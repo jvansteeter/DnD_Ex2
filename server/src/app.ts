@@ -37,7 +37,7 @@ class App {
             });
         });
         this.app.use(Express.static('./client/dist'));
-        this.app.use('/node_modules', Express.static('./node_modules'));
+        // this.app.use('/node_modules', Express.static('./node_modules'));
         // this.app.use('/', Express.static('view/login.html'));
         this.app.use('/test', HeroRouter);
     }

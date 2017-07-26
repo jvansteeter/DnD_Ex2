@@ -9,7 +9,7 @@
     "build": "npm run clean && webpack && gulp",
     "test": "mocha --reporter spec --compilers ts:ts-node/register test/helloWorld.test.ts",
     "clean": "rimraf client/dist client/typings server/dist",
-    "prod": "npm run clean && gulp && webpack --config client/config/webpack.prod.js && node server/dist/src/index.js"
+    "prod": "cross-env ENV=production npm run clean && gulp && webpack --config client/config/webpack.prod.js && node server/dist/src/index.js"
   },
   "repository": {
     "type": "git",
