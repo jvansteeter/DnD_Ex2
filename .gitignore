@@ -58,7 +58,10 @@ typings/
 .env
 
 # output folder
-dist/
+server/dist/
+server/typings/
+client/dist/
+client/typings/
 
 # intellij files
 .idea/

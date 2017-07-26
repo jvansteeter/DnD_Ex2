@@ -5,7 +5,8 @@
   "main": "lib/index.js",
   "types": "lib/index",
   "scripts": {
-    "start": "node dist/src/index.js",
+    "start": "npm run build && concurrently \"gulp watch\" \"nodemon server/dist/src/index.js\" \"webpack --progress --colors --watch\"",
+    "build": "rimraf client/dist client/typings server/dist && webpack --config client/config/webpack.prod.js && gulp",
     "test": "mocha --reporter spec --compilers ts:ts-node/register test/helloWorld.test.ts"
   },
   "repository": {
@@ -13,13 +14,15 @@
     "url": "git+https://github.com/jvansteeter/DnD_Ex2.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Joshua Van Steeter",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/jvansteeter/DnD_Ex2/issues"
   },
   "homepage": "https://github.com/jvansteeter/DnD_Ex2#readme",
   "devDependencies": {
+    "@angular/compiler": "^4.3.1",
+    "@angular/platform-browser-dynamic": "^4.3.1",
     "@types/body-parser": "0.0.33",
     "@types/chai": "^3.4.34",
     "@types/chai-http": "0.0.29",
@@ -28,18 +31,38 @@
     "@types/mocha": "^2.2.32",
     "@types/morgan": "^1.7.32",
     "@types/node": "^8.0.14",
+    "angular2-template-loader": "^0.6.2",
+    "awesome-typescript-loader": "^3.2.1",
     "chai": "^3.5.0",
     "chai-http": "^3.0.0",
+    "extract-text-webpack-plugin": "^3.0.0",
     "gulp": "^3.9.1",
+    "gulp-sourcemaps": "^2.6.0",
     "gulp-typescript": "^3.1.1",
+    "gulp-uglify": "^3.0.0",
+    "html-loader": "^0.4.5",
+    "html-webpack-plugin": "^2.29.0",
     "mocha": "^3.1.2",
+    "raw-loader": "^0.5.1",
     "ts-node": "^1.6.1",
-    "typescript": "^2.4.2"
+    "typescript": "^2.4.2",
+    "webpack": "^3.4.1",
+    "webpack-merge": "^4.1.0"
   },
   "dependencies": {
+    "@angular/common": "^4.3.1",
+    "@angular/core": "^4.3.1",
+    "@angular/forms": "^4.3.1",
+    "@angular/http": "^4.3.1",
+    "@angular/platform-browser": "^4.3.1",
+    "@angular/router": "^4.3.1",
     "body-parser": "^1.15.2",
+    "core-js": "^2.4.1",
     "debug": "^2.2.0",
     "express": "^4.14.0",
-    "morgan": "^1.7.0"
+    "morgan": "^1.7.0",
+    "rxjs": "^5.4.2",
+    "systemjs": "^0.20.16",
+    "zone.js": "^0.8.14"
   }
 }
