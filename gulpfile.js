@@ -5,7 +5,7 @@ var uglify = require('gulp-uglify');
 var ts = require('gulp-typescript');
 var sourcemaps = require('gulp-sourcemaps');
 
-var clientTsProject = ts.createProject('client/tsconfig.json');
+// var clientTsProject = ts.createProject('client/tsconfig.json');
 var serverTsProject = ts.createProject('server/tsconfig.json');
 
 // These tasks will be run when you just type "gulp"
@@ -27,7 +27,7 @@ gulp.task('serverscripts', function() {
         .pipe(sourcemaps.init())
         .pipe(serverTsProject())
         .js
-        //.pipe(uglify())
+        .pipe(uglify())
         .pipe(gulp.dest('server/dist'));
 });
 
@@ -40,6 +40,6 @@ gulp.task('serverscripts', function() {
 // By adding this, we can run "gulp watch" to automatically
 // run the build when we change a script
 gulp.task('watch', function() {
-    gulp.watch('client/src/**/*', [ 'clientscripts' ]);
+    // gulp.watch('client/src/**/*', [ 'clientscripts' ]);
     gulp.watch('server/src/**/*', [ 'serverscripts' ]);
 });

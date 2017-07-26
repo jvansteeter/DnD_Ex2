@@ -6,8 +6,10 @@
   "types": "lib/index",
   "scripts": {
     "start": "npm run build && concurrently \"gulp watch\" \"nodemon server/dist/src/index.js\" \"webpack --progress --colors --watch\"",
-    "build": "rimraf client/dist client/typings server/dist && webpack --config client/config/webpack.prod.js && gulp",
-    "test": "mocha --reporter spec --compilers ts:ts-node/register test/helloWorld.test.ts"
+    "build": "npm run clean && webpack && gulp",
+    "test": "mocha --reporter spec --compilers ts:ts-node/register test/helloWorld.test.ts",
+    "clean": "rimraf client/dist client/typings server/dist",
+    "prod": "npm run clean && gulp && webpack --config client/config/webpack.prod.js && node server/dist/src/index.js"
   },
   "repository": {
     "type": "git",
