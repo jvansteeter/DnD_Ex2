@@ -5,11 +5,11 @@
   "main": "lib/index.js",
   "types": "lib/index",
   "scripts": {
-    "start": "npm run build && concurrently \"gulp watch\" \"nodemon server/dist/src/index.js\" \"webpack --progress --colors --watch\"",
+    "start": "npm run build && concurrently \"gulp watch\" \"nodemon server/dist/src/index.js secretArg\" \"webpack --progress --colors --watch\"",
     "build": "npm run clean && webpack && gulp",
     "test": "mocha --reporter spec --compilers ts:ts-node/register test/helloWorld.test.ts",
     "clean": "rimraf client/dist client/typings server/dist",
-    "prod": "cross-env ENV=production npm run clean && gulp && webpack --config client/config/webpack.prod.js && node server/dist/src/index.js"
+    "prod": "cross-env ENV=production npm run clean && gulp && webpack --config client/config/webpack.prod.js && node server/dist/src/index.js secretArg"
   },
   "repository": {
     "type": "git",
@@ -58,13 +58,19 @@
     "@angular/http": "^4.3.1",
     "@angular/platform-browser": "^4.3.1",
     "@angular/router": "^4.3.1",
+    "@types/passport": "^0.3.3",
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.15.2",
+    "bootstrap": "^3.3.7",
     "core-js": "^2.4.1",
     "debug": "^2.2.0",
     "express": "^4.14.0",
+    "express-session": "^1.15.4",
+    "jquery": "^3.2.1",
     "morgan": "^1.7.0",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
     "rxjs": "^5.4.2",
-    "systemjs": "^0.20.16",
     "zone.js": "^0.8.14"
   }
 }
