@@ -4,10 +4,12 @@ import * as logger from 'morgan';
 import * as bodyParser from 'body-parser';
 import * as session from 'express-session';
 import * as passport from 'passport';
+import * as mongoose from 'mongoose';
 
-import HeroRouter from './routes/HeroRoutes';
 import LoginRouter from './routes/login.router';
 
+//  Import/Initialize configuration files and models
+import './db/models/user.model';
 import './config/passport.config';
 
 /***********************************************************************************************************************
@@ -28,6 +30,7 @@ class App {
     }
 
     private config(): void {
+        // passport
         this.app.use(session({
             secret: process.argv[2],
             resave: true,
@@ -35,6 +38,11 @@ class App {
         }));
         this.app.use(passport.initialize());
         this.app.use(passport.session());
+
+        // mongodb and mongoose
+        mongoose.connect('mongodb://localhost/dnd', {
+            useMongoClient: true
+        });
     }
 
     // Configure Express middleware.
@@ -77,7 +85,6 @@ class App {
 
         // ********************************************** API **********************************************************
         this.app.use('/auth', LoginRouter);
-        this.app.use('/test', this.isAuthenticated, HeroRouter);
     }
 
     private isLoggedIn(req: Request, res: Response, next: NextFunction): void {
@@ -85,7 +92,6 @@ class App {
             next();
         }
         else {
-            console.log('redirecting to login');
             res.redirect('/login');
         }
     }

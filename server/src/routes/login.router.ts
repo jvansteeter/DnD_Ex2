@@ -17,6 +17,8 @@ export class LoginRouter {
 
     init() {
         this.router.post('/login', passport.authenticate('local'), (req: Request, res: Response) => {
+            console.log('someone is attempting to log in');
+            console.log(req.user);
             res.send('OK')
         });
     }

@@ -3,6 +3,11 @@ import * as debug from 'debug';
 
 import App from './App';
 
+/***********************************************************************************************************************
+ * NODE SERVER
+ * This file is the actual node server that runs the app
+ **********************************************************************************************************************/
+
 debug('ts-express:server');
 
 const port = normalizePort(process.env.PORT || 3000);
