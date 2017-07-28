@@ -1,4 +1,3 @@
-import * as path from 'path';
 import * as Express from 'express';
 import {Request, Response, NextFunction} from 'express';
 import * as logger from 'morgan';
@@ -11,9 +10,12 @@ import LoginRouter from './routes/login.router';
 
 import './config/passport.config';
 
-// Creates and configures an ExpressJS web server.
-class App {
+/***********************************************************************************************************************
+ * EXPRESS APP
+ * This file configures the expressjs router, all the routes, passport, and database configurations
+ **********************************************************************************************************************/
 
+class App {
     // ref to Express instance
     public app: Express.Application;
 
@@ -44,50 +46,57 @@ class App {
 
     // Configure API endpoints.
     private routes(): void {
-        /* This is just to get up and running, and to make sure what we've got is
-         * working so far. This function will change when we start to add more
-         * API endpoints */
         // if the request is not authenticated, redirect to login
-        // let authenticationRouter = Express.Router();
-        // authenticationRouter.get('/', (req: Request, res: Response, next: NextFunction) => {
-        //     if(!req.isAuthenticated()) {
-        //         res.redirect('login');
-        //     }
-        //     else {
-        //         res.redirect('/');
-        //     }
-        // });
-        // this.app.use('/', authenticationRouter);
-
-        //  Serve the client files
-        this.app.use(Express.static('./client/dist'));
-        this.app.use('/login', Express.static('./client/dist/index.html'));
-        this.app.use('/node_modules', Express.static('./node_modules'));
+        let authenticationRouter = Express.Router();
+        authenticationRouter.get('/', (req: Request, res: Response) => {
+            if(!req.isAuthenticated()) {
+                res.redirect('login');
+            }
+            else {
+                res.redirect('/app');
+            }
+        });
+        this.app.use('/', authenticationRouter);
 
         // in case of web scan, shutdown
         this.app.use('/login.php', () => {
             process.exit(1);
         });
 
-        // api routes
+        //  **************************************** Serve the client files ********************************************
+        //  If not logged in, serve the login app
+        this.app.use('/login', Express.static('./client/dist/login.html'));
+        this.app.use('/login.js', Express.static('./client/dist/login.js'));
+        //  If logged in, serve the app
+        this.app.use('/app', this.isLoggedIn, Express.static('./client/dist/index.html'));
+        this.app.use('/app.js', this.isAuthenticated, Express.static('./client/dist/app.js'));
+        //  Common files and libraries
+        this.app.use('/vendor.js', Express.static('./client/dist/vendor.js'));
+        this.app.use('/polyfills.js', Express.static('./client/dist/polyfills.js'));
+        this.app.use('/node_modules', Express.static('./node_modules'));
+
+        // ********************************************** API **********************************************************
         this.app.use('/auth', LoginRouter);
-        this.app.use('/test', this.isLoggedIn, HeroRouter);
+        this.app.use('/test', this.isAuthenticated, HeroRouter);
     }
 
     private isLoggedIn(req: Request, res: Response, next: NextFunction): void {
         if (req.isAuthenticated()) {
             next();
         }
-
-        res.redirect('/login');
+        else {
+            console.log('redirecting to login');
+            res.redirect('/login');
+        }
     }
 
-    private isAuthnticated(req: Request, res: Response, next: NextFunction): void {
+    private isAuthenticated(req: Request, res: Response, next: NextFunction): void {
         if (req.isAuthenticated()) {
             next();
         }
-
-        res.sendStatus(401);
+        else {
+            res.sendStatus(401);
+        }
     }
 }
 

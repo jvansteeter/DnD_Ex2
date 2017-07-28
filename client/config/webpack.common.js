@@ -7,7 +7,8 @@ module.exports = {
   entry: {
     'polyfills': './client/src/polyfills.ts',
     'vendor': './client/src/vendor.ts',
-    'app': './client/src/main.ts'
+    'app': './client/src/main.ts',
+    'login': './client/src/login.ts'
   },
 
   resolve: {
@@ -42,6 +43,11 @@ module.exports = {
         test: /\.css$/,
         include: helpers.root('src', 'app'),
         loader: 'raw-loader'
+      },
+        {
+        test: /\.css$/,
+        include: helpers.root('src', 'login'),
+        loader: 'raw-loader'
       }
     ]
   },
@@ -55,10 +61,18 @@ module.exports = {
       {} // a map of your routes
     ),
     new webpack.optimize.CommonsChunkPlugin({
-      name: ['app', 'vendor', 'polyfills']
+      // name: ['vendor', 'polyfills'],
+        children: true
     }),
     new HtmlWebpackPlugin({
-      template: 'client/index.html'
+      filename: 'index.html',
+      template: 'client/index.html',
+      chunks: ['app']
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'login.html',
+      template: 'client/login.html',
+      chunks: ['login']
     }),
     new webpack.ProvidePlugin({
         jQuery: 'jquery',

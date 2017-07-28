@@ -1,17 +1,19 @@
 import * as passport from 'passport';
 import { Strategy } from 'passport-local';
 
+/***********************************************************************************************************************
+ * PASSPORT CONFIG
+ * Configures the passport authentication module
+ **********************************************************************************************************************/
+
 passport.serializeUser((user: any, next) => {
-    next(null, user.id);
+    next(null, user);
 });
 
-passport.deserializeUser((id, next) => {
-    next(null, {name: 'test user'});
+passport.deserializeUser((user, next) => {
+    next(null, user);
 });
 
 passport.use('local', new Strategy((username, password, next: Function) => {
-    console.log('attempt to log in');
-    console.log(username);
-    console.log(password);
     next(null, {name: 'test user'})
 }));

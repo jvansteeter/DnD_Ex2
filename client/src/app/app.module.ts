@@ -6,18 +6,18 @@ import {HttpModule} from '@angular/http';
 import {AppRoutingModule} from './app-routing.module';
 
 import {AppComponent} from './app.component';
-import {LoginModule} from "./login/login.module";
+import {TestComponent} from "./test.component";
 
 @NgModule({
     imports: [
         BrowserModule,
         FormsModule,
         HttpModule,
-        AppRoutingModule,
-        LoginModule
+        AppRoutingModule
     ],
     declarations: [
-        AppComponent
+        AppComponent,
+        TestComponent
     ],
     bootstrap: [AppComponent]
 })
