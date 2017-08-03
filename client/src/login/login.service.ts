@@ -12,7 +12,8 @@ export class LoginService {
             username: username,
             password: password
         };
+        console.log("attempting to log in")
 
-        return this.http.post('auth/login', data)
+        return this.http.post('auth/login', data);
     }
 }

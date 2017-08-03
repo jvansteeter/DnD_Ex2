@@ -29,7 +29,12 @@ export class UserModel extends mongoose.Schema {
     }
 
     public checkPassword(password: string): boolean {
+        console.log('checking password');
         return bcrypt.compareSync(password, this.methods.passwordHash);
+    }
+
+    public testMethod() {
+        console.log('test method')
     }
 }
 

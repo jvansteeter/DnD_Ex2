@@ -18,6 +18,7 @@ export class LoginComponent {
         this.loginService.login(this.usernameInput, this.passwordInput)
             .subscribe((response) => {
                 console.log('got a response from the server');
+                console.log(response);
                 window.location.href = 'app';
             });
     }

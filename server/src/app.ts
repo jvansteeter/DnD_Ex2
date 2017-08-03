@@ -41,8 +41,7 @@ class App {
 
         // mongodb and mongoose
         mongoose.connect('mongodb://localhost/dnd', {
-            useMongoClient: true,
-            promiseLibrary: global.Promise
+            useMongoClient: true
         });
     }
 
