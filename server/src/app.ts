@@ -8,6 +8,7 @@ import * as passport from 'passport';
 import * as mongoose from 'mongoose';
 
 import LoginRouter from './routes/login.router';
+import UserRouter from './routes/user.router';
 
 //  Import/Initialize configuration files and models
 import './db/models/user.model';
@@ -89,6 +90,7 @@ class App {
 
         // ********************************************** API **********************************************************
         this.app.use('/auth', LoginRouter);
+        this.app.use('/api/user', this.isAuthenticated, UserRouter);
     }
 
     private isLoggedIn(req: Request, res: Response, next: NextFunction): void {

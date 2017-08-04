@@ -1,0 +1,23 @@
+<nav class="navbar navbar-static navbar-inverse" style="margin: 0px;">
+	<div class="container">
+		<div class="nav-collapse collase">
+			<ul class="nav navbar-nav navbar-left">
+				<li><a routerLink="app">Home</a></li>
+				<li><a routerLink="mapmaker">Map Maker</a></li>
+			</ul>
+			<ul class="nav navbar-right navbar-nav">
+				<li class="dropdown">
+					<a class="dropdown-toggle" data-toggle="dropdown"><span>{{username}}</span> <i
+							class="fa fa-user"></i> <i
+							class="fa fa-chevron-down"></i></a>
+					<ul class="dropdown-menu">
+						<li><a href="login">Logout</a></li>
+						<li><a>Profile</a></li>
+						<li class="divider"></li>
+						<li><a>About</a></li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+	</div>
+</nav>

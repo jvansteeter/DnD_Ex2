@@ -1,12 +1,13 @@
-import {NgModule} from '@angular/core';
-import {BrowserModule} from '@angular/platform-browser';
-import {FormsModule} from '@angular/forms';
-import {HttpModule} from '@angular/http';
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
+import { HttpModule } from '@angular/http';
 
-import {AppRoutingModule} from './app-routing.module';
+import { AppRoutingModule } from './app-routing.module';
 
-import {AppComponent} from './app.component';
-import {TestComponent} from "./test.component";
+import { AppComponent } from './app.component';
+import { NavbarComponent } from './navbar/navbar.component';
+import { ProfileService } from './profile/profile.service';
 
 @NgModule({
     imports: [
@@ -17,9 +18,12 @@ import {TestComponent} from "./test.component";
     ],
     declarations: [
         AppComponent,
-        TestComponent
+        NavbarComponent
     ],
-    bootstrap: [AppComponent]
+    providers: [
+        ProfileService
+    ],
+    bootstrap: [ AppComponent ]
 })
 export class AppModule {
 }

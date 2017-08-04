@@ -4,13 +4,15 @@ import {FormsModule} from "@angular/forms";
 import {LoginService} from "./login.service";
 import {HttpModule} from "@angular/http";
 import {BrowserModule} from "@angular/platform-browser";
+import { MdDialogModule } from '@angular/material';
 
 
 @NgModule({
     imports: [
         FormsModule,
         BrowserModule,
-        HttpModule
+        HttpModule,
+        MdDialogModule
     ],
     declarations: [
         LoginComponent

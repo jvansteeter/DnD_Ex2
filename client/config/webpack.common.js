@@ -68,18 +68,17 @@ module.exports = {
       {} // a map of your routes
     ),
     new webpack.optimize.CommonsChunkPlugin({
-      // name: ['vendor', 'polyfills'],
-        children: true
+      name: ['vendor', 'polyfills']
     }),
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: 'client/index.html',
-      chunks: ['app']
+      chunks: ['app', 'vendor', 'polyfills']
     }),
     new HtmlWebpackPlugin({
       filename: 'login.html',
       template: 'client/login.html',
-      chunks: ['login']
+      chunks: ['login', 'vendor', 'polyfills']
     }),
     new webpack.ProvidePlugin({
         jQuery: 'jquery',
