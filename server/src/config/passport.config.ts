@@ -24,17 +24,18 @@ passport.deserializeUser((id: string, next) => {
 passport.use('local', new Strategy((username, password, next: Function) => {
     userRepo.findByUsername(username)
         .then((user: UserModel) => {
-            console.log('here');
-            console.log(user);
-            user.testMethod();
-            user.methods.checkPassword('bad password');
-            //////////////////////////////////////////////////////////////////////////
+            if (!user) {
+                next(null, false);
+                return;
+            }
             if (user.checkPassword(password)) {
                 next(null, user);
             }
             else {
                 next(null, false);
             }
-            ///////////////////////////////////////////////////////////////////////
+        }).catch(error => {
+            console.error(error);
+            next(null, false);
         });
 }));

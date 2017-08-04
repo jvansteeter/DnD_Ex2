@@ -7,13 +7,18 @@ import {Injectable} from "@angular/core";
 export class LoginService {
     constructor(private http: Http) {}
 
-    public login(username: string, password: string): Observable<Response> {
+    public login(username: string, password: string): Promise<boolean | Error> {
         let data = {
             username: username,
             password: password
         };
-        console.log("attempting to log in")
-
-        return this.http.post('auth/login', data);
+        return new Promise((resolve, reject) => {
+            this.http.post('auth/login', data)
+                .subscribe(() => {
+                    resolve(true);
+                }, error => {
+                    reject(error);
+                });
+        });
     }
 }

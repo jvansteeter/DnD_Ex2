@@ -40,8 +40,9 @@ class App {
         this.app.use(passport.session());
 
         // mongodb and mongoose
-        mongoose.connect('mongodb://localhost/dnd', {
-            useMongoClient: true
+        mongoose.connect('mongodb://localhost/ex2', {
+            useMongoClient: true,
+            promiseLibrary: global.Promise
         });
     }
 

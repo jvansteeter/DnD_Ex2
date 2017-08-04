@@ -8,6 +8,14 @@ export class UserRepository {
         this.user = mongoose.model('User');
     }
 
+    public create(username: string, password: string): Promise<UserModel> {
+        return this.user.create({
+            username: username
+        }).then(newUser => {
+            newUser.setPassword(password);
+        });
+    }
+
     public findById(id: string): Promise<UserModel> {
         return this.user.findById(id);
     }

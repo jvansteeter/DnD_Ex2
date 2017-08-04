@@ -16,10 +16,10 @@ export class LoginComponent {
 
     public login(): void {
         this.loginService.login(this.usernameInput, this.passwordInput)
-            .subscribe((response) => {
-                console.log('got a response from the server');
-                console.log(response);
+            .then(() => {
                 window.location.href = 'app';
-            });
+            }).catch(error => {
+                console.error(error);
+        })
     }
 }
