@@ -1,6 +1,7 @@
 var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
-// var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 var helpers = require('./helpers');
 
 module.exports = {
@@ -12,7 +13,7 @@ module.exports = {
   },
 
   resolve: {
-    extensions: ['.ts', '.js']
+    extensions: ['.ts', '.js', '.css']
   },
 
   module: {
@@ -23,32 +24,38 @@ module.exports = {
           {
             loader: 'awesome-typescript-loader',
             options: { configFileName: helpers.root('tsconfig.json') }
-          } , 'angular2-template-loader'
+          },
+          'angular2-template-loader'
         ]
       },
       {
         test: /\.html$/,
         loader: 'html-loader'
       },
-      {
-        test: /\.(png|jpe?g|gif|svg|woff|woff2|ttf|eot|ico)$/,
-        loader: 'file-loader?name=assets/[name].[hash].[ext]'
-      },
       // {
-      //   test: /\.css$/,
-      //   exclude: helpers.root('src', 'app'),
-        // loader: ExtractTextPlugin.extract({ fallbackLoader: 'style-loader', loader: 'css-loader?sourceMap' })
+      //   test: /\.(png|jpe?g|gif|svg|woff|woff2|ttf|eot|ico)$/,
+      //   loader: 'file-loader?name=resources/[name].[hash].[ext]'
+      // },
+      // {
+      //   test: /\.(png|jpe?g|gif|svg|woff|woff2|ttf|eot|ico|css)$/,
+      //   exclude: [helpers.root('src', 'app'), helpers.root('src', 'login')],
+      //   loader: 'file-loader?name=resources/[name].[hash].[ext]'
       // },
       {
         test: /\.css$/,
-        include: helpers.root('src', 'app'),
+        exclude: [helpers.root('src', 'app'), helpers.root('src', 'login')],
+        use: ExtractTextPlugin.extract({ fallback: 'style-loader', use: 'css-loader?sourceMap' })
+      },
+      {
+        test: /\.css$/,
+        include: [helpers.root('src', 'app'), helpers.root('src', 'login')],
         loader: 'raw-loader'
       },
-        {
-        test: /\.css$/,
-        include: helpers.root('src', 'login'),
-        loader: 'raw-loader'
-      }
+      // {
+      //   test: /\.css$/,
+      //   include: helpers.root('src', 'login'),
+      //   loader: 'raw-loader'
+      // }
     ]
   },
 
@@ -78,7 +85,10 @@ module.exports = {
         jQuery: 'jquery',
         $: 'jquery',
         jquery: 'jquery'
-    })
+    }),
+    new CopyWebpackPlugin([
+        {from : helpers.root('src', 'resources'), to: 'resources'}
+    ])
   ]
 };
 

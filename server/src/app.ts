@@ -1,6 +1,7 @@
 import * as Express from 'express';
 import {Request, Response, NextFunction} from 'express';
 import * as logger from 'morgan';
+import * as favicon from 'serve-favicon';
 import * as bodyParser from 'body-parser';
 import * as session from 'express-session';
 import * as passport from 'passport';
@@ -48,6 +49,7 @@ class App {
 
     // Configure Express middleware.
     private middleware(): void {
+        this.app.use(favicon('./client/dist/resources/images/favicon.ico'));
         this.app.use(logger('dev'));
         this.app.use(bodyParser.json());
         this.app.use(bodyParser.urlencoded({ extended: false }));
@@ -83,6 +85,7 @@ class App {
         this.app.use('/vendor.js', Express.static('./client/dist/vendor.js'));
         this.app.use('/polyfills.js', Express.static('./client/dist/polyfills.js'));
         this.app.use('/node_modules', Express.static('./node_modules'));
+        this.app.use('/resources', Express.static('./client/dist/resources'));
 
         // ********************************************** API **********************************************************
         this.app.use('/auth', LoginRouter);
