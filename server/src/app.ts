@@ -6,13 +6,15 @@ import * as bodyParser from 'body-parser';
 import * as session from 'express-session';
 import * as passport from 'passport';
 import * as mongoose from 'mongoose';
-
-import LoginRouter from './routes/login.router';
-import UserRouter from './routes/user.router';
+import * as bluebird from 'bluebird';
 
 //  Import/Initialize configuration files and models
 import './db/models/user.model';
 import './config/passport.config';
+
+import LoginRouter from './routes/login.router';
+import UserRouter from './routes/user.router';
+
 
 /***********************************************************************************************************************
  * EXPRESS APP
@@ -38,14 +40,15 @@ class App {
             resave: true,
             saveUninitialized: true
         }));
-        this.app.use(passport.initialize());
-        this.app.use(passport.session());
 
         // mongodb and mongoose
         mongoose.connect('mongodb://localhost/ex2', {
             useMongoClient: true,
-            promiseLibrary: global.Promise
+            promiseLibrary: bluebird
         });
+
+        this.app.use(passport.initialize());
+        this.app.use(passport.session());
     }
 
     // Configure Express middleware.

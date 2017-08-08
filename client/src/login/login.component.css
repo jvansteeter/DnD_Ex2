@@ -1,3 +1,27 @@
 h1 {
     font-family: 'breathe_fire', sans-serif;
 }
+
+.form-signin {
+    display: flex;
+    flex-direction: column;
+}
+
+a {
+    cursor: pointer;
+}
+
+.registerDialog {
+    display: flex;
+    flex-direction: column;
+}
+
+.alertShow {
+    opacity: 1;
+    transition: .5s ease-in;
+}
+
+.alertHide {
+    opacity: 0;
+    transition: 5s ease;
+}

@@ -1,5 +1,7 @@
 import {Router, Request, Response} from 'express';
 import * as passport from 'passport';
+import { UserRepository } from '../db/repositories/user.repository';
+import { UserModel } from '../db/models/user.model';
 
 
 /**********************************************************************************************************
@@ -8,9 +10,11 @@ import * as passport from 'passport';
  * Responsible for all authentication and authorization based calls
  *********************************************************************************************************/
 export class LoginRouter {
+    private userRepo: UserRepository;
     router: Router;
 
     constructor() {
+        this.userRepo = new UserRepository();
         this.router = Router();
         this.init();
     }
@@ -18,6 +22,25 @@ export class LoginRouter {
     init() {
         this.router.post('/login', passport.authenticate('local'), (req: Request, res: Response) => {
             res.send('OK')
+        });
+
+        this.router.post('/register', (req: Request, res: Response) => {
+            let username = req.body.username;
+            let password = req.body.password;
+            let firstName = req.body.firstName;
+            let lastName = req.body.lastName;
+
+            this.userRepo.findByUsername(username).then((user: UserModel) => {
+                if (user) {
+                    res.send('Username already exists');
+                    return;
+                }
+
+                this.userRepo.create(username, password, firstName, lastName)
+                    .then(() => {
+                        res.send('OK');
+                    });
+            })
         });
     }
 

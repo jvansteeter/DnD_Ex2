@@ -1,0 +1,45 @@
+import { Component } from '@angular/core';
+import { MdDialogRef } from '@angular/material';
+import { LoginService } from './login.service';
+import { ErrorEmitterService } from './ErrorEmitter.service';
+
+
+@Component({
+    selector: 'register-dialog',
+    templateUrl: 'registerDialog.component.html',
+    styleUrls: ['login.component.css']
+})
+export class RegisterDialogComponent {
+    private username: string;
+    private password: string;
+    private passwordConfirm: string;
+    private firstName: string;
+    private lastName: string;
+
+    constructor(private loginService: LoginService,
+                private errorService: ErrorEmitterService,
+                private dialogRef: MdDialogRef<RegisterDialogComponent>) {
+
+    }
+
+    public register(): void {
+        if (!this.username || !this.password || !this.passwordConfirm) {
+            return;
+        }
+
+        if (this.password !== this.passwordConfirm) {
+            this.errorService.emit('Passwords don\'t match');
+            this.dialogRef.close();
+            return;
+        }
+
+        this.loginService.register(this.username, this.password, this.firstName, this.lastName)
+            .then(() => {
+                window.location.href = 'app';
+            })
+            .catch((error: Error) => {
+                this.errorService.emit(error.message);
+                this.dialogRef.close();
+            })
+    }
+}

@@ -8,11 +8,19 @@ export class UserRepository {
         this.user = mongoose.model('User');
     }
 
-    public create(username: string, password: string): Promise<UserModel> {
+    public create(username: string, password: string, firstName?: string, lastName?: string): Promise<UserModel> {
+        console.log('creating user');
         return this.user.create({
             username: username
         }).then(newUser => {
+            console.log('user created');
             newUser.setPassword(password);
+            if (firstName) {
+                newUser.setFirstName(firstName);
+            }
+            if (lastName) {
+                newUser.setLastName(lastName);
+            }
         });
     }
 

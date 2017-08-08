@@ -1,0 +1,21 @@
+<form class="registerDialog" (submit)="register()">
+	<md-input-container>
+		<input mdInput placeholder="Username" name="username" [(ngModel)]="username" required>
+	</md-input-container>
+	<md-input-container>
+		<input mdInput placeholder="Password" name="password" [(ngModel)]="password" type="password" required>
+	</md-input-container>
+	<md-input-container>
+		<input mdInput placeholder="Password Confirmation" name="password confirm" [(ngModel)]="passwordConfirm" type="password" required>
+	</md-input-container>
+	<md-input-container>
+		<input mdInput placeholder="First Name" name="first name" [(ngModel)]="firstName">
+	</md-input-container>
+	<md-input-container>
+		<input mdInput placeholder="Last Name" name="last name" [(ngModel)]="lastName">
+	</md-input-container>
+	<div>
+		<button type="submit" name="submit" md-raised-button color="primary">Register</button>
+		<button md-raised-button (click)="dialogRef.close()">Close</button>
+	</div>
+</form>

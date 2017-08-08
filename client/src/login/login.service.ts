@@ -7,7 +7,7 @@ import {Injectable} from "@angular/core";
 export class LoginService {
     constructor(private http: Http) {}
 
-    public login(username: string, password: string): Promise<boolean | Error> {
+    public login(username: string, password: string): Promise<Error> {
         let data = {
             username: username,
             password: password
@@ -15,10 +15,28 @@ export class LoginService {
         return new Promise((resolve, reject) => {
             this.http.post('auth/login', data)
                 .subscribe(() => {
-                    resolve(true);
+                    resolve();
                 }, error => {
                     reject(error);
                 });
         });
+    }
+
+    public register(username: string, password: string, firstName: string, lastName: string): Promise<Error> {
+        let data = {
+            username: username,
+            password: password,
+            firstName: firstName,
+            lastName: lastName
+        };
+
+        return new Promise((resolve, reject) => {
+            this.http.post('auth/register', data)
+                .subscribe(() => {
+                    resolve();
+                }, error => {
+                    reject(new Error(error.text()));
+                })
+        })
     }
 }

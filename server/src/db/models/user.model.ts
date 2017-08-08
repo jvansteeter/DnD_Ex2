@@ -1,6 +1,13 @@
 import * as mongoose from 'mongoose';
 import * as bcrypt from 'bcryptjs';
 
+// let userSchema = new mongoose.Schema({
+//     username: {type: String, index: true, unique: true},
+//     profilePhotoUrl: {type: String, required: true, default: 'image/common/noImage.png'},
+//     firstName: String,
+//     lastName: String,
+//     passwordHash: {type: String, required: true}
+// });
 
 export class UserModel extends mongoose.Schema {
     public username: string;
@@ -15,7 +22,7 @@ export class UserModel extends mongoose.Schema {
             profilePhotoUrl: {type: String, required: true, default: 'image/common/noImage.png'},
             firstName: String,
             lastName: String,
-            passwordHash: String
+            passwordHash: {type: String, required: true}
         });
 
         this.username = this.methods.username;
@@ -33,6 +40,16 @@ export class UserModel extends mongoose.Schema {
         this.save();
     }
 
+    public setFirstName(firstName: string): void {
+        this.firstName = firstName;
+        this.save();
+    }
+
+    public setLastName(lastName: string): void {
+        this.lastName = lastName;
+        this.save();
+    }
+
     public checkPassword(password: string): boolean {
         return bcrypt.compareSync(password, this.passwordHash);
     }
@@ -40,6 +57,11 @@ export class UserModel extends mongoose.Schema {
     private save() {
         this.methods.save();
     }
+
+    // public create(obj: any) {
+    //     console.log('create has been called')
+    //     return this.methods.create(obj);
+    // }
 }
 
 mongoose.model('User', new UserModel());
