@@ -41,7 +41,7 @@ export class LoginRouter {
                         res.send('OK');
                     }, (error) => {
                         console.error(error);
-                        res.status(500).send('');
+                        res.status(500).send(error);
                     });
             })
         });

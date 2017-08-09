@@ -18,7 +18,6 @@ export class UserRepository {
                     reject (error);
                     return;
                 }
-                console.log('user created');
                 newUser.setPassword(password);
                 if (firstName) {
                     newUser.setFirstName(firstName);

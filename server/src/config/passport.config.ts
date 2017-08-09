@@ -24,7 +24,6 @@ passport.deserializeUser((id: string, next) => {
 passport.use('local', new Strategy((username, password, next: Function) => {
     userRepo.findByUsername(username)
         .then((user: UserModel) => {
-            // let user = new UserModel(iuser);
             if (!user) {
                 next(null, false);
                 return;
