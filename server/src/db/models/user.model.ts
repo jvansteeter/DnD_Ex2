@@ -1,13 +1,6 @@
 import * as mongoose from 'mongoose';
 import * as bcrypt from 'bcryptjs';
 
-// let userSchema = new mongoose.Schema({
-//     username: {type: String, index: true, unique: true},
-//     profilePhotoUrl: {type: String, required: true, default: 'image/common/noImage.png'},
-//     firstName: String,
-//     lastName: String,
-//     passwordHash: {type: String, required: true}
-// });
 
 export class UserModel extends mongoose.Schema {
     public username: string;
@@ -22,7 +15,7 @@ export class UserModel extends mongoose.Schema {
             profilePhotoUrl: {type: String, required: true, default: 'image/common/noImage.png'},
             firstName: String,
             lastName: String,
-            passwordHash: {type: String, required: true}
+            passwordHash: String
         });
 
         this.username = this.methods.username;
@@ -33,6 +26,8 @@ export class UserModel extends mongoose.Schema {
 
         this.methods.setPassword = this.setPassword;
         this.methods.checkPassword = this.checkPassword;
+        this.methods.setFirstName = this.setFirstName;
+        this.methods.setLastName = this.setLastName;
     }
 
     public setPassword(password: string): void {
@@ -57,11 +52,6 @@ export class UserModel extends mongoose.Schema {
     private save() {
         this.methods.save();
     }
-
-    // public create(obj: any) {
-    //     console.log('create has been called')
-    //     return this.methods.create(obj);
-    // }
 }
 
 mongoose.model('User', new UserModel());

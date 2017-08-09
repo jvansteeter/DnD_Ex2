@@ -32,13 +32,16 @@ export class LoginRouter {
 
             this.userRepo.findByUsername(username).then((user: UserModel) => {
                 if (user) {
-                    res.send('Username already exists');
+                    res.status(403).send('Username already exists');
                     return;
                 }
 
                 this.userRepo.create(username, password, firstName, lastName)
                     .then(() => {
                         res.send('OK');
+                    }, (error) => {
+                        console.error(error);
+                        res.status(500).send('');
                     });
             })
         });

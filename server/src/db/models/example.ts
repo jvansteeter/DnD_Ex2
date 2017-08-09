@@ -4,70 +4,45 @@
 // export let ObjectId = mongoose.Schema.Types.ObjectId;
 // export let Mixed = mongoose.Schema.Types.Mixed;
 //
-// export interface IHeroModel extends mongoose.Document {
-//     name: string;
-//     power: string;
-//     amountPeopleSaved: number;
-//     createdAt: Date;
-//     modifiedAt: Date;
+// export interface IUser extends mongoose.Document {
+//     username: string;
+//     passwordHash: string;
+//     firstName: string;
+//     lastName: string;
 // }
 //
 // let schema = new Schema({
-//     name: {
+//     username: {
+//         type: String,
+//         required: true,
+//         unique: true
+//     },
+//     passwordHash: {
 //         type: String,
 //         required: true
 //     },
-//     power: {
-//         type: String,
-//         required: true
-//     },
-//     amountPeopleSaved: {
-//         type: Number,
-//         required: false
-//     },
-//     createdAt: {
-//         type: Date,
-//         required: false
-//     },
-//     modifiedAt: {
-//         type: Date,
-//         required: false
-//     }
-// }).pre('save', function(next) {
-//     if (this._doc) {
-//         let doc = <IHeroModel>this._doc;
-//         let now = new Date();
-//         if (!doc.createdAt) {
-//             doc.createdAt = now;
-//         }
-//         doc.modifiedAt = now;
-//     }
-//     next();
-//     return this;
+//     firstName: String,
+//     lastName: String
 // });
 //
-// export let HeroSchema = mongoose.model<IHeroModel>('hero', schema, 'heroes', true);
+// export let UserSchema = mongoose.model<IUser>('User', schema);
 //
 // export class HeroModel {
 //
-//     private _heroModel: IHeroModel;
+//     private userModel: IUser;
 //
-//     constructor(heroModel: IHeroModel) {
-//         this._heroModel = heroModel;
+//     constructor(userModel: IUser) {
+//         this.userModel = userModel;
 //     }
-//     get name(): string {
-//         return this._heroModel.name;
-//     }
-//
-//     get power(): string {
-//         return this._heroModel.power;
+//     get username(): string {
+//         return this.userModel.username;
 //     }
 //
-//     get amountPeopleSaved(): number {
-//         return this._heroModel.amountPeopleSaved;
+//     get passwordHash(): string {
+//         return this.userModel.passwordHash;
 //     }
 //
-//     static createHero(name: string, power: string) : Promise.IThenable<IHeroModel> {
+//     static createHero(name: string, power: string) : Promise.IThenable<IUser> {
 //         let p = new Promise((resolve, reject) => {
 //
 //             let repo = new HeroRepository();
@@ -174,9 +149,9 @@
 //
 // }
 //
-// export class HeroRepository extends RepositoryBase<IHeroModel> {
+// export class HeroRepository extends RepositoryBase<IUser> {
 //     constructor() {
-//         super(HeroSchema);
+//         super(UserSchema);
 //     }
 // }
 //
@@ -202,7 +177,7 @@
 //         console.log(res);
 //
 //         // now update the Hero
-//         let hero = <IHeroModel>res;
+//         let hero = <IUser>res;
 //         hero.power = 'Invisibility';
 //         hero.save((err, res) => {
 //             if (err) {

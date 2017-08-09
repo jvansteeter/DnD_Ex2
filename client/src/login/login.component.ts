@@ -15,7 +15,7 @@ export class LoginComponent {
     private usernameInput: string;
     private passwordInput: string;
     private alertVisibility: string = 'alertHide';
-    private alertMessage: string;
+    private alertMessage: string = 'Error Message';
 
     constructor(private loginService: LoginService,
                 private errorService: ErrorEmitterService,

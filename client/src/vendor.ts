@@ -13,6 +13,7 @@ import '@angular/animations';
 import 'rxjs';
 import 'rxjs/Rx';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/observable/of';
 
 // Other vendors for example jQuery, Lodash or Bootstrap
 // You can import js, ts, css, sass, ...
