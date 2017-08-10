@@ -36,7 +36,7 @@ export class RegisterDialogComponent {
         this.loginService.register(this.username, this.password, this.firstName, this.lastName)
             .then(() => {
                 this.loginService.login(this.username, this.password)
-                    .then(() => window.location.href = 'app')
+                    .then(() => window.location.href = '/')
                     .catch((error: Error) => {
                         this.errorService.emit(error.message);
                         this.dialogRef.close();

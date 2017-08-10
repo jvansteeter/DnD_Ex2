@@ -28,7 +28,7 @@ export class LoginComponent {
     public login(): void {
         this.loginService.login(this.usernameInput, this.passwordInput)
             .then(() => {
-                window.location.href = 'app';
+                window.location.href = '/';
             }).catch(error => {
                 this.alert(error.text());
             })

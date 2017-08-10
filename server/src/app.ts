@@ -1,5 +1,6 @@
 import * as Express from 'express';
 import {Request, Response, NextFunction} from 'express';
+import * as path from 'path';
 import * as logger from 'morgan';
 import * as favicon from 'serve-favicon';
 import * as bodyParser from 'body-parser';
@@ -62,13 +63,14 @@ class App {
     // Configure API endpoints.
     private routes(): void {
         // if the request is not authenticated, redirect to login
+        // this.app.use(this.isLoggedIn);
         let authenticationRouter = Express.Router();
         authenticationRouter.get('/', (req: Request, res: Response) => {
             if(!req.isAuthenticated()) {
                 res.redirect('login');
             }
             else {
-                res.redirect('/app');
+                res.sendFile(path.resolve('./client/dist/index.html'))
             }
         });
         this.app.use('/', authenticationRouter);
@@ -83,7 +85,6 @@ class App {
         this.app.use('/login', Express.static('./client/dist/login.html'));
         this.app.use('/login.js', Express.static('./client/dist/login.js'));
         //  If logged in, serve the app
-        this.app.use('/app', this.isLoggedIn, Express.static('./client/dist/index.html'));
         this.app.use('/app.js', this.isAuthenticated, Express.static('./client/dist/app.js'));
         //  Common files and libraries
         this.app.use('/vendor.js', Express.static('./client/dist/vendor.js'));
