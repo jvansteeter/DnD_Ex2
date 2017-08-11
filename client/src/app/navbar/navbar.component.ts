@@ -1,4 +1,3 @@
-
 import { Component } from '@angular/core';
 import { ProfileService } from '../profile/profile.service';
 
@@ -22,6 +21,10 @@ export class NavbarComponent {
                 {
                     label: 'Map Maker',
                     route: 'map-maker'
+                },
+                {
+                    label: 'Character Maker',
+                    route: 'character-maker'
                 }
             ];
         });

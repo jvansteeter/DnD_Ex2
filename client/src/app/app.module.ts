@@ -12,6 +12,7 @@ import { MdButtonModule, MdIconModule, MdMenuModule, MdTabsModule } from '@angul
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HomeModule } from './home/home.module';
 import { MapMakerModule } from './map-maker/map-maker.module';
+import { CharacterMakerModule } from './character-maker/character-maker.module';
 
 @NgModule({
     imports: [
@@ -25,7 +26,8 @@ import { MapMakerModule } from './map-maker/map-maker.module';
         MdMenuModule,
         HomeModule,
         MapMakerModule,
-        MdIconModule
+        MdIconModule,
+        CharacterMakerModule
     ],
     declarations: [
         AppComponent,

@@ -1,0 +1,14 @@
+.characterSheet {
+    margin: 30px;
+    padding: 20px;
+}
+
+.add-dialog {
+    display: flex;
+    flex-direction: column;
+}
+
+.dialog-input {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
