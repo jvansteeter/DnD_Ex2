@@ -63,7 +63,6 @@ class App {
     // Configure API endpoints.
     private routes(): void {
         // if the request is not authenticated, redirect to login
-        // this.app.use(this.isLoggedIn);
         let authenticationRouter = Express.Router();
         authenticationRouter.get('/', (req: Request, res: Response) => {
             if(!req.isAuthenticated()) {
@@ -84,17 +83,23 @@ class App {
         //  If not logged in, serve the login app
         this.app.use('/login', Express.static('./client/dist/login.html'));
         this.app.use('/login.js', Express.static('./client/dist/login.js'));
-        //  If logged in, serve the app
-        this.app.use('/app.js', this.isAuthenticated, Express.static('./client/dist/app.js'));
         //  Common files and libraries
         this.app.use('/vendor.js', Express.static('./client/dist/vendor.js'));
         this.app.use('/polyfills.js', Express.static('./client/dist/polyfills.js'));
         this.app.use('/node_modules', Express.static('./node_modules'));
         this.app.use('/resources', Express.static('./client/dist/resources'));
+        //  If logged in, serve the app
+        this.app.use('/app.js', this.isAuthenticated, Express.static('./client/dist/app.js'));
+
 
         // ********************************************** API **********************************************************
         this.app.use('/auth', LoginRouter);
         this.app.use('/api/user', this.isAuthenticated, UserRouter);
+
+        //  All other requests, redirect to index
+        this.app.get('*', (req, res) => {
+            res.redirect('/');
+        });
     }
 
     private isLoggedIn(req: Request, res: Response, next: NextFunction): void {

@@ -1,17 +1,18 @@
 nav {
     display: flex;
     flex-direction: row;
-    align-items: stretch;
+    align-content: stretch;
 }
 
 .navbar-tabLink {
     color: whitesmoke;
 }
 
-.navbar-tabArea {
-    margin-right: auto;
-}
-
 .navbar-menuButton {
     color: whitesmoke;
+    margin-left: auto;
+}
+
+a {
+    text-decoration: none;
 }

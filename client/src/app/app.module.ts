@@ -8,10 +8,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { ProfileService } from './profile/profile.service';
-import { MdButtonModule, MdMenuModule, MdTabsModule } from '@angular/material';
+import { MdButtonModule, MdIconModule, MdMenuModule, MdTabsModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HomeModule } from './home/home.module';
-import { MapMakerComponent } from './map-maker/map-maker.component';
 import { MapMakerModule } from './map-maker/map-maker.module';
 
 @NgModule({
@@ -25,7 +24,8 @@ import { MapMakerModule } from './map-maker/map-maker.module';
         MdButtonModule,
         MdMenuModule,
         HomeModule,
-        MapMakerModule
+        MapMakerModule,
+        MdIconModule
     ],
     declarations: [
         AppComponent,
