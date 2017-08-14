@@ -26,7 +26,11 @@ export class AddComponentComponent {
     }
 
     public addComponent(): void {
-        if (this.label && this.aspectType) {
+        console.log('calling add component')
+        console.log(this.label)
+        console.log(this.aspectType)
+        if (this.label && this.aspectType !== undefined) {
+            console.log('in the if');
             let aspect = new Aspect(this.label, this.aspectType, this.required);
             this.addComponentService.emit(aspect);
             this.dialogRef.close();

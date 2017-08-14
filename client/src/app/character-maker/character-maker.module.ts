@@ -5,11 +5,13 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
     MdAutocompleteModule,
-    MdButtonModule, MdCheckboxModule, MdDialogModule, MdIconModule, MdInputModule,
+    MdButtonModule, MdCardModule, MdCheckboxModule, MdDialogModule, MdIconModule, MdInputModule,
     MdSelectModule
 } from '@angular/material';
 import { AddComponentComponent } from './dialog/add-component.component';
 import { AddComponentService } from './add-component.service';
+import { TextComponent } from './subcomponents/text.component';
+import { AngularDraggableModule } from 'angular2-draggable';
 
 
 @NgModule({
@@ -23,11 +25,14 @@ import { AddComponentService } from './add-component.service';
         MdIconModule,
         MdSelectModule,
         MdCheckboxModule,
-        MdAutocompleteModule
+        MdAutocompleteModule,
+        MdCardModule,
+        AngularDraggableModule
     ],
     declarations: [
         CharacterMakerComponent,
-        AddComponentComponent
+        AddComponentComponent,
+        TextComponent
     ],
     exports: [
         CharacterMakerComponent

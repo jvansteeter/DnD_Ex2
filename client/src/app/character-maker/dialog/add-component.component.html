@@ -3,7 +3,7 @@
 		<input name="label" mdInput placeholder="Label" class="dialog-input" [(ngModel)]="label" required>
 	</md-input-container>
 	<md-select name="aspect" placeholder="Aspect Type" class="dialog-input" [(ngModel)]="aspectType" required>
-		<md-option *ngFor="let aspect of aspectTypes" [value]="aspect.label">{{ aspect.label }}</md-option>
+		<md-option *ngFor="let aspect of aspectTypes" [value]="aspect.type">{{ aspect.label }}</md-option>
 	</md-select>
 	<md-checkbox name="required" class="dialog-input" color="primary" [(ngModel)]="required">Required</md-checkbox>
 	<button name="submit" md-raised-button color="primary" class="dialog-input">Add</button>

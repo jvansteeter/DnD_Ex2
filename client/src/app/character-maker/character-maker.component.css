@@ -1,6 +1,8 @@
 .characterSheet {
     margin: 30px;
     padding: 20px;
+    display: flex;
+    flex-flow: row;
 }
 
 .add-dialog {
@@ -11,4 +13,10 @@
 .dialog-input {
     margin-top: 5px;
     margin-bottom: 5px;
+}
+
+.characterMaker-resize {
+    float: right;
+    cursor: nw-resize;
+    opacity: .5;
 }
