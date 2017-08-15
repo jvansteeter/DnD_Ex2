@@ -11,7 +11,6 @@ import {
 import { AddComponentComponent } from './dialog/add-component.component';
 import { AddComponentService } from './add-component.service';
 import { TextComponent } from './subcomponents/text.component';
-import { AngularDraggableModule } from 'angular2-draggable';
 
 
 @NgModule({
@@ -26,8 +25,7 @@ import { AngularDraggableModule } from 'angular2-draggable';
         MdSelectModule,
         MdCheckboxModule,
         MdAutocompleteModule,
-        MdCardModule,
-        AngularDraggableModule
+        MdCardModule
     ],
     declarations: [
         CharacterMakerComponent,

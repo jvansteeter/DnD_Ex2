@@ -19,4 +19,3 @@ import 'rxjs/add/observable/of';
 // You can import js, ts, css, sass, ...
 import 'jquery';
 import 'bootstrap/dist/js/bootstrap';
-import 'angular2-draggable';
