@@ -66,7 +66,6 @@
     "@angular/router": "^4.3.1",
     "@types/bcryptjs": "^2.4.0",
     "@types/passport": "^0.3.3",
-    "angular2-draggable": "^1.0.5",
     "bcryptjs": "^2.4.3",
     "bluebird": "^3.5.0",
     "body-parser": "^1.15.2",
