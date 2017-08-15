@@ -1,0 +1,9 @@
+.characterMaker-resize {
+    cursor: move;
+    float: right;
+    opacity: .5;
+}
+
+.characterMaker-resize:active {
+    cursor: grabbing;
+}

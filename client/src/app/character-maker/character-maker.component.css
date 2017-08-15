@@ -14,9 +14,3 @@
     margin-top: 5px;
     margin-bottom: 5px;
 }
-
-.characterMaker-resize {
-    float: right;
-    cursor: nw-resize;
-    opacity: .5;
-}

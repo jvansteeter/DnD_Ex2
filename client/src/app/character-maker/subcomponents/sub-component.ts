@@ -1,15 +1,18 @@
 import { Aspect, AspectType } from '../aspect';
-import {ElementRef, Renderer2} from "@angular/core";
 
 export class subComponent {
     aspect: Aspect;
-    height: number;
     width: number;
+    height: number;
+    minHeight: number;
+    minWidth: number;
     value: any;
 
-    constructor() {
-        this.height = 500;
-        this.width = 500;
+    constructor(width: number, height: number) {
+        this.width = width;
+        this.minWidth = width;
+        this.height = height;
+        this.minHeight = height;
     }
 
     getAspectType(): AspectType {
@@ -17,8 +20,11 @@ export class subComponent {
     }
 
     dragEvent(event): void {
-        console.log(event);
-        console.log(this.width);
-        console.log(this.height);
+        if (this.width + event.offsetX > this.minWidth) {
+            this.width += event.offsetX;
+        }
+        if (this.height + event.offsetY > this.minHeight) {
+            this.height += event.offsetY;
+        }
     }
 }

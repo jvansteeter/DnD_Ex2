@@ -21,22 +21,12 @@ export class CharacterMakerComponent {
     }
 
     public openAddDialog(): void {
-        console.log(this.childAspects);
         this.dialog.open(AddComponentComponent)
     }
 
-    // private aspectType() {
-    //     return AspectType;
-    // }
-
     private addComponent(aspect: Aspect): void {
-        console.log(aspect);
-        console.log(this.childAspects);
-        console.log('addComponent was called');
         if (aspect.aspectType === AspectType.text) {
-            console.log('adding the aspect')
             this.childAspects.push(aspect);
         }
-
     }
 }
