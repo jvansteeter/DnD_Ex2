@@ -1,5 +1,6 @@
 export enum AspectType {
-    text
+    text,
+    boolean
 }
 
 export class Aspect {

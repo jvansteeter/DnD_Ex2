@@ -5,14 +5,15 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
     MdAutocompleteModule,
-    MdButtonModule, MdCardModule, MdCheckboxModule, MdDialogModule, MdIconModule, MdInputModule,
+    MdButtonModule, MdCardModule, MdCheckboxModule, MdDialogModule, MdGridListModule, MdIconModule, MdInputModule,
     MdSelectModule
 } from '@angular/material';
 import { AddComponentComponent } from './dialog/add-component.component';
-import { AddComponentService } from './add-component.service';
-import { TextComponent } from './subcomponents/text.component';
+import { CharacterMakerService } from './character-maker.service';
+import { TextComponent } from './subcomponents/text/text.component';
 import { SubComponent } from "./subcomponents/sub-component";
 import { SubComponentService } from "./subcomponents/sub-component.service";
+import { CheckboxComponent } from './subcomponents/checkbox/checkbox.component';
 
 
 @NgModule({
@@ -27,13 +28,15 @@ import { SubComponentService } from "./subcomponents/sub-component.service";
         MdSelectModule,
         MdCheckboxModule,
         MdAutocompleteModule,
-        MdCardModule
+        MdCardModule,
+        MdGridListModule
     ],
     declarations: [
         CharacterMakerComponent,
         AddComponentComponent,
         SubComponent,
-        TextComponent
+        TextComponent,
+        CheckboxComponent
     ],
     exports: [
         CharacterMakerComponent
@@ -42,7 +45,7 @@ import { SubComponentService } from "./subcomponents/sub-component.service";
         AddComponentComponent
     ],
     providers: [
-        AddComponentService,
+        CharacterMakerService,
         SubComponentService
     ]
 })

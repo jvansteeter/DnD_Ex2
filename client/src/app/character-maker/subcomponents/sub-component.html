@@ -1,13 +1,17 @@
-<!--<md-card [ngStyle]="{'width': width + 'px', 'height': height + 'px'}" #resizable>-->
-<md-card *ngIf="aspect" [ngStyle]="{'width': width + 'px', 'height': height + 'px'}" #resizable>
-    <md-card-header class="subcomponent-header"></md-card-header>
+<md-card *ngIf="aspect" [ngStyle]="{'width': width + 'px', 'height': height + 'px', 'top': top + 'px', 'left': left + 'px'}" class="sub-component">
+    <md-card-header class="sub-component-header" [ngStyle]="{'width': width + 'px'}">
+		<md-icon class="sub-component-reorder" (mousedown)="startMove()">reorder</md-icon>
+		<button class="sub-component-close" md-icon-button (click)="remove()"><md-icon>close</md-icon></button>
+	</md-card-header>
     <md-card-content [ngSwitch]="aspect.aspectType">
         <characterMaker-textComponent *ngSwitchCase="aspectType.text" [aspect]="aspect" [parent]="this" #child></characterMaker-textComponent>
+        <characterMaker-checkBoxComponent *ngSwitchCase="aspectType.boolean" [aspect]="aspect" #child></characterMaker-checkBoxComponent>
     </md-card-content>
     <md-card-footer>
-        <md-icon class="characterMaker-resize" (mousedown)="startDrag($event)">transform</md-icon>
+        <md-icon class="sub-component-resize" (mousedown)="startDrag($event)">transform</md-icon>
     </md-card-footer>
 </md-card>
-<!--<md-input-container>-->
-<!--<input mdInput placeholder="{{aspect.label}}" [required]="required">-->
-<!--</md-input-container>-->
+
+<!--<md-grid-tile [colspan]="'4'" [rowspan]="'2'">-->
+	<!--<div style="background-color: red">content</div>-->
+<!--</md-grid-tile>-->

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MdDialog } from '@angular/material';
 import { AddComponentComponent } from './dialog/add-component.component';
-import { AddComponentService } from './add-component.service';
+import { CharacterMakerService } from './character-maker.service';
 import { Aspect, AspectType } from './aspect';
 
 
@@ -12,21 +12,24 @@ import { Aspect, AspectType } from './aspect';
 })
 export class CharacterMakerComponent {
     private aspectType = AspectType;
-    private childAspects: Aspect[];
+    private aspects: Aspect[];
 
     constructor(private dialog: MdDialog,
-                private addComponentService: AddComponentService) {
-        this.addComponentService.subscribe((aspect) => this.addComponent(aspect));
-        this.childAspects = [];
+                private characterMakerService: CharacterMakerService) {
+        this.aspects = [];
+        this.characterMakerService.onAddComponent((aspect) => this.addComponent(aspect));
+        this.characterMakerService.onRemoveComponent((aspect) => this.removeComponent(aspect));
     }
 
     public openAddDialog(): void {
         this.dialog.open(AddComponentComponent)
     }
 
+    public removeComponent(aspect: Aspect): void {
+        this.aspects.splice(this.aspects.indexOf(aspect));
+    }
+
     private addComponent(aspect: Aspect): void {
-        if (aspect.aspectType === AspectType.text) {
-            this.childAspects.push(aspect);
-        }
+        this.aspects.push(aspect);
     }
 }

@@ -1,7 +1,13 @@
 <h1>Character Maker</h1>
 <button md-icon-button md-raised-button color="primary" (click)="openAddDialog()"><md-icon>add</md-icon></button>
-<div class="well well-lg characterSheet">
-	<div *ngFor="let aspect of childAspects">
+<div class="well well-lg characterSheet" cols="10" rowHeight="50px">
+	<div *ngFor="let aspect of aspects">
 		<sub-component [aspect]="aspect"></sub-component>
+		<!--<md-grid-tile style="background-color: red" [colspan]="3" [rowspan]="1">Grid item</md-grid-tile>-->
 	</div>
+	<!--<sub-component *ngFor="let aspect of aspects" [aspect]="aspect" [colspan]="'4'" [rowspan]="'2'"></sub-component>-->
+
+	<!--<md-grid-tile *ngFor="let aspect of aspects" style="background-color: red">-->
+		<!--<sub-component [aspect]="aspect"></sub-component>-->
+	<!--</md-grid-tile>-->
 </div>

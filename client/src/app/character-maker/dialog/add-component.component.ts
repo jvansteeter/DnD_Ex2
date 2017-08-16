@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MdDialogRef } from '@angular/material';
 import { Aspect, AspectType } from '../aspect';
-import { AddComponentService } from '../add-component.service';
+import { CharacterMakerService } from '../character-maker.service';
 
 
 @Component({
@@ -16,11 +16,15 @@ export class AddComponentComponent {
     private required: boolean = false;
 
     constructor(private dialogRef: MdDialogRef<AddComponentComponent>,
-                private addComponentService: AddComponentService) {
+                private addComponentService: CharacterMakerService) {
         this.aspectTypes = [
             {
                 type: AspectType.text,
                 label: 'Text'
+            },
+            {
+                type: AspectType.boolean,
+                label: 'Check Box'
             }
         ]
     }
@@ -28,7 +32,7 @@ export class AddComponentComponent {
     public addComponent(): void {
         if (this.label && this.aspectType !== undefined) {
             let aspect = new Aspect(this.label, this.aspectType, this.required);
-            this.addComponentService.emit(aspect);
+            this.addComponentService.addComponent(aspect);
             this.dialogRef.close();
         }
     }

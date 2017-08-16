@@ -1,11 +1,40 @@
-.characterMaker-resize {
+.sub-component {
+    z-index: auto;
+    margin: 5px;
+}
+
+.sub-component-resize {
     cursor: nwse-resize;
     float: right;
     opacity: .5;
 }
 
-.subcomponent-header {
-    background-color: #d9f3ff;
+.sub-component-header {
+    background-color: #CFD8DC;
+}
+
+.sub-component-reorder {
+    cursor: move;
+}
+
+.sub-component-close {
+    cursor: pointer;
+    align-self: flex-end;
+    margin-left: auto;
+    width: 24px;
+    height: 24px;
+}
+
+.sub-component-close md-icon {
+    vertical-align: baseline;
+}
+
+md-card-header {
+    display: flex;
+    flex-direction: row;
+    position: absolute;
+    right: 0;
+    top: 0;
 }
 
 textarea {
