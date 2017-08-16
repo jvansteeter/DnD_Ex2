@@ -1,15 +1,4 @@
-<!--<md-card [ngStyle]="{'width': width + 'px', 'height': height + 'px'}" #resizable>-->
-<md-card [ngStyle]="{'width': width + 'px', 'height': height + 'px'}" #resizable>
-	<md-card-header>{{aspect.label}}</md-card-header>
-	<md-card-content>
-		<md-input-container>
-			<input mdInput [required]="aspect.required">
-		</md-input-container>
-	</md-card-content>
-	<md-card-footer>
-		<md-icon class="characterMaker-resize" (drag)="dragEvent($event)">transform</md-icon>
-	</md-card-footer>
-</md-card>
-<!--<md-input-container>-->
-	<!--<input mdInput placeholder="{{aspect.label}}" [required]="required">-->
-<!--</md-input-container>-->
+<md-input-container>
+	<textarea mdInput placeholder="{{aspect.label}}" [required]="aspect.required"
+	[ngStyle]="{'width': width + 'px', 'height': height + 'px'}"></textarea>
+</md-input-container>

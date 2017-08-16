@@ -1,9 +1,13 @@
 .characterMaker-resize {
-    cursor: move;
+    cursor: nwse-resize;
     float: right;
     opacity: .5;
 }
 
-.characterMaker-resize:active {
-    cursor: grabbing;
+.subcomponent-header {
+    background-color: #d9f3ff;
+}
+
+textarea {
+    resize: none;
 }

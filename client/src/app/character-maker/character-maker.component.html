@@ -1,7 +1,7 @@
 <h1>Character Maker</h1>
 <button md-icon-button md-raised-button color="primary" (click)="openAddDialog()"><md-icon>add</md-icon></button>
 <div class="well well-lg characterSheet">
-	<div *ngFor="let aspect of childAspects" [ngSwitch]="aspect.aspectType">
-		<characterMaker-textComponent *ngSwitchCase="aspectType.text" [aspect]="aspect"></characterMaker-textComponent>
+	<div *ngFor="let aspect of childAspects">
+		<sub-component [aspect]="aspect"></sub-component>
 	</div>
 </div>

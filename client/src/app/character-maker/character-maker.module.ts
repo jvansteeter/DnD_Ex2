@@ -11,6 +11,8 @@ import {
 import { AddComponentComponent } from './dialog/add-component.component';
 import { AddComponentService } from './add-component.service';
 import { TextComponent } from './subcomponents/text.component';
+import { SubComponent } from "./subcomponents/sub-component";
+import { SubComponentService } from "./subcomponents/sub-component.service";
 
 
 @NgModule({
@@ -30,6 +32,7 @@ import { TextComponent } from './subcomponents/text.component';
     declarations: [
         CharacterMakerComponent,
         AddComponentComponent,
+        SubComponent,
         TextComponent
     ],
     exports: [
@@ -39,7 +42,8 @@ import { TextComponent } from './subcomponents/text.component';
         AddComponentComponent
     ],
     providers: [
-        AddComponentService
+        AddComponentService,
+        SubComponentService
     ]
 })
 export class CharacterMakerModule {
