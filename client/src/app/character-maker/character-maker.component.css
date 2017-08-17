@@ -3,6 +3,7 @@
     padding: 20px;
     display: flex;
     flex-flow: row;
+    flex-wrap: wrap;
 }
 
 .add-dialog {
