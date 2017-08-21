@@ -3,22 +3,31 @@ import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
 import { Aspect } from './aspect';
 import { SubComponent } from './subcomponents/sub-component';
+import { Observable } from 'rxjs/Observable';
 
+
+export enum Move {
+    LEFT, RIGHT, UP, DOWN
+}
 
 @Injectable()
 export class CharacterMakerService {
     private addEvents = new Subject();
     private removeEvents = new Subject();
     private resizeEvents = new Subject();
+    private changeHeightEvents = new Subject();
 
     private characterSheetWidth: number = 0;
-    private subComponents: SubComponent[];
+    private characterSheetHeight: number = 0;
+    public subComponents: SubComponent[];
+    private theRelocated: SubComponent[];
 
     public aspects: Aspect[];
 
     constructor() {
         this.aspects = [];
         this.subComponents = [];
+        this.theRelocated = [];
     }
 
     public onAddComponent(next?, error?, complete?): Subscription {
@@ -47,7 +56,22 @@ export class CharacterMakerService {
     }
 
     public registerSubComponent(subComponent: SubComponent): void {
+        let leftOffset = 0;
+        for (let i = 0; i < this.subComponents.length; i++) {
+            let stationary = this.subComponents[i];
+            if (stationary.violatesRightTerritory(subComponent)) {
+                let offset = stationary.left + stationary.width + 10;
+                if (offset > leftOffset) {
+                    leftOffset = offset;
+                }
+            }
+        }
         this.subComponents.push(subComponent);
+        Observable.timer(100).subscribe(() => {
+            subComponent.animate(leftOffset, 0);
+        });
+
+        this.adjustCharacterSheetHeight();
     }
 
     public onResize(next?, error?, complete?): Subscription {
@@ -62,5 +86,64 @@ export class CharacterMakerService {
         }
 
         return - (offset % this.characterSheetWidth);
+    }
+
+    public reorderAnimation(moving: SubComponent, directions: Move[]): void {
+        this.adjustCharacterSheetHeight();
+        for (let i = 0; i < this.subComponents.length; i++) {
+            let stationary = this.subComponents[i];
+            if (stationary === moving) {
+                continue;
+            }
+            if (moving.overlapsRightSide(stationary) && this.arrayContains(directions, Move.LEFT)) {
+                stationary.animate(moving.width + 10, 0);
+            }
+            if (moving.overlapsLeftSide(stationary) && this.arrayContains(directions, Move.RIGHT)) {
+                stationary.animate(-(moving.width + 10), 0);
+            }
+            // if (moving.overlapsTopSide(stationary) && this.arrayContains(directions, Move.DOWN)) {
+            //     stationary.animate(0, -(moving.height + 10));
+            // }
+            if (moving.overlapsRightSide(stationary) && this.arrayContains(directions, Move.UP)) {
+                stationary.animate(0, moving.width + 10);
+            }
+        }
+    }
+
+    public adjustCharacterSheetHeight(): void {
+        let greatestHeight = 0;
+        for (let i = 0; i < this.subComponents.length; i++) {
+            let subComponent = this.subComponents[i];
+            if (subComponent.height + subComponent.top > greatestHeight) {
+                greatestHeight = subComponent.height + subComponent.top;
+            }
+        }
+        this.characterSheetHeight = greatestHeight;
+        this.changeHeightEvents.next(greatestHeight);
+    }
+
+    public onChangeHeight(next?, error?, complete?): Subscription {
+        return this.changeHeightEvents.subscribe(next, error, complete);
+    }
+
+    private isRelocated(subComponent: SubComponent): boolean {
+        for (let i = 0; i < this.theRelocated.length; i++) {
+            if (this.theRelocated[i] === subComponent) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private arrayContains(array: any[], item: any) {
+        for (let i = 0; i < array.length; i++) {
+            if (array[i] === item) {
+                if (item === Move.UP) {
+                    console.log('yes moving up')
+                }
+                return true;
+            }
+        }
+        return false;
     }
 }

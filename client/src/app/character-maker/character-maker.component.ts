@@ -15,6 +15,8 @@ export class CharacterMakerComponent implements AfterViewInit {
     private aspectType = AspectType;
     // private aspects: Aspect[];
 
+    readonly characterSheetHeightMin: number = 42;
+
     @HostListener('window:resize')
     onResize(): void {
         this.characterMakerService.setWidth(this.characterSheet.nativeElement.offsetWidth);
@@ -22,13 +24,15 @@ export class CharacterMakerComponent implements AfterViewInit {
 
     constructor(private dialog: MdDialog,
                 public characterMakerService: CharacterMakerService) {
-        // this.aspects = [];
-        this.characterMakerService.onAddComponent((aspect) => this.addComponent(aspect));
-        this.characterMakerService.onRemoveComponent((aspect) => this.removeComponent(aspect));
     }
 
     ngAfterViewInit(): void {
         this.characterMakerService.setWidth(this.characterSheet.nativeElement.offsetWidth);
+        this.characterMakerService.onAddComponent((aspect) => this.addComponent(aspect));
+        this.characterMakerService.onRemoveComponent((aspect) => this.removeComponent(aspect));
+        this.characterMakerService.onChangeHeight((newHeight) => {
+            this.characterSheet.nativeElement.style.height = (this.characterSheetHeightMin + newHeight) + 'px';
+        })
     }
 
     public openAddDialog(): void {
@@ -37,6 +41,7 @@ export class CharacterMakerComponent implements AfterViewInit {
 
     public removeComponent(aspect: Aspect): void {
         this.characterMakerService.aspects.splice(this.characterMakerService.aspects.indexOf(aspect), 1);
+        this.characterMakerService.adjustCharacterSheetHeight();
     }
 
     private addComponent(aspect: Aspect): void {
@@ -44,8 +49,6 @@ export class CharacterMakerComponent implements AfterViewInit {
     }
 
     private reorder(): void {
-        // let aspect = <Aspect>this.aspects.pop();
-        // this.aspects.splice(0, 0, aspect);
-        console.log(this.characterSheet.nativeElement.offsetWidth);
+        console.log(this.characterMakerService.subComponents);
     }
 }

@@ -1,10 +1,8 @@
 <md-card *ngIf="aspect" [ngStyle]="{'transition': transition,
 									'width': width + 'px',
 									'height': height + 'px',
-									'top': top + 'px',
-									'left': left + 'px',
 									'z-index': zIndex,
-									'transform': transform}"
+									'transform': 'translate(' + left + 'px, ' + top + 'px)'}"
 		 class="sub-component">
     <md-card-header class="sub-component-header" [ngStyle]="{'width': width + 'px'}">
 		<md-icon class="sub-component-reorder" (mousedown)="startMove()">reorder</md-icon>
@@ -18,7 +16,3 @@
         <md-icon class="sub-component-resize" (mousedown)="startDrag($event)">transform</md-icon>
     </md-card-footer>
 </md-card>
-
-<!--<md-grid-tile [colspan]="'4'" [rowspan]="'2'">-->
-	<!--<div style="background-color: red">content</div>-->
-<!--</md-grid-tile>-->

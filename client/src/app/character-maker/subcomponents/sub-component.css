@@ -1,5 +1,4 @@
 .sub-component {
-    margin: 5px;
 }
 
 .sub-component-resize {
@@ -28,6 +27,12 @@
     vertical-align: baseline;
 }
 
+md-card {
+    position: absolute;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
 md-card-header {
     display: flex;
     flex-direction: row;
@@ -38,4 +43,8 @@ md-card-header {
 
 textarea {
     resize: none;
+}
+
+/deep/ .mat-card-header-text {
+    margin: 0;
 }

@@ -4,7 +4,7 @@ import {
     ViewChild
 } from '@angular/core';
 import { SubComponentChild } from './sub-component-child';
-import { CharacterMakerService } from '../character-maker.service';
+import { CharacterMakerService, Move } from '../character-maker.service';
 import { Observable } from 'rxjs/Observable';
 
 @Component({
@@ -16,16 +16,17 @@ export class SubComponent implements OnInit, AfterViewInit {
     ngAfterViewInit(): void {
         // console.log('this.child');
         // console.log(this.child);
+        this.characterMakerService.registerSubComponent(this);
     }
 
     ngOnInit(): void {
         switch (this.aspect.aspectType) {
             case AspectType.text: {
-                this.setDimensions(230, 120);
+                this.setDimensions(192, 120);
                 break;
             }
             case AspectType.boolean: {
-                this.setDimensions(105, 72);
+                this.setDimensions(67, 72);
                 break;
             }
 
@@ -50,7 +51,7 @@ export class SubComponent implements OnInit, AfterViewInit {
 
     readonly animation = 'transform 200ms ease-out';
     readonly noAnimation = '';
-    transition = this.noAnimation;
+    transition = this.animation;
     transform = '';
 
     value: any;
@@ -65,13 +66,12 @@ export class SubComponent implements OnInit, AfterViewInit {
         this.zIndex = 0;
     }
 
-    private dragging: boolean = false;
+    private resizing: boolean = false;
     private moving: boolean = false;
 
     constructor(renderer: Renderer2, private characterMakerService: CharacterMakerService) {
-        this.characterMakerService.registerSubComponent(this);
         renderer.listen('document', 'mousemove', (event) => {
-            if (this.dragging) {
+            if (this.resizing) {
                 let newWidth = this.width + event.movementX;
                 if (newWidth > this.minWidth &&
                     newWidth < this.getMaxWidth()) {
@@ -82,23 +82,38 @@ export class SubComponent implements OnInit, AfterViewInit {
                     this.height = newHeight;
                 }
                 this.child.resize(newWidth, newHeight);
+                this.characterMakerService.reorderAnimation(this, []);
             }
             if (this.moving) {
-                console.log(this.characterMakerService.leftBoundary(this))
+                let directions: Move[] = [];
+                if (event.movementX > 0) {
+                    directions.push(Move.RIGHT);
+                }
+                else {
+                    directions.push(Move.LEFT);
+                }
+                if (event.movementY > 0) {
+                    directions.push(Move.DOWN);
+                }
+                else {
+                    directions.push(Move.UP);
+                }
                 let newTop = this.top + event.movementY;
                 let newLeft = this.left + event.movementX;
                 if (newTop >= 0) {
                     this.top = newTop;
                 }
-                if (newLeft >= this.characterMakerService.leftBoundary(this)) {
+                if (newLeft >= 0) {
                     this.left = newLeft;
+                    this.characterMakerService.reorderAnimation(this, directions);
                 }
             }
         });
 
         renderer.listen('document', 'mouseup', () => {
-            this.dragging = false;
+            this.resizing = false;
             this.moving = false;
+            this.stopHover();
         });
     }
 
@@ -110,11 +125,14 @@ export class SubComponent implements OnInit, AfterViewInit {
     }
 
     startDrag(): void {
-        this.dragging = true;
+        this.resizing = true;
+        this.hover();
     }
 
     startMove(): void {
         this.moving = true;
+        this.transition = this.noAnimation;
+        this.hover();
     }
 
     remove(): void {
@@ -122,14 +140,55 @@ export class SubComponent implements OnInit, AfterViewInit {
     }
 
     animate(x: number, y: number): void {
+        console.log('i was told to move ' + x + ' to the left and ' + y + ' down')
         this.transition = this.animation;
-        this.transform = 'translate(' + x + 'px, ' + y + 'px)';
-        Observable.timer(2000).subscribe(() => this.stopAnimation());
+        this.top += y;
+        this.left += x;
+        // this.transform = 'translate(' + x + 'px, ' + y + 'px)';
+        Observable.timer(2000).subscribe(() => {
+            this.transition = this.noAnimation;
+        });
     }
 
-    stopAnimation(): void {
-        this.transition = this.noAnimation;
-        this.transform = '';
+    overlaps(other: SubComponent): boolean {
+        let thisRight = this.left + this.width;
+        let thisBottom = this.top + this.height;
+        let otherRight = other.left + other.width;
+        let otherBottom = other.top + other.height;
+
+        if (this.top === other.top && this.left === other.left) {
+            return true;
+        }
+
+        if (this.left <= other.left && thisRight > other.left ||
+            other.left <= this.left && otherRight > this.left) {
+            if (this.top <= other.top && thisBottom > other.top ||
+                other.top <= this.top && otherBottom > this.top) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    overlapsRightSide(stationary: SubComponent): boolean {
+        return this.overlaps(stationary) && this.left > stationary.left;
+    }
+
+    overlapsLeftSide(stationary: SubComponent): boolean {
+        return this.overlaps(stationary) && (this.left + this.width) > (stationary.left + stationary.width);
+    }
+
+    overlapsTopSide(stationary: SubComponent): boolean {
+        return this.overlaps(stationary) && (this.top + this.height) > (stationary.top + stationary.height);
+    }
+
+    overlapsBottomSide(stationary: SubComponent): boolean {
+        return this.overlaps(stationary) && this.top > stationary.top;
+    }
+
+    violatesRightTerritory(other: SubComponent) {
+        return other.left < (this.left + this.width);
     }
 
     private getMaxWidth(): number {

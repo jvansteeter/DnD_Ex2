@@ -23,7 +23,7 @@ export class TextComponent implements SubComponentChild{
     }
 
     public resize(width: number, height: number): void {
-        this.width = width - 72;
+        this.width = width - 34;
         this.height = height - 80;
     }
 }
