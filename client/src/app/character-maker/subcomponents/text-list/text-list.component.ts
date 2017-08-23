@@ -5,17 +5,16 @@ import { MdMenu } from '@angular/material';
 import { SubComponent } from '../sub-component';
 
 
-interface CheckboxItem {
-    label: string;
-    value: boolean;
+interface TextItem {
+    value: string
 }
 
 @Component({
-    selector: 'characterMaker-checkBoxListComponent',
-    templateUrl: 'checkbox-list.component.html',
+    selector: 'characterMaker-textListComponent',
+    templateUrl: 'text-list.component.html',
     styleUrls: ['../sub-component.css']
 })
-export class CheckboxListComponent implements SubComponentChild, AfterViewInit {
+export class TextListComponent implements SubComponentChild, AfterViewInit {
     @Input() aspect: Aspect;
     @Input() parent: SubComponent;
     @ViewChild('options') options: MdMenu;
@@ -26,12 +25,12 @@ export class CheckboxListComponent implements SubComponentChild, AfterViewInit {
     readonly hasOptions = true;
     value: any;
 
-    private checkboxes: CheckboxItem[];
+    private items: TextItem[];
     fontSize: number = 14;
     @ViewChild('fontSizeInput') fontSizeInput: ElementRef;
 
     constructor(private renderer: Renderer2) {
-        this.checkboxes = [];
+        this.items = [];
     }
 
     ngAfterViewInit(): void {
@@ -39,7 +38,7 @@ export class CheckboxListComponent implements SubComponentChild, AfterViewInit {
         this.height = this.parent.height;
 
         this.renderer.listen(this.fontSizeInput.nativeElement, 'change', () => {
-            this.parent.resize(this.width, this.height + this.fontSize - 10);
+            this.parent.resize(this.width, this.height + this.fontSize - 14);
         });
     }
 
@@ -56,12 +55,9 @@ export class CheckboxListComponent implements SubComponentChild, AfterViewInit {
         this.parent.closeOptions();
     }
 
-    addCheckbox(): void {
-        this.checkboxes.push({
-            label: '',
-            value: false
-        });
-        this.parent.resize(this.width, this.height + 25);
+    addItem(): void {
+        this.items.push({value: ''});
+        this.parent.resize(this.width, this.height + 34);
         this.parent.minHeight = this.height;
     }
 

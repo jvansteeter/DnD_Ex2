@@ -120,6 +120,10 @@ export class SubComponent implements OnInit, AfterViewInit {
                 this.setDimensions(67, 1);
                 break;
             }
+            case AspectType.TEXT_LIST: {
+                this.setDimensions(192, 25);
+                break;
+            }
 
             default: {
                 throw new Error('Unknown aspect type');

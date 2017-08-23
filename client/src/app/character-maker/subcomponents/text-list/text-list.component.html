@@ -1,0 +1,14 @@
+<span [ngStyle]="{'font-size': fontSize + 'px'}">{{aspect.label}}</span>
+<div class="text-list">
+	<span *ngFor="let item of items" class="checkbox-list-item">
+		<input class="form-control" [(ngModel)]="item.value">
+	</span>
+</div>
+<md-menu #options="mdMenu" (close)="closeOptions()">
+	<span md-menu-item (click)="addItem()">Add Item</span>
+	<div class="changeFontSize" (click)="stopClickPropagate($event)" (keyup.enter)="closeMenu()">
+		<md-input-container>
+			<input mdInput type="number" placeholder="Label Font Size" [(ngModel)]="fontSize" #fontSizeInput>
+		</md-input-container>
+	</div>
+</md-menu>
