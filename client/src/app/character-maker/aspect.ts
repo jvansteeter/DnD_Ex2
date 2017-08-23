@@ -1,7 +1,8 @@
 export enum AspectType {
     TEXT,
     NUMBER,
-    BOOLEAN
+    BOOLEAN,
+    BOOLEAN_LIST
 }
 
 export class Aspect {

@@ -29,6 +29,10 @@ export class AddComponentComponent {
             {
                 type: AspectType.NUMBER,
                 label: 'Number'
+            },
+            {
+                type: AspectType.BOOLEAN_LIST,
+                label: 'List of Checkboxes'
             }
         ]
     }

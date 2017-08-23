@@ -7,7 +7,7 @@ export interface SubComponentChild {
     parent: SubComponent;
     width: number;
     height: number;
-    hasOptions: boolean;
+    readonly hasOptions: boolean;
     value: any;
 
     resize(width: number, height: number);

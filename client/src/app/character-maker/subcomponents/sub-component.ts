@@ -116,6 +116,10 @@ export class SubComponent implements OnInit, AfterViewInit {
                 this.setDimensions(85,25);
                 break;
             }
+            case AspectType.BOOLEAN_LIST: {
+                this.setDimensions(67, 1);
+                break;
+            }
 
             default: {
                 throw new Error('Unknown aspect type');

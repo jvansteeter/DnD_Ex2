@@ -59,11 +59,11 @@ export class TextComponent implements SubComponentChild, AfterViewInit{
         this.options._emitCloseEvent();
     }
 
-    changeFontSize(event): void {
-        console.log(event)
-        let newFontSize = event.target.value;
-        console.log(newFontSize)
-        this.resize(this.width, this.height + (newFontSize - this.fontSize))
-        this.fontSize = newFontSize;
-    }
+    // changeFontSize(event): void {
+    //     console.log(event)
+    //     let newFontSize = event.target.value;
+    //     console.log(newFontSize)
+    //     this.resize(this.width, this.height + (newFontSize - this.fontSize))
+    //     this.fontSize = newFontSize;
+    // }
 }
