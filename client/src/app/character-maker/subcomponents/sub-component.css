@@ -39,6 +39,7 @@ md-card {
     position: absolute;
     padding-left: 5px;
     padding-right: 5px;
+    padding-top: 0;
 }
 
 md-card-header {
@@ -46,7 +47,8 @@ md-card-header {
     flex-direction: row;
     position: absolute;
     right: 0;
-    top: 0;
+    top: -24px;
+    height: 24px;
 }
 
 md-card-footer {
