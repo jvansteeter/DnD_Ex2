@@ -3,7 +3,8 @@ export enum AspectType {
     NUMBER,
     BOOLEAN,
     BOOLEAN_LIST,
-    TEXT_LIST
+    TEXT_LIST,
+    CATEGORICAL
 }
 
 export class Aspect {

@@ -26,6 +26,7 @@ export class TextListComponent implements SubComponentChild, AfterViewInit {
     value: any;
 
     private items: TextItem[];
+    private readonly itemHeight = 34;
     fontSize: number = 14;
     @ViewChild('fontSizeInput') fontSizeInput: ElementRef;
 
@@ -38,6 +39,7 @@ export class TextListComponent implements SubComponentChild, AfterViewInit {
         this.height = this.parent.height;
 
         this.renderer.listen(this.fontSizeInput.nativeElement, 'change', () => {
+            this.parent.minHeight += this.fontSize - 14;
             this.parent.resize(this.width, this.height + this.fontSize - 14);
         });
     }
@@ -57,8 +59,14 @@ export class TextListComponent implements SubComponentChild, AfterViewInit {
 
     addItem(): void {
         this.items.push({value: ''});
-        this.parent.resize(this.width, this.height + 34);
-        this.parent.minHeight = this.height;
+        this.parent.resize(this.width, this.height + this.itemHeight);
+        this.parent.minHeight += this.itemHeight;
+    }
+
+    removeItem(): void {
+        this.items.splice(this.items.length - 1, 1);
+        this.parent.minHeight -= this.itemHeight;
+        this.parent.resize(this.width, this.parent.height - this.itemHeight);
     }
 
     stopClickPropagate(event): void {

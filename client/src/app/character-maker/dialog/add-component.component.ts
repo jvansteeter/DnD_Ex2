@@ -37,6 +37,10 @@ export class AddComponentComponent {
             {
                 type: AspectType.TEXT_LIST,
                 label: 'List of Text'
+            },
+            {
+                type: AspectType.CATEGORICAL,
+                label: 'Category'
             }
         ]
     }

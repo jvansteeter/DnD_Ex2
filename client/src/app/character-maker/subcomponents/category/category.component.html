@@ -1,0 +1,17 @@
+<md-select [placeholder]="aspect.label">
+	<md-option *ngFor="let category of categories">{{category.value}}</md-option>
+</md-select>
+<md-menu #options="mdMenu" (close)="closeOptions()">
+	<div class="changeFontSize" (click)="stopClickPropagate($event)" (keyup.enter)="addCategory()">
+		<md-input-container>
+			<input mdInput placeholder="New Category" [(ngModel)]="categoryInput">
+		</md-input-container>
+		<button md-icon-button color="primary" (click)="addCategory()"><md-icon>add</md-icon></button>
+	</div>
+	<div class="category-remove-option" (click)="stopClickPropagate($event)" (keyup.enter)="removeCategory()">
+		<md-select placeholder="Remove Category" [(ngModel)]="categoryToRemove">
+			<md-option *ngFor="let category of categories" [value]="category">{{category.value}}</md-option>
+		</md-select>
+		<button md-icon-button color="primary" (click)="removeCategory()"><md-icon>remove</md-icon></button>
+	</div>
+</md-menu>

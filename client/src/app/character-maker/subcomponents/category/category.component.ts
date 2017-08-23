@@ -6,16 +6,19 @@ import { SubComponentChild } from '../sub-component-child';
 import { MdMenu } from '@angular/material';
 
 
+interface CategoryOption {
+    value: string
+}
+
 @Component({
-    selector:  'characterMaker-textComponent',
-    templateUrl: 'text.component.html',
+    selector:  'characterMaker-categoryComponent',
+    templateUrl: 'category.component.html',
     styleUrls: ['../sub-component.css']
 })
-export class TextComponent implements SubComponentChild, AfterViewInit{
+export class CategoryComponent implements SubComponentChild, AfterViewInit{
     @Input() aspect: Aspect;
     @Input() parent: SubComponent;
     @ViewChild('options') options: MdMenu;
-    @ViewChild('fontSizeInput') fontSizeInput: ElementRef;
     label: string;
     required: boolean;
     width: number = 158;
@@ -23,24 +26,36 @@ export class TextComponent implements SubComponentChild, AfterViewInit{
     hasOptions = true;
     value: any;
 
-    readonly widthMargin = 34;
-    readonly heightMargin = 10;
+    private categoryInput: string = '';
+    private categoryToRemove: CategoryOption;
 
-    fontSize: number = 14;
+    private categories: CategoryOption[];
 
-    constructor(private renderer: Renderer2, subComponentService: SubComponentService) {
-
+    constructor() {
+        this.categories = [];
     }
 
     ngAfterViewInit(): void {
-        this.renderer.listen(this.fontSizeInput.nativeElement, 'change', () => {
-            this.parent.resize(this.width + this.widthMargin, this.height + this.heightMargin + this.fontSize - 14);
-        });
     }
 
     public resize(width: number, height: number): void {
-        this.width = width - this.widthMargin;
-        this.height = height - this.heightMargin;
+    }
+
+    addCategory(): void {
+        if (this.categoryInput !== '') {
+            this.categories.push({
+                value: this.categoryInput
+            });
+            this.categoryInput = '';
+            this.closeOptions();
+        }
+    }
+
+    removeCategory(): void {
+        if (this.categoryToRemove) {
+            this.categories.splice(this.categories.indexOf(this.categoryToRemove), 1);
+        }
+        this.closeOptions();
     }
 
     getMenuOptions(): MdMenu {

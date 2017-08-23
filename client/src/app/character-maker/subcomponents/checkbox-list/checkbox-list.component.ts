@@ -27,8 +27,9 @@ export class CheckboxListComponent implements SubComponentChild, AfterViewInit {
     value: any;
 
     private checkboxes: CheckboxItem[];
+    private readonly checkboxHeight = 25;
     fontSize: number = 14;
-    @ViewChild('fontSizeInput') fontSizeInput: ElementRef;
+    @ViewChild('fontSizeInput') private fontSizeInput: ElementRef;
 
     constructor(private renderer: Renderer2) {
         this.checkboxes = [];
@@ -40,6 +41,7 @@ export class CheckboxListComponent implements SubComponentChild, AfterViewInit {
 
         this.renderer.listen(this.fontSizeInput.nativeElement, 'change', () => {
             this.parent.resize(this.width, this.height + this.fontSize - 10);
+            this.parent.minHeight += this.fontSize - 14;
         });
     }
 
@@ -61,8 +63,14 @@ export class CheckboxListComponent implements SubComponentChild, AfterViewInit {
             label: '',
             value: false
         });
-        this.parent.resize(this.width, this.height + 25);
-        this.parent.minHeight = this.height;
+        this.parent.resize(this.width, this.height + this.checkboxHeight);
+        this.parent.minHeight += this.checkboxHeight;
+    }
+
+    removeCheckbox(): void {
+        this.checkboxes.splice(this.checkboxes.length - 1, 1);
+        this.parent.minHeight -= this.checkboxHeight;
+        this.parent.resize(this.width, this.parent.minHeight);
     }
 
     stopClickPropagate(event): void {

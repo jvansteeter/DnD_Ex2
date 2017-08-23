@@ -124,6 +124,10 @@ export class SubComponent implements OnInit, AfterViewInit {
                 this.setDimensions(192, 25);
                 break;
             }
+            case AspectType.CATEGORICAL: {
+                this.setDimensions(125, 15);
+                break;
+            }
 
             default: {
                 throw new Error('Unknown aspect type');
@@ -132,11 +136,11 @@ export class SubComponent implements OnInit, AfterViewInit {
     }
 
     resize(width: number, height: number): void {
-        if (width > this.minWidth &&
-            this.left + width < this.getMaxWidth()) {
+        if (width >= this.minWidth &&
+            this.left + width <= this.getMaxWidth()) {
             this.width = width;
         }
-        if (height > this.minHeight) {
+        if (height >= this.minHeight) {
             this.height = height;
         }
         this.child.resize(width, height);
