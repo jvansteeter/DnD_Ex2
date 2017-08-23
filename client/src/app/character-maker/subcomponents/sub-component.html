@@ -1,6 +1,5 @@
 <md-card *ngIf="aspect" [ngStyle]="{'transition': transition,
 									'width': width + 'px',
-									'height': height + 'px',
 									'z-index': zIndex,
 									'transform': 'translate(' + left + 'px, ' + top + 'px)'}"
 		 class="sub-component">
@@ -8,11 +7,12 @@
 		<md-icon class="sub-component-reorder" (mousedown)="startMove()">reorder</md-icon>
 		<button class="sub-component-close" md-icon-button (click)="remove()"><md-icon>close</md-icon></button>
 	</md-card-header>
-    <md-card-content [ngSwitch]="aspect.aspectType">
+    <md-card-content [ngStyle]="{'width': width + 'px', 'height': height + 'px'}" [ngSwitch]="aspect.aspectType">
         <characterMaker-textComponent *ngSwitchCase="aspectType.text" [aspect]="aspect" [parent]="this" #child></characterMaker-textComponent>
-        <characterMaker-checkBoxComponent *ngSwitchCase="aspectType.boolean" [aspect]="aspect" #child></characterMaker-checkBoxComponent>
+        <characterMaker-checkBoxComponent *ngSwitchCase="aspectType.boolean" [aspect]="aspect" [parent]="this" #child></characterMaker-checkBoxComponent>
     </md-card-content>
-    <md-card-footer>
+    <md-card-footer *ngIf="isHovered">
+		<button *ngIf="child.hasOptions" md-icon-button class="sub-component-options" (mousedown)="openOptions()" [mdMenuTriggerFor]="options"><md-icon>settings</md-icon></button>
         <md-icon class="sub-component-resize" (mousedown)="startDrag($event)">transform</md-icon>
     </md-card-footer>
 </md-card>

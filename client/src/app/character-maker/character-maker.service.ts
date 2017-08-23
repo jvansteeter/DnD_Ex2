@@ -43,6 +43,10 @@ export class CharacterMakerService {
     }
 
     public removeComponent(aspect: any): void {
+        let index = this.aspects.indexOf(aspect);
+        this.aspects.splice(index, 1);
+        this.subComponents.splice(index, 1);
+        this.adjustCharacterSheetHeight();
         this.removeEvents.next(aspect);
     }
 
@@ -104,9 +108,9 @@ export class CharacterMakerService {
             // if (moving.overlapsTopSide(stationary) && this.arrayContains(directions, Move.DOWN)) {
             //     stationary.animate(0, -(moving.height + 10));
             // }
-            if (moving.overlapsRightSide(stationary) && this.arrayContains(directions, Move.UP)) {
-                stationary.animate(0, moving.width + 10);
-            }
+            // if (moving.overlapsRightSide(stationary) && this.arrayContains(directions, Move.UP)) {
+            //     stationary.animate(0, moving.width + 10);
+            // }
         }
     }
 
@@ -115,7 +119,7 @@ export class CharacterMakerService {
         for (let i = 0; i < this.subComponents.length; i++) {
             let subComponent = this.subComponents[i];
             if (subComponent.height + subComponent.top > greatestHeight) {
-                greatestHeight = subComponent.height + subComponent.top;
+                greatestHeight = subComponent.getTotalHeight() + subComponent.top;
             }
         }
         this.characterSheetHeight = greatestHeight;
@@ -126,21 +130,9 @@ export class CharacterMakerService {
         return this.changeHeightEvents.subscribe(next, error, complete);
     }
 
-    private isRelocated(subComponent: SubComponent): boolean {
-        for (let i = 0; i < this.theRelocated.length; i++) {
-            if (this.theRelocated[i] === subComponent) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     private arrayContains(array: any[], item: any) {
         for (let i = 0; i < array.length; i++) {
             if (array[i] === item) {
-                if (item === Move.UP) {
-                    console.log('yes moving up')
-                }
                 return true;
             }
         }

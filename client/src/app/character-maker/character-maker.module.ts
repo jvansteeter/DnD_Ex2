@@ -6,6 +6,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
     MdAutocompleteModule,
     MdButtonModule, MdCardModule, MdCheckboxModule, MdDialogModule, MdGridListModule, MdIconModule, MdInputModule,
+    MdMenuModule,
     MdSelectModule
 } from '@angular/material';
 import { AddComponentComponent } from './dialog/add-component.component';
@@ -29,7 +30,8 @@ import { CheckboxComponent } from './subcomponents/checkbox/checkbox.component';
         MdCheckboxModule,
         MdAutocompleteModule,
         MdCardModule,
-        MdGridListModule
+        MdGridListModule,
+        MdMenuModule
     ],
     declarations: [
         CharacterMakerComponent,

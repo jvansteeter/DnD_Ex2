@@ -29,7 +29,7 @@ export class CharacterMakerComponent implements AfterViewInit {
     ngAfterViewInit(): void {
         this.characterMakerService.setWidth(this.characterSheet.nativeElement.offsetWidth);
         this.characterMakerService.onAddComponent((aspect) => this.addComponent(aspect));
-        this.characterMakerService.onRemoveComponent((aspect) => this.removeComponent(aspect));
+        // this.characterMakerService.onRemoveComponent((aspect) => this.removeComponent(aspect));
         this.characterMakerService.onChangeHeight((newHeight) => {
             this.characterSheet.nativeElement.style.height = (this.characterSheetHeightMin + newHeight) + 'px';
         })
@@ -40,8 +40,8 @@ export class CharacterMakerComponent implements AfterViewInit {
     }
 
     public removeComponent(aspect: Aspect): void {
-        this.characterMakerService.aspects.splice(this.characterMakerService.aspects.indexOf(aspect), 1);
-        this.characterMakerService.adjustCharacterSheetHeight();
+        // this.characterMakerService.aspects.splice(this.characterMakerService.aspects.indexOf(aspect), 1);
+        // this.characterMakerService.adjustCharacterSheetHeight();
     }
 
     private addComponent(aspect: Aspect): void {

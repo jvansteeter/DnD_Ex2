@@ -3,7 +3,8 @@
 
 .sub-component-resize {
     cursor: nwse-resize;
-    float: right;
+    margin-left: auto;
+    margin-top: auto;
     opacity: .5;
 }
 
@@ -27,6 +28,13 @@
     vertical-align: baseline;
 }
 
+.sub-component-options md-icon{
+    cursor: pointer;
+    font-size: 14px;
+    opacity: .5;
+    margin-bottom: 16px;
+}
+
 md-card {
     position: absolute;
     padding-left: 5px;
@@ -41,10 +49,21 @@ md-card-header {
     top: 0;
 }
 
+md-card-footer {
+    display: flex;
+    flex-direction: row;
+    height: 24px;
+}
+
 textarea {
     resize: none;
 }
 
 /deep/ .mat-card-header-text {
     margin: 0;
+}
+
+.changeFontSize {
+    padding-left: 5px;
+    padding-right: 5px;
 }

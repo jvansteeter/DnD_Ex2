@@ -1,6 +1,8 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import { SubComponentChild } from '../sub-component-child';
 import { Aspect } from '../../aspect';
+import { MdMenu } from '@angular/material';
+import { SubComponent } from '../sub-component';
 
 
 @Component({
@@ -10,13 +12,26 @@ import { Aspect } from '../../aspect';
 })
 export class CheckboxComponent implements SubComponentChild {
     @Input() aspect: Aspect;
+    @Input() parent: SubComponent;
     label: string;
     required: boolean;
     width: number;
     height: number;
+    hasOptions = false;
     value: any;
+
+    @ViewChild('options') options: MdMenu;
 
     resize(width: number, height: number) {
         // does nothing
     }
+
+    getMenuOptions(): MdMenu {
+        return this.options;
+    }
+
+    closeOptions(): void {
+        this.parent.closeOptions();
+    }
 }
+

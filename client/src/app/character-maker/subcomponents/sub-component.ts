@@ -6,6 +6,7 @@ import {
 import { SubComponentChild } from './sub-component-child';
 import { CharacterMakerService, Move } from '../character-maker.service';
 import { Observable } from 'rxjs/Observable';
+import { MdMenu } from '@angular/material';
 
 @Component({
     selector: 'sub-component',
@@ -13,31 +14,9 @@ import { Observable } from 'rxjs/Observable';
     styleUrls: ['sub-component.css']
 })
 export class SubComponent implements OnInit, AfterViewInit {
-    ngAfterViewInit(): void {
-        // console.log('this.child');
-        // console.log(this.child);
-        this.characterMakerService.registerSubComponent(this);
-    }
-
-    ngOnInit(): void {
-        switch (this.aspect.aspectType) {
-            case AspectType.text: {
-                this.setDimensions(192, 120);
-                break;
-            }
-            case AspectType.boolean: {
-                this.setDimensions(67, 72);
-                break;
-            }
-
-            default: {
-                throw new Error('Unknown aspect type');
-            }
-        }
-    }
-
     @Input() aspect: Aspect;
     @ViewChild('child') child: SubComponentChild;
+    options: MdMenu;
     aspectType = AspectType;
 
     width: number;
@@ -48,9 +27,13 @@ export class SubComponent implements OnInit, AfterViewInit {
     top: number = 0;
     left: number = 0;
     zIndex = 0;
+    isHovered: boolean = false;
+    optionsOpen: boolean = false;
 
     readonly animation = 'transform 200ms ease-out';
     readonly noAnimation = '';
+    readonly footerHeight = 24;
+    readonly headerHeight = 24;
     transition = this.animation;
     transform = '';
 
@@ -59,11 +42,15 @@ export class SubComponent implements OnInit, AfterViewInit {
     @HostListener('mouseenter')
     hover(): void {
         this.zIndex = 1;
+        this.isHovered = true;
     }
 
     @HostListener('mouseleave')
     stopHover(): void {
-        this.zIndex = 0;
+        if (!this.optionsOpen) {
+            this.zIndex = 0;
+            this.isHovered = false;
+        }
     }
 
     private resizing: boolean = false;
@@ -73,15 +60,8 @@ export class SubComponent implements OnInit, AfterViewInit {
         renderer.listen('document', 'mousemove', (event) => {
             if (this.resizing) {
                 let newWidth = this.width + event.movementX;
-                if (newWidth > this.minWidth &&
-                    newWidth < this.getMaxWidth()) {
-                    this.width = newWidth;
-                }
                 let newHeight = this.height + event.movementY;
-                if (newHeight > this.minHeight) {
-                    this.height = newHeight;
-                }
-                this.child.resize(newWidth, newHeight);
+                this.resize(newWidth, newHeight);
                 this.characterMakerService.reorderAnimation(this, []);
             }
             if (this.moving) {
@@ -103,7 +83,7 @@ export class SubComponent implements OnInit, AfterViewInit {
                 if (newTop >= 0) {
                     this.top = newTop;
                 }
-                if (newLeft >= 0) {
+                if (newLeft >= 0 && newLeft + this.width < this.getMaxWidth()) {
                     this.left = newLeft;
                     this.characterMakerService.reorderAnimation(this, directions);
                 }
@@ -115,6 +95,41 @@ export class SubComponent implements OnInit, AfterViewInit {
             this.moving = false;
             this.stopHover();
         });
+    }
+
+    ngAfterViewInit(): void {
+        this.characterMakerService.registerSubComponent(this);
+        this.options = this.child.getMenuOptions();
+    }
+
+    ngOnInit(): void {
+        switch (this.aspect.aspectType) {
+            case AspectType.text: {
+                this.setDimensions(192, 50);
+                break;
+            }
+            case AspectType.boolean: {
+                this.setDimensions(67, 1);
+                break;
+            }
+
+            default: {
+                throw new Error('Unknown aspect type');
+            }
+        }
+
+    }
+
+    resize(width: number, height: number): void {
+        if (width > this.minWidth &&
+            this.left + width < this.getMaxWidth()) {
+            this.width = width;
+        }
+        if (height > this.minHeight) {
+            this.height = height;
+        }
+        this.child.resize(width, height);
+        this.characterMakerService.reorderAnimation(this, []);
     }
 
     setDimensions(width: number, height: number) {
@@ -131,7 +146,8 @@ export class SubComponent implements OnInit, AfterViewInit {
 
     startMove(): void {
         this.moving = true;
-        this.transition = this.noAnimation;
+        // this.transition = this.noAnimation;
+        this.showAnimation(false);
         this.hover();
     }
 
@@ -140,14 +156,13 @@ export class SubComponent implements OnInit, AfterViewInit {
     }
 
     animate(x: number, y: number): void {
-        console.log('i was told to move ' + x + ' to the left and ' + y + ' down')
-        this.transition = this.animation;
-        this.top += y;
-        this.left += x;
-        // this.transform = 'translate(' + x + 'px, ' + y + 'px)';
-        Observable.timer(2000).subscribe(() => {
-            this.transition = this.noAnimation;
-        });
+        this.showAnimation(true);
+        if (this.top + y > 0) {
+            this.top += y;
+        }
+        if (this.left + x > 0 && this.right() + x <= this.getMaxWidth()) {
+            this.left += x;
+        }
     }
 
     overlaps(other: SubComponent): boolean {
@@ -176,11 +191,11 @@ export class SubComponent implements OnInit, AfterViewInit {
     }
 
     overlapsLeftSide(stationary: SubComponent): boolean {
-        return this.overlaps(stationary) && (this.left + this.width) > (stationary.left + stationary.width);
+        return this.overlaps(stationary) && this.right() < stationary.right();
     }
 
     overlapsTopSide(stationary: SubComponent): boolean {
-        return this.overlaps(stationary) && (this.top + this.height) > (stationary.top + stationary.height);
+        return this.overlaps(stationary) && this.bottom() > stationary.bottom();
     }
 
     overlapsBottomSide(stationary: SubComponent): boolean {
@@ -191,7 +206,37 @@ export class SubComponent implements OnInit, AfterViewInit {
         return other.left < (this.left + this.width);
     }
 
+    getTotalHeight(): number {
+        return this.height + this.footerHeight + this.headerHeight;
+    }
+
+    openOptions(): void {
+        this.optionsOpen = true;
+    }
+
+    closeOptions(): void {
+        this.optionsOpen = false;
+        this.stopHover();
+    }
+
+    private showAnimation(show: boolean): void {
+        if (show) {
+            this.transition = this.animation;
+        }
+        else {
+            this.transition = this.noAnimation;
+        }
+    }
+
     private getMaxWidth(): number {
         return window.innerWidth - 100;
+    }
+
+    private right(): number {
+        return this.left + this.width;
+    }
+
+    private bottom(): number {
+        return this.top + this.height;
     }
 }
