@@ -82,16 +82,6 @@ export class CharacterMakerService {
         return this.resizeEvents.subscribe(next, error, complete);
     }
 
-    public leftBoundary(subComponent: SubComponent): number {
-        let index = this.subComponents.indexOf(subComponent);
-        let offset = 0;
-        for (let i = 0; i < index; i++) {
-            offset += this.subComponents[i].width + 10;
-        }
-
-        return - (offset % this.characterSheetWidth);
-    }
-
     public reorderAnimation(moving: SubComponent, directions: Move[]): void {
         this.adjustCharacterSheetHeight();
         for (let i = 0; i < this.subComponents.length; i++) {
@@ -105,12 +95,6 @@ export class CharacterMakerService {
             if (moving.overlapsLeftSide(stationary) && this.arrayContains(directions, Move.RIGHT)) {
                 stationary.animate(-(moving.width + 10), 0);
             }
-            // if (moving.overlapsTopSide(stationary) && this.arrayContains(directions, Move.DOWN)) {
-            //     stationary.animate(0, -(moving.height + 10));
-            // }
-            // if (moving.overlapsRightSide(stationary) && this.arrayContains(directions, Move.UP)) {
-            //     stationary.animate(0, moving.width + 10);
-            // }
         }
     }
 

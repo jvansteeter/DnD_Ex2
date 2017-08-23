@@ -59,6 +59,10 @@ textarea {
     resize: none;
 }
 
+input {
+    text-align: center;
+}
+
 /deep/ .mat-card-header-text {
     margin: 0;
 }

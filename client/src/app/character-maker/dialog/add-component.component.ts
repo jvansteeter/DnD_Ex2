@@ -19,12 +19,16 @@ export class AddComponentComponent {
                 private addComponentService: CharacterMakerService) {
         this.aspectTypes = [
             {
-                type: AspectType.text,
+                type: AspectType.TEXT,
                 label: 'Text'
             },
             {
-                type: AspectType.boolean,
+                type: AspectType.BOOLEAN,
                 label: 'Check Box'
+            },
+            {
+                type: AspectType.NUMBER,
+                label: 'Number'
             }
         ]
     }

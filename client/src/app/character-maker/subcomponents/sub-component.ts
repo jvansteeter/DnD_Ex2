@@ -104,12 +104,16 @@ export class SubComponent implements OnInit, AfterViewInit {
 
     ngOnInit(): void {
         switch (this.aspect.aspectType) {
-            case AspectType.text: {
+            case AspectType.TEXT: {
                 this.setDimensions(192, 50);
                 break;
             }
-            case AspectType.boolean: {
+            case AspectType.BOOLEAN: {
                 this.setDimensions(67, 1);
+                break;
+            }
+            case AspectType.NUMBER: {
+                this.setDimensions(85,25);
                 break;
             }
 
@@ -117,7 +121,6 @@ export class SubComponent implements OnInit, AfterViewInit {
                 throw new Error('Unknown aspect type');
             }
         }
-
     }
 
     resize(width: number, height: number): void {
@@ -146,7 +149,6 @@ export class SubComponent implements OnInit, AfterViewInit {
 
     startMove(): void {
         this.moving = true;
-        // this.transition = this.noAnimation;
         this.showAnimation(false);
         this.hover();
     }

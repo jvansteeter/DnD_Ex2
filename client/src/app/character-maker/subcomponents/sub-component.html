@@ -8,8 +8,9 @@
 		<button class="sub-component-close" md-icon-button (click)="remove()"><md-icon>close</md-icon></button>
 	</md-card-header>
     <md-card-content [ngStyle]="{'width': width + 'px', 'height': height + 'px'}" [ngSwitch]="aspect.aspectType">
-        <characterMaker-textComponent *ngSwitchCase="aspectType.text" [aspect]="aspect" [parent]="this" #child></characterMaker-textComponent>
-        <characterMaker-checkBoxComponent *ngSwitchCase="aspectType.boolean" [aspect]="aspect" [parent]="this" #child></characterMaker-checkBoxComponent>
+        <characterMaker-textComponent *ngSwitchCase="aspectType.TEXT" [aspect]="aspect" [parent]="this" #child></characterMaker-textComponent>
+        <characterMaker-checkBoxComponent *ngSwitchCase="aspectType.BOOLEAN" [aspect]="aspect" [parent]="this" #child></characterMaker-checkBoxComponent>
+        <characterMaker-numberComponent *ngSwitchCase="aspectType.NUMBER" [aspect]="aspect" [parent]="this" #child></characterMaker-numberComponent>
     </md-card-content>
     <md-card-footer *ngIf="isHovered">
 		<button *ngIf="child.hasOptions" md-icon-button class="sub-component-options" (mousedown)="openOptions()" [mdMenuTriggerFor]="options"><md-icon>settings</md-icon></button>

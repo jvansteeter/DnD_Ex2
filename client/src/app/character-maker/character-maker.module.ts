@@ -15,6 +15,7 @@ import { TextComponent } from './subcomponents/text/text.component';
 import { SubComponent } from "./subcomponents/sub-component";
 import { SubComponentService } from "./subcomponents/sub-component.service";
 import { CheckboxComponent } from './subcomponents/checkbox/checkbox.component';
+import { NumberComponent } from './subcomponents/number/number.component';
 
 
 @NgModule({
@@ -38,7 +39,8 @@ import { CheckboxComponent } from './subcomponents/checkbox/checkbox.component';
         AddComponentComponent,
         SubComponent,
         TextComponent,
-        CheckboxComponent
+        CheckboxComponent,
+        NumberComponent
     ],
     exports: [
         CharacterMakerComponent

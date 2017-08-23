@@ -1,0 +1,11 @@
+<md-input-container>
+	<input mdInput type="number" placeholder="{{aspect.label}}" [required]="aspect.required"
+			  [ngStyle]="{'width': width + 'px', 'height': height + 'px', 'font-size': fontSize + 'px'}">
+</md-input-container>
+<md-menu #options="mdMenu" (close)="closeOptions()">
+	<div class="changeFontSize" (click)="stopClickPropagate($event)" (keyup.enter)="closeMenu()">
+		<md-input-container>
+			<input mdInput type="number" placeholder="Font Size" [(ngModel)]="fontSize" #fontSizeInput>
+		</md-input-container>
+	</div>
+</md-menu>
