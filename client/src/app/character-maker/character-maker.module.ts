@@ -19,6 +19,7 @@ import { NumberComponent } from './subcomponents/number/number.component';
 import { CheckboxListComponent } from './subcomponents/checkbox-list/checkbox-list.component';
 import { TextListComponent } from './subcomponents/text-list/text-list.component';
 import { CategoryComponent } from './subcomponents/category/category.component';
+import { TokenComponent } from './subcomponents/token/token.component';
 
 
 @NgModule({
@@ -46,7 +47,8 @@ import { CategoryComponent } from './subcomponents/category/category.component';
         NumberComponent,
         CheckboxListComponent,
         TextListComponent,
-        CategoryComponent
+        CategoryComponent,
+        TokenComponent
     ],
     exports: [
         CharacterMakerComponent

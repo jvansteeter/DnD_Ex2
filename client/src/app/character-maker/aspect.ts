@@ -4,7 +4,8 @@ export enum AspectType {
     BOOLEAN,
     BOOLEAN_LIST,
     TEXT_LIST,
-    CATEGORICAL
+    CATEGORICAL,
+    TOKEN
 }
 
 export class Aspect {

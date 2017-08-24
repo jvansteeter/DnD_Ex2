@@ -14,6 +14,7 @@
         <characterMaker-checkBoxListComponent *ngSwitchCase="aspectType.BOOLEAN_LIST" [aspect]="aspect" [parent]="this" #child></characterMaker-checkBoxListComponent>
         <characterMaker-textListComponent *ngSwitchCase="aspectType.TEXT_LIST" [aspect]="aspect" [parent]="this" #child></characterMaker-textListComponent>
         <characterMaker-categoryComponent *ngSwitchCase="aspectType.CATEGORICAL" [aspect]="aspect" [parent]="this" #child></characterMaker-categoryComponent>
+        <characterMaker-tokenComponent *ngSwitchCase="aspectType.TOKEN" [aspect]="aspect" [parent]="this" #child></characterMaker-tokenComponent>
     </md-card-content>
     <md-card-footer *ngIf="isHovered">
 		<button *ngIf="child.hasOptions" md-icon-button class="sub-component-options" (mousedown)="openOptions()" [mdMenuTriggerFor]="options"><md-icon>settings</md-icon></button>

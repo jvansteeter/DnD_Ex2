@@ -108,3 +108,14 @@ textarea {
     flex-direction: row;
     justify-content: space-between;
 }
+
+.token-component {
+    margin-left: -6px;
+    /*width: 100%;*/
+    /*height: 100%;*/
+}
+
+.token-component a.thumbnail {
+    width: 100%;
+    height: 100%;
+}
