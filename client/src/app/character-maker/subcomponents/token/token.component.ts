@@ -24,8 +24,6 @@ export class TokenComponent implements SubComponentChild, AfterViewInit{
     readonly widthMargin = 3;
     readonly heightMargin = 26;
 
-    private flow: any;
-
     constructor() {
 
     }
