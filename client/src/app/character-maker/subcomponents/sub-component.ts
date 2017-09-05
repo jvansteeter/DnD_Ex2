@@ -62,7 +62,8 @@ export class SubComponent implements OnInit, AfterViewInit {
                 let newWidth = this.width + event.movementX;
                 let newHeight = this.height + event.movementY;
                 this.resize(newWidth, newHeight);
-                this.characterMakerService.reorderAnimation(this, []);
+                this.characterMakerService.adjustCharacterSheetHeight();
+                // this.characterMakerService.reorderAnimation(this);
             }
             if (this.moving) {
                 let directions: Move[] = [];
@@ -85,12 +86,17 @@ export class SubComponent implements OnInit, AfterViewInit {
                 }
                 if (newLeft >= 0 && newLeft + this.width < this.getMaxWidth()) {
                     this.left = newLeft;
-                    this.characterMakerService.reorderAnimation(this, directions);
+                    // this.characterMakerService.reorderAnimation(this, directions);
+                    this.characterMakerService.adjustCharacterSheetHeight();
                 }
             }
         });
 
         renderer.listen('document', 'mouseup', () => {
+            if (this.moving || this.resizing) {
+                this.characterMakerService.reorderAnimation(this);
+            }
+
             this.resizing = false;
             this.moving = false;
             this.stopHover();
@@ -148,7 +154,7 @@ export class SubComponent implements OnInit, AfterViewInit {
             this.height = height;
         }
         this.child.resize(width, height);
-        this.characterMakerService.reorderAnimation(this, []);
+        // this.characterMakerService.reorderAnimation(this);
     }
 
     setDimensions(width: number, height: number) {
@@ -183,11 +189,25 @@ export class SubComponent implements OnInit, AfterViewInit {
         }
     }
 
+    animateTo(x: number, y: number): void {
+        this.showAnimation(true);
+        if (y > 0) {
+            this.top = y;
+        }
+        if (x > 0 && this.width + x <= this.getMaxWidth()) {
+            this.left = x;
+        }
+    }
+
+    canMoveRightTo(x: number): boolean {
+        return x > 0 && this.width + x <= this.getMaxWidth();
+    }
+
     overlaps(other: SubComponent): boolean {
         let thisRight = this.left + this.width;
-        let thisBottom = this.top + this.height;
+        let thisBottom = this.top + this.getTotalHeight();
         let otherRight = other.left + other.width;
-        let otherBottom = other.top + other.height;
+        let otherBottom = other.top + other.getTotalHeight();
 
         if (this.top === other.top && this.left === other.left) {
             return true;
@@ -250,11 +270,11 @@ export class SubComponent implements OnInit, AfterViewInit {
         return window.innerWidth - 100;
     }
 
-    private right(): number {
+    right(): number {
         return this.left + this.width;
     }
 
-    private bottom(): number {
+    bottom(): number {
         return this.top + this.height;
     }
 }

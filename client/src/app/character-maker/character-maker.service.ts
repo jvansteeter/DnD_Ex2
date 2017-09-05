@@ -82,18 +82,24 @@ export class CharacterMakerService {
         return this.resizeEvents.subscribe(next, error, complete);
     }
 
-    public reorderAnimation(moving: SubComponent, directions: Move[]): void {
-        this.adjustCharacterSheetHeight();
+    public reorderAnimation(moving: SubComponent): void {
+        // this.adjustCharacterSheetHeight();
         for (let i = 0; i < this.subComponents.length; i++) {
             let stationary = this.subComponents[i];
             if (stationary === moving) {
                 continue;
             }
-            if (moving.overlapsRightSide(stationary) && this.arrayContains(directions, Move.LEFT)) {
-                stationary.animate(moving.width + 10, 0);
-            }
-            if (moving.overlapsLeftSide(stationary) && this.arrayContains(directions, Move.RIGHT)) {
-                stationary.animate(-(moving.width + 10), 0);
+            if (moving.overlaps(stationary)) {
+                console.log('overlap')
+                if (stationary.canMoveRightTo(moving.right() + 10)) {
+                    stationary.animateTo(moving.right() + 10, stationary.top);
+                }
+                else {
+                    stationary.animateTo(stationary.left, moving.bottom() + 30);
+                }
+                Observable.timer(100).subscribe(() => {
+                    this.adjustCharacterSheetHeight();
+                })
             }
         }
     }

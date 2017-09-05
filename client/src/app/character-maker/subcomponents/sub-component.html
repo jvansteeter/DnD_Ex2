@@ -5,7 +5,7 @@
 		 class="sub-component">
     <md-card-header *ngIf="isHovered" class="sub-component-header" [ngStyle]="{'width': width + 'px'}">
 		<md-icon class="sub-component-reorder" (mousedown)="startMove()">reorder</md-icon>
-		<button class="sub-component-close" md-icon-button (click)="remove()"><md-icon>close</md-icon></button>
+		<button class="sub-component-close" md-icon-button (mousedown)="remove()"><md-icon>close</md-icon></button>
 	</md-card-header>
     <md-card-content [ngStyle]="{'width': width + 'px', 'height': height + 'px'}" [ngSwitch]="aspect.aspectType">
         <characterMaker-textComponent *ngSwitchCase="aspectType.TEXT" [aspect]="aspect" [parent]="this" #child></characterMaker-textComponent>
