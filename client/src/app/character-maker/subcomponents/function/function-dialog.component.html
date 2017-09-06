@@ -1,0 +1,36 @@
+<span>Function:</span>
+<div class="well well-sm">
+	<div>
+		<span *ngFor="let chip of soFar">
+			<span *ngIf="chip === grammarNode.THEN"><br>&nbsp;</span>
+			<md-chip color="primary" selected="true" *ngIf="chip === grammarNode.IF ||
+															chip === grammarNode.THEN ||
+															chip === grammarNode.ASSIGNED ||
+															chip === grammarNode.THIS">{{chip}}</md-chip>
+			<md-select class="function-not-chip" placeholder="Logical Operator" *ngIf="chip === grammarNode.LOGIC_OPERATOR">
+				<md-option value="==">is equal to</md-option>
+				<md-option value="<">is less than</md-option>
+				<md-option value=">">is greater than</md-option>
+				<md-option value="<=">is less than or equal to</md-option>
+				<md-option value=">=">is greater than or equal to</md-option>
+			</md-select>
+			<md-select class="function-not-chip" placeholder="Aspect" *ngIf="chip === grammarNode.ASPECT">
+				<span *ngFor="let aspect of characterMakerService.aspects">
+					<md-option *ngIf="aspect.aspectType !== aspectType.FUNCTION" [value]="aspect">{{aspect.label}}</md-option>
+				</span>
+			</md-select>
+			<md-input-container class="function-not-chip" *ngIf="chip === grammarNode.NUMBER">
+				<input mdInput type="number">
+			</md-input-container>
+			<md-select class="function-not-chip" placeholder="True/False" *ngIf="chip === grammarNode.BOOLEAN">
+				<md-option [value]="true">True</md-option>
+				<md-option [value]="false">False</md-option>
+			</md-select>
+		</span>
+	</div>
+</div>
+<span>Options:</span>
+<md-chip-list>
+	<md-chip class="function-chip" color="accent" *ngFor="let chip of next" (click)="addNode(chip)">{{chip}}</md-chip>
+</md-chip-list>
+<button md-raised-button (click)="removeLast()" [disabled]="soFar.length < 2">Remove Last</button>

@@ -45,6 +45,10 @@ export class AddComponentComponent {
             {
                 type: AspectType.TOKEN,
                 label: 'Map Token'
+            },
+            {
+                type: AspectType.FUNCTION,
+                label: 'Function'
             }
         ]
     }

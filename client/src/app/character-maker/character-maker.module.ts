@@ -5,7 +5,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
     MdAutocompleteModule,
-    MdButtonModule, MdCardModule, MdCheckboxModule, MdDialogModule, MdGridListModule, MdIconModule, MdInputModule,
+    MdButtonModule, MdCardModule, MdCheckboxModule, MdChipsModule, MdDialogModule, MdGridListModule, MdIconModule,
+    MdInputModule,
     MdMenuModule,
     MdSelectModule
 } from '@angular/material';
@@ -20,6 +21,8 @@ import { CheckboxListComponent } from './subcomponents/checkbox-list/checkbox-li
 import { TextListComponent } from './subcomponents/text-list/text-list.component';
 import { CategoryComponent } from './subcomponents/category/category.component';
 import { TokenComponent } from './subcomponents/token/token.component';
+import { FunctionComponent } from './subcomponents/function/function.component';
+import { FunctionDialogComponent } from './subcomponents/function/function-dialog.component';
 
 
 @NgModule({
@@ -36,7 +39,8 @@ import { TokenComponent } from './subcomponents/token/token.component';
         MdAutocompleteModule,
         MdCardModule,
         MdGridListModule,
-        MdMenuModule
+        MdMenuModule,
+        MdChipsModule
     ],
     declarations: [
         CharacterMakerComponent,
@@ -48,13 +52,16 @@ import { TokenComponent } from './subcomponents/token/token.component';
         CheckboxListComponent,
         TextListComponent,
         CategoryComponent,
-        TokenComponent
+        TokenComponent,
+        FunctionComponent,
+        FunctionDialogComponent
     ],
     exports: [
         CharacterMakerComponent
     ],
     entryComponents: [
-        AddComponentComponent
+        AddComponentComponent,
+        FunctionDialogComponent
     ],
     providers: [
         CharacterMakerService,

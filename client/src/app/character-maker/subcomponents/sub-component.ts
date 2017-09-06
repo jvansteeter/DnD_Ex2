@@ -138,6 +138,10 @@ export class SubComponent implements OnInit, AfterViewInit {
                 this.setDimensions(70, 50);
                 break;
             }
+            case AspectType.FUNCTION: {
+                this.setDimensions(100, 100);
+                break;
+            }
 
             default: {
                 throw new Error('Unknown aspect type');
