@@ -120,6 +120,19 @@ export class CharacterMakerService {
         return this.changeHeightEvents.subscribe(next, error, complete);
     }
 
+    public getAspectWithLabel(label: string): Aspect | undefined {
+        console.log('getAspectWithLabel')
+        console.log('label: ' + label)
+        console.log(this.aspects)
+        for (let i = 0; i < this.aspects.length; i++) {
+            if (this.aspects[i].label === label) {
+                return this.aspects[i];
+            }
+        }
+
+        return undefined;
+    }
+
     private arrayContains(array: any[], item: any) {
         for (let i = 0; i < array.length; i++) {
             if (array[i] === item) {
