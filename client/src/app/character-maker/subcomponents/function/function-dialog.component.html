@@ -1,13 +1,13 @@
 <span>Function:</span>
 <div class="well well-sm">
 	<div>
-		<span *ngFor="let chip of functionList">
+		<span *ngFor="let chip of functionStack.stack">
 			<span *ngIf="chip === grammarNode.THEN"><br>&nbsp;</span>
 			<md-chip color="primary" selected="true" *ngIf="chip === grammarNode.IF ||
 															chip === grammarNode.THEN ||
 															chip === grammarNode.ASSIGNED ||
 															chip === grammarNode.THIS">{{chip}}</md-chip>
-			<md-select class="function-not-chip" placeholder="Logical Operator" *ngIf="chip === grammarNode.LOGIC_OPERATOR" (change)="selectOption($event)" [disabled]="chip !== functionList[functionList.length - 1]">
+			<md-select class="function-not-chip" placeholder="Logical Operator" *ngIf="chip === grammarNode.LOGIC_OPERATOR" (change)="selectOption($event)" [disabled]="chip !== functionStack.currentNode()">
 				<md-option value="==">is equal to</md-option>
 				<md-option value="!=">is not equal to</md-option>
 				<md-option value="<">is less than</md-option>
@@ -15,8 +15,13 @@
 				<md-option value="<=">is less than or equal to</md-option>
 				<md-option value=">=">is greater than or equal to</md-option>
 			</md-select>
-			<md-select class="function-not-chip" placeholder="Aspect" *ngIf="chip === grammarNode.ASPECT" (change)="selectOption($event)" [disabled]="chip !== functionList[functionList.length - 1]">
-				<span *ngFor="let aspect of characterMakerService.aspects">
+			<md-select class="function-not-chip" placeholder="Aspect" *ngIf="chip === grammarNode.ASPECT" (change)="selectOption($event)" [disabled]="chip !== functionStack.currentNode()">
+				<span *ngFor="let aspect of characterMakerService.getAspectsOfType(false)">
+					<md-option *ngIf="aspect.aspectType !== aspectType.FUNCTION" [value]="aspect">{{aspect.label}}</md-option>
+				</span>
+			</md-select>
+			<md-select class="function-not-chip" placeholder="Aspect" *ngIf="chip === grammarNode.ASPECT_BOOLEAN" (change)="selectOption($event)" [disabled]="chip !== functionStack.currentNode()">
+				<span *ngFor="let aspect of characterMakerService.getAspectsOfType(aspectType.BOOLEAN)">
 					<md-option *ngIf="aspect.aspectType !== aspectType.FUNCTION" [value]="aspect">{{aspect.label}}</md-option>
 				</span>
 			</md-select>
@@ -34,4 +39,4 @@
 <md-chip-list>
 	<md-chip class="function-chip" color="accent" *ngFor="let chip of next" (click)="addNode(chip)">{{chip}}</md-chip>
 </md-chip-list>
-<button md-raised-button (click)="removeLast()" [disabled]="functionList.length < 2">Remove Last</button>
+<button md-raised-button (click)="removeLast()" [disabled]="functionStack.stack.length < 2">Remove Last</button>

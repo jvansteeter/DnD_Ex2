@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
-import { Aspect } from './aspect';
+import { Aspect, AspectType } from './aspect';
 import { SubComponent } from './subcomponents/sub-component';
 import { Observable } from 'rxjs/Observable';
 
@@ -121,9 +121,6 @@ export class CharacterMakerService {
     }
 
     public getAspectWithLabel(label: string): Aspect | undefined {
-        console.log('getAspectWithLabel')
-        console.log('label: ' + label)
-        console.log(this.aspects)
         for (let i = 0; i < this.aspects.length; i++) {
             if (this.aspects[i].label === label) {
                 return this.aspects[i];
@@ -131,6 +128,20 @@ export class CharacterMakerService {
         }
 
         return undefined;
+    }
+
+    public getAspectsOfType(type: AspectType | false): Aspect[] {
+        if (!type) {
+            return this.aspects;
+        }
+        let result: Aspect[] = [];
+        for (let i = 0; i < this.aspects.length; i++) {
+            if (this.aspects[i].aspectType === type) {
+                result.push(this.aspects[i]);
+            }
+        }
+
+        return result;
     }
 
     private arrayContains(array: any[], item: any) {

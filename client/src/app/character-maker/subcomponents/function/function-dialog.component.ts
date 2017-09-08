@@ -9,30 +9,33 @@ import { Aspect, AspectType } from '../../aspect';
     styleUrls: ['../sub-component.css']
 })
 export class FunctionDialogComponent {
-    functionList: GrammarNode[] = [];
     next: GrammarNode[];
     grammarNode = GrammarNode;
     aspectType = AspectType;
     currentNodeValue: any;
 
-    graph = new FunctionGrammar();
+    functionStack = new FunctionGrammar();
 
+    private lastAspect: Aspect | null;
+
+    // private isEqual: boolean = true;
+    // private isNotEqual: boolean = true;
+    // private isLessThan: boolean = true;
+    // private isGreaterThan: boolean = true;
+    // private isLessThanOrEqualTo: boolean = true;
+    // private isGreaterThanOrEqualTo: boolean = true;
 
     constructor(private dialogRef: MdDialogRef<FunctionDialogComponent>, private characterMakerService: CharacterMakerService) {
-        this.functionList.push(GrammarNode.START);
-        this.next = this.graph.grammar[GrammarNode.START];
+        this.functionStack.start();
+        this.next = this.functionStack.nextOptions();
     }
 
     addNode(node): void {
-        this.functionList.push(node);
+        this.functionStack.push(node);
         this.currentNodeValue = null;
-        let currentNode = this.functionList[this.functionList.length - 1];
-        if (currentNode === GrammarNode.START ||
-            currentNode === GrammarNode.IF ||
-            currentNode === GrammarNode.THEN ||
-            currentNode === GrammarNode.THIS ||
-            currentNode === GrammarNode.ASSIGNED) {
-            this.next = this.graph.grammar[node];
+        let currentNode = this.functionStack.currentNode();
+        if (currentNode !== GrammarNode.ASPECT) {
+            this.next = this.functionStack.nextOptions();
         }
         else {
             this.next = [];
@@ -40,24 +43,54 @@ export class FunctionDialogComponent {
     }
 
     removeLast(): void {
-        this.functionList.pop();
-        this.next = this.graph.grammar[this.functionList[this.functionList.length - 1]];
-        // console.log(this.currentNode);
+        this.functionStack.pop();
+        this.next = this.functionStack.nextOptions();
     }
 
     selectOption(selected): void {
         this.currentNodeValue = selected.value;
-        let currentNode = this.functionList[this.functionList.length - 1];
-        console.log(selected);
+        let currentNode = this.functionStack.currentNode();
         switch (currentNode) {
-            case (GrammarNode.ASPECT): {
-                let currentAspect = this.characterMakerService.getAspectWithLabel(this.currentNodeValue);
-                console.log(currentAspect)
-                if (currentAspect === undefined) {
-                    return;
+            case GrammarNode.ASPECT: {
+                if (this.currentNodeValue.aspectType === AspectType.BOOLEAN) {
+                    this.functionStack.pop();
+                    this.functionStack.push(GrammarNode.ASPECT_BOOLEAN);
+                    this.next = this.functionStack.nextOptions();
                 }
-                if (currentAspect.aspectType === AspectType.NUMBER) {
-                    this.next = [GrammarNode.OPERATOR, GrammarNode.LOGIC_OPERATOR]
+                else if (this.currentNodeValue.aspectType === AspectType.NUMBER) {
+                    this.functionStack.pop();
+                    this.functionStack.push(GrammarNode.ASPECT_NUMBER);
+                    this.next = this.functionStack.nextOptions();
+                }
+
+
+                // if (this.currentNodeValue.aspectType === AspectType.BOOLEAN) {
+                //     if (this.lastAspect) {
+                //         this.lastAspect = null;
+                //         this.next = [GrammarNode.THEN];
+                //         return;
+                //     }
+                //     this.isEqual = true;
+                //     this.isNotEqual = true;
+                //     this.isLessThan = false;
+                //     this.isGreaterThan = false;
+                //     this.isLessThanOrEqualTo = false;
+                //     this.isGreaterThanOrEqualTo = false;
+                //
+                //     this.next = [GrammarNode.LOGIC_OPERATOR];
+                //     this.lastAspect = this.currentNodeValue;
+                // }
+                // else if (this.currentNodeValue.aspectType === AspectType.NUMBER) {
+                //     this.next = [GrammarNode.OPERATOR, GrammarNode.LOGIC_OPERATOR];
+                // }
+                break;
+            }
+            case GrammarNode.LOGIC_OPERATOR: {
+                if (this.functionStack.previousNode() === GrammarNode.ASPECT && (<Aspect>this.lastAspect).aspectType === AspectType.BOOLEAN) {
+                    this.next = [GrammarNode.ASPECT, GrammarNode.BOOLEAN];
+                }
+                if (this.functionStack.previousNode() === GrammarNode.ASPECT && (<Aspect>this.lastAspect).aspectType === AspectType.NUMBER) {
+                    this.next = [GrammarNode.ASPECT, GrammarNode.NUMBER];
                 }
                 break;
             }
