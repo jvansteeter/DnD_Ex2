@@ -5,13 +5,21 @@ export enum GrammarNode {
     THIS = 'THIS',
     ASPECT = 'ASPECT',
     ASPECT_BOOLEAN = 'ASPECT_BOOLEAN',
+    ASPECT_BOOLEAN_THEN = 'ASPECT_BOOLEAN_THEN',
+    ASPECT_NUMBER_THEN = 'ASPECT_NUMBER_THEN',
     ASPECT_NUMBER = 'ASPECT_NUMBER',
     OPERATOR = 'OPERATOR',
     LOGIC_OPERATOR = 'LOGIC_OPERATOR',
     EQUAL_OR_NOT = 'EQUAL_OR_NOT',
     ASSIGNED = 'ASSIGNED',
     NUMBER = 'NUMBER',
-    BOOLEAN = 'BOOLEAN'
+    BOOLEAN = 'BOOLEAN',
+    ASSIGNED_NUMBER = 'ASSIGNED_NUMBER',
+    ASSIGNED_ASPECT_NUMBER = 'ASSIGNED_ASPECT_NUMBER',
+    ASSIGNED_BOOLEAN = 'ASSIGNED_BOOLEAN',
+    ASSIGNED_ASPECT_BOOLEAN = 'ASSIGNED_ASPECT_BOOLEAN',
+    ASSIGNED_OPERATOR = 'ASSIGNED_OPERATOR',
+    DONE = 'DONE'
 }
 
 export class FunctionGrammar {
@@ -31,39 +39,61 @@ export class FunctionGrammar {
             GrammarNode.ASSIGNED
         ],
         'ASPECT': [
-            GrammarNode.OPERATOR,
-            GrammarNode.LOGIC_OPERATOR
         ],
         'ASPECT_BOOLEAN': [
-              GrammarNode.EQUAL_OR_NOT
+            GrammarNode.EQUAL_OR_NOT
+        ],
+        'ASPECT_BOOLEAN_THEN': [
+            GrammarNode.THEN
+        ],
+        'ASPECT_NUMBER': [
+            GrammarNode.LOGIC_OPERATOR
+        ],
+        'ASPECT_NUMBER_THEN': [
+            GrammarNode.OPERATOR,
+            GrammarNode.THEN
         ],
         'OPERATOR': [
-            GrammarNode.ASPECT,
+            GrammarNode.ASPECT_NUMBER_THEN,
             GrammarNode.NUMBER
         ],
         'LOGIC_OPERATOR': [
             GrammarNode.NUMBER,
-            GrammarNode.ASPECT,
-            GrammarNode.BOOLEAN
+            GrammarNode.ASPECT_NUMBER_THEN
         ],
         'EQUAL_OR_NOT': [
             GrammarNode.BOOLEAN,
-            GrammarNode.ASPECT_BOOLEAN,
+            GrammarNode.ASPECT_BOOLEAN_THEN,
         ],
         'ASSIGNED': [
             GrammarNode.ASPECT,
-            GrammarNode.NUMBER,
-            GrammarNode.BOOLEAN
+            GrammarNode.ASSIGNED_NUMBER,
+            GrammarNode.ASSIGNED_BOOLEAN
         ],
         'NUMBER': [
             GrammarNode.OPERATOR,
-            GrammarNode.LOGIC_OPERATOR,
             GrammarNode.THEN
         ],
         'BOOLEAN': [
-            GrammarNode.OPERATOR,
-            GrammarNode.LOGIC_OPERATOR,
             GrammarNode.THEN
+        ],
+        'ASSIGNED_NUMBER': [
+            GrammarNode.ASSIGNED_OPERATOR,
+            GrammarNode.DONE
+        ],
+        'ASSIGNED_ASPECT_NUMBER': [
+            GrammarNode.ASSIGNED_OPERATOR,
+            GrammarNode.DONE
+        ],
+        'ASSIGNED_BOOLEAN': [
+            GrammarNode.DONE
+        ],
+        'ASSIGNED_ASPECT_BOOLEAN': [
+            GrammarNode.DONE
+        ],
+        'ASSIGNED_OPERATOR': [
+            GrammarNode.ASSIGNED_NUMBER,
+            GrammarNode.ASSIGNED_ASPECT_NUMBER
         ]
     };
 

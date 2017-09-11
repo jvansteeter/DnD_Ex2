@@ -43,7 +43,10 @@ export class FunctionComponent implements SubComponentChild, AfterViewInit {
     }
 
     openFunctionDialog(): void {
-        this.dialog.open(FunctionDialogComponent);
+        this.dialog.open(FunctionDialogComponent).afterClosed().subscribe((result) => {
+            console.log('open has ended')
+            console.log(result)
+        });
     }
 
     stopClickPropagate(event): void {

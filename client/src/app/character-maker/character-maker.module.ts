@@ -22,7 +22,7 @@ import { TextListComponent } from './subcomponents/text-list/text-list.component
 import { CategoryComponent } from './subcomponents/category/category.component';
 import { TokenComponent } from './subcomponents/token/token.component';
 import { FunctionComponent } from './subcomponents/function/function.component';
-import { FunctionDialogComponent } from './subcomponents/function/function-dialog.component';
+import { FunctionDialogComponent, NodePipe } from './subcomponents/function/function-dialog.component';
 
 
 @NgModule({
@@ -54,7 +54,8 @@ import { FunctionDialogComponent } from './subcomponents/function/function-dialo
         CategoryComponent,
         TokenComponent,
         FunctionComponent,
-        FunctionDialogComponent
+        FunctionDialogComponent,
+        NodePipe
     ],
     exports: [
         CharacterMakerComponent

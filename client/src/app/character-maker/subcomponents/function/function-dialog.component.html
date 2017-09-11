@@ -20,23 +20,41 @@
 					<md-option *ngIf="aspect.aspectType !== aspectType.FUNCTION" [value]="aspect">{{aspect.label}}</md-option>
 				</span>
 			</md-select>
-			<md-select class="function-not-chip" placeholder="Aspect" *ngIf="chip === grammarNode.ASPECT_BOOLEAN" (change)="selectOption($event)" [disabled]="chip !== functionStack.currentNode()">
+			<md-select class="function-not-chip" placeholder="Aspect" *ngIf="chip === grammarNode.ASPECT_BOOLEAN_THEN" (change)="selectOption($event)" [disabled]="chip !== functionStack.currentNode()">
 				<span *ngFor="let aspect of characterMakerService.getAspectsOfType(aspectType.BOOLEAN)">
 					<md-option *ngIf="aspect.aspectType !== aspectType.FUNCTION" [value]="aspect">{{aspect.label}}</md-option>
 				</span>
 			</md-select>
-			<md-input-container class="function-not-chip" *ngIf="chip === grammarNode.NUMBER">
-				<input mdInput type="number">
+			<md-select class="function-not-chip" placeholder="Aspect" *ngIf="chip === grammarNode.ASPECT_NUMBER_THEN || chip === grammarNode.ASSIGNED_ASPECT_NUMBER" (change)="selectOption($event)" [disabled]="chip !== functionStack.currentNode()">
+				<span *ngFor="let aspect of characterMakerService.getAspectsOfType(aspectType.NUMBER)">
+					<md-option *ngIf="aspect.aspectType !== aspectType.FUNCTION" [value]="aspect">{{aspect.label}}</md-option>
+				</span>
+			</md-select>
+			<md-select class="function-not-chip" placeholder="Logical Operator" *ngIf="chip === grammarNode.EQUAL_OR_NOT" (change)="selectOption($event)" [disabled]="chip !== functionStack.currentNode()">
+				<md-option value="==">is equal to</md-option>
+				<md-option value="!=">is not equal to</md-option>
+			</md-select>
+			<md-input-container class="function-not-chip" *ngIf="chip === grammarNode.NUMBER || chip === grammarNode.ASSIGNED_NUMBER">
+				<input mdInput type="number" (change)="selectOption($event)">
 			</md-input-container>
-			<md-select class="function-not-chip" placeholder="True/False" *ngIf="chip === grammarNode.BOOLEAN">
+			<md-select class="function-not-chip" placeholder="True/False" *ngIf="chip === grammarNode.BOOLEAN || chip === grammarNode.ASSIGNED_BOOLEAN" (change)="selectOption($event)" [disabled]="chip !== functionStack.currentNode()">
 				<md-option [value]="true">True</md-option>
 				<md-option [value]="false">False</md-option>
+			</md-select>
+			<md-select class="function-not-chip" placeholder="Operator" *ngIf="chip === grammarNode.OPERATOR || chip === grammarNode.ASSIGNED_OPERATOR" (change)="selectOption($event)" [disabled]="chip !== functionStack.currentNode()">
+				<md-option value="+">Plus</md-option>
+				<md-option value="-">Minus</md-option>
+				<md-option value="*">Times by</md-option>
+				<md-option value="/">Divided by</md-option>
 			</md-select>
 		</span>
 	</div>
 </div>
 <span>Options:</span>
 <md-chip-list>
-	<md-chip class="function-chip" color="accent" *ngFor="let chip of next" (click)="addNode(chip)">{{chip}}</md-chip>
+	<span *ngFor="let chip of next">
+		<md-chip class="function-chip" color="accent" *ngIf="chip !== grammarNode.DONE" (click)="addNode(chip)">{{chip | nodePipe}}</md-chip>
+		<md-chip class="function-chip" color="accent" *ngIf="chip === grammarNode.DONE" (click)="finishFunction()">Done</md-chip>
+	</span>
 </md-chip-list>
 <button md-raised-button (click)="removeLast()" [disabled]="functionStack.stack.length < 2">Remove Last</button>
