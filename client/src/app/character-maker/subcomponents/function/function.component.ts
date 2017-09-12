@@ -4,6 +4,7 @@ import { SubComponent } from '../sub-component';
 import { MdDialog, MdMenu } from '@angular/material';
 import { FunctionDialogComponent } from './function-dialog.component';
 import { SubComponentChild } from '../sub-component-child';
+import { FunctionGrammar } from './function.grammar';
 
 @Component({
     selector: 'characterMaker-functionComponent',
@@ -46,6 +47,7 @@ export class FunctionComponent implements SubComponentChild, AfterViewInit {
         this.dialog.open(FunctionDialogComponent).afterClosed().subscribe((result) => {
             console.log('open has ended')
             console.log(result)
+            console.log((<FunctionGrammar>result).value())
         });
     }
 

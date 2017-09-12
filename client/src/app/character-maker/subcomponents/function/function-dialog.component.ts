@@ -12,18 +12,17 @@ export class FunctionDialogComponent {
     next: GrammarNode[];
     grammarNode = GrammarNode;
     aspectType = AspectType;
-    currentNodeValue: any;
 
-    functionStack = new FunctionGrammar();
+    functionStack: FunctionGrammar;
 
     constructor(private dialogRef: MdDialogRef<FunctionDialogComponent>, private characterMakerService: CharacterMakerService) {
+        this.functionStack = new FunctionGrammar(characterMakerService);
         this.functionStack.start();
         this.next = this.functionStack.nextOptions();
     }
 
-    addNode(node): void {
+    addNode(node: GrammarNode): void {
         this.functionStack.push(node);
-        this.currentNodeValue = null;
         let currentNode = this.functionStack.currentNode();
         if (currentNode === GrammarNode.START ||
             currentNode === GrammarNode.IF ||
@@ -31,6 +30,9 @@ export class FunctionDialogComponent {
             currentNode === GrammarNode.THIS ||
             currentNode === GrammarNode.ASSIGNED) {
             this.next = this.functionStack.nextOptions();
+        }
+        else if (currentNode === GrammarNode.DONE) {
+            this.finishFunction();
         }
         else {
             this.next = [];
@@ -49,26 +51,26 @@ export class FunctionDialogComponent {
     }
 
     selectOption(selected): void {
-        this.currentNodeValue = selected.value;
         let currentNode = this.functionStack.currentNode();
         if (currentNode === GrammarNode.ASPECT) {
-            if (this.currentNodeValue.aspectType === AspectType.BOOLEAN && this.functionStack.previousNode() === GrammarNode.IF) {
+            if (selected.aspectType === AspectType.BOOLEAN && this.functionStack.previousNode() === GrammarNode.IF) {
                 this.functionStack.push(GrammarNode.ASPECT_BOOLEAN);
             }
-            else if (this.currentNodeValue.aspectType === AspectType.BOOLEAN && this.functionStack.previousNode() === GrammarNode.ASSIGNED) {
+            else if (selected.aspectType === AspectType.BOOLEAN && this.functionStack.previousNode() === GrammarNode.ASSIGNED) {
                 this.functionStack.push(GrammarNode.ASSIGNED_ASPECT_BOOLEAN)
             }
-            else if (this.currentNodeValue.aspectType === AspectType.NUMBER && this.functionStack.previousNode() === GrammarNode.IF) {
+            else if (selected.aspectType === AspectType.NUMBER && this.functionStack.previousNode() === GrammarNode.IF) {
                 this.functionStack.push(GrammarNode.ASPECT_NUMBER);
             }
-            else if (this.currentNodeValue.aspectType === AspectType.NUMBER && this.functionStack.previousNode() === GrammarNode.ASSIGNED) {
-                this.functionStack.push(GrammarNode.ASSIGNED_ASPECT_NUMBER)
+            else if (selected.aspectType === AspectType.NUMBER && this.functionStack.previousNode() === GrammarNode.ASSIGNED) {
+                this.functionStack.push(GrammarNode.ASSIGNED_ASPECT_NUMBER_FIRST)
             }
         }
+        this.functionStack.setCurrentValue(selected);
         this.next = this.functionStack.nextOptions();
     }
 
-    finishFunction(): void {
+    private finishFunction(): void {
         this.dialogRef.close(this.functionStack);
     }
 }

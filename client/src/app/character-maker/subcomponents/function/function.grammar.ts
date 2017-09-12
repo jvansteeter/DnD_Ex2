@@ -1,3 +1,5 @@
+import { CharacterMakerService } from '../../character-maker.service';
+
 export enum GrammarNode {
     START = 'START',
     IF = 'IF',
@@ -16,10 +18,17 @@ export enum GrammarNode {
     BOOLEAN = 'BOOLEAN',
     ASSIGNED_NUMBER = 'ASSIGNED_NUMBER',
     ASSIGNED_ASPECT_NUMBER = 'ASSIGNED_ASPECT_NUMBER',
+    ASSIGNED_ASPECT_NUMBER_FIRST = 'ASSIGNED_ASPECT_NUMBER_FIRST',
     ASSIGNED_BOOLEAN = 'ASSIGNED_BOOLEAN',
     ASSIGNED_ASPECT_BOOLEAN = 'ASSIGNED_ASPECT_BOOLEAN',
     ASSIGNED_OPERATOR = 'ASSIGNED_OPERATOR',
     DONE = 'DONE'
+}
+
+interface FunctionNode {
+    index: number,
+    pendingOperator: any,
+    value: any
 }
 
 export class FunctionGrammar {
@@ -85,6 +94,10 @@ export class FunctionGrammar {
             GrammarNode.ASSIGNED_OPERATOR,
             GrammarNode.DONE
         ],
+        'ASSIGNED_ASPECT_NUMBER_FIRST': [
+            GrammarNode.ASSIGNED_OPERATOR,
+            GrammarNode.DONE
+        ],
         'ASSIGNED_BOOLEAN': [
             GrammarNode.DONE
         ],
@@ -98,9 +111,10 @@ export class FunctionGrammar {
     };
 
     public stack: GrammarNode[];
+    private mapValues = {};
     private currentIndex: number;
 
-    constructor() {
+    constructor(private characterMakerService: CharacterMakerService) {
         this.stack = [];
         this.currentIndex = -1;
     }
@@ -108,6 +122,10 @@ export class FunctionGrammar {
     public push(nextNode: GrammarNode): void {
         this.stack.push(nextNode);
         this.currentIndex++;
+    }
+
+    public setCurrentValue(value: any): void {
+        this.mapValues[this.currentIndex] = value;
     }
 
     public pop(): GrammarNode | undefined {
@@ -131,5 +149,150 @@ export class FunctionGrammar {
 
     public nextOptions(): GrammarNode[] {
         return this.grammar[this.stack[this.currentIndex]];
+    }
+
+    public value(): any{
+        try {
+            this._start();
+        }
+        catch (error) {
+            console.error(error);
+            return 'NaN';
+        }
+
+        return {};
+    }
+
+    private _start(): void {
+        console.log('_start')
+        if (this.stack[0] !== GrammarNode.START) {
+            throw new Error('Invalid Grammar');
+        }
+        let next = this.stack[1];
+        if (next === GrammarNode.IF) {
+            this._if({index: 1, pendingOperator: null, value: ''});
+            return;
+        }
+        else if (next === GrammarNode.THIS) {
+            this._this({index: 1, pendingOperator: null, value: ''});
+            return;
+        }
+
+        throw new Error('Invalid Grammar');
+    }
+
+    private _if(data: FunctionNode) {
+        if (this.stack[++data.index] !== GrammarNode.ASPECT) {
+            throw new Error('Invalid Grammar: _if ' + data.index);
+        }
+        let next = this.stack[++data.index];
+        if (next === GrammarNode.ASPECT_BOOLEAN) {
+            this._equalOrNot(data.index);
+        }
+    }
+
+    private _equalOrNot(index: number) {
+
+    }
+
+    private _this(data: FunctionNode) {
+        console.log('_this')
+        let next = this.stack[++data.index];
+        if (next === GrammarNode.ASSIGNED) {
+            this._assigned(data);
+            return;
+        }
+
+        throw new Error('Invalid Grammar: _this ' + data.index);
+    }
+
+    private _assigned(data: FunctionNode) {
+        console.log('_assigned');
+        let next = this.stack[++data.index];
+        if (next === GrammarNode.ASSIGNED_NUMBER) {
+            this._assignedNumber(data);
+            return;
+        }
+        else if (next === GrammarNode.ASPECT) {
+            next = this.stack[++data.index];
+            if (next === GrammarNode.ASSIGNED_ASPECT_NUMBER_FIRST) {
+                data.value = 0;
+                this._assignedAspectNumber(data);
+                return;
+            }
+        }
+        else if (next === GrammarNode.ASSIGNED_BOOLEAN) {
+            this._assignedBoolean(data);
+            return;
+        }
+
+        throw new Error('Invalid Grammar: _assigned ' + data.index);
+    }
+
+    private _assignedAspectNumber(data: FunctionNode) {
+        console.log('_assignedAspectNumber')
+
+        if (!data.pendingOperator) {
+            data.value = this.mapValues[data.index];
+            console.log(this.mapValues[data.index]);
+            console.log('Attempting to get value of aspect')
+            console.log(this.characterMakerService.valueOf(data.value));
+        }
+
+        let next = this.stack[++data.index];
+        if (next === GrammarNode.ASSIGNED_OPERATOR) {
+            this._assignedOperator(data);
+            return;
+        }
+        else if (next === GrammarNode.DONE) {
+            this._done();
+            return;
+        }
+
+        throw new Error('Invalid Grammar: _assignedAspectNumberFirst ' + data.index);
+    }
+
+    private _assignedNumber(data: FunctionNode) {
+        console.log('_assignedNumber')
+        let next = this.stack[++data.index];
+        if (next === GrammarNode.ASSIGNED_OPERATOR) {
+            this._assignedOperator(data);
+            return;
+        }
+        else if (next === GrammarNode.DONE) {
+            this._done();
+            return;
+        }
+
+        throw new Error('Invalid Grammar: _assignedNumber ' + data.index);
+    }
+
+    private _assignedBoolean(data: FunctionNode) {
+        console.log('_assignedBoolean')
+        let next = this.stack[++data.index];
+        if (next === GrammarNode.DONE) {
+            this._done();
+            return;
+        }
+
+        throw new Error('Invalid Grammar: _assignedBoolean ' + data.index);
+    }
+
+    private _assignedOperator(data: FunctionNode) {
+        let next = this.stack[++data.index];
+        if (next === GrammarNode.ASSIGNED_NUMBER) {
+            this._assignedNumber(data);
+            return;
+        }
+        else if (next === GrammarNode.ASSIGNED_ASPECT_NUMBER) {
+            this._assignedAspectNumber(data);
+            return;
+        }
+
+        throw new Error('Invalid Grammar: _assignedOperator ' + data.index);
+    }
+
+    private _done() {
+        console.log("---!!! DONE !!!---");
     }
 }

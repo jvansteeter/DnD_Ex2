@@ -105,6 +105,7 @@ export class SubComponent implements OnInit, AfterViewInit {
 
     ngAfterViewInit(): void {
         this.characterMakerService.registerSubComponent(this);
+        this.value = this.child.value;
         this.options = this.child.getMenuOptions();
     }
 

@@ -144,6 +144,17 @@ export class CharacterMakerService {
         return result;
     }
 
+    public valueOf(aspect: Aspect): any {
+        for (let i = 0; i < this.subComponents.length; i++) {
+            let subComponent = this.subComponents[i];
+            if (subComponent.aspect === aspect) {
+                return subComponent.value;
+            }
+        }
+
+        return null;
+    }
+
     private arrayContains(array: any[], item: any) {
         for (let i = 0; i < array.length; i++) {
             if (array[i] === item) {
