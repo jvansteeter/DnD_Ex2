@@ -182,17 +182,155 @@ export class FunctionGrammar {
     }
 
     private _if(data: FunctionNode) {
-        if (this.stack[++data.index] !== GrammarNode.ASPECT) {
-            throw new Error('Invalid Grammar: _if ' + data.index);
-        }
+        console.log('_if')
         let next = this.stack[++data.index];
-        if (next === GrammarNode.ASPECT_BOOLEAN) {
-            this._equalOrNot(data.index);
+        if (next === GrammarNode.ASPECT) {
+            next = this.stack[++data.index];
+            if (next === GrammarNode.ASPECT_BOOLEAN) {
+                this._aspectBoolean(data);
+                return;
+            }
+            else if (next === GrammarNode.ASPECT_NUMBER) {
+                this._aspectNumber(data);
+                return;
+            }
         }
+
+        throw new Error('Invalid Grammar: _if ' + data.index);
     }
 
-    private _equalOrNot(index: number) {
+    private _aspectBoolean(data: FunctionNode) {
+        console.log('_aspectBoolean')
+        let next = this.stack[++data.index];
+        if (next === GrammarNode.EQUAL_OR_NOT) {
+            this._equalOrNot(data);
+            return;
+        }
 
+        throw new Error('Invalid Grammar: _aspectBoolean ' + data.index);
+    }
+
+    private _aspectNumber(data: FunctionNode) {
+        console.log('_aspectNumber')
+        let next = this.stack[++data.index];
+        if (next === GrammarNode.LOGIC_OPERATOR) {
+            this._logicOperator(data);
+            return;
+        }
+
+        throw new Error('Invalid Grammar: _aspectNumber ' + data.index);
+    }
+
+    private _equalOrNot(data: FunctionNode) {
+        console.log('_equalOrNot');
+        let next = this.stack[++data.index];
+        if (next === GrammarNode.BOOLEAN) {
+            this._boolean(data);
+            return;
+        }
+        else if (next === GrammarNode.ASPECT_BOOLEAN_THEN) {
+            this._aspectBooleanThen(data);
+            return;
+        }
+
+        throw new Error('Invalid Grammar: _equalOrNot ' + data.index);
+    }
+
+    private _logicOperator(data: FunctionNode) {
+        console.log('_logicOperator')
+        let next = this.stack[++data.index];
+        if (next === GrammarNode.ASPECT_NUMBER_THEN) {
+            this._aspectNumberThen(data);
+            return;
+        }
+        else if (next === GrammarNode.NUMBER) {
+            this._number(data);
+            return;
+        }
+
+        throw new Error('Invalid Grammar: _logicOperator ' + data.index);
+    }
+
+    private _boolean(data: FunctionNode) {
+        console.log('_boolean')
+        let next = this.stack[++data.index];
+        if (next === GrammarNode.THEN) {
+            this._then(data);
+            return;
+        }
+
+        throw new Error('Invalid Grammar: _boolean ' + data.index);
+    }
+
+    private _aspectBooleanThen(data: FunctionNode) {
+        console.log('_aspectBooleanThen')
+        let next = this.stack[++data.index];
+        if (next === GrammarNode.THEN) {
+            this._then(data);
+            return;
+        }
+
+        throw new Error('Invalid Grammar: _aspectBooleanThen ' + data.index);
+    }
+
+    private _aspectNumberThen(data: FunctionNode) {
+        console.log('_aspectNumberThen')
+        let next = this.stack[++data.index];
+        if (next === GrammarNode.OPERATOR) {
+            this._operator(data);
+            return;
+        }
+        else if (next === GrammarNode.THEN) {
+            this._then(data);
+            return;
+        }
+
+        throw new Error('Invalid Grammar: _aspectNumberThen ' + data.index);
+    }
+
+    private _number(data: FunctionNode) {
+        console.log('_number')
+        let next = this.stack[++data.index];
+        if (next === GrammarNode.OPERATOR) {
+            this._operator(data);
+            return;
+        }
+        else if (next === GrammarNode.THEN) {
+            this._then(data);
+            return;
+        }
+
+        throw new Error('Invalid Grammar: _number ' + data.index);
+    }
+
+    private _operator(data: FunctionNode) {
+        console.log('_operator')
+        let next = this.stack[++data.index];
+        if (next === GrammarNode.ASPECT_NUMBER_THEN) {
+            this._aspectNumberThen(data);
+            return;
+        }
+        else if (next === GrammarNode.NUMBER) {
+            this._number(data);
+            return;
+        }
+
+        throw new Error('Invalid Grammar: _operator ' + data.index);
+    }
+
+    private _then(data: FunctionNode) {
+        console.log('_then')
+        let next = this.stack[++data.index];
+        if (next === GrammarNode.IF) {
+            this._if(data);
+            return;
+        }
+        else if (next === GrammarNode.THIS) {
+            this._this(data);
+            return;
+        }
+
+        throw new Error('Invalid Grammar: _then ' + data.index);
     }
 
     private _this(data: FunctionNode) {
