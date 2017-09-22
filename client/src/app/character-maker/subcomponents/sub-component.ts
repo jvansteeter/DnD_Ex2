@@ -37,8 +37,6 @@ export class SubComponent implements OnInit, AfterViewInit {
     transition = this.animation;
     transform = '';
 
-    value: any;
-
     @HostListener('mouseenter')
     hover(): void {
         this.zIndex = 1;
@@ -105,7 +103,6 @@ export class SubComponent implements OnInit, AfterViewInit {
 
     ngAfterViewInit(): void {
         this.characterMakerService.registerSubComponent(this);
-        this.value = this.child.value;
         this.options = this.child.getMenuOptions();
     }
 
@@ -167,6 +164,10 @@ export class SubComponent implements OnInit, AfterViewInit {
         this.minWidth = width;
         this.height = height;
         this.minHeight = height;
+    }
+
+    getValue(): any {
+        return this.child.value;
     }
 
     startDrag(): void {

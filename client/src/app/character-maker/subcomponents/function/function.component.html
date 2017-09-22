@@ -1,5 +1,6 @@
 <span [ngStyle]="{'font-size': fontSize + 'px'}">{{aspect.label}}</span>
 <div>
+	<span>{{value}}</span>
 </div>
 <md-menu #options="mdMenu" (close)="closeOptions()">
 	<span md-menu-item (click)="openFunctionDialog()">Define Function</span>

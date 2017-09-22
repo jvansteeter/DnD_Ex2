@@ -20,14 +20,12 @@ export class CharacterMakerService {
     private characterSheetWidth: number = 0;
     private characterSheetHeight: number = 0;
     public subComponents: SubComponent[];
-    private theRelocated: SubComponent[];
 
     public aspects: Aspect[];
 
     constructor() {
         this.aspects = [];
         this.subComponents = [];
-        this.theRelocated = [];
     }
 
     public onAddComponent(next?, error?, complete?): Subscription {
@@ -90,7 +88,6 @@ export class CharacterMakerService {
                 continue;
             }
             if (moving.overlaps(stationary)) {
-                console.log('overlap')
                 if (stationary.canMoveRightTo(moving.right() + 10)) {
                     stationary.animateTo(moving.right() + 10, stationary.top);
                 }
@@ -130,7 +127,7 @@ export class CharacterMakerService {
         return undefined;
     }
 
-    public getAspectsOfType(type: AspectType | false): Aspect[] {
+    public getAspectsOfType(type?: AspectType ): Aspect[] {
         if (!type) {
             return this.aspects;
         }
@@ -144,11 +141,27 @@ export class CharacterMakerService {
         return result;
     }
 
+    public getBooleanAspects(): Aspect[] {
+        let result: Aspect[] = [];
+        for (let i = 0; i < this.aspects.length; i++) {
+            if (this.aspects[i].aspectType === AspectType.BOOLEAN) {
+                result.push(this.aspects[i]);
+            }
+            else if (this.aspects[i].aspectType === AspectType.BOOLEAN_LIST) {
+
+            }
+        }
+
+        return result;
+    }
+
     public valueOf(aspect: Aspect): any {
         for (let i = 0; i < this.subComponents.length; i++) {
             let subComponent = this.subComponents[i];
             if (subComponent.aspect === aspect) {
-                return subComponent.value;
+                console.log('found it')
+                console.log(subComponent)
+                return subComponent.getValue();
             }
         }
 

@@ -16,7 +16,7 @@
 				<md-option value=">=">is greater than or equal to</md-option>
 			</md-select>
 			<md-select class="function-not-chip" placeholder="Aspect" *ngIf="chip === grammarNode.ASPECT" (change)="selectOption($event.value)" [disabled]="chip !== functionStack.currentNode()">
-				<span *ngFor="let aspect of characterMakerService.getAspectsOfType(false)">
+				<span *ngFor="let aspect of characterMakerService.getAspectsOfType()">
 					<md-option *ngIf="aspect.aspectType !== aspectType.FUNCTION" [value]="aspect">{{aspect.label}}</md-option>
 				</span>
 			</md-select>

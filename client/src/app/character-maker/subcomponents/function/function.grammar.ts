@@ -25,7 +25,7 @@ export enum GrammarNode {
     DONE = 'DONE'
 }
 
-interface FunctionNode {
+interface FunctionData {
     index: number,
     pendingOperator: any,
     value: any
@@ -151,37 +151,42 @@ export class FunctionGrammar {
         return this.grammar[this.stack[this.currentIndex]];
     }
 
-    public value(): any{
+    public getValue(): any{
+        let data = {
+            index: 0,
+            pendingOperator: null,
+            value: 0
+        };
         try {
-            this._start();
+            this._start(data);
         }
         catch (error) {
             console.error(error);
             return 'NaN';
         }
 
-        return {};
+        return data.value;
     }
 
-    private _start(): void {
+    private _start(data: FunctionData): void {
         console.log('_start')
         if (this.stack[0] !== GrammarNode.START) {
             throw new Error('Invalid Grammar');
         }
-        let next = this.stack[1];
+        let next = this.stack[++data.index];
         if (next === GrammarNode.IF) {
-            this._if({index: 1, pendingOperator: null, value: ''});
+            this._if(data);
             return;
         }
         else if (next === GrammarNode.THIS) {
-            this._this({index: 1, pendingOperator: null, value: ''});
+            this._this(data);
             return;
         }
 
         throw new Error('Invalid Grammar');
     }
 
-    private _if(data: FunctionNode) {
+    private _if(data: FunctionData) {
         console.log('_if')
         let next = this.stack[++data.index];
         if (next === GrammarNode.ASPECT) {
@@ -199,7 +204,7 @@ export class FunctionGrammar {
         throw new Error('Invalid Grammar: _if ' + data.index);
     }
 
-    private _aspectBoolean(data: FunctionNode) {
+    private _aspectBoolean(data: FunctionData) {
         console.log('_aspectBoolean')
         let next = this.stack[++data.index];
         if (next === GrammarNode.EQUAL_OR_NOT) {
@@ -210,7 +215,7 @@ export class FunctionGrammar {
         throw new Error('Invalid Grammar: _aspectBoolean ' + data.index);
     }
 
-    private _aspectNumber(data: FunctionNode) {
+    private _aspectNumber(data: FunctionData) {
         console.log('_aspectNumber')
         let next = this.stack[++data.index];
         if (next === GrammarNode.LOGIC_OPERATOR) {
@@ -221,7 +226,7 @@ export class FunctionGrammar {
         throw new Error('Invalid Grammar: _aspectNumber ' + data.index);
     }
 
-    private _equalOrNot(data: FunctionNode) {
+    private _equalOrNot(data: FunctionData) {
         console.log('_equalOrNot');
         let next = this.stack[++data.index];
         if (next === GrammarNode.BOOLEAN) {
@@ -236,7 +241,7 @@ export class FunctionGrammar {
         throw new Error('Invalid Grammar: _equalOrNot ' + data.index);
     }
 
-    private _logicOperator(data: FunctionNode) {
+    private _logicOperator(data: FunctionData) {
         console.log('_logicOperator')
         let next = this.stack[++data.index];
         if (next === GrammarNode.ASPECT_NUMBER_THEN) {
@@ -251,7 +256,7 @@ export class FunctionGrammar {
         throw new Error('Invalid Grammar: _logicOperator ' + data.index);
     }
 
-    private _boolean(data: FunctionNode) {
+    private _boolean(data: FunctionData) {
         console.log('_boolean')
         let next = this.stack[++data.index];
         if (next === GrammarNode.THEN) {
@@ -262,7 +267,7 @@ export class FunctionGrammar {
         throw new Error('Invalid Grammar: _boolean ' + data.index);
     }
 
-    private _aspectBooleanThen(data: FunctionNode) {
+    private _aspectBooleanThen(data: FunctionData) {
         console.log('_aspectBooleanThen')
         let next = this.stack[++data.index];
         if (next === GrammarNode.THEN) {
@@ -273,7 +278,7 @@ export class FunctionGrammar {
         throw new Error('Invalid Grammar: _aspectBooleanThen ' + data.index);
     }
 
-    private _aspectNumberThen(data: FunctionNode) {
+    private _aspectNumberThen(data: FunctionData) {
         console.log('_aspectNumberThen')
         let next = this.stack[++data.index];
         if (next === GrammarNode.OPERATOR) {
@@ -288,7 +293,7 @@ export class FunctionGrammar {
         throw new Error('Invalid Grammar: _aspectNumberThen ' + data.index);
     }
 
-    private _number(data: FunctionNode) {
+    private _number(data: FunctionData) {
         console.log('_number')
         let next = this.stack[++data.index];
         if (next === GrammarNode.OPERATOR) {
@@ -303,7 +308,7 @@ export class FunctionGrammar {
         throw new Error('Invalid Grammar: _number ' + data.index);
     }
 
-    private _operator(data: FunctionNode) {
+    private _operator(data: FunctionData) {
         console.log('_operator')
         let next = this.stack[++data.index];
         if (next === GrammarNode.ASPECT_NUMBER_THEN) {
@@ -318,7 +323,7 @@ export class FunctionGrammar {
         throw new Error('Invalid Grammar: _operator ' + data.index);
     }
 
-    private _then(data: FunctionNode) {
+    private _then(data: FunctionData) {
         console.log('_then')
         let next = this.stack[++data.index];
         if (next === GrammarNode.IF) {
@@ -333,7 +338,7 @@ export class FunctionGrammar {
         throw new Error('Invalid Grammar: _then ' + data.index);
     }
 
-    private _this(data: FunctionNode) {
+    private _this(data: FunctionData) {
         console.log('_this')
         let next = this.stack[++data.index];
         if (next === GrammarNode.ASSIGNED) {
@@ -344,7 +349,7 @@ export class FunctionGrammar {
         throw new Error('Invalid Grammar: _this ' + data.index);
     }
 
-    private _assigned(data: FunctionNode) {
+    private _assigned(data: FunctionData) {
         console.log('_assigned');
         let next = this.stack[++data.index];
         if (next === GrammarNode.ASSIGNED_NUMBER) {
@@ -367,14 +372,30 @@ export class FunctionGrammar {
         throw new Error('Invalid Grammar: _assigned ' + data.index);
     }
 
-    private _assignedAspectNumber(data: FunctionNode) {
+    private _assignedAspectNumber(data: FunctionData) {
         console.log('_assignedAspectNumber')
 
+        let currentAspect = this.mapValues[data.index];
+        let aspectValue = this.characterMakerService.valueOf(currentAspect);
         if (!data.pendingOperator) {
-            data.value = this.mapValues[data.index];
-            console.log(this.mapValues[data.index]);
-            console.log('Attempting to get value of aspect')
-            console.log(this.characterMakerService.valueOf(data.value));
+            console.log(this.characterMakerService.valueOf(currentAspect));
+            data.value = aspectValue;
+        }
+        else if (data.pendingOperator === '+') {
+            data.value += aspectValue;
+            data.pendingOperator = null;
+        }
+        else if (data.pendingOperator === '-') {
+            data.value -= aspectValue;
+            data.pendingOperator = null;
+        }
+        else if (data.pendingOperator === '*') {
+            data.value *= aspectValue;
+            data.pendingOperator = null;
+        }
+        else if (data.pendingOperator === '/') {
+            data.value /= aspectValue;
+            data.pendingOperator = null;
         }
 
         let next = this.stack[++data.index];
@@ -390,8 +411,32 @@ export class FunctionGrammar {
         throw new Error('Invalid Grammar: _assignedAspectNumberFirst ' + data.index);
     }
 
-    private _assignedNumber(data: FunctionNode) {
+    private _assignedNumber(data: FunctionData) {
         console.log('_assignedNumber')
+
+        let currentValue: number = +this.mapValues[data.index];
+        console.log('current value of this number is')
+        console.log(currentValue)
+        if (!data.pendingOperator) {
+            data.value = currentValue;
+        }
+        else if (data.pendingOperator === '+') {
+            data.value += currentValue;
+            data.pendingOperator = null;
+        }
+        else if (data.pendingOperator === '-') {
+            data.value -= currentValue;
+            data.pendingOperator = null;
+        }
+        else if (data.pendingOperator === '*') {
+            data.value *= currentValue;
+            data.pendingOperator = null;
+        }
+        else if (data.pendingOperator === '/') {
+            data.value /= currentValue;
+            data.pendingOperator = null;
+        }
+
         let next = this.stack[++data.index];
         if (next === GrammarNode.ASSIGNED_OPERATOR) {
             this._assignedOperator(data);
@@ -405,7 +450,7 @@ export class FunctionGrammar {
         throw new Error('Invalid Grammar: _assignedNumber ' + data.index);
     }
 
-    private _assignedBoolean(data: FunctionNode) {
+    private _assignedBoolean(data: FunctionData) {
         console.log('_assignedBoolean')
         let next = this.stack[++data.index];
         if (next === GrammarNode.DONE) {
@@ -416,7 +461,14 @@ export class FunctionGrammar {
         throw new Error('Invalid Grammar: _assignedBoolean ' + data.index);
     }
 
-    private _assignedOperator(data: FunctionNode) {
+    private _assignedOperator(data: FunctionData) {
+        console.log('_assignedOperator')
+
+        let currentNode = this.mapValues[data.index];
+        console.log('selected assigned operator')
+        console.log(currentNode)
+        data.pendingOperator = currentNode;
+
         let next = this.stack[++data.index];
         if (next === GrammarNode.ASSIGNED_NUMBER) {
             this._assignedNumber(data);

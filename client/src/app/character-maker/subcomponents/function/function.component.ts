@@ -22,6 +22,7 @@ export class FunctionComponent implements SubComponentChild, AfterViewInit {
     value: any;
 
     fontSize: number = 14;
+    private _function: FunctionGrammar;
 
     constructor(private dialog: MdDialog) {
 
@@ -44,10 +45,12 @@ export class FunctionComponent implements SubComponentChild, AfterViewInit {
     }
 
     openFunctionDialog(): void {
-        this.dialog.open(FunctionDialogComponent).afterClosed().subscribe((result) => {
+        this.dialog.open(FunctionDialogComponent).afterClosed().subscribe((result: FunctionGrammar) => {
             console.log('open has ended')
             console.log(result)
-            console.log((<FunctionGrammar>result).value())
+            console.log((<FunctionGrammar>result).getValue())
+            this._function = result;
+            this.value = this._function.getValue();
         });
     }
 
