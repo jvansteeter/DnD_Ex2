@@ -8,9 +8,9 @@ export interface SubComponentChild {
     width: number;
     height: number;
     readonly hasOptions: boolean;
-    value: any;
 
     resize(width: number, height: number);
     getMenuOptions(): MdMenu;
     closeOptions(): void;
+    getValue(): any;
 }

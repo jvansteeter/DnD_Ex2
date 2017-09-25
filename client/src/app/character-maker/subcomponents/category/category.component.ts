@@ -73,4 +73,8 @@ export class CategoryComponent implements SubComponentChild, AfterViewInit{
     closeMenu(): void {
         this.options._emitCloseEvent();
     }
+
+    getValue() {
+        return this.value;
+    }
 }

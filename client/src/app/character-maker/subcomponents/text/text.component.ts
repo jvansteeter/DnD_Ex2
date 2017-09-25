@@ -58,4 +58,8 @@ export class TextComponent implements SubComponentChild, AfterViewInit{
     closeMenu(): void {
         this.options._emitCloseEvent();
     }
+
+    getValue() {
+        return this.value;
+    }
 }

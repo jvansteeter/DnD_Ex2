@@ -4,6 +4,7 @@ import { SubComponent } from '../sub-component';
 import { SubComponentService } from '../sub-component.service';
 import { SubComponentChild } from '../sub-component-child';
 import { MdMenu } from '@angular/material';
+import { CharacterMakerService } from '../../character-maker.service';
 
 
 @Component({
@@ -28,7 +29,7 @@ export class NumberComponent implements SubComponentChild, AfterViewInit{
 
     fontSize: number = 14;
 
-    constructor(private renderer: Renderer2, subComponentService: SubComponentService) {
+    constructor(private renderer: Renderer2, private characterMakerService: CharacterMakerService) {
 
     }
 
@@ -59,11 +60,19 @@ export class NumberComponent implements SubComponentChild, AfterViewInit{
         this.options._emitCloseEvent();
     }
 
+    getValue() {
+        return this.value;
+    }
+
     changeFontSize(event): void {
         console.log(event)
         let newFontSize = event.target.value;
         console.log(newFontSize)
         this.resize(this.width, this.height + (newFontSize - this.fontSize))
         this.fontSize = newFontSize;
+    }
+
+    valueChanged(): void {
+        this.characterMakerService.updateFunctionAspects();
     }
 }

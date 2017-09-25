@@ -1,6 +1,6 @@
 <md-input-container>
 	<input mdInput type="number" placeholder="{{aspect.label}}" [required]="aspect.required" class="align-center" [(ngModel)]="value"
-			  [ngStyle]="{'width': width + 'px', 'height': height + 'px', 'font-size': fontSize + 'px'}">
+			  [ngStyle]="{'width': width + 'px', 'height': height + 'px', 'font-size': fontSize + 'px'}" (change)="valueChanged()">
 </md-input-container>
 <md-menu #options="mdMenu" (close)="closeOptions()">
 	<div class="changeFontSize" (click)="stopClickPropagate($event)" (keyup.enter)="closeMenu()">

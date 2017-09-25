@@ -137,7 +137,7 @@ export class SubComponent implements OnInit, AfterViewInit {
                 break;
             }
             case AspectType.FUNCTION: {
-                this.setDimensions(100, 100);
+                this.setDimensions(65, 20);
                 break;
             }
 
@@ -167,7 +167,7 @@ export class SubComponent implements OnInit, AfterViewInit {
     }
 
     getValue(): any {
-        return this.child.value;
+        return this.child.getValue();
     }
 
     startDrag(): void {

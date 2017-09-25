@@ -166,6 +166,14 @@ export class CharacterMakerService {
         return null;
     }
 
+    public updateFunctionAspects(): void {
+        this.subComponents.forEach(subComponent => {
+            if (subComponent.aspect.aspectType === AspectType.FUNCTION) {
+                subComponent.getValue();
+            }
+        })
+    }
+
     private arrayContains(array: any[], item: any) {
         for (let i = 0; i < array.length; i++) {
             if (array[i] === item) {

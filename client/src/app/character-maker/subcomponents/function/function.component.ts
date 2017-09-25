@@ -64,4 +64,9 @@ export class FunctionComponent implements SubComponentChild, AfterViewInit {
     closeMenu(): void {
         this.options._emitCloseEvent();
     }
+
+    getValue(): any {
+        this.value = this._function.getValue();
+        return this.value;
+    }
 }

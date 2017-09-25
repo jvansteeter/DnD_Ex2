@@ -514,6 +514,7 @@ export class FunctionGrammar {
             data.value /= aspectValue;
         }
         data.pendingOperator = null;
+        data.value = Math.floor(data.value);
 
         let next = this.stack[++data.index];
         if (next === GrammarNode.ASSIGNED_OPERATOR) {
@@ -565,6 +566,7 @@ export class FunctionGrammar {
             data.value /= currentValue;
         }
         data.pendingOperator = null;
+        data.value = Math.floor(data.value);
 
         let next = this.stack[++data.index];
         if (next === GrammarNode.ASSIGNED_OPERATOR) {

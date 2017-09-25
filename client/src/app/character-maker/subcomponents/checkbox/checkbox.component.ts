@@ -3,6 +3,7 @@ import { SubComponentChild } from '../sub-component-child';
 import { Aspect } from '../../aspect';
 import { MdMenu } from '@angular/material';
 import { SubComponent } from '../sub-component';
+import { CharacterMakerService } from '../../character-maker.service';
 
 
 @Component({
@@ -22,6 +23,10 @@ export class CheckboxComponent implements SubComponentChild {
 
     @ViewChild('options') options: MdMenu;
 
+    constructor(private characterMakerService: CharacterMakerService) {
+
+    }
+
     resize(width: number, height: number) {
         // does nothing
     }
@@ -32,6 +37,14 @@ export class CheckboxComponent implements SubComponentChild {
 
     closeOptions(): void {
         this.parent.closeOptions();
+    }
+
+    getValue() {
+        return this.value;
+    }
+
+    valueChanged(): void {
+        this.characterMakerService.updateFunctionAspects();
     }
 }
 
