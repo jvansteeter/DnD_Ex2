@@ -155,12 +155,10 @@ export class CharacterMakerService {
         return result;
     }
 
-    public valueOf(aspect: Aspect): any {
+    public valueOfAspect(aspect: Aspect): any {
         for (let i = 0; i < this.subComponents.length; i++) {
             let subComponent = this.subComponents[i];
             if (subComponent.aspect === aspect) {
-                console.log('found it')
-                console.log(subComponent)
                 return subComponent.getValue();
             }
         }

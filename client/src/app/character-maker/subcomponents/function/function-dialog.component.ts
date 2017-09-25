@@ -66,7 +66,12 @@ export class FunctionDialogComponent {
                 this.functionStack.push(GrammarNode.ASSIGNED_ASPECT_NUMBER_FIRST)
             }
         }
-        this.functionStack.setCurrentValue(selected);
+        if (currentNode === GrammarNode.LOGIC_OPERATOR) {
+            this.functionStack.setCurrentValue(selected.value);
+        }
+        else {
+            this.functionStack.setCurrentValue(selected);
+        }
         this.next = this.functionStack.nextOptions();
     }
 
