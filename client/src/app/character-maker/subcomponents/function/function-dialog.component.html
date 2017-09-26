@@ -20,6 +20,11 @@
 					<md-option *ngIf="aspect.aspectType !== aspectType.FUNCTION" [value]="aspect">{{aspect.label}}</md-option>
 				</span>
 			</md-select>
+			<md-select class="function-not-chip" placeholder="Item" *ngIf="chip === grammarNode.ASPECT_BOOLEAN_LIST_ITEM" (change)="selectOption($event.value)" [disabled]="chip !== functionStack.currentNode()">
+				<span *ngFor="let item of currentListOptions">
+					<md-option [value]="item">{{item.label}}</md-option>
+				</span>
+			</md-select>
 			<md-select class="function-not-chip" placeholder="Aspect" *ngIf="chip === grammarNode.ASPECT_BOOLEAN_THEN" (change)="selectOption($event.value)" [disabled]="chip !== functionStack.currentNode()">
 				<span *ngFor="let aspect of characterMakerService.getAspectsOfType(aspectType.BOOLEAN)">
 					<md-option *ngIf="aspect.aspectType !== aspectType.FUNCTION" [value]="aspect">{{aspect.label}}</md-option>

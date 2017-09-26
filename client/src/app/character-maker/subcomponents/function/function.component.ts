@@ -46,13 +46,9 @@ export class FunctionComponent implements SubComponentChild, AfterViewInit {
 
     openFunctionDialog(): void {
         this.dialog.open(FunctionDialogComponent).afterClosed().subscribe((result: FunctionGrammar) => {
-            console.log('open has ended')
-            console.log(result)
             if (result) {
                 this._function = result;
                 this.value = this._function.getValue();
-                console.log('final value')
-                console.log(this.value)
             }
         });
     }

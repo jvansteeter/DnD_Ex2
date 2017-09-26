@@ -7,6 +7,8 @@ export enum GrammarNode {
     THIS = 'THIS',
     ASPECT = 'ASPECT',
     ASPECT_BOOLEAN = 'ASPECT_BOOLEAN',
+    ASPECT_BOOLEAN_LIST = 'ASPECT_BOOLEAN_LIST',
+    ASPECT_BOOLEAN_LIST_ITEM = 'ASPECT_BOOLEAN_LIST_ITEM',
     ASPECT_BOOLEAN_THEN = 'ASPECT_BOOLEAN_THEN',
     ASPECT_NUMBER_THEN = 'ASPECT_NUMBER_THEN',
     ASPECT_NUMBER = 'ASPECT_NUMBER',
@@ -54,6 +56,12 @@ export class FunctionGrammar {
         'ASPECT': [
         ],
         'ASPECT_BOOLEAN': [
+            GrammarNode.EQUAL_OR_NOT
+        ],
+        'ASPECT_BOOLEAN_LIST': [
+            GrammarNode.ASPECT_BOOLEAN_LIST_ITEM
+        ],
+        'ASPECT_BOOLEAN_LIST_ITEM': [
             GrammarNode.EQUAL_OR_NOT
         ],
         'ASPECT_BOOLEAN_THEN': [
@@ -211,6 +219,10 @@ export class FunctionGrammar {
                 this._aspectNumber(data);
                 return;
             }
+            else if (next === GrammarNode.ASPECT_BOOLEAN_LIST) {
+                this._aspectBooleanList(data);
+                return;
+            }
         }
 
         throw new Error('Invalid Grammar: _if ' + data.index);
@@ -230,6 +242,36 @@ export class FunctionGrammar {
         }
 
         throw new Error('Invalid Grammar: _aspectBoolean ' + data.index);
+    }
+
+    private _aspectBooleanList(data: FunctionData) {
+        console.log('_aspectBooleanList')
+        console.log(JSON.parse(JSON.stringify(data)))
+
+        let currentAspect = this.mapValues[data.index];
+        let checkboxes = this.characterMakerService.valueOfAspect(currentAspect);
+
+        let next = this.stack[++data.index];
+        if (next === GrammarNode.ASPECT_BOOLEAN_LIST_ITEM) {
+            let currentItem = this.mapValues[data.index];
+            console.log(JSON.parse(JSON.stringify(this.mapValues)))
+            console.log('checkboxes')
+            console.log(checkboxes)
+            console.log('currentItem')
+            console.log(currentItem)
+            for (let i = 0; i < checkboxes.length; i++) {
+                if (checkboxes[i].label === currentItem.label) {
+                    data.pendingConditionalValue = currentItem.value;
+                }
+            }
+            next = this.stack[++data.index];
+            if (next === GrammarNode.EQUAL_OR_NOT) {
+                this._equalOrNot(data);
+                return;
+            }
+        }
+
+        throw new Error('Invalid Grammar: _aspectBooleanList ' + data.index);
     }
 
     private _aspectNumber(data: FunctionData) {

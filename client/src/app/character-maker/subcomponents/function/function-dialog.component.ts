@@ -15,6 +15,8 @@ export class FunctionDialogComponent {
 
     functionStack: FunctionGrammar;
 
+    currentListOptions = [];
+
     constructor(private dialogRef: MdDialogRef<FunctionDialogComponent>, private characterMakerService: CharacterMakerService) {
         this.functionStack = new FunctionGrammar(characterMakerService);
         this.functionStack.start();
@@ -47,23 +49,34 @@ export class FunctionDialogComponent {
             last === GrammarNode.ASSIGNED_ASPECT_BOOLEAN) {
             this.functionStack.pop();
         }
+        else if (last === GrammarNode.ASPECT_BOOLEAN_LIST_ITEM) {
+            this.functionStack.pop();
+            this.functionStack.pop();
+        }
         this.next = this.functionStack.nextOptions();
     }
 
     selectOption(selected): void {
+        console.log(selected)
         let currentNode = this.functionStack.currentNode();
         if (currentNode === GrammarNode.ASPECT) {
             if (selected.aspectType === AspectType.BOOLEAN && this.functionStack.previousNode() === GrammarNode.IF) {
                 this.functionStack.push(GrammarNode.ASPECT_BOOLEAN);
             }
             else if (selected.aspectType === AspectType.BOOLEAN && this.functionStack.previousNode() === GrammarNode.ASSIGNED) {
-                this.functionStack.push(GrammarNode.ASSIGNED_ASPECT_BOOLEAN)
+                this.functionStack.push(GrammarNode.ASSIGNED_ASPECT_BOOLEAN);
             }
             else if (selected.aspectType === AspectType.NUMBER && this.functionStack.previousNode() === GrammarNode.IF) {
                 this.functionStack.push(GrammarNode.ASPECT_NUMBER);
             }
             else if (selected.aspectType === AspectType.NUMBER && this.functionStack.previousNode() === GrammarNode.ASSIGNED) {
-                this.functionStack.push(GrammarNode.ASSIGNED_ASPECT_NUMBER_FIRST)
+                this.functionStack.push(GrammarNode.ASSIGNED_ASPECT_NUMBER_FIRST);
+            }
+            else if (selected.aspectType === AspectType.BOOLEAN_LIST && this.functionStack.previousNode() === GrammarNode.IF) {
+                this.functionStack.push(GrammarNode.ASPECT_BOOLEAN_LIST);
+                this.functionStack.setCurrentValue(selected);
+                this.currentListOptions = this.characterMakerService.valueOfAspect(selected);
+                this.functionStack.push(GrammarNode.ASPECT_BOOLEAN_LIST_ITEM);
             }
         }
         if (currentNode === GrammarNode.LOGIC_OPERATOR) {
@@ -72,7 +85,9 @@ export class FunctionDialogComponent {
         else {
             this.functionStack.setCurrentValue(selected);
         }
-        this.next = this.functionStack.nextOptions();
+        if (selected.aspectType !== AspectType.BOOLEAN_LIST) {
+            this.next = this.functionStack.nextOptions();
+        }
     }
 
     private finishFunction(): void {

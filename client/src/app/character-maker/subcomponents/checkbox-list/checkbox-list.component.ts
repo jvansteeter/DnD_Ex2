@@ -3,6 +3,7 @@ import { SubComponentChild } from '../sub-component-child';
 import { Aspect } from '../../aspect';
 import { MdMenu } from '@angular/material';
 import { SubComponent } from '../sub-component';
+import { CharacterMakerService } from '../../character-maker.service';
 
 
 interface CheckboxItem {
@@ -31,7 +32,7 @@ export class CheckboxListComponent implements SubComponentChild, AfterViewInit {
     fontSize: number = 14;
     @ViewChild('fontSizeInput') private fontSizeInput: ElementRef;
 
-    constructor(private renderer: Renderer2) {
+    constructor(private renderer: Renderer2, private characterMakerService: CharacterMakerService) {
         this.checkboxes = [];
     }
 
@@ -81,8 +82,12 @@ export class CheckboxListComponent implements SubComponentChild, AfterViewInit {
         this.options._emitCloseEvent();
     }
 
-    getValue() {
-        return this.value;
+    valueChanged(): void {
+        this.characterMakerService.updateFunctionAspects();
+    }
+
+    getValue(): any {
+        return this.checkboxes;
     }
 }
 

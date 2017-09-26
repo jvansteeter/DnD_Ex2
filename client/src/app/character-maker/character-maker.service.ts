@@ -148,7 +148,11 @@ export class CharacterMakerService {
                 result.push(this.aspects[i]);
             }
             else if (this.aspects[i].aspectType === AspectType.BOOLEAN_LIST) {
-
+                let boolList = this.valueOfAspect(this.aspects[i]);
+                for (let j = 0; j < boolList.length; j++) {
+                    let newLabel = this.aspects[i].label + '.' + boolList[j].label;
+                    result.push(new Aspect(newLabel, AspectType.BOOLEAN, false));
+                }
             }
         }
 
