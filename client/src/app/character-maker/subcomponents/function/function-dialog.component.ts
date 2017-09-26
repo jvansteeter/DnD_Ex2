@@ -30,7 +30,8 @@ export class FunctionDialogComponent {
             currentNode === GrammarNode.IF ||
             currentNode === GrammarNode.THEN ||
             currentNode === GrammarNode.THIS ||
-            currentNode === GrammarNode.ASSIGNED) {
+            currentNode === GrammarNode.ASSIGNED ||
+            currentNode === GrammarNode.IF_NOT) {
             this.next = this.functionStack.nextOptions();
         }
         else if (currentNode === GrammarNode.DONE) {

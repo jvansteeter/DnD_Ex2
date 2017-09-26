@@ -2,11 +2,12 @@
 <div class="well well-sm">
 	<div>
 		<span *ngFor="let chip of functionStack.stack">
-			<span *ngIf="chip === grammarNode.THEN"><br>&nbsp;</span>
+			<span *ngIf="chip === grammarNode.THEN || chip === grammarNode.IF_NOT"><br>&nbsp;</span>
 			<md-chip color="primary" selected="true" *ngIf="chip === grammarNode.IF ||
 															chip === grammarNode.THEN ||
 															chip === grammarNode.ASSIGNED ||
-															chip === grammarNode.THIS">{{chip}}</md-chip>
+															chip === grammarNode.THIS ||
+															chip === grammarNode.IF_NOT">{{chip}}</md-chip>
 			<md-select class="function-not-chip" placeholder="Logical Operator" *ngIf="chip === grammarNode.LOGIC_OPERATOR" (change)="selectOption($event)" [disabled]="chip !== functionStack.currentNode()">
 				<md-option value="==">is equal to</md-option>
 				<md-option value="!=">is not equal to</md-option>
@@ -17,7 +18,7 @@
 			</md-select>
 			<md-select class="function-not-chip" placeholder="Aspect" *ngIf="chip === grammarNode.ASPECT" (change)="selectOption($event.value)" [disabled]="chip !== functionStack.currentNode()">
 				<span *ngFor="let aspect of characterMakerService.getAspectsOfType()">
-					<md-option *ngIf="aspect.aspectType !== aspectType.FUNCTION" [value]="aspect">{{aspect.label}}</md-option>
+					<md-option [value]="aspect">{{aspect.label}}</md-option>
 				</span>
 			</md-select>
 			<md-select class="function-not-chip" placeholder="Item" *ngIf="chip === grammarNode.ASPECT_BOOLEAN_LIST_ITEM" (change)="selectOption($event.value)" [disabled]="chip !== functionStack.currentNode()">

@@ -24,6 +24,7 @@ export enum GrammarNode {
     ASSIGNED_BOOLEAN = 'ASSIGNED_BOOLEAN',
     ASSIGNED_ASPECT_BOOLEAN = 'ASSIGNED_ASPECT_BOOLEAN',
     ASSIGNED_OPERATOR = 'ASSIGNED_OPERATOR',
+    IF_NOT = 'IF_NOT',
     DONE = 'DONE'
 }
 
@@ -100,25 +101,34 @@ export class FunctionGrammar {
         ],
         'ASSIGNED_NUMBER': [
             GrammarNode.ASSIGNED_OPERATOR,
+            GrammarNode.IF_NOT,
             GrammarNode.DONE
         ],
         'ASSIGNED_ASPECT_NUMBER': [
             GrammarNode.ASSIGNED_OPERATOR,
+            GrammarNode.IF_NOT,
             GrammarNode.DONE
         ],
         'ASSIGNED_ASPECT_NUMBER_FIRST': [
             GrammarNode.ASSIGNED_OPERATOR,
+            GrammarNode.IF_NOT,
             GrammarNode.DONE
         ],
         'ASSIGNED_BOOLEAN': [
+            GrammarNode.IF_NOT,
             GrammarNode.DONE
         ],
         'ASSIGNED_ASPECT_BOOLEAN': [
+            GrammarNode.IF_NOT,
             GrammarNode.DONE
         ],
         'ASSIGNED_OPERATOR': [
             GrammarNode.ASSIGNED_NUMBER,
             GrammarNode.ASSIGNED_ASPECT_NUMBER
+        ],
+        'IF_NOT': [
+            GrammarNode.IF,
+            GrammarNode.THIS
         ]
     };
 
@@ -504,8 +514,33 @@ export class FunctionGrammar {
         console.log('_assigned');
         console.log(JSON.parse(JSON.stringify(data)))
 
+        // if the _if logic is false
         if (!data.condition) {
+            // see if there is an if_not, otherwise return null
             data.value = null;
+            while (data.index < this.stack.length) {
+                let next = this.stack[++data.index];
+                if (next === GrammarNode.IF_NOT) {
+                    data.pendingOperator= null;
+                    data.pendingLogicOperator = null;
+                    data.condition = true;
+                    data.pendingConditionalValue = null;
+                    data.operationalConditionalValue = null;
+                    data.value = 0;
+                    next = this.stack[++data.index];
+                    if (next === GrammarNode.IF) {
+                        this._if(data);
+                        return;
+                    }
+                    else if (next === GrammarNode.THIS) {
+                        this._this(data);
+                        return;
+                    }
+
+                    throw new Error('Invalid Grammar: _assigned ' + data.index);
+                }
+            }
+
             return;
         }
 
@@ -563,6 +598,10 @@ export class FunctionGrammar {
             this._assignedOperator(data);
             return;
         }
+        else if (next === GrammarNode.IF_NOT) {
+            this._if_not(data);
+            return;
+        }
         else if (next === GrammarNode.DONE) {
             this._done(data);
             return;
@@ -579,7 +618,11 @@ export class FunctionGrammar {
         data.value = this.characterMakerService.valueOfAspect(currentAspect);
 
         let next = this.stack[++data.index];
-        if (next === GrammarNode.DONE) {
+        if (next === GrammarNode.IF_NOT) {
+            this._if_not(data);
+            return;
+        }
+        else if (next === GrammarNode.DONE) {
             this._done(data);
             return;
         }
@@ -615,6 +658,10 @@ export class FunctionGrammar {
             this._assignedOperator(data);
             return;
         }
+        else if (next === GrammarNode.IF_NOT) {
+            this._if_not(data);
+            return;
+        }
         else if (next === GrammarNode.DONE) {
             this._done(data);
             return;
@@ -629,6 +676,10 @@ export class FunctionGrammar {
 
         data.value = this.mapValues[data.index];
         let next = this.stack[++data.index];
+        if (next === GrammarNode.IF_NOT) {
+            this._if_not(data);
+            return;
+        }
         if (next === GrammarNode.DONE) {
             this._done(data);
             return;
@@ -657,6 +708,12 @@ export class FunctionGrammar {
         }
 
         throw new Error('Invalid Grammar: _assignedOperator ' + data.index);
+    }
+
+    private _if_not(data: FunctionData) {
+        console.log('_if_not')
+        console.log(JSON.parse(JSON.stringify(data)))
+        this._done(data);
     }
 
     private _done(data: FunctionData) {
