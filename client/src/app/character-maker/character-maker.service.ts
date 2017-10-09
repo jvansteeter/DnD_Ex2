@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { Aspect, AspectType } from './aspect';
 import { SubComponent } from './subcomponents/sub-component';
 import { Observable } from 'rxjs/Observable';
+import { CategoryComponent } from './subcomponents/category/category.component';
 
 
 export enum Move {
@@ -141,24 +142,6 @@ export class CharacterMakerService {
         return result;
     }
 
-    public getBooleanAspects(): Aspect[] {
-        let result: Aspect[] = [];
-        for (let i = 0; i < this.aspects.length; i++) {
-            if (this.aspects[i].aspectType === AspectType.BOOLEAN) {
-                result.push(this.aspects[i]);
-            }
-            else if (this.aspects[i].aspectType === AspectType.BOOLEAN_LIST) {
-                let boolList = this.valueOfAspect(this.aspects[i]);
-                for (let j = 0; j < boolList.length; j++) {
-                    let newLabel = this.aspects[i].label + '.' + boolList[j].label;
-                    result.push(new Aspect(newLabel, AspectType.BOOLEAN, false));
-                }
-            }
-        }
-
-        return result;
-    }
-
     public valueOfAspect(aspect: Aspect): any {
         for (let i = 0; i < this.subComponents.length; i++) {
             let subComponent = this.subComponents[i];
@@ -176,6 +159,17 @@ export class CharacterMakerService {
                 subComponent.getValue();
             }
         })
+    }
+
+    public getAspectOptions(aspect: Aspect): any {
+        for (let i = 0; i < this.subComponents.length; i++) {
+            let subComponent = this.subComponents[i];
+            if (subComponent.aspect === aspect && aspect.aspectType === AspectType.CATEGORICAL) {
+                return (<CategoryComponent>subComponent.child).getCategories();
+            }
+        }
+
+        return null;
     }
 
     private arrayContains(array: any[], item: any) {

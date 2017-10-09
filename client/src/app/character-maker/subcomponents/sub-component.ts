@@ -129,7 +129,7 @@ export class SubComponent implements OnInit, AfterViewInit {
                 break;
             }
             case AspectType.CATEGORICAL: {
-                this.setDimensions(125, 15);
+                this.setDimensions(125, 35);
                 break;
             }
             case AspectType.TOKEN: {

@@ -4,6 +4,7 @@ import { SubComponent } from '../sub-component';
 import { SubComponentService } from '../sub-component.service';
 import { SubComponentChild } from '../sub-component-child';
 import { MdMenu } from '@angular/material';
+import { CharacterMakerService } from '../../character-maker.service';
 
 
 interface CategoryOption {
@@ -31,7 +32,7 @@ export class CategoryComponent implements SubComponentChild, AfterViewInit{
 
     private categories: CategoryOption[];
 
-    constructor() {
+    constructor(private characterMakerService: CharacterMakerService) {
         this.categories = [];
     }
 
@@ -76,5 +77,13 @@ export class CategoryComponent implements SubComponentChild, AfterViewInit{
 
     getValue() {
         return this.value;
+    }
+
+    getCategories(): any[] {
+        return this.categories;
+    }
+
+    valueChanged(): void {
+        this.characterMakerService.updateFunctionAspects();
     }
 }

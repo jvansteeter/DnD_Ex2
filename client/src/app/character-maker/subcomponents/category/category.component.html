@@ -1,5 +1,5 @@
-<md-select [placeholder]="aspect.label">
-	<md-option *ngFor="let category of categories">{{category.value}}</md-option>
+<md-select [placeholder]="aspect.label" [(ngModel)]="value" class="category-select" (change)="valueChanged()">
+	<md-option *ngFor="let category of categories" [value]="category.value">{{category.value}}</md-option>
 </md-select>
 <md-menu #options="mdMenu" (close)="closeOptions()">
 	<div class="changeFontSize" (click)="stopClickPropagate($event)" (keyup.enter)="addCategory()">

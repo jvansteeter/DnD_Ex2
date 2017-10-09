@@ -12,12 +12,15 @@ export enum GrammarNode {
     ASPECT_BOOLEAN_THEN = 'ASPECT_BOOLEAN_THEN',
     ASPECT_NUMBER_THEN = 'ASPECT_NUMBER_THEN',
     ASPECT_NUMBER = 'ASPECT_NUMBER',
+    ASPECT_CATEGORY = 'ASPECT_CATEGORY',
     OPERATOR = 'OPERATOR',
     LOGIC_OPERATOR = 'LOGIC_OPERATOR',
     EQUAL_OR_NOT = 'EQUAL_OR_NOT',
+    EQUAL_OR_NOT_CATEGORY = 'EQUAL_OR_NOT_CATEGORY',
     ASSIGNED = 'ASSIGNED',
     NUMBER = 'NUMBER',
     BOOLEAN = 'BOOLEAN',
+    CATEGORY_ITEM = 'CATEGORY_ITEM',
     ASSIGNED_NUMBER = 'ASSIGNED_NUMBER',
     ASSIGNED_ASPECT_NUMBER = 'ASSIGNED_ASPECT_NUMBER',
     ASSIGNED_ASPECT_NUMBER_FIRST = 'ASSIGNED_ASPECT_NUMBER_FIRST',
@@ -75,6 +78,9 @@ export class FunctionGrammar {
             GrammarNode.OPERATOR,
             GrammarNode.THEN
         ],
+        'ASPECT_CATEGORY' : [
+            GrammarNode.EQUAL_OR_NOT_CATEGORY
+        ],
         'OPERATOR': [
             GrammarNode.ASPECT_NUMBER_THEN,
             GrammarNode.NUMBER
@@ -87,6 +93,9 @@ export class FunctionGrammar {
             GrammarNode.BOOLEAN,
             GrammarNode.ASPECT_BOOLEAN_THEN,
         ],
+        'EQUAL_OR_NOT_CATEGORY': [
+            GrammarNode.CATEGORY_ITEM
+        ],
         'ASSIGNED': [
             GrammarNode.ASPECT,
             GrammarNode.ASSIGNED_NUMBER,
@@ -97,6 +106,9 @@ export class FunctionGrammar {
             GrammarNode.THEN
         ],
         'BOOLEAN': [
+            GrammarNode.THEN
+        ],
+        'CATEGORY_ITEM': [
             GrammarNode.THEN
         ],
         'ASSIGNED_NUMBER': [
@@ -233,6 +245,10 @@ export class FunctionGrammar {
                 this._aspectBooleanList(data);
                 return;
             }
+            else if (next === GrammarNode.ASPECT_CATEGORY) {
+                this._aspectCategory(data);
+                return;
+            }
         }
 
         throw new Error('Invalid Grammar: _if ' + data.index);
@@ -300,8 +316,24 @@ export class FunctionGrammar {
         throw new Error('Invalid Grammar: _aspectNumber ' + data.index);
     }
 
+    private _aspectCategory(data: FunctionData) {
+        console.log('_aspectCategory')
+        console.log(JSON.parse(JSON.stringify(data)))
+
+        let currentAspect = this.mapValues[data.index];
+        data.pendingConditionalValue = this.characterMakerService.valueOfAspect(currentAspect);
+
+        let next = this.stack[++data.index];
+        if (next === GrammarNode.EQUAL_OR_NOT_CATEGORY) {
+            this._equalOrNotCategory(data);
+            return;
+        }
+
+        throw new Error('Invalid Grammer: _aspectCategory ' + data.index);
+    }
+
     private _equalOrNot(data: FunctionData) {
-        console.log('_equalOrNot');
+        console.log('_equalOrNot')
         console.log(JSON.parse(JSON.stringify(data)))
 
         data.pendingLogicOperator = this.mapValues[data.index];
@@ -317,6 +349,21 @@ export class FunctionGrammar {
         }
 
         throw new Error('Invalid Grammar: _equalOrNot ' + data.index);
+    }
+
+    private _equalOrNotCategory(data: FunctionData) {
+        console.log('_equalOrNotCategory')
+        console.log(JSON.parse(JSON.stringify(data)))
+
+        data.pendingLogicOperator = this.mapValues[data.index];
+
+        let next = this.stack[++data.index];
+        if (next === GrammarNode.CATEGORY_ITEM) {
+            this._categoryItem(data);
+            return;
+        }
+
+        throw new Error('Invalid Grammar: _equalOrNotCategory ' + data.index);
     }
 
     private _logicOperator(data: FunctionData) {
@@ -439,6 +486,21 @@ export class FunctionGrammar {
         }
 
         throw new Error('Invalid Grammar: _number ' + data.index);
+    }
+
+    private _categoryItem(data: FunctionData) {
+        console.log('_categoryItem')
+        console.log(JSON.parse(JSON.stringify(data)))
+
+        data.operationalConditionalValue = this.mapValues[data.index];
+
+        let next = this.stack[++data.index];
+        if (next === GrammarNode.THEN) {
+            this._then(data);
+            return;
+        }
+
+        throw new Error('Invalid Grammar: _categoryItem ' + data.index);
     }
 
     private _operator(data: FunctionData) {

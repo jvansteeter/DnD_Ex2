@@ -58,6 +58,7 @@ export class FunctionDialogComponent {
     }
 
     selectOption(selected): void {
+        console.log('selected')
         console.log(selected)
         let currentNode = this.functionStack.currentNode();
         if (currentNode === GrammarNode.ASPECT) {
@@ -78,6 +79,14 @@ export class FunctionDialogComponent {
                 this.functionStack.setCurrentValue(selected);
                 this.currentListOptions = this.characterMakerService.valueOfAspect(selected);
                 this.functionStack.push(GrammarNode.ASPECT_BOOLEAN_LIST_ITEM);
+            }
+            else if (selected.aspectType === AspectType.CATEGORICAL && this.functionStack.previousNode() === GrammarNode.IF) {
+                this.functionStack.push(GrammarNode.ASPECT_CATEGORY);
+                let categories = this.characterMakerService.getAspectOptions(selected);
+                this.currentListOptions = [];
+                for (let i = 0; i < categories.length; i++) {
+                    this.currentListOptions.push(<never>categories[i]);
+                }
             }
         }
         if (currentNode === GrammarNode.LOGIC_OPERATOR) {
