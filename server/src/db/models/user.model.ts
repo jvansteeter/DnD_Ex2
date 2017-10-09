@@ -3,6 +3,7 @@ import * as bcrypt from 'bcryptjs';
 
 
 export class UserModel extends mongoose.Schema {
+    public _id: string;
     public username: string;
     public profilePhotoUrl: string;
     public firstName: string;
@@ -18,6 +19,7 @@ export class UserModel extends mongoose.Schema {
             passwordHash: String
         });
 
+        this._id = this.methods._id;
         this.username = this.methods.username;
         this.profilePhotoUrl = this.methods.profilePhotoUrl;
         this.firstName = this.methods.firstName;

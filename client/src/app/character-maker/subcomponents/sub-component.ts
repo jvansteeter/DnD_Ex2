@@ -5,7 +5,6 @@ import {
 } from '@angular/core';
 import { SubComponentChild } from './sub-component-child';
 import { CharacterMakerService, Move } from '../character-maker.service';
-import { Observable } from 'rxjs/Observable';
 import { MdMenu } from '@angular/material';
 
 @Component({

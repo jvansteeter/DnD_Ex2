@@ -5,6 +5,8 @@ import { Aspect, AspectType } from './aspect';
 import { SubComponent } from './subcomponents/sub-component';
 import { Observable } from 'rxjs/Observable';
 import { CategoryComponent } from './subcomponents/category/category.component';
+import { HttpClient } from '@angular/common/http';
+import { text } from 'body-parser';
 
 
 export enum Move {
@@ -24,7 +26,7 @@ export class CharacterMakerService {
 
     public aspects: Aspect[];
 
-    constructor() {
+    constructor(private http: HttpClient) {
         this.aspects = [];
         this.subComponents = [];
     }
@@ -170,6 +172,28 @@ export class CharacterMakerService {
         }
 
         return null;
+    }
+
+    public save() {
+        let subComponents: any[] = [];
+        for (let i = 0; i < this.subComponents.length; i++) {
+            let subComponent = this.subComponents[i];
+            let aspectObj = {
+                label: subComponent.aspect.label,
+                aspectType: subComponent.aspectType,
+                required: subComponent.aspect.required,
+                top: subComponent.top,
+                left: subComponent.left,
+                width: subComponent.width,
+                height: subComponent.height
+            };
+            if (subComponent)
+            subComponents.push(aspectObj);
+        }
+        this.http.post('/api/ruleset/save', subComponents, {responseType: 'text'}).subscribe((response) => {
+            console.log('\n\n\nRESULT\n\n\n\n')
+            console.log(response)
+        });
     }
 
     private arrayContains(array: any[], item: any) {

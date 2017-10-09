@@ -23,6 +23,7 @@ import { CategoryComponent } from './subcomponents/category/category.component';
 import { TokenComponent } from './subcomponents/token/token.component';
 import { FunctionComponent } from './subcomponents/function/function.component';
 import { FunctionDialogComponent, NodePipe } from './subcomponents/function/function-dialog.component';
+import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -40,7 +41,8 @@ import { FunctionDialogComponent, NodePipe } from './subcomponents/function/func
         MdCardModule,
         MdGridListModule,
         MdMenuModule,
-        MdChipsModule
+        MdChipsModule,
+        HttpClientModule
     ],
     declarations: [
         CharacterMakerComponent,

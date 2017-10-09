@@ -26,3 +26,8 @@ nav a:hover {
 nav a.active {
   color: #039be5;
 }
+
+.main-content {
+  padding-left: 15px;
+  padding-right: 15px;
+}
