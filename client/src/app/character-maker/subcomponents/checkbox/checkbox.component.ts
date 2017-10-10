@@ -1,9 +1,9 @@
 import { Component, Input, ViewChild } from '@angular/core';
 import { SubComponentChild } from '../sub-component-child';
 import { Aspect } from '../../aspect';
-import { MdMenu } from '@angular/material';
 import { SubComponent } from '../sub-component';
 import { CharacterMakerService } from '../../character-maker.service';
+import { MatMenu } from '@angular/material';
 
 
 @Component({
@@ -21,7 +21,7 @@ export class CheckboxComponent implements SubComponentChild {
     hasOptions = false;
     value: any;
 
-    @ViewChild('options') options: MdMenu;
+    @ViewChild('options') options: MatMenu;
 
     constructor(private characterMakerService: CharacterMakerService) {
 
@@ -31,7 +31,7 @@ export class CheckboxComponent implements SubComponentChild {
         // does nothing
     }
 
-    getMenuOptions(): MdMenu {
+    getMenuOptions(): MatMenu {
         return this.options;
     }
 

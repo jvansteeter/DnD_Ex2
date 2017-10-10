@@ -1,8 +1,8 @@
 import { AfterViewInit, Component, ElementRef, Input, Renderer2, ViewChild } from '@angular/core';
 import { SubComponentChild } from '../sub-component-child';
 import { Aspect } from '../../aspect';
-import { MdMenu } from '@angular/material';
 import { SubComponent } from '../sub-component';
+import { MatMenu } from '@angular/material';
 
 
 interface TextItem {
@@ -17,7 +17,7 @@ interface TextItem {
 export class TextListComponent implements SubComponentChild, AfterViewInit {
     @Input() aspect: Aspect;
     @Input() parent: SubComponent;
-    @ViewChild('options') options: MdMenu;
+    @ViewChild('options') options: MatMenu;
     label: string;
     required: boolean;
     width: number;
@@ -49,7 +49,7 @@ export class TextListComponent implements SubComponentChild, AfterViewInit {
         this.height = height;
     }
 
-    getMenuOptions(): MdMenu {
+    getMenuOptions(): MatMenu {
         return this.options;
     }
 
@@ -74,7 +74,7 @@ export class TextListComponent implements SubComponentChild, AfterViewInit {
     }
 
     closeMenu(): void {
-        this.options._emitCloseEvent();
+        // this.options._emitCloseEvent();
     }
 
     getValue() {

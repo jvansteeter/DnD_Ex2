@@ -2,17 +2,15 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
-
 import { AppRoutingModule } from './app-routing.module';
-
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { ProfileService } from './profile/profile.service';
-import { MdButtonModule, MdIconModule, MdMenuModule, MdTabsModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HomeModule } from './home/home.module';
 import { MapMakerModule } from './map-maker/map-maker.module';
 import { CharacterMakerModule } from './character-maker/character-maker.module';
+import { MatButtonModule, MatIconModule, MatMenuModule, MatTabsModule } from '@angular/material';
 
 @NgModule({
     imports: [
@@ -20,13 +18,13 @@ import { CharacterMakerModule } from './character-maker/character-maker.module';
         FormsModule,
         HttpModule,
         AppRoutingModule,
-        MdTabsModule,
+        MatTabsModule,
         BrowserAnimationsModule,
-        MdButtonModule,
-        MdMenuModule,
+        MatButtonModule,
+        MatMenuModule,
         HomeModule,
         MapMakerModule,
-        MdIconModule,
+        MatIconModule,
         CharacterMakerModule
     ],
     declarations: [

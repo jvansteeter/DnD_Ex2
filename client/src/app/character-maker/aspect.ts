@@ -1,12 +1,12 @@
 export enum AspectType {
-    TEXT,
-    NUMBER,
-    BOOLEAN,
-    BOOLEAN_LIST,
-    TEXT_LIST,
-    CATEGORICAL,
-    TOKEN,
-    FUNCTION
+    TEXT = 'TEXT',
+    NUMBER = 'NUMBER',
+    BOOLEAN = 'BOOLEAN',
+    BOOLEAN_LIST = 'BOOLEAN_LIST',
+    TEXT_LIST = 'TEXT_LIST',
+    CATEGORICAL = 'CATEGORICAL',
+    TOKEN = 'TOKEN',
+    FUNCTION = 'FUNCTION'
 }
 
 export class Aspect {

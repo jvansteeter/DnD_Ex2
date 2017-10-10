@@ -3,7 +3,7 @@ import { Aspect } from '../../aspect';
 import { SubComponent } from '../sub-component';
 import { SubComponentService } from '../sub-component.service';
 import { SubComponentChild } from '../sub-component-child';
-import { MdMenu } from '@angular/material';
+import { MatMenu } from '@angular/material';
 
 
 @Component({
@@ -14,7 +14,7 @@ import { MdMenu } from '@angular/material';
 export class TextComponent implements SubComponentChild, AfterViewInit{
     @Input() aspect: Aspect;
     @Input() parent: SubComponent;
-    @ViewChild('options') options: MdMenu;
+    @ViewChild('options') options: MatMenu;
     @ViewChild('fontSizeInput') fontSizeInput: ElementRef;
     label: string;
     required: boolean;
@@ -43,7 +43,7 @@ export class TextComponent implements SubComponentChild, AfterViewInit{
         this.height = height - this.heightMargin;
     }
 
-    getMenuOptions(): MdMenu {
+    getMenuOptions(): MatMenu {
         return this.options;
     }
 
@@ -56,7 +56,7 @@ export class TextComponent implements SubComponentChild, AfterViewInit{
     }
 
     closeMenu(): void {
-        this.options._emitCloseEvent();
+        // this.options._emitCloseEvent();
     }
 
     getValue() {

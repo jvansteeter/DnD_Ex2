@@ -1,4 +1,5 @@
 import * as mongoose from 'mongoose';
+import { CharacterSheetModel } from './characterSheet.model';
 
 
 export class RuleSetModel extends mongoose.Schema {
@@ -9,7 +10,7 @@ export class RuleSetModel extends mongoose.Schema {
 
     constructor() {
         super ({
-            label: String,
+            label: {type: String, required: true},
             characterSheets: [],
             admins: [{
                 userId: String,
@@ -23,10 +24,11 @@ export class RuleSetModel extends mongoose.Schema {
         this.admins = this.methods.admins;
 
         this.methods.addCharacterSheet = this.addCharacterSheet;
+        this.methods.addAdmin = this.addAdmin;
     }
 
-    public addCharacterSheet(sheet: any): void {
-        this.characterSheets.push(sheet);
+    public addCharacterSheet(sheet: CharacterSheetModel): void {
+        this.characterSheets.push(sheet._id);
         this.save();
     }
 

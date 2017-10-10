@@ -1,10 +1,10 @@
 import { AfterViewInit, Component, Input, ViewChild } from '@angular/core';
 import { Aspect } from '../../aspect';
 import { SubComponent } from '../sub-component';
-import { MdDialog, MdMenu } from '@angular/material';
 import { FunctionDialogComponent } from './function-dialog.component';
 import { SubComponentChild } from '../sub-component-child';
 import { FunctionGrammar } from './function.grammar';
+import { MatDialog, MatMenu } from '@angular/material';
 
 @Component({
     selector: 'characterMaker-functionComponent',
@@ -14,7 +14,7 @@ import { FunctionGrammar } from './function.grammar';
 export class FunctionComponent implements SubComponentChild, AfterViewInit {
     @Input() aspect: Aspect;
     @Input() parent: SubComponent;
-    @ViewChild('options') options: MdMenu;
+    @ViewChild('options') options: MatMenu;
 
     width: number;
     height: number;
@@ -24,7 +24,7 @@ export class FunctionComponent implements SubComponentChild, AfterViewInit {
     fontSize: number = 14;
     private _function: FunctionGrammar;
 
-    constructor(private dialog: MdDialog) {
+    constructor(private dialog: MatDialog) {
 
     }
 
@@ -36,7 +36,7 @@ export class FunctionComponent implements SubComponentChild, AfterViewInit {
         // do nothing
     }
 
-    getMenuOptions(): MdMenu {
+    getMenuOptions(): MatMenu {
         return this.options;
     }
 
@@ -58,7 +58,7 @@ export class FunctionComponent implements SubComponentChild, AfterViewInit {
     }
 
     closeMenu(): void {
-        this.options._emitCloseEvent();
+        // this.options._emitCloseEvent();
     }
 
     getValue(): any {

@@ -11,10 +11,14 @@ import * as bluebird from 'bluebird';
 
 //  Import/Initialize configuration files and models
 import './db/models/user.model';
+import './db/models/ruleSet.model';
+import './db/models/characterSheet.model';
+import './db/models/characterAspect.model';
 import './config/passport.config';
 
 import LoginRouter from './routes/login.router';
 import UserRouter from './routes/user.router';
+import RuleSetRouter from './routes/ruleSet.router';
 
 
 /***********************************************************************************************************************
@@ -95,6 +99,7 @@ class App {
         // ********************************************** API **********************************************************
         this.app.use('/auth', LoginRouter);
         this.app.use('/api/user', this.isAuthenticated, UserRouter);
+        this.app.use('/api/ruleset', this.isAuthenticated, RuleSetRouter);
 
         //  All other requests, redirect to index
         this.app.get('*', (req, res) => {

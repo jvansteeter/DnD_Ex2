@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { MdDialogRef } from '@angular/material';
 import { Aspect, AspectType } from '../aspect';
 import { CharacterMakerService } from '../character-maker.service';
+import { MatDialogRef } from '@angular/material';
 
 
 @Component({
@@ -15,7 +15,7 @@ export class AddComponentComponent {
     private aspectType: AspectType;
     private required: boolean = false;
 
-    constructor(private dialogRef: MdDialogRef<AddComponentComponent>,
+    constructor(private dialogRef: MatDialogRef<AddComponentComponent>,
                 private addComponentService: CharacterMakerService) {
         this.aspectTypes = [
             {

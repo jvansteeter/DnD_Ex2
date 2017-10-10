@@ -1,6 +1,6 @@
 import { Aspect } from '../aspect';
-import { MdMenu } from '@angular/material';
 import { SubComponent } from './sub-component';
+import { MatMenu } from '@angular/material';
 
 export interface SubComponentChild {
     aspect: Aspect;
@@ -10,7 +10,7 @@ export interface SubComponentChild {
     readonly hasOptions: boolean;
 
     resize(width: number, height: number);
-    getMenuOptions(): MdMenu;
+    getMenuOptions(): MatMenu;
     closeOptions(): void;
     getValue(): any;
 }

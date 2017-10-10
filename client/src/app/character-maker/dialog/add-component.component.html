@@ -1,10 +1,12 @@
 <form class="add-dialog" (submit)="addComponent()">
-	<md-input-container>
-		<input name="label" mdInput placeholder="Label" class="dialog-input" [(ngModel)]="label" required>
-	</md-input-container>
-	<md-select name="aspect" placeholder="Aspect Type" class="dialog-input" [(ngModel)]="aspectType" required>
-		<md-option *ngFor="let aspect of aspectTypes" [value]="aspect.type">{{ aspect.label }}</md-option>
-	</md-select>
-	<md-checkbox name="required" class="dialog-input" color="primary" [(ngModel)]="required">Required</md-checkbox>
-	<button name="submit" md-raised-button color="primary" class="dialog-input">Add</button>
+	<mat-form-field>
+		<input name="label" matInput placeholder="Label" class="dialog-input" [(ngModel)]="label" required>
+	</mat-form-field>
+	<mat-form-field>
+		<mat-select name="aspect" placeholder="Aspect Type" class="dialog-input" [(ngModel)]="aspectType" required>
+			<mat-option *ngFor="let aspect of aspectTypes" [value]="aspect.type">{{ aspect.label }}</mat-option>
+		</mat-select>
+	</mat-form-field>
+	<mat-checkbox name="required" class="dialog-input" color="primary" [(ngModel)]="required">Required</mat-checkbox>
+	<button name="submit" mat-raised-button color="primary" class="dialog-input">Add</button>
 </form>

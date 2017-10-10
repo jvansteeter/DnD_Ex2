@@ -1,10 +1,9 @@
 import { AfterViewInit, Component, ElementRef, Input, Renderer2, ViewChild } from '@angular/core';
 import { Aspect } from '../../aspect';
 import { SubComponent } from '../sub-component';
-import { SubComponentService } from '../sub-component.service';
 import { SubComponentChild } from '../sub-component-child';
-import { MdMenu } from '@angular/material';
 import { CharacterMakerService } from '../../character-maker.service';
+import { MatMenu } from '@angular/material';
 
 
 @Component({
@@ -15,7 +14,7 @@ import { CharacterMakerService } from '../../character-maker.service';
 export class NumberComponent implements SubComponentChild, AfterViewInit{
     @Input() aspect: Aspect;
     @Input() parent: SubComponent;
-    @ViewChild('options') options: MdMenu;
+    @ViewChild('options') options: MatMenu;
     @ViewChild('fontSizeInput') fontSizeInput: ElementRef;
     label: string;
     required: boolean;
@@ -44,7 +43,7 @@ export class NumberComponent implements SubComponentChild, AfterViewInit{
         this.height = height - this.heightMargin;
     }
 
-    getMenuOptions(): MdMenu {
+    getMenuOptions(): MatMenu {
         return this.options;
     }
 
@@ -57,7 +56,7 @@ export class NumberComponent implements SubComponentChild, AfterViewInit{
     }
 
     closeMenu(): void {
-        this.options._emitCloseEvent();
+        // this.options._emitCloseEvent();
     }
 
     getValue() {

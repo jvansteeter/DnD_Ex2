@@ -1,9 +1,9 @@
 import { AfterViewInit, Component, ElementRef, Input, Renderer2, ViewChild } from '@angular/core';
 import { SubComponentChild } from '../sub-component-child';
 import { Aspect } from '../../aspect';
-import { MdMenu } from '@angular/material';
 import { SubComponent } from '../sub-component';
 import { CharacterMakerService } from '../../character-maker.service';
+import { MatMenu } from '@angular/material';
 
 
 interface CheckboxItem {
@@ -19,7 +19,7 @@ interface CheckboxItem {
 export class CheckboxListComponent implements SubComponentChild, AfterViewInit {
     @Input() aspect: Aspect;
     @Input() parent: SubComponent;
-    @ViewChild('options') options: MdMenu;
+    @ViewChild('options') options: MatMenu;
     label: string;
     required: boolean;
     width: number;
@@ -51,7 +51,7 @@ export class CheckboxListComponent implements SubComponentChild, AfterViewInit {
         this.height = height;
     }
 
-    getMenuOptions(): MdMenu {
+    getMenuOptions(): MatMenu {
         return this.options;
     }
 
@@ -79,7 +79,7 @@ export class CheckboxListComponent implements SubComponentChild, AfterViewInit {
     }
 
     closeMenu(): void {
-        this.options._emitCloseEvent();
+        // this.options._emitCloseEvent();
     }
 
     valueChanged(): void {
@@ -88,6 +88,15 @@ export class CheckboxListComponent implements SubComponentChild, AfterViewInit {
 
     getValue(): any {
         return this.checkboxes;
+    }
+
+    getCheckboxLabels(): string[] {
+        let labels: string[] = [];
+        for (let i = 0; i < this.checkboxes.length; i++) {
+            labels.push(this.checkboxes[i].label);
+        }
+
+        return labels;
     }
 }
 

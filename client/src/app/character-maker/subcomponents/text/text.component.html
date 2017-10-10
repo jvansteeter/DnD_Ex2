@@ -1,11 +1,10 @@
-<md-input-container>
-	<textarea mdInput placeholder="{{aspect.label}}" [required]="aspect.required"
-	[ngStyle]="{'width': width + 'px', 'height': height + 'px', 'font-size': fontSize + 'px'}"></textarea>
-</md-input-container>
-<md-menu #options="mdMenu" (close)="closeOptions()">
+<mat-form-field [ngStyle]="{'width': width + 'px', 'font-size': fontSize + 'px'}">
+	<textarea matInput placeholder="{{aspect.label}}" [required]="aspect.required" [style.height.px]="height"></textarea>
+</mat-form-field>
+<mat-menu (close)="closeOptions()" #options>
 	<div class="changeFontSize" (click)="stopClickPropagate($event)" (keyup.enter)="closeMenu()">
-		<md-input-container>
-			<input mdInput type="number" placeholder="Font Size" [(ngModel)]="fontSize" #fontSizeInput>
-		</md-input-container>
+		<mat-form-field>
+			<input matInput type="number" placeholder="Font Size" [(ngModel)]="fontSize" #fontSizeInput>
+		</mat-form-field>
 	</div>
-</md-menu>
+</mat-menu>

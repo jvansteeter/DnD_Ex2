@@ -1,8 +1,8 @@
 import { Component, Pipe, PipeTransform } from '@angular/core';
-import { MdDialogRef } from '@angular/material';
 import { FunctionGrammar, GrammarNode } from './function.grammar';
 import { CharacterMakerService } from '../../character-maker.service';
-import { Aspect, AspectType } from '../../aspect';
+import { AspectType } from '../../aspect';
+import { MatDialogRef } from '@angular/material';
 
 @Component({
     templateUrl: 'function-dialog.component.html',
@@ -17,7 +17,7 @@ export class FunctionDialogComponent {
 
     currentListOptions = [];
 
-    constructor(private dialogRef: MdDialogRef<FunctionDialogComponent>, private characterMakerService: CharacterMakerService) {
+    constructor(private dialogRef: MatDialogRef<FunctionDialogComponent>, private characterMakerService: CharacterMakerService) {
         this.functionStack = new FunctionGrammar(characterMakerService);
         this.functionStack.start();
         this.next = this.functionStack.nextOptions();

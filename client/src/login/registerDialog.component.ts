@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { MdDialogRef } from '@angular/material';
 import { LoginService } from './login.service';
 import { ErrorEmitterService } from './ErrorEmitter.service';
+import { MatDialogRef } from '@angular/material';
 
 
 @Component({
@@ -18,7 +18,7 @@ export class RegisterDialogComponent {
 
     constructor(private loginService: LoginService,
                 private errorService: ErrorEmitterService,
-                private dialogRef: MdDialogRef<RegisterDialogComponent>) {
+                private dialogRef: MatDialogRef<RegisterDialogComponent>) {
 
     }
 

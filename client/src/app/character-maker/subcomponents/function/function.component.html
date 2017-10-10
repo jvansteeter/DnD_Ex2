@@ -2,11 +2,11 @@
 <div class="function-value">
 	<span>{{value}}</span>
 </div>
-<md-menu #options="mdMenu" (close)="closeOptions()">
-	<span md-menu-item (click)="openFunctionDialog()">Define Function</span>
+<mat-menu #options="matMenu" (close)="closeOptions()">
+	<span mat-menu-item (click)="openFunctionDialog()">Define Function</span>
 	<div class="changeFontSize" (click)="stopClickPropagate($event)" (keyup.enter)="closeMenu()">
-		<md-input-container>
-			<input mdInput type="number" placeholder="Label Font Size" [(ngModel)]="fontSize" #fontSizeInput>
-		</md-input-container>
+		<mat-form-field>
+			<input matInput type="number" placeholder="Label Font Size" [(ngModel)]="fontSize" #fontSizeInput>
+		</mat-form-field>
 	</div>
-</md-menu>
+</mat-menu>

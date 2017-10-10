@@ -1,16 +1,16 @@
 <span [ngStyle]="{'font-size': fontSize + 'px'}">{{aspect.label}}</span>
 <div class="checkbox-list">
 	<span *ngFor="let checkbox of checkboxes" class="checkbox-list-item">
-		<md-checkbox color="primary" [(ngModel)]="checkbox.value" (change)="valueChanged()"></md-checkbox>
+		<mat-checkbox color="primary" [(ngModel)]="checkbox.value" (change)="valueChanged()"></mat-checkbox>
 		<input class="form-control checkbox-list-label" [(ngModel)]="checkbox.label" (change)="valueChanged()">
 	</span>
 </div>
-<md-menu #options="mdMenu" (close)="closeOptions()">
-	<span md-menu-item (click)="addCheckbox()">Add Checkbox</span>
-	<span md-menu-item (click)="removeCheckbox()">Remove Checkbox</span>
+<mat-menu #options="matMenu" (close)="closeOptions()">
+	<span mat-menu-item (click)="addCheckbox()">Add Checkbox</span>
+	<span mat-menu-item (click)="removeCheckbox()">Remove Checkbox</span>
 	<div class="changeFontSize" (click)="stopClickPropagate($event)" (keyup.enter)="closeMenu()">
-		<md-input-container>
-			<input mdInput type="number" placeholder="Label Font Size" [(ngModel)]="fontSize" #fontSizeInput>
-		</md-input-container>
+		<mat-form-field>
+			<input matInput type="number" placeholder="Label Font Size" [(ngModel)]="fontSize" #fontSizeInput>
+		</mat-form-field>
 	</div>
-</md-menu>
+</mat-menu>

@@ -11,7 +11,7 @@ export class CharacterAspectModel extends mongoose.Schema {
     public left: number;
     public width: number;
     public height: number;
-    public options: string[];
+    public items: any[];
 
     constructor() {
         super ({
@@ -23,7 +23,7 @@ export class CharacterAspectModel extends mongoose.Schema {
             left: Number,
             width: Number,
             height: Number,
-            options: []
+            items: []
         });
 
         this._id = this.methods._id;
@@ -35,7 +35,14 @@ export class CharacterAspectModel extends mongoose.Schema {
         this.left = this.methods.left;
         this.width = this.methods.width;
         this.height = this.methods.height;
-        this.options = this.methods.options;
+        this.items = this.methods.items;
+
+        this.methods.setItems = this.setItems;
+    }
+
+    public setItems(items: any[]) {
+        this.items = items;
+        this.save();
     }
 
     private save() {

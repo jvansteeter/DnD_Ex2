@@ -3,20 +3,20 @@
 <div [ngClass]="alertVisibility" class="alert alert-danger">{{alertMessage}}</div>
 <div class="container">
 	<div class="row row-centered">
-		<div class="col-sm-6 col-md-4 col-md-offset-4">
+		<div class="col-sm-6 col-mat-4 col-mat-offset-4">
 			<h1 class="text-center login-title" style="font-size: 400%;">Dungeon Map</h1>
 			<div class="account-wall">
 				<div style="width: 250px; margin: 0 auto;">
 					<!--<img class="profile-img img-circle" src="image/die.png">-->
 				</div>
 				<form class="form-signin">
-					<md-input-container>
-						<input mdInput name="username" [(ngModel)]="usernameInput" placeholder="Username" required autofocus>
-					</md-input-container>
-					<md-input-container>
-						<input mdInput type="password" name="password" [(ngModel)]="passwordInput" placeholder="Password" required><br>
-					</md-input-container>
-					<button md-raised-button color="primary" (click)="login()">Sign in</button>
+					<mat-form-field>
+						<input matInput name="username" [(ngModel)]="usernameInput" placeholder="Username" required autofocus>
+					</mat-form-field>
+					<mat-form-field>
+						<input matInput type="password" name="password" [(ngModel)]="passwordInput" placeholder="Password" required><br>
+					</mat-form-field>
+					<button mat-raised-button color="primary" (click)="login()">Sign in</button>
 					<a (click)="openRegisterDialog()">Create an account</a>
 				</form>
 			</div>

@@ -4,12 +4,12 @@
 		<input class="form-control" [(ngModel)]="item.value">
 	</span>
 </div>
-<md-menu #options="mdMenu" (close)="closeOptions()">
-	<span md-menu-item (click)="addItem()">Add Item</span>
-	<span md-menu-item (click)="removeItem()">Remove Item</span>
+<mat-menu #options (close)="closeOptions()">
+	<span mat-menu-item (click)="addItem()">Add Item</span>
+	<span mat-menu-item (click)="removeItem()">Remove Item</span>
 	<div class="changeFontSize" (click)="stopClickPropagate($event)" (keyup.enter)="closeMenu()">
-		<md-input-container>
-			<input mdInput type="number" placeholder="Label Font Size" [(ngModel)]="fontSize" #fontSizeInput>
-		</md-input-container>
+		<mat-form-field>
+			<input matInput type="number" placeholder="Label Font Size" [(ngModel)]="fontSize" #fontSizeInput>
+		</mat-form-field>
 	</div>
-</md-menu>
+</mat-menu>

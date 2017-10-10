@@ -2,7 +2,7 @@ import { AfterViewInit, Component, Input, ViewChild } from '@angular/core';
 import { Aspect } from '../../aspect';
 import { SubComponent } from '../sub-component';
 import { SubComponentChild } from '../sub-component-child';
-import { MdMenu } from '@angular/material';
+import { MatMenu } from '@angular/material';
 
 
 @Component({
@@ -13,7 +13,7 @@ import { MdMenu } from '@angular/material';
 export class TokenComponent implements SubComponentChild, AfterViewInit{
     @Input() aspect: Aspect;
     @Input() parent: SubComponent;
-    @ViewChild('options') options: MdMenu;
+    @ViewChild('options') options: MatMenu;
     label: string;
     required: boolean;
     width: number = 72;
@@ -36,7 +36,7 @@ export class TokenComponent implements SubComponentChild, AfterViewInit{
         this.height = height + this.heightMargin;
     }
 
-    getMenuOptions(): MdMenu {
+    getMenuOptions(): MatMenu {
         return this.options;
     }
 
@@ -49,7 +49,7 @@ export class TokenComponent implements SubComponentChild, AfterViewInit{
     }
 
     closeMenu(): void {
-        this.options._emitCloseEvent();
+        // this.options._emitCloseEvent();
     }
 
     getValue() {

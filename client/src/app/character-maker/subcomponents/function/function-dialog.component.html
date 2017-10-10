@@ -3,68 +3,68 @@
 	<div>
 		<span *ngFor="let chip of functionStack.stack">
 			<span *ngIf="chip === grammarNode.THEN || chip === grammarNode.IF_NOT"><br>&nbsp;</span>
-			<md-chip color="primary" selected="true" *ngIf="chip === grammarNode.IF ||
+			<mat-chip color="primary" selected="true" *ngIf="chip === grammarNode.IF ||
 															chip === grammarNode.THEN ||
 															chip === grammarNode.ASSIGNED ||
 															chip === grammarNode.THIS ||
-															chip === grammarNode.IF_NOT">{{chip}}</md-chip>
-			<md-select class="function-not-chip" placeholder="Logical Operator" *ngIf="chip === grammarNode.LOGIC_OPERATOR" (change)="selectOption($event)" [disabled]="chip !== functionStack.currentNode()">
-				<md-option value="==">is equal to</md-option>
-				<md-option value="!=">is not equal to</md-option>
-				<md-option value="<">is less than</md-option>
-				<md-option value=">">is greater than</md-option>
-				<md-option value="<=">is less than or equal to</md-option>
-				<md-option value=">=">is greater than or equal to</md-option>
-			</md-select>
-			<md-select class="function-not-chip" placeholder="Aspect" *ngIf="chip === grammarNode.ASPECT" (change)="selectOption($event.value)" [disabled]="chip !== functionStack.currentNode()">
+															chip === grammarNode.IF_NOT">{{chip}}</mat-chip>
+			<mat-select class="function-not-chip" placeholder="Logical Operator" *ngIf="chip === grammarNode.LOGIC_OPERATOR" (change)="selectOption($event)" [disabled]="chip !== functionStack.currentNode()">
+				<mat-option value="==">is equal to</mat-option>
+				<mat-option value="!=">is not equal to</mat-option>
+				<mat-option value="<">is less than</mat-option>
+				<mat-option value=">">is greater than</mat-option>
+				<mat-option value="<=">is less than or equal to</mat-option>
+				<mat-option value=">=">is greater than or equal to</mat-option>
+			</mat-select>
+			<mat-select class="function-not-chip" placeholder="Aspect" *ngIf="chip === grammarNode.ASPECT" (change)="selectOption($event.value)" [disabled]="chip !== functionStack.currentNode()">
 				<span *ngFor="let aspect of characterMakerService.getAspectsOfType()">
-					<md-option [value]="aspect">{{aspect.label}}</md-option>
+					<mat-option [value]="aspect">{{aspect.label}}</mat-option>
 				</span>
-			</md-select>
-			<md-select class="function-not-chip" placeholder="Item" *ngIf="chip === grammarNode.ASPECT_BOOLEAN_LIST_ITEM" (change)="selectOption($event.value)" [disabled]="chip !== functionStack.currentNode()">
+			</mat-select>
+			<mat-select class="function-not-chip" placeholder="Item" *ngIf="chip === grammarNode.ASPECT_BOOLEAN_LIST_ITEM" (change)="selectOption($event.value)" [disabled]="chip !== functionStack.currentNode()">
 				<span *ngFor="let item of currentListOptions">
-					<md-option [value]="item">{{item.label}}</md-option>
+					<mat-option [value]="item">{{item.label}}</mat-option>
 				</span>
-			</md-select>
-			<md-select class="function-not-chip" placeholder="Item" *ngIf="chip === grammarNode.CATEGORY_ITEM" (change)="selectOption($event.value)" [disabled]="chip !== functionStack.currentNode()">
+			</mat-select>
+			<mat-select class="function-not-chip" placeholder="Item" *ngIf="chip === grammarNode.CATEGORY_ITEM" (change)="selectOption($event.value)" [disabled]="chip !== functionStack.currentNode()">
 				<span *ngFor="let item of currentListOptions">
-					<md-option [value]="item.value">{{item.value}}</md-option>
+					<mat-option [value]="item.value">{{item.value}}</mat-option>
 				</span>
-			</md-select>
-			<md-select class="function-not-chip" placeholder="Aspect" *ngIf="chip === grammarNode.ASPECT_BOOLEAN_THEN" (change)="selectOption($event.value)" [disabled]="chip !== functionStack.currentNode()">
+			</mat-select>
+			<mat-select class="function-not-chip" placeholder="Aspect" *ngIf="chip === grammarNode.ASPECT_BOOLEAN_THEN" (change)="selectOption($event.value)" [disabled]="chip !== functionStack.currentNode()">
 				<span *ngFor="let aspect of characterMakerService.getAspectsOfType(aspectType.BOOLEAN)">
-					<md-option *ngIf="aspect.aspectType !== aspectType.FUNCTION" [value]="aspect">{{aspect.label}}</md-option>
+					<mat-option *ngIf="aspect.aspectType !== aspectType.FUNCTION" [value]="aspect">{{aspect.label}}</mat-option>
 				</span>
-			</md-select>
-			<md-select class="function-not-chip" placeholder="Aspect" *ngIf="chip === grammarNode.ASPECT_NUMBER_THEN || chip === grammarNode.ASSIGNED_ASPECT_NUMBER" (change)="selectOption($event.value)" [disabled]="chip !== functionStack.currentNode()">
+			</mat-select>
+			<mat-select class="function-not-chip" placeholder="Aspect" *ngIf="chip === grammarNode.ASPECT_NUMBER_THEN || chip === grammarNode.ASSIGNED_ASPECT_NUMBER" (change)="selectOption($event.value)" [disabled]="chip !== functionStack.currentNode()">
 				<span *ngFor="let aspect of characterMakerService.getAspectsOfType(aspectType.NUMBER)">
-					<md-option *ngIf="aspect.aspectType !== aspectType.FUNCTION" [value]="aspect">{{aspect.label}}</md-option>
+					<mat-option *ngIf="aspect.aspectType !== aspectType.FUNCTION" [value]="aspect">{{aspect.label}}</mat-option>
 				</span>
-			</md-select>
-			<md-select class="function-not-chip" placeholder="Logical Operator" *ngIf="chip === grammarNode.EQUAL_OR_NOT || chip === grammarNode.EQUAL_OR_NOT_CATEGORY" (change)="selectOption($event.value)" [disabled]="chip !== functionStack.currentNode()">
-				<md-option value="==">is equal to</md-option>
-				<md-option value="!=">is not equal to</md-option>
-			</md-select>
-			<md-input-container class="function-not-chip" *ngIf="chip === grammarNode.NUMBER || chip === grammarNode.ASSIGNED_NUMBER">
-				<input mdInput type="number" (change)="selectOption($event.target.value)">
-			</md-input-container>
-			<md-select class="function-not-chip" placeholder="True/False" *ngIf="chip === grammarNode.BOOLEAN || chip === grammarNode.ASSIGNED_BOOLEAN" (change)="selectOption($event.value)" [disabled]="chip !== functionStack.currentNode()">
-				<md-option [value]="true">True</md-option>
-				<md-option [value]="false">False</md-option>
-			</md-select>
-			<md-select class="function-not-chip" placeholder="Operator" *ngIf="chip === grammarNode.OPERATOR || chip === grammarNode.ASSIGNED_OPERATOR" (change)="selectOption($event.value)" [disabled]="chip !== functionStack.currentNode()">
-				<md-option value="+">Plus</md-option>
-				<md-option value="-">Minus</md-option>
-				<md-option value="*">Times by</md-option>
-				<md-option value="/">Divided by</md-option>
-			</md-select>
+			</mat-select>
+			<mat-select class="function-not-chip" placeholder="Logical Operator" *ngIf="chip === grammarNode.EQUAL_OR_NOT || chip === grammarNode.EQUAL_OR_NOT_CATEGORY" (change)="selectOption($event.value)" [disabled]="chip !== functionStack.currentNode()">
+				<mat-option value="==">is equal to</mat-option>
+				<mat-option value="!=">is not equal to</mat-option>
+			</mat-select>
+			<mat-form-field class="function-not-chip" *ngIf="chip === grammarNode.NUMBER || chip === grammarNode.ASSIGNED_NUMBER">
+				<input matInput type="number" (change)="selectOption($event.target.value)">
+			</mat-form-field>
+			<mat-select class="function-not-chip" placeholder="True/False" *ngIf="chip === grammarNode.BOOLEAN || chip === grammarNode.ASSIGNED_BOOLEAN" (change)="selectOption($event.value)" [disabled]="chip !== functionStack.currentNode()">
+				<mat-option [value]="true">True</mat-option>
+				<mat-option [value]="false">False</mat-option>
+			</mat-select>
+			<mat-select class="function-not-chip" placeholder="Operator" *ngIf="chip === grammarNode.OPERATOR || chip === grammarNode.ASSIGNED_OPERATOR" (change)="selectOption($event.value)" [disabled]="chip !== functionStack.currentNode()">
+				<mat-option value="+">Plus</mat-option>
+				<mat-option value="-">Minus</mat-option>
+				<mat-option value="*">Times by</mat-option>
+				<mat-option value="/">Divided by</mat-option>
+			</mat-select>
 		</span>
 	</div>
 </div>
 <span>Options:</span>
-<md-chip-list>
+<mat-chip-list>
 	<span *ngFor="let chip of next">
-		<md-chip class="function-chip" color="accent" (click)="addNode(chip)">{{chip | nodePipe}}</md-chip>
+		<mat-chip class="function-chip" color="accent" (click)="addNode(chip)">{{chip | nodePipe}}</mat-chip>
 	</span>
-</md-chip-list>
-<button md-raised-button (click)="removeLast()" [disabled]="functionStack.stack.length < 2">Remove Last</button>
+</mat-chip-list>
+<button mat-raised-button (click)="removeLast()" [disabled]="functionStack.stack.length < 2">Remove Last</button>

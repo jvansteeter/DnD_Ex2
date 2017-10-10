@@ -1,9 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
 import { LoginService } from './login.service';
-import { MdDialog } from '@angular/material';
 import { RegisterDialogComponent } from './registerDialog.component';
 import { Observable } from 'rxjs/Observable';
 import { ErrorEmitterService } from './ErrorEmitter.service';
+import { MatDialog } from '@angular/material';
 
 
 @Component({
@@ -19,7 +19,7 @@ export class LoginComponent {
 
     constructor(private loginService: LoginService,
                 private errorService: ErrorEmitterService,
-                private dialog: MdDialog) {
+                private dialog: MatDialog) {
         this.errorService.subscribe((message) => {
             this.alert(message);
         })

@@ -5,7 +5,7 @@ import {
 } from '@angular/core';
 import { SubComponentChild } from './sub-component-child';
 import { CharacterMakerService, Move } from '../character-maker.service';
-import { MdMenu } from '@angular/material';
+import { MatMenu } from '@angular/material';
 
 @Component({
     selector: 'sub-component',
@@ -15,7 +15,7 @@ import { MdMenu } from '@angular/material';
 export class SubComponent implements OnInit, AfterViewInit {
     @Input() aspect: Aspect;
     @ViewChild('child') child: SubComponentChild;
-    options: MdMenu;
+    options: MatMenu;
     aspectType = AspectType;
 
     width: number;

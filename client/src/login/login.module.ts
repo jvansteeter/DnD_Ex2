@@ -4,10 +4,10 @@ import { FormsModule } from '@angular/forms';
 import { LoginService } from './login.service';
 import { HttpModule } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
-import { MdButtonModule, MdDialogModule, MdInputModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RegisterDialogComponent } from './registerDialog.component';
 import { ErrorEmitterService } from './ErrorEmitter.service';
+import { MatButtonModule, MatDialogModule, MatInputModule } from '@angular/material';
 
 
 @NgModule({
@@ -15,10 +15,10 @@ import { ErrorEmitterService } from './ErrorEmitter.service';
         FormsModule,
         BrowserModule,
         HttpModule,
-        MdDialogModule,
+        MatDialogModule,
         BrowserAnimationsModule,
-        MdButtonModule,
-        MdInputModule
+        MatButtonModule,
+        MatInputModule
     ],
     declarations: [
         LoginComponent,

@@ -1,9 +1,8 @@
 import { AfterViewInit, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
-import { MdDialog } from '@angular/material';
 import { AddComponentComponent } from './dialog/add-component.component';
 import { CharacterMakerService } from './character-maker.service';
-import { Aspect, AspectType } from './aspect';
-import { HttpClient } from '@angular/common/http';
+import { Aspect } from './aspect';
+import { MatDialog } from '@angular/material';
 
 
 @Component({
@@ -21,7 +20,7 @@ export class CharacterMakerComponent implements AfterViewInit {
         this.characterMakerService.setWidth(this.characterSheet.nativeElement.offsetWidth);
     }
 
-    constructor(private dialog: MdDialog,
+    constructor(private dialog: MatDialog,
                 public characterMakerService: CharacterMakerService) {
     }
 

@@ -7,6 +7,7 @@ import { Observable } from 'rxjs/Observable';
 import { CategoryComponent } from './subcomponents/category/category.component';
 import { HttpClient } from '@angular/common/http';
 import { text } from 'body-parser';
+import { CheckboxListComponent } from './subcomponents/checkbox-list/checkbox-list.component';
 
 
 export enum Move {
@@ -175,22 +176,31 @@ export class CharacterMakerService {
     }
 
     public save() {
-        let subComponents: any[] = [];
+        let characterSheet = {
+            label: 'Test 1'
+        };
+        let aspects: any[] = [];
         for (let i = 0; i < this.subComponents.length; i++) {
             let subComponent = this.subComponents[i];
             let aspectObj = {
                 label: subComponent.aspect.label,
-                aspectType: subComponent.aspectType,
+                aspectType: subComponent.aspect.aspectType,
                 required: subComponent.aspect.required,
                 top: subComponent.top,
                 left: subComponent.left,
                 width: subComponent.width,
                 height: subComponent.height
             };
-            if (subComponent)
-            subComponents.push(aspectObj);
+            if (subComponent.aspect.aspectType === AspectType.CATEGORICAL) {
+                aspectObj['items'] = (<CategoryComponent>subComponent.child).getCategories();
+            }
+            else if (subComponent.aspect.aspectType === AspectType.BOOLEAN_LIST) {
+                aspectObj['items'] = (<CheckboxListComponent>subComponent.child).getCheckboxLabels();
+            }
+            aspects.push(aspectObj);
         }
-        this.http.post('/api/ruleset/save', subComponents, {responseType: 'text'}).subscribe((response) => {
+        characterSheet['aspects'] = aspects;
+        this.http.post('/api/ruleset/save', characterSheet, {responseType: 'json'}).subscribe((response) => {
             console.log('\n\n\nRESULT\n\n\n\n')
             console.log(response)
         });

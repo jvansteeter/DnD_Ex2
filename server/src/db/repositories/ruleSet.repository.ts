@@ -10,17 +10,15 @@ export class RuleSetRepository {
         this.RuleSet = mongoose.model('RuleSet');
     }
 
-    public create(label: string, user: UserModel): Promise<Error | RuleSetModel> {
+    public create(ruleSetObj: any): Promise<Error | RuleSetModel> {
         return new Promise((resolve, reject) => {
             this.RuleSet.create({
-                label: label
+                label: ruleSetObj.label
             }, (error, newRuleSet: RuleSetModel) => {
                 if (error) {
                     reject (error);
                     return;
                 }
-
-                newRuleSet.addAdmin(user._id, 'superuser');
 
                 resolve(newRuleSet);
             });
