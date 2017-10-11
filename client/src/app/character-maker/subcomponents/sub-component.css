@@ -143,3 +143,7 @@ textarea {
 .category-select {
     padding-top: 5px;
 }
+
+.function-syntax-area span mat-form-field {
+    width: 105px;
+}

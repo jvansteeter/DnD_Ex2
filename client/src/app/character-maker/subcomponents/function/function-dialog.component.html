@@ -1,6 +1,6 @@
 <span>Function:</span>
 <div class="well well-sm">
-	<div>
+	<div class="function-syntax-area">
 		<span *ngFor="let chip of functionStack.stack">
 			<span *ngIf="chip === grammarNode.THEN || chip === grammarNode.IF_NOT"><br>&nbsp;</span>
 			<mat-chip color="primary" selected="true" *ngIf="chip === grammarNode.IF ||
@@ -8,7 +8,8 @@
 															chip === grammarNode.ASSIGNED ||
 															chip === grammarNode.THIS ||
 															chip === grammarNode.IF_NOT">{{chip}}</mat-chip>
-			<mat-select class="function-not-chip" placeholder="Logical Operator" *ngIf="chip === grammarNode.LOGIC_OPERATOR" (change)="selectOption($event)" [disabled]="chip !== functionStack.currentNode()">
+			<mat-form-field *ngIf="chip === grammarNode.LOGIC_OPERATOR">
+				<mat-select class="function-not-chip" placeholder="Logical Operator" (change)="selectOption($event)" [disabled]="chip !== functionStack.currentNode()">
 				<mat-option value="==">is equal to</mat-option>
 				<mat-option value="!=">is not equal to</mat-option>
 				<mat-option value="<">is less than</mat-option>
@@ -16,48 +17,65 @@
 				<mat-option value="<=">is less than or equal to</mat-option>
 				<mat-option value=">=">is greater than or equal to</mat-option>
 			</mat-select>
-			<mat-select class="function-not-chip" placeholder="Aspect" *ngIf="chip === grammarNode.ASPECT" (change)="selectOption($event.value)" [disabled]="chip !== functionStack.currentNode()">
+			</mat-form-field>
+			<mat-form-field *ngIf="chip === grammarNode.ASPECT">
+				<mat-select class="function-not-chip" placeholder="Aspect" (change)="selectOption($event.value)" [disabled]="chip !== functionStack.currentNode()">
 				<span *ngFor="let aspect of characterMakerService.getAspectsOfType()">
 					<mat-option [value]="aspect">{{aspect.label}}</mat-option>
 				</span>
 			</mat-select>
-			<mat-select class="function-not-chip" placeholder="Item" *ngIf="chip === grammarNode.ASPECT_BOOLEAN_LIST_ITEM" (change)="selectOption($event.value)" [disabled]="chip !== functionStack.currentNode()">
+			</mat-form-field>
+			<mat-form-field *ngIf="chip === grammarNode.ASPECT_BOOLEAN_LIST_ITEM">
+				<mat-select class="function-not-chip" placeholder="Item" (change)="selectOption($event.value)" [disabled]="chip !== functionStack.currentNode()">
 				<span *ngFor="let item of currentListOptions">
 					<mat-option [value]="item">{{item.label}}</mat-option>
 				</span>
 			</mat-select>
-			<mat-select class="function-not-chip" placeholder="Item" *ngIf="chip === grammarNode.CATEGORY_ITEM" (change)="selectOption($event.value)" [disabled]="chip !== functionStack.currentNode()">
+			</mat-form-field>
+			<mat-form-field *ngIf="chip === grammarNode.CATEGORY_ITEM">
+				<mat-select class="function-not-chip" placeholder="Item" (change)="selectOption($event.value)" [disabled]="chip !== functionStack.currentNode()">
 				<span *ngFor="let item of currentListOptions">
 					<mat-option [value]="item.value">{{item.value}}</mat-option>
 				</span>
 			</mat-select>
-			<mat-select class="function-not-chip" placeholder="Aspect" *ngIf="chip === grammarNode.ASPECT_BOOLEAN_THEN" (change)="selectOption($event.value)" [disabled]="chip !== functionStack.currentNode()">
+			</mat-form-field>
+			<mat-form-field *ngIf="chip === grammarNode.ASPECT_BOOLEAN_THEN">
+				<mat-select class="function-not-chip" placeholder="Aspect" (change)="selectOption($event.value)" [disabled]="chip !== functionStack.currentNode()">
 				<span *ngFor="let aspect of characterMakerService.getAspectsOfType(aspectType.BOOLEAN)">
 					<mat-option *ngIf="aspect.aspectType !== aspectType.FUNCTION" [value]="aspect">{{aspect.label}}</mat-option>
 				</span>
 			</mat-select>
-			<mat-select class="function-not-chip" placeholder="Aspect" *ngIf="chip === grammarNode.ASPECT_NUMBER_THEN || chip === grammarNode.ASSIGNED_ASPECT_NUMBER" (change)="selectOption($event.value)" [disabled]="chip !== functionStack.currentNode()">
+			</mat-form-field>
+			<mat-form-field *ngIf="chip === grammarNode.ASPECT_NUMBER_THEN || chip === grammarNode.ASSIGNED_ASPECT_NUMBER">
+				<mat-select class="function-not-chip" placeholder="Aspect" (change)="selectOption($event.value)" [disabled]="chip !== functionStack.currentNode()">
 				<span *ngFor="let aspect of characterMakerService.getAspectsOfType(aspectType.NUMBER)">
 					<mat-option *ngIf="aspect.aspectType !== aspectType.FUNCTION" [value]="aspect">{{aspect.label}}</mat-option>
 				</span>
 			</mat-select>
-			<mat-select class="function-not-chip" placeholder="Logical Operator" *ngIf="chip === grammarNode.EQUAL_OR_NOT || chip === grammarNode.EQUAL_OR_NOT_CATEGORY" (change)="selectOption($event.value)" [disabled]="chip !== functionStack.currentNode()">
-				<mat-option value="==">is equal to</mat-option>
-				<mat-option value="!=">is not equal to</mat-option>
-			</mat-select>
+			</mat-form-field>
+			<mat-form-field *ngIf="chip === grammarNode.EQUAL_OR_NOT || chip === grammarNode.EQUAL_OR_NOT_CATEGORY">
+				<mat-select class="function-not-chip" placeholder="Logical Operator" (change)="selectOption($event.value)" [disabled]="chip !== functionStack.currentNode()">
+					<mat-option value="==">is equal to</mat-option>
+					<mat-option value="!=">is not equal to</mat-option>
+				</mat-select>
+			</mat-form-field>
 			<mat-form-field class="function-not-chip" *ngIf="chip === grammarNode.NUMBER || chip === grammarNode.ASSIGNED_NUMBER">
 				<input matInput type="number" (change)="selectOption($event.target.value)">
 			</mat-form-field>
-			<mat-select class="function-not-chip" placeholder="True/False" *ngIf="chip === grammarNode.BOOLEAN || chip === grammarNode.ASSIGNED_BOOLEAN" (change)="selectOption($event.value)" [disabled]="chip !== functionStack.currentNode()">
-				<mat-option [value]="true">True</mat-option>
-				<mat-option [value]="false">False</mat-option>
-			</mat-select>
-			<mat-select class="function-not-chip" placeholder="Operator" *ngIf="chip === grammarNode.OPERATOR || chip === grammarNode.ASSIGNED_OPERATOR" (change)="selectOption($event.value)" [disabled]="chip !== functionStack.currentNode()">
-				<mat-option value="+">Plus</mat-option>
-				<mat-option value="-">Minus</mat-option>
-				<mat-option value="*">Times by</mat-option>
-				<mat-option value="/">Divided by</mat-option>
-			</mat-select>
+			<mat-form-field *ngIf="chip === grammarNode.BOOLEAN || chip === grammarNode.ASSIGNED_BOOLEAN">
+				<mat-select class="function-not-chip" placeholder="True/False" (change)="selectOption($event.value)" [disabled]="chip !== functionStack.currentNode()">
+					<mat-option [value]="true">True</mat-option>
+					<mat-option [value]="false">False</mat-option>
+				</mat-select>
+			</mat-form-field>
+			<mat-form-field *ngIf="chip === grammarNode.OPERATOR || chip === grammarNode.ASSIGNED_OPERATOR">
+				<mat-select class="function-not-chip" placeholder="Operator" (change)="selectOption($event.value)" [disabled]="chip !== functionStack.currentNode()">
+					<mat-option value="+">Plus</mat-option>
+					<mat-option value="-">Minus</mat-option>
+					<mat-option value="*">Times by</mat-option>
+					<mat-option value="/">Divided by</mat-option>
+				</mat-select>
+			</mat-form-field>
 		</span>
 	</div>
 </div>
