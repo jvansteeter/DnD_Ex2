@@ -206,6 +206,14 @@ export class FunctionGrammar {
         return data.value;
     }
 
+    public getStack(): string[] {
+        return this.stack;
+    }
+
+    public getMapValues(): any {
+        return this.mapValues;
+    }
+
     private _start(data: FunctionData): void {
         console.log(this.stack)
         console.log('_start')

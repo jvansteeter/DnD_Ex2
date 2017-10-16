@@ -1,4 +1,5 @@
 import * as mongoose from 'mongoose';
+import { RuleFunctionModel } from './ruleFunction.model';
 
 
 export class CharacterAspectModel extends mongoose.Schema {
@@ -12,6 +13,7 @@ export class CharacterAspectModel extends mongoose.Schema {
     public width: number;
     public height: number;
     public items: any[];
+    public ruleFunction: string;
 
     constructor() {
         super ({
@@ -23,7 +25,8 @@ export class CharacterAspectModel extends mongoose.Schema {
             left: Number,
             width: Number,
             height: Number,
-            items: []
+            items: [],
+            ruleFunction: String
         });
 
         this._id = this.methods._id;
@@ -36,12 +39,19 @@ export class CharacterAspectModel extends mongoose.Schema {
         this.width = this.methods.width;
         this.height = this.methods.height;
         this.items = this.methods.items;
+        this.ruleFunction = this.methods.ruleFunction;
 
         this.methods.setItems = this.setItems;
+        this.methods.setRuleFunction = this.setRuleFunction;
     }
 
     public setItems(items: any[]) {
         this.items = items;
+        this.save();
+    }
+
+    public setRuleFunction(ruleFunction: RuleFunctionModel) {
+        this.ruleFunction = ruleFunction._id;
         this.save();
     }
 

@@ -1,0 +1,15 @@
+<div *ngIf="ruleSet">
+	<h1>{{ruleSet.label}}</h1>
+	<mat-accordion>
+		<mat-expansion-panel>
+			<mat-expansion-panel-header>
+				<mat-panel-title>Character Sheets</mat-panel-title>
+				<mat-panel-description>Character Sheets description</mat-panel-description>
+			</mat-expansion-panel-header>
+			<mat-list>
+				<mat-list-item *ngFor="let characterSheet of characterSheets"><a (click)="editCharacterSheet(characterSheet._id)">{{characterSheet.label}}</a></mat-list-item>
+			</mat-list>
+			<button mat-raised-button color="primary" (click)="newCharacterSheet()">New</button>
+		</mat-expansion-panel>
+	</mat-accordion>
+</div>

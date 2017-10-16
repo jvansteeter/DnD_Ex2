@@ -8,6 +8,7 @@ import { CategoryComponent } from './subcomponents/category/category.component';
 import { HttpClient } from '@angular/common/http';
 import { text } from 'body-parser';
 import { CheckboxListComponent } from './subcomponents/checkbox-list/checkbox-list.component';
+import { FunctionComponent } from './subcomponents/function/function.component';
 
 
 export enum Move {
@@ -196,6 +197,9 @@ export class CharacterMakerService {
             }
             else if (subComponent.aspect.aspectType === AspectType.BOOLEAN_LIST) {
                 aspectObj['items'] = (<CheckboxListComponent>subComponent.child).getCheckboxLabels();
+            }
+            else if (subComponent.aspect.aspectType === AspectType.FUNCTION) {
+                aspectObj['functionGrammar'] = (<FunctionComponent>subComponent.child).getFunction();
             }
             aspects.push(aspectObj);
         }

@@ -65,4 +65,11 @@ export class FunctionComponent implements SubComponentChild, AfterViewInit {
         this.value = this._function.getValue();
         return this.value;
     }
+
+    getFunction(): any {
+        return {
+            stack: this._function.getStack(),
+            mapValues: this._function.getMapValues()
+        };
+    }
 }

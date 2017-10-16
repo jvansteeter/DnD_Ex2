@@ -26,6 +26,15 @@ export class RuleSetRepository {
     }
 
     public findById(id: string): Promise<RuleSetModel> {
-        return this.RuleSet.findById(id);
+        return new Promise((resolve, reject) => {
+            this.RuleSet.findById(id, (error, ruleSet) => {
+                if (error) {
+                    reject(error);
+                    return;
+                }
+
+                resolve(ruleSet);
+            })
+        });
     }
 }

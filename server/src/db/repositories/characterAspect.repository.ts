@@ -1,12 +1,16 @@
 import * as mongoose from 'mongoose';
 import { Promise } from 'bluebird';
 import { CharacterAspectModel } from '../models/characterAspect.model';
+import { RuleFunctionRepository } from './ruleFunction.repository';
+import { RuleFunctionModel } from '../models/ruleFunction.model';
 
 export class CharacterAspectRepository {
     private CharacterAspect: mongoose.Model<mongoose.Document>;
+    private ruleFunctionRepository: RuleFunctionRepository;
 
     constructor() {
         this.CharacterAspect = mongoose.model('CharacterAspect');
+        this.ruleFunctionRepository = new RuleFunctionRepository();
     }
 
     public create(characterSheetId: string, characterAspectObj: any): Promise<Error | CharacterAspectModel> {
@@ -28,8 +32,15 @@ export class CharacterAspectRepository {
                 if (characterAspectObj.hasOwnProperty('items')) {
                     newCharacterAspect.setItems(characterAspectObj.items);
                 }
-
-                resolve(newCharacterAspect);
+                if (characterAspectObj.hasOwnProperty('functionGrammar')) {
+                    this.ruleFunctionRepository.create(characterAspectObj.functionGrammar).then((newRuleFunction: RuleFunctionModel) => {
+                        newCharacterAspect.setRuleFunction(newRuleFunction);
+                        resolve(newCharacterAspect);
+                    });
+                }
+                else {
+                    resolve(newCharacterAspect);
+                }
             });
         });
     }
