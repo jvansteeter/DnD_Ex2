@@ -13,12 +13,21 @@ export class Aspect {
     label: string;
     aspectType: AspectType;
     required: boolean;
-    options: any;
+    // options: any;
 
-    constructor(label: string, aspectType: AspectType, required: boolean, options?: any) {
+    top: number;
+    left: number;
+    width: number;
+    height: number;
+    items: any[];
+    ruleFunction: any;
+
+    constructor(label: string, aspectType: AspectType, required: boolean) {
         this.label = label;
         this.aspectType = aspectType;
         this.required = required;
-        this.options = options;
+        // this.options = options;
+        this.top = 0;
+        this.left = 0;
     }
 }

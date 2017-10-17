@@ -28,6 +28,15 @@ export class RuleFunctionRepository {
     }
 
     public findById(id: string): Promise<CharacterSheetModel> {
-        return this.RuleFunction.findById(id);
+        return new Promise((resolve, reject) => {
+            this.RuleFunction.findById(id, (error, ruleFunction: RuleFunctionModel) => {
+                if (error) {
+                    reject(error);
+                    return;
+                }
+
+                resolve(ruleFunction);
+            });
+        });
     }
 }

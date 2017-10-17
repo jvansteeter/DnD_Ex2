@@ -9,6 +9,7 @@ import { HttpClient } from '@angular/common/http';
 import { text } from 'body-parser';
 import { CheckboxListComponent } from './subcomponents/checkbox-list/checkbox-list.component';
 import { FunctionComponent } from './subcomponents/function/function.component';
+import { SubComponentChild } from './subcomponents/sub-component-child';
 
 
 export enum Move {
@@ -17,10 +18,12 @@ export enum Move {
 
 @Injectable()
 export class CharacterMakerService {
-    private addEvents = new Subject();
+    // private addEvents = new Subject();
     private removeEvents = new Subject();
     private resizeEvents = new Subject();
     private changeHeightEvents = new Subject();
+
+    private characterSheetId: string;
 
     private characterSheetWidth: number = 0;
     private characterSheetHeight: number = 0;
@@ -33,12 +36,13 @@ export class CharacterMakerService {
         this.subComponents = [];
     }
 
-    public onAddComponent(next?, error?, complete?): Subscription {
-        return this.addEvents.subscribe(next, error, complete);
-    }
+    // public onAddComponent(next?, error?, complete?): Subscription {
+    //     return this.addEvents.subscribe(next, error, complete);
+    // }
 
     public addComponent(aspect: any): void {
-        this.addEvents.next(aspect);
+        this.aspects.push(aspect);
+        // this.addEvents.next(aspect);
     }
 
     public onRemoveComponent(next?, error?, complete?): Subscription {
@@ -63,11 +67,12 @@ export class CharacterMakerService {
     }
 
     public registerSubComponent(subComponent: SubComponent): void {
+        console.log('registering subcomponent')
         let leftOffset = 0;
         for (let i = 0; i < this.subComponents.length; i++) {
             let stationary = this.subComponents[i];
             if (stationary.violatesRightTerritory(subComponent)) {
-                let offset = stationary.left + stationary.width + 10;
+                let offset = stationary.aspect.left + stationary.aspect.width + 10;
                 if (offset > leftOffset) {
                     leftOffset = offset;
                 }
@@ -94,10 +99,10 @@ export class CharacterMakerService {
             }
             if (moving.overlaps(stationary)) {
                 if (stationary.canMoveRightTo(moving.right() + 10)) {
-                    stationary.animateTo(moving.right() + 10, stationary.top);
+                    stationary.animateTo(moving.right() + 10, stationary.aspect.top);
                 }
                 else {
-                    stationary.animateTo(stationary.left, moving.bottom() + 30);
+                    stationary.animateTo(stationary.aspect.left, moving.bottom() + 30);
                 }
                 Observable.timer(100).subscribe(() => {
                     this.adjustCharacterSheetHeight();
@@ -110,8 +115,8 @@ export class CharacterMakerService {
         let greatestHeight = 0;
         for (let i = 0; i < this.subComponents.length; i++) {
             let subComponent = this.subComponents[i];
-            if (subComponent.height + subComponent.top > greatestHeight) {
-                greatestHeight = subComponent.getTotalHeight() + subComponent.top;
+            if (subComponent.aspect.height + subComponent.aspect.top > greatestHeight) {
+                greatestHeight = subComponent.getTotalHeight() + subComponent.aspect.top;
             }
         }
         this.characterSheetHeight = greatestHeight;
@@ -178,44 +183,61 @@ export class CharacterMakerService {
 
     public save() {
         let characterSheet = {
-            label: 'Test 1'
+            _id: this.characterSheetId
         };
         let aspects: any[] = [];
-        for (let i = 0; i < this.subComponents.length; i++) {
-            let subComponent = this.subComponents[i];
+        for (let i = 0; i < this.aspects.length; i++) {
+            let aspect = this.aspects[i];
             let aspectObj = {
-                label: subComponent.aspect.label,
-                aspectType: subComponent.aspect.aspectType,
-                required: subComponent.aspect.required,
-                top: subComponent.top,
-                left: subComponent.left,
-                width: subComponent.width,
-                height: subComponent.height
+                label: aspect.label,
+                aspectType: aspect.aspectType,
+                required: aspect.required,
+                top: aspect.top,
+                left: aspect.left,
+                width: aspect.width,
+                height: aspect.height
             };
-            if (subComponent.aspect.aspectType === AspectType.CATEGORICAL) {
-                aspectObj['items'] = (<CategoryComponent>subComponent.child).getCategories();
+            if (aspect.aspectType === AspectType.CATEGORICAL) {
+                aspectObj['items'] = (<CategoryComponent>this.getChildOf(aspect)).getCategories();
             }
-            else if (subComponent.aspect.aspectType === AspectType.BOOLEAN_LIST) {
-                aspectObj['items'] = (<CheckboxListComponent>subComponent.child).getCheckboxLabels();
+            else if (aspect.aspectType === AspectType.BOOLEAN_LIST) {
+                aspectObj['items'] = (<CheckboxListComponent>this.getChildOf(aspect)).getCheckboxLabels();
             }
-            else if (subComponent.aspect.aspectType === AspectType.FUNCTION) {
-                aspectObj['functionGrammar'] = (<FunctionComponent>subComponent.child).getFunction();
+            else if (aspect.aspectType === AspectType.FUNCTION) {
+                aspectObj['functionGrammar'] = (<FunctionComponent>this.getChildOf(aspect)).getFunction();
             }
             aspects.push(aspectObj);
         }
         characterSheet['aspects'] = aspects;
-        this.http.post('/api/ruleset/save', characterSheet, {responseType: 'json'}).subscribe((response) => {
+        this.http.post('/api/ruleset/charactersheet/save', characterSheet, {responseType: 'text'}).subscribe((response) => {
             console.log('\n\n\nRESULT\n\n\n\n')
             console.log(response)
         });
     }
 
-    private arrayContains(array: any[], item: any) {
-        for (let i = 0; i < array.length; i++) {
-            if (array[i] === item) {
-                return true;
+    private getChildOf(aspect: Aspect): SubComponentChild | undefined {
+        for (let i = 0; i < this.subComponents.length; i++) {
+            if (this.subComponents[i].aspect === aspect) {
+                return this.subComponents[i].child;
             }
         }
-        return false;
+
+        return undefined;
+    }
+
+    public setCharacterSheetId(id: string): void {
+        this.characterSheetId = id;
+    }
+
+    public initAspects(aspects: any[]): void {
+        this.aspects = [];
+        aspects.forEach(aspect => {
+            let newAspect = new Aspect(aspect.label, aspect.aspectType, aspect.required);
+            newAspect.top = aspect.top;
+            newAspect.left = aspect.left;
+            newAspect.width = aspect.width;
+            newAspect.height = aspect.height;
+            this.aspects.push(newAspect);
+        });
     }
 }

@@ -35,8 +35,8 @@ export class TextListComponent implements SubComponentChild, AfterViewInit {
     }
 
     ngAfterViewInit(): void {
-        this.width = this.parent.width;
-        this.height = this.parent.height;
+        this.width = this.parent.aspect.width;
+        this.height = this.parent.aspect.height;
 
         this.renderer.listen(this.fontSizeInput.nativeElement, 'change', () => {
             this.parent.minHeight += this.fontSize - 14;
@@ -66,7 +66,7 @@ export class TextListComponent implements SubComponentChild, AfterViewInit {
     removeItem(): void {
         this.items.splice(this.items.length - 1, 1);
         this.parent.minHeight -= this.itemHeight;
-        this.parent.resize(this.width, this.parent.height - this.itemHeight);
+        this.parent.resize(this.width, this.parent.aspect.height - this.itemHeight);
     }
 
     stopClickPropagate(event): void {

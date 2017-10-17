@@ -18,13 +18,14 @@ export class SubComponent implements OnInit, AfterViewInit {
     options: MatMenu;
     aspectType = AspectType;
 
-    width: number;
-    height: number;
+    // width: number;
+    // height: number;
+    // top: number = 0;
+    // left: number = 0;
+
     minHeight: number;
     minWidth: number;
 
-    top: number = 0;
-    left: number = 0;
     zIndex = 0;
     isHovered: boolean = false;
     optionsOpen: boolean = false;
@@ -56,8 +57,8 @@ export class SubComponent implements OnInit, AfterViewInit {
     constructor(renderer: Renderer2, private characterMakerService: CharacterMakerService) {
         renderer.listen('document', 'mousemove', (event) => {
             if (this.resizing) {
-                let newWidth = this.width + event.movementX;
-                let newHeight = this.height + event.movementY;
+                let newWidth = this.aspect.width + event.movementX;
+                let newHeight = this.aspect.height + event.movementY;
                 this.resize(newWidth, newHeight);
                 this.characterMakerService.adjustCharacterSheetHeight();
                 // this.characterMakerService.reorderAnimation(this);
@@ -76,13 +77,13 @@ export class SubComponent implements OnInit, AfterViewInit {
                 else {
                     directions.push(Move.UP);
                 }
-                let newTop = this.top + event.movementY;
-                let newLeft = this.left + event.movementX;
+                let newTop = this.aspect.top + event.movementY;
+                let newLeft = this.aspect.left + event.movementX;
                 if (newTop >= 0) {
-                    this.top = newTop;
+                    this.aspect.top = newTop;
                 }
-                if (newLeft >= 0 && newLeft + this.width < this.getMaxWidth()) {
-                    this.left = newLeft;
+                if (newLeft >= 0 && newLeft + this.aspect.width < this.getMaxWidth()) {
+                    this.aspect.left = newLeft;
                     // this.characterMakerService.reorderAnimation(this, directions);
                     this.characterMakerService.adjustCharacterSheetHeight();
                 }
@@ -148,20 +149,20 @@ export class SubComponent implements OnInit, AfterViewInit {
 
     resize(width: number, height: number): void {
         if (width >= this.minWidth &&
-            this.left + width <= this.getMaxWidth()) {
-            this.width = width;
+            this.aspect.left + width <= this.getMaxWidth()) {
+            this.aspect.width = width;
         }
         if (height >= this.minHeight) {
-            this.height = height;
+            this.aspect.height = height;
         }
         this.child.resize(width, height);
         // this.characterMakerService.reorderAnimation(this);
     }
 
     setDimensions(width: number, height: number) {
-        this.width = width;
+        this.aspect.width = width;
         this.minWidth = width;
-        this.height = height;
+        this.aspect.height = height;
         this.minHeight = height;
     }
 
@@ -186,42 +187,42 @@ export class SubComponent implements OnInit, AfterViewInit {
 
     animate(x: number, y: number): void {
         this.showAnimation(true);
-        if (this.top + y > 0) {
-            this.top += y;
+        if (this.aspect.top + y > 0) {
+            this.aspect.top += y;
         }
-        if (this.left + x > 0 && this.right() + x <= this.getMaxWidth()) {
-            this.left += x;
+        if (this.aspect.left + x > 0 && this.right() + x <= this.getMaxWidth()) {
+            this.aspect.left += x;
         }
     }
 
     animateTo(x: number, y: number): void {
         this.showAnimation(true);
         if (y > 0) {
-            this.top = y;
+            this.aspect.top = y;
         }
-        if (x > 0 && this.width + x <= this.getMaxWidth()) {
-            this.left = x;
+        if (x > 0 && this.aspect.width + x <= this.getMaxWidth()) {
+            this.aspect.left = x;
         }
     }
 
     canMoveRightTo(x: number): boolean {
-        return x > 0 && this.width + x <= this.getMaxWidth();
+        return x > 0 && this.aspect.width + x <= this.getMaxWidth();
     }
 
     overlaps(other: SubComponent): boolean {
-        let thisRight = this.left + this.width;
-        let thisBottom = this.top + this.getTotalHeight();
-        let otherRight = other.left + other.width;
-        let otherBottom = other.top + other.getTotalHeight();
+        let thisRight = this.aspect.left + this.aspect.width;
+        let thisBottom = this.aspect.top + this.getTotalHeight();
+        let otherRight = other.aspect.left + other.aspect.width;
+        let otherBottom = other.aspect.top + other.getTotalHeight();
 
-        if (this.top === other.top && this.left === other.left) {
+        if (this.aspect.top === other.aspect.top && this.aspect.left === other.aspect.left) {
             return true;
         }
 
-        if (this.left <= other.left && thisRight > other.left ||
-            other.left <= this.left && otherRight > this.left) {
-            if (this.top <= other.top && thisBottom > other.top ||
-                other.top <= this.top && otherBottom > this.top) {
+        if (this.aspect.left <= other.aspect.left && thisRight > other.aspect.left ||
+            other.aspect.left <= this.aspect.left && otherRight > this.aspect.left) {
+            if (this.aspect.top <= other.aspect.top && thisBottom > other.aspect.top ||
+                other.aspect.top <= this.aspect.top && otherBottom > this.aspect.top) {
                 return true;
             }
         }
@@ -230,7 +231,7 @@ export class SubComponent implements OnInit, AfterViewInit {
     }
 
     overlapsRightSide(stationary: SubComponent): boolean {
-        return this.overlaps(stationary) && this.left > stationary.left;
+        return this.overlaps(stationary) && this.aspect.left > stationary.aspect.left;
     }
 
     overlapsLeftSide(stationary: SubComponent): boolean {
@@ -242,15 +243,15 @@ export class SubComponent implements OnInit, AfterViewInit {
     }
 
     overlapsBottomSide(stationary: SubComponent): boolean {
-        return this.overlaps(stationary) && this.top > stationary.top;
+        return this.overlaps(stationary) && this.aspect.top > stationary.aspect.top;
     }
 
     violatesRightTerritory(other: SubComponent) {
-        return other.left < (this.left + this.width);
+        return other.aspect.left < (this.aspect.left + this.aspect.width);
     }
 
     getTotalHeight(): number {
-        return this.height + this.footerHeight + this.headerHeight;
+        return this.aspect.height + this.footerHeight + this.headerHeight;
     }
 
     openOptions(): void {
@@ -276,10 +277,10 @@ export class SubComponent implements OnInit, AfterViewInit {
     }
 
     right(): number {
-        return this.left + this.width;
+        return this.aspect.left + this.aspect.width;
     }
 
     bottom(): number {
-        return this.top + this.height;
+        return this.aspect.top + this.aspect.height;
     }
 }

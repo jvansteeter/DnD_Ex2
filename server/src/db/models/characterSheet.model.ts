@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import { CharacterAspectModel } from './characterAspect.model';
+import { Promise } from 'bluebird';
 
 
 export class CharacterSheetModel extends mongoose.Schema {
@@ -11,25 +11,26 @@ export class CharacterSheetModel extends mongoose.Schema {
     constructor() {
         super ({
             ruleSetId: {type: String, required: true},
-            label: {type: String, required: true},
-            aspects: []
+            label: {type: String, required: true}
         });
 
         this._id = this.methods._id;
         this.ruleSetId = this.methods.ruleSetId;
         this.label = this.methods.label;
         this.aspects = this.methods.aspects;
-
-        this.methods.addAspect = this.addAspect;
     }
 
-    public addAspect(aspect: CharacterAspectModel) {
-        this.aspects.push(aspect._id);
-        this.save();
-    }
+    private save(): Promise<void> {
+        return new Promise((resolve, reject) => {
+            this.methods.save((error) => {
+                if (error) {
+                    reject(error);
+                    return;
+                }
 
-    private save() {
-        this.methods.save();
+                resolve();
+            });
+        });
     }
 }
 

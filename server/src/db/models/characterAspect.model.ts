@@ -1,4 +1,5 @@
 import * as mongoose from 'mongoose';
+import { Promise } from 'bluebird';
 import { RuleFunctionModel } from './ruleFunction.model';
 
 
@@ -50,13 +51,39 @@ export class CharacterAspectModel extends mongoose.Schema {
         this.save();
     }
 
+    public setToObject(aspectObj: any): Promise<CharacterAspectModel> {
+        this.label = aspectObj.label;
+        this.aspectType = aspectObj.aspectType;
+        this.required = aspectObj.required;
+        this.top = aspectObj.top;
+        this.left = aspectObj.left;
+        this.width = aspectObj.width;
+        this.height = aspectObj.height;
+        if (aspectObj.hasOwnProperty('items')) {
+            this.items = aspectObj.items;
+        }
+        if (aspectObj.hasOwnProperty('ruleFunction')) {
+            this.ruleFunction = aspectObj.ruleFunction;
+        }
+        return this.save();
+    }
+
     public setRuleFunction(ruleFunction: RuleFunctionModel) {
         this.ruleFunction = ruleFunction._id;
         this.save();
     }
 
-    private save() {
-        this.methods.save();
+    private save(): Promise<CharacterAspectModel> {
+        return new Promise((resolve, reject) => {
+            this.methods.save((error, aspect: CharacterAspectModel) => {
+                if (error) {
+                    reject(error);
+                    return;
+                }
+
+                resolve(aspect);
+            });
+        });
     }
 }
 

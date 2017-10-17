@@ -46,6 +46,51 @@ export class CharacterAspectRepository {
     }
 
     public findById(id: string): Promise<CharacterAspectModel> {
-        return this.CharacterAspect.findById(id);
+        return new Promise((resolve, reject) => {
+            this.CharacterAspect.findById(id, (error, characterAspect: CharacterAspectModel) => {
+                if (error) {
+                    reject(error);
+                    return;
+                }
+
+                resolve(characterAspect);
+            });
+        });
+    }
+
+    public update(aspectObj: any): Promise<CharacterAspectModel> {
+        return new Promise((resolve, reject) => {
+            this.findById(aspectObj._id).then((aspect: CharacterAspectModel) => {
+                aspect.setToObject(aspectObj).then((newAspect) => {
+                    resolve(newAspect);
+                }).catch((error) => reject(error));
+            }).catch((error) => reject(error));
+        });
+    }
+
+    public findByCharacterSheetId(id: string): Promise<CharacterAspectModel[]> {
+        return new Promise((resolve, reject) => {
+            this.CharacterAspect.find({characterSheetId: id}, (error, aspects: CharacterAspectModel) => {
+                if (error) {
+                    reject(error);
+                    return;
+                }
+
+                resolve(aspects);
+            });
+        });
+    }
+
+    public removeByCharacterSheetId(id: string): Promise<CharacterAspectModel[]> {
+        return new Promise((resolve, reject) => {
+            this.CharacterAspect.remove({characterSheetId: id}, (error) => {
+                if (error) {
+                    reject(error);
+                    return;
+                }
+
+                resolve();
+            });
+        });
     }
 }

@@ -1,13 +1,13 @@
 <mat-card *ngIf="aspect" [ngStyle]="{'transition': transition,
-									'width': width + 'px',
+									'width': aspect.width + 'px',
 									'z-index': zIndex,
-									'transform': 'translate(' + left + 'px, ' + top + 'px)'}"
+									'transform': 'translate(' + aspect.left + 'px, ' + aspect.top + 'px)'}"
 		 class="sub-component">
-    <mat-card-header *ngIf="isHovered" class="sub-component-header" [style.width.px]="width">
+    <mat-card-header *ngIf="isHovered" class="sub-component-header" [style.width.px]="aspect.width">
 		<mat-icon class="sub-component-reorder" (mousedown)="startMove()">reorder</mat-icon>
 		<button class="sub-component-close" mat-icon-button (mousedown)="remove()"><mat-icon>close</mat-icon></button>
 	</mat-card-header>
-    <mat-card-content [ngStyle]="{'width': width + 'px', 'height': height + 'px'}" [ngSwitch]="aspect.aspectType">
+    <mat-card-content [ngStyle]="{'width': aspect.width + 'px', 'height': aspect.height + 'px'}" [ngSwitch]="aspect.aspectType">
         <characterMaker-textComponent *ngSwitchCase="aspectType.TEXT" [aspect]="aspect" [parent]="this" #child></characterMaker-textComponent>
         <characterMaker-checkBoxComponent *ngSwitchCase="aspectType.BOOLEAN" [aspect]="aspect" [parent]="this" #child></characterMaker-checkBoxComponent>
         <characterMaker-numberComponent *ngSwitchCase="aspectType.NUMBER" [aspect]="aspect" [parent]="this" #child></characterMaker-numberComponent>

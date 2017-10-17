@@ -5,6 +5,9 @@ import { RuleSetModel } from '../db/models/ruleSet.model';
 import { CharacterSheetRepository } from '../db/repositories/characterSheet.repository';
 import { UserRuleSetRepository } from '../db/repositories/user-ruleSet.repository';
 import { CharacterSheetModel } from '../db/models/characterSheet.model';
+import { CharacterAspectRepository } from '../db/repositories/characterAspect.repository';
+import { CharacterAspectModel } from '../db/models/characterAspect.model';
+import { Observable } from 'rxjs/Observable';
 
 
 /**********************************************************************************************************
@@ -18,6 +21,7 @@ export class RuleSetRouter {
     private userRepository: UserRepository;
     private ruleSetRepository: RuleSetRepository;
     private characterSheetRepository: CharacterSheetRepository;
+    private characterAspectRepository: CharacterAspectRepository;
     private userRuleSetRepository: UserRuleSetRepository;
 
     constructor() {
@@ -25,6 +29,7 @@ export class RuleSetRouter {
         this.userRepository = new UserRepository();
         this.ruleSetRepository = new RuleSetRepository();
         this.characterSheetRepository = new CharacterSheetRepository();
+        this.characterAspectRepository = new CharacterAspectRepository();
         this.userRuleSetRepository = new UserRuleSetRepository();
         this.init();
     }
@@ -36,13 +41,26 @@ export class RuleSetRouter {
             });
         });
 
-        this.router.post('/save', (req: Request, res: Response) => {
-            this.ruleSetRepository.create({label: 'Test Rule Set'}).then((ruleSet: RuleSetModel) => {
-                ruleSet.addAdmin(req.user._id, 'superuser');
-                this.characterSheetRepository.create(ruleSet._id, req.body).then(() => {
-                    res.json(req.body);
-                });
+        this.router.post('/charactersheet/save', (req: Request, res: Response) => {
+            // let characterSheetObj = req.body;
+            this.characterSheetRepository.saveCharacterSheet(req.body).then(() => {
+                res.status(200).send();
             });
+            // console.log('attempting to save')
+            // console.log(characterSheetObj)
+            // this.characterSheetRepository.findById(characterSheetObj._id).then((characterSheet: CharacterSheetModel) => {
+            //      let aspectCount = characterSheetObj.aspects.length;
+            //      if (aspectCount === 0) {
+            //          res.status(200).send();
+            //      }
+            //      characterSheetObj.aspects.forEach((aspect) => {
+            //          this.characterAspectRepository.create(characterSheet._id, aspect).then(() => {
+            //              if (--aspectCount === 0) {
+            //                  res.status(200).send();
+            //              }
+            //          });
+            //      });
+            // });
         });
 
         this.router.post('/new/ruleset', (req: Request, res: Response) => {
@@ -69,6 +87,15 @@ export class RuleSetRouter {
         this.router.get('/charactersheets/:ruleSetId', (req: Request, res: Response) => {
             this.characterSheetRepository.getAllForRuleSet(req.params.ruleSetId).then((characterSheets: CharacterSheetModel[]) => {
                 res.json(characterSheets);
+            });
+        });
+
+        this.router.get('/charactersheet/:characterSheetId', (req: Request, res: Response) => {
+            console.log('lets compile a character sheet')
+            console.log(req.params.characterSheetId)
+            this.characterSheetRepository.getCompiledCharacterSheet(req.params.characterSheetId).then((characterSheet: CharacterSheetModel) => {
+                console.log(characterSheet);
+                res.json(characterSheet);
             });
         });
     }
