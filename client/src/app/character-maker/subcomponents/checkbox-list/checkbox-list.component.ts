@@ -44,6 +44,19 @@ export class CheckboxListComponent implements SubComponentChild, AfterViewInit {
             this.parent.resize(this.width, this.height + this.fontSize - 10);
             this.parent.minHeight += this.fontSize - 14;
         });
+
+        console.log('this is my aspect')
+        console.log(this.aspect)
+        if (this.aspect.hasOwnProperty('items') && this.aspect.items.length > 0) {
+            for (let i = 0; i < this.aspect.items.length; i++) {
+                this.checkboxes.push({
+                    label: this.aspect.items[i],
+                    value: false
+                });
+                // this.parent.resize(this.width, this.height + this.checkboxHeight);
+                this.parent.minHeight += this.checkboxHeight;
+            }
+        }
     }
 
     resize(width: number, height: number) {

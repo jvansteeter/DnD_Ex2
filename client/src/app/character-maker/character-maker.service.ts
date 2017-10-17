@@ -79,9 +79,9 @@ export class CharacterMakerService {
             }
         }
         this.subComponents.push(subComponent);
-        Observable.timer(100).subscribe(() => {
-            subComponent.animate(leftOffset, 0);
-        });
+        // Observable.timer(100).subscribe(() => {
+        //     subComponent.animate(leftOffset, 0);
+        // });
 
         this.adjustCharacterSheetHeight();
     }
@@ -209,10 +209,7 @@ export class CharacterMakerService {
             aspects.push(aspectObj);
         }
         characterSheet['aspects'] = aspects;
-        this.http.post('/api/ruleset/charactersheet/save', characterSheet, {responseType: 'text'}).subscribe((response) => {
-            console.log('\n\n\nRESULT\n\n\n\n')
-            console.log(response)
-        });
+        this.http.post('/api/ruleset/charactersheet/save', characterSheet, {responseType: 'text'}).subscribe();
     }
 
     private getChildOf(aspect: Aspect): SubComponentChild | undefined {
@@ -231,13 +228,17 @@ export class CharacterMakerService {
 
     public initAspects(aspects: any[]): void {
         this.aspects = [];
-        aspects.forEach(aspect => {
-            let newAspect = new Aspect(aspect.label, aspect.aspectType, aspect.required);
-            newAspect.top = aspect.top;
-            newAspect.left = aspect.left;
-            newAspect.width = aspect.width;
-            newAspect.height = aspect.height;
-            this.aspects.push(newAspect);
+        aspects.forEach(aspectObj => {
+            let aspect = new Aspect(aspectObj.label, aspectObj.aspectType, aspectObj.required);
+            aspect.top = aspectObj.top;
+            aspect.left = aspectObj.left;
+            aspect.width = aspectObj.width;
+            aspect.height = aspectObj.height;
+            aspect.isNew = false;
+            if (aspectObj.hasOwnProperty('items')) {
+                aspect.items = aspectObj.items;
+            }
+            this.aspects.push(aspect);
         });
     }
 }

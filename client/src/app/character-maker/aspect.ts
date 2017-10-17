@@ -22,6 +22,8 @@ export class Aspect {
     items: any[];
     ruleFunction: any;
 
+    isNew: boolean = true;
+
     constructor(label: string, aspectType: AspectType, required: boolean) {
         this.label = label;
         this.aspectType = aspectType;

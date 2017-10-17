@@ -160,10 +160,12 @@ export class SubComponent implements OnInit, AfterViewInit {
     }
 
     setDimensions(width: number, height: number) {
-        this.aspect.width = width;
         this.minWidth = width;
-        this.aspect.height = height;
         this.minHeight = height;
+        if (this.aspect.isNew) {
+            this.aspect.width = width;
+            this.aspect.height = height;
+        }
     }
 
     getValue(): any {
@@ -186,6 +188,7 @@ export class SubComponent implements OnInit, AfterViewInit {
     }
 
     animate(x: number, y: number): void {
+        console.log('animate')
         this.showAnimation(true);
         if (this.aspect.top + y > 0) {
             this.aspect.top += y;
@@ -196,6 +199,7 @@ export class SubComponent implements OnInit, AfterViewInit {
     }
 
     animateTo(x: number, y: number): void {
+        console.log('animateTo')
         this.showAnimation(true);
         if (y > 0) {
             this.aspect.top = y;

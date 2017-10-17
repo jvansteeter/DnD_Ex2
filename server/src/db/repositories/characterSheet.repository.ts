@@ -48,8 +48,6 @@ export class CharacterSheetRepository {
 
     public saveCharacterSheet(characterSheetObj: any): Promise<void> {
         return new Promise((resolve, reject) => {
-            console.log('attempting to save')
-            console.log(characterSheetObj)
             this.findById(characterSheetObj._id).then((characterSheet: CharacterSheetModel) => {
                 this.characterAspectRepository.removeByCharacterSheetId(characterSheet._id).then(() => {
                     let aspectCount = characterSheetObj.aspects.length;
@@ -98,7 +96,7 @@ export class CharacterSheetRepository {
                         }
                     });
                 });
-            }).catch((error) => { reject(error) });
+            }).catch((error) => reject(error));
         });
     }
 

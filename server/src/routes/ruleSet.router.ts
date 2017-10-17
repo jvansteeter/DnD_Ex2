@@ -42,25 +42,9 @@ export class RuleSetRouter {
         });
 
         this.router.post('/charactersheet/save', (req: Request, res: Response) => {
-            // let characterSheetObj = req.body;
             this.characterSheetRepository.saveCharacterSheet(req.body).then(() => {
                 res.status(200).send();
             });
-            // console.log('attempting to save')
-            // console.log(characterSheetObj)
-            // this.characterSheetRepository.findById(characterSheetObj._id).then((characterSheet: CharacterSheetModel) => {
-            //      let aspectCount = characterSheetObj.aspects.length;
-            //      if (aspectCount === 0) {
-            //          res.status(200).send();
-            //      }
-            //      characterSheetObj.aspects.forEach((aspect) => {
-            //          this.characterAspectRepository.create(characterSheet._id, aspect).then(() => {
-            //              if (--aspectCount === 0) {
-            //                  res.status(200).send();
-            //              }
-            //          });
-            //      });
-            // });
         });
 
         this.router.post('/new/ruleset', (req: Request, res: Response) => {
@@ -91,10 +75,7 @@ export class RuleSetRouter {
         });
 
         this.router.get('/charactersheet/:characterSheetId', (req: Request, res: Response) => {
-            console.log('lets compile a character sheet')
-            console.log(req.params.characterSheetId)
             this.characterSheetRepository.getCompiledCharacterSheet(req.params.characterSheetId).then((characterSheet: CharacterSheetModel) => {
-                console.log(characterSheet);
                 res.json(characterSheet);
             });
         });
