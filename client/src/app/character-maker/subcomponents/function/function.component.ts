@@ -3,8 +3,10 @@ import { Aspect } from '../../aspect';
 import { SubComponent } from '../sub-component';
 import { FunctionDialogComponent } from './function-dialog.component';
 import { SubComponentChild } from '../sub-component-child';
-import { FunctionGrammar } from './function.grammar';
+import { FunctionGrammar, FunctionTemplate } from './function.grammar';
 import { MatDialog, MatMenu } from '@angular/material';
+import { CharacterMakerService } from '../../character-maker.service';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
     selector: 'characterMaker-functionComponent',
@@ -24,12 +26,14 @@ export class FunctionComponent implements SubComponentChild, AfterViewInit {
     fontSize: number = 14;
     private _function: FunctionGrammar;
 
-    constructor(private dialog: MatDialog) {
+    constructor(private dialog: MatDialog, private characterMakerService: CharacterMakerService) {
 
     }
 
     ngAfterViewInit(): void {
-        // do nothing
+        if (!this.aspect.isNew) {
+            this.setFunction(this.aspect.ruleFunction);
+        }
     }
 
     resize(width: number, height: number) {
@@ -66,10 +70,16 @@ export class FunctionComponent implements SubComponentChild, AfterViewInit {
         return this.value;
     }
 
-    getFunction(): any {
+    getFunction(): FunctionTemplate {
         return {
             stack: this._function.getStack(),
             mapValues: this._function.getMapValues()
         };
+    }
+
+    private setFunction(template: FunctionTemplate): void {
+        this._function = new FunctionGrammar(this.characterMakerService);
+        this._function.initFromTemplate(template);
+        Observable.timer(100).subscribe(() => this.getValue());
     }
 }

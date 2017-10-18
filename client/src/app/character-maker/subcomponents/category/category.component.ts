@@ -36,6 +36,13 @@ export class CategoryComponent implements SubComponentChild, AfterViewInit{
     }
 
     ngAfterViewInit(): void {
+        if (this.aspect.hasOwnProperty('items') && this.aspect.items.length > 0) {
+            for (let i = 0; i < this.aspect.items.length; i++) {
+                this.categories.push({
+                    value: this.aspect.items[i].value
+                });
+            }
+        }
     }
 
     public resize(width: number, height: number): void {

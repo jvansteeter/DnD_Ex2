@@ -31,6 +31,11 @@ export enum GrammarNode {
     DONE = 'DONE'
 }
 
+export interface FunctionTemplate {
+    mapValues: any,
+    stack: GrammarNode[]
+}
+
 interface FunctionData {
     index: number,
     pendingOperator: any,
@@ -153,6 +158,12 @@ export class FunctionGrammar {
         this.currentIndex = -1;
     }
 
+    public initFromTemplate(template: FunctionTemplate): void {
+        this.stack = template.stack;
+        this.mapValues = template.mapValues;
+        this.currentIndex = template.stack.length - 1;
+    }
+
     public push(nextNode: GrammarNode): void {
         this.stack.push(nextNode);
         this.currentIndex++;
@@ -206,7 +217,7 @@ export class FunctionGrammar {
         return data.value;
     }
 
-    public getStack(): string[] {
+    public getStack(): GrammarNode[] {
         return this.stack;
     }
 

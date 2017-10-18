@@ -154,7 +154,7 @@ export class CharacterMakerService {
     public valueOfAspect(aspect: Aspect): any {
         for (let i = 0; i < this.subComponents.length; i++) {
             let subComponent = this.subComponents[i];
-            if (subComponent.aspect === aspect) {
+            if (subComponent.aspect.label === aspect.label) {
                 return subComponent.getValue();
             }
         }
@@ -209,6 +209,8 @@ export class CharacterMakerService {
             aspects.push(aspectObj);
         }
         characterSheet['aspects'] = aspects;
+        console.log('attempting to save')
+        console.log(characterSheet)
         this.http.post('/api/ruleset/charactersheet/save', characterSheet, {responseType: 'text'}).subscribe();
     }
 
@@ -227,6 +229,8 @@ export class CharacterMakerService {
     }
 
     public initAspects(aspects: any[]): void {
+        console.log('initializing aspects')
+        console.log(aspects)
         this.aspects = [];
         aspects.forEach(aspectObj => {
             let aspect = new Aspect(aspectObj.label, aspectObj.aspectType, aspectObj.required);
@@ -237,6 +241,9 @@ export class CharacterMakerService {
             aspect.isNew = false;
             if (aspectObj.hasOwnProperty('items')) {
                 aspect.items = aspectObj.items;
+            }
+            if (aspectObj.hasOwnProperty('ruleFunction')) {
+                aspect.ruleFunction = aspectObj.ruleFunction;
             }
             this.aspects.push(aspect);
         });

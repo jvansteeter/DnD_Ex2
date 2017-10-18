@@ -13,7 +13,6 @@ export class Aspect {
     label: string;
     aspectType: AspectType;
     required: boolean;
-    // options: any;
 
     top: number;
     left: number;
@@ -28,7 +27,7 @@ export class Aspect {
         this.label = label;
         this.aspectType = aspectType;
         this.required = required;
-        // this.options = options;
+
         this.top = 0;
         this.left = 0;
     }

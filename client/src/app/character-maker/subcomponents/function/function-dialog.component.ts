@@ -13,26 +13,26 @@ export class FunctionDialogComponent {
     grammarNode = GrammarNode;
     aspectType = AspectType;
 
-    functionStack: FunctionGrammar;
+    _function: FunctionGrammar;
 
     currentListOptions = [];
 
     constructor(private dialogRef: MatDialogRef<FunctionDialogComponent>, private characterMakerService: CharacterMakerService) {
-        this.functionStack = new FunctionGrammar(characterMakerService);
-        this.functionStack.start();
-        this.next = this.functionStack.nextOptions();
+        this._function = new FunctionGrammar(characterMakerService);
+        this._function.start();
+        this.next = this._function.nextOptions();
     }
 
     addNode(node: GrammarNode): void {
-        this.functionStack.push(node);
-        let currentNode = this.functionStack.currentNode();
+        this._function.push(node);
+        let currentNode = this._function.currentNode();
         if (currentNode === GrammarNode.START ||
             currentNode === GrammarNode.IF ||
             currentNode === GrammarNode.THEN ||
             currentNode === GrammarNode.THIS ||
             currentNode === GrammarNode.ASSIGNED ||
             currentNode === GrammarNode.IF_NOT) {
-            this.next = this.functionStack.nextOptions();
+            this.next = this._function.nextOptions();
         }
         else if (currentNode === GrammarNode.DONE) {
             this.finishFunction();
@@ -43,45 +43,45 @@ export class FunctionDialogComponent {
     }
 
     removeLast(): void {
-        let last = this.functionStack.pop();
+        let last = this._function.pop();
         if (last === GrammarNode.ASPECT_BOOLEAN ||
             last === GrammarNode.ASPECT_NUMBER ||
             last === GrammarNode.ASSIGNED_ASPECT_NUMBER ||
             last === GrammarNode.ASSIGNED_ASPECT_BOOLEAN) {
-            this.functionStack.pop();
+            this._function.pop();
         }
         else if (last === GrammarNode.ASPECT_BOOLEAN_LIST_ITEM) {
-            this.functionStack.pop();
-            this.functionStack.pop();
+            this._function.pop();
+            this._function.pop();
         }
-        this.next = this.functionStack.nextOptions();
+        this.next = this._function.nextOptions();
     }
 
     selectOption(selected): void {
         console.log('selected')
         console.log(selected)
-        let currentNode = this.functionStack.currentNode();
+        let currentNode = this._function.currentNode();
         if (currentNode === GrammarNode.ASPECT) {
-            if (selected.aspectType === AspectType.BOOLEAN && this.functionStack.previousNode() === GrammarNode.IF) {
-                this.functionStack.push(GrammarNode.ASPECT_BOOLEAN);
+            if (selected.aspectType === AspectType.BOOLEAN && this._function.previousNode() === GrammarNode.IF) {
+                this._function.push(GrammarNode.ASPECT_BOOLEAN);
             }
-            else if (selected.aspectType === AspectType.BOOLEAN && this.functionStack.previousNode() === GrammarNode.ASSIGNED) {
-                this.functionStack.push(GrammarNode.ASSIGNED_ASPECT_BOOLEAN);
+            else if (selected.aspectType === AspectType.BOOLEAN && this._function.previousNode() === GrammarNode.ASSIGNED) {
+                this._function.push(GrammarNode.ASSIGNED_ASPECT_BOOLEAN);
             }
-            else if (selected.aspectType === AspectType.NUMBER && this.functionStack.previousNode() === GrammarNode.IF) {
-                this.functionStack.push(GrammarNode.ASPECT_NUMBER);
+            else if (selected.aspectType === AspectType.NUMBER && this._function.previousNode() === GrammarNode.IF) {
+                this._function.push(GrammarNode.ASPECT_NUMBER);
             }
-            else if (selected.aspectType === AspectType.NUMBER && this.functionStack.previousNode() === GrammarNode.ASSIGNED) {
-                this.functionStack.push(GrammarNode.ASSIGNED_ASPECT_NUMBER_FIRST);
+            else if (selected.aspectType === AspectType.NUMBER && this._function.previousNode() === GrammarNode.ASSIGNED) {
+                this._function.push(GrammarNode.ASSIGNED_ASPECT_NUMBER_FIRST);
             }
-            else if (selected.aspectType === AspectType.BOOLEAN_LIST && this.functionStack.previousNode() === GrammarNode.IF) {
-                this.functionStack.push(GrammarNode.ASPECT_BOOLEAN_LIST);
-                this.functionStack.setCurrentValue(selected);
+            else if (selected.aspectType === AspectType.BOOLEAN_LIST && this._function.previousNode() === GrammarNode.IF) {
+                this._function.push(GrammarNode.ASPECT_BOOLEAN_LIST);
+                this._function.setCurrentValue(selected);
                 this.currentListOptions = this.characterMakerService.valueOfAspect(selected);
-                this.functionStack.push(GrammarNode.ASPECT_BOOLEAN_LIST_ITEM);
+                this._function.push(GrammarNode.ASPECT_BOOLEAN_LIST_ITEM);
             }
-            else if (selected.aspectType === AspectType.CATEGORICAL && this.functionStack.previousNode() === GrammarNode.IF) {
-                this.functionStack.push(GrammarNode.ASPECT_CATEGORY);
+            else if (selected.aspectType === AspectType.CATEGORICAL && this._function.previousNode() === GrammarNode.IF) {
+                this._function.push(GrammarNode.ASPECT_CATEGORY);
                 let categories = this.characterMakerService.getAspectOptions(selected);
                 this.currentListOptions = [];
                 for (let i = 0; i < categories.length; i++) {
@@ -90,18 +90,18 @@ export class FunctionDialogComponent {
             }
         }
         if (currentNode === GrammarNode.LOGIC_OPERATOR) {
-            this.functionStack.setCurrentValue(selected.value);
+            this._function.setCurrentValue(selected.value);
         }
         else {
-            this.functionStack.setCurrentValue(selected);
+            this._function.setCurrentValue(selected);
         }
         if (selected.aspectType !== AspectType.BOOLEAN_LIST) {
-            this.next = this.functionStack.nextOptions();
+            this.next = this._function.nextOptions();
         }
     }
 
     private finishFunction(): void {
-        this.dialogRef.close(this.functionStack);
+        this.dialogRef.close(this._function);
     }
 }
 
