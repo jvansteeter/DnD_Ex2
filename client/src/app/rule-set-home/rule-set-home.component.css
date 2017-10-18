@@ -1,0 +1,8 @@
+.admin-row {
+    display: flex;
+    justify-content: space-between;
+}
+
+.admin-row span {
+    flex: 1;
+}

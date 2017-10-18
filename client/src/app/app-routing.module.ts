@@ -15,10 +15,6 @@ const routes: Routes = [
         component: MapMakerComponent
     },
     {
-        path: 'character-maker',
-        component: CharacterMakerComponent
-    },
-    {
         path: 'rule-set/:ruleSetId',
         component: RuleSetHomeComponent
     },

@@ -21,10 +21,6 @@ export class NavbarComponent {
                 {
                     label: 'Map Maker',
                     route: 'map-maker'
-                },
-                {
-                    label: 'Character Maker',
-                    route: 'character-maker'
                 }
             ];
         });

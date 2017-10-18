@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
 import { MatDialog } from '@angular/material';
 import { NewCharacterSheetDialogComponent } from './dialog/new-character-sheet-dialog.component';
+import { RuleSetHomeRepository } from './rule-set-home.repository';
+import { DataSource } from '@angular/cdk/collections';
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
 
 @Component({
     selector: 'rule-set-home',
@@ -14,31 +17,37 @@ export class RuleSetHomeComponent implements OnInit {
     private ruleSet: any;
 
     public characterSheets: any[];
+    public admins: any[];
+
+    private adminDataSource: AdminDataSource;
+    private adminSubject: Subject<AdminData[]>;
+    public adminColumns = ['username', 'role'];
 
     constructor(private activatedRoute: ActivatedRoute,
-                private http: HttpClient,
                 private dialog: MatDialog,
-                private router: Router) {
-
+                private router: Router,
+                private ruleSetHomeRepository: RuleSetHomeRepository) {
+        this.adminSubject = new Subject<AdminData[]>();
+        this.adminDataSource = new AdminDataSource(this.adminSubject);
     }
 
     ngOnInit(): void {
         this.activatedRoute.params.subscribe((params) => {
             this.ruleSetId = params['ruleSetId'];
-            this.http.get('/api/ruleset/ruleset/' + this.ruleSetId, {responseType: 'json'}).subscribe((ruleSet: any) => {
+            this.ruleSetHomeRepository.getRuleSet(this.ruleSetId).subscribe((ruleSet: any) => {
                 this.ruleSet = ruleSet;
-                this.getCharacterSheets();
+            });
+            this.ruleSetHomeRepository.getCharacterSheets(this.ruleSetId).subscribe((characterSheets: any) => {
+                this.characterSheets = characterSheets;
+            });
+            this.ruleSetHomeRepository.getAdmin(this.ruleSetId).subscribe((admins: any) => {
+                this.admins = admins;
+                this.adminSubject.next(admins);
             });
         });
     }
 
-    getCharacterSheets(): void {
-        this.http.get('/api/ruleset/charactersheets/' + this.ruleSetId, {responseType: 'json'}).subscribe((characterSheets: any) => {
-            console.log('character sheets')
-            console.log(characterSheets)
-            this.characterSheets = characterSheets;
-        });
-    }
+
 
     newCharacterSheet(): void {
         this.dialog.open(NewCharacterSheetDialogComponent, {data: {ruleSetId: this.ruleSetId}});
@@ -46,5 +55,23 @@ export class RuleSetHomeComponent implements OnInit {
 
     editCharacterSheet(characterSheetId: string): void {
         this.router.navigate(['character-sheet', characterSheetId]);
+    }
+}
+
+interface AdminData {
+    username: string,
+    role: string
+}
+
+class AdminDataSource extends DataSource<AdminData> {
+    constructor(private adminSubject: Subject<AdminData[]>){
+        super();
+    }
+
+    connect(): Observable<AdminData[]> {
+        return this.adminSubject.asObservable();
+    }
+
+    disconnect(): void {
     }
 }

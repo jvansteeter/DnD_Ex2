@@ -79,6 +79,12 @@ export class RuleSetRouter {
                 res.json(characterSheet);
             });
         });
+
+        this.router.get('/admins/:ruleSetId', (req: Request, res: Response) => {
+             this.ruleSetRepository.getAdmins(req.params.ruleSetId).then((admins: any) => {
+                 res.json(admins);
+             });
+        });
     }
 }
 

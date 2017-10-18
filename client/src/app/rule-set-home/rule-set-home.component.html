@@ -3,6 +3,23 @@
 	<mat-accordion>
 		<mat-expansion-panel>
 			<mat-expansion-panel-header>
+				<mat-panel-title>Admin</mat-panel-title>
+			</mat-expansion-panel-header>
+			<mat-table [dataSource]="adminDataSource">
+				<ng-container matColumnDef="username">
+					<mat-header-cell *matHeaderCellDef>Username</mat-header-cell>
+					<mat-cell *matCellDef="let row">{{row.username}}</mat-cell>
+				</ng-container>
+				<ng-container matColumnDef="role">
+					<mat-header-cell *matHeaderCellDef>Role</mat-header-cell>
+					<mat-cell *matCellDef="let row">{{row.role}}</mat-cell>
+				</ng-container>
+				<mat-header-row *matHeaderRowDef="adminColumns"></mat-header-row>
+				<mat-row *matRowDef="let row; columns: adminColumns"></mat-row>
+			</mat-table>
+		</mat-expansion-panel>
+		<mat-expansion-panel>
+			<mat-expansion-panel-header>
 				<mat-panel-title>Character Sheets</mat-panel-title>
 				<mat-panel-description>Character Sheets description</mat-panel-description>
 			</mat-expansion-panel-header>
