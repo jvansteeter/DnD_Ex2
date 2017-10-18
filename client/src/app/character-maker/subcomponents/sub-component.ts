@@ -18,11 +18,6 @@ export class SubComponent implements OnInit, AfterViewInit {
     options: MatMenu;
     aspectType = AspectType;
 
-    // width: number;
-    // height: number;
-    // top: number = 0;
-    // left: number = 0;
-
     minHeight: number;
     minWidth: number;
 
@@ -61,7 +56,6 @@ export class SubComponent implements OnInit, AfterViewInit {
                 let newHeight = this.aspect.height + event.movementY;
                 this.resize(newWidth, newHeight);
                 this.characterMakerService.adjustCharacterSheetHeight();
-                // this.characterMakerService.reorderAnimation(this);
             }
             if (this.moving) {
                 let directions: Move[] = [];
@@ -84,7 +78,6 @@ export class SubComponent implements OnInit, AfterViewInit {
                 }
                 if (newLeft >= 0 && newLeft + this.aspect.width < this.getMaxWidth()) {
                     this.aspect.left = newLeft;
-                    // this.characterMakerService.reorderAnimation(this, directions);
                     this.characterMakerService.adjustCharacterSheetHeight();
                 }
             }
@@ -156,7 +149,6 @@ export class SubComponent implements OnInit, AfterViewInit {
             this.aspect.height = height;
         }
         this.child.resize(width, height);
-        // this.characterMakerService.reorderAnimation(this);
     }
 
     setDimensions(width: number, height: number) {
@@ -188,7 +180,6 @@ export class SubComponent implements OnInit, AfterViewInit {
     }
 
     animate(x: number, y: number): void {
-        console.log('animate')
         this.showAnimation(true);
         if (this.aspect.top + y > 0) {
             this.aspect.top += y;
@@ -199,7 +190,6 @@ export class SubComponent implements OnInit, AfterViewInit {
     }
 
     animateTo(x: number, y: number): void {
-        console.log('animateTo')
         this.showAnimation(true);
         if (y > 0) {
             this.aspect.top = y;

@@ -66,7 +66,9 @@ export class FunctionComponent implements SubComponentChild, AfterViewInit {
     }
 
     getValue(): any {
-        this.value = this._function.getValue();
+        if (this._function) {
+            this.value = this._function.getValue();
+        }
         return this.value;
     }
 

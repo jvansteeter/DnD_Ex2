@@ -6,7 +6,6 @@ import { SubComponent } from './subcomponents/sub-component';
 import { Observable } from 'rxjs/Observable';
 import { CategoryComponent } from './subcomponents/category/category.component';
 import { HttpClient } from '@angular/common/http';
-import { text } from 'body-parser';
 import { CheckboxListComponent } from './subcomponents/checkbox-list/checkbox-list.component';
 import { FunctionComponent } from './subcomponents/function/function.component';
 import { SubComponentChild } from './subcomponents/sub-component-child';
@@ -18,9 +17,6 @@ export enum Move {
 
 @Injectable()
 export class CharacterMakerService {
-    // private addEvents = new Subject();
-    private removeEvents = new Subject();
-    private resizeEvents = new Subject();
     private changeHeightEvents = new Subject();
 
     private characterSheetId: string;
@@ -36,25 +32,16 @@ export class CharacterMakerService {
         this.subComponents = [];
     }
 
-    // public onAddComponent(next?, error?, complete?): Subscription {
-    //     return this.addEvents.subscribe(next, error, complete);
-    // }
-
     public addComponent(aspect: any): void {
         this.aspects.push(aspect);
-        // this.addEvents.next(aspect);
     }
 
-    public onRemoveComponent(next?, error?, complete?): Subscription {
-        return this.removeEvents.subscribe(next, error, complete);
-    }
 
     public removeComponent(aspect: any): void {
         let index = this.aspects.indexOf(aspect);
         this.aspects.splice(index, 1);
         this.subComponents.splice(index, 1);
         this.adjustCharacterSheetHeight();
-        this.removeEvents.next(aspect);
     }
 
     public getWidth(): number {
@@ -63,11 +50,9 @@ export class CharacterMakerService {
 
     public setWidth(width: number): void {
         this.characterSheetWidth = width;
-        this.resizeEvents.next(width);
     }
 
     public registerSubComponent(subComponent: SubComponent): void {
-        console.log('registering subcomponent')
         let leftOffset = 0;
         for (let i = 0; i < this.subComponents.length; i++) {
             let stationary = this.subComponents[i];
@@ -84,10 +69,6 @@ export class CharacterMakerService {
         // });
 
         this.adjustCharacterSheetHeight();
-    }
-
-    public onResize(next?, error?, complete?): Subscription {
-        return this.resizeEvents.subscribe(next, error, complete);
     }
 
     public reorderAnimation(moving: SubComponent): void {
@@ -209,8 +190,6 @@ export class CharacterMakerService {
             aspects.push(aspectObj);
         }
         characterSheet['aspects'] = aspects;
-        console.log('attempting to save')
-        console.log(characterSheet)
         this.http.post('/api/ruleset/charactersheet/save', characterSheet, {responseType: 'text'}).subscribe();
     }
 
@@ -229,8 +208,6 @@ export class CharacterMakerService {
     }
 
     public initAspects(aspects: any[]): void {
-        console.log('initializing aspects')
-        console.log(aspects)
         this.aspects = [];
         aspects.forEach(aspectObj => {
             let aspect = new Aspect(aspectObj.label, aspectObj.aspectType, aspectObj.required);
