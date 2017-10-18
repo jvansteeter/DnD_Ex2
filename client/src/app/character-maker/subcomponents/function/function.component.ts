@@ -31,7 +31,7 @@ export class FunctionComponent implements SubComponentChild, AfterViewInit {
     }
 
     ngAfterViewInit(): void {
-        if (!this.aspect.isNew) {
+        if (!this.aspect.isNew && !!this.aspect.ruleFunction) {
             this.setFunction(this.aspect.ruleFunction);
         }
     }
@@ -70,11 +70,15 @@ export class FunctionComponent implements SubComponentChild, AfterViewInit {
         return this.value;
     }
 
-    getFunction(): FunctionTemplate {
-        return {
-            stack: this._function.getStack(),
-            mapValues: this._function.getMapValues()
-        };
+    getFunction(): FunctionTemplate | undefined {
+        if (this._function) {
+            return {
+                stack: this._function.getStack(),
+                mapValues: this._function.getMapValues()
+            };
+        }
+
+        return undefined;
     }
 
     private setFunction(template: FunctionTemplate): void {

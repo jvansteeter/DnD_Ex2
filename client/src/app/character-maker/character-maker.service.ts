@@ -242,7 +242,7 @@ export class CharacterMakerService {
             if (aspectObj.hasOwnProperty('items')) {
                 aspect.items = aspectObj.items;
             }
-            if (aspectObj.hasOwnProperty('ruleFunction')) {
+            if (!!aspectObj.ruleFunction) {
                 aspect.ruleFunction = aspectObj.ruleFunction;
             }
             this.aspects.push(aspect);
