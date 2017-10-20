@@ -12,6 +12,7 @@ import { MapMakerModule } from './map-maker/map-maker.module';
 import { CharacterMakerModule } from './character-maker/character-maker.module';
 import { MatButtonModule, MatIconModule, MatMenuModule, MatTabsModule } from '@angular/material';
 import { RuleSetHomeModule } from './rule-set-home/rule-set-home.module';
+import { CharacterSheetModule } from './character-sheet/character-sheet.module';
 
 @NgModule({
     imports: [
@@ -27,7 +28,8 @@ import { RuleSetHomeModule } from './rule-set-home/rule-set-home.module';
         MapMakerModule,
         MatIconModule,
         CharacterMakerModule,
-        RuleSetHomeModule
+        RuleSetHomeModule,
+        CharacterSheetModule
     ],
     declarations: [
         AppComponent,

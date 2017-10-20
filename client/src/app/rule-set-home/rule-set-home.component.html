@@ -28,5 +28,25 @@
 			</mat-list>
 			<button mat-raised-button color="primary" (click)="newCharacterSheet()">New</button>
 		</mat-expansion-panel>
+		<mat-expansion-panel>
+			<mat-expansion-panel-header>
+				<mat-panel-title>NPCs</mat-panel-title>
+			</mat-expansion-panel-header>
+			<mat-table [dataSource]="npcDataSource">
+				<ng-container matColumnDef="label">
+					<mat-header-cell *matHeaderCellDef>NPC</mat-header-cell>
+					<mat-cell *matCellDef="let npc">{{npc.label}}</mat-cell>
+				</ng-container>
+				<ng-container matColumnDef="edit">
+					<mat-header-cell *matHeaderCellDef></mat-header-cell>
+					<mat-cell *matCellDef="let npc">
+						<button mat-raised-button color="primary" (click)="editNpc(npc._id)">Edit</button>
+					</mat-cell>
+				</ng-container>
+				<mat-header-row *matHeaderRowDef="npcColumns"></mat-header-row>
+				<mat-row *matRowDef="let npc; columns: npcColumns"></mat-row>
+			</mat-table>
+			<button mat-raised-button color="primary" (click)="createNPC()">New</button>
+		</mat-expansion-panel>
 	</mat-accordion>
 </div>

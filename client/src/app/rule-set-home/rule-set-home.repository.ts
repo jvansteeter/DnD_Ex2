@@ -19,4 +19,12 @@ export class RuleSetHomeRepository {
     getAdmin(ruleSetId: string): Observable<any> {
         return this.http.get('/api/ruleset/admins/' + ruleSetId, {responseType: 'json'});
     }
+
+    createNewNpc(label: string, characterSheetId: string): Observable<any> {
+        return this.http.post('/api/ruleset/new/npc', {label: label, characterSheetId: characterSheetId}, {responseType: 'json'});
+    }
+
+    getNpcs(ruleSetId: string): Observable<any> {
+        return this.http.get('/api/ruleset/npcs/' + ruleSetId, {responseType: 'json'});
+    }
 }

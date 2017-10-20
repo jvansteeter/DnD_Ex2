@@ -32,14 +32,9 @@ export class CharacterMakerComponent implements AfterViewInit {
     }
 
     ngAfterViewInit(): void {
-        console.log('after view init')
         this.activatedRoute.params.subscribe(params => {
             this.characterSheetId = params['characterSheetId'];
-            console.log('params')
-            console.log(this.characterSheetId)
             this.http.get('/api/ruleset/charactersheet/' + this.characterSheetId, {responseType: 'json'}).subscribe((data: any) => {
-                console.log('character sheet data')
-                console.log(data)
                 this.characterSheetData = data;
                 this.characterMakerService.setCharacterSheetId(this.characterSheetId);
                 this.characterMakerService.initAspects(data.aspects);

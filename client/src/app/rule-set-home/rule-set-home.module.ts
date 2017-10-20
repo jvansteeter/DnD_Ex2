@@ -5,10 +5,12 @@ import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import {
     MatButtonModule, MatDialogModule, MatExpansionModule, MatInputModule, MatListModule,
+    MatSelectModule,
     MatTableModule
 } from '@angular/material';
 import { NewCharacterSheetDialogComponent } from './dialog/new-character-sheet-dialog.component';
 import { RuleSetHomeRepository } from './rule-set-home.repository';
+import { NewNpcDialogComponent } from './dialog/new-npc-dialog.component';
 
 @NgModule({
     imports: [
@@ -20,11 +22,13 @@ import { RuleSetHomeRepository } from './rule-set-home.repository';
         MatButtonModule,
         MatInputModule,
         MatListModule,
-        MatTableModule
+        MatTableModule,
+        MatSelectModule
     ],
     declarations: [
         RuleSetHomeComponent,
-        NewCharacterSheetDialogComponent
+        NewCharacterSheetDialogComponent,
+        NewNpcDialogComponent
     ],
     providers: [
         RuleSetHomeRepository
@@ -33,7 +37,8 @@ import { RuleSetHomeRepository } from './rule-set-home.repository';
         RuleSetHomeComponent
     ],
     entryComponents: [
-        NewCharacterSheetDialogComponent
+        NewCharacterSheetDialogComponent,
+        NewNpcDialogComponent
     ]
 })
 export class RuleSetHomeModule {

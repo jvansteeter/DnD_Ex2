@@ -8,6 +8,8 @@ import { CharacterSheetModel } from '../db/models/characterSheet.model';
 import { CharacterAspectRepository } from '../db/repositories/characterAspect.repository';
 import { CharacterAspectModel } from '../db/models/characterAspect.model';
 import { Observable } from 'rxjs/Observable';
+import { NpcRepository } from '../db/repositories/npc.repository';
+import { NpcModel } from '../db/models/npc.model';
 
 
 /**********************************************************************************************************
@@ -23,6 +25,7 @@ export class RuleSetRouter {
     private characterSheetRepository: CharacterSheetRepository;
     private characterAspectRepository: CharacterAspectRepository;
     private userRuleSetRepository: UserRuleSetRepository;
+    private npcRepository: NpcRepository;
 
     constructor() {
         this.router = Router();
@@ -31,6 +34,7 @@ export class RuleSetRouter {
         this.characterSheetRepository = new CharacterSheetRepository();
         this.characterAspectRepository = new CharacterAspectRepository();
         this.userRuleSetRepository = new UserRuleSetRepository();
+        this.npcRepository = new NpcRepository();
         this.init();
     }
 
@@ -84,6 +88,32 @@ export class RuleSetRouter {
              this.ruleSetRepository.getAdmins(req.params.ruleSetId).then((admins: any) => {
                  res.json(admins);
              });
+        });
+
+        this.router.post('/new/npc', (req: Request, res: Response) => {
+            this.characterSheetRepository.findById(req.body.characterSheetId).then((characterSheet: CharacterSheetModel) => {
+                this.npcRepository.create(req.body.label, req.body.characterSheetId).then((npc: NpcModel) => {
+                    npc.setRuleSetId(characterSheet.ruleSetId).then(() => {
+                        res.json(npc);
+                    });
+                });
+            });
+        });
+
+        this.router.get('/npc/:npcId', (req: Request, res: Response) => {
+            this.npcRepository.findById(req.params.npcId).then((npc: NpcModel) => {
+                this.characterSheetRepository.getCompiledCharacterSheet(npc.characterSheetId).then((characterSheet: CharacterSheetModel) => {
+                    let npcObj = JSON.parse(JSON.stringify(npc));
+                    npcObj.characterSheet = JSON.parse(JSON.stringify(characterSheet));
+                    res.json(npc);
+                });
+            });
+        });
+
+        this.router.get('/npcs/:ruleSetId', (req: Request, res: Response) => {
+            this.npcRepository.findAllForRuleSet(req.params.ruleSetId).then((npcs: NpcModel) => {
+                res.json(npcs);
+            });
         });
     }
 }

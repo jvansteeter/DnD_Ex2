@@ -1,0 +1,9 @@
+<mat-form-field>
+	<input matInput placeholder="Label" [(ngModel)]="npcLabel">
+</mat-form-field>
+<mat-form-field>
+	<mat-select placeholder="Character Sheet" [(ngModel)]="characterSheetId">
+		<mat-option *ngFor="let characterSheet of characterSheets" [value]="characterSheet._id">{{ characterSheet.label }}</mat-option>
+	</mat-select>
+</mat-form-field>
+<button mat-raised-button color="primary" (click)="createNewNpc()" [disabled]="!npcLabel || !characterSheetId">Create</button>

@@ -16,6 +16,7 @@ import './db/models/characterSheet.model';
 import './db/models/characterAspect.model';
 import './db/models/ruleFunction.model';
 import './db/models/user-ruleSet.model';
+import './db/models/npc.model';
 import './config/passport.config';
 
 import LoginRouter from './routes/login.router';
