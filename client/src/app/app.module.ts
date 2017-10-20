@@ -9,7 +9,6 @@ import { ProfileService } from './profile/profile.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HomeModule } from './home/home.module';
 import { MapMakerModule } from './map-maker/map-maker.module';
-import { CharacterMakerModule } from './character-maker/character-maker.module';
 import { MatButtonModule, MatIconModule, MatMenuModule, MatTabsModule } from '@angular/material';
 import { RuleSetHomeModule } from './rule-set-home/rule-set-home.module';
 import { CharacterSheetModule } from './character-sheet/character-sheet.module';
@@ -27,7 +26,6 @@ import { CharacterSheetModule } from './character-sheet/character-sheet.module';
         HomeModule,
         MapMakerModule,
         MatIconModule,
-        CharacterMakerModule,
         RuleSetHomeModule,
         CharacterSheetModule
     ],

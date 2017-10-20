@@ -1,6 +1,6 @@
 <h1>Character Maker</h1>
 <button mat-icon-button mat-raised-button color="primary" (click)="openAddDialog()"><mat-icon>add</mat-icon></button>
 <div class="well well-lg characterSheet" #characterSheet>
-	<sub-component *ngFor="let aspect of characterMakerService.aspects" [aspect]="aspect"></sub-component>
+	<sub-component *ngFor="let aspect of characterService.aspects" [aspect]="aspect"></sub-component>
 </div>
 <button (click)="save()">SAVE</button>

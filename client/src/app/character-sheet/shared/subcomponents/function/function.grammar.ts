@@ -1,4 +1,4 @@
-import { CharacterMakerService } from '../../character-maker.service';
+import { CharacterInterfaceService } from '../../character-interface.service';
 
 export enum GrammarNode {
     START = 'START',
@@ -153,7 +153,7 @@ export class FunctionGrammar {
     private mapValues = {};
     private currentIndex: number;
 
-    constructor(private characterMakerService: CharacterMakerService) {
+    constructor(private characterService: CharacterInterfaceService) {
         this.stack = [];
         this.currentIndex = -1;
     }
@@ -278,7 +278,7 @@ export class FunctionGrammar {
         console.log(JSON.parse(JSON.stringify(data)))
 
         let currentAspect = this.mapValues[data.index];
-        data.pendingConditionalValue = this.characterMakerService.valueOfAspect(currentAspect);
+        data.pendingConditionalValue = this.characterService.valueOfAspect(currentAspect);
 
         let next = this.stack[++data.index];
         if (next === GrammarNode.EQUAL_OR_NOT) {
@@ -294,7 +294,7 @@ export class FunctionGrammar {
         console.log(JSON.parse(JSON.stringify(data)))
 
         let currentAspect = this.mapValues[data.index];
-        let checkboxes = this.characterMakerService.valueOfAspect(currentAspect);
+        let checkboxes = this.characterService.valueOfAspect(currentAspect);
 
         let next = this.stack[++data.index];
         if (next === GrammarNode.ASPECT_BOOLEAN_LIST_ITEM) {
@@ -324,7 +324,7 @@ export class FunctionGrammar {
         console.log(JSON.parse(JSON.stringify(data)))
 
         let currentAspect = this.mapValues[data.index];
-        data.pendingConditionalValue = this.characterMakerService.valueOfAspect(currentAspect);
+        data.pendingConditionalValue = this.characterService.valueOfAspect(currentAspect);
 
         let next = this.stack[++data.index];
         if (next === GrammarNode.LOGIC_OPERATOR) {
@@ -340,7 +340,7 @@ export class FunctionGrammar {
         console.log(JSON.parse(JSON.stringify(data)))
 
         let currentAspect = this.mapValues[data.index];
-        data.pendingConditionalValue = this.characterMakerService.valueOfAspect(currentAspect);
+        data.pendingConditionalValue = this.characterService.valueOfAspect(currentAspect);
 
         let next = this.stack[++data.index];
         if (next === GrammarNode.EQUAL_OR_NOT_CATEGORY) {
@@ -423,7 +423,7 @@ export class FunctionGrammar {
         console.log(JSON.parse(JSON.stringify(data)))
 
         let currentNode = this.mapValues[data.index];
-        data.operationalConditionalValue = this.characterMakerService.valueOfAspect(currentNode);
+        data.operationalConditionalValue = this.characterService.valueOfAspect(currentNode);
         let next = this.stack[++data.index];
         if (next === GrammarNode.THEN) {
             this._then(data);
@@ -438,7 +438,7 @@ export class FunctionGrammar {
         console.log(JSON.parse(JSON.stringify(data)))
 
         let currentNode = this.mapValues[data.index];
-        let aspectValue = this.characterMakerService.valueOfAspect(currentNode);
+        let aspectValue = this.characterService.valueOfAspect(currentNode);
         if (data.pendingOperator === '+') {
             data.operationalConditionalValue += aspectValue;
         }
@@ -655,7 +655,7 @@ export class FunctionGrammar {
         console.log(JSON.parse(JSON.stringify(data)))
 
         let currentAspect = this.mapValues[data.index];
-        let aspectValue = this.characterMakerService.valueOfAspect(currentAspect);
+        let aspectValue = this.characterService.valueOfAspect(currentAspect);
         if (!data.pendingOperator) {
             data.value = aspectValue;
         }
@@ -696,7 +696,7 @@ export class FunctionGrammar {
         console.log(JSON.parse(JSON.stringify(data)))
 
         let currentAspect = this.mapValues[data.index];
-        data.value = this.characterMakerService.valueOfAspect(currentAspect);
+        data.value = this.characterService.valueOfAspect(currentAspect);
 
         let next = this.stack[++data.index];
         if (next === GrammarNode.IF_NOT) {

@@ -4,7 +4,7 @@ import {
     ViewChild
 } from '@angular/core';
 import { SubComponentChild } from './sub-component-child';
-import { CharacterMakerService, Move } from '../character-maker.service';
+import { CharacterMakerService, Move } from '../../maker/character-maker.service';
 import { MatMenu } from '@angular/material';
 
 @Component({

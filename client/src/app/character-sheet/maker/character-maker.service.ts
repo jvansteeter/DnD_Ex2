@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
-import { Aspect, AspectType } from './aspect';
-import { SubComponent } from './subcomponents/sub-component';
+import { Aspect, AspectType } from '../shared/aspect';
+import { SubComponent } from '../shared/subcomponents/sub-component';
 import { Observable } from 'rxjs/Observable';
-import { CategoryComponent } from './subcomponents/category/category.component';
+import { CategoryComponent } from '../shared/subcomponents/category/category.component';
 import { HttpClient } from '@angular/common/http';
-import { CheckboxListComponent } from './subcomponents/checkbox-list/checkbox-list.component';
-import { FunctionComponent } from './subcomponents/function/function.component';
-import { SubComponentChild } from './subcomponents/sub-component-child';
+import { CheckboxListComponent } from '../shared/subcomponents/checkbox-list/checkbox-list.component';
+import { FunctionComponent } from '../shared/subcomponents/function/function.component';
+import { SubComponentChild } from '../shared/subcomponents/sub-component-child';
+import { CharacterInterfaceService } from '../shared/character-interface.service';
 
 
 export enum Move {
@@ -16,7 +17,7 @@ export enum Move {
 }
 
 @Injectable()
-export class CharacterMakerService {
+export class CharacterMakerService implements CharacterInterfaceService {
     private changeHeightEvents = new Subject();
 
     private characterSheetId: string;

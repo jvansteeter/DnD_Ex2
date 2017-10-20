@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
-import { Aspect, AspectType } from '../aspect';
+import { Aspect, AspectType } from '../../shared/aspect';
 import { CharacterMakerService } from '../character-maker.service';
 import { MatDialogRef } from '@angular/material';
 
 
 @Component({
     templateUrl: 'add-component.component.html',
-    styleUrls: ['../character-maker.component.css']
+    styleUrls: ['../../shared/character-sheet.css']
 })
 export class AddComponentComponent {
     private aspectTypes: any[];

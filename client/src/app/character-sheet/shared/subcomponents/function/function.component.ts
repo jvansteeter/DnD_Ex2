@@ -5,8 +5,9 @@ import { FunctionDialogComponent } from './function-dialog.component';
 import { SubComponentChild } from '../sub-component-child';
 import { FunctionGrammar, FunctionTemplate } from './function.grammar';
 import { MatDialog, MatMenu } from '@angular/material';
-import { CharacterMakerService } from '../../character-maker.service';
 import { Observable } from 'rxjs/Observable';
+import { CharacterInterfaceService } from '../../character-interface.service';
+import { CharacterInterfaceFactory } from '../../character-interface.factory';
 
 @Component({
     selector: 'characterMaker-functionComponent',
@@ -25,9 +26,11 @@ export class FunctionComponent implements SubComponentChild, AfterViewInit {
 
     fontSize: number = 14;
     private _function: FunctionGrammar;
+    private characterService: CharacterInterfaceService;
 
-    constructor(private dialog: MatDialog, private characterMakerService: CharacterMakerService) {
-
+    constructor(private dialog: MatDialog,
+                characterInterfaceFactory: CharacterInterfaceFactory) {
+        this.characterService = characterInterfaceFactory.getCharacterInterface();
     }
 
     ngAfterViewInit(): void {
@@ -84,7 +87,7 @@ export class FunctionComponent implements SubComponentChild, AfterViewInit {
     }
 
     private setFunction(template: FunctionTemplate): void {
-        this._function = new FunctionGrammar(this.characterMakerService);
+        this._function = new FunctionGrammar(this.characterService);
         this._function.initFromTemplate(template);
         Observable.timer(100).subscribe(() => this.getValue());
     }

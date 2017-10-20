@@ -2,8 +2,9 @@ import { AfterViewInit, Component, ElementRef, Input, Renderer2, ViewChild } fro
 import { SubComponentChild } from '../sub-component-child';
 import { Aspect } from '../../aspect';
 import { SubComponent } from '../sub-component';
-import { CharacterMakerService } from '../../character-maker.service';
 import { MatMenu } from '@angular/material';
+import { CharacterInterfaceFactory } from '../../character-interface.factory';
+import { CharacterInterfaceService } from '../../character-interface.service';
 
 
 interface CheckboxItem {
@@ -27,12 +28,15 @@ export class CheckboxListComponent implements SubComponentChild, AfterViewInit {
     readonly hasOptions = true;
     value: any;
 
+    private characterMakerService: CharacterInterfaceService;
+
     private checkboxes: CheckboxItem[];
     private readonly checkboxHeight = 25;
     fontSize: number = 14;
     @ViewChild('fontSizeInput') private fontSizeInput: ElementRef;
 
-    constructor(private renderer: Renderer2, private characterMakerService: CharacterMakerService) {
+    constructor(private renderer: Renderer2, private characterInterfaceFactory: CharacterInterfaceFactory) {
+        this.characterMakerService = this.characterInterfaceFactory.getCharacterInterface();
         this.checkboxes = [];
     }
 

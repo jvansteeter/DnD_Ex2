@@ -1,16 +1,16 @@
 import { AfterViewInit, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { AddComponentComponent } from './dialog/add-component.component';
 import { CharacterMakerService } from './character-maker.service';
-import { Aspect } from './aspect';
 import { MatDialog } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { CharacterInterfaceFactory } from '../shared/character-interface.factory';
 
 
 @Component({
     selector: 'character-maker',
     templateUrl: 'character-maker.component.html',
-    styleUrls: ['character-maker.component.css']
+    styleUrls: ['../shared/character-sheet.css']
 })
 export class CharacterMakerComponent implements AfterViewInit {
     @ViewChild('characterSheet') characterSheet: ElementRef;
@@ -22,13 +22,15 @@ export class CharacterMakerComponent implements AfterViewInit {
 
     @HostListener('window:resize')
     onResize(): void {
-        this.characterMakerService.setWidth(this.characterSheet.nativeElement.offsetWidth);
+        this.characterService.setWidth(this.characterSheet.nativeElement.offsetWidth);
     }
 
     constructor(private dialog: MatDialog,
-                public characterMakerService: CharacterMakerService,
                 private activatedRoute: ActivatedRoute,
-                private http: HttpClient) {
+                private http: HttpClient,
+                private characterInterfaceFactory: CharacterInterfaceFactory,
+                public characterService: CharacterMakerService) {
+        this.characterInterfaceFactory.setCharacterInterface(this.characterService);
     }
 
     ngAfterViewInit(): void {
@@ -36,13 +38,13 @@ export class CharacterMakerComponent implements AfterViewInit {
             this.characterSheetId = params['characterSheetId'];
             this.http.get('/api/ruleset/charactersheet/' + this.characterSheetId, {responseType: 'json'}).subscribe((data: any) => {
                 this.characterSheetData = data;
-                this.characterMakerService.setCharacterSheetId(this.characterSheetId);
-                this.characterMakerService.initAspects(data.aspects);
+                this.characterService.setCharacterSheetId(this.characterSheetId);
+                this.characterService.initAspects(data.aspects);
             });
         });
-        this.characterMakerService.setWidth(this.characterSheet.nativeElement.offsetWidth);
-        // this.characterMakerService.onAddComponent((aspect) => this.addComponent(aspect));
-        this.characterMakerService.onChangeHeight((newHeight) => {
+        this.characterService.setWidth(this.characterSheet.nativeElement.offsetWidth);
+        // this.characterService.onAddComponent((aspect) => this.addComponent(aspect));
+        this.characterService.onChangeHeight((newHeight) => {
             this.characterSheet.nativeElement.style.height = (this.characterSheetHeightMin + newHeight) + 'px';
         });
     }
@@ -52,6 +54,6 @@ export class CharacterMakerComponent implements AfterViewInit {
     }
 
     public save(): void {
-        this.characterMakerService.save();
+        this.characterService.save();
     }
 }

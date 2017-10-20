@@ -77,6 +77,7 @@ export class RuleSetHomeComponent implements OnInit {
     editNpc(npcId: string): void {
         console.log('edit npc')
         console.log(npcId)
+        this.router.navigate(['npc', npcId]);
     }
 }
 

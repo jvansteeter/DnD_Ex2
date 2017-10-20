@@ -1,0 +1,14 @@
+<mat-card *ngIf="aspect" [ngStyle]="{'width': aspect.width + 'px',
+									'transform': 'translate(' + aspect.left + 'px, ' + aspect.top + 'px)'}"
+					  class="sub-component">
+	<mat-card-content [ngStyle]="{'width': aspect.width + 'px', 'height': aspect.height + 'px'}" [ngSwitch]="aspect.aspectType">
+		<characterMaker-textComponent *ngSwitchCase="aspectType.TEXT" [aspect]="aspect" [parent]="this" #child></characterMaker-textComponent>
+		<characterMaker-checkBoxComponent *ngSwitchCase="aspectType.BOOLEAN" [aspect]="aspect" [parent]="this" #child></characterMaker-checkBoxComponent>
+		<characterMaker-numberComponent *ngSwitchCase="aspectType.NUMBER" [aspect]="aspect" [parent]="this" #child></characterMaker-numberComponent>
+		<characterMaker-checkBoxListComponent *ngSwitchCase="aspectType.BOOLEAN_LIST" [aspect]="aspect" [parent]="this" #child></characterMaker-checkBoxListComponent>
+		<characterMaker-textListComponent *ngSwitchCase="aspectType.TEXT_LIST" [aspect]="aspect" [parent]="this" #child></characterMaker-textListComponent>
+		<characterMaker-categoryComponent *ngSwitchCase="aspectType.CATEGORICAL" [aspect]="aspect" [parent]="this" #child></characterMaker-categoryComponent>
+		<characterMaker-tokenComponent *ngSwitchCase="aspectType.TOKEN" [aspect]="aspect" [parent]="this" #child></characterMaker-tokenComponent>
+		<characterMaker-functionComponent *ngSwitchCase="aspectType.FUNCTION" [aspect]="aspect" [parent]="this" #child></characterMaker-functionComponent>
+	</mat-card-content>
+</mat-card>
