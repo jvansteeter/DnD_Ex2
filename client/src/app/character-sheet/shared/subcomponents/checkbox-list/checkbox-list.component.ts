@@ -41,16 +41,11 @@ export class CheckboxListComponent implements SubComponentChild, AfterViewInit {
     }
 
     ngAfterViewInit(): void {
-        this.width = this.parent.aspect.width;
-        this.height = this.parent.aspect.height;
-
         this.renderer.listen(this.fontSizeInput.nativeElement, 'change', () => {
             this.parent.resize(this.width, this.height + this.fontSize - 10);
             this.parent.minHeight += this.fontSize - 14;
         });
 
-        console.log('this is my aspect')
-        console.log(this.aspect)
         if (this.aspect.hasOwnProperty('items') && this.aspect.items.length > 0) {
             for (let i = 0; i < this.aspect.items.length; i++) {
                 this.checkboxes.push({

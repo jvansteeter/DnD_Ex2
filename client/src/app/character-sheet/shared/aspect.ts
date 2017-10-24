@@ -14,13 +14,10 @@ export class Aspect {
     aspectType: AspectType;
     required: boolean;
 
-    top: number;
-    left: number;
-    width: number;
-    height: number;
     items: any[];
     ruleFunction: any;
 
+    config: any;
     isNew: boolean = true;
 
     constructor(label: string, aspectType: AspectType, required: boolean) {
@@ -28,7 +25,10 @@ export class Aspect {
         this.aspectType = aspectType;
         this.required = required;
 
-        this.top = 0;
-        this.left = 0;
+        this.config = this.defaultConfig();
+    }
+
+    private defaultConfig(): any {
+        return { 'dragHandle': '.sub-component-header', 'col': 1, 'row': 1, 'sizex': 1, 'sizey': 1 };
     }
 }

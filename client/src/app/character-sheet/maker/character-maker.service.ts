@@ -59,15 +59,15 @@ export class CharacterMakerService implements CharacterInterfaceService {
 
     public registerSubComponent(subComponent: SubComponent): void {
         let leftOffset = 0;
-        for (let i = 0; i < this.subComponents.length; i++) {
-            let stationary = this.subComponents[i];
-            if (stationary.violatesRightTerritory(subComponent)) {
-                let offset = stationary.aspect.left + stationary.aspect.width + 10;
-                if (offset > leftOffset) {
-                    leftOffset = offset;
-                }
-            }
-        }
+        // for (let i = 0; i < this.subComponents.length; i++) {
+        //     let stationary = this.subComponents[i];
+        //     if (stationary.violatesRightTerritory(subComponent)) {
+        //         let offset = stationary.aspect.left + stationary.aspect.width + 10;
+        //         if (offset > leftOffset) {
+        //             leftOffset = offset;
+        //         }
+        //     }
+        // }
         this.subComponents.push(subComponent);
         // Observable.timer(100).subscribe(() => {
         //     subComponent.animate(leftOffset, 0);
@@ -83,17 +83,17 @@ export class CharacterMakerService implements CharacterInterfaceService {
             if (stationary === moving) {
                 continue;
             }
-            if (moving.overlaps(stationary)) {
-                if (stationary.canMoveRightTo(moving.right() + 10)) {
-                    stationary.animateTo(moving.right() + 10, stationary.aspect.top);
-                }
-                else {
-                    stationary.animateTo(stationary.aspect.left, moving.bottom() + 30);
-                }
-                Observable.timer(100).subscribe(() => {
-                    this.adjustCharacterSheetHeight();
-                })
-            }
+            // if (moving.overlaps(stationary)) {
+            //     if (stationary.canMoveRightTo(moving.right() + 10)) {
+            //         stationary.animateTo(moving.right() + 10, stationary.aspect.top);
+            //     }
+            //     else {
+            //         stationary.animateTo(stationary.aspect.left, moving.bottom() + 30);
+            //     }
+            //     Observable.timer(100).subscribe(() => {
+            //         this.adjustCharacterSheetHeight();
+            //     })
+            // }
         }
     }
 
@@ -101,9 +101,9 @@ export class CharacterMakerService implements CharacterInterfaceService {
         let greatestHeight = 0;
         for (let i = 0; i < this.subComponents.length; i++) {
             let subComponent = this.subComponents[i];
-            if (subComponent.aspect.height + subComponent.aspect.top > greatestHeight) {
-                greatestHeight = subComponent.getTotalHeight() + subComponent.aspect.top;
-            }
+            // if (subComponent.aspect.height + subComponent.aspect.top > greatestHeight) {
+            //     greatestHeight = subComponent.getTotalHeight() + subComponent.aspect.top;
+            // }
         }
         this.characterSheetHeight = greatestHeight;
         this.changeHeightEvents.next(greatestHeight);
@@ -179,10 +179,7 @@ export class CharacterMakerService implements CharacterInterfaceService {
                 label: aspect.label,
                 aspectType: aspect.aspectType,
                 required: aspect.required,
-                top: aspect.top,
-                left: aspect.left,
-                width: aspect.width,
-                height: aspect.height
+                config: aspect.config
             };
             if (aspect.aspectType === AspectType.CATEGORICAL) {
                 aspectObj['items'] = (<CategoryComponent>this.getChildOf(aspect)).getCategories();
@@ -214,20 +211,22 @@ export class CharacterMakerService implements CharacterInterfaceService {
     }
 
     public initAspects(aspects: any[]): void {
+        console.log('init aspects')
+        console.log(aspects)
         this.aspects = [];
         aspects.forEach(aspectObj => {
             let aspect = new Aspect(aspectObj.label, aspectObj.aspectType, aspectObj.required);
-            aspect.top = aspectObj.top;
-            aspect.left = aspectObj.left;
-            aspect.width = aspectObj.width;
-            aspect.height = aspectObj.height;
             aspect.isNew = false;
+            if (!!aspectObj.config) {
+                aspect.config = aspectObj.config;
+            }
             if (aspectObj.hasOwnProperty('items')) {
                 aspect.items = aspectObj.items;
             }
             if (!!aspectObj.ruleFunction) {
                 aspect.ruleFunction = aspectObj.ruleFunction;
             }
+
             this.aspects.push(aspect);
         });
     }

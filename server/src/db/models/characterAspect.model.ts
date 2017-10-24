@@ -9,10 +9,7 @@ export class CharacterAspectModel extends mongoose.Schema {
     public label: string;
     public aspectType: string;
     public required: boolean;
-    public top: number;
-    public left: number;
-    public width: number;
-    public height: number;
+    public config: any;
     public items: any[];
     public ruleFunction: string;
 
@@ -22,10 +19,7 @@ export class CharacterAspectModel extends mongoose.Schema {
             label: String,
             aspectType: String,
             required: Boolean,
-            top: Number,
-            left: Number,
-            width: Number,
-            height: Number,
+            config: {},
             items: [],
             ruleFunction: String
         });
@@ -35,10 +29,7 @@ export class CharacterAspectModel extends mongoose.Schema {
         this.label = this.methods.label;
         this.aspectType = this.methods.aspectType;
         this.required = this.methods.required;
-        this.top = this.methods.top;
-        this.left = this.methods.left;
-        this.width = this.methods.width;
-        this.height = this.methods.height;
+        this.config = this.methods.config;
         this.items = this.methods.items;
         this.ruleFunction = this.methods.ruleFunction;
 
@@ -55,10 +46,7 @@ export class CharacterAspectModel extends mongoose.Schema {
         this.label = aspectObj.label;
         this.aspectType = aspectObj.aspectType;
         this.required = aspectObj.required;
-        this.top = aspectObj.top;
-        this.left = aspectObj.left;
-        this.width = aspectObj.width;
-        this.height = aspectObj.height;
+        this.config = aspectObj.config;
         if (aspectObj.hasOwnProperty('items')) {
             this.items = aspectObj.items;
         }

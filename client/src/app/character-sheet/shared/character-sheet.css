@@ -16,3 +16,23 @@
     margin-top: 5px;
     margin-bottom: 5px;
 }
+
+.grid-item {
+    border: solid 1px;
+}
+
+.sub-component-header {
+    background-color: #CFD8DC;
+    display: flex;
+    flex-direction: row;
+    position: absolute;
+    height: 24px;
+    width: 25px;
+    /*z-index: 2;*/
+    left: 0;
+    top: 0;
+}
+
+.hidden {
+    visibility: hidden;
+}

@@ -28,6 +28,7 @@ import { SubComponentService } from './shared/subcomponents/sub-component.servic
 import { CharacterMakerService } from './maker/character-maker.service';
 import { CharacterSheetService } from './sheet/character-sheet.service';
 import { CharacterInterfaceFactory } from './shared/character-interface.factory';
+import { NgGridModule } from 'angular2-grid';
 
 @NgModule({
     imports: [
@@ -45,7 +46,8 @@ import { CharacterInterfaceFactory } from './shared/character-interface.factory'
         MatAutocompleteModule,
         MatGridListModule,
         MatMenuModule,
-        MatChipsModule
+        MatChipsModule,
+        NgGridModule
     ],
     declarations: [
         CharacterSheetComponent,
