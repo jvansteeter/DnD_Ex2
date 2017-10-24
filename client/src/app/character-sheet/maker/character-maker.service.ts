@@ -29,6 +29,10 @@ export class CharacterMakerService implements CharacterInterfaceService {
     public aspects: Aspect[];
 
     constructor(private http: HttpClient) {
+        this.init();
+    }
+
+    public init(): void {
         this.aspects = [];
         this.subComponents = [];
     }
@@ -165,7 +169,8 @@ export class CharacterMakerService implements CharacterInterfaceService {
 
     public save() {
         let characterSheet = {
-            _id: this.characterSheetId
+            _id: this.characterSheetId,
+            height: this.characterSheetHeight
         };
         let aspects: any[] = [];
         for (let i = 0; i < this.aspects.length; i++) {

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { AddComponentComponent } from './dialog/add-component.component';
 import { CharacterMakerService } from './character-maker.service';
 import { MatDialog } from '@angular/material';
@@ -12,7 +12,7 @@ import { CharacterInterfaceFactory } from '../shared/character-interface.factory
     templateUrl: 'character-maker.component.html',
     styleUrls: ['../shared/character-sheet.css']
 })
-export class CharacterMakerComponent implements AfterViewInit {
+export class CharacterMakerComponent implements OnInit, AfterViewInit {
     @ViewChild('characterSheet') characterSheet: ElementRef;
 
     readonly characterSheetHeightMin: number = 42;
@@ -31,6 +31,10 @@ export class CharacterMakerComponent implements AfterViewInit {
                 private characterInterfaceFactory: CharacterInterfaceFactory,
                 public characterService: CharacterMakerService) {
         this.characterInterfaceFactory.setCharacterInterface(this.characterService);
+    }
+
+    ngOnInit(): void {
+        this.characterService.init();
     }
 
     ngAfterViewInit(): void {

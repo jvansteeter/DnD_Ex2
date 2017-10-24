@@ -226,9 +226,9 @@ export class FunctionGrammar {
     }
 
     private _start(data: FunctionData): void {
-        console.log(this.stack)
-        console.log('_start')
-        console.log(JSON.parse(JSON.stringify(data)))
+        //console.log(this.stack)
+        //console.log('_start')
+        //console.log(JSON.parse(JSON.stringify(data)))
         if (this.stack[0] !== GrammarNode.START) {
             throw new Error('Invalid Grammar');
         }
@@ -246,8 +246,8 @@ export class FunctionGrammar {
     }
 
     private _if(data: FunctionData) {
-        console.log('_if')
-        console.log(JSON.parse(JSON.stringify(data)))
+        //console.log('_if')
+        //console.log(JSON.parse(JSON.stringify(data)))
 
         let next = this.stack[++data.index];
         if (next === GrammarNode.ASPECT) {
@@ -274,8 +274,8 @@ export class FunctionGrammar {
     }
 
     private _aspectBoolean(data: FunctionData) {
-        console.log('_aspectBoolean')
-        console.log(JSON.parse(JSON.stringify(data)))
+        //console.log('_aspectBoolean')
+        //console.log(JSON.parse(JSON.stringify(data)))
 
         let currentAspect = this.mapValues[data.index];
         data.pendingConditionalValue = this.characterService.valueOfAspect(currentAspect);
@@ -290,8 +290,8 @@ export class FunctionGrammar {
     }
 
     private _aspectBooleanList(data: FunctionData) {
-        console.log('_aspectBooleanList')
-        console.log(JSON.parse(JSON.stringify(data)))
+        //console.log('_aspectBooleanList')
+        //console.log(JSON.parse(JSON.stringify(data)))
 
         let currentAspect = this.mapValues[data.index];
         let checkboxes = this.characterService.valueOfAspect(currentAspect);
@@ -299,11 +299,6 @@ export class FunctionGrammar {
         let next = this.stack[++data.index];
         if (next === GrammarNode.ASPECT_BOOLEAN_LIST_ITEM) {
             let currentItem = this.mapValues[data.index];
-            console.log(JSON.parse(JSON.stringify(this.mapValues)))
-            console.log('checkboxes')
-            console.log(checkboxes)
-            console.log('currentItem')
-            console.log(currentItem)
             for (let i = 0; i < checkboxes.length; i++) {
                 if (checkboxes[i].label === currentItem.label) {
                     data.pendingConditionalValue = currentItem.value;
@@ -320,8 +315,8 @@ export class FunctionGrammar {
     }
 
     private _aspectNumber(data: FunctionData) {
-        console.log('_aspectNumber')
-        console.log(JSON.parse(JSON.stringify(data)))
+        //console.log('_aspectNumber')
+        //console.log(JSON.parse(JSON.stringify(data)))
 
         let currentAspect = this.mapValues[data.index];
         data.pendingConditionalValue = this.characterService.valueOfAspect(currentAspect);
@@ -336,8 +331,8 @@ export class FunctionGrammar {
     }
 
     private _aspectCategory(data: FunctionData) {
-        console.log('_aspectCategory')
-        console.log(JSON.parse(JSON.stringify(data)))
+        //console.log('_aspectCategory')
+        //console.log(JSON.parse(JSON.stringify(data)))
 
         let currentAspect = this.mapValues[data.index];
         data.pendingConditionalValue = this.characterService.valueOfAspect(currentAspect);
@@ -352,8 +347,8 @@ export class FunctionGrammar {
     }
 
     private _equalOrNot(data: FunctionData) {
-        console.log('_equalOrNot')
-        console.log(JSON.parse(JSON.stringify(data)))
+        //console.log('_equalOrNot')
+        //console.log(JSON.parse(JSON.stringify(data)))
 
         data.pendingLogicOperator = this.mapValues[data.index];
 
@@ -371,8 +366,8 @@ export class FunctionGrammar {
     }
 
     private _equalOrNotCategory(data: FunctionData) {
-        console.log('_equalOrNotCategory')
-        console.log(JSON.parse(JSON.stringify(data)))
+        //console.log('_equalOrNotCategory')
+        //console.log(JSON.parse(JSON.stringify(data)))
 
         data.pendingLogicOperator = this.mapValues[data.index];
 
@@ -386,8 +381,8 @@ export class FunctionGrammar {
     }
 
     private _logicOperator(data: FunctionData) {
-        console.log('_logicOperator')
-        console.log(JSON.parse(JSON.stringify(data)))
+        //console.log('_logicOperator')
+        //console.log(JSON.parse(JSON.stringify(data)))
 
         data.pendingLogicOperator = this.mapValues[data.index];
 
@@ -405,8 +400,8 @@ export class FunctionGrammar {
     }
 
     private _boolean(data: FunctionData) {
-        console.log('_boolean')
-        console.log(JSON.parse(JSON.stringify(data)))
+        //console.log('_boolean')
+        //console.log(JSON.parse(JSON.stringify(data)))
 
         data.operationalConditionalValue = this.mapValues[data.index];
         let next = this.stack[++data.index];
@@ -419,8 +414,8 @@ export class FunctionGrammar {
     }
 
     private _aspectBooleanThen(data: FunctionData) {
-        console.log('_aspectBooleanThen')
-        console.log(JSON.parse(JSON.stringify(data)))
+        //console.log('_aspectBooleanThen')
+        //console.log(JSON.parse(JSON.stringify(data)))
 
         let currentNode = this.mapValues[data.index];
         data.operationalConditionalValue = this.characterService.valueOfAspect(currentNode);
@@ -434,8 +429,8 @@ export class FunctionGrammar {
     }
 
     private _aspectNumberThen(data: FunctionData) {
-        console.log('_aspectNumberThen')
-        console.log(JSON.parse(JSON.stringify(data)))
+        //console.log('_aspectNumberThen')
+        //console.log(JSON.parse(JSON.stringify(data)))
 
         let currentNode = this.mapValues[data.index];
         let aspectValue = this.characterService.valueOfAspect(currentNode);
@@ -472,8 +467,8 @@ export class FunctionGrammar {
     }
 
     private _number(data: FunctionData) {
-        console.log('_number')
-        console.log(JSON.parse(JSON.stringify(data)))
+        //console.log('_number')
+        //console.log(JSON.parse(JSON.stringify(data)))
 
         let currentValue = this.mapValues[data.index];
         if (data.pendingOperator === '+') {
@@ -508,8 +503,8 @@ export class FunctionGrammar {
     }
 
     private _categoryItem(data: FunctionData) {
-        console.log('_categoryItem')
-        console.log(JSON.parse(JSON.stringify(data)))
+        //console.log('_categoryItem')
+        //console.log(JSON.parse(JSON.stringify(data)))
 
         data.operationalConditionalValue = this.mapValues[data.index];
 
@@ -523,8 +518,8 @@ export class FunctionGrammar {
     }
 
     private _operator(data: FunctionData) {
-        console.log('_operator')
-        console.log(JSON.parse(JSON.stringify(data)))
+        //console.log('_operator')
+        //console.log(JSON.parse(JSON.stringify(data)))
 
         data.pendingLogicOperator = this.mapValues[data.index];
 
@@ -542,8 +537,8 @@ export class FunctionGrammar {
     }
 
     private _then(data: FunctionData) {
-        console.log('_then')
-        console.log(JSON.parse(JSON.stringify(data)))
+        //console.log('_then')
+        //console.log(JSON.parse(JSON.stringify(data)))
 
         if (data.pendingLogicOperator === "==") {
             data.condition = data.condition && data.pendingConditionalValue == data.operationalConditionalValue;
@@ -579,8 +574,8 @@ export class FunctionGrammar {
     }
 
     private _this(data: FunctionData) {
-        console.log('_this')
-        console.log(JSON.parse(JSON.stringify(data)))
+        //console.log('_this')
+        //console.log(JSON.parse(JSON.stringify(data)))
 
         let next = this.stack[++data.index];
         if (next === GrammarNode.ASSIGNED) {
@@ -592,8 +587,8 @@ export class FunctionGrammar {
     }
 
     private _assigned(data: FunctionData) {
-        console.log('_assigned');
-        console.log(JSON.parse(JSON.stringify(data)))
+        //console.log('_assigned');
+        //console.log(JSON.parse(JSON.stringify(data)))
 
         // if the _if logic is false
         if (!data.condition) {
@@ -651,8 +646,8 @@ export class FunctionGrammar {
     }
 
     private _assignedAspectNumber(data: FunctionData) {
-        console.log('_assignedAspectNumber')
-        console.log(JSON.parse(JSON.stringify(data)))
+        //console.log('_assignedAspectNumber')
+        //console.log(JSON.parse(JSON.stringify(data)))
 
         let currentAspect = this.mapValues[data.index];
         let aspectValue = this.characterService.valueOfAspect(currentAspect);
@@ -692,8 +687,8 @@ export class FunctionGrammar {
     }
 
     private _assignedAspectBoolean(data: FunctionData) {
-        console.log('_assignedAspectBoolean')
-        console.log(JSON.parse(JSON.stringify(data)))
+        //console.log('_assignedAspectBoolean')
+        //console.log(JSON.parse(JSON.stringify(data)))
 
         let currentAspect = this.mapValues[data.index];
         data.value = this.characterService.valueOfAspect(currentAspect);
@@ -712,8 +707,8 @@ export class FunctionGrammar {
     }
 
     private _assignedNumber(data: FunctionData) {
-        console.log('_assignedNumber')
-        console.log(JSON.parse(JSON.stringify(data)))
+        //console.log('_assignedNumber')
+        //console.log(JSON.parse(JSON.stringify(data)))
 
         let currentValue: number = +this.mapValues[data.index];
         if (!data.pendingOperator) {
@@ -752,8 +747,8 @@ export class FunctionGrammar {
     }
 
     private _assignedBoolean(data: FunctionData) {
-        console.log('_assignedBoolean')
-        console.log(JSON.parse(JSON.stringify(data)))
+        //console.log('_assignedBoolean')
+        //console.log(JSON.parse(JSON.stringify(data)))
 
         data.value = this.mapValues[data.index];
         let next = this.stack[++data.index];
@@ -770,12 +765,12 @@ export class FunctionGrammar {
     }
 
     private _assignedOperator(data: FunctionData) {
-        console.log('_assignedOperator')
-        console.log(JSON.parse(JSON.stringify(data)))
+        //console.log('_assignedOperator')
+        //console.log(JSON.parse(JSON.stringify(data)))
 
         let currentNode = this.mapValues[data.index];
-        console.log('selected assigned operator')
-        console.log(currentNode)
+        //console.log('selected assigned operator')
+        //console.log(currentNode)
         data.pendingOperator = currentNode;
 
         let next = this.stack[++data.index];
@@ -792,13 +787,13 @@ export class FunctionGrammar {
     }
 
     private _if_not(data: FunctionData) {
-        console.log('_if_not')
-        console.log(JSON.parse(JSON.stringify(data)))
+        //console.log('_if_not')
+        //console.log(JSON.parse(JSON.stringify(data)))
         this._done(data);
     }
 
     private _done(data: FunctionData) {
-        console.log(JSON.parse(JSON.stringify(data)))
-        console.log("---!!! DONE !!!---");
+        //console.log(JSON.parse(JSON.stringify(data)))
+        //console.log("---!!! DONE !!!---");
     }
 }

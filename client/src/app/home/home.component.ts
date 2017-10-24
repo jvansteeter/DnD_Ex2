@@ -33,7 +33,6 @@ export class HomeComponent implements AfterViewInit {
     private getRuleSets(): void {
         this.http.get('/api/ruleset/userrulesets', {responseType: 'json'}).subscribe((ruleSets: any) => {
             this.ruleSets = ruleSets;
-            console.log(this.ruleSets)
         });
     }
 }

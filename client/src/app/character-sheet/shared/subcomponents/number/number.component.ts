@@ -2,8 +2,9 @@ import { AfterViewInit, Component, ElementRef, Input, Renderer2, ViewChild } fro
 import { Aspect } from '../../aspect';
 import { SubComponent } from '../sub-component';
 import { SubComponentChild } from '../sub-component-child';
-import { CharacterMakerService } from '../../../maker/character-maker.service';
 import { MatMenu } from '@angular/material';
+import { CharacterInterfaceService } from '../../character-interface.service';
+import { CharacterInterfaceFactory } from '../../character-interface.factory';
 
 
 @Component({
@@ -28,8 +29,10 @@ export class NumberComponent implements SubComponentChild, AfterViewInit{
 
     fontSize: number = 14;
 
-    constructor(private renderer: Renderer2, private characterMakerService: CharacterMakerService) {
+    private characterService: CharacterInterfaceService;
 
+    constructor(private renderer: Renderer2, characterInterfaceFactory: CharacterInterfaceFactory) {
+        this.characterService = characterInterfaceFactory.getCharacterInterface();
     }
 
     ngAfterViewInit(): void {
@@ -64,14 +67,12 @@ export class NumberComponent implements SubComponentChild, AfterViewInit{
     }
 
     changeFontSize(event): void {
-        console.log(event)
         let newFontSize = event.target.value;
-        console.log(newFontSize)
-        this.resize(this.width, this.height + (newFontSize - this.fontSize))
+        this.resize(this.width, this.height + (newFontSize - this.fontSize));
         this.fontSize = newFontSize;
     }
 
     valueChanged(): void {
-        this.characterMakerService.updateFunctionAspects();
+        this.characterService.updateFunctionAspects();
     }
 }

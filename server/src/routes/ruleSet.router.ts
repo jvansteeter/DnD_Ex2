@@ -105,8 +105,6 @@ export class RuleSetRouter {
                 this.characterSheetRepository.getCompiledCharacterSheet(npc.characterSheetId).then((characterSheet: CharacterSheetModel) => {
                     let npcObj = JSON.parse(JSON.stringify(npc));
                     npcObj.characterSheet = JSON.parse(JSON.stringify(characterSheet));
-                    console.log('npc data')
-                    console.log(npcObj)
                     res.json(npcObj);
                 });
             });

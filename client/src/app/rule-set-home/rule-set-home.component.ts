@@ -54,8 +54,6 @@ export class RuleSetHomeComponent implements OnInit {
                 this.adminSubject.next(admins);
             });
             this.ruleSetHomeRepository.getNpcs(this.ruleSetId).subscribe((npcs: any[]) => {
-                console.log('get npcs has returned')
-                console.log(npcs)
                 this.npcs = npcs;
                 this.npcSubject.next(npcs);
             });
@@ -75,8 +73,6 @@ export class RuleSetHomeComponent implements OnInit {
     }
 
     editNpc(npcId: string): void {
-        console.log('edit npc')
-        console.log(npcId)
         this.router.navigate(['npc', npcId]);
     }
 }

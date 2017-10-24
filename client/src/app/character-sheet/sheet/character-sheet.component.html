@@ -1,4 +1,4 @@
 <h1>Character Sheet</h1>
-<div class="well well-lg" *ngIf="characterSheet">
-	<sub-component-immutable *ngFor="let aspect of characterSheet.aspects" [aspect]="aspect">{{aspect.label}}</sub-component-immutable>
+<div class="well well-lg" *ngIf="characterSheet" #characterSheet>
+	<sub-component-immutable *ngFor="let aspect of characterSheetService.aspects" [aspect]="aspect"></sub-component-immutable>
 </div>

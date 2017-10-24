@@ -11,13 +11,10 @@ export class CharacterInterfaceFactory {
     }
 
     setCharacterInterface(characterInterface: CharacterInterfaceService): void {
-        console.log('set interface to')
-        console.log(characterInterface)
         this.characterInterface = characterInterface;
     }
 
     getCharacterInterface(): CharacterInterfaceService {
-        console.log('get interface')
         return this.characterInterface;
     }
 }
