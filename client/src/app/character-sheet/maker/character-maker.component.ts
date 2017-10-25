@@ -6,7 +6,6 @@ import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { CharacterInterfaceFactory } from '../shared/character-interface.factory';
 import { NgGridConfig } from 'angular2-grid';
-import { Aspect } from '../shared/aspect';
 
 
 @Component({
@@ -16,8 +15,6 @@ import { Aspect } from '../shared/aspect';
 })
 export class CharacterMakerComponent implements OnInit, AfterViewInit {
     @ViewChild('characterSheet') characterSheet: ElementRef;
-
-    readonly characterSheetHeightMin: number = 42;
 
     private characterSheetId: string;
     private characterSheetData: any;
@@ -62,8 +59,6 @@ export class CharacterMakerComponent implements OnInit, AfterViewInit {
         this.characterInterfaceFactory.setCharacterInterface(this.characterService);
     }
 
-
-
     ngOnInit(): void {
         this.characterService.init();
     }
@@ -78,11 +73,6 @@ export class CharacterMakerComponent implements OnInit, AfterViewInit {
 
             });
         });
-        // this.characterService.setWidth(this.characterSheet.nativeElement.offsetWidth);
-        // this.characterService.onAddComponent((aspect) => this.addComponent(aspect));
-        // this.characterService.onChangeHeight((newHeight) => {
-        //     this.characterSheet.nativeElement.style.height = (this.characterSheetHeightMin + newHeight) + 'px';
-        // });
     }
 
     public openAddDialog(): void {

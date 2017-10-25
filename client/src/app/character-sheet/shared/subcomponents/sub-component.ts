@@ -1,6 +1,6 @@
 import { Aspect, AspectType } from '../aspect';
 import {
-    AfterViewInit, Component, Input, OnInit,
+    AfterViewInit, Component, HostListener, Input, OnInit,
     ViewChild
 } from '@angular/core';
 import { SubComponentChild } from './sub-component-child';

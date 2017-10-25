@@ -1,9 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs/Subject';
-import { Subscription } from 'rxjs/Subscription';
 import { Aspect, AspectType } from '../shared/aspect';
 import { SubComponent } from '../shared/subcomponents/sub-component';
-import { Observable } from 'rxjs/Observable';
 import { CategoryComponent } from '../shared/subcomponents/category/category.component';
 import { HttpClient } from '@angular/common/http';
 import { CheckboxListComponent } from '../shared/subcomponents/checkbox-list/checkbox-list.component';
@@ -12,14 +9,8 @@ import { SubComponentChild } from '../shared/subcomponents/sub-component-child';
 import { CharacterInterfaceService } from '../shared/character-interface.service';
 
 
-export enum Move {
-    LEFT, RIGHT, UP, DOWN
-}
-
 @Injectable()
 export class CharacterMakerService implements CharacterInterfaceService {
-    private changeHeightEvents = new Subject();
-
     private characterSheetId: string;
 
     private characterSheetWidth: number = 0;
@@ -28,6 +19,8 @@ export class CharacterMakerService implements CharacterInterfaceService {
 
     public aspects: Aspect[];
 
+    private currentHover: Aspect;
+
     constructor(private http: HttpClient) {
         this.init();
     }
@@ -35,6 +28,7 @@ export class CharacterMakerService implements CharacterInterfaceService {
     public init(): void {
         this.aspects = [];
         this.subComponents = [];
+        delete this.currentHover;
     }
 
     public addComponent(aspect: any): void {
@@ -46,11 +40,6 @@ export class CharacterMakerService implements CharacterInterfaceService {
         let index = this.aspects.indexOf(aspect);
         this.aspects.splice(index, 1);
         this.subComponents.splice(index, 1);
-        this.adjustCharacterSheetHeight();
-    }
-
-    public getWidth(): number {
-        return this.characterSheetWidth;
     }
 
     public setWidth(width: number): void {
@@ -58,69 +47,7 @@ export class CharacterMakerService implements CharacterInterfaceService {
     }
 
     public registerSubComponent(subComponent: SubComponent): void {
-        let leftOffset = 0;
-        // for (let i = 0; i < this.subComponents.length; i++) {
-        //     let stationary = this.subComponents[i];
-        //     if (stationary.violatesRightTerritory(subComponent)) {
-        //         let offset = stationary.aspect.left + stationary.aspect.width + 10;
-        //         if (offset > leftOffset) {
-        //             leftOffset = offset;
-        //         }
-        //     }
-        // }
         this.subComponents.push(subComponent);
-        // Observable.timer(100).subscribe(() => {
-        //     subComponent.animate(leftOffset, 0);
-        // });
-
-        this.adjustCharacterSheetHeight();
-    }
-
-    public reorderAnimation(moving: SubComponent): void {
-        // this.adjustCharacterSheetHeight();
-        for (let i = 0; i < this.subComponents.length; i++) {
-            let stationary = this.subComponents[i];
-            if (stationary === moving) {
-                continue;
-            }
-            // if (moving.overlaps(stationary)) {
-            //     if (stationary.canMoveRightTo(moving.right() + 10)) {
-            //         stationary.animateTo(moving.right() + 10, stationary.aspect.top);
-            //     }
-            //     else {
-            //         stationary.animateTo(stationary.aspect.left, moving.bottom() + 30);
-            //     }
-            //     Observable.timer(100).subscribe(() => {
-            //         this.adjustCharacterSheetHeight();
-            //     })
-            // }
-        }
-    }
-
-    public adjustCharacterSheetHeight(): void {
-        let greatestHeight = 0;
-        for (let i = 0; i < this.subComponents.length; i++) {
-            let subComponent = this.subComponents[i];
-            // if (subComponent.aspect.height + subComponent.aspect.top > greatestHeight) {
-            //     greatestHeight = subComponent.getTotalHeight() + subComponent.aspect.top;
-            // }
-        }
-        this.characterSheetHeight = greatestHeight;
-        this.changeHeightEvents.next(greatestHeight);
-    }
-
-    public onChangeHeight(next?, error?, complete?): Subscription {
-        return this.changeHeightEvents.subscribe(next, error, complete);
-    }
-
-    public getAspectWithLabel(label: string): Aspect | undefined {
-        for (let i = 0; i < this.aspects.length; i++) {
-            if (this.aspects[i].label === label) {
-                return this.aspects[i];
-            }
-        }
-
-        return undefined;
     }
 
     public getAspectsOfType(type?: AspectType ): Aspect[] {
@@ -211,8 +138,6 @@ export class CharacterMakerService implements CharacterInterfaceService {
     }
 
     public initAspects(aspects: any[]): void {
-        console.log('init aspects')
-        console.log(aspects)
         this.aspects = [];
         aspects.forEach(aspectObj => {
             let aspect = new Aspect(aspectObj.label, aspectObj.aspectType, aspectObj.required);
@@ -229,5 +154,9 @@ export class CharacterMakerService implements CharacterInterfaceService {
 
             this.aspects.push(aspect);
         });
+    }
+
+    public setHover(aspect: Aspect): void {
+        this.currentHover = aspect;
     }
 }

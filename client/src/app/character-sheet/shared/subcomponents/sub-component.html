@@ -2,7 +2,7 @@
     <!--<mat-card-header class="sub-component-header">-->
 		<!--<button class="sub-component-close" mat-icon-button (mousedown)="remove()"><mat-icon>close</mat-icon></button>-->
 	<!--</mat-card-header>-->
-    <mat-card-content [ngSwitch]="aspect.aspectType">
+    <div [ngSwitch]="aspect.aspectType" class="sub-component-content">
         <characterMaker-textComponent *ngSwitchCase="aspectType.TEXT" [aspect]="aspect" [parent]="this" #child></characterMaker-textComponent>
         <characterMaker-checkBoxComponent *ngSwitchCase="aspectType.BOOLEAN" [aspect]="aspect" [parent]="this" #child></characterMaker-checkBoxComponent>
         <characterMaker-numberComponent *ngSwitchCase="aspectType.NUMBER" [aspect]="aspect" [parent]="this" #child></characterMaker-numberComponent>
@@ -11,7 +11,7 @@
         <characterMaker-categoryComponent *ngSwitchCase="aspectType.CATEGORICAL" [aspect]="aspect" [parent]="this" #child></characterMaker-categoryComponent>
         <characterMaker-tokenComponent *ngSwitchCase="aspectType.TOKEN" [aspect]="aspect" [parent]="this" #child></characterMaker-tokenComponent>
         <characterMaker-functionComponent *ngSwitchCase="aspectType.FUNCTION" [aspect]="aspect" [parent]="this" #child></characterMaker-functionComponent>
-    </mat-card-content>
+    </div>
     <mat-card-footer *ngIf="isHovered">
 		<button *ngIf="child.hasOptions" mat-icon-button class="sub-component-options" (mousedown)="openOptions()" [matMenuTriggerFor]="options"><mat-icon>settings</mat-icon></button>
     </mat-card-footer>

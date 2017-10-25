@@ -14,6 +14,10 @@
     background-color: #CFD8DC;
 }
 
+.sub-component-content {
+    height: 100%;
+}
+
 .sub-component-reorder {
     cursor: move;
 }
@@ -45,6 +49,10 @@ mat-card {
     /*width: 100%;*/
 }
 
+mat-card-content {
+    height: 100%;
+}
+
 mat-card-header {
     display: flex;
     flex-direction: row;
@@ -70,6 +78,7 @@ mat-form-field {
 
 textarea {
     resize: none;
+    height: 100%;
 }
 
 .align-center {
@@ -78,6 +87,14 @@ textarea {
 
 /deep/ .mat-card-header-text {
     margin: 0;
+}
+
+/deep/ .mat-input-wrapper {
+    height: 100%;
+}
+
+/deep/ .mat-input-flex {
+    height: 100%;
 }
 
 .changeFontSize {
