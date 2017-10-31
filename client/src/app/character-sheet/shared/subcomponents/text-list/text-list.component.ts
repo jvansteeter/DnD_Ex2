@@ -40,7 +40,7 @@ export class TextListComponent implements SubComponentChild, AfterViewInit {
 
         this.renderer.listen(this.fontSizeInput.nativeElement, 'change', () => {
             this.parent.minHeight += this.fontSize - 14;
-            this.parent.resize(this.width, this.height + this.fontSize - 14);
+            // this.parent.resize(this.width, this.height + this.fontSize - 14);
         });
     }
 
@@ -59,7 +59,7 @@ export class TextListComponent implements SubComponentChild, AfterViewInit {
 
     addItem(): void {
         this.items.push({value: ''});
-        this.parent.resize(this.width, this.height + this.itemHeight);
+        // this.parent.resize(this.width, this.height + this.itemHeight);
         this.parent.minHeight += this.itemHeight;
     }
 

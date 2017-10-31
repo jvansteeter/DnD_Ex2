@@ -10,25 +10,17 @@
     opacity: .5;
 }
 
-.sub-component-header {
-    background-color: #CFD8DC;
-}
-
 .sub-component-content {
     height: 100%;
 }
 
-.sub-component-reorder {
-    cursor: move;
-}
-
-.sub-component-close {
-    cursor: pointer;
-    align-self: flex-end;
-    margin-left: auto;
-    width: 24px;
-    height: 24px;
-}
+/*.sub-component-close {*/
+    /*cursor: pointer;*/
+    /*align-self: flex-end;*/
+    /*margin-left: auto;*/
+    /*width: 24px;*/
+    /*height: 24px;*/
+/*}*/
 
 .sub-component-close mat-icon {
     vertical-align: baseline;
@@ -43,9 +35,7 @@
 
 mat-card {
     /*position: absolute;*/
-    padding-left: 5px;
-    padding-right: 5px;
-    padding-top: 0;
+    padding: 0 5px;
     /*width: 100%;*/
 }
 
@@ -91,6 +81,7 @@ textarea {
 
 /deep/ .mat-input-wrapper {
     height: 100%;
+    /*padding-bottom: 15px;*/
 }
 
 /deep/ .mat-input-flex {
@@ -129,7 +120,7 @@ textarea {
     padding-right: 15px;
 }
 
-.category-remove-option {
+.category-addOrRemove-option {
     padding-left: 5px;
     padding-right: 5px;
     display: flex;
@@ -172,4 +163,8 @@ textarea {
 
 .function-number-input {
     width: 60px;
+}
+
+/deep/ .number-sub-component .mat-input-flex{
+    align-items: center;
 }

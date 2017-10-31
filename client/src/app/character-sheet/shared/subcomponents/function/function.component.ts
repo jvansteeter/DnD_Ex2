@@ -19,12 +19,9 @@ export class FunctionComponent implements SubComponentChild, AfterViewInit {
     @Input() parent: SubComponent;
     @ViewChild('options') options: MatMenu;
 
-    width: number;
-    height: number;
     readonly hasOptions: boolean = true;
     value: any;
 
-    fontSize: number = 14;
     private _function: FunctionGrammar;
     private characterService: CharacterInterfaceService;
 
@@ -37,10 +34,6 @@ export class FunctionComponent implements SubComponentChild, AfterViewInit {
         if (!this.aspect.isNew && !!this.aspect.ruleFunction) {
             this.setFunction(this.aspect.ruleFunction);
         }
-    }
-
-    resize(width: number, height: number) {
-        // do nothing
     }
 
     getMenuOptions(): MatMenu {

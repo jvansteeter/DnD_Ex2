@@ -14,6 +14,7 @@ export class Aspect {
     aspectType: AspectType;
     required: boolean;
 
+    fontSize: number;
     items: any[];
     ruleFunction: any;
 
@@ -24,6 +25,7 @@ export class Aspect {
         this.label = label;
         this.aspectType = aspectType;
         this.required = required;
+        this.fontSize = 14;
 
         this.config = this.defaultConfig();
     }

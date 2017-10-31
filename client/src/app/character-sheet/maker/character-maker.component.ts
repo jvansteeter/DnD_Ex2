@@ -6,6 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { CharacterInterfaceFactory } from '../shared/character-interface.factory';
 import { NgGridConfig } from 'angular2-grid';
+import { Aspect } from '../shared/aspect';
 
 
 @Component({
@@ -33,8 +34,8 @@ export class CharacterMakerComponent implements OnInit, AfterViewInit {
         'col_width': 2,
         'row_height': 2,
         'cascade': 'up',
-        'min_width': 20,
-        'min_height': 20,
+        'min_width': 15,
+        'min_height': 5,
         'fix_to_grid': true,
         'auto_style': true,
         'auto_resize': false,
@@ -48,7 +49,7 @@ export class CharacterMakerComponent implements OnInit, AfterViewInit {
 
     @HostListener('window:resize')
     onResize(): void {
-        this.characterService.setWidth(this.characterSheet.nativeElement.offsetWidth);
+        // this.characterService.setWidth(this.characterSheet.nativeElement.offsetWidth);
     }
 
     constructor(private dialog: MatDialog,
@@ -79,10 +80,16 @@ export class CharacterMakerComponent implements OnInit, AfterViewInit {
         this.dialog.open(AddComponentComponent)
     }
 
+    public removeComponent(aspect: Aspect): void {
+        this.characterService.removeComponent(aspect);
+    }
+
     public save(): void {
         this.characterService.save();
     }
 
+    openOptions(): void {
+    }
 
     hoverStart(index: number): void {
         this.hoveredZIndex[index] = 2;

@@ -1,11 +1,12 @@
 import { Aspect, AspectType } from '../aspect';
 import {
-    AfterViewInit, Component, HostListener, Input, OnInit,
+    AfterViewInit, Component, Input, OnInit,
     ViewChild
 } from '@angular/core';
 import { SubComponentChild } from './sub-component-child';
 import { CharacterMakerService } from '../../maker/character-maker.service';
 import { MatMenu } from '@angular/material';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
     selector: 'sub-component',
@@ -21,45 +22,21 @@ export class SubComponent implements OnInit, AfterViewInit {
     minHeight: number;
     minWidth: number;
 
-    zIndex = 0;
     isHovered: boolean = false;
     optionsOpen: boolean = false;
 
     readonly animation = 'transform 200ms ease-out';
     readonly noAnimation = '';
-    readonly footerHeight = 24;
-    readonly headerHeight = 24;
     transition = this.animation;
     transform = '';
-
-    // @HostListener('mouseenter')
-    // hover(): void {
-    //     console.log('mouseenter')
-    //     this.zIndex = 1;
-    //     this.isHovered = true;
-    //     this.aspect.config.isHovered = true;
-    // }
-    //
-    // @HostListener('mouseleave')
-    // stopHover(): void {
-    //     console.log('mouseleave')
-    //     if (!this.optionsOpen) {
-    //         this.zIndex = 0;
-    //         this.isHovered = false;
-    //     }
-    //     this.aspect.config.isHovered = false;
-    // }
-
-    private resizing: boolean = false;
-    private moving: boolean = false;
 
     constructor(private characterMakerService: CharacterMakerService) {
 
     }
 
     ngAfterViewInit(): void {
-        this.characterMakerService.registerSubComponent(this);
         this.options = this.child.getMenuOptions();
+        Observable.timer(100).subscribe(() => this.characterMakerService.registerSubComponent(this));
     }
 
     ngOnInit(): void {
@@ -103,7 +80,7 @@ export class SubComponent implements OnInit, AfterViewInit {
         }
     }
 
-    resize(width: number, height: number): void {
+    // resize(width: number, height: number): void {
         // if (width >= this.minWidth &&
         //     this.aspect.left + width <= this.getMaxWidth()) {
         //     this.aspect.width = width;
@@ -112,7 +89,7 @@ export class SubComponent implements OnInit, AfterViewInit {
         //     this.aspect.height = height;
         // }
         // this.child.resize(width, height);
-    }
+    // }
 
     setDimensions(width: number, height: number) {
         // this.minWidth = width;

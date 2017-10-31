@@ -9,6 +9,7 @@ export class CharacterAspectModel extends mongoose.Schema {
     public label: string;
     public aspectType: string;
     public required: boolean;
+    public fontSize: number;
     public config: any;
     public items: any[];
     public ruleFunction: string;
@@ -19,9 +20,10 @@ export class CharacterAspectModel extends mongoose.Schema {
             label: String,
             aspectType: String,
             required: Boolean,
+            fontSize: Number,
             config: {},
             items: [],
-            ruleFunction: String
+            ruleFunction: String,
         });
 
         this._id = this.methods._id;
@@ -29,6 +31,7 @@ export class CharacterAspectModel extends mongoose.Schema {
         this.label = this.methods.label;
         this.aspectType = this.methods.aspectType;
         this.required = this.methods.required;
+        this.fontSize = this.methods.fontSize;
         this.config = this.methods.config;
         this.items = this.methods.items;
         this.ruleFunction = this.methods.ruleFunction;
@@ -39,7 +42,7 @@ export class CharacterAspectModel extends mongoose.Schema {
 
     public setItems(items: any[]) {
         this.items = items;
-        this.save();
+        return this.save();
     }
 
     public setToObject(aspectObj: any): Promise<CharacterAspectModel> {
@@ -58,7 +61,7 @@ export class CharacterAspectModel extends mongoose.Schema {
 
     public setRuleFunction(ruleFunction: RuleFunctionModel) {
         this.ruleFunction = ruleFunction._id;
-        this.save();
+        return this.save();
     }
 
     private save(): Promise<CharacterAspectModel> {

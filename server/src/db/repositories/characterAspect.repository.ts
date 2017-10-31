@@ -20,10 +20,8 @@ export class CharacterAspectRepository {
                 label: characterAspectObj.label,
                 aspectType: characterAspectObj.aspectType,
                 required: characterAspectObj.required,
-                top: characterAspectObj.top,
-                left: characterAspectObj.left,
-                width: characterAspectObj.width,
-                height: characterAspectObj.height
+                fontSize: characterAspectObj.fontSize,
+                config: characterAspectObj.config
             }, (error, newCharacterAspect: CharacterAspectModel) => {
                 if (error) {
                     reject (error);

@@ -17,8 +17,8 @@ export class FunctionDialogComponent {
 
     currentListOptions = [];
 
-    constructor(private dialogRef: MatDialogRef<FunctionDialogComponent>, private characterMakerService: CharacterMakerService) {
-        this._function = new FunctionGrammar(characterMakerService);
+    constructor(private dialogRef: MatDialogRef<FunctionDialogComponent>, private characterService: CharacterMakerService) {
+        this._function = new FunctionGrammar(characterService);
         this._function.start();
         this.next = this._function.nextOptions();
     }
@@ -58,8 +58,6 @@ export class FunctionDialogComponent {
     }
 
     selectOption(selected): void {
-        console.log('selected')
-        console.log(selected)
         let currentNode = this._function.currentNode();
         if (currentNode === GrammarNode.ASPECT) {
             if (selected.aspectType === AspectType.BOOLEAN && this._function.previousNode() === GrammarNode.IF) {
@@ -77,12 +75,12 @@ export class FunctionDialogComponent {
             else if (selected.aspectType === AspectType.BOOLEAN_LIST && this._function.previousNode() === GrammarNode.IF) {
                 this._function.push(GrammarNode.ASPECT_BOOLEAN_LIST);
                 this._function.setCurrentValue(selected);
-                this.currentListOptions = this.characterMakerService.valueOfAspect(selected);
+                this.currentListOptions = this.characterService.valueOfAspect(selected);
                 this._function.push(GrammarNode.ASPECT_BOOLEAN_LIST_ITEM);
             }
             else if (selected.aspectType === AspectType.CATEGORICAL && this._function.previousNode() === GrammarNode.IF) {
                 this._function.push(GrammarNode.ASPECT_CATEGORY);
-                let categories = this.characterMakerService.getAspectOptions(selected);
+                let categories = this.characterService.getAspectOptions(selected);
                 this.currentListOptions = [];
                 for (let i = 0; i < categories.length; i++) {
                     this.currentListOptions.push(<never>categories[i]);

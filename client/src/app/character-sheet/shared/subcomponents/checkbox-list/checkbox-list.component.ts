@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, Input, Renderer2, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Input, ViewChild } from '@angular/core';
 import { SubComponentChild } from '../sub-component-child';
 import { Aspect } from '../../aspect';
 import { SubComponent } from '../sub-component';
@@ -23,44 +23,27 @@ export class CheckboxListComponent implements SubComponentChild, AfterViewInit {
     @ViewChild('options') options: MatMenu;
     label: string;
     required: boolean;
-    width: number;
-    height: number;
     readonly hasOptions = true;
     value: any;
 
+    private checkboxes: CheckboxItem[];
+
     private characterMakerService: CharacterInterfaceService;
 
-    private checkboxes: CheckboxItem[];
-    private readonly checkboxHeight = 25;
-    fontSize: number = 14;
-    @ViewChild('fontSizeInput') private fontSizeInput: ElementRef;
-
-    constructor(private renderer: Renderer2, private characterInterfaceFactory: CharacterInterfaceFactory) {
+    constructor(private characterInterfaceFactory: CharacterInterfaceFactory) {
         this.characterMakerService = this.characterInterfaceFactory.getCharacterInterface();
         this.checkboxes = [];
     }
 
     ngAfterViewInit(): void {
-        this.renderer.listen(this.fontSizeInput.nativeElement, 'change', () => {
-            this.parent.resize(this.width, this.height + this.fontSize - 10);
-            this.parent.minHeight += this.fontSize - 14;
-        });
-
         if (this.aspect.hasOwnProperty('items') && this.aspect.items.length > 0) {
             for (let i = 0; i < this.aspect.items.length; i++) {
                 this.checkboxes.push({
                     label: this.aspect.items[i],
                     value: false
                 });
-                // this.parent.resize(this.width, this.height + this.checkboxHeight);
-                this.parent.minHeight += this.checkboxHeight;
             }
         }
-    }
-
-    resize(width: number, height: number) {
-        this.width = width;
-        this.height = height;
     }
 
     getMenuOptions(): MatMenu {
@@ -76,14 +59,10 @@ export class CheckboxListComponent implements SubComponentChild, AfterViewInit {
             label: '',
             value: false
         });
-        this.parent.resize(this.width, this.height + this.checkboxHeight);
-        this.parent.minHeight += this.checkboxHeight;
     }
 
     removeCheckbox(): void {
         this.checkboxes.splice(this.checkboxes.length - 1, 1);
-        this.parent.minHeight -= this.checkboxHeight;
-        this.parent.resize(this.width, this.parent.minHeight);
     }
 
     stopClickPropagate(event): void {

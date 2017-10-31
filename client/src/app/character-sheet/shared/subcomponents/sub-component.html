@@ -12,7 +12,7 @@
         <characterMaker-tokenComponent *ngSwitchCase="aspectType.TOKEN" [aspect]="aspect" [parent]="this" #child></characterMaker-tokenComponent>
         <characterMaker-functionComponent *ngSwitchCase="aspectType.FUNCTION" [aspect]="aspect" [parent]="this" #child></characterMaker-functionComponent>
     </div>
-    <mat-card-footer *ngIf="isHovered">
-		<button *ngIf="child.hasOptions" mat-icon-button class="sub-component-options" (mousedown)="openOptions()" [matMenuTriggerFor]="options"><mat-icon>settings</mat-icon></button>
-    </mat-card-footer>
+    <!--<mat-card-footer *ngIf="isHovered">-->
+		<!--<button *ngIf="child.hasOptions" mat-icon-button class="sub-component-options" (mousedown)="openOptions()" [matMenuTriggerFor]="options"><mat-icon>settings</mat-icon></button>-->
+    <!--</mat-card-footer>-->
 </mat-card>

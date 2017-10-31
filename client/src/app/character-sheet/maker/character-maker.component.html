@@ -1,12 +1,15 @@
 <h1>Character Maker</h1>
 <button mat-icon-button mat-raised-button color="primary" (click)="openAddDialog()"><mat-icon>add</mat-icon></button>
-<div class="well well-lg characterSheet" [ngGrid]="gridConfig" #characterSheet>
-	<!--<div *ngFor="let aspect of characterService.aspects" [(ngGridItem)]="aspect.config" (mouseenter)="hoverStart(aspect)" (mouseleave)="hoverEnd(aspect)">-->
-	<div *ngFor="let aspect of characterService.aspects; let i = index" [(ngGridItem)]="aspect.config" (mouseenter)="hoverStart(i)" (mouseleave)="hoverEnd(i)">
-		<div class="sub-component-header" [style.z-index]="hoveredZIndex[i]">
-			<mat-icon class="sub-component-reorder">reorder</mat-icon>
+<div class="characterSheet-gridContainer">
+	<div class="well well-lg characterSheet" [ngGrid]="gridConfig" #characterSheet>
+		<div *ngFor="let aspect of characterService.aspects; let i = index" [(ngGridItem)]="aspect.config" (mouseenter)="hoverStart(i)" (mouseleave)="hoverEnd(i)">
+			<div class="sub-component-header" [style.z-index]="hoveredZIndex[i]">
+				<mat-icon class="sub-component-reorder">reorder</mat-icon>
+				<button *ngIf="characterService.subComponentOptions[i] && characterService.subComponents[i].child.hasOptions" mat-icon-button (mousedown)="openOptions()" [matMenuTriggerFor]="characterService.subComponentOptions[i]" class="sub-component-options"><mat-icon>settings</mat-icon></button>
+				<button mat-icon-button (click)="removeComponent(aspect)" class="sub-component-close"><mat-icon>close</mat-icon></button>
+			</div>
+			<sub-component [aspect]="aspect"></sub-component>
 		</div>
-		<sub-component [aspect]="aspect"></sub-component>
 	</div>
 </div>
 <button (click)="save()">SAVE</button>

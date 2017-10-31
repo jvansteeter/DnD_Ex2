@@ -1,16 +1,16 @@
-<mat-form-field class="category-select" [style.width.px]="width">
+<mat-form-field class="category-select">
 	<mat-select [placeholder]="aspect.label" [(ngModel)]="value" (change)="valueChanged()">
 		<mat-option *ngFor="let category of categories" [value]="category.value">{{category.value}}</mat-option>
 	</mat-select>
 </mat-form-field>
 <mat-menu (close)="closeOptions()" #options>
-	<div class="changeFontSize" (click)="stopClickPropagate($event)" (keyup.enter)="addCategory()">
+	<div class="category-addOrRemove-option" (click)="stopClickPropagate($event)" (keyup.enter)="addCategory()">
 		<mat-form-field>
 			<input matInput placeholder="New Category" [(ngModel)]="categoryInput">
 		</mat-form-field>
 		<button mat-icon-button color="primary" (click)="addCategory()"><mat-icon>add</mat-icon></button>
 	</div>
-	<div class="category-remove-option" (click)="stopClickPropagate($event)" (keyup.enter)="removeCategory()">
+	<div class="category-addOrRemove-option" (click)="stopClickPropagate($event)" (keyup.enter)="removeCategory()">
 		<mat-form-field>
 			<mat-select placeholder="Remove Category" [(ngModel)]="categoryToRemove">
 				<mat-option *ngFor="let category of categories" [value]="category">{{category.value}}</mat-option>

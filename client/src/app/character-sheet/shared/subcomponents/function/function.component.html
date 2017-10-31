@@ -1,12 +1,12 @@
-<span [ngStyle]="{'font-size': fontSize + 'px'}">{{aspect.label}}</span>
+<span [style.fontSize.px]="aspect.fontSize">{{aspect.label}}</span>
 <div class="function-value">
-	<span>{{value}}</span>
+	<span [style.fontSize.px]="aspect.fontSize">{{value}}</span>
 </div>
 <mat-menu #options="matMenu" (close)="closeOptions()">
 	<span mat-menu-item (click)="openFunctionDialog()">Define Function</span>
 	<div class="changeFontSize" (click)="stopClickPropagate($event)" (keyup.enter)="closeMenu()">
 		<mat-form-field>
-			<input matInput type="number" placeholder="Label Font Size" [(ngModel)]="fontSize" #fontSizeInput>
+			<input matInput type="number" placeholder="Label Font Size" [(ngModel)]="aspect.fontSize" #fontSizeInput>
 		</mat-form-field>
 	</div>
 </mat-menu>

@@ -7,6 +7,7 @@ import { CheckboxListComponent } from '../shared/subcomponents/checkbox-list/che
 import { FunctionComponent } from '../shared/subcomponents/function/function.component';
 import { SubComponentChild } from '../shared/subcomponents/sub-component-child';
 import { CharacterInterfaceService } from '../shared/character-interface.service';
+import { MatMenu } from '@angular/material';
 
 
 @Injectable()
@@ -16,8 +17,8 @@ export class CharacterMakerService implements CharacterInterfaceService {
     private characterSheetWidth: number = 0;
     private characterSheetHeight: number = 0;
     public subComponents: SubComponent[];
-
     public aspects: Aspect[];
+    public subComponentOptions: MatMenu[];
 
     private currentHover: Aspect;
 
@@ -28,6 +29,7 @@ export class CharacterMakerService implements CharacterInterfaceService {
     public init(): void {
         this.aspects = [];
         this.subComponents = [];
+        this.subComponentOptions = [];
         delete this.currentHover;
     }
 
@@ -35,11 +37,11 @@ export class CharacterMakerService implements CharacterInterfaceService {
         this.aspects.push(aspect);
     }
 
-
     public removeComponent(aspect: any): void {
         let index = this.aspects.indexOf(aspect);
         this.aspects.splice(index, 1);
         this.subComponents.splice(index, 1);
+        this.subComponentOptions.splice(index, 1);
     }
 
     public setWidth(width: number): void {
@@ -48,6 +50,7 @@ export class CharacterMakerService implements CharacterInterfaceService {
 
     public registerSubComponent(subComponent: SubComponent): void {
         this.subComponents.push(subComponent);
+        this.subComponentOptions.push(subComponent.options);
     }
 
     public getAspectsOfType(type?: AspectType ): Aspect[] {
@@ -106,6 +109,7 @@ export class CharacterMakerService implements CharacterInterfaceService {
                 label: aspect.label,
                 aspectType: aspect.aspectType,
                 required: aspect.required,
+                fontSize: aspect.fontSize,
                 config: aspect.config
             };
             if (aspect.aspectType === AspectType.CATEGORICAL) {
@@ -141,6 +145,7 @@ export class CharacterMakerService implements CharacterInterfaceService {
         this.aspects = [];
         aspects.forEach(aspectObj => {
             let aspect = new Aspect(aspectObj.label, aspectObj.aspectType, aspectObj.required);
+            aspect.fontSize = aspectObj.fontSize;
             aspect.isNew = false;
             if (!!aspectObj.config) {
                 aspect.config = aspectObj.config;

@@ -21,8 +21,6 @@ export class CategoryComponent implements SubComponentChild, AfterViewInit{
     @ViewChild('options') options: MatMenu;
     label: string;
     required: boolean;
-    width: number = 110;
-    height: number = 40;
     hasOptions = true;
     value: any;
 
@@ -43,10 +41,6 @@ export class CategoryComponent implements SubComponentChild, AfterViewInit{
                 });
             }
         }
-    }
-
-    public resize(width: number, height: number): void {
-        this.width = width - 15;
     }
 
     addCategory(): void {
