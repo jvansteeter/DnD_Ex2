@@ -1,4 +1,4 @@
-<span [ngStyle]="{'font-size': fontSize + 'px'}">{{aspect.label}}</span>
+<span [style.font-size.px]="aspect.fontSize">{{aspect.label}}</span>
 <div class="text-list">
 	<span *ngFor="let item of items" class="checkbox-list-item">
 		<input class="form-control" [(ngModel)]="item.value">
@@ -9,7 +9,7 @@
 	<span mat-menu-item (click)="removeItem()">Remove Item</span>
 	<div class="changeFontSize" (click)="stopClickPropagate($event)" (keyup.enter)="closeMenu()">
 		<mat-form-field>
-			<input matInput type="number" placeholder="Label Font Size" [(ngModel)]="fontSize" #fontSizeInput>
+			<input matInput type="number" placeholder="Label Font Size" [(ngModel)]="aspect.fontSize" #fontSizeInput>
 		</mat-form-field>
 	</div>
 </mat-menu>

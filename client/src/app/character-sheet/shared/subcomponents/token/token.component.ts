@@ -16,24 +16,14 @@ export class TokenComponent implements SubComponentChild, AfterViewInit{
     @ViewChild('options') options: MatMenu;
     label: string;
     required: boolean;
-    width: number = 72;
-    height: number = 76;
     readonly hasOptions = false;
     value: any;
-
-    readonly widthMargin = 3;
-    readonly heightMargin = 26;
 
     constructor() {
 
     }
 
     ngAfterViewInit(): void {
-    }
-
-    public resize(width: number, height: number): void {
-        this.width = width + this.widthMargin;
-        this.height = height + this.heightMargin;
     }
 
     getMenuOptions(): MatMenu {

@@ -1,4 +1,4 @@
-<span [ngStyle]="{'font-size': aspect.fontSize + 'px'}">{{aspect.label}}</span>
+<span [style.font-size.px]="aspect.fontSize">{{aspect.label}}</span>
 <div class="checkbox-list">
 	<span *ngFor="let checkbox of checkboxes" class="checkbox-list-item">
 		<mat-checkbox color="primary" [(ngModel)]="checkbox.value" (change)="valueChanged()"></mat-checkbox>

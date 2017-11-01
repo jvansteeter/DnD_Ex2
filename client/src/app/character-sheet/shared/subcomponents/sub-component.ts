@@ -4,9 +4,10 @@ import {
     ViewChild
 } from '@angular/core';
 import { SubComponentChild } from './sub-component-child';
-import { CharacterMakerService } from '../../maker/character-maker.service';
 import { MatMenu } from '@angular/material';
 import { Observable } from 'rxjs/Observable';
+import { CharacterInterfaceService } from '../character-interface.service';
+import { CharacterInterfaceFactory } from '../character-interface.factory';
 
 @Component({
     selector: 'sub-component',
@@ -19,14 +20,15 @@ export class SubComponent implements AfterViewInit {
     options: MatMenu;
     aspectType = AspectType;
     optionsOpen: boolean = false;
+    private characterService: CharacterInterfaceService;
 
-    constructor(private characterMakerService: CharacterMakerService) {
-
+    constructor(characterInterfaceFactory: CharacterInterfaceFactory) {
+        this.characterService = characterInterfaceFactory.getCharacterInterface();
     }
 
     ngAfterViewInit(): void {
         this.options = this.child.getMenuOptions();
-        Observable.timer(100).subscribe(() => this.characterMakerService.registerSubComponent(this));
+        Observable.timer(100).subscribe(() => this.characterService.registerSubComponent(this));
     }
 
     getValue(): any {

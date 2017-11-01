@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { CharacterSheetComponent } from './sheet/character-sheet.component';
 import { CharacterSheetRepository } from './sheet/character-sheet.repository';
-import { SubComponentImmutable } from './shared/subcomponents/sub-component-immutable';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import {
@@ -24,7 +23,6 @@ import { TextComponent } from './shared/subcomponents/text/text.component';
 import { AddComponentComponent } from './maker/dialog/add-component.component';
 import { CharacterMakerComponent } from './maker/character-maker.component';
 import { SubComponent } from './shared/subcomponents/sub-component';
-import { SubComponentService } from './shared/subcomponents/sub-component.service';
 import { CharacterMakerService } from './maker/character-maker.service';
 import { CharacterSheetService } from './sheet/character-sheet.service';
 import { CharacterInterfaceFactory } from './shared/character-interface.factory';
@@ -54,7 +52,6 @@ import { NgGridModule } from 'angular2-grid';
         SubComponent,
         CharacterMakerComponent,
         AddComponentComponent,
-        SubComponentImmutable,
         TextComponent,
         CheckboxComponent,
         NumberComponent,
@@ -70,8 +67,7 @@ import { NgGridModule } from 'angular2-grid';
         CharacterSheetRepository,
         CharacterMakerService,
         CharacterSheetService,
-        CharacterInterfaceFactory,
-        SubComponentService
+        CharacterInterfaceFactory
     ],
     entryComponents: [
         AddComponentComponent,

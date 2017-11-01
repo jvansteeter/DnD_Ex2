@@ -14,14 +14,6 @@
     height: 100%;
 }
 
-/*.sub-component-close {*/
-    /*cursor: pointer;*/
-    /*align-self: flex-end;*/
-    /*margin-left: auto;*/
-    /*width: 24px;*/
-    /*height: 24px;*/
-/*}*/
-
 .sub-component-close mat-icon {
     vertical-align: baseline;
 }
@@ -34,31 +26,7 @@
 }
 
 mat-card {
-    /*position: absolute;*/
     padding: 0 5px;
-    /*width: 100%;*/
-}
-
-mat-card-content {
-    height: 100%;
-}
-
-mat-card-header {
-    display: flex;
-    flex-direction: row;
-    position: absolute;
-    right: 0;
-    /*top: -24px;*/
-    height: 24px;
-    width: 100%;
-}
-
-mat-card-footer {
-    display: flex;
-    flex-direction: row;
-    height: 24px;
-    width: 100%;
-    margin-left: -5px;
 }
 
 mat-form-field {
@@ -81,7 +49,6 @@ textarea {
 
 /deep/ .mat-input-wrapper {
     height: 100%;
-    /*padding-bottom: 15px;*/
 }
 
 /deep/ .mat-input-flex {
@@ -106,7 +73,6 @@ textarea {
 .checkbox-list-label {
     border: 0;
     background-color: inherit;
-    /*-webkit-box-shadow: none;*/
     box-shadow: none;
     height: 22px;
     width: 80%;
@@ -130,6 +96,8 @@ textarea {
 
 .token-component {
     margin-left: -6px;
+    margin-right: -6px;
+    height: 100%;
 }
 
 .token-component a.thumbnail {

@@ -12,7 +12,7 @@ export class CharacterSheetRepository {
         return this.http.get('/api/ruleset/npc/' + id, {responseType: 'json'});
     }
 
-    getCharacterSheet(id: string): Observable<any> {
-        return this.http.get('/api/ruleset/charactersheet/' + id, {responseType: 'json'});
-    }
+    // getCharacterSheet(id: string): Observable<any> {
+    //     return this.http.get('/api/ruleset/charactersheet/' + id, {responseType: 'json'});
+    // }
 }

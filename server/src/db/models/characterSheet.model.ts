@@ -6,7 +6,6 @@ export class CharacterSheetModel extends mongoose.Schema {
     public _id: string;
     public ruleSetId: string;
     public label: string;
-    public height: number;
 
     constructor() {
         super ({
@@ -18,14 +17,6 @@ export class CharacterSheetModel extends mongoose.Schema {
         this._id = this.methods._id;
         this.ruleSetId = this.methods.ruleSetId;
         this.label = this.methods.label;
-        this.height = this.methods.height;
-
-        this.methods.setHeight = this.setHeight;
-    }
-
-    public setHeight(height: number): Promise<void> {
-        this.height = height;
-        return this.save();
     }
 
     private save(): Promise<void> {

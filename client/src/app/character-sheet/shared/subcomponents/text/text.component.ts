@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import { Aspect } from '../../aspect';
 import { SubComponent } from '../sub-component';
 import { SubComponentChild } from '../sub-component-child';
@@ -14,7 +14,6 @@ export class TextComponent implements SubComponentChild {
     @Input() aspect: Aspect;
     @Input() parent: SubComponent;
     @ViewChild('options') options: MatMenu;
-    @ViewChild('fontSizeInput') fontSizeInput: ElementRef;
     label: string;
     required: boolean;
     hasOptions = true;

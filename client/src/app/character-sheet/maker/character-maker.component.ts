@@ -66,7 +66,6 @@ export class CharacterMakerComponent implements OnInit, AfterViewInit {
                 this.characterSheetData = data;
                 this.characterService.setCharacterSheetId(this.characterSheetId);
                 this.characterService.initAspects(data.aspects);
-
             });
         });
     }
@@ -81,9 +80,6 @@ export class CharacterMakerComponent implements OnInit, AfterViewInit {
 
     public save(): void {
         this.characterService.save();
-        for (let i = 0; i < this.characterService.aspects.length; i++) {
-            console.log(this.characterService.aspects[i])
-        }
     }
 
     openOptions(): void {

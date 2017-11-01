@@ -14,13 +14,9 @@ import { MatMenu } from '@angular/material';
 export class CharacterMakerService implements CharacterInterfaceService {
     private characterSheetId: string;
 
-    private characterSheetWidth: number = 0;
-    private characterSheetHeight: number = 0;
-    public subComponents: SubComponent[];
     public aspects: Aspect[];
+    public subComponents: SubComponent[];
     public subComponentOptions: MatMenu[];
-
-    private currentHover: Aspect;
 
     constructor(private http: HttpClient) {
         this.init();
@@ -30,7 +26,6 @@ export class CharacterMakerService implements CharacterInterfaceService {
         this.aspects = [];
         this.subComponents = [];
         this.subComponentOptions = [];
-        delete this.currentHover;
     }
 
     public addComponent(aspect: any): void {
@@ -42,10 +37,6 @@ export class CharacterMakerService implements CharacterInterfaceService {
         this.aspects.splice(index, 1);
         this.subComponents.splice(index, 1);
         this.subComponentOptions.splice(index, 1);
-    }
-
-    public setWidth(width: number): void {
-        this.characterSheetWidth = width;
     }
 
     public registerSubComponent(subComponent: SubComponent): void {
@@ -100,7 +91,6 @@ export class CharacterMakerService implements CharacterInterfaceService {
     public save() {
         let characterSheet = {
             _id: this.characterSheetId,
-            height: this.characterSheetHeight
         };
         let aspects: any[] = [];
         for (let i = 0; i < this.aspects.length; i++) {
@@ -159,9 +149,5 @@ export class CharacterMakerService implements CharacterInterfaceService {
 
             this.aspects.push(aspect);
         });
-    }
-
-    public setHover(aspect: Aspect): void {
-        this.currentHover = aspect;
     }
 }

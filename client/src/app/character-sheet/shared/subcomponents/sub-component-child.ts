@@ -7,7 +7,6 @@ export interface SubComponentChild {
     parent: SubComponent;
     readonly hasOptions: boolean;
 
-    // resize(width: number, height: number);
     getMenuOptions(): MatMenu;
     closeOptions(): void;
     getValue(): any;

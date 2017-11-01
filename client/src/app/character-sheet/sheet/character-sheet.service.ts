@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { CharacterInterfaceService } from '../shared/character-interface.service';
 import { Aspect, AspectType } from '../shared/aspect';
-import { SubComponentImmutable } from '../shared/subcomponents/sub-component-immutable';
+import { SubComponent } from '../shared/subcomponents/sub-component';
 
 
 @Injectable()
 export class CharacterSheetService implements CharacterInterfaceService {
     public aspects: Aspect[];
-    private subComponents: SubComponentImmutable[];
+    private subComponents: SubComponent[];
 
     constructor() {
         this.init();
@@ -17,7 +17,7 @@ export class CharacterSheetService implements CharacterInterfaceService {
         this.subComponents = [];
     }
 
-    registerSubComponent(subComponent: SubComponentImmutable): void {
+    registerSubComponent(subComponent: SubComponent): void {
         this.subComponents.push(subComponent);
     }
 

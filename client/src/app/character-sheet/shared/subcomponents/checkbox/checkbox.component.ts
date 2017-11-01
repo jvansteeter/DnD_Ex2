@@ -27,10 +27,6 @@ export class CheckboxComponent implements SubComponentChild {
 
     }
 
-    resize(width: number, height: number) {
-        // does nothing
-    }
-
     getMenuOptions(): MatMenu {
         return this.options;
     }

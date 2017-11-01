@@ -24,7 +24,6 @@ export class TextListComponent implements SubComponentChild {
     value: any;
 
     private items: TextItem[];
-    @ViewChild('fontSizeInput') fontSizeInput: ElementRef;
 
     constructor() {
         this.items = [];

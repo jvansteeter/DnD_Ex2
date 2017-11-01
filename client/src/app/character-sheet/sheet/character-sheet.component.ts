@@ -69,7 +69,7 @@ export class CharacterSheetComponent implements OnInit {
     }
 
     doStuff(): void {
-        console.log(this.gridConfig)
+        console.log(this.characterSheetService.aspects)
     }
 }
 
