@@ -18,6 +18,8 @@ export class CharacterMakerService implements CharacterInterfaceService {
     public subComponents: SubComponent[];
     public subComponentOptions: MatMenu[];
 
+    immutable = false;
+
     constructor(private http: HttpClient) {
         this.init();
     }

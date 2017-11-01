@@ -27,10 +27,10 @@ export class CheckboxListComponent implements SubComponentChild, AfterViewInit {
 
     private checkboxes: CheckboxItem[];
 
-    private characterMakerService: CharacterInterfaceService;
+    private characterService: CharacterInterfaceService;
 
     constructor(private characterInterfaceFactory: CharacterInterfaceFactory) {
-        this.characterMakerService = this.characterInterfaceFactory.getCharacterInterface();
+        this.characterService = this.characterInterfaceFactory.getCharacterInterface();
         this.checkboxes = [];
     }
 
@@ -69,7 +69,7 @@ export class CheckboxListComponent implements SubComponentChild, AfterViewInit {
     }
 
     valueChanged(): void {
-        this.characterMakerService.updateFunctionAspects();
+        this.characterService.updateFunctionAspects();
     }
 
     getValue(): any {

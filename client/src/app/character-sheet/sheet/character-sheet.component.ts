@@ -13,7 +13,7 @@ import { NgGridConfig } from 'angular2-grid';
 })
 export class CharacterSheetComponent implements OnInit {
     private npcId: string;
-    private characterSheet: any;
+    private npcData: any;
 
     public gridConfig: NgGridConfig = <NgGridConfig>{
         'margins': [5],
@@ -53,7 +53,7 @@ export class CharacterSheetComponent implements OnInit {
         this.activatedRoute.params.subscribe((params) => {
             this.npcId = params['npcId'];
             this.characterSheetRepository.getNpc(this.npcId).subscribe((npcData) => {
-                this.characterSheet = npcData.characterSheet;
+                this.npcData = npcData;
                 if (npcData.characterSheet.aspects) {
                     this.gridConfig.max_cols = 0;
                     for (let i = 0; i < npcData.characterSheet.aspects.length; i++) {
@@ -66,10 +66,6 @@ export class CharacterSheetComponent implements OnInit {
                 }
             });
         });
-    }
-
-    doStuff(): void {
-        console.log(this.characterSheetService.aspects)
     }
 }
 

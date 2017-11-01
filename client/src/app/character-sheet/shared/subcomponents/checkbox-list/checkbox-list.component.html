@@ -2,7 +2,7 @@
 <div class="checkbox-list">
 	<span *ngFor="let checkbox of checkboxes" class="checkbox-list-item">
 		<mat-checkbox color="primary" [(ngModel)]="checkbox.value" (change)="valueChanged()"></mat-checkbox>
-		<input class="form-control checkbox-list-label" [(ngModel)]="checkbox.label" (change)="valueChanged()">
+		<input class="form-control checkbox-list-label" [(ngModel)]="checkbox.label" (change)="valueChanged()" [readonly]="characterService.immutable">
 	</span>
 </div>
 <mat-menu #options="matMenu">

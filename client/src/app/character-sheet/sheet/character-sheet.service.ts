@@ -9,6 +9,8 @@ export class CharacterSheetService implements CharacterInterfaceService {
     public aspects: Aspect[];
     private subComponents: SubComponent[];
 
+    public immutable = true;
+
     constructor() {
         this.init();
     }
