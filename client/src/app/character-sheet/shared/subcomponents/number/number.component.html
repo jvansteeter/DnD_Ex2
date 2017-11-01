@@ -1,7 +1,7 @@
 <mat-form-field [style.fontSize.px]="aspect.fontSize" class="number-sub-component">
 	<input matInput type="number" placeholder="{{aspect.label}}" [required]="aspect.required" class="align-center" [(ngModel)]="value" (change)="valueChanged()">
 </mat-form-field>
-<mat-menu #options="matMenu" (close)="closeOptions()">
+<mat-menu #options="matMenu">
 	<div class="changeFontSize" (click)="stopClickPropagate($event)" (keyup.enter)="closeMenu()">
 		<mat-form-field>
 			<input matInput type="number" placeholder="Font Size" [(ngModel)]="aspect.fontSize" #fontSizeInput>

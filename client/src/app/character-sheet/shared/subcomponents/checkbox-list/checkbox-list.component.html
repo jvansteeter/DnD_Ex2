@@ -5,7 +5,7 @@
 		<input class="form-control checkbox-list-label" [(ngModel)]="checkbox.label" (change)="valueChanged()">
 	</span>
 </div>
-<mat-menu #options="matMenu" (close)="closeOptions()">
+<mat-menu #options="matMenu">
 	<span mat-menu-item (click)="addCheckbox()">Add Checkbox</span>
 	<span mat-menu-item (click)="removeCheckbox()">Remove Checkbox</span>
 	<div class="changeFontSize" (click)="stopClickPropagate($event)" (keyup.enter)="closeMenu()">

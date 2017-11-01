@@ -14,7 +14,6 @@ import { CharacterInterfaceFactory } from '../../character-interface.factory';
 })
 export class NumberComponent implements SubComponentChild {
     @Input() aspect: Aspect;
-    @Input() parent: SubComponent;
     @ViewChild('options') options: MatMenu;
     @ViewChild('fontSizeInput') fontSizeInput: ElementRef;
     label: string;
@@ -30,10 +29,6 @@ export class NumberComponent implements SubComponentChild {
 
     getMenuOptions(): MatMenu {
         return this.options;
-    }
-
-    closeOptions(): void {
-        this.parent.closeOptions();
     }
 
     stopClickPropagate(event): void {

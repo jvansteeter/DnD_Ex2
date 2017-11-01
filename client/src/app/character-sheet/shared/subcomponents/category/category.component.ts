@@ -17,7 +17,6 @@ interface CategoryOption {
 })
 export class CategoryComponent implements SubComponentChild, AfterViewInit{
     @Input() aspect: Aspect;
-    @Input() parent: SubComponent;
     @ViewChild('options') options: MatMenu;
     label: string;
     required: boolean;
@@ -49,7 +48,6 @@ export class CategoryComponent implements SubComponentChild, AfterViewInit{
                 value: this.categoryInput
             });
             this.categoryInput = '';
-            this.closeOptions();
         }
     }
 
@@ -57,15 +55,10 @@ export class CategoryComponent implements SubComponentChild, AfterViewInit{
         if (this.categoryToRemove) {
             this.categories.splice(this.categories.indexOf(this.categoryToRemove), 1);
         }
-        this.closeOptions();
     }
 
     getMenuOptions(): MatMenu {
         return this.options;
-    }
-
-    closeOptions(): void {
-        this.parent.closeOptions();
     }
 
     stopClickPropagate(event): void {

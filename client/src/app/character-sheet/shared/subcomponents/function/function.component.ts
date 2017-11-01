@@ -16,7 +16,6 @@ import { CharacterInterfaceFactory } from '../../character-interface.factory';
 })
 export class FunctionComponent implements SubComponentChild, AfterViewInit {
     @Input() aspect: Aspect;
-    @Input() parent: SubComponent;
     @ViewChild('options') options: MatMenu;
 
     readonly hasOptions: boolean = true;
@@ -38,10 +37,6 @@ export class FunctionComponent implements SubComponentChild, AfterViewInit {
 
     getMenuOptions(): MatMenu {
         return this.options;
-    }
-
-    closeOptions(): void {
-        this.parent.closeOptions();
     }
 
     openFunctionDialog(): void {

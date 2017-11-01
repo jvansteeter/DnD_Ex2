@@ -19,7 +19,6 @@ interface CheckboxItem {
 })
 export class CheckboxListComponent implements SubComponentChild, AfterViewInit {
     @Input() aspect: Aspect;
-    @Input() parent: SubComponent;
     @ViewChild('options') options: MatMenu;
     label: string;
     required: boolean;
@@ -48,10 +47,6 @@ export class CheckboxListComponent implements SubComponentChild, AfterViewInit {
 
     getMenuOptions(): MatMenu {
         return this.options;
-    }
-
-    closeOptions(): void {
-        this.parent.closeOptions();
     }
 
     addCheckbox(): void {

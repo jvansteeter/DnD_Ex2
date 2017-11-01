@@ -12,7 +12,6 @@ import { MatMenu } from '@angular/material';
 })
 export class TextComponent implements SubComponentChild {
     @Input() aspect: Aspect;
-    @Input() parent: SubComponent;
     @ViewChild('options') options: MatMenu;
     label: string;
     required: boolean;
@@ -25,10 +24,6 @@ export class TextComponent implements SubComponentChild {
 
     getMenuOptions(): MatMenu {
         return this.options;
-    }
-
-    closeOptions(): void {
-        this.parent.closeOptions();
     }
 
     stopClickPropagate(event): void {

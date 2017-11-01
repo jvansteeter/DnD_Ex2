@@ -16,7 +16,6 @@ interface TextItem {
 })
 export class TextListComponent implements SubComponentChild {
     @Input() aspect: Aspect;
-    @Input() parent: SubComponent;
     @ViewChild('options') options: MatMenu;
     label: string;
     required: boolean;
@@ -31,10 +30,6 @@ export class TextListComponent implements SubComponentChild {
 
     getMenuOptions(): MatMenu {
         return this.options;
-    }
-
-    closeOptions(): void {
-        this.parent.closeOptions();
     }
 
     addItem(): void {

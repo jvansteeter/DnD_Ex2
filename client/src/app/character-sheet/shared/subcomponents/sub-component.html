@@ -1,12 +1,12 @@
 <mat-card *ngIf="aspect" class="sub-component">
     <div [ngSwitch]="aspect.aspectType" class="sub-component-content">
-        <characterMaker-textComponent *ngSwitchCase="aspectType.TEXT" [aspect]="aspect" [parent]="this" #child></characterMaker-textComponent>
-        <characterMaker-checkBoxComponent *ngSwitchCase="aspectType.BOOLEAN" [aspect]="aspect" [parent]="this" #child></characterMaker-checkBoxComponent>
-        <characterMaker-numberComponent *ngSwitchCase="aspectType.NUMBER" [aspect]="aspect" [parent]="this" #child></characterMaker-numberComponent>
-        <characterMaker-checkBoxListComponent *ngSwitchCase="aspectType.BOOLEAN_LIST" [aspect]="aspect" [parent]="this" #child></characterMaker-checkBoxListComponent>
-        <characterMaker-textListComponent *ngSwitchCase="aspectType.TEXT_LIST" [aspect]="aspect" [parent]="this" #child></characterMaker-textListComponent>
-        <characterMaker-categoryComponent *ngSwitchCase="aspectType.CATEGORICAL" [aspect]="aspect" [parent]="this" #child></characterMaker-categoryComponent>
-        <characterMaker-tokenComponent *ngSwitchCase="aspectType.TOKEN" [aspect]="aspect" [parent]="this" #child></characterMaker-tokenComponent>
-        <characterMaker-functionComponent *ngSwitchCase="aspectType.FUNCTION" [aspect]="aspect" [parent]="this" #child></characterMaker-functionComponent>
+        <characterMaker-textComponent *ngSwitchCase="aspectType.TEXT" [aspect]="aspect" #child></characterMaker-textComponent>
+        <characterMaker-checkBoxComponent *ngSwitchCase="aspectType.BOOLEAN" [aspect]="aspect" #child></characterMaker-checkBoxComponent>
+        <characterMaker-numberComponent *ngSwitchCase="aspectType.NUMBER" [aspect]="aspect" #child></characterMaker-numberComponent>
+        <characterMaker-checkBoxListComponent *ngSwitchCase="aspectType.BOOLEAN_LIST" [aspect]="aspect" #child></characterMaker-checkBoxListComponent>
+        <characterMaker-textListComponent *ngSwitchCase="aspectType.TEXT_LIST" [aspect]="aspect" #child></characterMaker-textListComponent>
+        <characterMaker-categoryComponent *ngSwitchCase="aspectType.CATEGORICAL" [aspect]="aspect" #child></characterMaker-categoryComponent>
+        <characterMaker-tokenComponent *ngSwitchCase="aspectType.TOKEN" [aspect]="aspect" #child></characterMaker-tokenComponent>
+        <characterMaker-functionComponent *ngSwitchCase="aspectType.FUNCTION" [aspect]="aspect" #child></characterMaker-functionComponent>
     </div>
 </mat-card>

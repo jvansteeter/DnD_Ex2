@@ -13,7 +13,6 @@ import { MatMenu } from '@angular/material';
 })
 export class CheckboxComponent implements SubComponentChild {
     @Input() aspect: Aspect;
-    @Input() parent: SubComponent;
     label: string;
     required: boolean;
     width: number;
@@ -29,10 +28,6 @@ export class CheckboxComponent implements SubComponentChild {
 
     getMenuOptions(): MatMenu {
         return this.options;
-    }
-
-    closeOptions(): void {
-        this.parent.closeOptions();
     }
 
     getValue() {

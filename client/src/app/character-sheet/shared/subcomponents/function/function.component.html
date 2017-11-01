@@ -2,7 +2,7 @@
 <div class="function-value">
 	<span [style.fontSize.px]="aspect.fontSize">{{value}}</span>
 </div>
-<mat-menu #options="matMenu" (close)="closeOptions()">
+<mat-menu #options="matMenu">
 	<span mat-menu-item (click)="openFunctionDialog()">Define Function</span>
 	<div class="changeFontSize" (click)="stopClickPropagate($event)" (keyup.enter)="closeMenu()">
 		<mat-form-field>

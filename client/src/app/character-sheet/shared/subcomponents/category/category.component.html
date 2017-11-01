@@ -3,7 +3,7 @@
 		<mat-option *ngFor="let category of categories" [value]="category.value">{{category.value}}</mat-option>
 	</mat-select>
 </mat-form-field>
-<mat-menu (close)="closeOptions()" #options>
+<mat-menu #options>
 	<div class="category-addOrRemove-option" (click)="stopClickPropagate($event)" (keyup.enter)="addCategory()">
 		<mat-form-field>
 			<input matInput placeholder="New Category" [(ngModel)]="categoryInput">

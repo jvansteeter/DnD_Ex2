@@ -12,7 +12,6 @@ import { MatMenu } from '@angular/material';
 })
 export class TokenComponent implements SubComponentChild, AfterViewInit{
     @Input() aspect: Aspect;
-    @Input() parent: SubComponent;
     @ViewChild('options') options: MatMenu;
     label: string;
     required: boolean;
@@ -28,10 +27,6 @@ export class TokenComponent implements SubComponentChild, AfterViewInit{
 
     getMenuOptions(): MatMenu {
         return this.options;
-    }
-
-    closeOptions(): void {
-        this.parent.closeOptions();
     }
 
     stopClickPropagate(event): void {
