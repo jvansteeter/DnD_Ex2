@@ -1,9 +1,9 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CharacterSheetRepository } from './character-sheet.repository';
 import { CharacterSheetService } from './character-sheet.service';
 import { CharacterInterfaceFactory } from '../shared/character-interface.factory';
-import { Observable } from 'rxjs/Observable';
+import { NgGridConfig } from 'angular2-grid';
 
 
 @Component({
@@ -11,12 +11,35 @@ import { Observable } from 'rxjs/Observable';
     templateUrl: 'character-sheet.component.html',
     styleUrls: ['../shared/character-sheet.css']
 })
-export class CharacterSheetComponent implements OnInit, AfterViewInit {
+export class CharacterSheetComponent implements OnInit {
     private npcId: string;
     private characterSheet: any;
-    @ViewChild('characterSheet') private characterSheetElement: ElementRef;
 
-    readonly characterSheetHeightMin: number = 42;
+    public gridConfig: NgGridConfig = <NgGridConfig>{
+        'margins': [5],
+        'draggable': false,
+        'resizable': false,
+        'max_cols': 0,
+        'max_rows': 0,
+        'visible_cols': 0,
+        'visible_rows': 0,
+        'min_cols': 1,
+        'min_rows': 1,
+        'col_width': 2,
+        'row_height': 2,
+        'cascade': 'up',
+        'min_width': 1,
+        'min_height': 1,
+        'fix_to_grid': true,
+        'auto_style': true,
+        'auto_resize': true,
+        'maintain_ratio': false,
+        'prefer_new': false,
+        'zoom_on_drag': false,
+        'limit_to_screen': false,
+        'element_based_row_height': false,
+        'center_to_screen': false,
+    };
 
     constructor(private activatedRoute: ActivatedRoute,
                 private characterSheetRepository: CharacterSheetRepository,
@@ -32,16 +55,21 @@ export class CharacterSheetComponent implements OnInit, AfterViewInit {
             this.characterSheetRepository.getNpc(this.npcId).subscribe((npcData) => {
                 this.characterSheet = npcData.characterSheet;
                 if (npcData.characterSheet.aspects) {
+                    this.gridConfig.max_cols = 0;
+                    for (let i = 0; i < npcData.characterSheet.aspects.length; i++) {
+                        let currentAspect = npcData.characterSheet.aspects[i];
+                        if (currentAspect.config.row === 1) {
+                            this.gridConfig.max_cols += currentAspect.config.sizex;
+                        }
+                    }
                     this.characterSheetService.setAspects(npcData.characterSheet.aspects);
                 }
             });
         });
     }
 
-    ngAfterViewInit(): void {
-        Observable.timer(100).subscribe(() => {
-            this.characterSheetElement.nativeElement.style.height = (this.characterSheet.height + this.characterSheetHeightMin) + 'px';
-        });
+    doStuff(): void {
+        console.log(this.gridConfig)
     }
 }
 

@@ -68,11 +68,12 @@ export class CharacterAspectRepository {
 
     public findByCharacterSheetId(id: string): Promise<CharacterAspectModel[]> {
         return new Promise((resolve, reject) => {
-            this.CharacterAspect.find({characterSheetId: id}, (error, aspects: CharacterAspectModel) => {
+            this.CharacterAspect.find({characterSheetId: id}, (error, aspects: CharacterAspectModel[]) => {
                 if (error) {
                     reject(error);
                     return;
                 }
+                aspects.sort(this.orderByConfigCol);
 
                 resolve(aspects);
             });
@@ -90,5 +91,16 @@ export class CharacterAspectRepository {
                 resolve();
             });
         });
+    }
+
+    private orderByConfigCol(a, b): number {
+        if (a.config.row < b.config.row) {
+            return -1;
+        }
+        else if (a.config.row > b.config.row) {
+            return 1;
+        }
+
+        return 0;
     }
 }

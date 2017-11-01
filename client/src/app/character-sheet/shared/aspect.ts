@@ -31,6 +31,6 @@ export class Aspect {
     }
 
     private defaultConfig(): any {
-        return { 'dragHandle': '.sub-component-header', 'col': 1, 'row': 1, 'sizex': 1, 'sizey': 1 };
+        return { 'dragHandle': '.sub-component-header', 'col': 1, 'row': 1, 'sizex': 15, 'sizey': 5 };
     }
 }

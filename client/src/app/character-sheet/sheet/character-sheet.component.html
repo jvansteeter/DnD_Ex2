@@ -1,4 +1,10 @@
 <h1>Character Sheet</h1>
-<div class="well well-lg" *ngIf="characterSheet" #characterSheet>
-	<sub-component-immutable *ngFor="let aspect of characterSheetService.aspects" [aspect]="aspect"></sub-component-immutable>
+<div class="characterSheet-gridContainer">
+	<div class="well well-lg" *ngIf="characterSheet" [ngGrid]="gridConfig">
+		<div *ngFor="let aspect of characterSheetService.aspects" [(ngGridItem)]="aspect.config">
+			<sub-component [aspect]="aspect"></sub-component>
+		</div>
+	</div>
 </div>
+<button (click)="doStuff()">Stuff</button>
+

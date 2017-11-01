@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AddComponentComponent } from './dialog/add-component.component';
 import { CharacterMakerService } from './character-maker.service';
 import { MatDialog } from '@angular/material';
@@ -34,23 +34,18 @@ export class CharacterMakerComponent implements OnInit, AfterViewInit {
         'col_width': 2,
         'row_height': 2,
         'cascade': 'up',
-        'min_width': 15,
+        'min_width': 10,
         'min_height': 5,
         'fix_to_grid': true,
         'auto_style': true,
         'auto_resize': false,
-        'maintain_ratio': false,
+        'maintain_ratio': true,
         'prefer_new': false,
         'zoom_on_drag': false,
         'limit_to_screen': true,
         'element_based_row_height': false,
-        'center_to_screen': false,
+        'center_to_screen': false
     };
-
-    @HostListener('window:resize')
-    onResize(): void {
-        // this.characterService.setWidth(this.characterSheet.nativeElement.offsetWidth);
-    }
 
     constructor(private dialog: MatDialog,
                 private activatedRoute: ActivatedRoute,
@@ -86,6 +81,9 @@ export class CharacterMakerComponent implements OnInit, AfterViewInit {
 
     public save(): void {
         this.characterService.save();
+        for (let i = 0; i < this.characterService.aspects.length; i++) {
+            console.log(this.characterService.aspects[i])
+        }
     }
 
     openOptions(): void {
