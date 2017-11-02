@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { CharacterSheetComponent } from './sheet/character-sheet.component';
-import { CharacterSheetRepository } from './sheet/character-sheet.repository';
+import { CharacterSheetRepository } from './shared/character-sheet.repository';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import {

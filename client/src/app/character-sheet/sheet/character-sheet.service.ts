@@ -1,13 +1,16 @@
 import { Injectable } from '@angular/core';
 import { CharacterInterfaceService } from '../shared/character-interface.service';
-import { Aspect, AspectType } from '../shared/aspect';
+import { Aspect, AspectType } from '../../types/character-sheet/aspect';
 import { SubComponent } from '../shared/subcomponents/sub-component';
+import { Npc } from '../../types/character-sheet/npc';
+import { AspectValue } from '../../types/character-sheet/aspectValue';
 
 
 @Injectable()
 export class CharacterSheetService implements CharacterInterfaceService {
     public aspects: Aspect[];
     private subComponents: SubComponent[];
+    private aspectValues: any[];
 
     public immutable = true;
 
@@ -21,6 +24,11 @@ export class CharacterSheetService implements CharacterInterfaceService {
 
     registerSubComponent(subComponent: SubComponent): void {
         this.subComponents.push(subComponent);
+        this.aspectValues.forEach((value: AspectValue) => {
+            if (value.key === subComponent.aspect._id) {
+                subComponent.child.setValue(value.value);
+            }
+        });
     }
 
     valueOfAspect(aspect: Aspect): any {
@@ -42,7 +50,8 @@ export class CharacterSheetService implements CharacterInterfaceService {
         })
     }
 
-    setAspects(aspects: Aspect[]): void {
-        this.aspects = aspects;
+    populateCharacterData(characterData: Npc): void {
+        this.aspectValues = characterData.values;
+        this.aspects = characterData.characterSheet.aspects;
     }
 }

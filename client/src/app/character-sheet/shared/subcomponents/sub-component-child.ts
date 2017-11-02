@@ -1,4 +1,4 @@
-import { Aspect } from '../aspect';
+import { Aspect } from '../../../types/character-sheet/aspect';
 import { SubComponent } from './sub-component';
 import { MatMenu } from '@angular/material';
 
@@ -8,4 +8,5 @@ export interface SubComponentChild {
 
     getMenuOptions(): MatMenu;
     getValue(): any;
+    setValue(value: any): void;
 }

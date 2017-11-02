@@ -11,7 +11,6 @@ export class CharacterSheetModel extends mongoose.Schema {
         super ({
             ruleSetId: {type: String, required: true},
             label: {type: String, required: true},
-            height: Number
         });
 
         this._id = this.methods._id;

@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { CharacterSheetRepository } from './character-sheet.repository';
+import { CharacterSheetRepository } from '../shared/character-sheet.repository';
 import { CharacterSheetService } from './character-sheet.service';
 import { CharacterInterfaceFactory } from '../shared/character-interface.factory';
 import { NgGridConfig } from 'angular2-grid';
+import { Npc } from '../../types/character-sheet/npc';
 
 
 @Component({
@@ -13,7 +14,7 @@ import { NgGridConfig } from 'angular2-grid';
 })
 export class CharacterSheetComponent implements OnInit {
     private npcId: string;
-    private npcData: any;
+    private npcData: Npc;
 
     public gridConfig: NgGridConfig = <NgGridConfig>{
         'margins': [5],
@@ -52,20 +53,36 @@ export class CharacterSheetComponent implements OnInit {
         this.characterSheetService.init();
         this.activatedRoute.params.subscribe((params) => {
             this.npcId = params['npcId'];
-            this.characterSheetRepository.getNpc(this.npcId).subscribe((npcData) => {
+            this.characterSheetRepository.getNpc(this.npcId).subscribe((npcData: Npc) => {
                 this.npcData = npcData;
+                console.log(this.npcData)
                 if (npcData.characterSheet.aspects) {
                     this.gridConfig.max_cols = 0;
                     for (let i = 0; i < npcData.characterSheet.aspects.length; i++) {
                         let currentAspect = npcData.characterSheet.aspects[i];
-                        if (currentAspect.config.row === 1) {
+                        if (currentAspect.config.row === 1 && currentAspect.config.sizex) {
                             this.gridConfig.max_cols += currentAspect.config.sizex;
                         }
                     }
-                    this.characterSheetService.setAspects(npcData.characterSheet.aspects);
+                    this.characterSheetService.populateCharacterData(npcData);
                 }
             });
         });
+    }
+
+    save(): void {
+        this.npcData.values = [];
+        console.log(this.characterSheetService.aspects)
+        for (let i = 0; i < this.characterSheetService.aspects.length; i++) {
+            let aspect = this.characterSheetService.aspects[i];
+            let value = {
+                key: aspect._id,
+                value: this.characterSheetService.valueOfAspect(aspect)
+            };
+            this.npcData.values.push(value);
+        }
+        console.log(this.npcData)
+        this.characterSheetRepository.saveNpc(this.npcData).subscribe();
     }
 }
 

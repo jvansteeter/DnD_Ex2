@@ -10,7 +10,7 @@ export class UserRuleSetRepository {
     private ruleSetRepository: RuleSetRepository;
 
     constructor() {
-        this.UserRuleSet = mongoose.model('UserRuleSet');
+        this.UserRuleSet = mongoose.model('User_RuleSet');
         this.ruleSetRepository = new RuleSetRepository();
     }
 

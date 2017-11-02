@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, Input, ViewChild } from '@angular/core';
-import { Aspect } from '../../aspect';
+import { Aspect } from '../../../../types/character-sheet/aspect';
 import { SubComponent } from '../sub-component';
 import { FunctionDialogComponent } from './function-dialog.component';
 import { SubComponentChild } from '../sub-component-child';
@@ -61,6 +61,10 @@ export class FunctionComponent implements SubComponentChild, AfterViewInit {
             this.value = this._function.getValue();
         }
         return this.value;
+    }
+
+    setValue(value: any): any {
+        // do nothing
     }
 
     getFunction(): FunctionTemplate | undefined {

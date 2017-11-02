@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, Input, ViewChild } from '@angular/core';
 import { SubComponentChild } from '../sub-component-child';
-import { Aspect } from '../../aspect';
+import { Aspect } from '../../../../types/character-sheet/aspect';
 import { SubComponent } from '../sub-component';
 import { MatMenu } from '@angular/material';
 import { CharacterInterfaceFactory } from '../../character-interface.factory';
@@ -74,6 +74,10 @@ export class CheckboxListComponent implements SubComponentChild, AfterViewInit {
 
     getValue(): any {
         return this.checkboxes;
+    }
+
+    setValue(value: any): any {
+        this.checkboxes = value;
     }
 
     getCheckboxLabels(): string[] {

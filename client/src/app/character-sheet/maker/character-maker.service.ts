@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import { Aspect, AspectType } from '../shared/aspect';
+import { Aspect, AspectType } from '../../types/character-sheet/aspect';
 import { SubComponent } from '../shared/subcomponents/sub-component';
 import { CategoryComponent } from '../shared/subcomponents/category/category.component';
-import { HttpClient } from '@angular/common/http';
 import { CheckboxListComponent } from '../shared/subcomponents/checkbox-list/checkbox-list.component';
 import { FunctionComponent } from '../shared/subcomponents/function/function.component';
 import { SubComponentChild } from '../shared/subcomponents/sub-component-child';
 import { CharacterInterfaceService } from '../shared/character-interface.service';
 import { MatMenu } from '@angular/material';
+import { CharacterSheetRepository } from '../shared/character-sheet.repository';
 
 
 @Injectable()
@@ -20,7 +20,7 @@ export class CharacterMakerService implements CharacterInterfaceService {
 
     immutable = false;
 
-    constructor(private http: HttpClient) {
+    constructor(private characterSheetRepository: CharacterSheetRepository) {
         this.init();
     }
 
@@ -116,7 +116,7 @@ export class CharacterMakerService implements CharacterInterfaceService {
             aspects.push(aspectObj);
         }
         characterSheet['aspects'] = aspects;
-        this.http.post('/api/ruleset/charactersheet/save', characterSheet, {responseType: 'text'}).subscribe();
+        this.characterSheetRepository.saveCharacterSheet(characterSheet).subscribe();
     }
 
     private getChildOf(aspect: Aspect): SubComponentChild | undefined {

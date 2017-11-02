@@ -1,4 +1,4 @@
-import { Aspect, AspectType } from '../aspect';
+import { Aspect, AspectType } from '../../../types/character-sheet/aspect';
 import {
     AfterViewInit, Component, Input,
     ViewChild

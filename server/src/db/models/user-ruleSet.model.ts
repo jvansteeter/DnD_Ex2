@@ -21,4 +21,4 @@ export class UserRuleSetModel extends mongoose.Schema {
     }
 }
 
-mongoose.model('UserRuleSet', new UserRuleSetModel());
+mongoose.model('User_RuleSet', new UserRuleSetModel());

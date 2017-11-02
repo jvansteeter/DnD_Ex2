@@ -1,6 +1,6 @@
 import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { SubComponentChild } from '../sub-component-child';
-import { Aspect } from '../../aspect';
+import { Aspect } from '../../../../types/character-sheet/aspect';
 import { SubComponent } from '../sub-component';
 import { MatMenu } from '@angular/material';
 
@@ -50,6 +50,10 @@ export class TextListComponent implements SubComponentChild {
 
     getValue() {
         return this.value;
+    }
+
+    setValue(value: any): any {
+        this.value = value;
     }
 }
 

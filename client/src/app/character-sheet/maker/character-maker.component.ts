@@ -6,7 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { CharacterInterfaceFactory } from '../shared/character-interface.factory';
 import { NgGridConfig } from 'angular2-grid';
-import { Aspect } from '../shared/aspect';
+import { Aspect } from '../../types/character-sheet/aspect';
 
 
 @Component({

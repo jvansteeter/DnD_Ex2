@@ -1,7 +1,7 @@
 import { Component, Pipe, PipeTransform } from '@angular/core';
 import { FunctionGrammar, GrammarNode } from './function.grammar';
 import { CharacterMakerService } from '../../../maker/character-maker.service';
-import { AspectType } from '../../aspect';
+import { AspectType } from '../../../../types/character-sheet/aspect';
 import { MatDialogRef } from '@angular/material';
 
 @Component({

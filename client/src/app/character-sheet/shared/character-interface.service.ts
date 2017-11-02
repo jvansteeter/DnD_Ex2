@@ -1,4 +1,4 @@
-import { Aspect } from './aspect';
+import { Aspect } from '../../types/character-sheet/aspect';
 import { SubComponent } from './subcomponents/sub-component';
 
 

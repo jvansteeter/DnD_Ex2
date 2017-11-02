@@ -24,10 +24,16 @@ export class NpcModel extends mongoose.Schema {
         this.values = this.methods.values;
 
         this.methods.setRuleSetId = this.setRuleSetId;
+        this.methods.setValues = this.setValues;
     }
 
     public setRuleSetId(id: string): Promise<void> {
         this.ruleSetId = id;
+        return this.save();
+    }
+
+    public setValues(values: any[]): Promise<void> {
+        this.values = values;
         return this.save();
     }
 

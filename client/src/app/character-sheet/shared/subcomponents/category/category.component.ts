@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, Input, ViewChild } from '@angular/core';
-import { Aspect } from '../../aspect';
+import { Aspect } from '../../../../types/character-sheet/aspect';
 import { SubComponent } from '../sub-component';
 import { SubComponentChild } from '../sub-component-child';
 import { CharacterMakerService } from '../../../maker/character-maker.service';
@@ -71,6 +71,10 @@ export class CategoryComponent implements SubComponentChild, AfterViewInit{
 
     getValue() {
         return this.value;
+    }
+
+    setValue(value: any): void {
+        this.value = value;
     }
 
     getCategories(): any[] {
