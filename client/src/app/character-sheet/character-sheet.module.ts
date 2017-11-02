@@ -8,7 +8,7 @@ import {
     MatAutocompleteModule, MatButtonModule, MatCardModule, MatCheckboxModule, MatChipsModule, MatDialogModule,
     MatGridListModule,
     MatIconModule, MatInputModule,
-    MatMenuModule, MatSelectModule
+    MatMenuModule, MatSelectModule, MatToolbarModule, MatTooltipModule
 } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FunctionDialogComponent, NodePipe } from './shared/subcomponents/function/function-dialog.component';
@@ -45,7 +45,9 @@ import { NgGridModule } from 'angular2-grid';
         MatGridListModule,
         MatMenuModule,
         MatChipsModule,
-        NgGridModule
+        NgGridModule,
+        MatToolbarModule,
+        MatTooltipModule
     ],
     declarations: [
         CharacterSheetComponent,

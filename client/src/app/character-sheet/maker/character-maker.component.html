@@ -1,5 +1,12 @@
-<h1>Character Maker</h1>
-<button mat-icon-button mat-raised-button color="primary" (click)="openAddDialog()"><mat-icon>add</mat-icon></button>
+<h1 *ngIf="characterSheetData">{{characterSheetData.label}}</h1>
+<mat-toolbar>
+	<button mat-icon-button mat-raised-button color="primary" (click)="openAddDialog()" class="characterSheet-addButton" matTooltip="Add SubComponent">
+		<mat-icon>add</mat-icon>
+	</button>
+	<button mat-icon-button mat-raised-button color="primary" (click)="save()" matTooltip="Save">
+		<mat-icon>sd_card</mat-icon>
+	</button>
+</mat-toolbar>
 <div class="characterSheet-gridContainer">
 	<div class="well well-lg characterSheet" [ngGrid]="gridConfig" #characterSheet>
 		<div *ngFor="let aspect of characterService.aspects; let i = index" [(ngGridItem)]="aspect.config" (mouseenter)="hoverStart(i)" (mouseleave)="hoverEnd(i)">
@@ -12,4 +19,3 @@
 		</div>
 	</div>
 </div>
-<button (click)="save()">SAVE</button>
