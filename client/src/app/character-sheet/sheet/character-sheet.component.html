@@ -1,14 +1,15 @@
-<h1 *ngIf="npcData">{{npcData.label}}</h1>
-<mat-toolbar>
-	<button mat-icon-button mat-raised-button color="primary" (click)="save()" matTooltip="Save">
-		<mat-icon>sd_card</mat-icon>
-	</button>
-</mat-toolbar>
-<div class="characterSheet-gridContainer">
-	<div class="well well-lg characterSheet" *ngIf="npcData" [ngGrid]="gridConfig">
-		<div *ngFor="let aspect of characterSheetService.aspects" [(ngGridItem)]="aspect.config">
-			<sub-component [aspect]="aspect"></sub-component>
+<div class="container">
+	<h1 *ngIf="npcData">{{npcData.label}}</h1>
+	<mat-toolbar>
+		<button mat-icon-button mat-raised-button color="primary" (click)="save()" matTooltip="Save">
+			<mat-icon>sd_card</mat-icon>
+		</button>
+	</mat-toolbar>
+	<div class="characterSheet-gridContainer">
+		<div class="well well-lg characterSheet" *ngIf="npcData" [ngGrid]="gridConfig">
+			<div *ngFor="let aspect of characterSheetService.aspects" [(ngGridItem)]="aspect.config">
+				<sub-component [aspect]="aspect"></sub-component>
+			</div>
 		</div>
 	</div>
 </div>
-

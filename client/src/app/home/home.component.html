@@ -1,13 +1,15 @@
-<h1>Home</h1>
-<mat-accordion>
-	<mat-expansion-panel>
-		<mat-expansion-panel-header>
-			<mat-panel-title>Rule Sets</mat-panel-title>
-			<mat-panel-description>Rule Set description</mat-panel-description>
-		</mat-expansion-panel-header>
-		<mat-list>
-			<mat-list-item *ngFor="let ruleSet of ruleSets"><a (click)="ruleSetHome(ruleSet._id)">{{ruleSet.label}}</a></mat-list-item>
-		</mat-list>
-		<button mat-raised-button color="primary" (click)="newRuleSet()">New</button>
-	</mat-expansion-panel>
-</mat-accordion>
+<div class="container">
+	<h1>Home</h1>
+	<mat-accordion>
+		<mat-expansion-panel>
+			<mat-expansion-panel-header>
+				<mat-panel-title>Rule Sets</mat-panel-title>
+				<mat-panel-description>Rule Set description</mat-panel-description>
+			</mat-expansion-panel-header>
+			<mat-list>
+				<mat-list-item *ngFor="let ruleSet of ruleSets"><a (click)="ruleSetHome(ruleSet._id)">{{ruleSet.label}}</a></mat-list-item>
+			</mat-list>
+			<button mat-raised-button color="primary" (click)="newRuleSet()">New</button>
+		</mat-expansion-panel>
+	</mat-accordion>
+</div>

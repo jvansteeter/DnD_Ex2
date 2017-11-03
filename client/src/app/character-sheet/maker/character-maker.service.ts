@@ -98,6 +98,7 @@ export class CharacterMakerService implements CharacterInterfaceService {
         for (let i = 0; i < this.aspects.length; i++) {
             let aspect = this.aspects[i];
             let aspectObj = {
+                _id: aspect._id,
                 label: aspect.label,
                 aspectType: aspect.aspectType,
                 required: aspect.required,
@@ -137,6 +138,7 @@ export class CharacterMakerService implements CharacterInterfaceService {
         this.aspects = [];
         aspects.forEach(aspectObj => {
             let aspect = new Aspect(aspectObj.label, aspectObj.aspectType, aspectObj.required);
+            aspect._id = aspectObj._id;
             aspect.fontSize = aspectObj.fontSize;
             aspect.isNew = false;
             if (!!aspectObj.config) {

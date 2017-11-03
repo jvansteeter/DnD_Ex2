@@ -37,6 +37,7 @@ export class CharacterAspectModel extends mongoose.Schema {
         this.ruleFunction = this.methods.ruleFunction;
 
         this.methods.setItems = this.setItems;
+        this.methods.setToObject = this.setToObject;
         this.methods.setRuleFunction = this.setRuleFunction;
     }
 
@@ -56,6 +57,7 @@ export class CharacterAspectModel extends mongoose.Schema {
         if (aspectObj.hasOwnProperty('ruleFunction')) {
             this.ruleFunction = aspectObj.ruleFunction;
         }
+        console.log('UPDATE')
         return this.save();
     }
 

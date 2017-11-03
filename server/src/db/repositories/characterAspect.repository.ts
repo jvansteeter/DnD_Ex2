@@ -93,6 +93,19 @@ export class CharacterAspectRepository {
         });
     }
 
+    public deleteById(id: string): Promise<void> {
+        return new Promise((resolve, reject) => {
+            this.CharacterAspect.remove({_id: id}, (error) => {
+                if (error) {
+                    reject(error);
+                    return;
+                }
+
+                resolve();
+            })
+        })
+    }
+
     private orderByConfigCol(a, b): number {
         if (a.config.row < b.config.row) {
             return -1;

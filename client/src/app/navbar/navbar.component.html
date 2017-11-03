@@ -1,12 +1,14 @@
 <nav class="navbar navbar-inverse">
-	<button mat-button class="navbar-tabLink"
-	   *ngFor="let link of navLinks"
-	   [routerLink]="link.route"
-	   routerLinkActive #rla="routerLinkActive">
-		{{link.label}}
-	</button>
-	<button mat-button class="navbar-menuButton" [matMenuTriggerFor]="menu"><mat-icon>person</mat-icon></button>
-	<mat-menu #menu="matMenu">
-		<a mat-menu-item href="login">Logout</a>
-	</mat-menu>
+	<div class="container">
+		<button mat-button class="navbar-tabLink"
+				*ngFor="let link of navLinks"
+				[routerLink]="link.route"
+				routerLinkActive #rla="routerLinkActive">
+			{{link.label}}
+		</button>
+		<button mat-button class="navbar-menuButton" [matMenuTriggerFor]="menu"><mat-icon>person</mat-icon></button>
+		<mat-menu #menu="matMenu">
+			<a mat-menu-item href="login">Logout</a>
+		</mat-menu>
+	</div>
 </nav>

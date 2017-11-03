@@ -1,5 +1,5 @@
 <mat-form-field [style.font-size.px]="aspect.fontSize">
-	<textarea matInput placeholder="{{aspect.label}}" [required]="aspect.required" [style.resize]="'none'"></textarea>
+	<textarea matInput placeholder="{{aspect.label}}" [required]="aspect.required" [style.resize]="'none'" [(ngModel)]="value"></textarea>
 </mat-form-field>
 <mat-menu #options>
 	<div class="changeFontSize" (click)="stopClickPropagate($event)" (keyup.enter)="closeMenu()">

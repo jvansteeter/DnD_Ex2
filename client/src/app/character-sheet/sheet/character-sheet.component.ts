@@ -55,7 +55,6 @@ export class CharacterSheetComponent implements OnInit {
             this.npcId = params['npcId'];
             this.characterSheetRepository.getNpc(this.npcId).subscribe((npcData: Npc) => {
                 this.npcData = npcData;
-                console.log(this.npcData)
                 if (npcData.characterSheet.aspects) {
                     this.gridConfig.max_cols = 0;
                     for (let i = 0; i < npcData.characterSheet.aspects.length; i++) {
@@ -72,7 +71,6 @@ export class CharacterSheetComponent implements OnInit {
 
     save(): void {
         this.npcData.values = [];
-        console.log(this.characterSheetService.aspects)
         for (let i = 0; i < this.characterSheetService.aspects.length; i++) {
             let aspect = this.characterSheetService.aspects[i];
             let value = {
@@ -81,7 +79,6 @@ export class CharacterSheetComponent implements OnInit {
             };
             this.npcData.values.push(value);
         }
-        console.log(this.npcData)
         this.characterSheetRepository.saveNpc(this.npcData).subscribe();
     }
 }

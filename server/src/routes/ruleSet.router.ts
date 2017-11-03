@@ -6,10 +6,9 @@ import { CharacterSheetRepository } from '../db/repositories/characterSheet.repo
 import { UserRuleSetRepository } from '../db/repositories/user-ruleSet.repository';
 import { CharacterSheetModel } from '../db/models/characterSheet.model';
 import { CharacterAspectRepository } from '../db/repositories/characterAspect.repository';
-import { CharacterAspectModel } from '../db/models/characterAspect.model';
-import { Observable } from 'rxjs/Observable';
 import { NpcRepository } from '../db/repositories/npc.repository';
 import { NpcModel } from '../db/models/npc.model';
+import { CharacterSheetService } from '../services/characterSheet-service';
 
 
 /**********************************************************************************************************
@@ -23,6 +22,7 @@ export class RuleSetRouter {
     private userRepository: UserRepository;
     private ruleSetRepository: RuleSetRepository;
     private characterSheetRepository: CharacterSheetRepository;
+    private characterSheetService: CharacterSheetService;
     private characterAspectRepository: CharacterAspectRepository;
     private userRuleSetRepository: UserRuleSetRepository;
     private npcRepository: NpcRepository;
@@ -32,6 +32,7 @@ export class RuleSetRouter {
         this.userRepository = new UserRepository();
         this.ruleSetRepository = new RuleSetRepository();
         this.characterSheetRepository = new CharacterSheetRepository();
+        this.characterSheetService = new CharacterSheetService();
         this.characterAspectRepository = new CharacterAspectRepository();
         this.userRuleSetRepository = new UserRuleSetRepository();
         this.npcRepository = new NpcRepository();
@@ -46,9 +47,12 @@ export class RuleSetRouter {
         });
 
         this.router.post('/charactersheet/save', (req: Request, res: Response) => {
-            this.characterSheetRepository.saveCharacterSheet(req.body).then(() => {
+            this.characterSheetService.saveCharacterSheet(req.body).then(() => {
                 res.status(200).send();
-            }).catch(error => res.status(500).send(error));
+            }).catch(error => {
+                console.error(error);
+                res.status(500).send(error)
+            });
         });
 
         this.router.post('/new/ruleset', (req: Request, res: Response) => {

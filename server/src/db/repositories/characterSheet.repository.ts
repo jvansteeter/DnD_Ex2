@@ -46,26 +46,6 @@ export class CharacterSheetRepository {
         });
     }
 
-    public saveCharacterSheet(characterSheetObj: any): Promise<void> {
-        return new Promise((resolve, reject) => {
-            this.findById(characterSheetObj._id).then((characterSheet: CharacterSheetModel) => {
-                this.characterAspectRepository.removeByCharacterSheetId(characterSheet._id).then(() => {
-                    let aspectCount = characterSheetObj.aspects.length;
-                    if (aspectCount === 0) {
-                        resolve();
-                    }
-                    characterSheetObj.aspects.forEach((aspect) => {
-                        this.characterAspectRepository.create(characterSheet._id, aspect).then(() => {
-                            if (--aspectCount === 0) {
-                                resolve();
-                            }
-                        }).catch((error) => reject(error));
-                    });
-                }).catch((error) => reject(error));
-            }).catch((error) => reject(error));
-        });
-    }
-
     public getCompiledCharacterSheet(id: string): Promise<any> {
         return new Promise((resolve, reject) => {
             let characterSheetObj;
