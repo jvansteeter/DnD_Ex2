@@ -99,6 +99,18 @@ textarea {
     margin-left: -6px;
     margin-right: -6px;
     height: 100%;
+    position: relative;
+}
+
+.token-component input {
+    position: absolute;
+    display: none;
+    top: 0;
+    left: 0;
+}
+
+.token-component-image {
+    height: 100%;
 }
 
 .token-component a.thumbnail {

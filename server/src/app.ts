@@ -63,8 +63,8 @@ class App {
     private middleware(): void {
         this.app.use(favicon('./client/dist/resources/images/favicon.ico'));
         this.app.use(logger('dev'));
-        this.app.use(bodyParser.json());
-        this.app.use(bodyParser.urlencoded({ extended: false }));
+        this.app.use(bodyParser.json({limit: '50mb'}));
+        this.app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
     }
 
     // Configure API endpoints.

@@ -1,7 +1,8 @@
 <div class="token-component">
-	<a class="thumbnail">
-		<img/>
+	<a class="thumbnail" (click)="upload()">
+		<img class="token-component-image" [src]="value"/>
 	</a>
+	<input type="file" accept="image/*" #fileInput (change)="loadImage()"/>
 </div>
 <mat-menu #options="matMenu">
 </mat-menu>

@@ -1,6 +1,5 @@
-import { AfterViewInit, Component, Input, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { Aspect } from '../../../../types/character-sheet/aspect';
-import { SubComponent } from '../sub-component';
 import { SubComponentChild } from '../sub-component-child';
 import { MatMenu } from '@angular/material';
 
@@ -16,7 +15,10 @@ export class TokenComponent implements SubComponentChild, AfterViewInit{
     label: string;
     required: boolean;
     readonly hasOptions = false;
-    value: any;
+    value: string = '';
+
+    @ViewChild('fileInput') fileInput: ElementRef;
+    reader: FileReader = new FileReader();
 
     constructor() {
 
@@ -43,5 +45,18 @@ export class TokenComponent implements SubComponentChild, AfterViewInit{
 
     setValue(value: any): any {
         this.value = value;
+    }
+
+    upload(): void {
+        this.fileInput.nativeElement.click();
+    }
+
+    loadImage(): void {
+        this.reader.addEventListener('load', () => {
+            this.value = this.reader.result;
+        });
+        if (this.fileInput.nativeElement.files[0]) {
+            this.reader.readAsDataURL(this.fileInput.nativeElement.files[0]);
+        }
     }
 }
