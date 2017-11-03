@@ -67,7 +67,10 @@
 }
 
 .characterSheet-addButton {
-    margin-right: auto;
+}
+
+.characterSheet-saveButton {
+    margin-left: auto;
 }
 
 mat-toolbar {
