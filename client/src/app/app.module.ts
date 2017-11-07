@@ -5,7 +5,7 @@ import { HttpModule } from '@angular/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
-import { ProfileService } from './profile/profile.service';
+import { UserProfileService } from './utilities/services/userProfile.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HomeModule } from './home/home.module';
 import { MapMakerModule } from './map-maker/map-maker.module';
@@ -34,7 +34,7 @@ import { CharacterSheetModule } from './character-sheet/character-sheet.module';
         NavbarComponent
     ],
     providers: [
-        ProfileService
+        UserProfileService
     ],
     bootstrap: [ AppComponent ]
 })

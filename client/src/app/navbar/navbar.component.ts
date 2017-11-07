@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { ProfileService } from '../profile/profile.service';
+import { UserProfileService } from '../utilities/services/userProfile.service';
+import { UserProfile } from '../types/userProfile';
 
 @Component({
     selector: 'app-navbar',
@@ -10,9 +11,9 @@ export class NavbarComponent {
     private username: string;
     private navLinks: any[];
 
-    constructor(private profileService: ProfileService) {
-        this.profileService.getUsername().then(username => {
-            this.username = username;
+    constructor(private profileService: UserProfileService) {
+        this.profileService.getUserProfile().then((userProfile: UserProfile) => {
+            this.username = userProfile.getName();
             this.navLinks = [
                 {
                     label: 'Home',

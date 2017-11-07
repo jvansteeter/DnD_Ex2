@@ -7,6 +7,10 @@ h1 {
     flex-direction: column;
 }
 
+.form-signin mat-form-field {
+    width: 100%;
+}
+
 a {
     cursor: pointer;
 }

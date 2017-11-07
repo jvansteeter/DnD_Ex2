@@ -1,5 +1,6 @@
 import * as mongoose from 'mongoose';
 import * as bcrypt from 'bcryptjs';
+import Promise from 'bluebird';
 
 
 export class UserModel extends mongoose.Schema {
@@ -47,12 +48,26 @@ export class UserModel extends mongoose.Schema {
         this.save();
     }
 
+    public setProfilePhotoUrl(url: string): void {
+        this.profilePhotoUrl = url;
+        this.save();
+    }
+
     public checkPassword(password: string): boolean {
         return bcrypt.compareSync(password, this.passwordHash);
     }
 
-    private save() {
-        this.methods.save();
+    private save(): Promise<UserModel> {
+        return new Promise((resolve, reject) => {
+            this.methods.save((error, user: UserModel) => {
+                if (error) {
+                    reject(error);
+                    return;
+                }
+
+                resolve(user);
+            })
+        });
     }
 }
 

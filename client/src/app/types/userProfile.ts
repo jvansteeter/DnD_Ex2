@@ -1,9 +1,10 @@
 
-export class Profile {
+export class UserProfile {
     public id: string;
     public username: string;
     public firstName: string;
     public lastName: string;
+    public profilePhotoUrl: string;
 
     constructor(profileData: any) {
         this.id = profileData._id;
@@ -13,6 +14,9 @@ export class Profile {
         }
         if (profileData.hasOwnProperty('lastName')) {
             this.lastName = profileData.lastName;
+        }
+        if (profileData.hasOwnProperty('profilePhotoUrl')) {
+            this.profilePhotoUrl = profileData.profilePhotoUrl;
         }
     }
 
