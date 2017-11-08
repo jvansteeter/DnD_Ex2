@@ -20,14 +20,16 @@ export class UserProfileService {
         });
     }
 
-    public getProfilePhotoUrl(): string | undefined {
+    public getProfilePhotoUrl(): string {
         if (this.userProfile) {
             return this.userProfile.profilePhotoUrl;
         }
+
+        return '';
     }
 
     public setProfilePhotoUrl(url: string): void {
-
+        this.http.post('api/user/profilephoto', url, {responseType: 'text'}).subscribe();
     }
 
     private getProfileData(): Promise<void> {

@@ -1,3 +1,9 @@
+.home-profilePhoto {
+    flex: 2;
+    height: 150px;
+    padding-right: 10px;
+}
+
 .home-profilePhoto input {
     position: absolute;
     display: none;
@@ -16,4 +22,8 @@
 
 .container {
     display: flex;
+}
+
+.home-content {
+    flex: 6;
 }

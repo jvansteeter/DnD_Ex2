@@ -15,13 +15,15 @@ export class HomeComponent implements AfterViewInit {
     @ViewChild('fileInput') fileInput: ElementRef;
     public ruleSets: any[];
     private reader: FileReader = new FileReader();
-    private profileImageURL;
+    private profilePhotoUrl: string = '';
 
     constructor(private dialog: MatDialog,
                 private http: HttpClient,
                 private router: Router,
                 private userProfileService: UserProfileService) {
-        this.profileImageURL = this.userProfileService.getProfilePhotoUrl();
+        if (this.userProfileService.getProfilePhotoUrl()) {
+            this.profilePhotoUrl = this.userProfileService.getProfilePhotoUrl();
+        }
     }
 
     public ngAfterViewInit(): void {
@@ -42,8 +44,8 @@ export class HomeComponent implements AfterViewInit {
 
     public loadImage(): void {
         this.reader.addEventListener('load', () => {
-            this.profileImageURL = this.reader.result;
-            this.userProfileService.setProfilePhotoUrl(this.profileImageURL);
+            this.profilePhotoUrl = this.reader.result;
+            this.userProfileService.setProfilePhotoUrl(this.profilePhotoUrl);
         });
         if (this.fileInput.nativeElement.files[0]) {
             this.reader.readAsDataURL(this.fileInput.nativeElement.files[0]);

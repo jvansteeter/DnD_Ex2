@@ -48,9 +48,9 @@ export class UserModel extends mongoose.Schema {
         this.save();
     }
 
-    public setProfilePhotoUrl(url: string): void {
+    public setProfilePhotoUrl(url: string): Promise<UserModel> {
         this.profilePhotoUrl = url;
-        this.save();
+        return this.save();
     }
 
     public checkPassword(password: string): boolean {
