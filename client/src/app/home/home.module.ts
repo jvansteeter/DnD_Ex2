@@ -5,6 +5,7 @@ import { NewRuleSetDialogComponent } from './dialog/new-rule-set-dialog.componen
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
+import { SocialModule } from '../social/social.module';
 
 @NgModule({
     imports: [
@@ -14,7 +15,8 @@ import { BrowserModule } from '@angular/platform-browser';
         HttpClientModule,
         FormsModule,
         BrowserModule,
-        MatListModule
+        MatListModule,
+        SocialModule
     ],
     declarations: [
         HomeComponent,

@@ -1,0 +1,20 @@
+<mat-form-field>
+	<input matInput #searchCriteria placeholder="Search" (keyup.enter)="search()">
+</mat-form-field>
+<mat-table #table [dataSource]="userDataSource" [ngClass]="{'hidden': (users.length === 0)}">
+	<ng-container matColumnDef="user">
+		<mat-header-cell *matHeaderCellDef>User</mat-header-cell>
+		<mat-cell *matCellDef="let user">
+			<img [src]="user.profilePhotoUrl" class="img-rounded">
+			<span>{{user.username}}</span>
+		</mat-cell>
+	</ng-container>
+	<ng-container matColumnDef="actions">
+		<mat-header-cell *matHeaderCellDef></mat-header-cell>
+		<mat-cell *matCellDef="let user">
+			<button mat-raised-button color="primary" class="friendRequest" (click)="sendRequest(user)">Send Friend Request</button>
+		</mat-cell>
+	</ng-container>
+	<mat-header-row *matHeaderRowDef="tableColumns"></mat-header-row>
+	<mat-row *matRowDef="let user; columns: tableColumns"></mat-row>
+</mat-table>

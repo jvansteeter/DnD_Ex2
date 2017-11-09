@@ -1,0 +1,13 @@
+.hidden {
+    display: none;
+}
+
+.img-rounded {
+    width: 50px;
+    min-width: 50px;
+    margin-right: 10px;
+}
+
+.friendRequest {
+    margin-left: 25px;
+}

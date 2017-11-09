@@ -28,8 +28,18 @@ export class UserRouter {
                  user.setProfilePhotoUrl(req.body.imageUrl).then(() => res.status(200).send()).catch(error => res.status(500).send(error));
              }).catch(error => res.status(500).send(error));
         });
-    }
 
+        this.router.post('/find', (req: Request, res: Response) => {
+            let criteria = req.body.search;
+            this.userRepository.findBySearch(criteria).then((users: UserModel[]) => {
+                for (let i = 0; i < users.length; i++) {
+                    users[i]._id = undefined;
+                    users[i].passwordHash = undefined;
+                }
+                res.json(users);
+            }).catch(error => res.status(500).send(error));
+        });
+    }
 }
 
 export default new UserRouter().router;

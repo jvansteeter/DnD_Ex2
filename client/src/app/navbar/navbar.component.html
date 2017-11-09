@@ -8,6 +8,7 @@
 		</button>
 		<button mat-button class="navbar-menuButton" [matMenuTriggerFor]="menu"><mat-icon>person</mat-icon></button>
 		<mat-menu #menu="matMenu">
+			<a mat-menu-item (click)="openAddFriendDialog()">Add Friend</a>
 			<a mat-menu-item href="login">Logout</a>
 		</mat-menu>
 	</div>

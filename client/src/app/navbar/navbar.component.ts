@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { UserProfileService } from '../utilities/services/userProfile.service';
 import { UserProfile } from '../types/userProfile';
+import { MatDialog } from '@angular/material';
+import { AddFriendComponent } from '../social/add-friend/add-friend.component';
 
 @Component({
     selector: 'app-navbar',
@@ -11,19 +13,23 @@ export class NavbarComponent {
     private username: string;
     private navLinks: any[];
 
-    constructor(private profileService: UserProfileService) {
+    constructor(private profileService: UserProfileService, private dialog: MatDialog) {
+        this.navLinks = [
+            {
+                label: 'Home',
+                route: 'home'
+            },
+            {
+                label: 'Map Maker',
+                route: 'map-maker'
+            }
+        ];
         this.profileService.getUserProfile().then((userProfile: UserProfile) => {
             this.username = userProfile.getName();
-            this.navLinks = [
-                {
-                    label: 'Home',
-                    route: 'home'
-                },
-                {
-                    label: 'Map Maker',
-                    route: 'map-maker'
-                }
-            ];
         });
+    }
+
+    public openAddFriendDialog(): void {
+        this.dialog.open(AddFriendComponent);
     }
 }

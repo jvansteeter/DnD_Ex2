@@ -35,6 +35,20 @@ export class UserRepository {
         return this.user.findById(id);
     }
 
+    public findBySearch(searchCriteria: string): Promise<UserModel[]> {
+        let regexp = new RegExp('.*' + searchCriteria + '.*', 'i');
+        return new Promise((resolve, reject) => {
+            this.user.find({username: regexp}, (error, users: UserModel[]) => {
+                if (error) {
+                    reject(error);
+                    return;
+                }
+
+                resolve(users);
+            });
+        });
+    }
+
     public findByUsername(username: string): Promise<UserModel> {
         return this.user.findOne({username: username});
     }

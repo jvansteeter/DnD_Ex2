@@ -4,12 +4,12 @@ import Promise from 'bluebird';
 
 
 export class UserModel extends mongoose.Schema {
-    public _id: string;
+    public _id;
     public username: string;
     public profilePhotoUrl: string;
     public firstName: string;
     public lastName: string;
-    public passwordHash: string;
+    public passwordHash;
 
     constructor() {
         super ({
