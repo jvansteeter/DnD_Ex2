@@ -25,7 +25,7 @@ export class UserRouter {
 
         this.router.post('/profilephoto', (req: Request, res: Response) => {
              this.userRepository.findById(req.user._id).then((user: UserModel) => {
-                 user.setProfilePhotoUrl(req.body).then(() => res.status(200).send()).catch(error => res.status(500).send(error));
+                 user.setProfilePhotoUrl(req.body.imageUrl).then(() => res.status(200).send()).catch(error => res.status(500).send(error));
              }).catch(error => res.status(500).send(error));
         });
     }

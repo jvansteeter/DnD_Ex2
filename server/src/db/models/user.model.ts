@@ -31,6 +31,7 @@ export class UserModel extends mongoose.Schema {
         this.methods.checkPassword = this.checkPassword;
         this.methods.setFirstName = this.setFirstName;
         this.methods.setLastName = this.setLastName;
+        this.methods.setProfilePhotoUrl = this.setProfilePhotoUrl;
     }
 
     public setPassword(password: string): void {

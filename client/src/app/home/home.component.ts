@@ -21,9 +21,9 @@ export class HomeComponent implements AfterViewInit {
                 private http: HttpClient,
                 private router: Router,
                 private userProfileService: UserProfileService) {
-        if (this.userProfileService.getProfilePhotoUrl()) {
+        this.userProfileService.getUserProfile().then(() => {
             this.profilePhotoUrl = this.userProfileService.getProfilePhotoUrl();
-        }
+        });
     }
 
     public ngAfterViewInit(): void {

@@ -29,14 +29,12 @@ export class UserProfileService {
     }
 
     public setProfilePhotoUrl(url: string): void {
-        this.http.post('api/user/profilephoto', url, {responseType: 'text'}).subscribe();
+        this.http.post('api/user/profilephoto', {imageUrl: url}, {responseType: 'text'}).subscribe();
     }
 
     private getProfileData(): Promise<void> {
         return new Promise((resolve, reject) => {
             this.http.get('/api/user/profile', {responseType: 'json'}).subscribe((data) => {
-                console.log('getProfileData')
-                console.log(data)
                 this.userProfile = new UserProfile(data);
                 resolve();
             }, error => reject(error));
