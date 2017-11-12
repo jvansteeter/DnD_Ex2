@@ -12,6 +12,7 @@ import { MapMakerModule } from './map-maker/map-maker.module';
 import { MatButtonModule, MatIconModule, MatMenuModule, MatTabsModule } from '@angular/material';
 import { RuleSetHomeModule } from './rule-set-home/rule-set-home.module';
 import { CharacterSheetModule } from './character-sheet/character-sheet.module';
+import { SocketService } from "./socket/socket.service";
 
 @NgModule({
     imports: [
@@ -34,7 +35,8 @@ import { CharacterSheetModule } from './character-sheet/character-sheet.module';
         NavbarComponent
     ],
     providers: [
-        UserProfileService
+        UserProfileService,
+        SocketService
     ],
     bootstrap: [ AppComponent ]
 })
