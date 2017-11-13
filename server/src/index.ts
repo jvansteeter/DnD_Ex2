@@ -2,6 +2,7 @@ import * as http from 'http';
 import * as debug from 'debug';
 
 import App from './App';
+import SocketService from './services/socket.service';
 
 /***********************************************************************************************************************
  * NODE SERVER
@@ -13,7 +14,19 @@ debug('ts-express:server');
 const port = normalizePort(process.env.PORT || 3000);
 App.set('port', port);
 
+/**
+ * Create HTTP server
+ * @type {"http".Server}
+ */
 const server = http.createServer(App);
+
+/**
+ * Add socket listener to server
+ */
+let io = require('socket.io').listen(server);
+io.sockets.on('connection', SocketService);
+io.sockets.on('error', onError);
+
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);

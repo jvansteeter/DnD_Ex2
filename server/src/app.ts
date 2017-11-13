@@ -31,7 +31,7 @@ import RuleSetRouter from './routes/ruleSet.router';
 
 class App {
     // ref to Express instance
-    public app: Express.Application;
+    public app;
 
     //Run configuration methods on the Express instance.
     constructor() {
