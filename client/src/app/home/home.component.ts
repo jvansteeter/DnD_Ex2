@@ -4,8 +4,6 @@ import { NewRuleSetDialogComponent } from './dialog/new-rule-set-dialog.componen
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { UserProfileService } from '../utilities/services/userProfile.service';
-import { SocketService } from '../socket/socket.service';
-import { SocketComponent } from '../socket/socket.component';
 
 
 @Component({
@@ -13,7 +11,7 @@ import { SocketComponent } from '../socket/socket.component';
     templateUrl: 'home.component.html',
     styleUrls: ['home.component.css']
 })
-export class HomeComponent extends SocketComponent implements AfterViewInit {
+export class HomeComponent implements AfterViewInit {
     @ViewChild('fileInput') fileInput: ElementRef;
     public ruleSets: any[];
     private reader: FileReader = new FileReader();
@@ -22,20 +20,10 @@ export class HomeComponent extends SocketComponent implements AfterViewInit {
     constructor(private dialog: MatDialog,
                 private http: HttpClient,
                 private router: Router,
-                private userProfileService: UserProfileService,
-                socketService: SocketService) {
-        super(socketService);
+                private userProfileService: UserProfileService) {
         this.userProfileService.getUserProfile().then(() => {
             this.profilePhotoUrl = this.userProfileService.getProfilePhotoUrl();
         });
-        this.socketOn('init').subscribe((data) => {
-            console.log(data)
-            console.log('socket init')
-        });
-        this.socketOn('echo').subscribe(data => {
-            console.log(data);
-        });
-        this.socketEmit('echo', 'this is an echo');
     }
 
     public ngAfterViewInit(): void {

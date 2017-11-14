@@ -12,7 +12,7 @@
 	<ng-container matColumnDef="actions">
 		<mat-header-cell *matHeaderCellDef></mat-header-cell>
 		<mat-cell *matCellDef="let user">
-			<button mat-raised-button color="primary" class="friendRequest" (click)="sendRequest(user)">Send Friend Request</button>
+			<button mat-raised-button color="primary" class="friendRequest" (click)="sendRequest(user)"><mat-icon>person_add</mat-icon></button>
 		</mat-cell>
 	</ng-container>
 	<mat-header-row *matHeaderRowDef="tableColumns"></mat-header-row>

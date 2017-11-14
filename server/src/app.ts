@@ -22,6 +22,7 @@ import './config/passport.config';
 import LoginRouter from './routes/login.router';
 import UserRouter from './routes/user.router';
 import RuleSetRouter from './routes/ruleSet.router';
+import SocialRouter from './routes/social.router';
 
 
 /***********************************************************************************************************************
@@ -103,6 +104,7 @@ class App {
         this.app.use('/auth', LoginRouter);
         this.app.use('/api/user', this.isAuthenticated, UserRouter);
         this.app.use('/api/ruleset', this.isAuthenticated, RuleSetRouter);
+        this.app.use('/api/social', this.isAuthenticated, SocialRouter);
 
         //  All other requests, redirect to index
         this.app.get('*', (req, res) => {

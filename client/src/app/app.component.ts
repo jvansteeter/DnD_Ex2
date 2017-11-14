@@ -1,15 +1,24 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { SocketService } from './socket/socket.service';
+import { SocketComponent } from './socket/socket.component';
+import { UserProfileService } from './utilities/services/userProfile.service';
+import { UserProfile } from './types/userProfile';
 
 @Component({
   selector: 'web-app',
   templateUrl: 'app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit {
+export class AppComponent extends SocketComponent implements OnInit {
 
-    constructor(private router: Router) {
-
+    constructor(private router: Router,
+                private userProfileService: UserProfileService,
+                socketService: SocketService) {
+        super(socketService);
+        this.userProfileService.getUserProfile().then((userProfile: UserProfile) => {
+            this.socketEmit('connect', userProfile.id);
+        });
     }
 
     ngOnInit(): void {
