@@ -1,12 +1,12 @@
 import { Router, Request, Response } from 'express';
 import { RuleSetRepository } from '../db/repositories/ruleSet.repository';
 import { UserRepository } from '../db/repositories/user.repository';
-import { RuleSetModel } from '../db/models/ruleSet.model';
 import { CharacterSheetRepository } from '../db/repositories/characterSheet.repository';
 import { UserRuleSetRepository } from '../db/repositories/user-ruleSet.repository';
 import { CharacterAspectRepository } from '../db/repositories/characterAspect.repository';
 import { NpcRepository } from '../db/repositories/npc.repository';
 import { CharacterSheetService } from '../services/characterSheet-service';
+import { SocialService } from '../services/social.service';
 
 
 /**********************************************************************************************************
@@ -24,6 +24,7 @@ export class SocialRouter {
     private characterAspectRepository: CharacterAspectRepository;
     private userRuleSetRepository: UserRuleSetRepository;
     private npcRepository: NpcRepository;
+    private socialService: SocialService;
 
     constructor() {
         this.router = Router();
@@ -34,14 +35,15 @@ export class SocialRouter {
         this.characterAspectRepository = new CharacterAspectRepository();
         this.userRuleSetRepository = new UserRuleSetRepository();
         this.npcRepository = new NpcRepository();
+        this.socialService = new SocialService();
         this.init();
     }
 
     init() {
         this.router.post('/friendrequest/', (req: Request, res: Response) => {
-            this.userRepository.findById(req.body.fromUserId).then((ruleSet: RuleSetModel) => {
-                res.json(ruleSet);
-            }).catch(error => res.status(500).send(error));
+            this.socialService.sendFriendRequest(req.user._id, req.body).then(() => {
+                res.status(200).send("OK");
+            });
         });
 
     }

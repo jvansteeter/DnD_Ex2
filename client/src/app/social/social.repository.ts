@@ -12,4 +12,8 @@ export class SocialRepository {
     public findUsers(criteria: string): Observable<any> {
         return this.http.post<UserProfile[]>('api/user/find', {search: criteria});
     }
+
+    public sendFriendRequest(toUserId: string): void {
+        this.http.post('api/social/friendrequest', toUserId, {responseType: 'text'}).subscribe();
+    }
 }

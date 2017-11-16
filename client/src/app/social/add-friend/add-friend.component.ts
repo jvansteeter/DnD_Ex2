@@ -5,6 +5,7 @@ import { Subject } from 'rxjs/Subject';
 import { SocialRepository } from '../social.repository';
 import { UserProfile } from '../../types/userProfile';
 import { MatDialogRef } from '@angular/material';
+import { SocialService } from '../social.service';
 
 
 @Component({
@@ -20,20 +21,21 @@ export class AddFriendComponent {
 
     public users: UserProfile[];
 
-    constructor(private socialRepository: SocialRepository, private dialogRef: MatDialogRef<AddFriendComponent>) {
+    constructor(private socialService: SocialService, private dialogRef: MatDialogRef<AddFriendComponent>) {
         this.userSubject = new Subject();
         this.userDataSource = new UserDataSource(this.userSubject);
         this.users = [];
     }
 
     public search(): void {
-        this.socialRepository.findUsers(this.searchInput.nativeElement.value).subscribe((users: UserProfile[]) => {
+        this.socialService.findUsers(this.searchInput.nativeElement.value).subscribe((users: UserProfile[]) => {
             this.users = users;
             this.userSubject.next(users);
         });
     }
 
     public sendRequest(user: UserProfile): void {
+        this.socialService.sendFriendRequest(user.id);
         this.dialogRef.close();
     }
 }

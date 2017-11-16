@@ -4,6 +4,7 @@ import { MatButtonModule, MatIconModule, MatInputModule, MatTableModule } from '
 import { SocialRepository } from './social.repository';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
+import { SocialService } from './social.service';
 
 @NgModule({
     imports: [
@@ -21,7 +22,8 @@ import { BrowserModule } from '@angular/platform-browser';
         AddFriendComponent
     ],
     providers: [
-        SocialRepository
+        SocialRepository,
+        SocialService
     ],
     exports: [
         AddFriendComponent

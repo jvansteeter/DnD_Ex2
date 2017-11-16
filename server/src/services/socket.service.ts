@@ -1,16 +1,18 @@
-let currentUserService = require('./currentUsers.service');
+let currentUserService = require('./loggedInUserSocket.service');
 
 export class SocketService {
     onConnect = (socket) => {
+        let userId: string = '';
         socket.emit('init');
-        console.log("\n\n" + socket.id + "\n\n")
 
-        socket.on('connect', (userId) => {
-            currentUserService.addUser(userId);
+        socket.on('login', (_userId) => {
+            userId = _userId;
+            currentUserService.addUser(userId, socket);
+            socket.join(userId);
         });
 
         socket.on('disconnect', () => {
-            console.log('socket has been disconnected')
+            currentUserService.removeUser(userId);
         });
 
         socket.on('echo', (data) => {

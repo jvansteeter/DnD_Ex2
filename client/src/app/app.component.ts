@@ -17,11 +17,15 @@ export class AppComponent extends SocketComponent implements OnInit {
                 socketService: SocketService) {
         super(socketService);
         this.userProfileService.getUserProfile().then((userProfile: UserProfile) => {
-            this.socketEmit('connect', userProfile.id);
+            this.socketEmit('login', userProfile.id);
         });
     }
 
     ngOnInit(): void {
         this.router.navigate(['/home']);
+        this.socketOn('friendRequest').subscribe(fromUser => {
+            console.log('got a friend request')
+            console.log(fromUser)
+        })
     }
 }
