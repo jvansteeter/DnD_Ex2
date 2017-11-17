@@ -16,4 +16,16 @@ export class SocialRepository {
     public sendFriendRequest(toUserId: string): void {
         this.http.post('api/social/friendrequest', {userId: toUserId}, {responseType: 'text'}).subscribe();
     }
+
+    public acceptRequest(fromUserId: string): void {
+        this.http.post('api/social/acceptrequest', {userId: fromUserId}, {responseType: 'text'}).subscribe();
+    }
+
+    public rejectFriendRequest(fromUserId: string): void {
+        this.http.post('api/social/rejectrequest', {userId: fromUserId}, {responseType: 'text'}).subscribe();
+    }
+
+    public getPendingFriendRequests(): Observable<any> {
+        return this.http.get('api/social/pendingrequests', {responseType: 'json'});
+    }
 }

@@ -16,6 +16,22 @@ export class FriendRequestModel extends mongoose.Schema {
         this._id = this.methods._id;
         this.fromUserId = this.methods.fromUserId;
         this.toUserId = this.methods.toUserId;
+
+        this.methods.destroy = this.destroy;
+    }
+
+    public destroy(): Promise<void> {
+        return new Promise((resolve, reject) => {
+            this.methods.remove(error => {
+                if (error) {
+                    reject(error);
+                    return;
+                }
+
+                resolve();
+            });
+        });
+
     }
 
     private save(): Promise<void> {

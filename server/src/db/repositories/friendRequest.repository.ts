@@ -57,7 +57,7 @@ export class FriendRequestRepository {
         });
     }
 
-    private findFromTo(fromId: string, toId: string): Promise<FriendRequestModel> {
+    public findFromTo(fromId: string, toId: string): Promise<FriendRequestModel> {
         return new Promise((resolve, reject) => {
             this.FriendRequest.find({fromUserId: fromId, toUserId: toId}, (error, requests: FriendRequestModel[]) => {
                 if (error) {
@@ -66,6 +66,19 @@ export class FriendRequestRepository {
                 }
 
                 resolve(requests);
+            });
+        });
+    }
+
+    public delete(request: FriendRequestModel): Promise<void> {
+        return new Promise((resolve, reject) => {
+            this.FriendRequest.remove({_id: request._id}, (error) => {
+                if (error) {
+                    reject(error);
+                    return;
+                }
+
+                resolve();
             });
         });
     }

@@ -7,6 +7,7 @@ import { CharacterAspectRepository } from '../db/repositories/characterAspect.re
 import { NpcRepository } from '../db/repositories/npc.repository';
 import { CharacterSheetService } from '../services/characterSheet-service';
 import { SocialService } from '../services/social.service';
+import { UserModel } from "../db/models/user.model";
 
 
 /**********************************************************************************************************
@@ -46,6 +47,32 @@ export class SocialRouter {
             }).catch(error => res.status(500).send(error));
         });
 
+        this.router.get('/pendingrequests', (req: Request, res: Response) => {
+            this.socialService.getPendingFriendRequests(req.user._id).then((users: UserModel[]) => {
+                res.json(users);
+            }).catch(error => {
+                console.error(error);
+                res.status(500).send(error);
+            })
+        });
+
+        this.router.post('/acceptrequest', (req: Request, res: Response) => {
+            this.socialService.acceptFriendRequest(req.user._id, req.body.userId).then(() => {
+                res.send("OK");
+            }).catch(error => {
+                console.error(error);
+                res.status(500).send(error);
+            });
+        });
+
+        this.router.post('/rejectrequest', (req: Request, res: Response) => {
+            this.socialService.rejectFriendRequest(req.user._id, req.body.userId).then(() => {
+                res.send('OK');
+            }).catch(error => {
+                console.error(error);
+                res.status(500).send(error);
+            });
+        });
     }
 }
 

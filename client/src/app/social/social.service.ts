@@ -13,4 +13,16 @@ export class SocialService {
     public sendFriendRequest(toUserId: string): void {
         this.socialRepo.sendFriendRequest(toUserId);
     }
+
+    public acceptRequest(fromUserId: string): void {
+        this.socialRepo.acceptRequest(fromUserId);
+    }
+
+    public rejectFriendRequest(fromUserId: string): void {
+        this.socialRepo.rejectFriendRequest(fromUserId);
+    }
+
+    public getPendingFriendRequests(): Observable<any> {
+        return this.socialRepo.getPendingFriendRequests();
+    }
 }

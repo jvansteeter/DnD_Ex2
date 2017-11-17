@@ -18,10 +18,6 @@ export class SocketService {
         socket.on('echo', (data) => {
             socket.emit('echo', data);
         });
-
-        socket.on('requestRequest', () => {
-            socket.emit('friendRequest', 'system');
-        })
     };
 }
 

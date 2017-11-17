@@ -46,6 +46,26 @@ export class AddFriendComponent {
         this.socialService.sendFriendRequest(user._id);
         this.dialogRef.close();
     }
+
+    public acceptRequest(user: UserProfile): void {
+        this.socialService.acceptRequest(user._id);
+        this.dialogRef.close();
+    }
+
+    public rejectRequest(user: UserProfile): void {
+        this.socialService.rejectFriendRequest(user._id);
+        this.dialogRef.close();
+    }
+
+    public hasPendingRequestFrom(user: UserProfile): boolean {
+        for (let i = 0; i < this.userProfileService.friendRequests.length; i++) {
+            if (this.userProfileService.friendRequests[i]._id === user._id) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
 
 class UserDataSource extends DataSource<UserProfile> {

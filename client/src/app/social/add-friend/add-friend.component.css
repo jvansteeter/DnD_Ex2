@@ -11,3 +11,16 @@
 .friendRequest {
     margin-left: 25px;
 }
+
+.acceptButton {
+    background-color: forestgreen;
+}
+
+.rejectButton {
+    background-color: orangered;
+}
+
+.actionsCell {
+    display: flex;
+    align-items: stretch;
+}
