@@ -28,6 +28,14 @@ export class UserProfileService {
         return '';
     }
 
+    public getUserId(): string {
+        if (this.userProfile) {
+            return this.userProfile._id;
+        }
+
+        return '';
+    }
+
     public setProfilePhotoUrl(url: string): void {
         this.http.post('api/user/profilephoto', {imageUrl: url}, {responseType: 'text'}).subscribe();
     }

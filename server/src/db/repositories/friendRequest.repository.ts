@@ -11,16 +11,22 @@ export class FriendRequestRepository {
 
     public create(fromUserId: string, toUserId: string): Promise<FriendRequestModel> {
         return new Promise((resolve, reject) => {
-            this.FriendRequest.create({
-                fromUserId: fromUserId,
-                toUserId: toUserId
-            }, (error, friend: FriendRequestModel) => {
-                if (error) {
-                    reject (error);
+            this.findFromTo(fromUserId, toUserId).then((requests: FriendRequestModel[]) => {
+                if (requests.length > 0) {
+                    resolve(requests[0]);
                     return;
                 }
+                this.FriendRequest.create({
+                    fromUserId: fromUserId,
+                    toUserId: toUserId
+                }, (error, friend: FriendRequestModel) => {
+                    if (error) {
+                        reject (error);
+                        return;
+                    }
 
-                resolve(friend);
+                    resolve(friend);
+                });
             });
         });
     }
@@ -41,6 +47,19 @@ export class FriendRequestRepository {
     public findAllTo(userId: string): Promise<FriendRequestModel[]> {
         return new Promise((resolve, reject) => {
             this.FriendRequest.find({toUserId: userId}, (error, requests) => {
+                if (error) {
+                    reject(error);
+                    return;
+                }
+
+                resolve(requests);
+            });
+        });
+    }
+
+    private findFromTo(fromId: string, toId: string): Promise<FriendRequestModel> {
+        return new Promise((resolve, reject) => {
+            this.FriendRequest.find({fromUserId: fromId, toUserId: toId}, (error, requests: FriendRequestModel[]) => {
                 if (error) {
                     reject(error);
                     return;

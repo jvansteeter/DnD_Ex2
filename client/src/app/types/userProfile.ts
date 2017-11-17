@@ -1,13 +1,13 @@
 
 export class UserProfile {
-    public id: string;
+    public _id: string;
     public username: string;
     public firstName: string;
     public lastName: string;
     public profilePhotoUrl: string;
 
     constructor(profileData: any) {
-        this.id = profileData._id;
+        this._id = profileData._id;
         this.username = profileData.username;
         if (profileData.hasOwnProperty('firstName')) {
             this.firstName = profileData.firstName;

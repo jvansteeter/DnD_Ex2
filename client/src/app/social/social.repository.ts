@@ -14,6 +14,6 @@ export class SocialRepository {
     }
 
     public sendFriendRequest(toUserId: string): void {
-        this.http.post('api/social/friendrequest', toUserId, {responseType: 'text'}).subscribe();
+        this.http.post('api/social/friendrequest', {userId: toUserId}, {responseType: 'text'}).subscribe();
     }
 }

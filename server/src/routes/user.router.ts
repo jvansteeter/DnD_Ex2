@@ -33,11 +33,13 @@ export class UserRouter {
             let criteria = req.body.search;
             this.userRepository.findBySearch(criteria).then((users: UserModel[]) => {
                 for (let i = 0; i < users.length; i++) {
-                    users[i]._id = undefined;
                     users[i].passwordHash = undefined;
                 }
                 res.json(users);
-            }).catch(error => res.status(500).send(error));
+            }).catch(error => {
+                console.error(error);
+                res.status(500).send(error)
+            });
         });
     }
 }

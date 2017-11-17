@@ -24,7 +24,7 @@ export abstract class SocketComponent implements OnDestroy {
         return subject.asObservable();
     }
 
-    protected socketEmit(eventName: string, data: any): void {
+    protected socketEmit(eventName: string, data?: any): void {
         this.socketService.emit(eventName, data);
     }
 }

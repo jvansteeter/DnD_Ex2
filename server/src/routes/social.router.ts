@@ -41,9 +41,9 @@ export class SocialRouter {
 
     init() {
         this.router.post('/friendrequest/', (req: Request, res: Response) => {
-            this.socialService.sendFriendRequest(req.user._id, req.body).then(() => {
+            this.socialService.sendFriendRequest(req.user._id, req.body.userId).then(() => {
                 res.status(200).send("OK");
-            });
+            }).catch(error => res.status(500).send(error));
         });
 
     }
