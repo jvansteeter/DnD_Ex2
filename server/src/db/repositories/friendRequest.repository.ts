@@ -11,9 +11,11 @@ export class FriendRequestRepository {
 
     public create(fromUserId: string, toUserId: string): Promise<FriendRequestModel> {
         return new Promise((resolve, reject) => {
-            this.findFromTo(fromUserId, toUserId).then((requests: FriendRequestModel[]) => {
-                if (requests.length > 0) {
-                    resolve(requests[0]);
+            this.findFromTo(fromUserId, toUserId).then((request: FriendRequestModel) => {
+                console.log('When creating this is what findFromTo returned')
+                console.log(request)
+                if (request) {
+                    resolve(request);
                     return;
                 }
                 this.FriendRequest.create({
@@ -65,12 +67,12 @@ export class FriendRequestRepository {
                     return;
                 }
 
-                resolve(requests);
+                resolve(requests[0]);
             });
         });
     }
 
-    public delete(request: FriendRequestModel): Promise<void> {
+    public remove(request: FriendRequestModel): Promise<void> {
         return new Promise((resolve, reject) => {
             this.FriendRequest.remove({_id: request._id}, (error) => {
                 if (error) {

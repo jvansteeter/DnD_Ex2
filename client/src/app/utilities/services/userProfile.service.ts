@@ -10,6 +10,7 @@ export class UserProfileService {
     private profilePromise: Promise<void>;
 
     public friendRequests: UserProfile[];
+    public friends: UserProfile[];
 
     constructor(private http: HttpClient,
                 private socialService: SocialService) {
@@ -46,9 +47,26 @@ export class UserProfileService {
 
     public getPendingFriendRequests(): void {
         this.socialService.getPendingFriendRequests().subscribe((fromUsers: UserProfile[]) => {
-            console.log('these are the people who want to be my friend')
+            console.log('pending requests from:')
             console.log(fromUsers)
             this.friendRequests = fromUsers;
+        });
+    }
+
+    public removeFriendRequest(fromUserId: string): void {
+        for (let i = 0; i < this.friendRequests.length; i++) {
+            if (this.friendRequests[i]._id === fromUserId) {
+                this.friendRequests.splice(i, 1);
+                return;
+            }
+        }
+    }
+
+    public getFriends(): void {
+        this.socialService.getFriends().subscribe((friends: UserProfile[]) => {
+            console.log('these are my friends')
+            console.log(friends)
+            this.friends = friends;
         });
     }
 

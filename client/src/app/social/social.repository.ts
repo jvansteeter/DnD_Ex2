@@ -25,7 +25,11 @@ export class SocialRepository {
         this.http.post('api/social/rejectrequest', {userId: fromUserId}, {responseType: 'text'}).subscribe();
     }
 
-    public getPendingFriendRequests(): Observable<any> {
-        return this.http.get('api/social/pendingrequests', {responseType: 'json'});
+    public getPendingFriendRequests(): Observable<UserProfile[]> {
+        return this.http.get<UserProfile[]>('api/social/pendingrequests', {responseType: 'json'});
+    }
+
+    public getFriends(): Observable<UserProfile[]> {
+        return this.http.get<UserProfile[]>('api/social/friendlist', {responseType: 'json'});
     }
 }

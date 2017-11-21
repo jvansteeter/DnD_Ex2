@@ -49,11 +49,13 @@ export class AddFriendComponent {
 
     public acceptRequest(user: UserProfile): void {
         this.socialService.acceptRequest(user._id);
+        this.userProfileService.removeFriendRequest(user._id);
         this.dialogRef.close();
     }
 
     public rejectRequest(user: UserProfile): void {
         this.socialService.rejectFriendRequest(user._id);
+        this.userProfileService.removeFriendRequest(user._id);
         this.dialogRef.close();
     }
 

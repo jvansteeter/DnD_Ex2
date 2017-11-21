@@ -73,6 +73,15 @@ export class SocialRouter {
                 res.status(500).send(error);
             });
         });
+
+        this.router.get('/friendlist', (req: Request, res: Response) => {
+            this.socialService.getFriendList(req.user._id).then((friendList: UserModel[]) => {
+                res.json(friendList);
+            }).catch(error => {
+                console.error(error);
+                res.status(500).send(error);
+            })
+        });
     }
 }
 

@@ -6,6 +6,7 @@ import { LoggedInUserSocketService } from './loggedInUserSocket.service';
 import { FriendRequestModel } from "../db/models/friendRequest.model";
 import { UserModel } from "../db/models/user.model";
 import { noUndefined } from "@angular/compiler/src/util";
+import { FriendModel } from '../db/models/friend.model';
 
 export class SocialService {
     private userRepository: UserRepository;
@@ -56,7 +57,9 @@ export class SocialService {
             this.friendRepository.create(toUserId, fromUserId).then(() => {
                 this.friendRepository.create(fromUserId, toUserId).then(() => {
                     this.friendRequestRepository.findFromTo(fromUserId, toUserId).then((request: FriendRequestModel) => {
-                        request.destroy().then(() => {
+                        console.log('all that remains is destroying the old request')
+                        console.log(request)
+                        this.friendRequestRepository.remove(request).then(() => {
                             resolve();
                         });
                     }).catch(error => reject(error));
@@ -68,10 +71,34 @@ export class SocialService {
     public rejectFriendRequest(toUserId, fromUserId): Promise<void> {
         return new Promise((resolve, reject) => {
             this.friendRequestRepository.findFromTo(fromUserId, toUserId).then((request: FriendRequestModel) => {
-                this.friendRequestRepository.delete(request).then(() => {
+                this.friendRequestRepository.remove(request).then(() => {
                     resolve();
                 }).catch(error => reject(error));
             }).catch(error => reject(error));
+        });
+    }
+
+    public getFriendList(userId: string): Promise<UserModel[]> {
+        return new Promise((resolve, reject) => {
+             this.friendRepository.findAll(userId).then((friends: FriendModel[]) => {
+                 let friendCount = friends.length;
+                 if (friendCount === 0) {
+                     resolve([]);
+                     return;
+                 }
+
+                 let friendList: UserModel[] = [];
+                 friends.forEach((friend: FriendModel) => {
+                     this.userRepository.findById(friend.friendId).then((user: UserModel) => {
+                         user.passwordHash = undefined;
+                         friendList.push(user);
+
+                         if (--friendCount === 0) {
+                             resolve(friendList);
+                         }
+                     }).catch(error => reject(error));
+                 });
+             }).catch(error => reject(error));
         });
     }
 }

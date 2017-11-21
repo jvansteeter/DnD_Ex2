@@ -5,7 +5,6 @@ import { HttpModule } from '@angular/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
-import { UserProfileService } from './utilities/services/userProfile.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HomeModule } from './home/home.module';
 import { MapMakerModule } from './map-maker/map-maker.module';
@@ -13,6 +12,7 @@ import { MatButtonModule, MatIconModule, MatMenuModule, MatTabsModule } from '@a
 import { RuleSetHomeModule } from './rule-set-home/rule-set-home.module';
 import { CharacterSheetModule } from './character-sheet/character-sheet.module';
 import { SocketService } from "./socket/socket.service";
+import { UtilityModule } from './utilities/utility.module';
 
 @NgModule({
     imports: [
@@ -28,14 +28,14 @@ import { SocketService } from "./socket/socket.service";
         MapMakerModule,
         MatIconModule,
         RuleSetHomeModule,
-        CharacterSheetModule
+        CharacterSheetModule,
+        UtilityModule
     ],
     declarations: [
         AppComponent,
         NavbarComponent
     ],
     providers: [
-        UserProfileService,
         SocketService
     ],
     bootstrap: [ AppComponent ]

@@ -13,7 +13,7 @@ import { SocialService } from './social.service';
         MatTableModule,
         MatInputModule,
         MatButtonModule,
-        MatIconModule
+        MatIconModule,
     ],
     declarations: [
         AddFriendComponent

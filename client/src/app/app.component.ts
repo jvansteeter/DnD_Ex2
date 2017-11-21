@@ -20,6 +20,7 @@ export class AppComponent extends SocketComponent implements OnInit {
             this.socketEmit('login', userProfile._id);
         });
         this.userProfileService.getPendingFriendRequests();
+        this.userProfileService.getFriends();
     }
 
     ngOnInit(): void {
