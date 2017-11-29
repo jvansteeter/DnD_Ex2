@@ -1,11 +1,22 @@
 <nav class="navbar navbar-inverse">
 	<div class="container">
-		<button mat-button class="navbar-tabLink"
-				*ngFor="let link of navLinks"
-				[routerLink]="link.route"
-				routerLinkActive #rla="routerLinkActive">
+		<span class="navbar-tabs">
+			<button mat-button class="navbar-tabLink"
+					*ngFor="let link of navLinks"
+					[routerLink]="link.route"
+					routerLinkActive #rla="routerLinkActive">
 			{{link.label}}
 		</button>
+		</span>
+		<button mat-button class="navbar-menuButton" [matMenuTriggerFor]="notifications">
+			<span class="badge navbar-noteAlert" *ngIf="notificationsService.newNotifications">{{notificationsService.notifications.length}}</span>
+			<mat-icon>book</mat-icon>
+		</button>
+		<mat-menu #notifications>
+			<a mat-menu-item *ngFor="let note of notificationsService.notifications">
+				<ng-container *ngIf="note.type === notificationType.FRIEND_REQUEST">{{note.message}}</ng-container>
+			</a>
+		</mat-menu>
 		<button mat-button class="navbar-menuButton" [matMenuTriggerFor]="menu"><mat-icon>person</mat-icon></button>
 		<mat-menu #menu="matMenu">
 			<a mat-menu-item (click)="openAddFriendDialog()">Add Friend</a>

@@ -12,12 +12,13 @@ export class SocialService {
     private userRepository: UserRepository;
     private friendRepository: FriendRepository;
     private friendRequestRepository: FriendRequestRepository;
-    private loggedInUserService: LoggedInUserSocketService = require('./loggedInUserSocket.service');
+    private loggedInUserService: LoggedInUserSocketService;
 
     constructor() {
         this.userRepository = new UserRepository();
         this.friendRepository = new FriendRepository();
         this.friendRequestRepository = new FriendRequestRepository();
+        this.loggedInUserService = require('./loggedInUserSocket.service');
     }
 
     public sendFriendRequest(fromUserId: string, toUserId: string): Promise<void> {
@@ -57,8 +58,6 @@ export class SocialService {
             this.friendRepository.create(toUserId, fromUserId).then(() => {
                 this.friendRepository.create(fromUserId, toUserId).then(() => {
                     this.friendRequestRepository.findFromTo(fromUserId, toUserId).then((request: FriendRequestModel) => {
-                        console.log('all that remains is destroying the old request')
-                        console.log(request)
                         this.friendRequestRepository.remove(request).then(() => {
                             resolve();
                         });

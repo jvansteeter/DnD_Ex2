@@ -8,9 +8,23 @@ nav {
     color: whitesmoke;
 }
 
+.navbar-tabs {
+    margin-right: auto;
+    display: flex;
+}
+
 .navbar-menuButton {
     color: whitesmoke;
-    margin-left: auto;
+    padding: 0;
+    min-width: 50px;
+}
+
+.navbar-noteAlert {
+    position: absolute;
+    background-color: red;
+    font-size: 10px;
+    bottom: 4px;
+    right: 8px;
 }
 
 a {

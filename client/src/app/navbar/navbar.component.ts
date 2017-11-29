@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
 import { UserProfileService } from '../utilities/services/userProfile.service';
 import { UserProfile } from '../types/userProfile';
-import { MatDialog } from '@angular/material';
 import { AddFriendComponent } from '../social/add-friend/add-friend.component';
+import { NotificationsService } from '../utilities/services/notifications.service';
+import { MatDialog } from '@angular/material';
+import { Component } from '@angular/core';
+import { NotificationType } from '../types/notification';
 
 @Component({
     selector: 'app-navbar',
@@ -13,7 +15,11 @@ export class NavbarComponent {
     private username: string;
     private navLinks: any[];
 
-    constructor(private profileService: UserProfileService, private dialog: MatDialog) {
+    public notificationType = NotificationType;
+
+    constructor(private profileService: UserProfileService,
+                public notificationsService: NotificationsService,
+                private dialog: MatDialog) {
         this.navLinks = [
             {
                 label: 'Home',

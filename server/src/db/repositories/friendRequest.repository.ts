@@ -12,8 +12,6 @@ export class FriendRequestRepository {
     public create(fromUserId: string, toUserId: string): Promise<FriendRequestModel> {
         return new Promise((resolve, reject) => {
             this.findFromTo(fromUserId, toUserId).then((request: FriendRequestModel) => {
-                console.log('When creating this is what findFromTo returned')
-                console.log(request)
                 if (request) {
                     resolve(request);
                     return;

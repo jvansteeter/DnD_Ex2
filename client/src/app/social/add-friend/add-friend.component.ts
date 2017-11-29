@@ -35,6 +35,17 @@ export class AddFriendComponent {
             for (let i = 0; i < users.length; i++) {
                 if (this.userProfileService.getUserId() === users[i]._id) {
                     users.splice(i, 1);
+                    i--;
+                }
+                else {
+                    for (let j = 0; j < this.userProfileService.friends.length; j++) {
+                        let friend = this.userProfileService.friends[j];
+                        if (users[i]._id === friend._id) {
+                            users.splice(i, 1);
+                            i--;
+                            break;
+                        }
+                    }
                 }
             }
             this.users = users;

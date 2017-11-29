@@ -45,11 +45,16 @@ export class UserProfileService {
         this.http.post('api/user/profilephoto', {imageUrl: url}, {responseType: 'text'}).subscribe();
     }
 
-    public getPendingFriendRequests(): void {
-        this.socialService.getPendingFriendRequests().subscribe((fromUsers: UserProfile[]) => {
-            console.log('pending requests from:')
-            console.log(fromUsers)
-            this.friendRequests = fromUsers;
+    public getPendingFriendRequests(): Promise<void> {
+        return new Promise((resolve, reject) => {
+            this.socialService.getPendingFriendRequests().subscribe((fromUsers: UserProfile[]) => {
+                console.log('pending requests from:')
+                console.log(fromUsers)
+                this.friendRequests = fromUsers;
+                resolve();
+            }, error => {
+                reject(error);
+            });
         });
     }
 
