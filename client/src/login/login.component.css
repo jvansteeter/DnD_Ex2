@@ -2,6 +2,13 @@ h1 {
     font-family: 'breathe_fire', sans-serif;
 }
 
+.loginForm {
+    width: 500px;
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+}
+
 .form-signin {
     display: flex;
     flex-direction: column;

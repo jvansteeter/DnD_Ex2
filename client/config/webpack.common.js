@@ -32,10 +32,10 @@ module.exports = {
         test: /\.html$/,
         loader: 'html-loader'
       },
-      // {
-      //   test: /\.(png|jpe?g|gif|svg|woff|woff2|ttf|eot|ico)$/,
-      //   loader: 'file-loader?name=resources/[name].[hash].[ext]'
-      // },
+      {
+        test: /\.(png|jpe?g|gif|svg|woff|woff2|ttf|eot|ico)$/,
+        loader: 'file-loader?name=resources/[name].[hash].[ext]'
+      },
       // {
       //   test: /\.(png|jpe?g|gif|svg|woff|woff2|ttf|eot|ico|css)$/,
       //   exclude: [helpers.root('src', 'app'), helpers.root('src', 'login')],

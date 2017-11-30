@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { LoginService } from './login.service';
 import { RegisterDialogComponent } from './registerDialog.component';
 import { Observable } from 'rxjs/Observable';
