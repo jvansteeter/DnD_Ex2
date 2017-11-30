@@ -9,7 +9,6 @@ export class UserProfileService {
     public userProfile: UserProfile;
     private profilePromise: Promise<void>;
 
-    public friendRequests: UserProfile[];
     public friends: UserProfile[];
 
     constructor(private http: HttpClient,
@@ -43,28 +42,6 @@ export class UserProfileService {
 
     public setProfilePhotoUrl(url: string): void {
         this.http.post('api/user/profilephoto', {imageUrl: url}, {responseType: 'text'}).subscribe();
-    }
-
-    public getPendingFriendRequests(): Promise<void> {
-        return new Promise((resolve, reject) => {
-            this.socialService.getPendingFriendRequests().subscribe((fromUsers: UserProfile[]) => {
-                console.log('pending requests from:')
-                console.log(fromUsers)
-                this.friendRequests = fromUsers;
-                resolve();
-            }, error => {
-                reject(error);
-            });
-        });
-    }
-
-    public removeFriendRequest(fromUserId: string): void {
-        for (let i = 0; i < this.friendRequests.length; i++) {
-            if (this.friendRequests[i]._id === fromUserId) {
-                this.friendRequests.splice(i, 1);
-                return;
-            }
-        }
     }
 
     public getFriends(): void {

@@ -4,7 +4,7 @@
 <mat-table #table [dataSource]="userDataSource" [ngClass]="{'hidden': (users.length === 0)}">
 	<ng-container matColumnDef="user">
 		<mat-header-cell *matHeaderCellDef>User</mat-header-cell>
-		<mat-cell *matCellDef="let user">
+		<mat-cell *matCellDef="let user" class="userCell">
 			<img [src]="user.profilePhotoUrl" class="img-rounded">
 			<span>{{user.username}}</span>
 		</mat-cell>
@@ -24,3 +24,6 @@
 	<mat-header-row *matHeaderRowDef="tableColumns"></mat-header-row>
 	<mat-row *matRowDef="let user; columns: tableColumns"></mat-row>
 </mat-table>
+<div *ngIf="noUsersError">
+	No Users match search
+</div>

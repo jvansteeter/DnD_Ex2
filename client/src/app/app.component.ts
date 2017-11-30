@@ -5,7 +5,6 @@ import { SocketComponent } from './socket/socket.component';
 import { UserProfileService } from './utilities/services/userProfile.service';
 import { UserProfile } from './types/userProfile';
 import { NotificationsService } from './utilities/services/notifications.service';
-import { NotificationType } from './types/notification';
 
 @Component({
   selector: 'web-app',
@@ -22,27 +21,14 @@ export class AppComponent extends SocketComponent implements OnInit {
         this.userProfileService.getUserProfile().then((userProfile: UserProfile) => {
             this.socketEmit('login', userProfile._id);
         });
-        this.notifyOfFriendRequests();
+        this.notificationsService.getPendingFriendRequests();
         this.userProfileService.getFriends();
     }
 
     ngOnInit(): void {
         this.router.navigate(['/home']);
         this.socketOn('friendRequest').subscribe(() => {
-            this.notifyOfFriendRequests();
-            this.notificationsService.setNewNotifications(true);
-        });
-    }
-
-    private notifyOfFriendRequests(): void {
-        this.userProfileService.getPendingFriendRequests().then(() => {
-            this.notificationsService.clearNotifications();
-            this.userProfileService.friendRequests.forEach((requestFromUser: UserProfile) => {
-                this.notificationsService.addNotification({
-                    type: NotificationType.FRIEND_REQUEST,
-                    message: requestFromUser.username
-                }) ;
-            });
+            this.notificationsService.getPendingFriendRequests();
         });
     }
 }

@@ -34,3 +34,35 @@ a {
 .container {
     display: flex;
 }
+
+.notification-friendRequestHeader {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.notification-friendRequest {
+    display: flex;
+    height: 50px;
+    align-items: center;
+    margin: 0 10px 0 10px;
+}
+
+.notification-friendRequest img {
+    height: 100%;
+    margin-right: 10px;
+}
+
+hr {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.acceptButton {
+    background-color: forestgreen;
+    margin-left: 10px;
+}
+
+.rejectButton {
+    background-color: orangered;
+    margin-left: 5px;
+}

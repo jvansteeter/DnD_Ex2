@@ -7,6 +7,7 @@ import { UserProfile } from '../../types/userProfile';
 import { MatDialogRef } from '@angular/material';
 import { SocialService } from '../social.service';
 import { UserProfileService } from '../../utilities/services/userProfile.service';
+import { NotificationsService } from '../../utilities/services/notifications.service';
 
 
 @Component({
@@ -21,13 +22,16 @@ export class AddFriendComponent {
     public tableColumns = ['user', 'actions'];
 
     public users: UserProfile[];
+    public noUsersError: boolean;
 
     constructor(private socialService: SocialService,
                 private dialogRef: MatDialogRef<AddFriendComponent>,
-                private userProfileService: UserProfileService) {
+                private userProfileService: UserProfileService,
+                private notificationsService: NotificationsService) {
         this.userSubject = new Subject();
         this.userDataSource = new UserDataSource(this.userSubject);
         this.users = [];
+        this.noUsersError = false;
     }
 
     public search(): void {
@@ -48,6 +52,7 @@ export class AddFriendComponent {
                     }
                 }
             }
+            this.noUsersError = users.length === 0;
             this.users = users;
             this.userSubject.next(users);
         });
@@ -60,19 +65,19 @@ export class AddFriendComponent {
 
     public acceptRequest(user: UserProfile): void {
         this.socialService.acceptRequest(user._id);
-        this.userProfileService.removeFriendRequest(user._id);
+        this.notificationsService.removeFriendRequest(user._id);
         this.dialogRef.close();
     }
 
     public rejectRequest(user: UserProfile): void {
         this.socialService.rejectFriendRequest(user._id);
-        this.userProfileService.removeFriendRequest(user._id);
+        this.notificationsService.removeFriendRequest(user._id);
         this.dialogRef.close();
     }
 
     public hasPendingRequestFrom(user: UserProfile): boolean {
-        for (let i = 0; i < this.userProfileService.friendRequests.length; i++) {
-            if (this.userProfileService.friendRequests[i]._id === user._id) {
+        for (let i = 0; i < this.notificationsService.friendRequests.length; i++) {
+            if (this.notificationsService.friendRequests[i]._id === user._id) {
                 return true;
             }
         }

@@ -18,9 +18,20 @@
 
 .rejectButton {
     background-color: orangered;
+    margin-left: 5px;
 }
 
 .actionsCell {
     display: flex;
     align-items: stretch;
+}
+
+.userCell {
+    display: flex;
+    align-items: center;
+    padding-right: 10px;
+}
+
+.userCell img {
+    height: 100%;
 }
