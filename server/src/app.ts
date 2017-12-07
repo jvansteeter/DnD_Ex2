@@ -25,6 +25,7 @@ import LoginRouter from './routes/login.router';
 import UserRouter from './routes/user.router';
 import RuleSetRouter from './routes/ruleSet.router';
 import SocialRouter from './routes/social.router';
+import CampaignRouter from './routes/campaign.router';
 
 
 /***********************************************************************************************************************
@@ -107,6 +108,7 @@ class App {
         this.app.use('/api/user', this.isAuthenticated, UserRouter);
         this.app.use('/api/ruleset', this.isAuthenticated, RuleSetRouter);
         this.app.use('/api/social', this.isAuthenticated, SocialRouter);
+        this.app.use('/api/campaign', this.isAuthenticated, CampaignRouter);
 
         //  All other requests, redirect to index
         this.app.get('*', (req, res) => {

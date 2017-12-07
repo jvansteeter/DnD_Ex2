@@ -1,7 +1,6 @@
 import * as mongoose from 'mongoose';
 import { Promise } from 'bluebird';
 import { RuleSetModel } from '../models/ruleSet.model';
-import { UserModel } from '../models/user.model';
 import { UserRuleSetModel } from '../models/user-ruleSet.model';
 import { RuleSetRepository } from './ruleSet.repository';
 

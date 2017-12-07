@@ -4,6 +4,8 @@ import { NewRuleSetDialogComponent } from './dialog/new-rule-set-dialog.componen
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { UserProfileService } from '../utilities/services/userProfile.service';
+import { DataSource } from '@angular/cdk/collections';
+import { Observable } from 'rxjs/Observable';
 
 
 @Component({
@@ -16,6 +18,8 @@ export class HomeComponent implements AfterViewInit {
     public ruleSets: any[];
     private reader: FileReader = new FileReader();
     private profilePhotoUrl: string = '';
+
+
 
     constructor(private dialog: MatDialog,
                 private http: HttpClient,
@@ -57,4 +61,14 @@ export class HomeComponent implements AfterViewInit {
             this.ruleSets = ruleSets;
         });
     }
+}
+
+class CampaignDataSource extends DataSource<any> {
+    connect(): Observable<any[]> {
+        return Observable.of([]);
+    }
+
+    disconnect(): void {
+    }
+
 }
