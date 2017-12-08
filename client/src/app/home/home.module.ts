@@ -6,6 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { SocialModule } from '../social/social.module';
+import { HomeRepository } from './home.repository';
 
 @NgModule({
     imports: [
@@ -21,6 +22,9 @@ import { SocialModule } from '../social/social.module';
     declarations: [
         HomeComponent,
         NewRuleSetDialogComponent
+    ],
+    providers: [
+        HomeRepository
     ],
     exports: [
         HomeComponent

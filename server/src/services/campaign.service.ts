@@ -17,7 +17,7 @@ export class CampaignService {
         return this.campaignRepository.create(label, ruleSetId);
     }
 
-    public findAllForUser(userId: string): Promise<UserCampaignModel[]> {
+    public findAllForUser(userId: string): Promise<CampaignModel[]> {
         return new Promise((resolve, reject) => {
             this.userCampaignRepository.findAllForUser(userId).then((userCampaigns: UserCampaignModel[]) => {
                  let userCampaignCount = userCampaigns.length;
@@ -34,7 +34,7 @@ export class CampaignService {
                          if (--userCampaignCount === 0) {
                              resolve(campaigns);
                          }
-                     });
+                     }).catch(error => reject(error));
                  });
             }, error => reject(error));
         });

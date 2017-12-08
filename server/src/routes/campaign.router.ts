@@ -1,5 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { CampaignService } from '../services/campaign.service';
+import { CampaignModel } from '../db/models/campaign.model';
 
 
 /**********************************************************************************************************
@@ -23,6 +24,12 @@ export class CampaignRouter {
         this.router.post('/create', (req: Request, res: Response) => {
             this.campaignService.create(req.body.label, req.body.ruleSetId).then(() => {
                 res.status(200).send("OK");
+            }).catch(error => res.status(500).send(error));
+        });
+
+        this.router.get('/all', (req: Request, res: Response) => {
+            this.campaignService.findAllForUser(req.user._id).then((campaigns: CampaignModel[]) => {
+                res.json(campaigns);
             }).catch(error => res.status(500).send(error));
         });
     }
