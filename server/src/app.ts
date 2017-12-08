@@ -19,6 +19,8 @@ import './db/models/user-ruleSet.model';
 import './db/models/npc.model';
 import './db/models/friend.model';
 import './db/models/friendRequest.model';
+import './db/models/campaign.model';
+import './db/models/user-campaign.model';
 import './config/passport.config';
 
 import LoginRouter from './routes/login.router';
