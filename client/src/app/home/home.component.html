@@ -1,29 +1,42 @@
 <div class="container">
-	<div class="home-profilePhoto">
-		<a class="thumbnail" (click)="upload()">
-			<img class="home-profilePhotoImg" [src]="profilePhotoUrl"/>
-		</a>
-		<input type="file" accept="image/*" (change)="loadImage()" #fileInput>
-	</div>
 	<div class="home-content">
-		<h1>Home</h1>
-		<mat-accordion>
-			<mat-expansion-panel>
-				<mat-expansion-panel-header>
-					<mat-panel-title>Rule Sets</mat-panel-title>
-					<mat-panel-description>Rule Set description</mat-panel-description>
-				</mat-expansion-panel-header>
+		<div class="home-leftContent">
+			<div class="home-profilePhoto">
+				<a class="thumbnail" (click)="upload()">
+					<img class="home-profilePhotoImg" [src]="profilePhotoUrl"/>
+				</a>
+				<input type="file" accept="image/*" (change)="loadImage()" #fileInput>
+			</div>
+			<div class="home-menuOptions">
 				<mat-list>
-					<mat-list-item *ngFor="let ruleSet of ruleSets"><a (click)="ruleSetHome(ruleSet._id)">{{ruleSet.label}}</a></mat-list-item>
+					<mat-list-item>
+						<button mat-raised-button color="primary" (click)="newRuleSet()">New RuleSet</button>
+					</mat-list-item>
+					<mat-list-item>
+						<button mat-raised-button color="primary" (click)="newCampaign()">New Campaign</button>
+					</mat-list-item>
 				</mat-list>
-				<button mat-raised-button color="primary" (click)="newRuleSet()">New</button>
-			</mat-expansion-panel>
-			<mat-expansion-panel>
-				<mat-expansion-panel-header>
-					<mat-panel-title>Campaigns</mat-panel-title>
-					<mat-panel-description>Description here</mat-panel-description>
-				</mat-expansion-panel-header>
-			</mat-expansion-panel>
-		</mat-accordion>
+			</div>
+		</div>
+		<div class="home-rightContent">
+			<h1>Home</h1>
+			<mat-accordion>
+				<mat-expansion-panel>
+					<mat-expansion-panel-header>
+						<mat-panel-title>Rule Sets</mat-panel-title>
+						<mat-panel-description>Rule Set description</mat-panel-description>
+					</mat-expansion-panel-header>
+					<mat-list>
+						<mat-list-item *ngFor="let ruleSet of ruleSets"><a (click)="ruleSetHome(ruleSet._id)">{{ruleSet.label}}</a></mat-list-item>
+					</mat-list>
+				</mat-expansion-panel>
+				<mat-expansion-panel>
+					<mat-expansion-panel-header>
+						<mat-panel-title>Campaigns</mat-panel-title>
+						<mat-panel-description>Description here</mat-panel-description>
+					</mat-expansion-panel-header>
+				</mat-expansion-panel>
+			</mat-accordion>
+		</div>
 	</div>
 </div>

@@ -1,0 +1,9 @@
+:host {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.newCampaign-field {
+    margin-right: 5px;
+}

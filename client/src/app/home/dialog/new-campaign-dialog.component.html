@@ -1,0 +1,10 @@
+<mat-form-field class="newCampaign-field">
+	<input matInput placeholder="Campaign Label" [(ngModel)]="campaignLabel">
+</mat-form-field>
+<span class="newCampaign-field">{{selectedRuleSet ? selectedRuleSet.label : 'Select a Rule Set'}}</span>
+<button mat-mini-fab color="primary" class="newCampaign-field" [matMenuTriggerFor]="ruleSetSelector"><mat-icon>description</mat-icon></button>
+<mat-menu #ruleSetSelector>
+	<rule-set-selector (ruleSetSelected)="ruleSetSelected($event)"></rule-set-selector>
+</mat-menu>
+<button mat-raised-button color="primary" class="newCampaign-field" (click)="createCampaign()"
+		[disabled]="campaignLabel === '' || selectedRuleSet === undefined">Create</button>

@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material';
 import { NewCharacterSheetDialogComponent } from './dialog/new-character-sheet-dialog.component';
-import { RuleSetHomeRepository } from './rule-set-home.repository';
 import { DataSource } from '@angular/cdk/collections';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { NewNpcDialogComponent } from './dialog/new-npc-dialog.component';
+import { RuleSetRepository } from '../../repositories/rule-set.repository';
 
 @Component({
     selector: 'rule-set-home',
@@ -32,7 +32,7 @@ export class RuleSetHomeComponent implements OnInit {
     constructor(private activatedRoute: ActivatedRoute,
                 private dialog: MatDialog,
                 private router: Router,
-                private ruleSetHomeRepository: RuleSetHomeRepository) {
+                private ruleSetRepository: RuleSetRepository) {
         this.adminSubject = new Subject<AdminData[]>();
         this.adminDataSource = new AdminDataSource(this.adminSubject);
 
@@ -43,17 +43,17 @@ export class RuleSetHomeComponent implements OnInit {
     ngOnInit(): void {
         this.activatedRoute.params.subscribe((params) => {
             this.ruleSetId = params['ruleSetId'];
-            this.ruleSetHomeRepository.getRuleSet(this.ruleSetId).subscribe((ruleSet: any) => {
+            this.ruleSetRepository.getRuleSet(this.ruleSetId).subscribe((ruleSet: any) => {
                 this.ruleSet = ruleSet;
             });
-            this.ruleSetHomeRepository.getCharacterSheets(this.ruleSetId).subscribe((characterSheets: any[]) => {
+            this.ruleSetRepository.getCharacterSheets(this.ruleSetId).subscribe((characterSheets: any[]) => {
                 this.characterSheets = characterSheets;
             });
-            this.ruleSetHomeRepository.getAdmin(this.ruleSetId).subscribe((admins: any[]) => {
+            this.ruleSetRepository.getAdmin(this.ruleSetId).subscribe((admins: any[]) => {
                 this.admins = admins;
                 this.adminSubject.next(admins);
             });
-            this.ruleSetHomeRepository.getNpcs(this.ruleSetId).subscribe((npcs: any[]) => {
+            this.ruleSetRepository.getNpcs(this.ruleSetId).subscribe((npcs: any[]) => {
                 this.npcs = npcs;
                 this.npcSubject.next(npcs);
             });

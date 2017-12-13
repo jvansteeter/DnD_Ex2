@@ -1,4 +1,4 @@
-import { AfterViewInit, Component } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
 import { HttpClient } from '@angular/common/http';
 

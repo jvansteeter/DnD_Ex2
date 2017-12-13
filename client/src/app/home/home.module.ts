@@ -1,12 +1,18 @@
 import { NgModule } from '@angular/core';
 import { HomeComponent } from './home.component';
-import { MatButtonModule, MatExpansionModule, MatInputModule, MatListModule } from '@angular/material';
+import {
+    MatButtonModule, MatExpansionModule, MatIconModule, MatInputModule, MatListModule,
+    MatMenuModule
+} from '@angular/material';
 import { NewRuleSetDialogComponent } from './dialog/new-rule-set-dialog.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { SocialModule } from '../social/social.module';
-import { HomeRepository } from './home.repository';
+import { RuleSetRepository } from '../repositories/rule-set.repository';
+import { NewCampaignDialogComponent } from './dialog/new-campaign-dialog.component';
+import { RuleSetModule } from '../rule-set/rule-set.module';
+import { CampaignRepository } from '../repositories/campaign.repository';
 
 @NgModule({
     imports: [
@@ -17,20 +23,26 @@ import { HomeRepository } from './home.repository';
         FormsModule,
         BrowserModule,
         MatListModule,
+        MatIconModule,
+        MatMenuModule,
+        RuleSetModule,
         SocialModule
     ],
     declarations: [
         HomeComponent,
-        NewRuleSetDialogComponent
+        NewRuleSetDialogComponent,
+        NewCampaignDialogComponent
     ],
     providers: [
-        HomeRepository
+        RuleSetRepository,
+        CampaignRepository
     ],
     exports: [
         HomeComponent
     ],
     entryComponents: [
-        NewRuleSetDialogComponent
+        NewRuleSetDialogComponent,
+        NewCampaignDialogComponent
     ]
 })
 export class HomeModule {

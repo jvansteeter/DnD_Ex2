@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-import { RuleSetHomeRepository } from '../rule-set-home.repository';
+import { RuleSetRepository } from '../../../repositories/rule-set.repository';
 
 @Component({
     selector: '',
@@ -13,7 +13,7 @@ export class NewNpcDialogComponent {
 
     constructor(private dialogRef: MatDialogRef<NewNpcDialogComponent>,
                 @Inject(MAT_DIALOG_DATA) private data: any,
-                private ruleSetRepository: RuleSetHomeRepository) {
+                private ruleSetRepository: RuleSetRepository) {
         this.characterSheets = data.characterSheets;
     }
 
@@ -23,7 +23,6 @@ export class NewNpcDialogComponent {
         }
 
         this.ruleSetRepository.createNewNpc(this.npcLabel, this.characterSheetId).subscribe((npc) => {
-            console.log(npc)
             this.dialogRef.close();
         });
     }

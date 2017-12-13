@@ -1,11 +1,14 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { NewRuleSetDialogComponent } from './dialog/new-rule-set-dialog.component';
 import { Router } from '@angular/router';
 import { UserProfileService } from '../utilities/services/userProfile.service';
-import { HomeRepository } from './home.repository';
 import { Subject } from 'rxjs/Subject';
 import { SubjectDataSource } from '../utilities/subjectDataSource';
+import { RuleSetRepository } from '../repositories/rule-set.repository';
+import { NewCampaignDialogComponent } from './dialog/new-campaign-dialog.component';
+import { CampaignRepository } from '../repositories/campaign.repository';
+import { Observable } from 'rxjs/Observable';
 
 
 @Component({
@@ -29,7 +32,8 @@ export class HomeComponent implements OnInit {
     constructor(private dialog: MatDialog,
                 private router: Router,
                 private userProfileService: UserProfileService,
-                private homeRepository: HomeRepository) {
+                private ruleSetRepository: RuleSetRepository,
+                private campaignRepository: CampaignRepository) {
         this.userProfileService.getUserProfile().then(() => {
             this.profilePhotoUrl = this.userProfileService.getProfilePhotoUrl();
         });
@@ -46,7 +50,20 @@ export class HomeComponent implements OnInit {
     }
 
     public newRuleSet(): void {
-        this.dialog.open(NewRuleSetDialogComponent);
+        this.dialog.open(NewRuleSetDialogComponent).afterClosed().subscribe(() => this.getRuleSets());
+    }
+
+    public newCampaign(): void {
+        let dialogRef = this.dialog.open(NewCampaignDialogComponent);
+        dialogRef.componentInstance.getNewCampaignObservable().subscribe(() => {
+            this.getCampaigns();
+        });
+        // dialogRef.afterClosed().subscribe(() => {
+        //     console.log('new campaign dialog has closed')
+        //     console.log('getting new cmapaigns')
+        //     console.log(this.campaigns)
+        //     Observable.timer(1000).subscribe(() => this.getCampaigns());
+        // });
     }
 
     public ruleSetHome(ruleSetId: string): void {
@@ -68,13 +85,13 @@ export class HomeComponent implements OnInit {
     }
 
     private getRuleSets(): void {
-        this.homeRepository.getRuleSets().subscribe((ruleSets: any) => {
+        this.ruleSetRepository.getRuleSets().subscribe((ruleSets: any) => {
             this.ruleSets = ruleSets;
         });
     }
 
     private getCampaigns(): void {
-        this.homeRepository.getCampaigns().subscribe((campaigns: any[]) => {
+        this.campaignRepository.getCampaigns().subscribe((campaigns: any[]) => {
             this.campaigns = campaigns;
             this.campaignSubject.next(campaigns);
         });

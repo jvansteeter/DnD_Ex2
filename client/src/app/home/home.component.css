@@ -25,5 +25,22 @@
 }
 
 .home-content {
-    flex: 6;
+    display: flex;
+    width: 100%;
+}
+
+.home-leftContent {
+
+}
+
+.home-rightContent {
+    flex: 1;
+}
+
+.home-menuOptions {
+
+}
+
+.home-menuOptions mat-list mat-list-item button {
+    width: 100%;
 }

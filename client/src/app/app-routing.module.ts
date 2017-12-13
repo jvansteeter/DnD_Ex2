@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { MapMakerComponent } from './map-maker/map-maker.component';
 import { CharacterMakerComponent } from './character-sheet/maker/character-maker.component';
-import { RuleSetHomeComponent } from './rule-set-home/rule-set-home.component';
+import { RuleSetHomeComponent } from './rule-set/home/rule-set-home.component';
 import { CharacterSheetComponent } from './character-sheet/sheet/character-sheet.component';
 
 const routes: Routes = [

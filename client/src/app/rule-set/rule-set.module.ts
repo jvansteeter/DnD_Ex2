@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { RuleSetHomeComponent } from './rule-set-home.component';
+import { RuleSetHomeComponent } from './home/rule-set-home.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -8,9 +8,10 @@ import {
     MatSelectModule,
     MatTableModule
 } from '@angular/material';
-import { NewCharacterSheetDialogComponent } from './dialog/new-character-sheet-dialog.component';
-import { RuleSetHomeRepository } from './rule-set-home.repository';
-import { NewNpcDialogComponent } from './dialog/new-npc-dialog.component';
+import { NewCharacterSheetDialogComponent } from './home/dialog/new-character-sheet-dialog.component';
+import { NewNpcDialogComponent } from './home/dialog/new-npc-dialog.component';
+import { RuleSetRepository } from '../repositories/rule-set.repository';
+import { RuleSetSelectorComponent } from './selector/rule-set-selector.component';
 
 @NgModule({
     imports: [
@@ -28,19 +29,21 @@ import { NewNpcDialogComponent } from './dialog/new-npc-dialog.component';
     declarations: [
         RuleSetHomeComponent,
         NewCharacterSheetDialogComponent,
-        NewNpcDialogComponent
+        NewNpcDialogComponent,
+        RuleSetSelectorComponent
     ],
     providers: [
-        RuleSetHomeRepository
+        RuleSetRepository
     ],
     exports: [
-        RuleSetHomeComponent
+        RuleSetHomeComponent,
+        RuleSetSelectorComponent
     ],
     entryComponents: [
         NewCharacterSheetDialogComponent,
         NewNpcDialogComponent
     ]
 })
-export class RuleSetHomeModule {
+export class RuleSetModule {
 
 }

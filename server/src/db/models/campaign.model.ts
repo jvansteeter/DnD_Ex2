@@ -4,17 +4,17 @@ import Promise from 'bluebird';
 
 export class CampaignModel extends mongoose.Schema {
     public _id;
-    public title: string;
+    public label: string;
     public ruleSetId: string;
 
     constructor() {
         super ({
-            title: String,
+            label: String,
             ruleSetId: String
         });
 
         this._id = this.methods._id;
-        this.title = this.methods.title;
+        this.label = this.methods.label;
         this.ruleSetId = this.methods.ruleSetId;
     }
 
