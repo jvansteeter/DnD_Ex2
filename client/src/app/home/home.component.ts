@@ -8,7 +8,6 @@ import { SubjectDataSource } from '../utilities/subjectDataSource';
 import { RuleSetRepository } from '../repositories/rule-set.repository';
 import { NewCampaignDialogComponent } from './dialog/new-campaign-dialog.component';
 import { CampaignRepository } from '../repositories/campaign.repository';
-import { Observable } from 'rxjs/Observable';
 
 
 @Component({
@@ -26,6 +25,7 @@ export class HomeComponent implements OnInit {
     private ruleSetDataSource: SubjectDataSource;
 
     public campaigns: any[];
+    public campaignTableColumns = ['label', 'actions'];
     private campaignSubject: Subject<any>;
     private campaignDataSource: SubjectDataSource;
 
@@ -54,16 +54,9 @@ export class HomeComponent implements OnInit {
     }
 
     public newCampaign(): void {
-        let dialogRef = this.dialog.open(NewCampaignDialogComponent);
-        dialogRef.componentInstance.getNewCampaignObservable().subscribe(() => {
+        this.dialog.open(NewCampaignDialogComponent).componentInstance.getNewCampaignObservable().subscribe(() => {
             this.getCampaigns();
         });
-        // dialogRef.afterClosed().subscribe(() => {
-        //     console.log('new campaign dialog has closed')
-        //     console.log('getting new cmapaigns')
-        //     console.log(this.campaigns)
-        //     Observable.timer(1000).subscribe(() => this.getCampaigns());
-        // });
     }
 
     public ruleSetHome(ruleSetId: string): void {

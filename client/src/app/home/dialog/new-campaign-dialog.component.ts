@@ -13,7 +13,7 @@ export class NewCampaignDialogComponent implements OnInit {
     campaignLabel: string;
     selectedRuleSet;
 
-    private newCampaignSubject: Subject<void>;
+    private newCampaignSubject: Subject<void> = new Subject<void>();
 
     constructor(private dialogRef: MatDialogRef<NewCampaignDialogComponent>,
                 private campaignRepository: CampaignRepository) {
@@ -22,18 +22,15 @@ export class NewCampaignDialogComponent implements OnInit {
     ngOnInit(): void {
         this.campaignLabel = '';
         this.selectedRuleSet = undefined;
-        this.newCampaignSubject = new Subject<void>();
     }
 
-    ruleSetSelected(ruleSet: RuleSet): void {
+    public ruleSetSelected(ruleSet: RuleSet): void {
         this.selectedRuleSet = ruleSet;
     }
 
-    createCampaign(): void {
+    public createCampaign(): void {
         this.campaignRepository.createNewCampaign(this.campaignLabel, this.selectedRuleSet._id).subscribe((campaign: any) => {
-            console.log('new campaign created')
             this.campaignRepository.joinCampaign(campaign._id).subscribe(() => {
-                console.log('campaigns joined')
                 this.newCampaignSubject.next();
                 this.dialogRef.close();
             });

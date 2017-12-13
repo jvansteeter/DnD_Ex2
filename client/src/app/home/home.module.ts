@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { HomeComponent } from './home.component';
 import {
     MatButtonModule, MatExpansionModule, MatIconModule, MatInputModule, MatListModule,
-    MatMenuModule
+    MatMenuModule, MatTableModule
 } from '@angular/material';
 import { NewRuleSetDialogComponent } from './dialog/new-rule-set-dialog.component';
 import { HttpClientModule } from '@angular/common/http';
@@ -25,6 +25,7 @@ import { CampaignRepository } from '../repositories/campaign.repository';
         MatListModule,
         MatIconModule,
         MatMenuModule,
+        MatTableModule,
         RuleSetModule,
         SocialModule
     ],
