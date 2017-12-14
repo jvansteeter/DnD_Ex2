@@ -7,6 +7,7 @@ import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { NewNpcDialogComponent } from './dialog/new-npc-dialog.component';
 import { RuleSetRepository } from '../../repositories/rule-set.repository';
+import { SubjectDataSource } from '../../utilities/subjectDataSource';
 
 @Component({
     selector: 'rule-set-home',
@@ -25,7 +26,7 @@ export class RuleSetHomeComponent implements OnInit {
     private adminSubject: Subject<AdminData[]>;
     public adminColumns = ['username', 'role'];
 
-    private npcDataSource: NpcDataSource;
+    private npcDataSource: SubjectDataSource<NpcData>;
     private npcSubject: Subject<NpcData[]>;
     public npcColumns = ['label', 'edit'];
 
@@ -37,7 +38,7 @@ export class RuleSetHomeComponent implements OnInit {
         this.adminDataSource = new AdminDataSource(this.adminSubject);
 
         this.npcSubject = new Subject<NpcData[]>();
-        this.npcDataSource = new NpcDataSource(this.npcSubject);
+        this.npcDataSource = new SubjectDataSource(this.npcSubject);
     }
 
     ngOnInit(): void {

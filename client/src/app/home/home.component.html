@@ -34,20 +34,21 @@
 					<mat-expansion-panel-header>
 						<mat-panel-title>Campaigns</mat-panel-title>
 						<mat-panel-description>Description here</mat-panel-description>
-						<mat-table [dataSource]="campaignDataSource">
-							<ng-container matColumnDef="label">
-								<mat-header-cell *matHeaderCellDef>Campaign</mat-header-cell>
-								<mat-cell *matCellDef="let campaign">{{campaign.label}}</mat-cell>
-							</ng-container>
-							<ng-container matColumnDef="actions">
-								<mat-cell *matCellDef="let campaign">
-									<button mat-raised-button color="primary">Go To</button>
-								</mat-cell>
-							</ng-container>
-							<mat-header-row *matHeaderRowDef="campaignTableColumns"></mat-header-row>
-							<mat-row *matRowDef="let campaign; columns: campaignTableColumns"></mat-row>
-						</mat-table>
 					</mat-expansion-panel-header>
+					<mat-table [dataSource]="campaignDataSource">
+						<ng-container matColumnDef="label">
+							<mat-header-cell *matHeaderCellDef>Campaign</mat-header-cell>
+							<mat-cell *matCellDef="let campaign">{{campaign.label}}</mat-cell>
+						</ng-container>
+						<ng-container matColumnDef="options">
+							<mat-header-cell *matHeaderCellDef></mat-header-cell>
+							<mat-cell *matCellDef="let campaign">
+								<button mat-raised-button color="primary">Go To</button>
+							</mat-cell>
+						</ng-container>
+						<mat-header-row *matHeaderRowDef="campaignTableColumns"></mat-header-row>
+						<mat-row *matRowDef="let campaign; columns: campaignTableColumns"></mat-row>
+					</mat-table>
 				</mat-expansion-panel>
 			</mat-accordion>
 		</div>

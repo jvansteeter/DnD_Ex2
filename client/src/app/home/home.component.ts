@@ -22,12 +22,12 @@ export class HomeComponent implements OnInit {
 
     public ruleSets: any[];
     private ruleSetSubject: Subject<any>;
-    private ruleSetDataSource: SubjectDataSource;
+    private ruleSetDataSource: SubjectDataSource<any>;
 
     public campaigns: any[];
-    public campaignTableColumns = ['label', 'actions'];
+    public campaignTableColumns = ['label', 'options'];
     private campaignSubject: Subject<any>;
-    private campaignDataSource: SubjectDataSource;
+    private campaignDataSource: SubjectDataSource<any>;
 
     constructor(private dialog: MatDialog,
                 private router: Router,
