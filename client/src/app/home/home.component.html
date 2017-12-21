@@ -43,7 +43,7 @@
 						<ng-container matColumnDef="options">
 							<mat-header-cell *matHeaderCellDef></mat-header-cell>
 							<mat-cell *matCellDef="let campaign">
-								<button mat-raised-button color="primary">Go To</button>
+								<button mat-raised-button color="primary" (click)="campaignHome(campaign)">Go To</button>
 							</mat-cell>
 						</ng-container>
 						<mat-header-row *matHeaderRowDef="campaignTableColumns"></mat-header-row>

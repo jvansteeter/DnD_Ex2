@@ -63,6 +63,10 @@ export class HomeComponent implements OnInit {
         this.router.navigate(['/rule-set', ruleSetId]);
     }
 
+    public campaignHome(campaign: any) {
+        this.router.navigate(['campaign', campaign._id]);
+    }
+
     public upload(): void {
         this.fileInput.nativeElement.click();
     }

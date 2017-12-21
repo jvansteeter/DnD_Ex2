@@ -5,6 +5,7 @@ import { MapMakerComponent } from './map-maker/map-maker.component';
 import { CharacterMakerComponent } from './character-sheet/maker/character-maker.component';
 import { RuleSetHomeComponent } from './rule-set/home/rule-set-home.component';
 import { CharacterSheetComponent } from './character-sheet/sheet/character-sheet.component';
+import { CampaignComponent } from './campaign/campaign.component';
 
 const routes: Routes = [
     {
@@ -26,6 +27,10 @@ const routes: Routes = [
     {
         path: 'npc/:npcId',
         component: CharacterSheetComponent
+    },
+    {
+        path: 'campaign/:campaignId',
+        component: CampaignComponent
     }
 ];
 
