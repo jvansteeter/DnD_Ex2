@@ -1,1 +1,15 @@
+button {
+    width: 100%;
+}
 
+.campaign-content {
+    display: flex;
+}
+
+.campaign-leftContent {
+    flex: 3;
+}
+
+.campaign-rightContent {
+    flex: 6;
+}

@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material';
 import { NewCharacterSheetDialogComponent } from './dialog/new-character-sheet-dialog.component';
-import { DataSource } from '@angular/cdk/collections';
-import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { NewNpcDialogComponent } from './dialog/new-npc-dialog.component';
 import { RuleSetRepository } from '../../repositories/rule-set.repository';
@@ -22,7 +20,7 @@ export class RuleSetHomeComponent implements OnInit {
     public admins: any[];
     public npcs: any[];
 
-    private adminDataSource: AdminDataSource;
+    private adminDataSource: SubjectDataSource<AdminData>;
     private adminSubject: Subject<AdminData[]>;
     public adminColumns = ['username', 'role'];
 
@@ -35,7 +33,7 @@ export class RuleSetHomeComponent implements OnInit {
                 private router: Router,
                 private ruleSetRepository: RuleSetRepository) {
         this.adminSubject = new Subject<AdminData[]>();
-        this.adminDataSource = new AdminDataSource(this.adminSubject);
+        this.adminDataSource = new SubjectDataSource(this.adminSubject);
 
         this.npcSubject = new Subject<NpcData[]>();
         this.npcDataSource = new SubjectDataSource(this.npcSubject);
@@ -83,18 +81,18 @@ interface AdminData {
     role: string
 }
 
-class AdminDataSource extends DataSource<AdminData> {
-    constructor(private adminSubject: Subject<AdminData[]>){
-        super();
-    }
-
-    connect(): Observable<AdminData[]> {
-        return this.adminSubject.asObservable();
-    }
-
-    disconnect(): void {
-    }
-}
+// class AdminDataSource extends DataSource<AdminData> {
+//     constructor(private adminSubject: Subject<AdminData[]>){
+//         super();
+//     }
+//
+//     connect(): Observable<AdminData[]> {
+//         return this.adminSubject.asObservable();
+//     }
+//
+//     disconnect(): void {
+//     }
+// }
 
 interface NpcData {
     _id: string,
@@ -104,15 +102,15 @@ interface NpcData {
     values: any[]
 }
 
-class NpcDataSource extends DataSource<NpcData> {
-    constructor(private npcSubject: Subject<NpcData[]>){
-        super();
-    }
-
-    connect(): Observable<NpcData[]> {
-        return this.npcSubject.asObservable();
-    }
-
-    disconnect(): void {
-    }
-}
+// class NpcDataSource extends DataSource<NpcData> {
+//     constructor(private npcSubject: Subject<NpcData[]>){
+//         super();
+//     }
+//
+//     connect(): Observable<NpcData[]> {
+//         return this.npcSubject.asObservable();
+//     }
+//
+//     disconnect(): void {
+//     }
+// }

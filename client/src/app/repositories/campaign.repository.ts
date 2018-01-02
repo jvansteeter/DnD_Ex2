@@ -25,4 +25,12 @@ export class CampaignRepository {
     public getCampaigns(): Observable<any> {
         return this.http.get('/api/campaign/all', {responseType: 'json'});
     }
+
+    public getCampaign(campaignId): Observable<any> {
+        return this.http.get('/api/campaign/campaign/' + campaignId, {responseType: 'json'});
+    }
+
+    public getCampaignMembers(campaignId): Observable<any> {
+        return this.http.get('/api/campaign/members/' + campaignId, {responseType: 'json'});
+    }
 }

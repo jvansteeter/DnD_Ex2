@@ -22,7 +22,7 @@ export class CampaignRouter {
 
     init() {
         this.router.post('/create', (req: Request, res: Response) => {
-            this.campaignService.create(req.body.label, req.body.ruleSetId).then((campaign: CampaignModel) => {
+            this.campaignService.create(req.body.label, req.body.ruleSetId, req.user._id).then((campaign: CampaignModel) => {
                 res.json(campaign);
             }).catch(error => res.status(500).send(error));
         });
@@ -37,6 +37,18 @@ export class CampaignRouter {
              this.campaignService.join(req.user._id, req.body.campaignId).then(() => {
                  res.status(200).send("OK");
              }).catch(error => res.status(500).send(error));
+        });
+
+        this.router.get('/campaign/:campaignId', (req: Request, res: Response) => {
+            this.campaignService.getCampaign(req.params.campaignId).then((campaign: CampaignModel) => {
+                res.json(campaign);
+            }).catch(error => res.status(500).send(error));
+        });
+
+        this.router.get('/members/:campaignId', (req: Request, res: Response) => {
+            this.campaignService.findAllForCampaign(req.params.campaignId).then(members => {
+                res.json(members);
+            }).catch(error => res.status(500).send(error));
         });
     }
 }

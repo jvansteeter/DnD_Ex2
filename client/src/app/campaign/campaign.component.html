@@ -1,1 +1,39 @@
-<h1>Campaign</h1>
+<div *ngIf="campaign" class="container">
+	<h1>{{campaign.label}}</h1>
+	<div class="campaign-content">
+		<div class="campaign-leftContent">
+			<mat-list>
+				<mat-list-item>
+					<button mat-raised-button color="primary">Invite Friend</button>
+				</mat-list-item>
+				<mat-list-item>
+					<button mat-raised-button color="primary">Create New Character</button>
+				</mat-list-item>
+			</mat-list>
+			<mat-accordion>
+				<mat-expansion-panel>
+					<mat-expansion-panel-header>
+						<mat-panel-title>Campaign Members</mat-panel-title>
+					</mat-expansion-panel-header>
+					<mat-table [dataSource]="gameMasterDataSource">
+						<ng-container matColumnDef="users">
+							<mat-header-cell *matHeaderCellDef>Username</mat-header-cell>
+							<mat-cell *matCellDef="let member">{{member.username}}</mat-cell>
+						</ng-container>
+						<ng-container matColumnDef="gm">
+							<mat-header-cell *matHeaderCellDef><span style="float: right">GM</span></mat-header-cell>
+							<mat-cell *matCellDef="let member">
+								<mat-checkbox color="primary" [(ngModel)]="member.gameMaster" style="float: right"></mat-checkbox>
+							</mat-cell>
+						</ng-container>
+						<mat-header-row *matHeaderRowDef="gameMasterColumns"></mat-header-row>
+						<mat-row *matRowDef="let member; columns: gameMasterColumns"></mat-row>
+					</mat-table>
+				</mat-expansion-panel>
+			</mat-accordion>
+		</div>
+		<div class="campaign-rightContent">
+			Encounters
+		</div>
+	</div>
+</div>

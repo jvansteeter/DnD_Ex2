@@ -26,9 +26,14 @@
 						<mat-panel-title>Rule Sets</mat-panel-title>
 						<mat-panel-description>Rule Set description</mat-panel-description>
 					</mat-expansion-panel-header>
-					<mat-list>
-						<mat-list-item *ngFor="let ruleSet of ruleSets"><a (click)="ruleSetHome(ruleSet._id)">{{ruleSet.label}}</a></mat-list-item>
-					</mat-list>
+					<mat-table [dataSource]="ruleSetDataSource">
+						<ng-container matColumnDef="label">
+							<mat-header-cell *matHeaderCellDef>Rule Set</mat-header-cell>
+							<mat-cell *matCellDef="let ruleSet">{{ruleSet.label}}</mat-cell>
+						</ng-container>
+						<mat-header-row *matHeaderRowDef="ruleSetTableColumns"></mat-header-row>
+						<mat-row class="clickable-row" *matRowDef="let ruleSet; columns: ruleSetTableColumns" (click)="ruleSetHome(ruleSet._id)"></mat-row>
+					</mat-table>
 				</mat-expansion-panel>
 				<mat-expansion-panel>
 					<mat-expansion-panel-header>
@@ -40,14 +45,8 @@
 							<mat-header-cell *matHeaderCellDef>Campaign</mat-header-cell>
 							<mat-cell *matCellDef="let campaign">{{campaign.label}}</mat-cell>
 						</ng-container>
-						<ng-container matColumnDef="options">
-							<mat-header-cell *matHeaderCellDef></mat-header-cell>
-							<mat-cell *matCellDef="let campaign">
-								<button mat-raised-button color="primary" (click)="campaignHome(campaign)">Go To</button>
-							</mat-cell>
-						</ng-container>
 						<mat-header-row *matHeaderRowDef="campaignTableColumns"></mat-header-row>
-						<mat-row *matRowDef="let campaign; columns: campaignTableColumns"></mat-row>
+						<mat-row class="clickable-row" *matRowDef="let campaign; columns: campaignTableColumns" (click)="campaignHome(campaign)"></mat-row>
 					</mat-table>
 				</mat-expansion-panel>
 			</mat-accordion>

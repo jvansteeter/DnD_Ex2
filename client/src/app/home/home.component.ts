@@ -21,11 +21,12 @@ export class HomeComponent implements OnInit {
     private profilePhotoUrl: string = '';
 
     public ruleSets: any[];
+    public ruleSetTableColumns = ['label'];
     private ruleSetSubject: Subject<any>;
     private ruleSetDataSource: SubjectDataSource<any>;
 
     public campaigns: any[];
-    public campaignTableColumns = ['label', 'options'];
+    public campaignTableColumns = ['label'];
     private campaignSubject: Subject<any>;
     private campaignDataSource: SubjectDataSource<any>;
 
@@ -84,6 +85,7 @@ export class HomeComponent implements OnInit {
     private getRuleSets(): void {
         this.ruleSetRepository.getRuleSets().subscribe((ruleSets: any) => {
             this.ruleSets = ruleSets;
+            this.ruleSetSubject.next(ruleSets);
         });
     }
 

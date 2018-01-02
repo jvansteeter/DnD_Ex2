@@ -29,11 +29,9 @@ export class NewCampaignDialogComponent implements OnInit {
     }
 
     public createCampaign(): void {
-        this.campaignRepository.createNewCampaign(this.campaignLabel, this.selectedRuleSet._id).subscribe((campaign: any) => {
-            this.campaignRepository.joinCampaign(campaign._id).subscribe(() => {
-                this.newCampaignSubject.next();
-                this.dialogRef.close();
-            });
+        this.campaignRepository.createNewCampaign(this.campaignLabel, this.selectedRuleSet._id).subscribe(() => {
+            this.newCampaignSubject.next();
+            this.dialogRef.close();
         });
     }
 

@@ -44,3 +44,8 @@
 .home-menuOptions mat-list mat-list-item button {
     width: 100%;
 }
+
+.clickable-row:hover {
+    cursor: pointer;
+    background: #CFD8DC;
+}

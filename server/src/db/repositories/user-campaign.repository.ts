@@ -12,11 +12,12 @@ export class UserCampaignRepository {
         this.campaignRepository = new CampaignRepository();
     }
 
-    public create(userId: string, campaignId: string): Promise<UserCampaignModel> {
+    public create(userId: string, campaignId: string, gameMaster: boolean): Promise<UserCampaignModel> {
         return new Promise((resolve, reject) => {
             this.UserCampaign.create({
                 userId: userId,
-                campaignId: campaignId
+                campaignId: campaignId,
+                gameMaster: gameMaster
             }, (error, userCampaign: UserCampaignModel) => {
                 if (error) {
                     reject (error);
@@ -44,6 +45,19 @@ export class UserCampaignRepository {
     public findAllForUser(userId: string): Promise<UserCampaignModel[]> {
         return new Promise((resolve, reject) => {
             this.UserCampaign.find({userId: userId}, (error, userCampaigns: UserCampaignModel[]) => {
+                if (error) {
+                    reject(error);
+                    return;
+                }
+
+                resolve(userCampaigns);
+            });
+        });
+    }
+
+    public findAllForCampaign(campaignId: string): Promise<UserCampaignModel[]> {
+        return new Promise((resolve, reject) => {
+            this.UserCampaign.find({campaignId: campaignId}, (error, userCampaigns: UserCampaignModel[]) => {
                 if (error) {
                     reject(error);
                     return;
