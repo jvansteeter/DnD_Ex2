@@ -4,6 +4,7 @@ import { CampaignRepository } from '../repositories/campaign.repository';
 import { Subject } from 'rxjs/Subject';
 import { SubjectDataSource } from '../utilities/subjectDataSource';
 import { UserProfile } from '../types/userProfile';
+import { Observable } from 'rxjs/Observable';
 
 
 @Component({
@@ -14,6 +15,7 @@ import { UserProfile } from '../types/userProfile';
 export class CampaignComponent implements OnInit {
     private campaignId;
     private campaign;
+    private members: any[];
 
     private gameMasterDataSource: SubjectDataSource<UserProfile>;
     private gameMasterSubject: Subject<UserProfile[]>;
@@ -32,8 +34,22 @@ export class CampaignComponent implements OnInit {
                 this.campaign = campaign;
             });
             this.campaignRepository.getCampaignMembers(this.campaignId).subscribe(members => {
+                this.members = members;
                 this.gameMasterSubject.next(members);
             });
         });
+    }
+
+    changeGameMaster(member: any): void {
+        // make sure there is at least one game master left
+        let remainingMaster = false;
+        for (let i = 0; i < this.members.length; i++) {
+            remainingMaster = remainingMaster || this.members[i].gameMaster;
+        }
+        if (!remainingMaster) {
+            Observable.timer(100).subscribe(() => {
+                member.gameMaster = true;
+            });
+        }
     }
 }

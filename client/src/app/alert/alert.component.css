@@ -1,0 +1,14 @@
+.alert {
+    position: absolute;
+    width: 97%;
+}
+
+.alertShow {
+    opacity: 1;
+    transition: .5s ease-in;
+}
+
+.alertHide {
+    opacity: 0;
+    transition: 5s ease;
+}
