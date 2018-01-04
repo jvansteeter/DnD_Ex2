@@ -6,7 +6,6 @@ import { UserProfileService } from './utilities/services/userProfile.service';
 import { UserProfile } from './types/userProfile';
 import { NotificationsService } from './utilities/services/notifications.service';
 import { AlertService } from './alert/alert.service';
-import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'web-app',
@@ -33,9 +32,5 @@ export class AppComponent extends SocketComponent implements OnInit {
         this.socketOn('friendRequest').subscribe(() => {
             this.notificationsService.getPendingFriendRequests();
         });
-
-        Observable.timer(2000).subscribe(() => {
-            this.alertService.showAlert('this is a test alert');
-        })
     }
 }

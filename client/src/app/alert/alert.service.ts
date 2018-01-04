@@ -15,6 +15,6 @@ export class AlertService {
     public showAlert(message: string): void {
         this.alertMessage = message;
         this.alertVisibility = 'alertShow';
-        Observable.timer(1000).subscribe(() => this.alertVisibility = 'alertHide');
+        Observable.timer(2000).subscribe(() => this.alertVisibility = 'alertHide');
     }
 }

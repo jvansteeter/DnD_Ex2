@@ -5,6 +5,7 @@ import { SocialRepository } from './social.repository';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { SocialService } from './social.service';
+import { SelectFriendsComponent } from './select-friends/select-friends.component';
 
 @NgModule({
     imports: [
@@ -16,17 +17,20 @@ import { SocialService } from './social.service';
         MatIconModule,
     ],
     declarations: [
-        AddFriendComponent
+        AddFriendComponent,
+        SelectFriendsComponent
     ],
     entryComponents: [
-        AddFriendComponent
+        AddFriendComponent,
+        SelectFriendsComponent
     ],
     providers: [
         SocialRepository,
         SocialService
     ],
     exports: [
-        AddFriendComponent
+        AddFriendComponent,
+        SelectFriendsComponent
     ]
 })
 export class SocialModule {

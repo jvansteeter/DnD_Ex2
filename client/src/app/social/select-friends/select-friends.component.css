@@ -1,0 +1,31 @@
+:host {
+
+}
+
+.select-friends {
+    display: flex;
+    flex-direction: row;
+}
+
+.selected-friends {
+    display: flex;
+    flex-direction: column;
+}
+
+.friend-selector {
+
+}
+
+.select-friends-footer {
+
+}
+
+.img-rounded {
+    max-height: 60px;
+    max-width: 60px;
+    margin-right: 10px;
+}
+
+/deep/ .mat-header-cell {
+    margin-right: 10px;
+}

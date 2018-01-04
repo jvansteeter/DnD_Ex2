@@ -296,3 +296,8 @@
     -webkit-font-feature-settings: 'liga';
     -webkit-font-smoothing: antialiased;
 }
+
+.clickable-row:hover {
+    cursor: pointer;
+    background: #CFD8DC;
+}

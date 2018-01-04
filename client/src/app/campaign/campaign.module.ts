@@ -3,9 +3,11 @@ import { CampaignComponent } from './campaign.component';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import {
-    MatButtonModule, MatCheckboxModule, MatExpansionModule, MatListModule,
+    MatButtonModule, MatCheckboxModule, MatDialogModule, MatExpansionModule, MatListModule,
     MatTableModule
 } from '@angular/material';
+import { AlertModule } from '../alert/alert.module';
+import { SocialModule } from '../social/social.module';
 
 
 @NgModule({
@@ -16,7 +18,9 @@ import {
         MatButtonModule,
         MatExpansionModule,
         MatTableModule,
-        MatCheckboxModule
+        MatCheckboxModule,
+        SocialModule,
+        MatDialogModule
     ],
     declarations: [
         CampaignComponent

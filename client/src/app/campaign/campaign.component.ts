@@ -5,6 +5,10 @@ import { Subject } from 'rxjs/Subject';
 import { SubjectDataSource } from '../utilities/subjectDataSource';
 import { UserProfile } from '../types/userProfile';
 import { Observable } from 'rxjs/Observable';
+import { AlertService } from '../alert/alert.service';
+import { UserProfileService } from '../utilities/services/userProfile.service';
+import { MatDialog } from '@angular/material';
+import { SelectFriendsComponent } from '../social/select-friends/select-friends.component';
 
 
 @Component({
@@ -22,7 +26,10 @@ export class CampaignComponent implements OnInit {
     public gameMasterColumns = ['users', 'gm'];
 
     constructor(private activatedRoute: ActivatedRoute,
-                private campaignRepository: CampaignRepository){
+                private campaignRepository: CampaignRepository,
+                private alertService: AlertService,
+                private userProfileService: UserProfileService,
+                private dialog: MatDialog){
         this.gameMasterSubject = new Subject<UserProfile[]>();
         this.gameMasterDataSource = new SubjectDataSource<UserProfile>(this.gameMasterSubject);
     }
@@ -50,6 +57,21 @@ export class CampaignComponent implements OnInit {
             Observable.timer(100).subscribe(() => {
                 member.gameMaster = true;
             });
+            this.alertService.showAlert('There must be at least one game master');
         }
+    }
+
+    inviteFriends(): void {
+        this.dialog.open(SelectFriendsComponent);
+    }
+
+    isGameMaster(): boolean {
+        for (let i = 0; i < this.members.length; i++) {
+            if (this.userProfileService.getUserId() === this.members[i]._id) {
+                return this.members[i].gameMaster;
+            }
+        }
+
+        return false;
     }
 }

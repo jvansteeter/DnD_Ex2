@@ -1,0 +1,30 @@
+<div class="select-friends">
+	<div class="selected-friends">
+		content
+	</div>
+	<div class="friend-selector">
+		<mat-table [dataSource]="friendDataSource">
+			<ng-container matColumnDef="icon">
+				<mat-header-cell *matHeaderCellDef></mat-header-cell>
+				<mat-cell *matCellDef="let friend">
+					<img [src]="friend.profilePhotoUrl" class="img-rounded">
+				</mat-cell>
+			</ng-container>
+			<ng-container matColumnDef="username">
+				<mat-header-cell *matHeaderCellDef>Username</mat-header-cell>
+				<mat-cell *matCellDef="let friend">{{friend.username}}</mat-cell>
+			</ng-container>
+			<ng-container matColumnDef="firstName">
+				<mat-header-cell *matHeaderCellDef>First Name</mat-header-cell>
+				<mat-cell *matCellDef="let friend">{{friend.firstName}}</mat-cell>
+			</ng-container>
+			<ng-container matColumnDef="lastName">
+				<mat-header-cell *matHeaderCellDef>Last Name</mat-header-cell>
+				<mat-cell *matCellDef="let friend">{{friend.lastName}}</mat-cell>
+			</ng-container>
+			<mat-header-row *matHeaderRowDef="friendColumns"></mat-header-row>
+			<mat-row *matRowDef="let friend; columns: friendColumns" class="clickable-row" (click)="selectFriend(friend)"></mat-row>
+		</mat-table>
+	</div>
+</div>
+<div class="select-friends-footer"></div>

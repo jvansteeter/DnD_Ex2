@@ -3,8 +3,8 @@
 }
 
 .img-rounded {
-    width: 50px;
-    min-width: 50px;
+    max-height: 60px;
+    max-width: 60px;
     margin-right: 10px;
 }
 
