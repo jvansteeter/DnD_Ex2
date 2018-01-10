@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { AddFriendComponent } from './add-friend/add-friend.component';
-import { MatButtonModule, MatIconModule, MatInputModule, MatTableModule } from '@angular/material';
+import { MatButtonModule, MatIconModule, MatInputModule, MatListModule, MatTableModule } from '@angular/material';
 import { SocialRepository } from './social.repository';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -15,6 +15,7 @@ import { SelectFriendsComponent } from './select-friends/select-friends.componen
         MatInputModule,
         MatButtonModule,
         MatIconModule,
+        MatListModule
     ],
     declarations: [
         AddFriendComponent,

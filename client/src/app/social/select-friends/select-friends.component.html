@@ -1,6 +1,11 @@
 <div class="select-friends">
 	<div class="selected-friends">
-		content
+		<mat-list class="well well-sm" *ngIf="selectedFriends.length > 0">
+			<mat-list-item *ngFor="let friend of selectedFriends">
+				<img [src]="friend.profilePhotoUrl" class="img-rounded">
+				<span>{{friend.username}}</span>
+			</mat-list-item>
+		</mat-list>
 	</div>
 	<div class="friend-selector">
 		<mat-table [dataSource]="friendDataSource">
@@ -27,4 +32,5 @@
 		</mat-table>
 	</div>
 </div>
+<hr>
 <div class="select-friends-footer"></div>

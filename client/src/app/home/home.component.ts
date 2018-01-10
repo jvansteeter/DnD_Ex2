@@ -1,13 +1,13 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { MatDialog } from '@angular/material';
 import { NewRuleSetDialogComponent } from './dialog/new-rule-set-dialog.component';
-import { Router } from '@angular/router';
 import { UserProfileService } from '../utilities/services/userProfile.service';
-import { Subject } from 'rxjs/Subject';
 import { SubjectDataSource } from '../utilities/subjectDataSource';
 import { RuleSetRepository } from '../repositories/rule-set.repository';
 import { NewCampaignDialogComponent } from './dialog/new-campaign-dialog.component';
 import { CampaignRepository } from '../repositories/campaign.repository';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Subject } from 'rxjs/Subject';
+import { MatDialog } from '@angular/material';
+import { Router } from '@angular/router';
 
 
 @Component({

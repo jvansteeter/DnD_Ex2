@@ -26,6 +26,15 @@
     margin-right: 10px;
 }
 
-/deep/ .mat-header-cell {
+/deep/ mat-header-cell {
     margin-right: 10px;
+}
+
+mat-table {
+    min-width: 350px;
+}
+
+.well {
+    display: flex;
+    flex-direction: column;
 }
