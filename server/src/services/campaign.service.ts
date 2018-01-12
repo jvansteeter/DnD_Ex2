@@ -83,4 +83,8 @@ export class CampaignService {
             }, error => reject(error));
         });
     }
+
+    public inviteUsers(campaignId: string, inviterId: string, inviteeIds: string[]): Promise<boolean> {
+
+    }
 }

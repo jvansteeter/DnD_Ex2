@@ -6,8 +6,9 @@ import {
     MatButtonModule, MatCheckboxModule, MatDialogModule, MatExpansionModule, MatListModule,
     MatTableModule
 } from '@angular/material';
-import { AlertModule } from '../alert/alert.module';
 import { SocialModule } from '../social/social.module';
+import { CampaignService } from './campaign.service';
+import { CampaignRepository } from '../repositories/campaign.repository';
 
 
 @NgModule({
@@ -29,7 +30,8 @@ import { SocialModule } from '../social/social.module';
         CampaignComponent
     ],
     providers: [
-
+        CampaignRepository,
+        CampaignService
     ]
 })
 export class CampaignModule {

@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { CampaignRepository } from '../repositories/campaign.repository';
 import { Subject } from 'rxjs/Subject';
 import { SubjectDataSource } from '../utilities/subjectDataSource';
 import { UserProfile } from '../types/userProfile';
 import { Observable } from 'rxjs/Observable';
 import { AlertService } from '../alert/alert.service';
 import { UserProfileService } from '../utilities/services/userProfile.service';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatTableDataSource } from '@angular/material';
 import { SelectFriendsComponent } from '../social/select-friends/select-friends.component';
+import { CampaignService } from './campaign.service';
 
 
 @Component({
@@ -21,28 +21,26 @@ export class CampaignComponent implements OnInit {
     private campaign;
     private members: any[];
 
-    private gameMasterDataSource: SubjectDataSource<UserProfile>;
-    private gameMasterSubject: Subject<UserProfile[]>;
+    private gameMasterDataSource: MatTableDataSource<any>;
     public gameMasterColumns = ['users', 'gm'];
 
     constructor(private activatedRoute: ActivatedRoute,
-                private campaignRepository: CampaignRepository,
+                private campaignService: CampaignService,
                 private alertService: AlertService,
                 private userProfileService: UserProfileService,
                 private dialog: MatDialog){
-        this.gameMasterSubject = new Subject<UserProfile[]>();
-        this.gameMasterDataSource = new SubjectDataSource<UserProfile>(this.gameMasterSubject);
     }
 
     ngOnInit(): void {
         this.activatedRoute.params.subscribe((params) => {
             this.campaignId = params['campaignId'];
-            this.campaignRepository.getCampaign(this.campaignId).subscribe((campaign: any) => {
-                this.campaign = campaign;
-            });
-            this.campaignRepository.getCampaignMembers(this.campaignId).subscribe(members => {
-                this.members = members;
-                this.gameMasterSubject.next(members);
+            this.campaignService.setCampaignId(this.campaignId);
+            this.campaignService.isReady().subscribe((isReady: boolean) => {
+                if (isReady) {
+                    this.campaign = this.campaignService.campaign;
+                    this.members = this.campaignService.members;
+                    this.gameMasterDataSource = new MatTableDataSource(this.members);
+                }
             });
         });
     }
@@ -62,7 +60,11 @@ export class CampaignComponent implements OnInit {
     }
 
     inviteFriends(): void {
-        this.dialog.open(SelectFriendsComponent);
+        let dialogRef = this.dialog.open(SelectFriendsComponent);
+        dialogRef.componentInstance.friendsSelected.subscribe((friends: UserProfile[]) => {
+            console.log('successfully subscribed to selection events')
+            console.log(friends)
+        });
     }
 
     isGameMaster(): boolean {

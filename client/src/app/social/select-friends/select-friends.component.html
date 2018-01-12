@@ -1,13 +1,16 @@
 <div class="select-friends">
 	<div class="selected-friends">
-		<mat-list class="well well-sm" *ngIf="selectedFriends.length > 0">
+		<mat-selection-list class="well well-sm" *ngIf="selectedFriends.length > 0">
 			<mat-list-item *ngFor="let friend of selectedFriends">
-				<img [src]="friend.profilePhotoUrl" class="img-rounded">
+				<!--<img [src]="friend.profilePhotoUrl" class="img-rounded">-->
 				<span>{{friend.username}}</span>
 			</mat-list-item>
-		</mat-list>
+		</mat-selection-list>
 	</div>
 	<div class="friend-selector">
+		<mat-form-field>
+			<input matInput placeholder="Search Friends" (keyup)="applyFilter($event.target.value)">
+		</mat-form-field>
 		<mat-table [dataSource]="friendDataSource">
 			<ng-container matColumnDef="icon">
 				<mat-header-cell *matHeaderCellDef></mat-header-cell>
@@ -28,9 +31,12 @@
 				<mat-cell *matCellDef="let friend">{{friend.lastName}}</mat-cell>
 			</ng-container>
 			<mat-header-row *matHeaderRowDef="friendColumns"></mat-header-row>
-			<mat-row *matRowDef="let friend; columns: friendColumns" class="clickable-row" (click)="selectFriend(friend)"></mat-row>
+			<mat-row *matRowDef="let friend; columns: friendColumns" class="clickable-row" (click)="selectFriend(friend)"
+				[ngClass]="{'selected': friend.selected}"></mat-row>
 		</mat-table>
 	</div>
 </div>
 <hr>
-<div class="select-friends-footer"></div>
+<div class="select-friends-footer">
+	<button mat-raised-button color="primary" [disabled]="selectedFriends.length < 1" (click)="select()">Select</button>
+</div>

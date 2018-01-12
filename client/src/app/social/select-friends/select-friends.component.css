@@ -13,11 +13,12 @@
 }
 
 .friend-selector {
-
+    margin-left: 10px;
 }
 
 .select-friends-footer {
-
+    display: flex;
+    justify-content: flex-end;
 }
 
 .img-rounded {
@@ -37,4 +38,12 @@ mat-table {
 .well {
     display: flex;
     flex-direction: column;
+}
+
+mat-form-field {
+    width: 100%;
+}
+
+.selected {
+    opacity: 0.1;
 }

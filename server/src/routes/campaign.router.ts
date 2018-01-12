@@ -50,6 +50,12 @@ export class CampaignRouter {
                 res.json(members);
             }).catch(error => res.status(500).send(error));
         });
+
+        this.router.post('/invite/:campaignId', (req: Request, res: Response) => {
+            this.campaignService.inviteUsers(req.params.campaignId, req.user._id, req.body).then((success) => {
+
+            }).catch(error => res.status(500).send(error));
+        });
     }
 }
 
