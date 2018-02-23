@@ -10,11 +10,11 @@ import { MatDialogRef } from '@angular/material';
     styleUrls: ['login.component.css']
 })
 export class RegisterDialogComponent {
-    private username: string;
-    private password: string;
-    private passwordConfirm: string;
-    private firstName: string;
-    private lastName: string;
+    username: string = '';
+    password: string = '';
+    passwordConfirm: string = '';
+    firstName: string = '';
+    lastName: string = '';
 
     constructor(private loginService: LoginService,
                 private errorService: ErrorEmitterService,
