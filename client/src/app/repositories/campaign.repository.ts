@@ -37,4 +37,14 @@ export class CampaignRepository {
     public sendInvitations(campaignId: string, userIds: string[]): Observable<void> {
         return this.http.post<void>('/api/campaign/invite/' + campaignId, userIds);
     }
+
+    public createNewEncounter(label: string, campaignId: string): Observable<void> {
+        return this.http.post('/api/campaign/newEncounter/' + campaignId, {label: label}, {responseType: 'text'}).map(() => {
+            return;
+        });
+    }
+
+    public getAllEncounters(campaignId: string): Observable<any> {
+        return this.http.get('api/campaign/encounters/' + campaignId, {responseType: 'json'});
+    }
 }

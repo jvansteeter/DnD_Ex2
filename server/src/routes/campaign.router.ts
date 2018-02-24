@@ -1,6 +1,8 @@
 import { Router, Request, Response } from 'express';
 import { CampaignService } from '../services/campaign.service';
 import { CampaignModel } from '../db/models/campaign.model';
+import { EncounterService } from "../services/encounter.service";
+import { EncounterModel } from "../db/models/encounter.model";
 
 
 /**********************************************************************************************************
@@ -12,11 +14,13 @@ export class CampaignRouter {
     router: Router;
 
     private campaignService: CampaignService;
+    private encounterService: EncounterService;
 
     constructor() {
         this.router = Router();
 
         this.campaignService = new CampaignService();
+        this.encounterService = new EncounterService();
         this.init();
     }
 
@@ -53,7 +57,20 @@ export class CampaignRouter {
 
         this.router.post('/invite/:campaignId', (req: Request, res: Response) => {
             this.campaignService.inviteUsers(req.params.campaignId, req.user._id, req.body).then((success) => {
+                // TODO:  Implement
+                res.status(501).send();
+            }).catch(error => res.status(500).send(error));
+        });
 
+        this.router.post('/newEncounter/:campaignId', (req: Request, res: Response) => {
+            this.encounterService.create(req.user._id, req.body.label, req.params.campaignId).then(() => {
+                res.status(200).send("OK");
+            }).catch(error => res.status(500).send(error));
+        });
+
+        this.router.get('/encounters/:campaignId', (req: Request, res: Response) => {
+            this.encounterService.getAllForCampaignId(req.params.campaignId).then((encounters: EncounterModel[]) => {
+                res.json(encounters);
             }).catch(error => res.status(500).send(error));
         });
     }

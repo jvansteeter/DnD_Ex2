@@ -20,6 +20,7 @@ import './db/models/npc.model';
 import './db/models/friend.model';
 import './db/models/friendRequest.model';
 import './db/models/campaign.model';
+import './db/models/encounter.model';
 import './db/models/user-campaign.model';
 import './config/passport.config';
 
@@ -28,6 +29,7 @@ import UserRouter from './routes/user.router';
 import RuleSetRouter from './routes/ruleSet.router';
 import SocialRouter from './routes/social.router';
 import CampaignRouter from './routes/campaign.router';
+import EncounterRouter from "./routes/encounter.router";
 
 
 /***********************************************************************************************************************
@@ -111,6 +113,7 @@ class App {
         this.app.use('/api/ruleset', this.isAuthenticated, RuleSetRouter);
         this.app.use('/api/social', this.isAuthenticated, SocialRouter);
         this.app.use('/api/campaign', this.isAuthenticated, CampaignRouter);
+        this.app.use('/api/encounter', this.isAuthenticated, EncounterRouter);
 
         //  All other requests, redirect to index
         this.app.get('*', (req, res) => {

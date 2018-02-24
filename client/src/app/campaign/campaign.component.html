@@ -9,6 +9,9 @@
 				<mat-list-item>
 					<button mat-raised-button color="primary">Create New Character</button>
 				</mat-list-item>
+				<mat-list-item *ngIf="campaignService.isGameMaster()">
+					<button mat-raised-button color="primary" (click)="newEncounter()">New Encounter</button>
+				</mat-list-item>
 			</mat-list>
 			<mat-accordion>
 				<mat-expansion-panel>
@@ -34,6 +37,9 @@
 		</div>
 		<div class="campaign-rightContent">
 			Encounters
+			<mat-list>
+				<mat-list-item *ngFor="let encounter of campaignService.encounters"><a (click)="enterEncounter(encounter)">{{encounter.label}}</a></mat-list-item>
+			</mat-list>
 		</div>
 	</div>
 </div>

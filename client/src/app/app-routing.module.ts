@@ -6,6 +6,7 @@ import { CharacterMakerComponent } from './character-sheet/maker/character-maker
 import { RuleSetHomeComponent } from './rule-set/home/rule-set-home.component';
 import { CharacterSheetComponent } from './character-sheet/sheet/character-sheet.component';
 import { CampaignComponent } from './campaign/campaign.component';
+import { EncounterComponent } from "./encounter/encounter.component";
 
 const routes: Routes = [
     {
@@ -31,6 +32,10 @@ const routes: Routes = [
     {
         path: 'campaign/:campaignId',
         component: CampaignComponent
+    },
+    {
+        path: 'encounter/:encounterId',
+        component: EncounterComponent
     }
 ];
 

@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Subject } from 'rxjs/Subject';
-import { SubjectDataSource } from '../utilities/subjectDataSource';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UserProfile } from '../types/userProfile';
 import { Observable } from 'rxjs/Observable';
 import { AlertService } from '../alert/alert.service';
@@ -9,6 +7,7 @@ import { UserProfileService } from '../utilities/services/userProfile.service';
 import { MatDialog, MatTableDataSource } from '@angular/material';
 import { SelectFriendsComponent } from '../social/select-friends/select-friends.component';
 import { CampaignService } from './campaign.service';
+import { NewEncounterDialogComponent } from "./dialog/new-encounter-dialog.component";
 
 
 @Component({
@@ -28,7 +27,8 @@ export class CampaignComponent implements OnInit {
                 private campaignService: CampaignService,
                 private alertService: AlertService,
                 private userProfileService: UserProfileService,
-                private dialog: MatDialog){
+                private dialog: MatDialog,
+                private router: Router){
     }
 
     ngOnInit(): void {
@@ -67,13 +67,11 @@ export class CampaignComponent implements OnInit {
         });
     }
 
-    isGameMaster(): boolean {
-        for (let i = 0; i < this.members.length; i++) {
-            if (this.userProfileService.getUserId() === this.members[i]._id) {
-                return this.members[i].gameMaster;
-            }
-        }
+    public newEncounter(): void {
+        this.dialog.open(NewEncounterDialogComponent);
+    }
 
-        return false;
+    public enterEncounter(encounter: any): void {
+        this.router.navigate(['encounter', encounter._id])
     }
 }

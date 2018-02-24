@@ -3,12 +3,14 @@ import { CampaignComponent } from './campaign.component';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import {
-    MatButtonModule, MatCheckboxModule, MatDialogModule, MatExpansionModule, MatListModule,
+    MatButtonModule, MatCheckboxModule, MatDialogModule, MatExpansionModule, MatInputModule,
+    MatListModule,
     MatTableModule
 } from '@angular/material';
 import { SocialModule } from '../social/social.module';
 import { CampaignService } from './campaign.service';
 import { CampaignRepository } from '../repositories/campaign.repository';
+import { NewEncounterDialogComponent } from "./dialog/new-encounter-dialog.component";
 
 
 @NgModule({
@@ -21,13 +23,18 @@ import { CampaignRepository } from '../repositories/campaign.repository';
         MatTableModule,
         MatCheckboxModule,
         SocialModule,
-        MatDialogModule
+        MatDialogModule,
+        MatInputModule
     ],
     declarations: [
-        CampaignComponent
+        CampaignComponent,
+        NewEncounterDialogComponent
     ],
     exports: [
         CampaignComponent
+    ],
+    entryComponents: [
+        NewEncounterDialogComponent
     ],
     providers: [
         CampaignRepository,

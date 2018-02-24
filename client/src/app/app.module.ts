@@ -15,6 +15,7 @@ import { SocketService } from "./socket/socket.service";
 import { UtilityModule } from './utilities/utility.module';
 import { CampaignModule } from './campaign/campaign.module';
 import { AlertModule } from './alert/alert.module';
+import { EncounterModule } from "./encounter/encounter.module";
 
 @NgModule({
     imports: [
@@ -33,7 +34,8 @@ import { AlertModule } from './alert/alert.module';
         CharacterSheetModule,
         UtilityModule,
         CampaignModule,
-        AlertModule
+        AlertModule,
+        EncounterModule
     ],
     declarations: [
         AppComponent,
