@@ -42,6 +42,19 @@ module.exports = {
       //   loader: 'file-loader?name=resources/[name].[hash].[ext]'
       // },
       {
+        test: /\.scss$/,
+        include: [helpers.root('src', 'app'), helpers.root('src', 'login')],
+        loaders: ["raw-loader", "sass-loader"]
+        // loaders: ["style-loader", "css-loader", "sass-loader"]
+        // use: [{
+        //     loader: "style-loader" // creates style nodes from JS strings
+        // }, {
+        //     loader: "css-loader" // translates CSS into CommonJS
+        // }, {
+        //     loader: "sass-loader" // compiles Sass to CSS
+        // }]
+      },
+      {
         test: /\.css$/,
         exclude: [helpers.root('src', 'app'), helpers.root('src', 'login')],
         use: ExtractTextPlugin.extract({ fallback: 'style-loader', use: 'css-loader?sourceMap' })
