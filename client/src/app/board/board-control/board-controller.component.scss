@@ -1,0 +1,59 @@
+:host {
+  flex: 0 0 200px;
+  width: 100%;
+  border-bottom: 2px solid #cccccc;
+  display: flex;
+}
+
+mat-radio-group {
+  display: inline-flex;
+  flex-direction: column;
+}
+
+mat-radio-button {
+  margin: 2px;
+}
+
+.section {
+  margin: 10px;
+  background-color: #fafafa;
+  border-radius: 5px; border: 1px solid #b7b7b7;
+  display: flex;
+  flex-direction: column;
+}
+
+.sectionHeader {
+  padding: 5px 10px;
+  flex: 0 0 18px;
+
+  font-family: Roboto,"Helvetica Neue",sans-serif;
+  font-weight: bold;
+
+  display: flex;
+  background-color: #e1e1e1;
+  border-bottom: 1px solid #b7b7b7;
+
+  span {
+    margin: auto;
+  }
+}
+
+.font {
+  font-family: Roboto,"Helvetica Neue",sans-serif;
+}
+
+.sectionContents {
+  padding: 10px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  flex: auto;
+}
+
+.activeTile {
+  border: 2px solid yellow;
+  margin: 0;
+}
+
+.defaultTile {
+  margin: 2px;
+}

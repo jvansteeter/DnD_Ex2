@@ -16,6 +16,7 @@ import { UtilityModule } from './utilities/utility.module';
 import { CampaignModule } from './campaign/campaign.module';
 import { AlertModule } from './alert/alert.module';
 import { EncounterModule } from "./encounter/encounter.module";
+import {BoardModule} from "./board/board.module";
 
 @NgModule({
     imports: [
@@ -35,7 +36,8 @@ import { EncounterModule } from "./encounter/encounter.module";
         UtilityModule,
         CampaignModule,
         AlertModule,
-        EncounterModule
+        EncounterModule,
+        BoardModule
     ],
     declarations: [
         AppComponent,

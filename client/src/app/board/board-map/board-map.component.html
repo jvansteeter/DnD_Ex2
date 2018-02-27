@@ -1,0 +1,26 @@
+<div style="height: 100%; width: 100%" #mapContainer>
+  <map-renderer></map-renderer>
+  <grid-renderer></grid-renderer>
+  <tile-renderer></tile-renderer>
+  <wall-renderer></wall-renderer>
+  <highlight-renderer></highlight-renderer>
+  <hover-renderer></hover-renderer>
+  <light-renderer></light-renderer>
+
+  <canvas
+    style="position: absolute"
+    height={{getCanvasHeight()}} width={{getCanvasWidth()}}
+    #inputCanvas
+    (mouseleave)="handleMouseLeave($event)"
+    (mouseenter)="handleMouseEnter($event)"
+    mouseWheel
+    (mouseWheelUp)="handleMouseWheelUp($event)"
+    (mouseWheelDown)="handleMouseWheelDown($event)"
+    (mousemove)="mouseMove($event)"
+    (mousedown)="handleMouseDown($event)"
+    (mouseup)="handleMouseUp($event)"
+    (click)="clickResponse()">
+  </canvas>
+</div>
+
+
