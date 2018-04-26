@@ -17,6 +17,7 @@ import './db/models/characterAspect.model';
 import './db/models/ruleFunction.model';
 import './db/models/user-ruleSet.model';
 import './db/models/npc.model';
+import './db/models/notification.model';
 import './db/models/friend.model';
 import './db/models/friendRequest.model';
 import './db/models/campaign.model';
@@ -30,7 +31,6 @@ import RuleSetRouter from './routes/ruleSet.router';
 import SocialRouter from './routes/social.router';
 import CampaignRouter from './routes/campaign.router';
 import EncounterRouter from "./routes/encounter.router";
-
 
 /***********************************************************************************************************************
  * EXPRESS APP

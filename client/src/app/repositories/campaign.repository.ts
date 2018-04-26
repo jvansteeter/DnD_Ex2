@@ -34,10 +34,6 @@ export class CampaignRepository {
         return this.http.get('/api/campaign/members/' + campaignId, {responseType: 'json'});
     }
 
-    public sendInvitations(campaignId: string, userIds: string[]): Observable<void> {
-        return this.http.post<void>('/api/campaign/invite/' + campaignId, userIds);
-    }
-
     public createNewEncounter(label: string, campaignId: string): Observable<void> {
         return this.http.post('/api/campaign/newEncounter/' + campaignId, {label: label}, {responseType: 'text'}).map(() => {
             return;

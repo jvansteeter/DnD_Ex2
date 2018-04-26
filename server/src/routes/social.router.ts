@@ -8,6 +8,7 @@ import { NpcRepository } from '../db/repositories/npc.repository';
 import { CharacterSheetService } from '../services/characterSheet-service';
 import { SocialService } from '../services/social.service';
 import { UserModel } from "../db/models/user.model";
+import { NotificationData } from "../../../shared/types/notification-data";
 
 
 /**********************************************************************************************************
@@ -41,13 +42,13 @@ export class SocialRouter {
     }
 
     init() {
-        this.router.post('/friendrequest/', (req: Request, res: Response) => {
+        this.router.post('/friendRequest/', (req: Request, res: Response) => {
             this.socialService.sendFriendRequest(req.user._id, req.body.userId).then(() => {
                 res.status(200).send("OK");
             }).catch(error => res.status(500).send(error));
         });
 
-        this.router.get('/pendingrequests', (req: Request, res: Response) => {
+        this.router.get('/pendingRequests', (req: Request, res: Response) => {
             this.socialService.getPendingFriendRequests(req.user._id).then((users: UserModel[]) => {
                 res.json(users);
             }).catch(error => {
@@ -56,7 +57,16 @@ export class SocialRouter {
             })
         });
 
-        this.router.post('/acceptrequest', (req: Request, res: Response) => {
+        this.router.get('/pendingNotifications', (req: Request, res: Response) => {
+            this.socialService.getPendingNotifications(req.user._id).then((notifications: NotificationData[]) => {
+                res.json(notifications);
+            }).catch(error => {
+                console.error(error);
+                res.status(500).send(error);
+            })
+        });
+
+        this.router.post('/acceptRequest', (req: Request, res: Response) => {
             this.socialService.acceptFriendRequest(req.user._id, req.body.userId).then(() => {
                 res.send("OK");
             }).catch(error => {
@@ -65,7 +75,7 @@ export class SocialRouter {
             });
         });
 
-        this.router.post('/rejectrequest', (req: Request, res: Response) => {
+        this.router.post('/rejectRequest', (req: Request, res: Response) => {
             this.socialService.rejectFriendRequest(req.user._id, req.body.userId).then(() => {
                 res.send('OK');
             }).catch(error => {
@@ -74,9 +84,18 @@ export class SocialRouter {
             });
         });
 
-        this.router.get('/friendlist', (req: Request, res: Response) => {
+        this.router.get('/friendList', (req: Request, res: Response) => {
             this.socialService.getFriendList(req.user._id).then((friendList: UserModel[]) => {
                 res.json(friendList);
+            }).catch(error => {
+                console.error(error);
+                res.status(500).send(error);
+            })
+        });
+
+        this.router.post('/campaignInvite', (req: Request, res: Response) => {
+            this.socialService.sendCampaignInvite(req.body.userId, req.body.campaignId).then(() => {
+                res.send('OK');
             }).catch(error => {
                 console.error(error);
                 res.status(500).send(error);

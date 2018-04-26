@@ -45,7 +45,7 @@ export class CampaignComponent implements OnInit {
         });
     }
 
-    changeGameMaster(member: any): void {
+    public changeGameMaster(member: any): void {
         // make sure there is at least one game master left
         let remainingMaster = false;
         for (let i = 0; i < this.members.length; i++) {
@@ -59,11 +59,12 @@ export class CampaignComponent implements OnInit {
         }
     }
 
-    inviteFriends(): void {
+    public inviteFriends(): void {
         let dialogRef = this.dialog.open(SelectFriendsComponent);
         dialogRef.componentInstance.friendsSelected.subscribe((friends: UserProfile[]) => {
             console.log('successfully subscribed to selection events')
             console.log(friends)
+            this.campaignService.sendInvitations(friends);
         });
     }
 

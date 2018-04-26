@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { SocialRepository } from './social.repository';
 import { Observable } from 'rxjs/Observable';
 import { UserProfile } from '../types/userProfile';
+import { NotificationData } from "../../../../shared/types/notification-data";
 
 @Injectable()
 export class SocialService {
@@ -25,6 +26,10 @@ export class SocialService {
 
     public getPendingFriendRequests(): Observable<UserProfile[]> {
         return this.socialRepo.getPendingFriendRequests();
+    }
+
+    public getPendingNotifications(): Observable<NotificationData[]> {
+        return this.socialRepo.getPendingNotifications();
     }
 
     public getFriends(): Observable<UserProfile[]> {

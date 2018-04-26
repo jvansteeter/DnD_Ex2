@@ -1,3 +1,5 @@
+import { NotificationData } from "../../../shared/types/notification-data";
+
 export class LoggedInUserSocketService {
     private userSocketMap = {};
 
@@ -9,9 +11,9 @@ export class LoggedInUserSocketService {
         delete this.userSocketMap[userId];
     }
 
-    emitToUser(userId: string, eventName: string, data?: any): void {
+    emitToUser(userId: string, notificationData: NotificationData): void {
         if (this.userSocketMap.hasOwnProperty(userId)) {
-            this.userSocketMap[userId].emit(eventName, data);
+            this.userSocketMap[userId].emit(notificationData.notificationType, notificationData);
         }
     }
 }

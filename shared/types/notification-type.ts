@@ -1,0 +1,4 @@
+export enum NotificationType {
+    CAMPAIGN_INVITE = 'CAMPAIGN_INVITE',
+    FRIEND_REQUEST = 'FRIEND_REQUEST'
+}

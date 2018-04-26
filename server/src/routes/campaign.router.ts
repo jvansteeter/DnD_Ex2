@@ -55,13 +55,6 @@ export class CampaignRouter {
             }).catch(error => res.status(500).send(error));
         });
 
-        this.router.post('/invite/:campaignId', (req: Request, res: Response) => {
-            this.campaignService.inviteUsers(req.params.campaignId, req.user._id, req.body).then((success) => {
-                // TODO:  Implement
-                res.status(501).send();
-            }).catch(error => res.status(500).send(error));
-        });
-
         this.router.post('/newEncounter/:campaignId', (req: Request, res: Response) => {
             this.encounterService.create(req.user._id, req.body.label, req.params.campaignId).then(() => {
                 res.status(200).send("OK");

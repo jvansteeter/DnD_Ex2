@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { SocketService } from './socket/socket.service';
 import { SocketComponent } from './socket/socket.component';
@@ -6,6 +6,7 @@ import { UserProfileService } from './utilities/services/userProfile.service';
 import { UserProfile } from './types/userProfile';
 import { NotificationsService } from './utilities/services/notifications.service';
 import { AlertService } from './alert/alert.service';
+import { NotificationType } from "../../../shared/types/notification-type";
 
 @Component({
   selector: 'web-app',
@@ -31,6 +32,10 @@ export class AppComponent extends SocketComponent implements OnInit {
         this.router.navigate(['/home']);
         this.socketOn('friendRequest').subscribe(() => {
             this.notificationsService.getPendingFriendRequests();
+        });
+        this.socketOn(NotificationType.CAMPAIGN_INVITE).subscribe((data) => {
+            console.log('CampaignInvite')
+            console.log(data)
         });
     }
 }

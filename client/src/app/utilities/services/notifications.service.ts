@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Notification } from '../../types/notification';
 import { UserProfile } from '../../types/userProfile';
 import { SocialService } from '../../social/social.service';
+import { NotificationData } from "../../../../../shared/types/notification-data";
 
 @Injectable()
 export class NotificationsService {
-    public notifications: Notification[];
+    public notifications: NotificationData[];
     public friendRequests: UserProfile[];
 
     constructor(private socialService: SocialService) {
@@ -13,18 +13,15 @@ export class NotificationsService {
         this.friendRequests = [];
     }
 
-    public addNotification(note: Notification): void {
-        this.notifications.push(note);
+    public getPendingFriendRequests(): void {
+        this.socialService.getPendingFriendRequests().subscribe((fromUsers: UserProfile[]) => {
+            this.friendRequests = fromUsers;
+        });
     }
 
-    public getPendingFriendRequests(): Promise<void> {
-        return new Promise((resolve, reject) => {
-            this.socialService.getPendingFriendRequests().subscribe((fromUsers: UserProfile[]) => {
-                this.friendRequests = fromUsers;
-                resolve();
-            }, error => {
-                reject(error);
-            });
+    public getPendingNotifications(): void {
+        this.socialService.getPendingNotifications().subscribe((notifications: NotificationData[]) => {
+            this.notifications = notifications;
         });
     }
 

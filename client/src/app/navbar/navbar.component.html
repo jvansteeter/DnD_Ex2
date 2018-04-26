@@ -3,26 +3,11 @@
 		<span class="navbar-tabs">
 			<button mat-button class="navbar-tabLink"
 					*ngFor="let link of navLinks"
-					[routerLink]="link.route"
-					routerLinkActive #rla="routerLinkActive">
+					[routerLink]="link.route">
 			{{link.label}}
 		</button>
 		</span>
-		<button mat-button class="navbar-menuButton" [matMenuTriggerFor]="notifications">
-			<span class="badge navbar-noteAlert" *ngIf="notificationsService.friendRequests.length > 0">{{notificationsService.notifications.length + notificationsService.friendRequests.length}}</span>
-			<mat-icon>book</mat-icon>
-		</button>
-		<mat-menu #notifications>
-			<span class="notification-friendRequestHeader">Friend Requests<hr></span>
-			<ng-container *ngFor="let requester of notificationsService.friendRequests">
-				<div class="notification-friendRequest">
-					<img [src]="requester.profilePhotoUrl" class="img-rounded">
-					<span>{{requester.username}}</span>
-					<button mat-mini-fab class="acceptButton" (click)="acceptRequest(requester)"><mat-icon>check</mat-icon></button>
-					<button mat-mini-fab class="rejectButton" (click)="rejectRequest(requester)"><mat-icon>not_interested</mat-icon></button>
-				</div>
-			</ng-container>
-		</mat-menu>
+		<app-notifications></app-notifications>
 		<button mat-button class="navbar-menuButton" [matMenuTriggerFor]="menu"><mat-icon>person</mat-icon></button>
 		<mat-menu #menu="matMenu">
 			<a mat-menu-item (click)="openAddFriendDialog()">Add Friend</a>

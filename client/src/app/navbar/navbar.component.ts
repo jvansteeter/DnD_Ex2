@@ -16,8 +16,6 @@ export class NavbarComponent {
     private navLinks: any[];
 
     constructor(private profileService: UserProfileService,
-                public notificationsService: NotificationsService,
-                private socialService: SocialService,
                 private dialog: MatDialog) {
         this.navLinks = [
             {
@@ -36,16 +34,5 @@ export class NavbarComponent {
 
     public openAddFriendDialog(): void {
         this.dialog.open(AddFriendComponent);
-    }
-
-    public acceptRequest(requester: UserProfile): void {
-        this.socialService.acceptRequest(requester._id);
-        this.notificationsService.removeFriendRequest(requester._id);
-        this.profileService.getFriends();
-    }
-
-    public rejectRequest(requester: UserProfile): void {
-        this.socialService.rejectFriendRequest(requester._id);
-        this.notificationsService.removeFriendRequest(requester._id);
     }
 }

@@ -1,10 +1,8 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { NavbarComponent } from './navbar/navbar.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HomeModule } from './home/home.module';
 import { MapMakerModule } from './map-maker/map-maker.module';
@@ -17,13 +15,15 @@ import { CampaignModule } from './campaign/campaign.module';
 import { AlertModule } from './alert/alert.module';
 import { EncounterModule } from "./encounter/encounter.module";
 import {BoardModule} from "./board/board.module";
+import { NavbarModule } from "./navbar/navbar.module";
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
     imports: [
         BrowserModule,
         FormsModule,
-        HttpModule,
         AppRoutingModule,
+        HttpClientModule,
         MatTabsModule,
         BrowserAnimationsModule,
         MatButtonModule,
@@ -37,11 +37,11 @@ import {BoardModule} from "./board/board.module";
         CampaignModule,
         AlertModule,
         EncounterModule,
-        BoardModule
+        BoardModule,
+        NavbarModule
     ],
     declarations: [
         AppComponent,
-        NavbarComponent
     ],
     providers: [
         SocketService

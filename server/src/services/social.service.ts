@@ -5,26 +5,32 @@ import { FriendRequestRepository } from '../db/repositories/friendRequest.reposi
 import { LoggedInUserSocketService } from './loggedInUserSocket.service';
 import { FriendRequestModel } from "../db/models/friendRequest.model";
 import { UserModel } from "../db/models/user.model";
-import { noUndefined } from "@angular/compiler/src/util";
 import { FriendModel } from '../db/models/friend.model';
+import { NotificationRepository } from "../db/repositories/notification.repository";
+import { NotificationModel } from "../db/models/notification.model";
+import { NotificationType } from "../../../shared/types/notification-type";
+import { FriendRequest } from "../../../shared/types/friend-request";
+import { NotificationData } from "../../../shared/types/notification-data";
 
 export class SocialService {
-    private userRepository: UserRepository;
-    private friendRepository: FriendRepository;
-    private friendRequestRepository: FriendRequestRepository;
+    private userRepo: UserRepository;
+    private friendRepo: FriendRepository;
+    private friendRequestRepo: FriendRequestRepository;
+    private notificationRepo: NotificationRepository;
     private loggedInUserService: LoggedInUserSocketService;
 
     constructor() {
-        this.userRepository = new UserRepository();
-        this.friendRepository = new FriendRepository();
-        this.friendRequestRepository = new FriendRequestRepository();
+        this.userRepo = new UserRepository();
+        this.friendRepo = new FriendRepository();
+        this.friendRequestRepo = new FriendRequestRepository();
+        this.notificationRepo = new NotificationRepository();
         this.loggedInUserService = require('./loggedInUserSocket.service');
     }
 
     public sendFriendRequest(fromUserId: string, toUserId: string): Promise<void> {
         return new Promise((resolve, reject) => {
-            this.friendRequestRepository.create(fromUserId, toUserId).then(() => {
-                this.loggedInUserService.emitToUser(toUserId, 'friendRequest', fromUserId);
+            this.friendRequestRepo.create(fromUserId, toUserId).then(() => {
+                this.loggedInUserService.emitToUser(toUserId, { fromUserId: fromUserId, notificationType: NotificationType.FRIEND_REQUEST } as FriendRequest);
                 resolve();
             }).catch(error => reject(error));
         });
@@ -32,7 +38,7 @@ export class SocialService {
 
     public getPendingFriendRequests(toUserId: string): Promise<FriendRequestModel[]> {
         return new Promise((resolve, reject) => {
-            this.friendRequestRepository.findAllTo(toUserId).then((requests: FriendRequestModel[]) => {
+            this.friendRequestRepo.findAllTo(toUserId).then((requests: FriendRequestModel[]) => {
                 let count = requests.length;
                 if (count === 0) {
                     resolve([]);
@@ -41,7 +47,7 @@ export class SocialService {
 
                 let requestsFromUsers: UserModel[] = [];
                 requests.forEach((request: FriendRequestModel) => {
-                    this.userRepository.findById(request.fromUserId).then((fromUser: UserModel) => {
+                    this.userRepo.findById(request.fromUserId).then((fromUser: UserModel) => {
                         fromUser.passwordHash = undefined;
                         requestsFromUsers.push(fromUser);
                         if (--count === 0) {
@@ -53,12 +59,32 @@ export class SocialService {
         });
     }
 
+    public getPendingNotifications(toUserId: string): Promise<NotificationData[]> {
+        return new Promise((resolve, reject) => {
+            this.notificationRepo.findAllTo(toUserId).then((notifications: NotificationModel[]) => {
+                let count = notifications.length;
+                if (count === 0) {
+                    resolve([]);
+                    return;
+                }
+
+                let notificationsData: NotificationData[] = [];
+                notifications.forEach((notification: NotificationModel) => {
+                    notificationsData.push(notification.notificationData);
+                    if (--count === 0) {
+                        resolve(notificationsData);
+                    }
+                });
+            }).catch(error => reject(error));
+        });
+    }
+
     public acceptFriendRequest(toUserId, fromUserId): Promise<void> {
         return new Promise((resolve, reject) => {
-            this.friendRepository.create(toUserId, fromUserId).then(() => {
-                this.friendRepository.create(fromUserId, toUserId).then(() => {
-                    this.friendRequestRepository.findFromTo(fromUserId, toUserId).then((request: FriendRequestModel) => {
-                        this.friendRequestRepository.remove(request).then(() => {
+            this.friendRepo.create(toUserId, fromUserId).then(() => {
+                this.friendRepo.create(fromUserId, toUserId).then(() => {
+                    this.friendRequestRepo.findFromTo(fromUserId, toUserId).then((request: FriendRequestModel) => {
+                        this.friendRequestRepo.remove(request).then(() => {
                             resolve();
                         });
                     }).catch(error => reject(error));
@@ -69,8 +95,8 @@ export class SocialService {
 
     public rejectFriendRequest(toUserId, fromUserId): Promise<void> {
         return new Promise((resolve, reject) => {
-            this.friendRequestRepository.findFromTo(fromUserId, toUserId).then((request: FriendRequestModel) => {
-                this.friendRequestRepository.remove(request).then(() => {
+            this.friendRequestRepo.findFromTo(fromUserId, toUserId).then((request: FriendRequestModel) => {
+                this.friendRequestRepo.remove(request).then(() => {
                     resolve();
                 }).catch(error => reject(error));
             }).catch(error => reject(error));
@@ -79,7 +105,7 @@ export class SocialService {
 
     public getFriendList(userId: string): Promise<UserModel[]> {
         return new Promise((resolve, reject) => {
-             this.friendRepository.findAll(userId).then((friends: FriendModel[]) => {
+             this.friendRepo.findAll(userId).then((friends: FriendModel[]) => {
                  let friendCount = friends.length;
                  if (friendCount === 0) {
                      resolve([]);
@@ -88,7 +114,7 @@ export class SocialService {
 
                  let friendList: UserModel[] = [];
                  friends.forEach((friend: FriendModel) => {
-                     this.userRepository.findById(friend.friendId).then((user: UserModel) => {
+                     this.userRepo.findById(friend.friendId).then((user: UserModel) => {
                          user.passwordHash = undefined;
                          friendList.push(user);
 
@@ -98,6 +124,15 @@ export class SocialService {
                      }).catch(error => reject(error));
                  });
              }).catch(error => reject(error));
+        });
+    }
+
+    public sendCampaignInvite(toUserId: string, campaignId: string): Promise<void> {
+        return new Promise((resolve, reject) => {
+            this.notificationRepo.createCampaignInvite(toUserId, campaignId).then((notification: NotificationModel) => {
+                this.loggedInUserService.emitToUser(toUserId, notification.notificationData);
+                resolve();
+            }).catch(error => reject(error));
         });
     }
 }
