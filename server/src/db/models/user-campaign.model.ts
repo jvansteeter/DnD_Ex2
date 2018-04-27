@@ -13,6 +13,7 @@ export class UserCampaignModel extends mongoose.Schema {
             campaignId: {type: String, required: true},
             gameMaster: {type: Boolean, default: false}
         });
+        this.index({userId: 1, campaignId: 1}, {unique: true});
 
         this._id = this.methods._id;
         this.userId = this.methods.userId;

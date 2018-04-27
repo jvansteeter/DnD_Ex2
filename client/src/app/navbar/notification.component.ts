@@ -33,7 +33,9 @@ export class NotificationComponent {
     }
 
     public acceptCampaignInvite(notificationData: NotificationData): void {
+        console.log('accept campaign invite')
         let campaignData = notificationData as CampaignInviteNotification;
+        this.notificationsService.joinCampaign(campaignData.campaignId);
     }
 
     public rejectCampaignInvite(notificationData: NotificationData): void {

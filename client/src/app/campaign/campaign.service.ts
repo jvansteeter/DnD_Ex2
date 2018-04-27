@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { CampaignRepository } from '../repositories/campaign.repository';
-import { Observable } from 'rxjs/Observable';
 import { IsReadyService } from '../utilities/services/isReady.service';
 import { UserProfileService } from "../utilities/services/userProfile.service";
 import { UserProfile } from "../types/userProfile";

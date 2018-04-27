@@ -39,7 +39,9 @@ export class CampaignRouter {
         });
 
         this.router.post('/join', (req: Request, res: Response) => {
+            console.log('hit campaing/join')
              this.campaignService.join(req.user._id, req.body.campaignId).then(() => {
+                 console.log('got back from the join')
                  res.status(200).send("OK");
              }).catch((error: Error) => {
                  if (error.message === ServerError.NOT_INVITED) {

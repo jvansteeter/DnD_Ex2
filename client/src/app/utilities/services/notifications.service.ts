@@ -1,14 +1,16 @@
 import { Injectable } from '@angular/core';
+import { NotificationData } from '../../../../../shared/types/notification-data';
 import { UserProfile } from '../../types/userProfile';
 import { SocialService } from '../../social/social.service';
-import { NotificationData } from "../../../../../shared/types/notification-data";
+import { CampaignRepository } from '../../repositories/campaign.repository';
 
 @Injectable()
 export class NotificationsService {
     public notifications: NotificationData[];
     public friendRequests: UserProfile[];
 
-    constructor(private socialService: SocialService) {
+    constructor(private socialService: SocialService,
+                private campaignRepo: CampaignRepository) {
         this.notifications = [];
         this.friendRequests = [];
         this.getPendingFriendRequests();
@@ -34,5 +36,9 @@ export class NotificationsService {
                 return;
             }
         }
+    }
+
+    public joinCampaign(campaignId: string): void {
+        this.campaignRepo.joinCampaign(campaignId).subscribe();
     }
 }
