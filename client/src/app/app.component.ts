@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { SocketService } from './socket/socket.service';
 import { SocketComponent } from './socket/socket.component';
@@ -36,6 +36,7 @@ export class AppComponent extends SocketComponent implements OnInit {
         this.socketOn(NotificationType.CAMPAIGN_INVITE).subscribe((data) => {
             console.log('CampaignInvite')
             console.log(data)
+            this.notificationsService.getPendingNotifications();
         });
     }
 }

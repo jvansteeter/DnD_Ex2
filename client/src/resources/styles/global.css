@@ -301,3 +301,27 @@
     cursor: pointer;
     background: #CFD8DC;
 }
+
+.app-container {
+    display: flex;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+@media (min-width: 1200px) {
+    .app-container {
+        width: 1170px;
+    }
+}
+
+@media (min-width: 992px) {
+    .app-container {
+        width: 970px;
+    }
+}
+
+@media (min-width: 768px) {
+    .app-container {
+        width: 750px;
+    }
+}

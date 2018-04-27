@@ -1,55 +1,55 @@
-<div class="container">
-	<div class="home-content">
-		<div class="home-leftContent">
-			<div class="home-profilePhoto">
-				<a class="thumbnail" (click)="upload()">
-					<img class="home-profilePhotoImg" [src]="profilePhotoUrl"/>
-				</a>
-				<input type="file" accept="image/*" (change)="loadImage()" #fileInput>
-			</div>
-			<div class="home-menuOptions">
-				<mat-list>
-					<mat-list-item>
-						<button mat-raised-button color="primary" (click)="newRuleSet()">New RuleSet</button>
-					</mat-list-item>
-					<mat-list-item>
-						<button mat-raised-button color="primary" (click)="newCampaign()">New Campaign</button>
-					</mat-list-item>
-				</mat-list>
-			</div>
-		</div>
-		<div class="home-rightContent">
-			<h1>Home</h1>
-			<mat-accordion>
-				<mat-expansion-panel>
-					<mat-expansion-panel-header>
-						<mat-panel-title>Rule Sets</mat-panel-title>
-						<mat-panel-description>Rule Set description</mat-panel-description>
-					</mat-expansion-panel-header>
-					<mat-table [dataSource]="ruleSetDataSource">
-						<ng-container matColumnDef="label">
-							<mat-header-cell *matHeaderCellDef>Rule Set</mat-header-cell>
-							<mat-cell *matCellDef="let ruleSet">{{ruleSet.label}}</mat-cell>
-						</ng-container>
-						<mat-header-row *matHeaderRowDef="ruleSetTableColumns"></mat-header-row>
-						<mat-row class="clickable-row" *matRowDef="let ruleSet; columns: ruleSetTableColumns" (click)="ruleSetHome(ruleSet._id)"></mat-row>
-					</mat-table>
-				</mat-expansion-panel>
-				<mat-expansion-panel>
-					<mat-expansion-panel-header>
-						<mat-panel-title>Campaigns</mat-panel-title>
-						<mat-panel-description>Description here</mat-panel-description>
-					</mat-expansion-panel-header>
-					<mat-table [dataSource]="campaignDataSource">
-						<ng-container matColumnDef="label">
-							<mat-header-cell *matHeaderCellDef>Campaign</mat-header-cell>
-							<mat-cell *matCellDef="let campaign">{{campaign.label}}</mat-cell>
-						</ng-container>
-						<mat-header-row *matHeaderRowDef="campaignTableColumns"></mat-header-row>
-						<mat-row class="clickable-row" *matRowDef="let campaign; columns: campaignTableColumns" (click)="campaignHome(campaign)"></mat-row>
-					</mat-table>
-				</mat-expansion-panel>
-			</mat-accordion>
-		</div>
-	</div>
+<div class="home-content">
+    <div class="home-leftContent">
+        <div class="home-profilePhoto">
+            <a class="thumbnail" (click)="upload()">
+                <img class="home-profilePhotoImg" [src]="profilePhotoUrl"/>
+            </a>
+            <input type="file" accept="image/*" (change)="loadImage()" #fileInput>
+        </div>
+        <div class="home-menuOptions">
+            <mat-list>
+                <mat-list-item>
+                    <button mat-raised-button color="primary" (click)="newRuleSet()">New RuleSet</button>
+                </mat-list-item>
+                <mat-list-item>
+                    <button mat-raised-button color="primary" (click)="newCampaign()">New Campaign</button>
+                </mat-list-item>
+            </mat-list>
+        </div>
+    </div>
+    <div class="home-rightContent">
+        <h1>Home</h1>
+        <mat-accordion>
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>Rule Sets</mat-panel-title>
+                    <mat-panel-description>Rule Set description</mat-panel-description>
+                </mat-expansion-panel-header>
+                <mat-table [dataSource]="ruleSetDataSource">
+                    <ng-container matColumnDef="label">
+                        <mat-header-cell *matHeaderCellDef>Rule Set</mat-header-cell>
+                        <mat-cell *matCellDef="let ruleSet">{{ruleSet.label}}</mat-cell>
+                    </ng-container>
+                    <mat-header-row *matHeaderRowDef="ruleSetTableColumns"></mat-header-row>
+                    <mat-row class="clickable-row" *matRowDef="let ruleSet; columns: ruleSetTableColumns"
+                             (click)="ruleSetHome(ruleSet._id)"></mat-row>
+                </mat-table>
+            </mat-expansion-panel>
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>Campaigns</mat-panel-title>
+                    <mat-panel-description>Description here</mat-panel-description>
+                </mat-expansion-panel-header>
+                <mat-table [dataSource]="campaignDataSource">
+                    <ng-container matColumnDef="label">
+                        <mat-header-cell *matHeaderCellDef>Campaign</mat-header-cell>
+                        <mat-cell *matCellDef="let campaign">{{campaign.label}}</mat-cell>
+                    </ng-container>
+                    <mat-header-row *matHeaderRowDef="campaignTableColumns"></mat-header-row>
+                    <mat-row class="clickable-row" *matRowDef="let campaign; columns: campaignTableColumns"
+                             (click)="campaignHome(campaign)"></mat-row>
+                </mat-table>
+            </mat-expansion-panel>
+        </mat-accordion>
+    </div>
 </div>

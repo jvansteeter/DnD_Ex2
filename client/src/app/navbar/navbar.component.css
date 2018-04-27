@@ -1,87 +1,8 @@
-nav {
-    display: flex;
-    flex-direction: row;
-    align-content: stretch;
-}
-
-.navbar-tabLink {
-    color: whitesmoke;
+mat-toolbar-row {
+    background: #222;
 }
 
 .navbar-tabs {
     margin-right: auto;
     display: flex;
-}
-
-.navbar-menuButton {
-    color: whitesmoke;
-    padding: 0;
-    min-width: 50px;
-}
-
-.navbar-noteAlert {
-    position: absolute;
-    background-color: red;
-    font-size: 10px;
-    bottom: 4px;
-    right: 8px;
-}
-
-a {
-    text-decoration: none;
-}
-
-.container {
-    display: flex;
-}
-
-.notification-friendRequestHeader {
-    margin-left: 5px;
-    margin-right: 5px;
-}
-
-.notification-friendRequest {
-    display: flex;
-    height: 50px;
-    align-items: center;
-    margin: 0 10px 0 10px;
-}
-
-.notification-friendRequest img {
-    height: 100%;
-    margin-right: 10px;
-}
-
-hr {
-    margin-top: 10px;
-    margin-bottom: 10px;
-}
-
-.acceptButton {
-    background-color: forestgreen;
-    margin-left: 10px;
-}
-
-.rejectButton {
-    background-color: orangered;
-    margin-left: 5px;
-}
-
-nav a {
-    padding: 5px 10px;
-    text-decoration: none;
-    margin-top: 10px;
-    display: inline-block;
-    background-color: #eee;
-    border-radius: 4px;
-}
-nav a:visited, a:link {
-    color: #607D8B;
-}
-nav a:hover {
-    color: #039be5;
-    background-color: #CFD8DC;
-}
-nav a.active {
-    color: #039be5;
 }

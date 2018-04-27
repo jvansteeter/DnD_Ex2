@@ -1,5 +1,5 @@
-<nav class="navbar navbar-inverse">
-	<div class="container">
+<mat-toolbar>
+	<mat-toolbar-row class="app-container">
 		<span class="navbar-tabs">
 			<button mat-button class="navbar-tabLink"
 					*ngFor="let link of navLinks"
@@ -13,5 +13,5 @@
 			<a mat-menu-item (click)="openAddFriendDialog()">Add Friend</a>
 			<a mat-menu-item href="login">Logout</a>
 		</mat-menu>
-	</div>
-</nav>
+	</mat-toolbar-row>
+</mat-toolbar>

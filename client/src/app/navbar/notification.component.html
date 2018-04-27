@@ -12,4 +12,8 @@
             <button mat-mini-fab class="rejectButton" (click)="rejectRequest(requester)"><mat-icon>not_interested</mat-icon></button>
         </div>
     </ng-container>
+    <span>Notifications</span>
+    <ng-container *ngFor="let notification of notificationsService.notifications">
+        <span>{{notification.campaignId}}</span>
+    </ng-container>
 </mat-menu>
