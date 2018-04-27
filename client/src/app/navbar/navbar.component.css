@@ -6,3 +6,20 @@ mat-toolbar-row {
     margin-right: auto;
     display: flex;
 }
+
+.notification-friendRequestHeader {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.notification-friendRequest {
+    display: flex;
+    height: 50px;
+    align-items: center;
+    margin: 0 10px 0 10px;
+}
+
+.notification-friendRequest img {
+    height: 100%;
+    margin-right: 10px;
+}

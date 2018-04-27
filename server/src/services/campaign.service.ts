@@ -5,15 +5,22 @@ import { UserCampaignRepository } from '../db/repositories/user-campaign.reposit
 import { Promise } from 'bluebird';
 import { UserRepository } from '../db/repositories/user.repository';
 import { UserModel } from '../db/models/user.model';
+import { NotificationRepository } from '../db/repositories/notification.repository';
+import { NotificationType } from '../../../shared/types/notification-type';
+import { NotificationModel } from '../db/models/notification.model';
+import { CampaignInviteNotification } from '../../../shared/types/campaign-invite-notification';
+import { ServerError } from '../../../shared/errors/ServerError';
 
 export class CampaignService {
     private campaignRepository: CampaignRepository;
     private userRepository: UserRepository;
+    private notificationRepo: NotificationRepository;
     private userCampaignRepository: UserCampaignRepository;
 
     constructor() {
         this.campaignRepository = new CampaignRepository();
         this.userRepository = new UserRepository();
+        this.notificationRepo = new NotificationRepository();
         this.userCampaignRepository = new UserCampaignRepository();
     }
 
@@ -32,7 +39,22 @@ export class CampaignService {
     }
 
     public join(userId: string, campaignId: string): Promise<UserCampaignModel> {
-        return this.userCampaignRepository.create(userId, campaignId, false);
+        this.notificationRepo.findAllToByType(userId, NotificationType.CAMPAIGN_INVITE).then((notifications: NotificationModel[]) => {
+            let count = notifications.length;
+
+            notifications.forEach((notification: NotificationModel) => {
+                let campaignInvite = notification.notificationData as CampaignInviteNotification;
+                if (campaignInvite.campaignId === campaignId) {
+                    this.notificationRepo.removeById(notification._id).then(() => {
+                        return this.userCampaignRepository.create(userId, campaignId, false);
+                    });
+                }
+                if (--count === 0) {
+                    return new Promise((resolve, reject) => reject(new Error(ServerError.NOT_INVITED)))
+                }
+            });
+
+        });
     }
 
     public findAllForUser(userId: string): Promise<CampaignModel[]> {

@@ -11,6 +11,8 @@ export class NotificationsService {
     constructor(private socialService: SocialService) {
         this.notifications = [];
         this.friendRequests = [];
+        this.getPendingFriendRequests();
+        this.getPendingNotifications();
     }
 
     public getPendingFriendRequests(): void {

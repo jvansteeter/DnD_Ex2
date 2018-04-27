@@ -3,17 +3,37 @@
     <mat-icon>book</mat-icon>
 </button>
 <mat-menu #notifications>
-    <span class="notification-friendRequestHeader">Friend Requests<hr></span>
-    <ng-container *ngFor="let requester of notificationsService.friendRequests">
-        <div class="notification-friendRequest">
-            <img [src]="requester.profilePhotoUrl" class="img-rounded">
-            <span>{{requester.username}}</span>
-            <button mat-mini-fab class="acceptButton" (click)="acceptRequest(requester)"><mat-icon>check</mat-icon></button>
-            <button mat-mini-fab class="rejectButton" (click)="rejectRequest(requester)"><mat-icon>not_interested</mat-icon></button>
-        </div>
+    <ng-container *ngIf="notificationsService.friendRequests.length > 0">
+        <span class="notification-friendRequestHeader">Friend Requests</span>
+        <mat-divider></mat-divider>
+        <ng-container *ngFor="let requester of notificationsService.friendRequests">
+            <div class="notification-friendRequest">
+                <img [src]="requester.profilePhotoUrl" class="img-rounded">
+                <span>{{requester.username}}</span>
+                <button mat-mini-fab class="acceptButton" (click)="acceptRequest(requester)"><mat-icon>check</mat-icon></button>
+                <button mat-mini-fab class="rejectButton" (click)="rejectRequest(requester)"><mat-icon>not_interested</mat-icon></button>
+            </div>
+        </ng-container>
+        <mat-divider></mat-divider>
     </ng-container>
-    <span>Notifications</span>
-    <ng-container *ngFor="let notification of notificationsService.notifications">
-        <span>{{notification.campaignId}}</span>
+
+    <ng-container *ngIf="notificationsService.notifications.length > 0">
+        <span>Notifications</span>
+        <mat-divider></mat-divider>
+        <ng-container *ngFor="let notification of notificationsService.notifications">
+            <div *ngIf="notification.notificationType === notificationType.CAMPAIGN_INVITE" class="notification-friendRequest">
+                <span>Campaign Invite: </span>
+                <span>{{notification.campaignLabel}}</span>
+                <button mat-mini-fab class="acceptButton" (click)="acceptCampaignInvite(notification)"><mat-icon>check</mat-icon></button>
+                <button mat-mini-fab class="rejectButton" (click)="rejectCampaignInvite(notification)"><mat-icon>not_interested</mat-icon></button>
+            </div>
+
+        </ng-container>
+        <mat-divider></mat-divider>
     </ng-container>
+
+    <ng-container *ngIf="notificationsService.friendRequests.length === 0 && notificationsService.notifications.length === 0">
+        <span>No Notifications</span>
+    </ng-container>
+
 </mat-menu>

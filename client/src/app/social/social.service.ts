@@ -35,4 +35,8 @@ export class SocialService {
     public getFriends(): Observable<UserProfile[]> {
         return this.socialRepo.getFriends();
     }
+
+    public acceptCampaignInvite(campaignId: string): void {
+
+    }
 }
