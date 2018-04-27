@@ -40,28 +40,29 @@ export class CampaignService {
 
     public join(userId: string, campaignId: string): Promise<UserCampaignModel> {
         return new Promise((resolve, reject) => {
-            console.log('in campaignService.join()')
             this.notificationRepo.findAllToByType(userId, NotificationType.CAMPAIGN_INVITE).then((notifications: NotificationModel[]) => {
-                console.log('after findAllToByType')
-                console.log(notifications)
                 let count = notifications.length;
+                if (count === 0) {
+                    reject(new Error(ServerError.NOT_INVITED));
+                    return;
+                }
 
                 notifications.forEach((notification: NotificationModel) => {
-                    console.log(count)
                     let campaignInvite = notification.notificationData as CampaignInviteNotification;
                     if (campaignInvite.campaignId === campaignId) {
                         this.notificationRepo.removeById(notification._id).then(() => {
                             this.userCampaignRepository.create(userId, campaignId, false).then((userCampaign: UserCampaignModel) => {
                                 resolve(userCampaign);
+                                return;
                             });
-                        });
+                        }).catch(error => reject(error));
                     }
-                    if (--count === 0) {
+                    else if (--count === 0) {
                          reject(new Error(ServerError.NOT_INVITED));
                     }
                 });
 
-            });
+            }).catch(error => reject(error));
         });
 
     }
@@ -69,7 +70,6 @@ export class CampaignService {
     public findAllForUser(userId: string): Promise<CampaignModel[]> {
         return new Promise((resolve, reject) => {
             this.userCampaignRepository.findAllForUser(userId).then((userCampaigns: UserCampaignModel[]) => {
-                console.log(userCampaigns)
                  let userCampaignCount = userCampaigns.length;
                  if (userCampaignCount === 0) {
                      resolve([]);

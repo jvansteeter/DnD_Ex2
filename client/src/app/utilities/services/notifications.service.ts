@@ -3,6 +3,9 @@ import { NotificationData } from '../../../../../shared/types/notification-data'
 import { UserProfile } from '../../types/userProfile';
 import { SocialService } from '../../social/social.service';
 import { CampaignRepository } from '../../repositories/campaign.repository';
+import { HomeState } from '../user-data/home.state';
+import { Campaign } from '../../../../../shared/types/campaign';
+import { UserDataService } from '../user-data/userData.service';
 
 @Injectable()
 export class NotificationsService {
@@ -10,7 +13,8 @@ export class NotificationsService {
     public friendRequests: UserProfile[];
 
     constructor(private socialService: SocialService,
-                private campaignRepo: CampaignRepository) {
+                private campaignRepo: CampaignRepository,
+                private userDataService: UserDataService) {
         this.notifications = [];
         this.friendRequests = [];
         this.getPendingFriendRequests();
@@ -39,6 +43,10 @@ export class NotificationsService {
     }
 
     public joinCampaign(campaignId: string): void {
-        this.campaignRepo.joinCampaign(campaignId).subscribe();
+        this.campaignRepo.joinCampaign(campaignId).subscribe(() => {
+            this.campaignRepo.getCampaigns().subscribe((campaigns: Campaign[]) => {
+                this.userDataService.homeState.campaigns = campaigns;
+            });
+        });
     }
 }

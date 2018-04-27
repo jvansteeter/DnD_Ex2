@@ -33,13 +33,12 @@ export class NotificationComponent {
     }
 
     public acceptCampaignInvite(notificationData: NotificationData): void {
-        console.log('accept campaign invite')
+        this.notificationsService.notifications.splice(this.notificationsService.notifications.indexOf(notificationData), 1);
         let campaignData = notificationData as CampaignInviteNotification;
         this.notificationsService.joinCampaign(campaignData.campaignId);
     }
 
     public rejectCampaignInvite(notificationData: NotificationData): void {
         let campaignData = notificationData as CampaignInviteNotification;
-
     }
 }

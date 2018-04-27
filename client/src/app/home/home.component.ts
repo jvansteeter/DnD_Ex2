@@ -8,6 +8,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
+import { UserDataService } from '../utilities/user-data/userData.service';
 
 
 @Component({
@@ -27,22 +28,18 @@ export class HomeComponent implements OnInit {
 
     public campaigns: any[];
     public campaignTableColumns = ['label'];
-    private campaignSubject: Subject<any>;
-    private campaignDataSource: SubjectDataSource<any>;
 
     constructor(private dialog: MatDialog,
                 private router: Router,
                 private userProfileService: UserProfileService,
                 private ruleSetRepository: RuleSetRepository,
-                private campaignRepository: CampaignRepository) {
+                private campaignRepository: CampaignRepository,
+                public userDataService: UserDataService) {
         this.userProfileService.getUserProfile().then(() => {
             this.profilePhotoUrl = this.userProfileService.getProfilePhotoUrl();
         });
         this.ruleSetSubject = new Subject<any>();
         this.ruleSetDataSource = new SubjectDataSource(this.ruleSetSubject);
-
-        this.campaignSubject = new Subject<any>();
-        this.campaignDataSource = new SubjectDataSource(this.campaignSubject);
     }
 
     public ngOnInit(): void {
@@ -91,8 +88,7 @@ export class HomeComponent implements OnInit {
 
     private getCampaigns(): void {
         this.campaignRepository.getCampaigns().subscribe((campaigns: any[]) => {
-            this.campaigns = campaigns;
-            this.campaignSubject.next(campaigns);
+            this.userDataService.homeState.campaigns = campaigns;
         });
     }
 }

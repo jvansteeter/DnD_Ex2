@@ -17,6 +17,7 @@ import { EncounterModule } from "./encounter/encounter.module";
 import {BoardModule} from "./board/board.module";
 import { NavbarModule } from "./navbar/navbar.module";
 import { HttpClientModule } from '@angular/common/http';
+import { UserDataService } from './utilities/user-data/userData.service';
 
 @NgModule({
     imports: [
@@ -44,7 +45,8 @@ import { HttpClientModule } from '@angular/common/http';
         AppComponent,
     ],
     providers: [
-        SocketService
+        SocketService,
+        UserDataService
     ],
     bootstrap: [ AppComponent ]
 })

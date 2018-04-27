@@ -40,7 +40,7 @@
                     <mat-panel-title>Campaigns</mat-panel-title>
                     <mat-panel-description>Description here</mat-panel-description>
                 </mat-expansion-panel-header>
-                <mat-table [dataSource]="campaignDataSource">
+                <mat-table [dataSource]="userDataService.homeState.campaigns">
                     <ng-container matColumnDef="label">
                         <mat-header-cell *matHeaderCellDef>Campaign</mat-header-cell>
                         <mat-cell *matCellDef="let campaign">{{campaign.label}}</mat-cell>

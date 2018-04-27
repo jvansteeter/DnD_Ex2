@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
+import { Campaign } from '../../../../shared/types/campaign';
 
 @Injectable()
 export class CampaignRepository {
@@ -22,8 +23,8 @@ export class CampaignRepository {
         });
     }
 
-    public getCampaigns(): Observable<any> {
-        return this.http.get('/api/campaign/all', {responseType: 'json'});
+    public getCampaigns(): Observable<Campaign[]> {
+        return this.http.get<Campaign[]>('/api/campaign/all', {responseType: 'json'});
     }
 
     public getCampaign(campaignId): Observable<any> {
