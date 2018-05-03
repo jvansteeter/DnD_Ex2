@@ -304,13 +304,14 @@
 
 .app-container {
     display: flex;
+    flex-flow: column;
     margin-right: auto;
     margin-left: auto;
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 768px) {
     .app-container {
-        width: 1170px;
+        width: 750px;
     }
 }
 
@@ -320,8 +321,8 @@
     }
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1200px) {
     .app-container {
-        width: 750px;
+        width: 1170px;
     }
 }
