@@ -9,6 +9,7 @@ import { Subject } from 'rxjs/Subject';
 import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
 import { UserDataService } from '../utilities/user-data/userData.service';
+import { RouterComponent } from '../utilities/router-component/router-component';
 
 
 @Component({
@@ -16,7 +17,7 @@ import { UserDataService } from '../utilities/user-data/userData.service';
     templateUrl: 'home.component.html',
     styleUrls: ['home.component.css']
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent extends RouterComponent implements OnInit {
     @ViewChild('fileInput') fileInput: ElementRef;
     private reader: FileReader = new FileReader();
     private profilePhotoUrl: string = '';
@@ -29,12 +30,26 @@ export class HomeComponent implements OnInit {
     public campaigns: any[];
     public campaignTableColumns = ['label'];
 
+    static sideNavOptions = [
+        {
+            label: 'New Rule Set',
+            function: this.newRuleSet
+        },
+        {
+            label: 'New Campaign',
+            function: this.newCampaign
+        }
+    ];
+
+
     constructor(private dialog: MatDialog,
                 private router: Router,
                 private userProfileService: UserProfileService,
                 private ruleSetRepository: RuleSetRepository,
                 private campaignRepository: CampaignRepository,
                 public userDataService: UserDataService) {
+        super();
+
         this.userProfileService.getUserProfile().then(() => {
             this.profilePhotoUrl = this.userProfileService.getProfilePhotoUrl();
         });
@@ -47,11 +62,11 @@ export class HomeComponent implements OnInit {
         this.getCampaigns();
     }
 
-    public newRuleSet(): void {
+    private newRuleSet(): void {
         this.dialog.open(NewRuleSetDialogComponent).afterClosed().subscribe(() => this.getRuleSets());
     }
 
-    public newCampaign(): void {
+    private newCampaign(): void {
         this.dialog.open(NewCampaignDialogComponent).componentInstance.getNewCampaignObservable().subscribe(() => {
             this.getCampaigns();
         });

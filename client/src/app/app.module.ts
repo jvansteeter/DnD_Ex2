@@ -6,7 +6,14 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HomeModule } from './home/home.module';
 import { MapMakerModule } from './map-maker/map-maker.module';
-import { MatButtonModule, MatIconModule, MatMenuModule, MatTabsModule } from '@angular/material';
+import {
+    MatButtonModule, MatCardModule, MatGridListModule,
+    MatIconModule, MatListModule,
+    MatMenuModule, MatPaginatorModule,
+    MatSidenavModule, MatSortModule, MatTableModule,
+    MatTabsModule,
+    MatToolbarModule
+} from '@angular/material';
 import { RuleSetModule } from './rule-set/rule-set.module';
 import { CharacterSheetModule } from './character-sheet/character-sheet.module';
 import { SocketService } from "./socket/socket.service";
@@ -14,10 +21,13 @@ import { UtilityModule } from './utilities/utility.module';
 import { CampaignModule } from './campaign/campaign.module';
 import { AlertModule } from './alert/alert.module';
 import { EncounterModule } from "./encounter/encounter.module";
-import {BoardModule} from "./board/board.module";
+import { BoardModule } from "./board/board.module";
 import { NavbarModule } from "./navbar/navbar.module";
 import { HttpClientModule } from '@angular/common/http';
 import { UserDataService } from './utilities/user-data/userData.service';
+import { MainDashComponent } from './main-dash/main-dash.component';
+import { MainNavComponent } from './main-nav/main-nav.component';
+import { MainTableComponent } from './main-table/main-table.component';
 
 @NgModule({
     imports: [
@@ -28,7 +38,6 @@ import { UserDataService } from './utilities/user-data/userData.service';
         MatTabsModule,
         BrowserAnimationsModule,
         MatButtonModule,
-        MatMenuModule,
         HomeModule,
         MapMakerModule,
         MatIconModule,
@@ -39,10 +48,22 @@ import { UserDataService } from './utilities/user-data/userData.service';
         AlertModule,
         EncounterModule,
         BoardModule,
-        NavbarModule
+        NavbarModule,
+        MatToolbarModule,
+        MatSidenavModule,
+        MatListModule,
+        MatTableModule,
+        MatPaginatorModule,
+        MatSortModule,
+        MatGridListModule,
+        MatCardModule,
+        MatMenuModule,
     ],
     declarations: [
         AppComponent,
+        MainDashComponent,
+        MainNavComponent,
+        MainTableComponent
     ],
     providers: [
         SocketService,
