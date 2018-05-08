@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { LoginService } from './login.service';
 import { RegisterDialogComponent } from './registerDialog.component';
-import { Observable } from 'rxjs/Observable';
 import { ErrorEmitterService } from './ErrorEmitter.service';
 import { MatDialog } from '@angular/material';
 
@@ -41,7 +40,8 @@ export class LoginComponent {
     private alert(message: string): void {
         this.alertMessage = message;
         this.alertVisibility = 'alertShow';
-        Observable.timer(2000)
-            .subscribe(() => this.alertVisibility = 'alertHide');
+        setTimeout(() => {
+            this.alertVisibility = 'alertHide'
+        }, 2000);
     }
 }

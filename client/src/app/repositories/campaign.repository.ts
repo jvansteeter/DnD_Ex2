@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { Campaign } from '../../../../shared/types/campaign';
+import 'rxjs-compat/add/operator/map';
 
 @Injectable()
 export class CampaignRepository {

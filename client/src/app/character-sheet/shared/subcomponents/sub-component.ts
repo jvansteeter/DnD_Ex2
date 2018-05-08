@@ -8,6 +8,7 @@ import { MatMenu } from '@angular/material';
 import { Observable } from 'rxjs/Observable';
 import { CharacterInterfaceService } from '../character-interface.service';
 import { CharacterInterfaceFactory } from '../character-interface.factory';
+import 'rxjs-compat/add/observable/timer';
 
 @Component({
     selector: 'sub-component',
