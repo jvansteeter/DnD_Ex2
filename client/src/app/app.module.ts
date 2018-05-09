@@ -28,6 +28,7 @@ import { UserDataService } from './utilities/user-data/userData.service';
 import { MainDashComponent } from './main-dash/main-dash.component';
 import { MainNavComponent } from './main-nav/main-nav.component';
 import { MainTableComponent } from './main-table/main-table.component';
+import { MainNavService } from './main-nav/main-nav.service';
 
 @NgModule({
     imports: [
@@ -67,6 +68,7 @@ import { MainTableComponent } from './main-table/main-table.component';
     ],
     providers: [
         SocketService,
+        MainNavService,
         UserDataService
     ],
     bootstrap: [ AppComponent ]

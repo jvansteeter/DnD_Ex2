@@ -10,6 +10,8 @@ import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
 import { UserDataService } from '../utilities/user-data/userData.service';
 import { RouterComponent } from '../utilities/router-component/router-component';
+import { SideNavOption } from '../utilities/router-component/sideNav-option';
+import { MainNavService } from '../main-nav/main-nav.service';
 
 
 @Component({
@@ -30,16 +32,7 @@ export class HomeComponent extends RouterComponent implements OnInit {
     public campaigns: any[];
     public campaignTableColumns = ['label'];
 
-    static sideNavOptions = [
-        {
-            label: 'New Rule Set',
-            function: this.newRuleSet
-        },
-        {
-            label: 'New Campaign',
-            function: this.newCampaign
-        }
-    ];
+
 
 
     constructor(private dialog: MatDialog,
@@ -47,8 +40,9 @@ export class HomeComponent extends RouterComponent implements OnInit {
                 private userProfileService: UserProfileService,
                 private ruleSetRepository: RuleSetRepository,
                 private campaignRepository: CampaignRepository,
-                public userDataService: UserDataService) {
-        super();
+                public userDataService: UserDataService,
+                mainNavService: MainNavService) {
+        super(mainNavService);
 
         this.userProfileService.getUserProfile().then(() => {
             this.profilePhotoUrl = this.userProfileService.getProfilePhotoUrl();
@@ -60,6 +54,17 @@ export class HomeComponent extends RouterComponent implements OnInit {
     public ngOnInit(): void {
         this.getRuleSets();
         this.getCampaigns();
+        this.sideNavOptions = [
+            {
+                label: 'New Rule Set',
+                function: this.newRuleSet
+            },
+            {
+                label: 'New Campaign',
+                function: this.newCampaign
+            }
+        ];
+        this.registerRouterComponent();
     }
 
     private newRuleSet(): void {
