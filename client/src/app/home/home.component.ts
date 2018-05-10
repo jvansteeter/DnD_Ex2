@@ -10,9 +10,7 @@ import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
 import { UserDataService } from '../utilities/user-data/userData.service';
 import { RouterComponent } from '../utilities/router-component/router-component';
-import { SideNavOption } from '../utilities/router-component/sideNav-option';
 import { MainNavService } from '../main-nav/main-nav.service';
-
 
 @Component({
     selector: 'home-page',
@@ -31,9 +29,6 @@ export class HomeComponent extends RouterComponent implements OnInit {
 
     public campaigns: any[];
     public campaignTableColumns = ['label'];
-
-
-
 
     constructor(private dialog: MatDialog,
                 private router: Router,
@@ -65,16 +60,6 @@ export class HomeComponent extends RouterComponent implements OnInit {
             }
         ];
         this.registerRouterComponent();
-    }
-
-    private newRuleSet(): void {
-        this.dialog.open(NewRuleSetDialogComponent).afterClosed().subscribe(() => this.getRuleSets());
-    }
-
-    private newCampaign(): void {
-        this.dialog.open(NewCampaignDialogComponent).componentInstance.getNewCampaignObservable().subscribe(() => {
-            this.getCampaigns();
-        });
     }
 
     public ruleSetHome(ruleSetId: string): void {
@@ -111,4 +96,14 @@ export class HomeComponent extends RouterComponent implements OnInit {
             this.userDataService.homeState.campaigns = campaigns;
         });
     }
+
+    private newRuleSet = () => {
+        this.dialog.open(NewRuleSetDialogComponent).afterClosed().subscribe(() => this.getRuleSets());
+    };
+
+    private newCampaign = () => {
+        this.dialog.open(NewCampaignDialogComponent).componentInstance.getNewCampaignObservable().subscribe(() => {
+            this.getCampaigns();
+        });
+    };
 }

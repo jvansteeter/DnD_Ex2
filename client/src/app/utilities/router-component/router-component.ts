@@ -1,10 +1,10 @@
 import { MainNavService } from '../../main-nav/main-nav.service';
 import { SideNavOption } from './sideNav-option';
 
-export class RouterComponent {
+export abstract class RouterComponent {
     public sideNavOptions: SideNavOption[];
 
-    constructor(private mainNavService: MainNavService) {
+    protected constructor(private mainNavService: MainNavService) {
 
     }
 

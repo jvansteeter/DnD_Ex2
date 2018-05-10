@@ -20,30 +20,23 @@ export class MainNavComponent implements OnInit {
     isHandset: Observable<BreakpointState> = this.breakpointObserver.observe(Breakpoints.Handset);
     sideNavOptions: SideNavOption[];
 
-
     constructor(private breakpointObserver: BreakpointObserver,
                 private router: Router,
-                private mainNavService: MainNavService,
-                private activatedRoute: ActivatedRoute) {}
+                private mainNavService: MainNavService) {}
 
     ngOnInit(): void {
-
-        // merge(this.mainNavService.getComponentRegisteredObservable(), this.router.events.filter((routerEvent) => routerEvent instanceof NavigationEnd))
         this.mainNavService.getComponentRegisteredObservable()
             .merge(this.router.events.filter((routerEvent) => routerEvent instanceof NavigationEnd))
-            .flatMap(() => {
-                return this.activatedRoute.component.toString();
+            .map(() => {
+                return this.router.url;
             })
             .subscribe((url) => {
-
-                // const url = event.url;
-                // if (url.path.match(/.*home.*/)){
-                //     let component: RouterComponent = this.mainNavService.getRouterComponent('HomeComponent');
-                //     if (component) {
-                //         this.sideNavOptions = component.sideNavOptions;
-                //     }
-                // }
-                console.log(url);
+                if (url.indexOf('home') >= 0){
+                    let component: RouterComponent = this.mainNavService.getRouterComponent(HomeComponent.name);
+                    if (component) {
+                        this.sideNavOptions = component.sideNavOptions;
+                    }
+                }
             });
     }
 }
