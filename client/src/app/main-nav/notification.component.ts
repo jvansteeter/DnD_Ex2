@@ -10,7 +10,7 @@ import { CampaignInviteNotification } from '../../../../shared/types/campaign-in
 @Component({
     selector: 'app-notifications',
     templateUrl: 'notification.component.html',
-    styleUrls: ['navbar.component.css']
+    styleUrls: []
 })
 export class NotificationComponent {
     public notificationType = NotificationType;

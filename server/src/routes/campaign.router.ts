@@ -4,6 +4,8 @@ import { CampaignModel } from '../db/models/campaign.model';
 import { EncounterService } from "../services/encounter.service";
 import { EncounterModel } from "../db/models/encounter.model";
 import { ServerError } from '../../../shared/errors/ServerError';
+import { Campaign } from '../../../shared/types/campaign';
+import { Encounter } from '../../../shared/types/encounter';
 
 
 /**********************************************************************************************************
@@ -51,7 +53,7 @@ export class CampaignRouter {
         });
 
         this.router.get('/campaign/:campaignId', (req: Request, res: Response) => {
-            this.campaignService.getCampaign(req.params.campaignId).then((campaign: CampaignModel) => {
+            this.campaignService.getCampaign(req.params.campaignId).then((campaign: Campaign) => {
                 res.json(campaign);
             }).catch(error => res.status(500).send(error));
         });
@@ -69,7 +71,7 @@ export class CampaignRouter {
         });
 
         this.router.get('/encounters/:campaignId', (req: Request, res: Response) => {
-            this.encounterService.getAllForCampaignId(req.params.campaignId).then((encounters: EncounterModel[]) => {
+            this.encounterService.getAllForCampaignId(req.params.campaignId).then((encounters: Encounter[]) => {
                 res.json(encounters);
             }).catch(error => res.status(500).send(error));
         });

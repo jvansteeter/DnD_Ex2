@@ -15,10 +15,14 @@
 .main-content {
   margin-left: 15px;
   margin-right: 15px;
-  margin-top: 64px;
+  margin-top: 70px;
 }
 
 .right-toolbar {
   position: fixed;
   z-index: 99;
+}
+
+.right-toolbarButtons {
+  position: absolute;
 }

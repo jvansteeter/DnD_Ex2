@@ -3,7 +3,13 @@ import { CampaignComponent } from './campaign.component';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import {
-    MatButtonModule, MatCheckboxModule, MatDialogModule, MatExpansionModule, MatInputModule,
+    MatButtonModule,
+    MatCardModule,
+    MatCheckboxModule,
+    MatDialogModule,
+    MatExpansionModule,
+    MatGridListModule,
+    MatInputModule,
     MatListModule,
     MatTableModule
 } from '@angular/material';
@@ -24,7 +30,9 @@ import { NewEncounterDialogComponent } from "./dialog/new-encounter-dialog.compo
         MatCheckboxModule,
         SocialModule,
         MatDialogModule,
-        MatInputModule
+        MatInputModule,
+        MatGridListModule,
+        MatCardModule,
     ],
     declarations: [
         CampaignComponent,

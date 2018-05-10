@@ -1,30 +1,36 @@
 <mat-sidenav-container class="sidenav-container">
-    <mat-sidenav
-            #drawer
-            class="sidenav"
-            fixedInViewport="true"
-            [attr.role]="isHandset ? 'dialog' : 'navigation'"
-            [mode]="(isHandset | async)!.matches ? 'over' : 'side'"
-            [opened]="!(isHandset | async)!.matches">
-        <mat-toolbar color="primary">Menu</mat-toolbar>
-        <mat-nav-list>
-            <a mat-list-item *ngFor="let option of sideNavOptions" (click)="option.function()">{{ option.label }}</a>
-        </mat-nav-list>
-    </mat-sidenav>
-    <mat-sidenav-content class="right-content">
-        <mat-toolbar color="primary" class="right-toolbar">
-            <button
-                    type="button"
-                    aria-label="Toggle sidenav"
-                    mat-icon-button
-                    (click)="drawer.toggle()"
-                    *ngIf="(isHandset | async)!.matches">
-                <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
-            </button>
-            <span [routerLink]="'home'">Dungeon Map</span>
-        </mat-toolbar>
-        <div class="main-content">
-            <ng-content></ng-content>
-        </div>
-    </mat-sidenav-content>
+	<mat-sidenav
+					#drawer
+					class="sidenav"
+					fixedInViewport="true"
+					[attr.role]="isHandset ? 'dialog' : 'navigation'"
+					[mode]="(isHandset | async)!.matches ? 'over' : 'side'"
+					[opened]="!(isHandset | async)!.matches">
+		<mat-toolbar color="primary">Menu</mat-toolbar>
+		<mat-nav-list>
+			<a mat-list-item *ngFor="let option of sideNavOptions" (click)="option.function()">{{ option.label }}</a>
+		</mat-nav-list>
+	</mat-sidenav>
+	<mat-sidenav-content class="right-content" #rightContent>
+		<mat-toolbar color="primary" class="right-toolbar">
+			<button
+							type="button"
+							aria-label="Toggle sidenav"
+							mat-icon-button
+							(click)="drawer.toggle()"
+							*ngIf="(isHandset | async)!.matches">
+				<mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+			</button>
+			<span [routerLink]="'home'">Dungeon Map</span>
+			<span class="right-toolbarButtons" [style.right.px]="rightContent._margins.left">
+				<button mat-button class="navbar-menuButton" [matMenuTriggerFor]="profileMenu"><mat-icon>person</mat-icon></button>
+				<mat-menu #profileMenu="matMenu">
+					<a mat-menu-item href="login">Logout</a>
+				</mat-menu>
+			</span>
+		</mat-toolbar>
+		<div class="main-content">
+			<ng-content></ng-content>
+		</div>
+	</mat-sidenav-content>
 </mat-sidenav-container>

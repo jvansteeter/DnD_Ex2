@@ -99,8 +99,8 @@ class App {
         this.app.use('/login', Express.static('./client/dist/login.html'));
         this.app.use('/static', Express.static('./client/dist'));
         this.app.use('/node_modules', Express.static('./node_modules'));
-        this.app.use('/resources', Express.static('./client/dist/resources'));
-        this.app.use('/static/resources', Express.static('./client/dist/resources'));
+        this.app.use('/resources', Express.static('./client/src/resources'));
+        // this.app.use('/static/resources', Express.static('./client/dist/resources'));
         //  If logged in, serve the app
         // this.app.use('/static/app.js', this.isAuthenticated, Express.static('./client/dist/app.js'));
 

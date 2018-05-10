@@ -1,5 +1,5 @@
 var HtmlWebpackPlugin = require('html-webpack-plugin');
-// var CleanWebpackPlugin = require('clean-webpack-plugin');
+var CleanWebpackPlugin = require('clean-webpack-plugin');
 var helpers = require('./helpers');
 
 module.exports = {
@@ -20,7 +20,7 @@ module.exports = {
         loaders: [
           {
             loader: 'awesome-typescript-loader',
-            options: { configFileName: helpers.root('tsconfig.json') }
+            options: {configFileName: helpers.root('tsconfig.json')}
           },
           'angular2-template-loader'
         ]
@@ -31,6 +31,7 @@ module.exports = {
       },
       {
         test: /\.(png|jpe?g|gif|svg|woff|woff2|ttf|eot|ico)$/,
+        include: [helpers.root('src', 'resources')],
         loader: 'file-loader?name=resources/[name].[hash].[ext]'
       },
       {
@@ -42,15 +43,15 @@ module.exports = {
         test: /\.css$/,
         exclude: [helpers.root('src', 'app'), helpers.root('src', 'login')],
         use: [
-            'style-loader',
-            'css-loader'
+          'style-loader',
+          'css-loader'
         ]
       },
       {
         test: /\.css$/,
-        include: [helpers.root('src', 'app'), helpers.root('src', 'login')],
+        include: [helpers.root('src', 'app'), helpers.root('src', 'login'), helpers.root('src', 'resources')],
         use: 'raw-loader'
-      }
+      },
     ]
   },
 
@@ -67,7 +68,7 @@ module.exports = {
   },
 
   plugins: [
-    // new CleanWebpackPlugin([helpers.root('dist')]),
+    new CleanWebpackPlugin([helpers.root('dist')]),
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: 'client/index.html',
@@ -77,7 +78,7 @@ module.exports = {
       filename: 'login.html',
       template: 'client/login.html',
       chunks: ['login', 'vendor', 'polyfills']
-    })
+    }),
   ]
 };
 

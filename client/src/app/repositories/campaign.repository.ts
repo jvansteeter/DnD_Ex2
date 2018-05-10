@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { Campaign } from '../../../../shared/types/campaign';
 import 'rxjs-compat/add/operator/map';
+import { UserProfile } from '../types/userProfile';
+import { Encounter } from '../../../../shared/types/encounter';
 
 @Injectable()
 export class CampaignRepository {
@@ -32,8 +34,8 @@ export class CampaignRepository {
         return this.http.get('/api/campaign/campaign/' + campaignId, {responseType: 'json'});
     }
 
-    public getCampaignMembers(campaignId): Observable<any> {
-        return this.http.get('/api/campaign/members/' + campaignId, {responseType: 'json'});
+    public getCampaignMembers(campaignId): Observable<UserProfile[]> {
+        return this.http.get<UserProfile[]>('/api/campaign/members/' + campaignId, {responseType: 'json'});
     }
 
     public createNewEncounter(label: string, campaignId: string): Observable<void> {
@@ -42,7 +44,7 @@ export class CampaignRepository {
         });
     }
 
-    public getAllEncounters(campaignId: string): Observable<any> {
-        return this.http.get('api/campaign/encounters/' + campaignId, {responseType: 'json'});
+    public getAllEncounters(campaignId: string): Observable<Encounter[]> {
+        return this.http.get<Encounter[]>('api/campaign/encounters/' + campaignId, {responseType: 'json'});
     }
 }

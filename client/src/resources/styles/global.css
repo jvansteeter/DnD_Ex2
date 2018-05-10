@@ -1,328 +1,331 @@
-@font-face
-{
-    font-family: 'breathe_fire';
-    src: url('../fonts/breathe-fire/breathe_fire-webfont.woff2') format('woff2'),
-    url('../fonts/breathe-fire/breathe_fire-webfont.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
+@font-face {
+  font-family: 'breathe_fire';
+  src: url('../fonts/breathe-fire/breathe_fire-webfont.woff2') format('woff2'),
+  url('../fonts/breathe-fire/breathe_fire-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
 }
 
 @font-face {
-    font-family: 'barazhad';
-    src: url('../fonts/barazhad/barazhad_bold_italic-webfont.woff2') format('woff2'),
-    url('../fonts/barazhad/barazhad_bold_italic-webfont.woff') format('woff');
-    font-weight: bold;
-    font-style: italic;
+  font-family: 'barazhad';
+  src: url('../fonts/barazhad/barazhad_bold_italic-webfont.woff2') format('woff2'),
+  url('../fonts/barazhad/barazhad_bold_italic-webfont.woff') format('woff');
+  font-weight: bold;
+  font-style: italic;
 }
 
 @font-face {
-    font-family: 'barazhad';
-    src: url('../fonts/barazhad/barazhad_bold-webfont.woff2') format('woff2'),
-    url('../fonts/barazhad/barazhad_bold-webfont.woff') format('woff');
-    font-weight: bold;
-    font-style: normal;
+  font-family: 'barazhad';
+  src: url('../fonts/barazhad/barazhad_bold-webfont.woff2') format('woff2'),
+  url('../fonts/barazhad/barazhad_bold-webfont.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
 }
 
 @font-face {
-    font-family: 'barazhad';
-    src: url('../fonts/barazhad/barazhad_italic-webfont.woff2') format('woff2'),
-    url('../fonts/barazhad/barazhad_italic-webfont.woff') format('woff');
-    font-weight: normal;
-    font-style: italic;
+  font-family: 'barazhad';
+  src: url('../fonts/barazhad/barazhad_italic-webfont.woff2') format('woff2'),
+  url('../fonts/barazhad/barazhad_italic-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: italic;
 }
 
 @font-face {
-    font-family: 'barazhad';
-    src: url('../fonts/barazhad/barazhad-webfont.woff2') format('woff2'),
-    url('../fonts/barazhad/barazhad-webfont.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
+  font-family: 'barazhad';
+  src: url('../fonts/barazhad/barazhad-webfont.woff2') format('woff2'),
+  url('../fonts/barazhad/barazhad-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
 }
 
 @font-face {
-    font-family: 'dalelands';
-    src: url('../fonts/dalelands/dalelands_uncial_bold_italic-webfont.woff2') format('woff2'),
-    url('../fonts/dalelands/dalelands_uncial_bold_italic-webfont.woff') format('woff');
-    font-weight: bold;
-    font-style: italic;
+  font-family: 'dalelands';
+  src: url('../fonts/dalelands/dalelands_uncial_bold_italic-webfont.woff2') format('woff2'),
+  url('../fonts/dalelands/dalelands_uncial_bold_italic-webfont.woff') format('woff');
+  font-weight: bold;
+  font-style: italic;
 }
 
 @font-face {
-    font-family: 'dalelands';
-    src: url('../fonts/dalelands/dalelands_uncial_bold-webfont.woff2') format('woff2'),
-    url('../fonts/dalelands/dalelands_uncial_bold-webfont.woff') format('woff');
-    font-weight: bold;
-    font-style: normal;
+  font-family: 'dalelands';
+  src: url('../fonts/dalelands/dalelands_uncial_bold-webfont.woff2') format('woff2'),
+  url('../fonts/dalelands/dalelands_uncial_bold-webfont.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
 }
 
 @font-face {
-    font-family: 'dalelands';
-    src: url('../fonts/dalelands/dalelands_uncial_italic-webfont.woff2') format('woff2'),
-    url('../fonts/dalelands/dalelands_uncial_italic-webfont.woff') format('woff');
-    font-weight: normal;
-    font-style: italic;
+  font-family: 'dalelands';
+  src: url('../fonts/dalelands/dalelands_uncial_italic-webfont.woff2') format('woff2'),
+  url('../fonts/dalelands/dalelands_uncial_italic-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: italic;
 }
 
 @font-face {
-    font-family: 'dalelands';
-    src: url('../fonts/dalelands/dalelands_uncial-webfont.woff2') format('woff2'),
-    url('../fonts/dalelands/dalelands_uncial-webfont.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
+  font-family: 'dalelands';
+  src: url('../fonts/dalelands/dalelands_uncial-webfont.woff2') format('woff2'),
+  url('../fonts/dalelands/dalelands_uncial-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
 }
 
 @font-face {
-    font-family: 'davek';
-    src: url('../fonts/davek/davek_bold_italic-webfont.woff2') format('woff2'),
-    url('../fonts/davek/davek_bold_italic-webfont.woff') format('woff');
-    font-weight: bold;
-    font-style: italic;
+  font-family: 'davek';
+  src: url('../fonts/davek/davek_bold_italic-webfont.woff2') format('woff2'),
+  url('../fonts/davek/davek_bold_italic-webfont.woff') format('woff');
+  font-weight: bold;
+  font-style: italic;
 }
 
 @font-face {
-    font-family: 'davek';
-    src: url('../fonts/davek/davek_bold-webfont.woff2') format('woff2'),
-    url('../fonts/davek/davek_bold-webfont.woff') format('woff');
-    font-weight: bold;
-    font-style: normal;
+  font-family: 'davek';
+  src: url('../fonts/davek/davek_bold-webfont.woff2') format('woff2'),
+  url('../fonts/davek/davek_bold-webfont.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
 }
 
 @font-face {
-    font-family: 'davek';
-    src: url('../fonts/davek/davek_italic-webfont.woff2') format('woff2'),
-    url('../fonts/davek/davek_italic-webfont.woff') format('woff');
-    font-weight: normal;
-    font-style: italic;
+  font-family: 'davek';
+  src: url('../fonts/davek/davek_italic-webfont.woff2') format('woff2'),
+  url('../fonts/davek/davek_italic-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: italic;
 }
 
 @font-face {
-    font-family: 'davek';
-    src: url('../fonts/davek/davek-webfont.woff2') format('woff2'),
-    url('../fonts/davek/davek-webfont.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-}
-
-@font-face
-{
-    font-family: 'dungeon';
-    src: url('../fonts/dungeon_sn/DUNGRG.ttf');
-    font-weight: normal;
-    font-style: normal;
+  font-family: 'davek';
+  src: url('../fonts/davek/davek-webfont.woff2') format('woff2'),
+  url('../fonts/davek/davek-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
 }
 
 @font-face {
-    font-family: 'vecna';
-    src: url('../fonts/vecna/vecna-webfont.woff2') format('woff2'),
-    url('../fonts/vecna/vecna-webfont.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
+  font-family: 'dungeon';
+  src: url('../fonts/dungeon_sn/DUNGRG.ttf');
+  font-weight: normal;
+  font-style: normal;
 }
 
 @font-face {
-    font-family: 'vecna';
-    src: url('../fonts/vecna/vecna_italic-webfont.woff2') format('woff2'),
-    url('../fonts/vecna/vecna_italic-webfont.woff') format('woff');
-    font-weight: normal;
-    font-style: italic;
+  font-family: 'vecna';
+  src: url('../fonts/vecna/vecna-webfont.woff2') format('woff2'),
+  url('../fonts/vecna/vecna-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'vecna';
+  src: url('../fonts/vecna/vecna_italic-webfont.woff2') format('woff2'),
+  url('../fonts/vecna/vecna_italic-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: italic;
 
 }
 
 @font-face {
-    font-family: 'vecna';
-    src: url('../fonts/vecna/vecna_bold-webfont.woff2') format('woff2'),
-    url('../fonts/vecna/vecna_bold-webfont.woff') format('woff');
-    font-weight: bold;
-    font-style: normal;
+  font-family: 'vecna';
+  src: url('../fonts/vecna/vecna_bold-webfont.woff2') format('woff2'),
+  url('../fonts/vecna/vecna_bold-webfont.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
 }
 
 @font-face {
-    font-family: 'vecna';
-    src: url('../fonts/vecna/vecna_bold_italic-webfont.woff2') format('woff2'),
-    url('../fonts/vecna/vecna_bold_italic-webfont.woff') format('woff');
-    font-weight: bold;
-    font-style: italic;
+  font-family: 'vecna';
+  src: url('../fonts/vecna/vecna_bold_italic-webfont.woff2') format('woff2'),
+  url('../fonts/vecna/vecna_bold_italic-webfont.woff') format('woff');
+  font-weight: bold;
+  font-style: italic;
 }
 
 @font-face {
-    font-family: 'drowic';
-    src: url('../fonts/high-drowic/high_drowic_bold_italic-webfont.woff2') format('woff2'),
-    url('../fonts/high-drowic/high_drowic_bold_italic-webfont.woff') format('woff');
-    font-weight: bold;
-    font-style: italic;
+  font-family: 'drowic';
+  src: url('../fonts/high-drowic/high_drowic_bold_italic-webfont.woff2') format('woff2'),
+  url('../fonts/high-drowic/high_drowic_bold_italic-webfont.woff') format('woff');
+  font-weight: bold;
+  font-style: italic;
 }
 
 @font-face {
-    font-family: 'drowic';
-    src: url('../fonts/high-drowic/high_drowic_bold-webfont.woff2') format('woff2'),
-    url('../fonts/high-drowic/high_drowic_bold-webfont.woff') format('woff');
-    font-weight: bold;
-    font-style: normal;
+  font-family: 'drowic';
+  src: url('../fonts/high-drowic/high_drowic_bold-webfont.woff2') format('woff2'),
+  url('../fonts/high-drowic/high_drowic_bold-webfont.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
 }
 
 @font-face {
-    font-family: 'drowic';
-    src: url('../fonts/high-drowic/high_drowic_italic-webfont.woff2') format('woff2'),
-    url('../fonts/high-drowic/high_drowic_italic-webfont.woff') format('woff');
-    font-weight: normal;
-    font-style: italic;
+  font-family: 'drowic';
+  src: url('../fonts/high-drowic/high_drowic_italic-webfont.woff2') format('woff2'),
+  url('../fonts/high-drowic/high_drowic_italic-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: italic;
 }
 
 @font-face {
-    font-family: 'drowic';
-    src: url('../fonts/high-drowic/high_drowic-webfont.woff2') format('woff2'),
-    url('../fonts/high-drowic/high_drowic-webfont.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
+  font-family: 'drowic';
+  src: url('../fonts/high-drowic/high_drowic-webfont.woff2') format('woff2'),
+  url('../fonts/high-drowic/high_drowic-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
 }
 
 @font-face {
-    font-family: 'fourth-edition-dings';
-    src: url('../fonts/fourth-edition-dings/fourth-edition_dings-webfont.woff2') format('woff2'),
-    url('../fonts/fourth-edition-dings/fourth-edition_dings-webfont.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
+  font-family: 'fourth-edition-dings';
+  src: url('../fonts/fourth-edition-dings/fourth-edition_dings-webfont.woff2') format('woff2'),
+  url('../fonts/fourth-edition-dings/fourth-edition_dings-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
 }
 
 @font-face {
-    font-family: 'iokharic';
-    src: url('../fonts/iokharic/iokharic_bold_italic-webfont.woff2') format('woff2'),
-    url('../fonts/iokharic/iokharic_bold_italic-webfont.woff') format('woff');
-    font-weight: bold;
-    font-style: italic;
+  font-family: 'iokharic';
+  src: url('../fonts/iokharic/iokharic_bold_italic-webfont.woff2') format('woff2'),
+  url('../fonts/iokharic/iokharic_bold_italic-webfont.woff') format('woff');
+  font-weight: bold;
+  font-style: italic;
 
 }
 
 @font-face {
-    font-family: 'iokharic';
-    src: url('../fonts/iokharic/iokharic_bold-webfont.woff2') format('woff2'),
-    url('../fonts/iokharic/iokharic_bold-webfont.woff') format('woff');
-    font-weight: bold;
-    font-style: normal;
+  font-family: 'iokharic';
+  src: url('../fonts/iokharic/iokharic_bold-webfont.woff2') format('woff2'),
+  url('../fonts/iokharic/iokharic_bold-webfont.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
 }
 
 @font-face {
-    font-family: 'iokharic';
-    src: url('../fonts/iokharic/iokharic_italic-webfont.woff2') format('woff2'),
-    url('../fonts/iokharic/iokharic_italic-webfont.woff') format('woff');
-    font-weight: normal;
-    font-style: italic;
+  font-family: 'iokharic';
+  src: url('../fonts/iokharic/iokharic_italic-webfont.woff2') format('woff2'),
+  url('../fonts/iokharic/iokharic_italic-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: italic;
 }
 
 @font-face {
-    font-family: 'iokharic';
-    src: url('../fonts/iokharic/iokharic-webfont.woff2') format('woff2'),
-    url('../fonts/iokharic/iokharic-webfont.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-}
-
-@font-face
-{
-    font-family: 'magi';
-    src: url('../fonts/magi/magi.ttf');
-    font-weight: normal;
-    font-style: normal;
-}
-
-@font-face
-{
-    font-family: 'planetary';
-    src: url('../fonts/planetary/ar-ciela_compartment.ttf');
-    font-weight: normal;
-    font-style: normal;
-}
-
-@font-face
-{
-    font-family: 'pulsian';
-    src: url('../fonts/pulsian/pulsian.ttf');
-    font-weight: normal;
-    font-style: normal;
+  font-family: 'iokharic';
+  src: url('../fonts/iokharic/iokharic-webfont.woff2') format('woff2'),
+  url('../fonts/iokharic/iokharic-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
 }
 
 @font-face {
-    font-family: 'rellanic';
-    src: url('../fonts/rellanic/rellanic_bold_italic-webfont.woff2') format('woff2'),
-    url('../fonts/rellanic/rellanic_bold_italic-webfont.woff') format('woff');
-    font-weight: bold;
-    font-style: italic;
+  font-family: 'magi';
+  src: url('../fonts/magi/magi.ttf');
+  font-weight: normal;
+  font-style: normal;
 }
 
 @font-face {
-    font-family: 'rellanic';
-    src: url('../fonts/rellanic/rellanic_bold-webfont.woff2') format('woff2'),
-    url('../fonts/rellanic/rellanic_bold-webfont.woff') format('woff');
-    font-weight: bold;
-    font-style: normal;
+  font-family: 'planetary';
+  src: url('../fonts/planetary/ar-ciela_compartment.ttf');
+  font-weight: normal;
+  font-style: normal;
 }
 
 @font-face {
-    font-family: 'rellanic';
-    src: url('../fonts/rellanic/rellanic_italic-webfont.woff2') format('woff2'),
-    url('../fonts/rellanic/rellanic_italic-webfont.woff') format('woff');
-    font-weight: normal;
-    font-style: italic;
+  font-family: 'pulsian';
+  src: url('../fonts/pulsian/pulsian.ttf');
+  font-weight: normal;
+  font-style: normal;
 }
 
 @font-face {
-    font-family: 'rellanic';
-    src: url('../fonts/rellanic/rellanic-webfont.woff2') format('woff2'),
-    url('../fonts/rellanic/rellanic-webfont.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
+  font-family: 'rellanic';
+  src: url('../fonts/rellanic/rellanic_bold_italic-webfont.woff2') format('woff2'),
+  url('../fonts/rellanic/rellanic_bold_italic-webfont.woff') format('woff');
+  font-weight: bold;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'rellanic';
+  src: url('../fonts/rellanic/rellanic_bold-webfont.woff2') format('woff2'),
+  url('../fonts/rellanic/rellanic_bold-webfont.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'rellanic';
+  src: url('../fonts/rellanic/rellanic_italic-webfont.woff2') format('woff2'),
+  url('../fonts/rellanic/rellanic_italic-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'rellanic';
+  src: url('../fonts/rellanic/rellanic-webfont.woff2') format('woff2'),
+  url('../fonts/rellanic/rellanic-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
 }
 
 /* fallback */
 @font-face {
-    font-family: 'Material Icons';
-    font-style: normal;
-    font-weight: 400;
-    src: url('../fonts/icons/icons.woff2') format('woff2');
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  src: url('../fonts/icons/icons.woff2') format('woff2');
 }
 
 .material-icons {
-    font-family: 'Material Icons';
-    font-weight: normal;
-    font-style: normal;
-    font-size: 24px;
-    line-height: 1;
-    letter-spacing: normal;
-    text-transform: none;
-    display: inline-block;
-    white-space: nowrap;
-    word-wrap: normal;
-    direction: ltr;
-    -webkit-font-feature-settings: 'liga';
-    -webkit-font-smoothing: antialiased;
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
 }
 
 .clickable-row:hover {
-    cursor: pointer;
-    background: #CFD8DC;
+  cursor: pointer;
+  background: #CFD8DC;
 }
 
 .app-container {
-    display: flex;
-    flex-flow: column;
-    margin-right: auto;
-    margin-left: auto;
+  display: flex;
+  flex-flow: column;
+  margin-right: auto;
+  margin-left: auto;
 }
 
 @media (min-width: 768px) {
-    .app-container {
-        width: 750px;
-    }
+  .app-container {
+    width: 750px;
+  }
 }
 
 @media (min-width: 992px) {
-    .app-container {
-        width: 970px;
-    }
+  .app-container {
+    width: 970px;
+  }
 }
 
 @media (min-width: 1200px) {
-    .app-container {
-        width: 1170px;
-    }
+  .app-container {
+    width: 1170px;
+  }
+}
+
+.global-dashboard-card {
+  position: absolute !important;
+  top: 15px;
+  left: 15px;
+  right: 15px;
+  bottom: 15px;
 }

@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import 'rxjs-compat/add/operator/filter';
 import { SideNavOption } from '../utilities/router-component/sideNav-option';
 import { MainNavService } from './main-nav.service';
@@ -10,6 +10,7 @@ import { Observable } from 'rxjs';
 import 'rxjs-compat/add/operator/merge';
 import 'rxjs-compat/add/operator/mergeMap';
 import 'rxjs-compat/add/operator/do';
+import { CampaignComponent } from '../campaign/campaign.component';
 
 @Component({
     selector: 'main-nav',
@@ -31,12 +32,20 @@ export class MainNavComponent implements OnInit {
                 return this.router.url;
             })
             .subscribe((url) => {
+                this.sideNavOptions = [];
                 if (url.indexOf('home') >= 0){
-                    let component: RouterComponent = this.mainNavService.getRouterComponent(HomeComponent.name);
-                    if (component) {
-                        this.sideNavOptions = component.sideNavOptions;
-                    }
+                    this.initSideNavOptions(HomeComponent.name);
+                }
+                else if (url.indexOf('campaign') >= 0) {
+                    this.initSideNavOptions(CampaignComponent.name);
                 }
             });
+    }
+
+    private initSideNavOptions(componentName: string): void {
+        let component: RouterComponent = this.mainNavService.getRouterComponent(componentName);
+        if (component) {
+            this.sideNavOptions = component.sideNavOptions;
+        }
     }
 }

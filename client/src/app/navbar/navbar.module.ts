@@ -1,6 +1,6 @@
 import { NgModule } from "@angular/core";
 import { NavbarComponent } from "./navbar.component";
-import { NotificationComponent } from "./notification.component";
+import { NotificationComponent } from "../main-nav/notification.component";
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from '../app-routing.module';

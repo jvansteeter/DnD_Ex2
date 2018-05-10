@@ -1,9 +1,10 @@
 import * as mongoose from 'mongoose';
 import Promise from 'bluebird';
+import { Encounter } from '../../../../shared/types/encounter';
 
 
-export class EncounterModel extends mongoose.Schema {
-    public _id;
+export class EncounterModel extends mongoose.Schema implements Encounter {
+    public id;
     public label: string;
     public campaignId: string;
     public gameMasters: string[];
@@ -15,7 +16,7 @@ export class EncounterModel extends mongoose.Schema {
             gameMasters: [String]
         });
 
-        this._id = this.methods._id;
+        this.id = this.methods._id;
         this.label = this.methods.label;
         this.campaignId = this.methods.campaignId;
         this.gameMasters = this.methods.gameMasters;

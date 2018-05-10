@@ -1,24 +1,22 @@
-<div *ngIf="campaign">
-	<h1>{{campaign.label}}</h1>
-	<div class="campaign-content">
-		<div class="campaign-leftContent">
-			<mat-list>
-				<mat-list-item>
-					<button mat-raised-button color="primary" (click)="inviteFriends()">Invite Friend</button>
-				</mat-list-item>
-				<mat-list-item>
-					<button mat-raised-button color="primary">Create New Character</button>
-				</mat-list-item>
-				<mat-list-item *ngIf="campaignService.isGameMaster()">
-					<button mat-raised-button color="primary" (click)="newEncounter()">New Encounter</button>
-				</mat-list-item>
-			</mat-list>
-			<mat-accordion>
-				<mat-expansion-panel>
-					<mat-expansion-panel-header>
-						<mat-panel-title>Campaign Members</mat-panel-title>
-					</mat-expansion-panel-header>
-					<mat-table [dataSource]="gameMasterDataSource">
+<ng-container *ngIf="campaignService.campaignState">
+	<h1>{{campaignService.campaignState.label}}</h1>
+	<!--<div class="campaign-content">-->
+
+	<!--<div class="campaign-rightContent">-->
+	<!--Encounters-->
+	<!--<mat-list>-->
+	<!--<mat-list-item *ngFor="let encounter of campaignService.encounters"><a (click)="enterEncounter(encounter)">{{encounter.label}}</a></mat-list-item>-->
+	<!--</mat-list>-->
+	<!--</div>-->
+	<!--</div>-->
+	<mat-grid-list cols="2" rowHeight="350px">
+		<mat-grid-tile [colspan]="1" [rowspan]="1">
+			<mat-card class="global-dashboard-card">
+				<mat-card-header>
+					<span>Campaign Members</span>
+				</mat-card-header>
+				<mat-card-content>
+					<mat-table [dataSource]="memberDataSource">
 						<ng-container matColumnDef="users">
 							<mat-header-cell *matHeaderCellDef>Username</mat-header-cell>
 							<mat-cell *matCellDef="let member">{{member.username}}</mat-cell>
@@ -26,20 +24,31 @@
 						<ng-container matColumnDef="gm">
 							<mat-header-cell *matHeaderCellDef><span style="float: right">GM</span></mat-header-cell>
 							<mat-cell *matCellDef="let member">
-								<mat-checkbox color="primary" [(ngModel)]="member.gameMaster" style="float: right" (change)="changeGameMaster(member)"></mat-checkbox>
+								<mat-checkbox color="primary" [(ngModel)]="member.gameMaster" style="float: right" [disabled]="true"></mat-checkbox>
 							</mat-cell>
 						</ng-container>
-						<mat-header-row *matHeaderRowDef="gameMasterColumns"></mat-header-row>
-						<mat-row *matRowDef="let member; columns: gameMasterColumns"></mat-row>
+						<mat-header-row *matHeaderRowDef="memberTableCols"></mat-header-row>
+						<mat-row *matRowDef="let member; columns: memberTableCols"></mat-row>
 					</mat-table>
-				</mat-expansion-panel>
-			</mat-accordion>
-		</div>
-		<div class="campaign-rightContent">
-			Encounters
-			<mat-list>
-				<mat-list-item *ngFor="let encounter of campaignService.encounters"><a (click)="enterEncounter(encounter)">{{encounter.label}}</a></mat-list-item>
-			</mat-list>
-		</div>
-	</div>
-</div>
+				</mat-card-content>
+			</mat-card>
+		</mat-grid-tile>
+		<mat-grid-tile [colspan]="1" [rowspan]="1">
+			<mat-card class="global-dashboard-card">
+				<mat-card-header>
+					<span>Encounters</span>
+				</mat-card-header>
+				<mat-card-content>
+					<mat-table [dataSource]="encounterDataSource">
+						<ng-container matColumnDef="label">
+							<mat-header-cell *matHeaderCellDef>Label</mat-header-cell>
+							<mat-cell *matCellDef="let encounter">{{ encounter.label }}</mat-cell>
+						</ng-container>
+						<mat-header-row *matHeaderRowDef="encounterTableCols"></mat-header-row>
+						<mat-row *matRowDef="let encounter; columns: encounterTableCols"></mat-row>
+					</mat-table>
+				</mat-card-content>
+			</mat-card>
+		</mat-grid-tile>
+	</mat-grid-list>
+</ng-container>
