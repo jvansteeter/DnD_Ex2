@@ -24,7 +24,7 @@ export class HomeComponent extends RouterComponent implements OnInit {
 
     public ruleSets: any[];
     public ruleSetTableColumns = ['label'];
-    private ruleSetSubject: Subject<any>;
+    private readonly ruleSetSubject: Subject<any>;
     private ruleSetDataSource: SubjectDataSource<any>;
 
     public campaigns: any[];
@@ -63,7 +63,7 @@ export class HomeComponent extends RouterComponent implements OnInit {
     }
 
     public ruleSetHome(ruleSetId: string): void {
-        this.router.navigate(['/rule-set', ruleSetId]);
+        this.router.navigate(['rule-set', ruleSetId]);
     }
 
     public campaignHome(campaign: any) {

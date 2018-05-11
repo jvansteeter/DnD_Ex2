@@ -1,17 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserProfile } from '../types/userProfile';
-import { Observable } from 'rxjs/Observable';
 import { AlertService } from '../alert/alert.service';
 import { UserProfileService } from '../utilities/services/userProfile.service';
-import { MatDialog, MatTableDataSource } from '@angular/material';
+import { MatDialog, MatPaginator, MatTableDataSource } from '@angular/material';
 import { SelectFriendsComponent } from '../social/select-friends/select-friends.component';
 import { CampaignService } from './campaign.service';
 import { NewEncounterDialogComponent } from './dialog/new-encounter-dialog.component';
 import { RouterComponent } from '../utilities/router-component/router-component';
 import { MainNavService } from '../main-nav/main-nav.service';
 import { SubjectDataSource } from '../utilities/subjectDataSource';
-import { Subject } from 'rxjs/Subject';
 import { Encounter } from '../../../../shared/types/encounter';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
@@ -28,7 +26,7 @@ export class CampaignComponent extends RouterComponent implements OnInit {
   public memberTableCols = [ 'users', 'gm' ];
 
   public encounterDataSource: SubjectDataSource<Encounter>;
-  public encounterTableCols = ['label'];
+  public encounterTableCols = ['label', 'date'];
   public encounterSubject: BehaviorSubject<Encounter[]>;
 
   constructor(private activatedRoute: ActivatedRoute,
@@ -42,18 +40,6 @@ export class CampaignComponent extends RouterComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // this.activatedRoute.params.subscribe((params) => {
-    //   this.campaignId = params[ 'campaignId' ];
-    //   this.campaignService.setCampaignId(this.campaignId);
-    //   this.campaignService.isReady().subscribe((isReady: boolean) => {
-    //     if (isReady) {
-    //       this.campaign = this.campaignService.campaign;
-    //       this.members = this.campaignService.members;
-    //       this.memberDataSource = new MatTableDataSource(this.members);
-    //     }
-    //   });
-    // });
-
     this.activatedRoute.params.do((params) => {
       this.campaignId = params[ 'campaignId' ];
       this.campaignService.setCampaignId(this.campaignId);
@@ -93,8 +79,8 @@ export class CampaignComponent extends RouterComponent implements OnInit {
   //   }
   // }
 
-  public enterEncounter(encounter: any): void {
-    this.router.navigate([ 'encounter', encounter._id ])
+  public enterEncounter(encounter: Encounter): void {
+    this.router.navigate([ 'encounter', encounter.id ])
   }
 
   private initEncounterDataSource(): void {
