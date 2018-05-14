@@ -1,5 +1,5 @@
 export interface Encounter {
-  id: string;
+  _id: string;
   label: string;
   date: Date;
   campaignId: string;

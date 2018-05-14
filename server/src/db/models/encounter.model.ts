@@ -4,7 +4,7 @@ import { Encounter } from '../../../../shared/types/encounter';
 
 
 export class EncounterModel extends mongoose.Schema implements Encounter {
-  public id;
+  public _id;
   public label: string;
   public date: Date;
   public campaignId: string;
@@ -18,7 +18,7 @@ export class EncounterModel extends mongoose.Schema implements Encounter {
       gameMasters: [ String ]
     });
 
-    this.id = this.methods._id;
+    this._id = this.methods._id;
     this.label = this.methods.label;
     this.date = this.methods.date;
     this.campaignId = this.methods.campaignId;

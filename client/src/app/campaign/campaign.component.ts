@@ -80,7 +80,7 @@ export class CampaignComponent extends RouterComponent implements OnInit {
   // }
 
   public enterEncounter(encounter: Encounter): void {
-    this.router.navigate([ 'encounter', encounter.id ])
+    this.router.navigate([ 'encounter', encounter._id ])
   }
 
   private initEncounterDataSource(): void {
