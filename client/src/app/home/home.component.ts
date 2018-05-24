@@ -9,15 +9,13 @@ import { Subject } from 'rxjs/Subject';
 import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
 import { UserDataService } from '../utilities/user-data/userData.service';
-import { RouterComponent } from '../utilities/router-component/router-component';
-import { MainNavService } from '../main-nav/main-nav.service';
 
 @Component({
     selector: 'home-page',
     templateUrl: 'home.component.html',
     styleUrls: ['home.component.css']
 })
-export class HomeComponent extends RouterComponent implements OnInit {
+export class HomeComponent implements OnInit {
     @ViewChild('fileInput') fileInput: ElementRef;
     private reader: FileReader = new FileReader();
     private profilePhotoUrl: string = '';
@@ -35,9 +33,7 @@ export class HomeComponent extends RouterComponent implements OnInit {
                 private userProfileService: UserProfileService,
                 private ruleSetRepository: RuleSetRepository,
                 private campaignRepository: CampaignRepository,
-                public userDataService: UserDataService,
-                mainNavService: MainNavService) {
-        super(mainNavService);
+                public userDataService: UserDataService) {
 
         this.userProfileService.getUserProfile().then(() => {
             this.profilePhotoUrl = this.userProfileService.getProfilePhotoUrl();
@@ -49,17 +45,17 @@ export class HomeComponent extends RouterComponent implements OnInit {
     public ngOnInit(): void {
         this.getRuleSets();
         this.getCampaigns();
-        this.sideNavOptions = [
-            {
-                label: 'New Rule Set',
-                function: this.newRuleSet
-            },
-            {
-                label: 'New Campaign',
-                function: this.newCampaign
-            }
-        ];
-        this.registerRouterComponent();
+        // this.sideNavOptions = [
+        //     {
+        //         label: 'New Rule Set',
+        //         function: this.newRuleSet
+        //     },
+        //     {
+        //         label: 'New Campaign',
+        //         function: this.newCampaign
+        //     }
+        // ];
+        // this.registerRouterComponent();
     }
 
     public ruleSetHome(ruleSetId: string): void {

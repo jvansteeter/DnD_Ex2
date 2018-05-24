@@ -7,8 +7,8 @@ import { NewCampaignDialogComponent } from './dialog/new-campaign-dialog.compone
 import { RuleSetModule } from '../rule-set/rule-set.module';
 import { CampaignRepository } from '../repositories/campaign.repository';
 import {
-    MatButtonModule, MatExpansionModule, MatIconModule, MatInputModule, MatListModule,
-    MatMenuModule, MatTableModule
+  MatButtonModule, MatCardModule, MatExpansionModule, MatGridListModule, MatIconModule, MatInputModule, MatListModule,
+  MatMenuModule, MatTableModule
 } from '@angular/material';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
@@ -28,7 +28,9 @@ import { BrowserModule } from '@angular/platform-browser';
         MatMenuModule,
         MatTableModule,
         RuleSetModule,
-        SocialModule
+        SocialModule,
+        MatGridListModule,
+        MatCardModule
     ],
     declarations: [
         HomeComponent,

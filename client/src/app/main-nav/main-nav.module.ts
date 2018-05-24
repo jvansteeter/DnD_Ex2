@@ -9,7 +9,6 @@ import {
     MatToolbarModule
 } from '@angular/material';
 import { MainNavComponent } from './main-nav.component';
-import { MainNavService } from './main-nav.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from '../app-routing.module';
@@ -33,7 +32,6 @@ import { AppRoutingModule } from '../app-routing.module';
         MainNavComponent
     ],
     providers: [
-        MainNavService
     ],
     exports: [
         MainNavComponent

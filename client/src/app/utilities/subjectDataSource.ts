@@ -3,7 +3,7 @@ import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
 import { MatPaginator, MatSort } from '@angular/material';
 import { BehaviorSubject, merge } from 'rxjs/index';
-import { map } from 'rxjs/operators';
+import { map, mergeMap, tap } from 'rxjs/operators';
 
 
 export class SubjectDataSource<T> extends DataSource<T> {
@@ -39,22 +39,25 @@ export class SubjectDataSource<T> extends DataSource<T> {
 
     let updateSubject: BehaviorSubject<T[]>;
     let dataMutations: any[] = [];
-    return this.dataSubject.asObservable().do((data: T[]) => {
-      this.data = data;
-      updateSubject = new BehaviorSubject<T[]>(data);
+    return this.dataSubject.asObservable().pipe(
+        tap((data: T[]) => {
+          this.data = data;
+          updateSubject = new BehaviorSubject<T[]>(data);
 
-      dataMutations.push(updateSubject.asObservable());
-      if (this.paginator) {
-        dataMutations.push(this.paginator.page);
-      }
-      if (this.sort) {
-        dataMutations.push(this.sort.sortChange);
-      }
-    }).flatMap(() => {
-      return merge(...dataMutations).pipe(map(() => {
-        return this.getPagedData(this.getSortedData([...this.data]));
-      }));
-    })
+          dataMutations.push(updateSubject.asObservable());
+          if (this.paginator) {
+            dataMutations.push(this.paginator.page);
+          }
+          if (this.sort) {
+            dataMutations.push(this.sort.sortChange);
+          }
+        }),
+        mergeMap(() => {
+          return merge(...dataMutations).pipe(map(() => {
+            return this.getPagedData(this.getSortedData([ ...this.data ]));
+          }));
+        })
+    );
   }
 
   disconnect(): void {
@@ -84,9 +87,10 @@ export class SubjectDataSource<T> extends DataSource<T> {
     return data.sort((a, b) => {
       const isAsc = this.sort.direction === 'asc';
       switch (this.sort.active) {
-        // case 'name': return compare(a.name, b.name, isAsc);
-        // case 'id': return compare(+a.id, +b.id, isAsc);
-        default: return 0;
+          // case 'name': return compare(a.name, b.name, isAsc);
+          // case 'id': return compare(+a.id, +b.id, isAsc);
+        default:
+          return 0;
       }
     });
   }

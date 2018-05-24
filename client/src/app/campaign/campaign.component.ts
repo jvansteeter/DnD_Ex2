@@ -1,14 +1,12 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserProfile } from '../types/userProfile';
 import { AlertService } from '../alert/alert.service';
 import { UserProfileService } from '../utilities/services/userProfile.service';
-import { MatDialog, MatPaginator, MatTableDataSource } from '@angular/material';
+import { MatDialog, MatTableDataSource } from '@angular/material';
 import { SelectFriendsComponent } from '../social/select-friends/select-friends.component';
 import { CampaignService } from './campaign.service';
 import { NewEncounterDialogComponent } from './dialog/new-encounter-dialog.component';
-import { RouterComponent } from '../utilities/router-component/router-component';
-import { MainNavService } from '../main-nav/main-nav.service';
 import { SubjectDataSource } from '../utilities/subjectDataSource';
 import { Encounter } from '../../../../shared/types/encounter';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -19,7 +17,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
   templateUrl: 'campaign.component.html',
   styleUrls: [ 'campaign.component.css' ]
 })
-export class CampaignComponent extends RouterComponent implements OnInit {
+export class CampaignComponent implements OnInit {
   private campaignId;
 
   public memberDataSource: MatTableDataSource<UserProfile>;
@@ -34,9 +32,7 @@ export class CampaignComponent extends RouterComponent implements OnInit {
               private alertService: AlertService,
               private userProfileService: UserProfileService,
               private dialog: MatDialog,
-              private router: Router,
-              mainNavService: MainNavService) {
-    super(mainNavService);
+              private router: Router) {
   }
 
   ngOnInit(): void {
@@ -51,18 +47,6 @@ export class CampaignComponent extends RouterComponent implements OnInit {
         this.initEncounterDataSource();
       }
     });
-
-    this.sideNavOptions = [
-      {
-        label: 'Invite Friends',
-        function: this.inviteFriends
-      },
-      {
-        label: 'New Encounter',
-        function: this.newEncounter
-      }
-    ];
-    this.registerRouterComponent();
   }
 
   // public changeGameMaster(member: any): void {
