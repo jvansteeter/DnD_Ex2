@@ -1,6 +1,6 @@
 .home-profilePhoto {
     flex: 2;
-    height: 302px;
+    height: 100%;
 }
 
 .home-profilePhoto input {

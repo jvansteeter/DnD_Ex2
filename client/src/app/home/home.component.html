@@ -1,80 +1,45 @@
 <div class="home-content">
 	<mat-grid-list cols="3" rowHeight="350px">
 		<mat-grid-tile [colspan]="1" [rowspan]="1">
-			<mat-card class="global-dashboard-card">
-				<mat-card-content>
-					<div class="home-profilePhoto">
-						<a class="thumbnail" (click)="upload()">
-							<img class="home-profilePhotoImg" [src]="profilePhotoUrl"/>
-						</a>
-						<input type="file" accept="image/*" (change)="loadImage()" #fileInput>
-					</div>
-				</mat-card-content>
-			</mat-card>
+			<dashboard-card>
+				<div class="home-profilePhoto">
+					<a class="thumbnail" (click)="upload()">
+						<img class="home-profilePhotoImg" [src]="profilePhotoUrl"/>
+					</a>
+					<input type="file" accept="image/*" (change)="loadImage()" #fileInput>
+				</div>
+			</dashboard-card>
 		</mat-grid-tile>
 		<mat-grid-tile [colspan]="2" [rowspan]="1">
-			<mat-card class="global-dashboard-card">
-				<mat-card-header>
-					<mat-card-title>
-						<button mat-icon-button class="global-dash-more-button" [matMenuTriggerFor]="ruleSetMenu" aria-label="Toggle menu">
-							<mat-icon>more_vert</mat-icon>
-						</button>
-						<mat-menu #ruleSetMenu="matMenu" xPosition="before">
-							<button mat-menu-item (click)="newRuleSet()">New Rule Set</button>
-						</mat-menu>
-					</mat-card-title>
-				</mat-card-header>
-				<mat-card-content>
-					<mat-table [dataSource]="ruleSetDataSource">
-						<ng-container matColumnDef="label">
-							<mat-header-cell *matHeaderCellDef>Rule Set</mat-header-cell>
-							<mat-cell *matCellDef="let ruleSet">{{ruleSet.label}}</mat-cell>
-						</ng-container>
-						<mat-header-row *matHeaderRowDef="ruleSetTableColumns"></mat-header-row>
-						<mat-row class="clickable-row" *matRowDef="let ruleSet; columns: ruleSetTableColumns"
-										 (click)="ruleSetHome(ruleSet._id)"></mat-row>
-					</mat-table>
-				</mat-card-content>
-			</mat-card>
+			<dashboard-card [dashboardCard]="ruleSetCard">
+				<mat-table [dataSource]="ruleSetDataSource">
+					<ng-container matColumnDef="label">
+						<mat-header-cell *matHeaderCellDef>Rule Set</mat-header-cell>
+						<mat-cell *matCellDef="let ruleSet">{{ruleSet.label}}</mat-cell>
+					</ng-container>
+					<mat-header-row *matHeaderRowDef="ruleSetTableColumns"></mat-header-row>
+					<mat-row class="clickable-row" *matRowDef="let ruleSet; columns: ruleSetTableColumns"
+									 (click)="ruleSetHome(ruleSet._id)"></mat-row>
+				</mat-table>
+			</dashboard-card>
 		</mat-grid-tile>
 		<mat-grid-tile>
-			<mat-card class="global-dashboard-card">
-				<mat-card-header>
-					<mat-card-title>
-						<button mat-icon-button class="global-dash-more-button" [matMenuTriggerFor]="friendMenu" aria-label="Toggle menu">
-							<mat-icon>more_vert</mat-icon>
-						</button>
-						<mat-menu #friendMenu="matMenu" xPosition="before">
-							<button mat-menu-item (click)="newRuleSet()">Find Friend</button>
-						</mat-menu>
-					</mat-card-title>
-				</mat-card-header>
-			</mat-card>
+			<dashboard-card [dashboardCard]="friendsCard">
+				... to be continued
+			</dashboard-card>
 		</mat-grid-tile>
 		<mat-grid-tile [colspan]="2" [rowspan]="1">
-			<mat-card class="global-dashboard-card">
-				<mat-card-header>
-					<mat-card-title>
-						<button mat-icon-button class="global-dash-more-button" [matMenuTriggerFor]="campaignMenu" aria-label="Toggle menu">
-							<mat-icon>more_vert</mat-icon>
-						</button>
-						<mat-menu #campaignMenu="matMenu" xPosition="before">
-							<button mat-menu-item (click)="newCampaign()">New Campaign</button>
-						</mat-menu>
-					</mat-card-title>
-				</mat-card-header>
-				<mat-card-content>
-					<mat-table [dataSource]="userDataService.homeState.campaigns">
-						<ng-container matColumnDef="label">
-							<mat-header-cell *matHeaderCellDef>Campaign</mat-header-cell>
-							<mat-cell *matCellDef="let campaign">{{campaign.label}}</mat-cell>
-						</ng-container>
-						<mat-header-row *matHeaderRowDef="campaignTableColumns"></mat-header-row>
-						<mat-row class="clickable-row" *matRowDef="let campaign; columns: campaignTableColumns"
-										 (click)="campaignHome(campaign)"></mat-row>
-					</mat-table>
-				</mat-card-content>
-			</mat-card>
+			<dashboard-card [dashboardCard]="campaignCard">
+				<mat-table [dataSource]="userDataService.homeState.campaigns">
+					<ng-container matColumnDef="label">
+						<mat-header-cell *matHeaderCellDef>Campaign</mat-header-cell>
+						<mat-cell *matCellDef="let campaign">{{campaign.label}}</mat-cell>
+					</ng-container>
+					<mat-header-row *matHeaderRowDef="campaignTableColumns"></mat-header-row>
+					<mat-row class="clickable-row" *matRowDef="let campaign; columns: campaignTableColumns"
+									 (click)="campaignHome(campaign)"></mat-row>
+				</mat-table>
+			</dashboard-card>
 		</mat-grid-tile>
 	</mat-grid-list>
 </div>
