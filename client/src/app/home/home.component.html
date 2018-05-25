@@ -1,28 +1,4 @@
 <div class="home-content">
-	<!--<div class="home-leftContent">-->
-		<!---->
-	<!--</div>-->
-	<!--<div class="home-rightContent">-->
-		<!--<h1>Home</h1>-->
-		<!--<mat-accordion>-->
-			<!--<mat-expansion-panel>-->
-				<!--<mat-expansion-panel-header>-->
-					<!--<mat-panel-title>Rule Sets</mat-panel-title>-->
-					<!--<mat-panel-description>Rule Set description</mat-panel-description>-->
-				<!--</mat-expansion-panel-header>-->
-				<!---->
-			<!--</mat-expansion-panel>-->
-			<!--<mat-expansion-panel>-->
-				<!--<mat-expansion-panel-header>-->
-					<!--<mat-panel-title>Campaigns</mat-panel-title>-->
-					<!--<mat-panel-description>Description here</mat-panel-description>-->
-				<!--</mat-expansion-panel-header>-->
-				<!---->
-			<!--</mat-expansion-panel>-->
-		<!--</mat-accordion>-->
-	<!--</div>-->
-    <!---->
-
 	<mat-grid-list cols="3" rowHeight="350px">
 		<mat-grid-tile [colspan]="1" [rowspan]="1">
 			<mat-card class="global-dashboard-card">
@@ -38,7 +14,16 @@
 		</mat-grid-tile>
 		<mat-grid-tile [colspan]="2" [rowspan]="1">
 			<mat-card class="global-dashboard-card">
-				<mat-card-header></mat-card-header>
+				<mat-card-header>
+					<mat-card-title>
+						<button mat-icon-button class="global-dash-more-button" [matMenuTriggerFor]="ruleSetMenu" aria-label="Toggle menu">
+							<mat-icon>more_vert</mat-icon>
+						</button>
+						<mat-menu #ruleSetMenu="matMenu" xPosition="before">
+							<button mat-menu-item (click)="newRuleSet()">New Rule Set</button>
+						</mat-menu>
+					</mat-card-title>
+				</mat-card-header>
 				<mat-card-content>
 					<mat-table [dataSource]="ruleSetDataSource">
 						<ng-container matColumnDef="label">
@@ -52,9 +37,32 @@
 				</mat-card-content>
 			</mat-card>
 		</mat-grid-tile>
+		<mat-grid-tile>
+			<mat-card class="global-dashboard-card">
+				<mat-card-header>
+					<mat-card-title>
+						<button mat-icon-button class="global-dash-more-button" [matMenuTriggerFor]="friendMenu" aria-label="Toggle menu">
+							<mat-icon>more_vert</mat-icon>
+						</button>
+						<mat-menu #friendMenu="matMenu" xPosition="before">
+							<button mat-menu-item (click)="newRuleSet()">Find Friend</button>
+						</mat-menu>
+					</mat-card-title>
+				</mat-card-header>
+			</mat-card>
+		</mat-grid-tile>
 		<mat-grid-tile [colspan]="2" [rowspan]="1">
 			<mat-card class="global-dashboard-card">
-				<mat-card-header></mat-card-header>
+				<mat-card-header>
+					<mat-card-title>
+						<button mat-icon-button class="global-dash-more-button" [matMenuTriggerFor]="campaignMenu" aria-label="Toggle menu">
+							<mat-icon>more_vert</mat-icon>
+						</button>
+						<mat-menu #campaignMenu="matMenu" xPosition="before">
+							<button mat-menu-item (click)="newCampaign()">New Campaign</button>
+						</mat-menu>
+					</mat-card-title>
+				</mat-card-header>
 				<mat-card-content>
 					<mat-table [dataSource]="userDataService.homeState.campaigns">
 						<ng-container matColumnDef="label">

@@ -45,17 +45,6 @@ export class HomeComponent implements OnInit {
     public ngOnInit(): void {
         this.getRuleSets();
         this.getCampaigns();
-        // this.sideNavOptions = [
-        //     {
-        //         label: 'New Rule Set',
-        //         function: this.newRuleSet
-        //     },
-        //     {
-        //         label: 'New Campaign',
-        //         function: this.newCampaign
-        //     }
-        // ];
-        // this.registerRouterComponent();
     }
 
     public ruleSetHome(ruleSetId: string): void {
@@ -93,11 +82,11 @@ export class HomeComponent implements OnInit {
         });
     }
 
-    private newRuleSet = () => {
+    public newRuleSet(): void {
         this.dialog.open(NewRuleSetDialogComponent).afterClosed().subscribe(() => this.getRuleSets());
     };
 
-    private newCampaign = () => {
+    public newCampaign(): void {
         this.dialog.open(NewCampaignDialogComponent).componentInstance.getNewCampaignObservable().subscribe(() => {
             this.getCampaigns();
         });

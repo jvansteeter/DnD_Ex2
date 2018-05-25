@@ -35,6 +35,16 @@
 		</mat-grid-tile>
 		<mat-grid-tile [colspan]="1" [rowspan]="1">
 			<mat-card class="global-dashboard-card">
+				<mat-card-header>
+					<mat-card-title>
+						<button mat-icon-button class="global-dash-more-button" [matMenuTriggerFor]="encounterMenu" aria-label="Toggle menu">
+							<mat-icon>more_vert</mat-icon>
+						</button>
+						<mat-menu #encounterMenu="matMenu" xPosition="before">
+							<button mat-menu-item (click)="newEncounter()">New Encounter</button>
+						</mat-menu>
+					</mat-card-title>
+				</mat-card-header>
 				<mat-card-content>
 					<mat-table [dataSource]="encounterDataSource">
 						<ng-container matColumnDef="label">

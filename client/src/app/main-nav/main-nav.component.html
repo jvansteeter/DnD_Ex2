@@ -1,11 +1,13 @@
 <mat-toolbar color="primary" class="main-toolbar">
-	<span [routerLink]="'home'">Dungeon Map</span>
+	<span [routerLink]="'home'">Game Map</span>
 	<span class="right-toolbarButtons" [style.right.px]="0">
-				<button mat-button class="navbar-menuButton" [matMenuTriggerFor]="profileMenu"><mat-icon>person</mat-icon></button>
-				<mat-menu #profileMenu="matMenu">
-					<a mat-menu-item href="login">Logout</a>
-				</mat-menu>
-			</span>
+		<button mat-button class="navbar-menuButton" [matMenuTriggerFor]="profileMenu">
+			<mat-icon>person</mat-icon>
+		</button>
+		<mat-menu #profileMenu="matMenu">
+			<a mat-menu-item href="login">Logout</a>
+		</mat-menu>
+	</span>
 </mat-toolbar>
 <div class="main-content">
 	<ng-content></ng-content>

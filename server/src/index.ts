@@ -11,7 +11,7 @@ import SocketService from './services/socket.service';
 
 debug('ts-express:server');
 
-const port = normalizePort(process.env.PORT || 3000);
+const port = normalizePort(process.env.PORT || 4000);
 App.set('port', port);
 
 /**
