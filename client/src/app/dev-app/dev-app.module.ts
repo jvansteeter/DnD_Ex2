@@ -29,7 +29,6 @@ import { UserDataService } from '../utilities/user-data/userData.service';
 	imports: [
 		BrowserModule,
 		FormsModule,
-		AppRoutingModule,
 		HttpClientModule,
 		MatTabsModule,
 		BrowserAnimationsModule,
@@ -54,12 +53,11 @@ import { UserDataService } from '../utilities/user-data/userData.service';
 	],
 	declarations: [
 		DevAppComponent,
-		BoardModule,
 	],
 	providers: [
 		UserDataService
 	],
 	bootstrap: [ DevAppComponent ]
 })
-export class AppModule {
+export class DevAppModule {
 }

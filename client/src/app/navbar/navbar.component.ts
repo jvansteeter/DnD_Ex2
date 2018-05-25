@@ -1,10 +1,8 @@
 import { UserProfileService } from '../utilities/services/userProfile.service';
 import { UserProfile } from '../types/userProfile';
 import { AddFriendComponent } from '../social/add-friend/add-friend.component';
-import { NotificationsService } from '../utilities/services/notifications.service';
 import { MatDialog } from '@angular/material';
 import { Component } from '@angular/core';
-import { SocialService } from '../social/social.service';
 
 @Component({
     selector: 'app-navbar',

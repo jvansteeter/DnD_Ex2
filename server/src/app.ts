@@ -78,16 +78,16 @@ class App {
 	// Configure API endpoints.
 	private routes(): void {
 		// if the request is not authenticated, redirect to login
+		let appPath: string = this.isDevMode() ? './client/dist/dev.html' : './client/dist/index.html';
 		let authenticationRouter = Express.Router();
 		authenticationRouter.get('/', (req: Request, res: Response) => {
 			if (!req.isAuthenticated()) {
 				res.redirect('login');
 			}
 			else {
-				res.sendFile(path.resolve('./client/dist/index.html'))
+				res.sendFile(path.resolve(appPath))
 			}
 		});
-		this.app.use('/dev/map', Express.static('./client/dist/dev.html'));
 		this.app.use('/', authenticationRouter);
 
 		// in case of web scan, shutdown
@@ -98,7 +98,6 @@ class App {
 		//  **************************************** Serve the client files ********************************************
 		//  If not logged in, serve the login app
 		this.app.use('/login', Express.static('./client/dist/login.html'));
-
 		this.app.use('/static', Express.static('./client/dist'));
 		this.app.use('/node_modules', Express.static('./node_modules'));
 		this.app.use('/resources', Express.static('./client/src/resources'));
@@ -128,6 +127,15 @@ class App {
 		else {
 			res.sendStatus(401);
 		}
+	}
+
+	private isDevMode(): boolean {
+		for (let arg of process.argv) {
+			if (arg === '-dev') {
+				return true;
+			}
+		}
+		return false;
 	}
 }
 
