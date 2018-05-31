@@ -3,6 +3,7 @@ import {BoardConfigService} from '../../services/board-config.service';
 import {BoardCanvasService} from '../../services/board-canvas-service';
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {XyPair} from '../../geometry/xy-pair';
+import {EncounterDevService} from '../../../encounter/encounter-dev.service';
 
 @Component({
     selector: 'token-renderer',
@@ -16,7 +17,8 @@ export class TokenRendererComponent implements OnInit {
     constructor(
         private bs: BoardService,
         private bcs: BoardConfigService,
-        private bctx: BoardCanvasService
+        private bctx: BoardCanvasService,
+        private encounterService: EncounterDevService
     ) {}
 
     ngOnInit(): void {
@@ -29,6 +31,9 @@ export class TokenRendererComponent implements OnInit {
         this.bctx.updateTransform(this.ctx);
 
         // do stuff here
+        for (const player of this.encounterService.players) {
+            this.bctx.draw_center(this.ctx, new XyPair(player.loc_x, player.loc_y), 'rgba(200, 120, 120, 0.8)', 0.8);
+        }
 
         requestAnimationFrame(this.render);
     }

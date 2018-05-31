@@ -1,12 +1,10 @@
 import {Injectable, OnInit} from "@angular/core";
 
 @Injectable()
-export class EncounterDevService implements OnInit {
+export class EncounterDevService {
     players = [];
 
-    constructor() {}
-
-    ngOnInit(): void {
+    constructor() {
         this.players = [
             {
                 name: 'Joe',
@@ -33,5 +31,4 @@ export class EncounterDevService implements OnInit {
                 loc_y: 9
             }];
     }
-
 }

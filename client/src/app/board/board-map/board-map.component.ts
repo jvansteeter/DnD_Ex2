@@ -34,9 +34,7 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
   constructor(
     private bs: BoardService,
     private bctx: BoardCanvasService,
-    private bcs: BoardConfigService,
-    private wall_service: WallService,
-    private tile_service: TileService
+    private bcs: BoardConfigService
   ) {}
 
   ngOnInit(): void {
