@@ -136,7 +136,6 @@ export class WallService {
     } else {
       this.addWall(loc);
     }
-    this.logBlockMapToConsole();
   }
 
   public hasWall(loc: CellTarget): boolean {

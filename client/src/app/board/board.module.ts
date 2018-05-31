@@ -18,6 +18,7 @@ import {BoardCanvasService} from "./services/board-canvas-service";
 import {WallService} from "./services/wall.service";
 import {TileService} from "./services/tile.service";
 import {BoardMapComponent} from './board-map/board-map.component';
+import {TokenRendererComponent} from './renderer/token-renderer/token-renderer.component';
 
 
 
@@ -33,7 +34,8 @@ import {BoardMapComponent} from './board-map/board-map.component';
     TileRendererComponent,
     LightRendererComponent,
     WallRendererComponent,
-    HighlightRendererComponent
+    HighlightRendererComponent,
+      TokenRendererComponent
   ],
   imports: [
     BrowserModule,

@@ -18,7 +18,7 @@ export class MapRendererComponent implements OnInit {
     private bcs: BoardConfigService,
     private bctx: BoardCanvasService
   ) {
-    this.bgImage.src = 'assets/tavern.jpg';
+    this.bgImage.src = 'resources/images/maps/tavern.jpg';
   }
 
   ngOnInit(): void {

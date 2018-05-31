@@ -136,7 +136,6 @@ export class BoardCanvasService {
   }
 
   draw_fill_all(ctx: CanvasRenderingContext2D, xy_pair: XyPair, fill_code: string | CanvasGradient | CanvasPattern) {
-    console.log(xy_pair)
     const loc = new XyPair(xy_pair.x * this.bcs.cell_res, xy_pair.y * this.bcs.cell_res);
 
     ctx.save();
