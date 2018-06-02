@@ -19,6 +19,9 @@ export class BoardConfigService {
   // public mapDimY = 3;
   // public cell_res = 5;
 
+  public mapOffsetTop: number;
+  public mapOffsetLeft: number;
+
   public inputOffset = 0.2;    // offset used for input boundaries
 
   // transform state

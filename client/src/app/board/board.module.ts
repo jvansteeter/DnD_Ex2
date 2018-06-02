@@ -1,6 +1,6 @@
-import { BrowserModule } from '@angular/platform-browser';
+import {BrowserModule} from '@angular/platform-browser';
 import {MatCheckboxModule, MatRadioModule, MatSliderModule} from '@angular/material';
-import { NgModule } from '@angular/core';
+import {NgModule} from '@angular/core';
 import {MapRendererComponent} from "./renderer/map-renderer/map-renderer.component";
 import {GridRendererComponent} from "./renderer/grid-renderer/grid-renderer";
 import {BoardZoneComponent} from "./board-zone.component";
@@ -19,42 +19,50 @@ import {WallService} from "./services/wall.service";
 import {TileService} from "./services/tile.service";
 import {BoardMapComponent} from './board-map/board-map.component';
 import {TokenRendererComponent} from './renderer/token-renderer/token-renderer.component';
-
+import {PopService} from "./pop/pop.service";
+import {PopRootComponent} from "./pop/pop-root.component";
+import {NpcPopComponent} from "./pop/npcPop/npc-pop.component";
 
 
 @NgModule({
-  declarations: [
-    BoardZoneComponent,
-    BoardControllerComponent,
-    BoardMapComponent,
-    MouseWheelDirective,
-    MapRendererComponent,
-    GridRendererComponent,
-    HoverRendererComponent,
-    TileRendererComponent,
-    LightRendererComponent,
-    WallRendererComponent,
-    HighlightRendererComponent,
-      TokenRendererComponent
-  ],
-  imports: [
-    BrowserModule,
-    MatRadioModule,
-    MatCheckboxModule,
-    FormsModule,
-    MatSliderModule
-  ],
-  providers: [
-    BoardService,
-    BoardConfigService,
-    BoardCanvasService,
-    WallService,
-    TileService
-  ],
-  bootstrap: [
-  ],
-  exports: [
-      BoardZoneComponent
-  ]
+    declarations: [
+        BoardZoneComponent,
+        PopRootComponent,
+        BoardControllerComponent,
+        BoardMapComponent,
+        MouseWheelDirective,
+        MapRendererComponent,
+        GridRendererComponent,
+        HoverRendererComponent,
+        TileRendererComponent,
+        LightRendererComponent,
+        WallRendererComponent,
+        HighlightRendererComponent,
+        TokenRendererComponent,
+        NpcPopComponent
+    ],
+    imports: [
+        BrowserModule,
+        MatRadioModule,
+        MatCheckboxModule,
+        FormsModule,
+        MatSliderModule
+    ],
+    providers: [
+        BoardService,
+        PopService,
+        BoardConfigService,
+        BoardCanvasService,
+        WallService,
+        TileService
+    ],
+    entryComponents: [
+        NpcPopComponent
+    ],
+    bootstrap: [],
+    exports: [
+        BoardZoneComponent
+    ]
 })
-export class BoardModule { }
+export class BoardModule {
+}

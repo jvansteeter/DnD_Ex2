@@ -12,6 +12,7 @@ import {WallService} from './wall.service';
 import {BoardCanvasService} from './board-canvas-service';
 import {TileService} from './tile.service';
 import {ViewMode} from '../shared/view-mode';
+import {EncounterDevService} from '../../encounter/encounter-dev.service';
 
 /*************************************************************************************************************************************
  * BoardConfigService
@@ -62,7 +63,8 @@ export class BoardService {
   constructor(public bcs: BoardConfigService,
               public bctx: BoardCanvasService,
               private wall_service: WallService,
-              private tile_service: TileService) {
+              private tile_service: TileService,
+              private encounterService: EncounterDevService) {
     this.cellLightData = new Array(this.bcs.mapDimX);
     for (let x = 0; x < this.bcs.mapDimX; x++) {
       this.cellLightData[x] = new Array(this.bcs.mapDimY);
@@ -272,6 +274,7 @@ export class BoardService {
     }
 
     this.updateMouseLocation(mouse_screen);
+    this.encounterService.checkForPops(new XyPair(this.mouse_loc_cell.x, this.mouse_loc_cell.y));
   }
 
   // *************************************************************************************************************************************************************
