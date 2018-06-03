@@ -1,0 +1,7 @@
+.action {
+    font-weight: normal;
+}
+
+.action:hover {
+    font-weight: bold;
+}

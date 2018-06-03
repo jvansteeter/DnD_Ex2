@@ -37,6 +37,7 @@ export class BoardConfigService {
   public playerWallsEnabled = false;
   public lightEnabled = false;
   public traceHitCountForVisibility = 3;
+  public do_pops = false;
 
   public doDiagonals = true;
 

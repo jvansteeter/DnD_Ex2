@@ -1,8 +1,14 @@
 <div style="position: fixed; background-color: white; border-radius: 5px; border: 2px solid darkgrey;"
      [ngStyle]="{'left': pos_x + 'px', 'top': pos_y + 'px'}">
-    <div style="margin: 5px; display: flex; flex-direction: column">
-        <div><b>Player:</b> {{data.name}}</div>
-        <div><b>HP:</b> {{data.hp}}/{{data.maxHp}}</div>
-        <div><b>AC:</b> {{data.ac}}</div>
+    <div style="margin: 7px 9px; display: flex; flex-direction: column">
+        <div style="margin-left: auto; margin-right: auto;"><b>{{data.name}}</b></div>
+        <div style="margin-left:1px"><b>🖤:</b> {{data.hp}}/{{data.maxHp}}</div>
+        <div style="margin-left:3px"><b>⛨ :</b> {{data.ac}}</div>
+
+        <div class="action" *ngIf="!actionsVisible" (click)="toggleActionVis()" style="margin-top: 5px; margin-left: auto; margin-right: auto">Show Actions</div>
+
+        <ul *ngIf="actionsVisible" style="padding-left: 25px; margin: 5px 0px">
+            <li *ngFor="let action of data.actions"><b>{{action.action}}</b> {{action.detail}}</li>
+        </ul>
     </div>
 </div>

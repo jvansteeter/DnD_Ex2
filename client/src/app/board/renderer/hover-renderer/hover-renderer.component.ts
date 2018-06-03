@@ -91,7 +91,7 @@ export class HoverRendererComponent implements OnInit {
           break;
         case BoardMode.TILES:
           break;
-        case BoardMode.DEFAULT:
+        case BoardMode.PLAYER:
           break;
       }
     }

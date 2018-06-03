@@ -31,6 +31,12 @@ export class BoardCanvasService {
     ctx.clearRect(-this.cvs_width, -this.cvs_height, this.cvs_width * 3, this.cvs_height * 3);
   }
 
+  draw_img(ctx: CanvasRenderingContext2D, origin: XyPair, img: HTMLImageElement) {
+    // const img = new Image();
+    // img.src = img_url;
+    ctx.drawImage(img, origin.x, origin.y);
+  }
+
   draw_dot(ctx: CanvasRenderingContext2D, origin: XyPair, rgba_code?: string): void {
     if (isNullOrUndefined(rgba_code)) {
       ctx.fillStyle = 'rgba(50, 50, 50, 1)';

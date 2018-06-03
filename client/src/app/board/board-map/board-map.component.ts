@@ -44,8 +44,6 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
         this.bctx.cvs_width = this.mapContainer.nativeElement.clientWidth;
         this.bcs.mapOffsetTop = this.mapContainer.nativeElement.offsetTop;
         this.bcs.mapOffsetLeft = this.mapContainer.nativeElement.offsetLeft;
-
-        console.log(this.mapContainer);
     }
 
     ngAfterViewChecked(): void {
