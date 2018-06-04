@@ -31,7 +31,7 @@ export class BoardConfigService {
 
   // board-map controls
   public map_enabled = false;
-  public board_edit_mode: BoardMode = BoardMode.WALLS;
+  public board_edit_mode: BoardMode = BoardMode.PLAYER;
   public board_view_mode: ViewMode = ViewMode.BOARD_MAKER;
   public gridEnabled = true;
   public playerWallsEnabled = false;

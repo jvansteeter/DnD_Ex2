@@ -32,9 +32,17 @@ export class TokenRendererComponent implements OnInit {
 
         // do stuff here
         for (const player of this.encounterService.players) {
-            // this.bctx.draw_center(this.ctx, new XyPair(player.loc_x, player.loc_y), 'rgba(200, 120, 120, 0.8)', 0.8);
             if (player.isSelected) {
                 this.bctx.draw_fill_all(this.ctx, player.loc, 'rgba(0, 0, 180, 0.2)');
+                const near_cells = this.bs.calcCellsWithinRangeOfCell(player.loc, player.speed);
+                const far_cells = this.bs.calcCellsWithinRangeOfCell(player.loc, player.speed * 2);
+
+                for (const cell of near_cells) {
+                    this.bctx.draw_fill_all(this.ctx, cell, 'rgba(0, 0, 180, 0.1)');
+                }
+                for (const cell of far_cells) {
+                    this.bctx.draw_fill_all(this.ctx, cell, 'rgba(0, 0, 180, 0.1)');
+                }
             }
             this.bctx.draw_img(this.ctx, new XyPair(player.loc.x * this.bcs.cell_res, player.loc.y * this.bcs.cell_res), player.token_img)
 

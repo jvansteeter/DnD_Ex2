@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {BoardConfigService} from '../services/board-config.service';
 import {BoardService} from '../services/board.service';
 import {TileService} from '../services/tile.service';
@@ -12,11 +12,11 @@ import {LightValue} from '../shared/light-value';
     styleUrls: ['board-controller.component.scss']
 })
 
-export class BoardControllerComponent {
+export class BoardControllerComponent implements OnInit{
     public ViewMode = ViewMode;
     public BoardMode = BoardMode;
 
-    currentMode = 'Walls';
+    currentMode: string;
     modes: string[] = [
         'Player',
         'Walls',
@@ -25,7 +25,7 @@ export class BoardControllerComponent {
         'Tiles'
     ];
 
-    currentView = 'Board Maker';
+    currentView: string;
     viewModes: string[] = [
         'Board Maker',
         'Player View',
@@ -79,6 +79,10 @@ export class BoardControllerComponent {
         public bcs: BoardConfigService,
         public ts: TileService
     ) {
+    }
+
+    ngOnInit(): void {
+        this.sync();
     }
 
     showModeControls(): boolean {
@@ -216,4 +220,6 @@ export class BoardControllerComponent {
     updateTile(id: string) {
         this.ts.activeTileUrl = id;
     }
+
+
 }

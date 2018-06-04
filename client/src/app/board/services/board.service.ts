@@ -322,8 +322,8 @@ export class BoardService {
             y_high = this.bcs.mapDimY;
         }
 
-        for (let x = x_low; x < x_high; x++) {
-            for (let y = y_low; y < y_high; y++) {
+        for (let x = x_low; x <= x_high; x++) {
+            for (let y = y_low; y <= y_high; y++) {
                 const cell = new XyPair(x, y);
                 if (BoardService.distanceCellToCell(source_cell, cell) <= range) {
                     returnMe.push(cell);

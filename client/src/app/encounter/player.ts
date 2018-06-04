@@ -5,6 +5,7 @@ export class Player {
     hp: number;
     maxHp: number;
     ac: number;
+    speed: number;
     loc: XyPair;
     token_url: string;
     token_img: HTMLImageElement;
@@ -16,6 +17,7 @@ export class Player {
         this.hp = hp;
         this.maxHp = mapHp;
         this.ac = ac;
+        this.speed = 3;
         if (!!x && !!y) {
             this.loc = new XyPair(x, y);
         }
