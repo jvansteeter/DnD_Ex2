@@ -16,7 +16,7 @@ export class LightRendererComponent implements OnInit {
   private ctx: CanvasRenderingContext2D;
 
   constructor(
-    private bs: BoardService,
+    private boardService: BoardService,
     private boardStateService: BoardStateService,
     private boardCanvasService: BoardCanvasService
   ) {}
@@ -34,9 +34,9 @@ export class LightRendererComponent implements OnInit {
       case ViewMode.BOARD_MAKER:
         // render the covers for the light values for each cell
         if (this.boardStateService.lightEnabled) {
-          for (let x = 0; x < this.bs.cellLightData.length; x++) {
-            for (let y = 0; y < this.bs.cellLightData[0].length; y++) {
-              const cell = this.bs.cellLightData[x][y];
+          for (let x = 0; x < this.boardService.cellLightData.length; x++) {
+            for (let y = 0; y < this.boardService.cellLightData[0].length; y++) {
+              const cell = this.boardService.cellLightData[x][y];
               this.draw_cell_dim_light(cell, 'rgba(0, 0, 0, 0.3)');
               this.draw_cell_dark_light(cell, 'rgba(0, 0, 0, 0.5)');
             }
@@ -45,9 +45,9 @@ export class LightRendererComponent implements OnInit {
         break;
       case ViewMode.PLAYER:
         if (this.boardStateService.lightEnabled) {
-          for (let x = 0; x < this.bs.cellLightData.length; x++) {
-            for (let y = 0; y < this.bs.cellLightData[0].length; y++) {
-              const cell = this.bs.cellLightData[x][y];
+          for (let x = 0; x < this.boardService.cellLightData.length; x++) {
+            for (let y = 0; y < this.boardService.cellLightData[0].length; y++) {
+              const cell = this.boardService.cellLightData[x][y];
               this.draw_cell_dim_light(cell, 'rgba(0, 0, 0, 0.5)');
               this.draw_cell_dark_light(cell, 'rgba(0, 0, 0, 1)');
             }
@@ -56,16 +56,16 @@ export class LightRendererComponent implements OnInit {
         break;
       case ViewMode.MASTER:
         // render the source boxes for the light sources
-        for (const lightSource of Array.from(this.bs.lightSourceData.values())) {
+        for (const lightSource of Array.from(this.boardService.lightSourceData.values())) {
           this.boardCanvasService.draw_center(this.ctx, lightSource.coor, 'rgba(255, 255, 0, .6)', 0.35);
           this.boardCanvasService.stroke_center(this.ctx, lightSource.coor, 'rgba(0, 0, 0, .3)', 0.33);
         }
 
         // render the covers for the light values for each cell
         if (this.boardStateService.lightEnabled) {
-          for (let x = 0; x < this.bs.cellLightData.length; x++) {
-            for (let y = 0; y < this.bs.cellLightData[0].length; y++) {
-              const cell = this.bs.cellLightData[x][y];
+          for (let x = 0; x < this.boardService.cellLightData.length; x++) {
+            for (let y = 0; y < this.boardService.cellLightData[0].length; y++) {
+              const cell = this.boardService.cellLightData[x][y];
               this.draw_cell_dim_light(cell, 'rgba(0, 0, 0, 0.3)');
               this.draw_cell_dark_light(cell, 'rgba(0, 0, 0, 0.5)');
             }

@@ -75,7 +75,7 @@ export class BoardControllerComponent implements OnInit{
     ];
 
     constructor(
-        public bs: BoardService,
+        public boardService: BoardService,
         public boardStateService: BoardStateService,
         public ts: TileService
     ) {
@@ -128,7 +128,7 @@ export class BoardControllerComponent implements OnInit{
     onModeChange() {
         switch (this.currentMode) {
             case 'Player' :
-                this.bs.source_click_location = null;
+                this.boardService.source_click_location = null;
                 this.boardStateService.board_edit_mode = BoardMode.PLAYER;
                 this.boardStateService.doDiagonals = false;
                 this.boardStateService.inputOffset = 0;
@@ -139,19 +139,19 @@ export class BoardControllerComponent implements OnInit{
                 this.boardStateService.doDiagonals = true;
                 break;
             case 'Doors' :
-                this.bs.source_click_location = null;
+                this.boardService.source_click_location = null;
                 this.boardStateService.board_edit_mode = BoardMode.DOORS;
                 this.boardStateService.inputOffset = 0.10;
                 this.boardStateService.doDiagonals = true;
                 break;
             case 'Lights' :
-                this.bs.source_click_location = null;
+                this.boardService.source_click_location = null;
                 this.boardStateService.board_edit_mode = BoardMode.LIGHTS;
                 this.boardStateService.inputOffset = 0;
                 this.boardStateService.doDiagonals = false;
                 break;
             case 'Tiles' :
-                this.bs.source_click_location = null;
+                this.boardService.source_click_location = null;
                 this.boardStateService.board_edit_mode = BoardMode.TILES;
                 this.boardStateService.inputOffset = 0;
                 this.boardStateService.doDiagonals = false;
@@ -163,19 +163,19 @@ export class BoardControllerComponent implements OnInit{
     onViewChange() {
         switch (this.currentView) {
             case 'Board Maker':
-                this.bs.source_click_location = null;
+                this.boardService.source_click_location = null;
                 this.boardStateService.board_view_mode = ViewMode.BOARD_MAKER;
                 this.boardStateService.board_edit_mode = BoardMode.WALLS;
                 this.boardStateService.do_pops = false;
                 break;
             case 'Player View':
-                this.bs.source_click_location = null;
+                this.boardService.source_click_location = null;
                 this.boardStateService.board_view_mode = ViewMode.PLAYER;
                 this.boardStateService.board_edit_mode = BoardMode.PLAYER;
                 this.boardStateService.do_pops = true;
                 break;
             case 'Game Master':
-                this.bs.source_click_location = null;
+                this.boardService.source_click_location = null;
                 this.boardStateService.board_view_mode = ViewMode.MASTER;
                 this.boardStateService.board_edit_mode = BoardMode.PLAYER;
                 this.boardStateService.do_pops = true;
@@ -194,7 +194,7 @@ export class BoardControllerComponent implements OnInit{
         } else if (this.boardStateService.ambientLight === LightValue.DIM) {
             this.boardStateService.ambientLight = LightValue.FULL;
         }
-        this.bs.updateLightValues();
+        this.boardService.updateLightValues();
     }
 
     decreaseAmbientLight(): void {
@@ -203,7 +203,7 @@ export class BoardControllerComponent implements OnInit{
         } else if (this.boardStateService.ambientLight === LightValue.DIM) {
             this.boardStateService.ambientLight = LightValue.DARK;
         }
-        this.bs.updateLightValues();
+        this.boardService.updateLightValues();
     }
 
     getLightValue(): string {

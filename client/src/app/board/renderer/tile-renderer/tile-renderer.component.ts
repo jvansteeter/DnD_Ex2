@@ -18,7 +18,7 @@ export class TileRendererComponent implements OnInit {
   private ctx: CanvasRenderingContext2D;
 
   constructor(
-    private bs: BoardService,
+    private boardService: BoardService,
     private boardStateService: BoardStateService,
     private boardCanvasService: BoardCanvasService,
     private ts: TileService
@@ -77,23 +77,23 @@ export class TileRendererComponent implements OnInit {
             tileImage.src = this.ts.activeTileUrl;
             const canvasPattern = this.ctx.createPattern(tileImage, 'no-repeat');
 
-            if (this.bs.shiftDown) {
-              switch (this.bs.mouse_cell_target.zone) {
+            if (this.boardService.shiftDown) {
+              switch (this.boardStateService.mouse_cell_target.zone) {
                 case CellZone.TOP:
-                  this.boardCanvasService.draw_fill_N(this.ctx, this.bs.mouse_loc_cell, canvasPattern);
+                  this.boardCanvasService.draw_fill_N(this.ctx, this.boardStateService.mouse_loc_cell, canvasPattern);
                   break;
                 case CellZone.BOTTOM:
-                  this.boardCanvasService.draw_fill_S(this.ctx, this.bs.mouse_loc_cell, canvasPattern);
+                  this.boardCanvasService.draw_fill_S(this.ctx, this.boardStateService.mouse_loc_cell, canvasPattern);
                   break;
                 case CellZone.LEFT:
-                  this.boardCanvasService.draw_fill_W(this.ctx, this.bs.mouse_loc_cell, canvasPattern);
+                  this.boardCanvasService.draw_fill_W(this.ctx, this.boardStateService.mouse_loc_cell, canvasPattern);
                   break;
                 case CellZone.RIGHT:
-                  this.boardCanvasService.draw_fill_E(this.ctx, this.bs.mouse_loc_cell, canvasPattern);
+                  this.boardCanvasService.draw_fill_E(this.ctx, this.boardStateService.mouse_loc_cell, canvasPattern);
                   break;
               }
             } else {
-              this.boardCanvasService.draw_fill_all(this.ctx, this.bs.mouse_loc_cell, canvasPattern);
+              this.boardCanvasService.draw_fill_all(this.ctx, this.boardStateService.mouse_loc_cell, canvasPattern);
             }
           }
         }

@@ -16,7 +16,7 @@ export class HighlightRendererComponent implements OnInit {
   private ctx: CanvasRenderingContext2D;
 
   constructor(
-    private bs: BoardService,
+    private boardService: BoardService,
     private boardStateService: BoardStateService,
     private boardCanvasService: BoardCanvasService
   ) {}
@@ -33,7 +33,7 @@ export class HighlightRendererComponent implements OnInit {
     switch (this.boardStateService.board_view_mode) {
       case ViewMode.BOARD_MAKER:
         // render the source boxes for the light sources
-        for (const lightSource of Array.from(this.bs.lightSourceData.values())) {
+        for (const lightSource of Array.from(this.boardService.lightSourceData.values())) {
           this.boardCanvasService.draw_center(this.ctx, lightSource.coor, 'rgba(255, 255, 0, 1)', 0.35);
           this.boardCanvasService.stroke_center(this.ctx, lightSource.coor, 'rgba(0, 0, 0, 1)', 0.35);
         }
@@ -45,8 +45,8 @@ export class HighlightRendererComponent implements OnInit {
     }
 
     // render corner to corner grid
-    if (!isNullOrUndefined(this.bs.source_click_location)) {
-      const sc_loc = this.bs.source_click_location.coor;
+    if (!isNullOrUndefined(this.boardService.source_click_location)) {
+      const sc_loc = this.boardService.source_click_location.coor;
       this.render_corner_to_corner(sc_loc);
     }
 
@@ -58,35 +58,35 @@ export class HighlightRendererComponent implements OnInit {
 
     let y = sc_loc.y;
     let x = sc_loc.x;
-    while (this.bs.coorInBounds(x + 1, y)) {
+    while (this.boardService.coorInBounds(x + 1, y)) {
       this.boardCanvasService.draw_corner(this.ctx, new XyPair(x + 1, y), 'rgba(0, 220, 0, 0.3)', this.boardStateService.inputOffset);
       x++;
     }
 
     y = sc_loc.y;
     x = sc_loc.x;
-    while (this.bs.coorInBounds(x - 1, y)) {
+    while (this.boardService.coorInBounds(x - 1, y)) {
       this.boardCanvasService.draw_corner(this.ctx, new XyPair(x - 1, y), 'rgba(0, 220, 0, 0.3)', this.boardStateService.inputOffset);
       x--;
     }
 
     y = sc_loc.y;
     x = sc_loc.x;
-    while (this.bs.coorInBounds(x, y - 1)) {
+    while (this.boardService.coorInBounds(x, y - 1)) {
       this.boardCanvasService.draw_corner(this.ctx, new XyPair(x, y - 1), 'rgba(0, 220, 0, 0.3)', this.boardStateService.inputOffset);
       y--;
     }
 
     y = sc_loc.y;
     x = sc_loc.x;
-    while (this.bs.coorInBounds(x, y + 1)) {
+    while (this.boardService.coorInBounds(x, y + 1)) {
       this.boardCanvasService.draw_corner(this.ctx, new XyPair(x, y + 1), 'rgba(0, 220, 0, 0.3)', this.boardStateService.inputOffset);
       y++;
     }
 
     y = sc_loc.y;
     x = sc_loc.x;
-    while (this.bs.coorInBounds(x + 1, y + 1)) {
+    while (this.boardService.coorInBounds(x + 1, y + 1)) {
       this.boardCanvasService.draw_corner(this.ctx, new XyPair(x + 1, y + 1), 'rgba(0, 220, 0, 0.3)', this.boardStateService.inputOffset);
       y++;
       x++;
@@ -94,7 +94,7 @@ export class HighlightRendererComponent implements OnInit {
 
     y = sc_loc.y;
     x = sc_loc.x;
-    while (this.bs.coorInBounds(x - 1, y + 1)) {
+    while (this.boardService.coorInBounds(x - 1, y + 1)) {
       this.boardCanvasService.draw_corner(this.ctx, new XyPair(x - 1, y + 1), 'rgba(0, 220, 0, 0.3)', this.boardStateService.inputOffset);
       y++;
       x--;
@@ -102,7 +102,7 @@ export class HighlightRendererComponent implements OnInit {
 
     y = sc_loc.y;
     x = sc_loc.x;
-    while (this.bs.coorInBounds(x + 1, y - 1)) {
+    while (this.boardService.coorInBounds(x + 1, y - 1)) {
       this.boardCanvasService.draw_corner(this.ctx, new XyPair(x + 1, y - 1), 'rgba(0, 220, 0, 0.3)', this.boardStateService.inputOffset);
       y--;
       x++;
@@ -110,7 +110,7 @@ export class HighlightRendererComponent implements OnInit {
 
     y = sc_loc.y;
     x = sc_loc.x;
-    while (this.bs.coorInBounds(x - 1, y - 1)) {
+    while (this.boardService.coorInBounds(x - 1, y - 1)) {
       this.boardCanvasService.draw_corner(this.ctx, new XyPair(x - 1, y - 1), 'rgba(0, 220, 0, 0.3)', this.boardStateService.inputOffset);
       y--;
       x--;

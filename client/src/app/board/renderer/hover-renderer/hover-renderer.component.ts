@@ -17,7 +17,7 @@ export class HoverRendererComponent implements OnInit {
   private ctx: CanvasRenderingContext2D;
 
   constructor(
-    private bs: BoardService,
+    private boardService: BoardService,
     private boardStateService: BoardStateService,
     private boardCanvasService: BoardCanvasService
   ) {}
@@ -31,61 +31,61 @@ export class HoverRendererComponent implements OnInit {
     this.boardCanvasService.clear_canvas(this.ctx);
     this.boardCanvasService.updateTransform(this.ctx);
 
-    if (!isNullOrUndefined(this.bs.mouse_cell_target) && this.bs.mouseOnMap) {
+    if (!isNullOrUndefined(this.boardStateService.mouse_cell_target) && this.boardService.mouseOnMap) {
       switch (this.boardStateService.board_edit_mode) {
         case BoardMode.WALLS:
-          if (!isNullOrUndefined(this.bs.source_click_location)) {
+          if (!isNullOrUndefined(this.boardService.source_click_location)) {
             // MOUSE ON MAP - WALL EDIT MODE - SOURCE IS DEFINED
-            switch (this.bs.mouse_cell_target.zone) {
+            switch (this.boardStateService.mouse_cell_target.zone) {
               case CellZone.CORNER:
-                this.boardCanvasService.draw_corner(this.ctx, this.bs.mouse_cell_target.coor, 'rgba(255, 0, 0, 0.2)', this.boardStateService.inputOffset);
+                this.boardCanvasService.draw_corner(this.ctx, this.boardStateService.mouse_cell_target.coor, 'rgba(255, 0, 0, 0.2)', this.boardStateService.inputOffset);
                 break;
             }
           } else {
-            switch (this.bs.mouse_cell_target.zone) {
+            switch (this.boardStateService.mouse_cell_target.zone) {
               // MOUSE ON MAP - WALL EDIT MODE - SOURCE IS NOT DEFINED
               case CellZone.WEST:
-                this.boardCanvasService.draw_wall(this.ctx, this.bs.mouse_cell_target, 8, 'rgba(0, 0, 255, 0.2');
+                this.boardCanvasService.draw_wall(this.ctx, this.boardStateService.mouse_cell_target, 8, 'rgba(0, 0, 255, 0.2');
                 break;
               case CellZone.NORTH:
-                this.boardCanvasService.draw_wall(this.ctx, this.bs.mouse_cell_target, 8, 'rgba(0, 0, 255, 0.2');
+                this.boardCanvasService.draw_wall(this.ctx, this.boardStateService.mouse_cell_target, 8, 'rgba(0, 0, 255, 0.2');
                 break;
               case CellZone.CORNER:
-                this.boardCanvasService.draw_corner(this.ctx, this.bs.mouse_cell_target.coor, 'rgba(255, 0, 0, 0.2)', this.boardStateService.inputOffset);
+                this.boardCanvasService.draw_corner(this.ctx, this.boardStateService.mouse_cell_target.coor, 'rgba(255, 0, 0, 0.2)', this.boardStateService.inputOffset);
                 break;
               case CellZone.FWR:
-                this.boardCanvasService.draw_wall(this.ctx, this.bs.mouse_cell_target, 8, 'rgba(0, 0, 255, 0.2');
+                this.boardCanvasService.draw_wall(this.ctx, this.boardStateService.mouse_cell_target, 8, 'rgba(0, 0, 255, 0.2');
                 break;
               case CellZone.BKW:
-                this.boardCanvasService.draw_wall(this.ctx, this.bs.mouse_cell_target, 8, 'rgba(0, 0, 255, 0.2');
+                this.boardCanvasService.draw_wall(this.ctx, this.boardStateService.mouse_cell_target, 8, 'rgba(0, 0, 255, 0.2');
                 break;
             }
           }
           break;
         case BoardMode.DOORS:
-          switch (this.bs.mouse_cell_target.zone) {
+          switch (this.boardStateService.mouse_cell_target.zone) {
             case CellZone.CENTER:
               break;
             case CellZone.WEST:
-              this.boardCanvasService.draw_wall(this.ctx, new CellTarget(this.bs.mouse_cell_target.coor, CellZone.WEST), 6, 'rgba(255, 0, 0, 0.2)');
+              this.boardCanvasService.draw_wall(this.ctx, new CellTarget(this.boardStateService.mouse_cell_target.coor, CellZone.WEST), 6, 'rgba(255, 0, 0, 0.2)');
               break;
             case CellZone.NORTH:
-              this.boardCanvasService.draw_wall(this.ctx, new CellTarget(this.bs.mouse_cell_target.coor, CellZone.NORTH), 6, 'rgba(255, 0, 0, 0.2)');
+              this.boardCanvasService.draw_wall(this.ctx, new CellTarget(this.boardStateService.mouse_cell_target.coor, CellZone.NORTH), 6, 'rgba(255, 0, 0, 0.2)');
               break;
             case CellZone.CORNER:
               break;
             case CellZone.FWR:
-              this.boardCanvasService.draw_wall(this.ctx, new CellTarget(this.bs.mouse_cell_target.coor, CellZone.FWR), 6, 'rgba(255, 0, 0, 0.2)');
+              this.boardCanvasService.draw_wall(this.ctx, new CellTarget(this.boardStateService.mouse_cell_target.coor, CellZone.FWR), 6, 'rgba(255, 0, 0, 0.2)');
               break;
             case CellZone.BKW:
-              this.boardCanvasService.draw_wall(this.ctx, new CellTarget(this.bs.mouse_cell_target.coor, CellZone.BKW), 6, 'rgba(255, 0, 0, 0.2)');
+              this.boardCanvasService.draw_wall(this.ctx, new CellTarget(this.boardStateService.mouse_cell_target.coor, CellZone.BKW), 6, 'rgba(255, 0, 0, 0.2)');
               break;
           }
           break;
         case BoardMode.LIGHTS:
-          switch (this.bs.mouse_cell_target.zone) {
+          switch (this.boardStateService.mouse_cell_target.zone) {
             case CellZone.CENTER:
-              this.boardCanvasService.draw_center(this.ctx, this.bs.mouse_cell_target.coor, 'rgba(255, 0, 0, 0.2)', this.boardStateService.inputOffset);
+              this.boardCanvasService.draw_center(this.ctx, this.boardStateService.mouse_cell_target.coor, 'rgba(255, 0, 0, 0.2)', this.boardStateService.inputOffset);
               break;
           }
           break;

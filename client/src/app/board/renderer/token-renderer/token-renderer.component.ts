@@ -15,7 +15,7 @@ export class TokenRendererComponent implements OnInit {
     private ctx: CanvasRenderingContext2D;
 
     constructor(
-        private bs: BoardService,
+        private boardService: BoardService,
         private boardStateService: BoardStateService,
         private boardCanvasService: BoardCanvasService,
         private encounterService: EncounterDevService
@@ -34,8 +34,8 @@ export class TokenRendererComponent implements OnInit {
         for (const player of this.encounterService.players) {
             if (player.isSelected) {
                 this.boardCanvasService.draw_fill_all(this.ctx, player.loc, 'rgba(0, 0, 180, 0.2)');
-                const near_cells = this.bs.calcCellsWithinRangeOfCell(player.loc, player.speed);
-                const far_cells = this.bs.calcCellsWithinRangeOfCell(player.loc, player.speed * 2);
+                const near_cells = this.boardService.calcCellsWithinRangeOfCell(player.loc, player.speed);
+                const far_cells = this.boardService.calcCellsWithinRangeOfCell(player.loc, player.speed * 2);
 
                 for (const cell of near_cells) {
                     this.boardCanvasService.draw_fill_all(this.ctx, cell, 'rgba(0, 0, 180, 0.1)');

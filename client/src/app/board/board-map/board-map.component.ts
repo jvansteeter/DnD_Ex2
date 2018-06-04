@@ -32,7 +32,7 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
     private ctx: CanvasRenderingContext2D;
 
     constructor(
-        private bs: BoardService,
+        private boardService: BoardService,
         private boardCanvasService: BoardCanvasService,
         private boardStateService: BoardStateService
     ) {
@@ -59,35 +59,35 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
     }
 
     clickResponse(): void {
-        this.bs.handleClickResponse();
+        this.boardService.handleClickResponse();
     }
 
     mouseMove(event): void {
-        this.bs.handleMouseMove(event);
+        this.boardService.handleMouseMove(event);
     }
 
     handleMouseUp(event) {
-        this.bs.handleMouseUp(event);
+        this.boardService.handleMouseUp(event);
     }
 
     handleMouseDown(event) {
-        this.bs.handleMouseDown(event);
+        this.boardService.handleMouseDown(event);
     }
 
     handleMouseWheelUp(event) {
-        this.bs.handleMouseScroll(event.deltaY);
+        this.boardService.handleMouseScroll(event.deltaY);
     }
 
     handleMouseWheelDown(event) {
-        this.bs.handleMouseScroll(event.deltaY);
+        this.boardService.handleMouseScroll(event.deltaY);
     }
 
     handleMouseLeave(event) {
-        this.bs.handleMouseLeave();
+        this.boardService.handleMouseLeave();
     }
 
     handleMouseEnter(event) {
-        this.bs.handleMouseEnter();
+        this.boardService.handleMouseEnter();
     }
 
     @HostListener('window:resize', ['$event'])
@@ -104,13 +104,13 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
         const key_code = event.code;
         switch (key_code) {
             case 'ShiftLeft' :
-                this.bs.shiftDown = true;
-                this.bs.refreshMouseLocation();
+                this.boardService.shiftDown = true;
+                this.boardService.refreshMouseLocation();
                 break;
             case 'ShiftRight' :
                 break;
             case 'Space' :
-                this.bs.spaceDown = true;
+                this.boardService.spaceDown = true;
                 break;
         }
     }
@@ -120,16 +120,16 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
         const key_code = event.code;
         switch (key_code) {
             case 'ShiftLeft' :
-                this.bs.shiftDown = false;
-                this.bs.refreshMouseLocation();
+                this.boardService.shiftDown = false;
+                this.boardService.refreshMouseLocation();
                 break;
             case 'ShiftRight' :
                 break;
             case 'Space' :
-                this.bs.spaceDown = false;
+                this.boardService.spaceDown = false;
                 break;
             case 'Escape':
-                this.bs.source_click_location = null;
+                this.boardService.source_click_location = null;
                 break;
         }
     }
