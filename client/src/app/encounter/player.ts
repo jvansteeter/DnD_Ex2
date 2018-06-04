@@ -1,6 +1,7 @@
 import {XyPair} from "../board/geometry/xy-pair";
 
 export class Player {
+    id: number;
     name: string;
     hp: number;
     maxHp: number;
@@ -27,6 +28,7 @@ export class Player {
             this.token_img.src = this.token_url;
         }
         this.actions = [];
+        this.id = window.crypto.getRandomValues(new Uint32Array(1))[0];
     }
 
     addAction(action: string, detail: string) {

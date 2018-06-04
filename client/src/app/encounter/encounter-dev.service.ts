@@ -33,7 +33,6 @@ export class EncounterDevService {
     }
 
     checkForPops(loc_cell: XyPair, pop_origin: XyPair) {
-        this.popService.clearPops();
         if (this.bsc.do_pops) {
             for (const player of this.players) {
                 if (player.loc.x === loc_cell.x && player.loc.y === loc_cell.y) {
