@@ -11,7 +11,7 @@ export class EncounterDevService {
     playerSelected = false;
 
     constructor(
-        private bsc: BoardStateService,
+        private boardStateService: BoardStateService,
         private popService: PopService
     ) {
         let player = new Player('Joe', 10, 15, 17,  9, 8, 'resources/images/player-tokens/human fighter 1.png');
@@ -33,11 +33,11 @@ export class EncounterDevService {
     }
 
     checkForPops(loc_cell: XyPair, pop_origin: XyPair) {
-        if (this.bsc.do_pops) {
+        if (this.boardStateService.do_pops) {
             for (const player of this.players) {
                 if (player.loc.x === loc_cell.x && player.loc.y === loc_cell.y) {
-                    const x = (loc_cell.x + 1) * this.bsc.cell_res;
-                    const y = (loc_cell.y) * this.bsc.cell_res;
+                    const x = (loc_cell.x + 1) * this.boardStateService.cell_res;
+                    const y = (loc_cell.y) * this.boardStateService.cell_res;
 
                     this.popService.addPlayerPop(pop_origin.x, pop_origin.y, player);
                 }
