@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {BoardConfigService} from '../services/board-config.service';
+import {BoardStateService} from '../services/board-state.service';
 import {BoardService} from '../services/board.service';
 import {TileService} from '../services/tile.service';
 import {ViewMode} from '../shared/view-mode';
@@ -76,7 +76,7 @@ export class BoardControllerComponent implements OnInit{
 
     constructor(
         public bs: BoardService,
-        public bcs: BoardConfigService,
+        public boardStateService: BoardStateService,
         public ts: TileService
     ) {
     }
@@ -86,15 +86,15 @@ export class BoardControllerComponent implements OnInit{
     }
 
     showModeControls(): boolean {
-        return this.bcs.board_view_mode === ViewMode.BOARD_MAKER;
+        return this.boardStateService.board_view_mode === ViewMode.BOARD_MAKER;
     }
 
     showLightControls(): boolean {
-        return this.bcs.board_view_mode === ViewMode.BOARD_MAKER || this.bcs.board_view_mode === ViewMode.MASTER;
+        return this.boardStateService.board_view_mode === ViewMode.BOARD_MAKER || this.boardStateService.board_view_mode === ViewMode.MASTER;
     }
 
     sync() {
-        switch (this.bcs.board_edit_mode) {
+        switch (this.boardStateService.board_edit_mode) {
             case BoardMode.PLAYER:
                 this.currentMode = 'Player';
                 break;
@@ -112,7 +112,7 @@ export class BoardControllerComponent implements OnInit{
                 break;
         }
 
-        switch (this.bcs.board_view_mode) {
+        switch (this.boardStateService.board_view_mode) {
             case ViewMode.BOARD_MAKER:
                 this.currentView = 'Board Maker';
                 break;
@@ -129,32 +129,32 @@ export class BoardControllerComponent implements OnInit{
         switch (this.currentMode) {
             case 'Player' :
                 this.bs.source_click_location = null;
-                this.bcs.board_edit_mode = BoardMode.PLAYER;
-                this.bcs.doDiagonals = false;
-                this.bcs.inputOffset = 0;
+                this.boardStateService.board_edit_mode = BoardMode.PLAYER;
+                this.boardStateService.doDiagonals = false;
+                this.boardStateService.inputOffset = 0;
                 break;
             case 'Walls' :
-                this.bcs.board_edit_mode = BoardMode.WALLS;
-                this.bcs.inputOffset = 0.12;
-                this.bcs.doDiagonals = true;
+                this.boardStateService.board_edit_mode = BoardMode.WALLS;
+                this.boardStateService.inputOffset = 0.12;
+                this.boardStateService.doDiagonals = true;
                 break;
             case 'Doors' :
                 this.bs.source_click_location = null;
-                this.bcs.board_edit_mode = BoardMode.DOORS;
-                this.bcs.inputOffset = 0.10;
-                this.bcs.doDiagonals = true;
+                this.boardStateService.board_edit_mode = BoardMode.DOORS;
+                this.boardStateService.inputOffset = 0.10;
+                this.boardStateService.doDiagonals = true;
                 break;
             case 'Lights' :
                 this.bs.source_click_location = null;
-                this.bcs.board_edit_mode = BoardMode.LIGHTS;
-                this.bcs.inputOffset = 0;
-                this.bcs.doDiagonals = false;
+                this.boardStateService.board_edit_mode = BoardMode.LIGHTS;
+                this.boardStateService.inputOffset = 0;
+                this.boardStateService.doDiagonals = false;
                 break;
             case 'Tiles' :
                 this.bs.source_click_location = null;
-                this.bcs.board_edit_mode = BoardMode.TILES;
-                this.bcs.inputOffset = 0;
-                this.bcs.doDiagonals = false;
+                this.boardStateService.board_edit_mode = BoardMode.TILES;
+                this.boardStateService.inputOffset = 0;
+                this.boardStateService.doDiagonals = false;
                 break;
         }
         this.sync()
@@ -164,50 +164,50 @@ export class BoardControllerComponent implements OnInit{
         switch (this.currentView) {
             case 'Board Maker':
                 this.bs.source_click_location = null;
-                this.bcs.board_view_mode = ViewMode.BOARD_MAKER;
-                this.bcs.board_edit_mode = BoardMode.WALLS;
-                this.bcs.do_pops = false;
+                this.boardStateService.board_view_mode = ViewMode.BOARD_MAKER;
+                this.boardStateService.board_edit_mode = BoardMode.WALLS;
+                this.boardStateService.do_pops = false;
                 break;
             case 'Player View':
                 this.bs.source_click_location = null;
-                this.bcs.board_view_mode = ViewMode.PLAYER;
-                this.bcs.board_edit_mode = BoardMode.PLAYER;
-                this.bcs.do_pops = true;
+                this.boardStateService.board_view_mode = ViewMode.PLAYER;
+                this.boardStateService.board_edit_mode = BoardMode.PLAYER;
+                this.boardStateService.do_pops = true;
                 break;
             case 'Game Master':
                 this.bs.source_click_location = null;
-                this.bcs.board_view_mode = ViewMode.MASTER;
-                this.bcs.board_edit_mode = BoardMode.PLAYER;
-                this.bcs.do_pops = true;
+                this.boardStateService.board_view_mode = ViewMode.MASTER;
+                this.boardStateService.board_edit_mode = BoardMode.PLAYER;
+                this.boardStateService.do_pops = true;
                 break;
         }
         this.sync()
     }
 
     mapOpacitySliderInput(event) {
-        this.bcs.board_maker_map_opacity = event.value;
+        this.boardStateService.board_maker_map_opacity = event.value;
     }
 
     increaseAmbientLight(): void {
-        if (this.bcs.ambientLight === LightValue.DARK) {
-            this.bcs.ambientLight = LightValue.DIM;
-        } else if (this.bcs.ambientLight === LightValue.DIM) {
-            this.bcs.ambientLight = LightValue.FULL;
+        if (this.boardStateService.ambientLight === LightValue.DARK) {
+            this.boardStateService.ambientLight = LightValue.DIM;
+        } else if (this.boardStateService.ambientLight === LightValue.DIM) {
+            this.boardStateService.ambientLight = LightValue.FULL;
         }
         this.bs.updateLightValues();
     }
 
     decreaseAmbientLight(): void {
-        if (this.bcs.ambientLight === LightValue.FULL) {
-            this.bcs.ambientLight = LightValue.DIM;
-        } else if (this.bcs.ambientLight === LightValue.DIM) {
-            this.bcs.ambientLight = LightValue.DARK;
+        if (this.boardStateService.ambientLight === LightValue.FULL) {
+            this.boardStateService.ambientLight = LightValue.DIM;
+        } else if (this.boardStateService.ambientLight === LightValue.DIM) {
+            this.boardStateService.ambientLight = LightValue.DARK;
         }
         this.bs.updateLightValues();
     }
 
     getLightValue(): string {
-        switch (this.bcs.ambientLight) {
+        switch (this.boardStateService.ambientLight) {
             case LightValue.DARK:
                 return 'Dark';
             case LightValue.DIM:

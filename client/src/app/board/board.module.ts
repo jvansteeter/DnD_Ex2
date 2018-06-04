@@ -13,7 +13,7 @@ import {MouseWheelDirective} from "./mousewheel.directive";
 import {BoardControllerComponent} from "./board-control/board-controller.component";
 import {FormsModule} from "@angular/forms";
 import {BoardService} from "./services/board.service";
-import {BoardConfigService} from "./services/board-config.service";
+import {BoardStateService} from "./services/board-state.service";
 import {BoardCanvasService} from "./services/board-canvas-service";
 import {WallService} from "./services/wall.service";
 import {TileService} from "./services/tile.service";
@@ -51,7 +51,7 @@ import {NpcPopComponent} from "./pop/npcPop/npc-pop.component";
     providers: [
         BoardService,
         PopService,
-        BoardConfigService,
+        BoardStateService,
         BoardCanvasService,
         WallService,
         TileService

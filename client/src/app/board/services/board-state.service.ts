@@ -10,7 +10,7 @@ import {LightValue} from '../shared/light-value';
  */
 
 @Injectable()
-export class BoardConfigService {
+export class BoardStateService {
 
   public cell_res = 50;
   public mapDimX = 28;

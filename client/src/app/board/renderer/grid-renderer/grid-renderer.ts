@@ -1,5 +1,5 @@
 import {BoardService} from '../../services/board.service';
-import {BoardConfigService} from '../../services/board-config.service';
+import {BoardStateService} from '../../services/board-state.service';
 import {BoardCanvasService} from '../../services/board-canvas-service';
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 
@@ -14,8 +14,8 @@ export class GridRendererComponent implements OnInit {
 
   constructor(
     private bs: BoardService,
-    private bcs: BoardConfigService,
-    private bctx: BoardCanvasService
+    private boardStateService: BoardStateService,
+    private boardCanvasService: BoardCanvasService
   ) {}
 
   ngOnInit(): void {
@@ -24,18 +24,18 @@ export class GridRendererComponent implements OnInit {
   }
 
   render = () => {
-    this.bctx.clear_canvas(this.ctx);
-    this.bctx.updateTransform(this.ctx);
+    this.boardCanvasService.clear_canvas(this.ctx);
+    this.boardCanvasService.updateTransform(this.ctx);
 
-    if (this.bcs.gridEnabled) {
-      for (let x = 0; x < this.bcs.mapDimX; x += 1) {
-        for (let y = 0; y < this.bcs.mapDimY; y += 1) {
+    if (this.boardStateService.gridEnabled) {
+      for (let x = 0; x < this.boardStateService.mapDimX; x += 1) {
+        for (let y = 0; y < this.boardStateService.mapDimY; y += 1) {
           if (((x + y) % 2 === 0)) {
             this.ctx.fillStyle = 'rgba(255, 255, 255, 0.03';
-            this.ctx.fillRect(x * this.bcs.cell_res, y * this.bcs.cell_res, this.bcs.cell_res, this.bcs.cell_res);
+            this.ctx.fillRect(x * this.boardStateService.cell_res, y * this.boardStateService.cell_res, this.boardStateService.cell_res, this.boardStateService.cell_res);
           } else {
             this.ctx.fillStyle = 'rgba(0, 0, 0, 0.03';
-            this.ctx.fillRect(x * this.bcs.cell_res, y * this.bcs.cell_res, this.bcs.cell_res, this.bcs.cell_res);
+            this.ctx.fillRect(x * this.boardStateService.cell_res, y * this.boardStateService.cell_res, this.boardStateService.cell_res, this.boardStateService.cell_res);
           }
         }
       }

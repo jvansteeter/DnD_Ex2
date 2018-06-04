@@ -3,7 +3,7 @@ import {Wall} from '../map-objects/wall';
 import {XyPair} from '../geometry/xy-pair';
 import {CellTarget} from '../shared/cell-target';
 import {CellZone} from '../shared/cell-zone';
-import {BoardConfigService} from './board-config.service';
+import {BoardStateService} from './board-state.service';
 
 @Injectable()
 export class WallService {
@@ -12,12 +12,12 @@ export class WallService {
   private blockMap = [];
 
   constructor(
-    private bcs: BoardConfigService
+    private boardStateService: BoardStateService
   ) {
     this.blockMap = [];
-    for (let x = 0; x < this.bcs.mapDimX * this.bcs.cell_res; x++) {
+    for (let x = 0; x < this.boardStateService.mapDimX * this.boardStateService.cell_res; x++) {
       this.blockMap[x] = [];
-      for (let y = 0; y < this.bcs.mapDimY * this.bcs.cell_res; y++) {
+      for (let y = 0; y < this.boardStateService.mapDimY * this.boardStateService.cell_res; y++) {
         this.blockMap[x][y] = 0;
       }
     }
@@ -89,7 +89,7 @@ export class WallService {
 
   public addWall(loc: CellTarget) {
     if (!this.hasWall(loc)) {
-      this.wallData.set(loc.hash(), new Wall(loc, this.bcs.cell_res));
+      this.wallData.set(loc.hash(), new Wall(loc, this.boardStateService.cell_res));
 
       switch (loc.zone) {
         case CellZone.NORTH:
@@ -111,7 +111,7 @@ export class WallService {
   public removeWall(loc: CellTarget): void {
     if (this.hasWall(loc)) {
       this.wallData.delete(loc.hash());
-      // this.wallData.set(loc.hash(), new Wall(loc, this.bcs.cell_res));
+      // this.wallData.set(loc.hash(), new Wall(loc, this.boardStateService.cell_res));
 
       switch (loc.zone) {
         case CellZone.NORTH:
@@ -144,8 +144,8 @@ export class WallService {
 
   private northSet(cell: XyPair): Map<string, XyPair> {
     const returnMe = new Map<string, XyPair>();
-    for (let y = cell.y * this.bcs.cell_res; y >= (cell.y * this.bcs.cell_res) - 1; y--) {
-      for (let x = cell.x * this.bcs.cell_res; x < cell.x * this.bcs.cell_res + this.bcs.cell_res; x++) {
+    for (let y = cell.y * this.boardStateService.cell_res; y >= (cell.y * this.boardStateService.cell_res) - 1; y--) {
+      for (let x = cell.x * this.boardStateService.cell_res; x < cell.x * this.boardStateService.cell_res + this.boardStateService.cell_res; x++) {
         const pair = new XyPair(x, y);
         returnMe.set(pair.hash(), pair);
       }
@@ -199,8 +199,8 @@ export class WallService {
 
   private westSet(cell: XyPair): Map<string, XyPair> {
     const returnMe = new Map<string, XyPair>();
-    for (let x = cell.x * this.bcs.cell_res; x >= (cell.x * this.bcs.cell_res) - 1; x--) {
-      for (let y = cell.y * this.bcs.cell_res; y < cell.y * this.bcs.cell_res + this.bcs.cell_res; y++) {
+    for (let x = cell.x * this.boardStateService.cell_res; x >= (cell.x * this.boardStateService.cell_res) - 1; x--) {
+      for (let y = cell.y * this.boardStateService.cell_res; y < cell.y * this.boardStateService.cell_res + this.boardStateService.cell_res; y++) {
         const pair = new XyPair(x, y);
         returnMe.set(pair.hash(), pair);
       }
@@ -254,20 +254,20 @@ export class WallService {
 
   private fwdSet(cell: XyPair): Map<string, XyPair> {
     const returnMe = new Map<string, XyPair>();
-    let y = cell.y * this.bcs.cell_res + this.bcs.cell_res - 1;
-    for (let x = cell.x * this.bcs.cell_res; x < cell.x * this.bcs.cell_res + this.bcs.cell_res; x++) {
+    let y = cell.y * this.boardStateService.cell_res + this.boardStateService.cell_res - 1;
+    for (let x = cell.x * this.boardStateService.cell_res; x < cell.x * this.boardStateService.cell_res + this.boardStateService.cell_res; x++) {
       const pair = new XyPair(x, y);
       returnMe.set(pair.hash(), pair);
       y--;
     }
-    y = cell.y * this.bcs.cell_res + this.bcs.cell_res - 2;
-    for (let x = cell.x * this.bcs.cell_res; x < cell.x * this.bcs.cell_res + this.bcs.cell_res - 1; x++) {
+    y = cell.y * this.boardStateService.cell_res + this.boardStateService.cell_res - 2;
+    for (let x = cell.x * this.boardStateService.cell_res; x < cell.x * this.boardStateService.cell_res + this.boardStateService.cell_res - 1; x++) {
       const pair = new XyPair(x, y);
       returnMe.set(pair.hash(), pair);
       y--;
     }
-    y = cell.y * this.bcs.cell_res + this.bcs.cell_res - 1;
-    for (let x = cell.x * this.bcs.cell_res + 1; x < cell.x * this.bcs.cell_res + this.bcs.cell_res; x++) {
+    y = cell.y * this.boardStateService.cell_res + this.boardStateService.cell_res - 1;
+    for (let x = cell.x * this.boardStateService.cell_res + 1; x < cell.x * this.boardStateService.cell_res + this.boardStateService.cell_res; x++) {
       const pair = new XyPair(x, y);
       returnMe.set(pair.hash(), pair);
       y--;
@@ -310,20 +310,20 @@ export class WallService {
 
   private bkwSet(cell: XyPair): Map<string, XyPair> {
     const returnMe = new Map<string, XyPair>();
-    let y = cell.y * this.bcs.cell_res;
-    for (let x = cell.x * this.bcs.cell_res; x < cell.x * this.bcs.cell_res + this.bcs.cell_res; x++) {
+    let y = cell.y * this.boardStateService.cell_res;
+    for (let x = cell.x * this.boardStateService.cell_res; x < cell.x * this.boardStateService.cell_res + this.boardStateService.cell_res; x++) {
       const pair = new XyPair(x, y);
       returnMe.set(pair.hash(), pair);
       y++;
     }
-    y = cell.y * this.bcs.cell_res;
-    for (let x = cell.x * this.bcs.cell_res + 1; x < cell.x * this.bcs.cell_res + this.bcs.cell_res; x++) {
+    y = cell.y * this.boardStateService.cell_res;
+    for (let x = cell.x * this.boardStateService.cell_res + 1; x < cell.x * this.boardStateService.cell_res + this.boardStateService.cell_res; x++) {
       const pair = new XyPair(x, y);
       returnMe.set(pair.hash(), pair);
       y++;
     }
-    y = cell.y * this.bcs.cell_res + 1;
-    for (let x = cell.x * this.bcs.cell_res; x < cell.x * this.bcs.cell_res + this.bcs.cell_res - 1; x++) {
+    y = cell.y * this.boardStateService.cell_res + 1;
+    for (let x = cell.x * this.boardStateService.cell_res; x < cell.x * this.boardStateService.cell_res + this.boardStateService.cell_res - 1; x++) {
       const pair = new XyPair(x, y);
       returnMe.set(pair.hash(), pair);
       y++;

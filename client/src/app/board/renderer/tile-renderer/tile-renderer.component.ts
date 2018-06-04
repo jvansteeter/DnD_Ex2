@@ -1,7 +1,7 @@
 import {BoardService} from '../../services/board.service';
 import {ViewMode} from '../../shared/view-mode';
 import {XyPair} from '../../geometry/xy-pair';
-import {BoardConfigService} from '../../services/board-config.service';
+import {BoardStateService} from '../../services/board-state.service';
 import {BoardCanvasService} from '../../services/board-canvas-service';
 import {TileService} from '../../services/tile.service';
 import {BoardMode} from '../../shared/board-mode';
@@ -19,8 +19,8 @@ export class TileRendererComponent implements OnInit {
 
   constructor(
     private bs: BoardService,
-    private bcs: BoardConfigService,
-    private bctx: BoardCanvasService,
+    private boardStateService: BoardStateService,
+    private boardCanvasService: BoardCanvasService,
     private ts: TileService
   ) {}
 
@@ -30,11 +30,11 @@ export class TileRendererComponent implements OnInit {
   }
 
   render = () => {
-    this.bctx.clear_canvas(this.ctx);
-    this.bctx.updateTransform(this.ctx);
+    this.boardCanvasService.clear_canvas(this.ctx);
+    this.boardCanvasService.updateTransform(this.ctx);
 
-    for (let x = 0; x < this.bcs.mapDimX; x++) {
-      for (let y = 0; y < this.bcs.mapDimY; y++) {
+    for (let x = 0; x < this.boardStateService.mapDimX; x++) {
+      for (let y = 0; y < this.boardStateService.mapDimY; y++) {
         const tileState = this.ts.tileData[x][y];
 
         let handle_N = false;
@@ -45,33 +45,33 @@ export class TileRendererComponent implements OnInit {
         if (tileState.hasTop) {
           const tileImage = new Image();
           tileImage.src = tileState.topUrl;
-          this.bctx.draw_fill_N(this.ctx, new XyPair(x, y), this.ctx.createPattern(tileImage, 'no-repeat'));
+          this.boardCanvasService.draw_fill_N(this.ctx, new XyPair(x, y), this.ctx.createPattern(tileImage, 'no-repeat'));
         }
 
         if (tileState.hasRight) {
           const tileImage = new Image();
           tileImage.src = tileState.rightUrl;
-          this.bctx.draw_fill_E(this.ctx, new XyPair(x, y), this.ctx.createPattern(tileImage, 'no-repeat'));
+          this.boardCanvasService.draw_fill_E(this.ctx, new XyPair(x, y), this.ctx.createPattern(tileImage, 'no-repeat'));
         }
 
         if (tileState.hasBottom) {
           const tileImage = new Image();
           tileImage.src = tileState.bottomUrl;
-          this.bctx.draw_fill_S(this.ctx, new XyPair(x, y), this.ctx.createPattern(tileImage, 'no-repeat'));
+          this.boardCanvasService.draw_fill_S(this.ctx, new XyPair(x, y), this.ctx.createPattern(tileImage, 'no-repeat'));
         }
 
         if (tileState.hasLeft) {
           const tileImage = new Image();
           tileImage.src = tileState.leftUrl;
-          this.bctx.draw_fill_W(this.ctx, new XyPair(x, y), this.ctx.createPattern(tileImage, 'no-repeat'));
+          this.boardCanvasService.draw_fill_W(this.ctx, new XyPair(x, y), this.ctx.createPattern(tileImage, 'no-repeat'));
         }
       }
     }
 
-    switch (this.bcs.board_view_mode) {
+    switch (this.boardStateService.board_view_mode) {
       case ViewMode.BOARD_MAKER:
         // render the hover cell
-        if (this.bcs.board_edit_mode === BoardMode.TILES) {
+        if (this.boardStateService.board_edit_mode === BoardMode.TILES) {
           if (this.ts.activeTileUrl !== '') {
             const tileImage = new Image();
             tileImage.src = this.ts.activeTileUrl;
@@ -80,20 +80,20 @@ export class TileRendererComponent implements OnInit {
             if (this.bs.shiftDown) {
               switch (this.bs.mouse_cell_target.zone) {
                 case CellZone.TOP:
-                  this.bctx.draw_fill_N(this.ctx, this.bs.mouse_loc_cell, canvasPattern);
+                  this.boardCanvasService.draw_fill_N(this.ctx, this.bs.mouse_loc_cell, canvasPattern);
                   break;
                 case CellZone.BOTTOM:
-                  this.bctx.draw_fill_S(this.ctx, this.bs.mouse_loc_cell, canvasPattern);
+                  this.boardCanvasService.draw_fill_S(this.ctx, this.bs.mouse_loc_cell, canvasPattern);
                   break;
                 case CellZone.LEFT:
-                  this.bctx.draw_fill_W(this.ctx, this.bs.mouse_loc_cell, canvasPattern);
+                  this.boardCanvasService.draw_fill_W(this.ctx, this.bs.mouse_loc_cell, canvasPattern);
                   break;
                 case CellZone.RIGHT:
-                  this.bctx.draw_fill_E(this.ctx, this.bs.mouse_loc_cell, canvasPattern);
+                  this.boardCanvasService.draw_fill_E(this.ctx, this.bs.mouse_loc_cell, canvasPattern);
                   break;
               }
             } else {
-              this.bctx.draw_fill_all(this.ctx, this.bs.mouse_loc_cell, canvasPattern);
+              this.boardCanvasService.draw_fill_all(this.ctx, this.bs.mouse_loc_cell, canvasPattern);
             }
           }
         }

@@ -1,7 +1,7 @@
 import {XyPair} from '../../geometry/xy-pair';
 import {BoardService} from '../../services/board.service';
 import {isNullOrUndefined} from 'util';
-import {BoardConfigService} from '../../services/board-config.service';
+import {BoardStateService} from '../../services/board-state.service';
 import {BoardCanvasService} from '../../services/board-canvas-service';
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ViewMode} from '../../shared/view-mode';
@@ -17,8 +17,8 @@ export class HighlightRendererComponent implements OnInit {
 
   constructor(
     private bs: BoardService,
-    private bcs: BoardConfigService,
-    private bctx: BoardCanvasService
+    private boardStateService: BoardStateService,
+    private boardCanvasService: BoardCanvasService
   ) {}
 
   ngOnInit() {
@@ -27,15 +27,15 @@ export class HighlightRendererComponent implements OnInit {
   }
 
   render = () => {
-    this.bctx.clear_canvas(this.ctx);
-    this.bctx.updateTransform(this.ctx);
+    this.boardCanvasService.clear_canvas(this.ctx);
+    this.boardCanvasService.updateTransform(this.ctx);
 
-    switch (this.bcs.board_view_mode) {
+    switch (this.boardStateService.board_view_mode) {
       case ViewMode.BOARD_MAKER:
         // render the source boxes for the light sources
         for (const lightSource of Array.from(this.bs.lightSourceData.values())) {
-          this.bctx.draw_center(this.ctx, lightSource.coor, 'rgba(255, 255, 0, 1)', 0.35);
-          this.bctx.stroke_center(this.ctx, lightSource.coor, 'rgba(0, 0, 0, 1)', 0.35);
+          this.boardCanvasService.draw_center(this.ctx, lightSource.coor, 'rgba(255, 255, 0, 1)', 0.35);
+          this.boardCanvasService.stroke_center(this.ctx, lightSource.coor, 'rgba(0, 0, 0, 1)', 0.35);
         }
         break;
       case ViewMode.MASTER:
@@ -54,40 +54,40 @@ export class HighlightRendererComponent implements OnInit {
   }
 
   render_corner_to_corner(sc_loc: XyPair): void {
-    this.bctx.draw_corner(this.ctx, sc_loc, 'rgba(0, 0, 220, 0.3)', this.bcs.inputOffset);
+    this.boardCanvasService.draw_corner(this.ctx, sc_loc, 'rgba(0, 0, 220, 0.3)', this.boardStateService.inputOffset);
 
     let y = sc_loc.y;
     let x = sc_loc.x;
     while (this.bs.coorInBounds(x + 1, y)) {
-      this.bctx.draw_corner(this.ctx, new XyPair(x + 1, y), 'rgba(0, 220, 0, 0.3)', this.bcs.inputOffset);
+      this.boardCanvasService.draw_corner(this.ctx, new XyPair(x + 1, y), 'rgba(0, 220, 0, 0.3)', this.boardStateService.inputOffset);
       x++;
     }
 
     y = sc_loc.y;
     x = sc_loc.x;
     while (this.bs.coorInBounds(x - 1, y)) {
-      this.bctx.draw_corner(this.ctx, new XyPair(x - 1, y), 'rgba(0, 220, 0, 0.3)', this.bcs.inputOffset);
+      this.boardCanvasService.draw_corner(this.ctx, new XyPair(x - 1, y), 'rgba(0, 220, 0, 0.3)', this.boardStateService.inputOffset);
       x--;
     }
 
     y = sc_loc.y;
     x = sc_loc.x;
     while (this.bs.coorInBounds(x, y - 1)) {
-      this.bctx.draw_corner(this.ctx, new XyPair(x, y - 1), 'rgba(0, 220, 0, 0.3)', this.bcs.inputOffset);
+      this.boardCanvasService.draw_corner(this.ctx, new XyPair(x, y - 1), 'rgba(0, 220, 0, 0.3)', this.boardStateService.inputOffset);
       y--;
     }
 
     y = sc_loc.y;
     x = sc_loc.x;
     while (this.bs.coorInBounds(x, y + 1)) {
-      this.bctx.draw_corner(this.ctx, new XyPair(x, y + 1), 'rgba(0, 220, 0, 0.3)', this.bcs.inputOffset);
+      this.boardCanvasService.draw_corner(this.ctx, new XyPair(x, y + 1), 'rgba(0, 220, 0, 0.3)', this.boardStateService.inputOffset);
       y++;
     }
 
     y = sc_loc.y;
     x = sc_loc.x;
     while (this.bs.coorInBounds(x + 1, y + 1)) {
-      this.bctx.draw_corner(this.ctx, new XyPair(x + 1, y + 1), 'rgba(0, 220, 0, 0.3)', this.bcs.inputOffset);
+      this.boardCanvasService.draw_corner(this.ctx, new XyPair(x + 1, y + 1), 'rgba(0, 220, 0, 0.3)', this.boardStateService.inputOffset);
       y++;
       x++;
     }
@@ -95,7 +95,7 @@ export class HighlightRendererComponent implements OnInit {
     y = sc_loc.y;
     x = sc_loc.x;
     while (this.bs.coorInBounds(x - 1, y + 1)) {
-      this.bctx.draw_corner(this.ctx, new XyPair(x - 1, y + 1), 'rgba(0, 220, 0, 0.3)', this.bcs.inputOffset);
+      this.boardCanvasService.draw_corner(this.ctx, new XyPair(x - 1, y + 1), 'rgba(0, 220, 0, 0.3)', this.boardStateService.inputOffset);
       y++;
       x--;
     }
@@ -103,7 +103,7 @@ export class HighlightRendererComponent implements OnInit {
     y = sc_loc.y;
     x = sc_loc.x;
     while (this.bs.coorInBounds(x + 1, y - 1)) {
-      this.bctx.draw_corner(this.ctx, new XyPair(x + 1, y - 1), 'rgba(0, 220, 0, 0.3)', this.bcs.inputOffset);
+      this.boardCanvasService.draw_corner(this.ctx, new XyPair(x + 1, y - 1), 'rgba(0, 220, 0, 0.3)', this.boardStateService.inputOffset);
       y--;
       x++;
     }
@@ -111,7 +111,7 @@ export class HighlightRendererComponent implements OnInit {
     y = sc_loc.y;
     x = sc_loc.x;
     while (this.bs.coorInBounds(x - 1, y - 1)) {
-      this.bctx.draw_corner(this.ctx, new XyPair(x - 1, y - 1), 'rgba(0, 220, 0, 0.3)', this.bcs.inputOffset);
+      this.boardCanvasService.draw_corner(this.ctx, new XyPair(x - 1, y - 1), 'rgba(0, 220, 0, 0.3)', this.boardStateService.inputOffset);
       y--;
       x--;
     }

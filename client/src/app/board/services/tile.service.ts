@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {CellTileState} from '../shared/cell-tile-state';
-import {BoardConfigService} from './board-config.service';
+import {BoardStateService} from './board-state.service';
 import {XyPair} from '../geometry/xy-pair';
 import {expressionChangedAfterItHasBeenCheckedError} from '@angular/core/src/view/errors';
 
@@ -11,12 +11,12 @@ export class TileService {
   public tileData = [];
 
   constructor(
-    private bcs: BoardConfigService
+    private boardStateService: BoardStateService
   ) {
     this.tileData = [];
-    for (let x = 0; x < this.bcs.mapDimX; x++) {
+    for (let x = 0; x < this.boardStateService.mapDimX; x++) {
       this.tileData[x] = Array<CellTileState>();
-      for (let y = 0; y < this.bcs.mapDimY; y++) {
+      for (let y = 0; y < this.boardStateService.mapDimY; y++) {
         this.tileData[x][y] = new CellTileState();
       }
     }

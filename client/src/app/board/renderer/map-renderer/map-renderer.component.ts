@@ -1,5 +1,5 @@
 import {ViewMode} from '../../shared/view-mode';
-import {BoardConfigService} from '../../services/board-config.service';
+import {BoardStateService} from '../../services/board-state.service';
 import {BoardCanvasService} from '../../services/board-canvas-service';
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 
@@ -15,8 +15,8 @@ export class MapRendererComponent implements OnInit {
   private bgImage = new Image();
 
   constructor(
-    private bcs: BoardConfigService,
-    private bctx: BoardCanvasService
+    private boardStateService: BoardStateService,
+    private boardCanvasService: BoardCanvasService
   ) {
     this.bgImage.src = 'resources/images/maps/tavern.jpg';
   }
@@ -27,13 +27,13 @@ export class MapRendererComponent implements OnInit {
   }
 
   render = () => {
-    this.bctx.clear_canvas(this.ctx);
-    this.bctx.updateTransform(this.ctx);
+    this.boardCanvasService.clear_canvas(this.ctx);
+    this.boardCanvasService.updateTransform(this.ctx);
 
-    if (this.bcs.map_enabled) {
-      switch (this.bcs.board_view_mode) {
+    if (this.boardStateService.map_enabled) {
+      switch (this.boardStateService.board_view_mode) {
         case ViewMode.BOARD_MAKER:
-          this.ctx.globalAlpha = this.bcs.board_maker_map_opacity;
+          this.ctx.globalAlpha = this.boardStateService.board_maker_map_opacity;
           this.ctx.drawImage(this.bgImage, 0, 0);
           this.ctx.globalAlpha = 1.0;
           break;

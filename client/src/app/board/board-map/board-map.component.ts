@@ -1,7 +1,7 @@
 import {Component, ViewChild, ElementRef, OnInit, HostListener, AfterViewInit, AfterViewChecked} from '@angular/core';
 import {BoardService} from "../services/board.service";
 import {BoardCanvasService} from "../services/board-canvas-service";
-import {BoardConfigService} from "../services/board-config.service";
+import {BoardStateService} from "../services/board-state.service";
 import {WallService} from "../services/wall.service";
 import {TileService} from "../services/tile.service";
 
@@ -33,29 +33,29 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
 
     constructor(
         private bs: BoardService,
-        private bctx: BoardCanvasService,
-        private bcs: BoardConfigService
+        private boardCanvasService: BoardCanvasService,
+        private boardStateService: BoardStateService
     ) {
     }
 
     ngOnInit(): void {
         this.ctx = this.inputCanvas.nativeElement.getContext('2d');
-        this.bctx.cvs_height = this.mapContainer.nativeElement.clientHeight;
-        this.bctx.cvs_width = this.mapContainer.nativeElement.clientWidth;
-        this.bcs.mapOffsetTop = this.mapContainer.nativeElement.offsetTop;
-        this.bcs.mapOffsetLeft = this.mapContainer.nativeElement.offsetLeft;
+        this.boardCanvasService.cvs_height = this.mapContainer.nativeElement.clientHeight;
+        this.boardCanvasService.cvs_width = this.mapContainer.nativeElement.clientWidth;
+        this.boardStateService.mapOffsetTop = this.mapContainer.nativeElement.offsetTop;
+        this.boardStateService.mapOffsetLeft = this.mapContainer.nativeElement.offsetLeft;
     }
 
     ngAfterViewChecked(): void {
-        this.bctx.canvasNativeElement = this.mapContainer.nativeElement;
+        this.boardCanvasService.canvasNativeElement = this.mapContainer.nativeElement;
     }
 
     getCanvasHeight(): number {
-        return this.bctx.cvs_height;
+        return this.boardCanvasService.cvs_height;
     }
 
     getCanvasWidth(): number {
-        return this.bctx.cvs_width;
+        return this.boardCanvasService.cvs_width;
     }
 
     clickResponse(): void {
@@ -92,11 +92,11 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
 
     @HostListener('window:resize', ['$event'])
     onResize(event) {
-        this.bctx.canvasNativeElement = this.mapContainer.nativeElement;
-        this.bctx.cvs_height = this.mapContainer.nativeElement.clientHeight;
-        this.bctx.cvs_width = this.mapContainer.nativeElement.clientWidth;
-        this.bcs.mapOffsetTop = this.mapContainer.nativeElement.offsetTop;
-        this.bcs.mapOffsetLeft = this.mapContainer.nativeElement.offsetLeft;
+        this.boardCanvasService.canvasNativeElement = this.mapContainer.nativeElement;
+        this.boardCanvasService.cvs_height = this.mapContainer.nativeElement.clientHeight;
+        this.boardCanvasService.cvs_width = this.mapContainer.nativeElement.clientWidth;
+        this.boardStateService.mapOffsetTop = this.mapContainer.nativeElement.offsetTop;
+        this.boardStateService.mapOffsetLeft = this.mapContainer.nativeElement.offsetLeft;
     }
 
     @HostListener('document:keydown', ['$event'])

@@ -2,7 +2,7 @@ import {Injectable, OnInit} from "@angular/core";
 import {PopService} from "../board/pop/pop.service";
 import {BoardService} from "../board/services/board.service";
 import {XyPair} from "../board/geometry/xy-pair";
-import {BoardConfigService} from "../board/services/board-config.service";
+import {BoardStateService} from "../board/services/board-state.service";
 import {Player} from "./player";
 
 @Injectable()
@@ -11,7 +11,7 @@ export class EncounterDevService {
     playerSelected = false;
 
     constructor(
-        private bsc: BoardConfigService,
+        private bsc: BoardStateService,
         private popService: PopService
     ) {
         let player = new Player('Joe', 10, 15, 17,  9, 8, 'resources/images/player-tokens/human fighter 1.png');

@@ -3,7 +3,7 @@ import {isNullOrUndefined} from 'util';
 import {XyPair} from '../geometry/xy-pair';
 import {CellTarget} from '../shared/cell-target';
 import {CellZone} from '../shared/cell-zone';
-import {BoardConfigService} from './board-config.service';
+import {BoardStateService} from './board-state.service';
 
 @Injectable()
 export class BoardCanvasService {
@@ -13,13 +13,13 @@ export class BoardCanvasService {
   public cvs_height: number;
 
   constructor(
-    private bcs: BoardConfigService
+    private boardStateService: BoardStateService
   ) {}
 
   public updateTransform(ctx: CanvasRenderingContext2D) {
-    const scale = this.bcs.scale;
-    const x_offset = this.bcs.x_offset;
-    const y_offset = this.bcs.y_offset;
+    const scale = this.boardStateService.scale;
+    const x_offset = this.boardStateService.x_offset;
+    const y_offset = this.boardStateService.y_offset;
 
     ctx.setTransform(scale, 0, 0, scale, x_offset, y_offset);
   }
@@ -81,8 +81,8 @@ export class BoardCanvasService {
   }
 
   draw_corner(ctx: CanvasRenderingContext2D, xy_loc: XyPair, rgba_code: string, offset: number) {
-    const loc = new XyPair(xy_loc.x * this.bcs.cell_res, xy_loc.y * this.bcs.cell_res);
-    const shift = this.bcs.cell_res * offset;
+    const loc = new XyPair(xy_loc.x * this.boardStateService.cell_res, xy_loc.y * this.boardStateService.cell_res);
+    const shift = this.boardStateService.cell_res * offset;
 
     ctx.save();
     ctx.translate(loc.x - shift, loc.y - shift);
@@ -92,19 +92,19 @@ export class BoardCanvasService {
   }
 
   draw_center(ctx: CanvasRenderingContext2D, xy_loc: XyPair, rgba_code: string, offset: number) {
-    const loc = new XyPair(xy_loc.x * this.bcs.cell_res, xy_loc.y * this.bcs.cell_res);
-    const shift = this.bcs.cell_res * offset;
+    const loc = new XyPair(xy_loc.x * this.boardStateService.cell_res, xy_loc.y * this.boardStateService.cell_res);
+    const shift = this.boardStateService.cell_res * offset;
 
     ctx.save();
     ctx.translate(loc.x + shift, loc.y + shift);
     ctx.fillStyle = rgba_code;
-    ctx.fillRect(0, 0, this.bcs.cell_res - (2 * shift), this.bcs.cell_res - (2 * shift));
+    ctx.fillRect(0, 0, this.boardStateService.cell_res - (2 * shift), this.boardStateService.cell_res - (2 * shift));
     ctx.restore();
   }
 
   stroke_center(ctx: CanvasRenderingContext2D, xy_loc: XyPair, rgba_code: string, offset: number) {
-    const loc = new XyPair(xy_loc.x * this.bcs.cell_res, xy_loc.y * this.bcs.cell_res);
-    const shift = this.bcs.cell_res * offset;
+    const loc = new XyPair(xy_loc.x * this.boardStateService.cell_res, xy_loc.y * this.boardStateService.cell_res);
+    const shift = this.boardStateService.cell_res * offset;
 
     ctx.save();
     ctx.translate(loc.x + shift, loc.y + shift);
@@ -112,12 +112,12 @@ export class BoardCanvasService {
     ctx.lineCap = 'round';
     ctx.lineWidth = 1;
     ctx.strokeStyle = rgba_code;
-    ctx.strokeRect(0, 0, this.bcs.cell_res - (2 * shift), this.bcs.cell_res - (2 * shift));
+    ctx.strokeRect(0, 0, this.boardStateService.cell_res - (2 * shift), this.boardStateService.cell_res - (2 * shift));
     ctx.restore();
   }
 
   draw_wall(ctx: CanvasRenderingContext2D, target: CellTarget, width: number, rgba_code?: string): void {
-    const loc = new XyPair(target.coor.x * this.bcs.cell_res, target.coor.y * this.bcs.cell_res);
+    const loc = new XyPair(target.coor.x * this.boardStateService.cell_res, target.coor.y * this.boardStateService.cell_res);
 
     if (isNullOrUndefined(rgba_code)) {
       ctx.strokeStyle = 'rgba(50, 50, 50, 1)';
@@ -127,40 +127,40 @@ export class BoardCanvasService {
 
     switch (target.zone) {
       case CellZone.NORTH:
-        this.draw_line(ctx, new XyPair(loc.x, loc.y), new XyPair(loc.x + this.bcs.cell_res, loc.y), width, rgba_code);
+        this.draw_line(ctx, new XyPair(loc.x, loc.y), new XyPair(loc.x + this.boardStateService.cell_res, loc.y), width, rgba_code);
         break;
       case CellZone.WEST:
-        this.draw_line(ctx, new XyPair(loc.x, loc.y), new XyPair(loc.x, loc.y + this.bcs.cell_res), width, rgba_code);
+        this.draw_line(ctx, new XyPair(loc.x, loc.y), new XyPair(loc.x, loc.y + this.boardStateService.cell_res), width, rgba_code);
         break;
       case CellZone.FWR:
-        this.draw_line(ctx, new XyPair(loc.x, loc.y + this.bcs.cell_res), new XyPair(loc.x + this.bcs.cell_res, loc.y), width, rgba_code);
+        this.draw_line(ctx, new XyPair(loc.x, loc.y + this.boardStateService.cell_res), new XyPair(loc.x + this.boardStateService.cell_res, loc.y), width, rgba_code);
         break;
       case CellZone.BKW:
-        this.draw_line(ctx, new XyPair(loc.x, loc.y), new XyPair(loc.x + this.bcs.cell_res, loc.y + this.bcs.cell_res), width, rgba_code);
+        this.draw_line(ctx, new XyPair(loc.x, loc.y), new XyPair(loc.x + this.boardStateService.cell_res, loc.y + this.boardStateService.cell_res), width, rgba_code);
         break;
     }
   }
 
   draw_fill_all(ctx: CanvasRenderingContext2D, xy_pair: XyPair, fill_code: string | CanvasGradient | CanvasPattern) {
-    const loc = new XyPair(xy_pair.x * this.bcs.cell_res, xy_pair.y * this.bcs.cell_res);
+    const loc = new XyPair(xy_pair.x * this.boardStateService.cell_res, xy_pair.y * this.boardStateService.cell_res);
 
     ctx.save();
     ctx.fillStyle = fill_code;
     ctx.translate(loc.x, loc.y);
-    ctx.fillRect(0, 0, this.bcs.cell_res, this.bcs.cell_res);
+    ctx.fillRect(0, 0, this.boardStateService.cell_res, this.boardStateService.cell_res);
     ctx.restore();
   }
 
   draw_fill_N(ctx: CanvasRenderingContext2D, cell: XyPair, fill_code: string | CanvasGradient | CanvasPattern): void {
-    const loc_canvas = new XyPair(cell.x * this.bcs.cell_res, cell.y * this.bcs.cell_res);
+    const loc_canvas = new XyPair(cell.x * this.boardStateService.cell_res, cell.y * this.boardStateService.cell_res);
     ctx.fillStyle = fill_code;
 
     ctx.save();
     ctx.beginPath();
 
     ctx.translate(loc_canvas.x, loc_canvas.y);
-    ctx.lineTo(this.bcs.cell_res, 0);
-    ctx.lineTo((this.bcs.cell_res / 2), (this.bcs.cell_res / 2));
+    ctx.lineTo(this.boardStateService.cell_res, 0);
+    ctx.lineTo((this.boardStateService.cell_res / 2), (this.boardStateService.cell_res / 2));
     ctx.lineTo(0, 0);
 
     ctx.fill();
@@ -168,7 +168,7 @@ export class BoardCanvasService {
   }
 
   draw_fill_E(ctx: CanvasRenderingContext2D, cell: XyPair, fill_code: string | CanvasGradient | CanvasPattern): void {
-    const loc_canvas = new XyPair(cell.x * this.bcs.cell_res, cell.y * this.bcs.cell_res);
+    const loc_canvas = new XyPair(cell.x * this.boardStateService.cell_res, cell.y * this.boardStateService.cell_res);
     ctx.fillStyle = fill_code;
 
     ctx.save();
@@ -176,17 +176,17 @@ export class BoardCanvasService {
 
     ctx.translate(loc_canvas.x, loc_canvas.y);
 
-    ctx.moveTo(this.bcs.cell_res, 0);
-    ctx.lineTo((this.bcs.cell_res / 2), (this.bcs.cell_res / 2));
-    ctx.lineTo(this.bcs.cell_res, this.bcs.cell_res);
-    ctx.lineTo(this.bcs.cell_res, 0);
+    ctx.moveTo(this.boardStateService.cell_res, 0);
+    ctx.lineTo((this.boardStateService.cell_res / 2), (this.boardStateService.cell_res / 2));
+    ctx.lineTo(this.boardStateService.cell_res, this.boardStateService.cell_res);
+    ctx.lineTo(this.boardStateService.cell_res, 0);
 
     ctx.fill();
     ctx.restore();
   }
 
   draw_fill_S(ctx: CanvasRenderingContext2D, cell: XyPair, fill_code: string | CanvasGradient | CanvasPattern): void {
-    const loc_canvas = new XyPair(cell.x * this.bcs.cell_res, cell.y * this.bcs.cell_res);
+    const loc_canvas = new XyPair(cell.x * this.boardStateService.cell_res, cell.y * this.boardStateService.cell_res);
     ctx.fillStyle = fill_code;
 
     ctx.save();
@@ -194,17 +194,17 @@ export class BoardCanvasService {
 
     ctx.translate(loc_canvas.x, loc_canvas.y);
 
-    ctx.moveTo(this.bcs.cell_res, this.bcs.cell_res);
-    ctx.lineTo((this.bcs.cell_res / 2), (this.bcs.cell_res / 2));
-    ctx.lineTo(0, this.bcs.cell_res);
-    ctx.lineTo(this.bcs.cell_res, this.bcs.cell_res);
+    ctx.moveTo(this.boardStateService.cell_res, this.boardStateService.cell_res);
+    ctx.lineTo((this.boardStateService.cell_res / 2), (this.boardStateService.cell_res / 2));
+    ctx.lineTo(0, this.boardStateService.cell_res);
+    ctx.lineTo(this.boardStateService.cell_res, this.boardStateService.cell_res);
 
     ctx.fill();
     ctx.restore();
   }
 
   draw_fill_W(ctx: CanvasRenderingContext2D, cell: XyPair, fill_code: string | CanvasGradient | CanvasPattern): void {
-    const loc_canvas = new XyPair(cell.x * this.bcs.cell_res, cell.y * this.bcs.cell_res);
+    const loc_canvas = new XyPair(cell.x * this.boardStateService.cell_res, cell.y * this.boardStateService.cell_res);
     ctx.fillStyle = fill_code;
 
     ctx.save();
@@ -212,116 +212,116 @@ export class BoardCanvasService {
 
     ctx.translate(loc_canvas.x, loc_canvas.y);
 
-    ctx.moveTo(0, this.bcs.cell_res);
-    ctx.lineTo((this.bcs.cell_res / 2), (this.bcs.cell_res / 2));
+    ctx.moveTo(0, this.boardStateService.cell_res);
+    ctx.lineTo((this.boardStateService.cell_res / 2), (this.boardStateService.cell_res / 2));
     ctx.lineTo(0, 0);
-    ctx.lineTo(0, this.bcs.cell_res);
+    ctx.lineTo(0, this.boardStateService.cell_res);
 
     ctx.fill();
     ctx.restore();
   }
 
   draw_fill_NE(ctx: CanvasRenderingContext2D, cell: XyPair, fill_code: string | CanvasGradient | CanvasPattern): void {
-    const loc_canvas = new XyPair(cell.x * this.bcs.cell_res, cell.y * this.bcs.cell_res);
+    const loc_canvas = new XyPair(cell.x * this.boardStateService.cell_res, cell.y * this.boardStateService.cell_res);
     ctx.fillStyle = fill_code;
 
     ctx.beginPath();
     ctx.moveTo(loc_canvas.x, loc_canvas.y);
-    ctx.lineTo(loc_canvas.x + this.bcs.cell_res, loc_canvas.y + this.bcs.cell_res);
-    ctx.lineTo(loc_canvas.x + this.bcs.cell_res, loc_canvas.y);
+    ctx.lineTo(loc_canvas.x + this.boardStateService.cell_res, loc_canvas.y + this.boardStateService.cell_res);
+    ctx.lineTo(loc_canvas.x + this.boardStateService.cell_res, loc_canvas.y);
     ctx.lineTo(loc_canvas.x, loc_canvas.y);
     ctx.fill();
   }
 
   draw_fill_SE(ctx: CanvasRenderingContext2D, cell: XyPair, fill_code: string | CanvasGradient | CanvasPattern): void {
-    const loc_canvas = new XyPair(cell.x * this.bcs.cell_res, cell.y * this.bcs.cell_res);
+    const loc_canvas = new XyPair(cell.x * this.boardStateService.cell_res, cell.y * this.boardStateService.cell_res);
     ctx.fillStyle = fill_code;
 
     ctx.beginPath();
-    ctx.moveTo(loc_canvas.x + this.bcs.cell_res, loc_canvas.y);
-    ctx.lineTo(loc_canvas.x + this.bcs.cell_res, loc_canvas.y + this.bcs.cell_res);
-    ctx.lineTo(loc_canvas.x, loc_canvas.y + this.bcs.cell_res);
-    ctx.lineTo(loc_canvas.x + this.bcs.cell_res, loc_canvas.y);
+    ctx.moveTo(loc_canvas.x + this.boardStateService.cell_res, loc_canvas.y);
+    ctx.lineTo(loc_canvas.x + this.boardStateService.cell_res, loc_canvas.y + this.boardStateService.cell_res);
+    ctx.lineTo(loc_canvas.x, loc_canvas.y + this.boardStateService.cell_res);
+    ctx.lineTo(loc_canvas.x + this.boardStateService.cell_res, loc_canvas.y);
     ctx.fill();
   }
 
   draw_fill_NW(ctx: CanvasRenderingContext2D, cell: XyPair, fill_code: string | CanvasGradient | CanvasPattern): void {
-    const loc_canvas = new XyPair(cell.x * this.bcs.cell_res, cell.y * this.bcs.cell_res);
+    const loc_canvas = new XyPair(cell.x * this.boardStateService.cell_res, cell.y * this.boardStateService.cell_res);
     ctx.fillStyle = fill_code;
 
     ctx.beginPath();
-    ctx.moveTo(loc_canvas.x + this.bcs.cell_res, loc_canvas.y);
-    ctx.lineTo(loc_canvas.x, loc_canvas.y + this.bcs.cell_res);
+    ctx.moveTo(loc_canvas.x + this.boardStateService.cell_res, loc_canvas.y);
+    ctx.lineTo(loc_canvas.x, loc_canvas.y + this.boardStateService.cell_res);
     ctx.lineTo(loc_canvas.x, loc_canvas.y);
-    ctx.lineTo(loc_canvas.x + this.bcs.cell_res, loc_canvas.y);
+    ctx.lineTo(loc_canvas.x + this.boardStateService.cell_res, loc_canvas.y);
     ctx.fill();
   }
 
   draw_fill_SW(ctx: CanvasRenderingContext2D, cell: XyPair, fill_code: string | CanvasGradient | CanvasPattern): void {
-    const loc_canvas = new XyPair(cell.x * this.bcs.cell_res, cell.y * this.bcs.cell_res);
+    const loc_canvas = new XyPair(cell.x * this.boardStateService.cell_res, cell.y * this.boardStateService.cell_res);
     ctx.fillStyle = fill_code;
 
     ctx.beginPath();
     ctx.moveTo(loc_canvas.x, loc_canvas.y);
-    ctx.lineTo(loc_canvas.x, loc_canvas.y + this.bcs.cell_res);
-    ctx.lineTo(loc_canvas.x + this.bcs.cell_res, loc_canvas.y + this.bcs.cell_res);
+    ctx.lineTo(loc_canvas.x, loc_canvas.y + this.boardStateService.cell_res);
+    ctx.lineTo(loc_canvas.x + this.boardStateService.cell_res, loc_canvas.y + this.boardStateService.cell_res);
     ctx.lineTo(loc_canvas.x, loc_canvas.y);
     ctx.fill();
   }
 
   draw_fill_NES(ctx: CanvasRenderingContext2D, cell: XyPair, fill_code: string | CanvasGradient | CanvasPattern): void {
-    const loc_canvas = new XyPair(cell.x * this.bcs.cell_res, cell.y * this.bcs.cell_res);
+    const loc_canvas = new XyPair(cell.x * this.boardStateService.cell_res, cell.y * this.boardStateService.cell_res);
     ctx.fillStyle = fill_code;
 
     ctx.beginPath();
     ctx.moveTo(loc_canvas.x, loc_canvas.y);
-    ctx.lineTo(loc_canvas.x + this.bcs.cell_res, loc_canvas.y);
-    ctx.lineTo(loc_canvas.x + this.bcs.cell_res, loc_canvas.y + this.bcs.cell_res);
-    ctx.lineTo(loc_canvas.x, loc_canvas.y + this.bcs.cell_res);
-    ctx.lineTo(loc_canvas.x + (this.bcs.cell_res / 2), loc_canvas.y + (this.bcs.cell_res / 2));
+    ctx.lineTo(loc_canvas.x + this.boardStateService.cell_res, loc_canvas.y);
+    ctx.lineTo(loc_canvas.x + this.boardStateService.cell_res, loc_canvas.y + this.boardStateService.cell_res);
+    ctx.lineTo(loc_canvas.x, loc_canvas.y + this.boardStateService.cell_res);
+    ctx.lineTo(loc_canvas.x + (this.boardStateService.cell_res / 2), loc_canvas.y + (this.boardStateService.cell_res / 2));
     ctx.lineTo(loc_canvas.x, loc_canvas.y);
 
     ctx.fill();
   }
 
   draw_fill_ESW(ctx: CanvasRenderingContext2D, cell: XyPair, fill_code: string | CanvasGradient | CanvasPattern): void {
-    const loc_canvas = new XyPair(cell.x * this.bcs.cell_res, cell.y * this.bcs.cell_res);
+    const loc_canvas = new XyPair(cell.x * this.boardStateService.cell_res, cell.y * this.boardStateService.cell_res);
     ctx.fillStyle = fill_code;
 
     ctx.beginPath();
-    ctx.moveTo(loc_canvas.x + this.bcs.cell_res, loc_canvas.y);
-    ctx.lineTo(loc_canvas.x + this.bcs.cell_res, loc_canvas.y + this.bcs.cell_res);
-    ctx.lineTo(loc_canvas.x, loc_canvas.y + this.bcs.cell_res);
+    ctx.moveTo(loc_canvas.x + this.boardStateService.cell_res, loc_canvas.y);
+    ctx.lineTo(loc_canvas.x + this.boardStateService.cell_res, loc_canvas.y + this.boardStateService.cell_res);
+    ctx.lineTo(loc_canvas.x, loc_canvas.y + this.boardStateService.cell_res);
     ctx.lineTo(loc_canvas.x, loc_canvas.y);
-    ctx.lineTo(loc_canvas.x + (this.bcs.cell_res / 2), loc_canvas.y + (this.bcs.cell_res / 2));
-    ctx.lineTo(loc_canvas.x + this.bcs.cell_res, loc_canvas.y);
+    ctx.lineTo(loc_canvas.x + (this.boardStateService.cell_res / 2), loc_canvas.y + (this.boardStateService.cell_res / 2));
+    ctx.lineTo(loc_canvas.x + this.boardStateService.cell_res, loc_canvas.y);
     ctx.fill();
   }
 
   draw_fill_SWN(ctx: CanvasRenderingContext2D, cell: XyPair, fill_code: string | CanvasGradient | CanvasPattern): void {
-    const loc_canvas = new XyPair(cell.x * this.bcs.cell_res, cell.y * this.bcs.cell_res);
+    const loc_canvas = new XyPair(cell.x * this.boardStateService.cell_res, cell.y * this.boardStateService.cell_res);
     ctx.fillStyle = fill_code;
 
     ctx.beginPath();
     ctx.moveTo(loc_canvas.x, loc_canvas.y);
-    ctx.lineTo(loc_canvas.x + this.bcs.cell_res, loc_canvas.y);
-    ctx.lineTo(loc_canvas.x + (this.bcs.cell_res / 2), loc_canvas.y + (this.bcs.cell_res / 2));
-    ctx.lineTo(loc_canvas.x + this.bcs.cell_res, loc_canvas.y + this.bcs.cell_res);
-    ctx.lineTo(loc_canvas.x, loc_canvas.y + this.bcs.cell_res);
+    ctx.lineTo(loc_canvas.x + this.boardStateService.cell_res, loc_canvas.y);
+    ctx.lineTo(loc_canvas.x + (this.boardStateService.cell_res / 2), loc_canvas.y + (this.boardStateService.cell_res / 2));
+    ctx.lineTo(loc_canvas.x + this.boardStateService.cell_res, loc_canvas.y + this.boardStateService.cell_res);
+    ctx.lineTo(loc_canvas.x, loc_canvas.y + this.boardStateService.cell_res);
     ctx.lineTo(loc_canvas.x, loc_canvas.y);
     ctx.fill();
   }
 
   draw_fill_WNE(ctx: CanvasRenderingContext2D, cell: XyPair, fill_code: string | CanvasGradient | CanvasPattern): void {
-    const loc_canvas = new XyPair(cell.x * this.bcs.cell_res, cell.y * this.bcs.cell_res);
+    const loc_canvas = new XyPair(cell.x * this.boardStateService.cell_res, cell.y * this.boardStateService.cell_res);
     ctx.fillStyle = fill_code;
 
     ctx.beginPath();
     ctx.moveTo(loc_canvas.x, loc_canvas.y);
-    ctx.lineTo(loc_canvas.x + this.bcs.cell_res, loc_canvas.y);
-    ctx.lineTo(loc_canvas.x + this.bcs.cell_res, loc_canvas.y + this.bcs.cell_res);
-    ctx.lineTo(loc_canvas.x + (this.bcs.cell_res / 2), loc_canvas.y + (this.bcs.cell_res / 2));
-    ctx.lineTo(loc_canvas.x, loc_canvas.y + this.bcs.cell_res);
+    ctx.lineTo(loc_canvas.x + this.boardStateService.cell_res, loc_canvas.y);
+    ctx.lineTo(loc_canvas.x + this.boardStateService.cell_res, loc_canvas.y + this.boardStateService.cell_res);
+    ctx.lineTo(loc_canvas.x + (this.boardStateService.cell_res / 2), loc_canvas.y + (this.boardStateService.cell_res / 2));
+    ctx.lineTo(loc_canvas.x, loc_canvas.y + this.boardStateService.cell_res);
     ctx.lineTo(loc_canvas.x, loc_canvas.y);
     ctx.fill();
   }

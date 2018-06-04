@@ -1,5 +1,5 @@
 import {BoardService} from '../../services/board.service';
-import {BoardConfigService} from '../../services/board-config.service';
+import {BoardStateService} from '../../services/board-state.service';
 import {BoardCanvasService} from '../../services/board-canvas-service';
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {XyPair} from '../../geometry/xy-pair';
@@ -16,8 +16,8 @@ export class TokenRendererComponent implements OnInit {
 
     constructor(
         private bs: BoardService,
-        private bcs: BoardConfigService,
-        private bctx: BoardCanvasService,
+        private boardStateService: BoardStateService,
+        private boardCanvasService: BoardCanvasService,
         private encounterService: EncounterDevService
     ) {}
 
@@ -27,24 +27,24 @@ export class TokenRendererComponent implements OnInit {
     }
 
     render = () => {
-        this.bctx.clear_canvas(this.ctx);
-        this.bctx.updateTransform(this.ctx);
+        this.boardCanvasService.clear_canvas(this.ctx);
+        this.boardCanvasService.updateTransform(this.ctx);
 
         // do stuff here
         for (const player of this.encounterService.players) {
             if (player.isSelected) {
-                this.bctx.draw_fill_all(this.ctx, player.loc, 'rgba(0, 0, 180, 0.2)');
+                this.boardCanvasService.draw_fill_all(this.ctx, player.loc, 'rgba(0, 0, 180, 0.2)');
                 const near_cells = this.bs.calcCellsWithinRangeOfCell(player.loc, player.speed);
                 const far_cells = this.bs.calcCellsWithinRangeOfCell(player.loc, player.speed * 2);
 
                 for (const cell of near_cells) {
-                    this.bctx.draw_fill_all(this.ctx, cell, 'rgba(0, 0, 180, 0.1)');
+                    this.boardCanvasService.draw_fill_all(this.ctx, cell, 'rgba(0, 0, 180, 0.1)');
                 }
                 for (const cell of far_cells) {
-                    this.bctx.draw_fill_all(this.ctx, cell, 'rgba(0, 0, 180, 0.1)');
+                    this.boardCanvasService.draw_fill_all(this.ctx, cell, 'rgba(0, 0, 180, 0.1)');
                 }
             }
-            this.bctx.draw_img(this.ctx, new XyPair(player.loc.x * this.bcs.cell_res, player.loc.y * this.bcs.cell_res), player.token_img)
+            this.boardCanvasService.draw_img(this.ctx, new XyPair(player.loc.x * this.boardStateService.cell_res, player.loc.y * this.boardStateService.cell_res), player.token_img)
 
         }
 
