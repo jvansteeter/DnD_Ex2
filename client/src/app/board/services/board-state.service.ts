@@ -55,6 +55,8 @@ export class BoardStateService {
     public mouse_loc_cell_pix: XyPair;     // the pixel coor of the mouse relative to the current tile
     public mouse_cell_target: CellTarget;  // to current cell target under the pointer
 
+    public show_health = true;
+
     constructor() {
     }
 

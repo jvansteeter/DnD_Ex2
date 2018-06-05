@@ -44,8 +44,11 @@ export class TokenRendererComponent implements OnInit {
                     this.boardCanvasService.draw_fill_all(this.ctx, cell, 'rgba(0, 0, 180, 0.1)');
                 }
             }
-            this.boardCanvasService.draw_img(this.ctx, new XyPair(player.loc.x * this.boardStateService.cell_res, player.loc.y * this.boardStateService.cell_res), player.token_img)
 
+            this.boardCanvasService.draw_img(this.ctx, new XyPair(player.loc.x * this.boardStateService.cell_res, player.loc.y * this.boardStateService.cell_res), player.token_img)
+            if (this.boardStateService.show_health) {
+                this.boardCanvasService.draw_health(this.ctx, player.loc, player.hp/player.maxHp);
+            }
         }
 
         requestAnimationFrame(this.render);

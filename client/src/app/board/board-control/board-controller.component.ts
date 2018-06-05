@@ -167,18 +167,21 @@ export class BoardControllerComponent implements OnInit{
                 this.boardStateService.board_view_mode = ViewMode.BOARD_MAKER;
                 this.boardStateService.board_edit_mode = BoardMode.WALLS;
                 this.boardStateService.do_pops = false;
+                this.boardStateService.show_health = true;
                 break;
             case 'Player View':
                 this.boardService.source_click_location = null;
                 this.boardStateService.board_view_mode = ViewMode.PLAYER;
                 this.boardStateService.board_edit_mode = BoardMode.PLAYER;
                 this.boardStateService.do_pops = true;
+                this.boardStateService.show_health = false;
                 break;
             case 'Game Master':
                 this.boardService.source_click_location = null;
                 this.boardStateService.board_view_mode = ViewMode.MASTER;
                 this.boardStateService.board_edit_mode = BoardMode.PLAYER;
                 this.boardStateService.do_pops = true;
+                this.boardStateService.show_health = true;
                 break;
         }
         this.sync()

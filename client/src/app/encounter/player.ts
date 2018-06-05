@@ -13,10 +13,10 @@ export class Player {
     actions: {action: string, detail: string}[];
     isSelected = false;
 
-    constructor(name: string, hp: number, mapHp: number, ac: number, x?: number, y?: number, token_url?: string) {
+    constructor(name: string, hp: number, maxHp: number, ac: number, x?: number, y?: number, token_url?: string) {
         this.name = name;
         this.hp = hp;
-        this.maxHp = mapHp;
+        this.maxHp = maxHp;
         this.ac = ac;
         this.speed = 3;
         if (!!x && !!y) {

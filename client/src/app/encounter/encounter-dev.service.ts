@@ -30,6 +30,11 @@ export class EncounterDevService {
         player.addAction('Gaze of the Deep One:', 'Kill all living creatures, no saves, no escape');
         player.addAction('Disco Fever:', 'They can tell by the way you use your walk ...');
         this.players.push(player);
+
+        player = new Player('Stevie', 2, 36, 17,  6, 3, 'resources/images/player-tokens/human fatty 1.png');
+        player.addAction('Longsword:', '+4 Attack, 1d10 + 5');
+        player.addAction('Crossbow:', ' +2 Attack,  1d6 + 1');
+        this.players.push(player);
     }
 
     checkForPops(loc_cell: XyPair, pop_origin: XyPair) {
