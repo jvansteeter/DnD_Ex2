@@ -288,6 +288,25 @@ export class BoardService {
     // UN-CATEGORIZED FUNCTIONS
     // *************************************************************************************************************************************************************
 
+    calcTraversableCells(sourceCell: XyPair, range: number): Array<XyPair> {
+        const returnMe = Array<XyPair>();
+
+        const queue: {cell: XyPair, range: number, diagAsDouble: boolean}[] = [];
+        queue.push({cell: sourceCell, range: range, diagAsDouble: false});
+
+        while (queue.length > 0) {
+            // grab the next cell within range
+            const curCell = queue.shift();
+            // add the actual cell return array
+            returnMe.push(curCell.cell);
+
+            // check if traversal to each adjacent cell
+            // add them to the queue
+        }
+
+        return returnMe;
+    }
+
     /**
      * returns an array of XY pairs that represent cells
      * @param source_cell
