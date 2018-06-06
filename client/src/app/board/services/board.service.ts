@@ -301,6 +301,44 @@ export class BoardService {
             returnMe.push(curCell.cell);
 
             // check if traversal to each adjacent cell
+            if (this.wallService.canMoveN(curCell.cell)) {
+
+            }
+
+
+            if (this.wallService.canMoveE(curCell.cell)) {
+
+            }
+
+
+            if (this.wallService.canMoveS(curCell.cell)) {
+
+            }
+
+
+            if (this.wallService.canMoveW(curCell.cell)) {
+
+            }
+
+
+            if (this.wallService.canMoveNE(curCell.cell)) {
+
+            }
+
+
+            if (this.wallService.canMoveNW(curCell.cell)) {
+
+            }
+
+
+            if (this.wallService.canMoveSE(curCell.cell)) {
+
+            }
+
+
+            if (this.wallService.canMoveSW(curCell.cell)) {
+
+            }
             // add them to the queue
         }
 
