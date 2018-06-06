@@ -11,6 +11,7 @@ import { SubjectDataSource } from '../utilities/subjectDataSource';
 import { Encounter } from '../../../../shared/types/encounter';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { mergeMap, tap } from 'rxjs/operators';
+import { DashboardCard } from '../cdk/dashboard-card/dashboard-card';
 
 
 @Component({
@@ -27,6 +28,8 @@ export class CampaignComponent implements OnInit {
 	public encounterDataSource: SubjectDataSource<Encounter>;
 	public encounterTableCols = ['label', 'date'];
 	public encounterSubject: BehaviorSubject<Encounter[]>;
+
+	public encountersCard: DashboardCard;
 
 	constructor(private activatedRoute: ActivatedRoute,
 							private campaignService: CampaignService,
@@ -52,6 +55,15 @@ export class CampaignComponent implements OnInit {
 				this.initEncounterDataSource();
 			}
 		});
+
+		this.encountersCard = {
+			menuOptions: [
+				{
+					title: 'New Encounter',
+					function: this.newEncounter
+				}
+			]
+		}
 	}
 
 	// public changeGameMaster(member: any): void {
@@ -87,7 +99,7 @@ export class CampaignComponent implements OnInit {
 		});
 	};
 
-	public newEncounter(): void {
+	private newEncounter = () => {
 		this.dialog.open(NewEncounterDialogComponent);
 	};
 }

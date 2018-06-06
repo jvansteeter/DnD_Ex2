@@ -1,68 +1,42 @@
 <ng-container *ngIf="campaignService.campaignState">
 	<h1>{{campaignService.campaignState.label}}</h1>
-	<!--<div class="campaign-content">-->
-
-	<!--<div class="campaign-rightContent">-->
-	<!--Encounters-->
-	<!--<mat-list>-->
-	<!--<mat-list-item *ngFor="let encounter of campaignService.encounters"><a (click)="enterEncounter(encounter)">{{encounter.label}}</a></mat-list-item>-->
-	<!--</mat-list>-->
-	<!--</div>-->
-	<!--</div>-->
 	<mat-grid-list cols="2" rowHeight="350px">
 		<mat-grid-tile [colspan]="1" [rowspan]="1">
-			<mat-card class="global-dashboard-card">
-				<mat-card-header>
-					<span>Campaign Members</span>
-				</mat-card-header>
-				<mat-card-content>
-					<mat-table [dataSource]="memberDataSource">
-						<ng-container matColumnDef="users">
-							<mat-header-cell *matHeaderCellDef>Username</mat-header-cell>
-							<mat-cell *matCellDef="let member">{{member.username}}</mat-cell>
-						</ng-container>
-						<ng-container matColumnDef="gm">
-							<mat-header-cell *matHeaderCellDef><span style="float: right">GM</span></mat-header-cell>
-							<mat-cell *matCellDef="let member">
-								<mat-checkbox color="primary" [(ngModel)]="member.gameMaster" style="float: right" [disabled]="true"></mat-checkbox>
-							</mat-cell>
-						</ng-container>
-						<mat-header-row *matHeaderRowDef="memberTableCols"></mat-header-row>
-						<mat-row *matRowDef="let member; columns: memberTableCols"></mat-row>
-					</mat-table>
-				</mat-card-content>
-			</mat-card>
+			<dashboard-card>
+				<mat-table [dataSource]="memberDataSource">
+					<ng-container matColumnDef="users">
+						<mat-header-cell *matHeaderCellDef>Campaign Members</mat-header-cell>
+						<mat-cell *matCellDef="let member">{{member.username}}</mat-cell>
+					</ng-container>
+					<ng-container matColumnDef="gm">
+						<mat-header-cell *matHeaderCellDef><span style="float: right">GM</span></mat-header-cell>
+						<mat-cell *matCellDef="let member">
+							<mat-checkbox color="primary" [(ngModel)]="member.gameMaster" style="float: right" [disabled]="true"></mat-checkbox>
+						</mat-cell>
+					</ng-container>
+					<mat-header-row *matHeaderRowDef="memberTableCols"></mat-header-row>
+					<mat-row *matRowDef="let member; columns: memberTableCols"></mat-row>
+				</mat-table>
+			</dashboard-card>
 		</mat-grid-tile>
 		<mat-grid-tile [colspan]="1" [rowspan]="1">
-			<mat-card class="global-dashboard-card">
-				<mat-card-header>
-					<mat-card-title>
-						<button mat-icon-button class="global-dash-more-button" [matMenuTriggerFor]="encounterMenu" aria-label="Toggle menu">
-							<mat-icon>more_vert</mat-icon>
-						</button>
-						<mat-menu #encounterMenu="matMenu" xPosition="before">
-							<button mat-menu-item (click)="newEncounter()">New Encounter</button>
-						</mat-menu>
-					</mat-card-title>
-				</mat-card-header>
-				<mat-card-content>
-					<mat-table [dataSource]="encounterDataSource">
-						<ng-container matColumnDef="label">
-							<mat-header-cell *matHeaderCellDef>Encounters</mat-header-cell>
-							<mat-cell *matCellDef="let encounter">{{ encounter.label }}</mat-cell>
-						</ng-container>
-						<ng-container matColumnDef="date">
-							<mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
-							<mat-cell *matCellDef="let encounter">{{ encounter.date | dateFormat }}</mat-cell>
-						</ng-container>
-						<mat-header-row *matHeaderRowDef="encounterTableCols"></mat-header-row>
-						<mat-row class="clickable-row"
-										 *matRowDef="let encounter; columns: encounterTableCols"
-										 (click)="enterEncounter(encounter)"
-						></mat-row>
-					</mat-table>
-				</mat-card-content>
-			</mat-card>
+			<dashboard-card [dashboardCard]="encountersCard">
+				<mat-table [dataSource]="encounterDataSource">
+					<ng-container matColumnDef="label">
+						<mat-header-cell *matHeaderCellDef>Encounters</mat-header-cell>
+						<mat-cell *matCellDef="let encounter">{{ encounter.label }}</mat-cell>
+					</ng-container>
+					<ng-container matColumnDef="date">
+						<mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
+						<mat-cell *matCellDef="let encounter">{{ encounter.date | dateFormat }}</mat-cell>
+					</ng-container>
+					<mat-header-row *matHeaderRowDef="encounterTableCols"></mat-header-row>
+					<mat-row class="clickable-row"
+									 *matRowDef="let encounter; columns: encounterTableCols"
+									 (click)="enterEncounter(encounter)"
+					></mat-row>
+				</mat-table>
+			</dashboard-card>
 		</mat-grid-tile>
 	</mat-grid-list>
 </ng-container>

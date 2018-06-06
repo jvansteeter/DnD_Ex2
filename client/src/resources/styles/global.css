@@ -322,20 +322,20 @@
 	}
 }
 
-.global-dashboard-card {
-	position: absolute !important;
-	top: 15px;
-	left: 15px;
-	right: 15px;
-	bottom: 15px;
-	overflow-y: auto;
-}
+/*.global-dashboard-card {*/
+	/*position: absolute !important;*/
+	/*top: 15px;*/
+	/*left: 15px;*/
+	/*right: 15px;*/
+	/*bottom: 15px;*/
+	/*overflow-y: auto;*/
+/*}*/
 
-.global-dash-more-button {
-	position: absolute !important;
-	top: 5px;
-	right: 10px;
-}
+/*.global-dash-more-button {*/
+	/*position: absolute !important;*/
+	/*top: 5px;*/
+	/*right: 10px;*/
+/*}*/
 
 html {
 	height: 100%;

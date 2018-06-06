@@ -12,7 +12,7 @@ import {WallService} from './wall.service';
 import {BoardCanvasService} from './board-canvas-service';
 import {TileService} from './tile.service';
 import {ViewMode} from '../shared/view-mode';
-import {EncounterDevService} from '../../encounter/encounter-dev.service';
+import { EncounterService } from '../../encounter/encounter.service';
 
 /*************************************************************************************************************************************
  * BoardConfigService
@@ -56,7 +56,7 @@ export class BoardService {
                 public boardCanvasService: BoardCanvasService,
                 private wallService: WallService,
                 private tileService: TileService,
-                private encounterService: EncounterDevService) {
+                private encounterService: EncounterService) {
         this.cellLightData = new Array(this.boardStateService.mapDimX);
         for (let x = 0; x < this.boardStateService.mapDimX; x++) {
             this.cellLightData[x] = new Array(this.boardStateService.mapDimY);

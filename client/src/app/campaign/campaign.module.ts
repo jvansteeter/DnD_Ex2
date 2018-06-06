@@ -18,6 +18,7 @@ import { CampaignService } from './campaign.service';
 import { CampaignRepository } from '../repositories/campaign.repository';
 import { NewEncounterDialogComponent } from './dialog/new-encounter-dialog.component';
 import { UtilityModule } from '../utilities/utility.module';
+import { AppCDKModule } from '../cdk/cdk.module';
 
 
 @NgModule({
@@ -38,6 +39,7 @@ import { UtilityModule } from '../utilities/utility.module';
 		UtilityModule,
 		MatMenuModule,
 		MatIconModule,
+		AppCDKModule,
 	],
 	declarations: [
 		CampaignComponent,

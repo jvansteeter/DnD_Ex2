@@ -3,7 +3,7 @@ import {BoardStateService} from '../../services/board-state.service';
 import {BoardCanvasService} from '../../services/board-canvas-service';
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {XyPair} from '../../geometry/xy-pair';
-import {EncounterDevService} from '../../../encounter/encounter-dev.service';
+import { EncounterService } from '../../../encounter/encounter.service';
 
 @Component({
     selector: 'token-renderer',
@@ -18,7 +18,7 @@ export class TokenRendererComponent implements OnInit {
         private boardService: BoardService,
         private boardStateService: BoardStateService,
         private boardCanvasService: BoardCanvasService,
-        private encounterService: EncounterDevService
+        private encounterService: EncounterService
     ) {}
 
     ngOnInit(): void {

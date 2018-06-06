@@ -25,6 +25,7 @@ import { MainNavModule } from '../main-nav/main-nav.module';
 import { DevAppComponent } from './dev-app.component';
 import { UserDataService } from '../utilities/user-data/userData.service';
 import {EncounterDevService} from '../encounter/encounter-dev.service';
+import { EncounterService } from '../encounter/encounter.service';
 
 @NgModule({
 	imports: [
@@ -57,7 +58,7 @@ import {EncounterDevService} from '../encounter/encounter-dev.service';
 	],
 	providers: [
 		UserDataService,
-		EncounterDevService
+		{ provide: EncounterService, useClass: EncounterDevService }
 	],
 	bootstrap: [ DevAppComponent ]
 })
