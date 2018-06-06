@@ -346,3 +346,7 @@ body {
 	display: flex;
 	flex: 1;
 }
+
+web-app {
+	flex: 1;
+}
