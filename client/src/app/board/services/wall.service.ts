@@ -4,6 +4,7 @@ import {XyPair} from '../geometry/xy-pair';
 import {CellTarget} from '../shared/cell-target';
 import {CellZone} from '../shared/cell-zone';
 import {BoardStateService} from './board-state.service';
+import {BoardService} from "./board.service";
 
 @Injectable()
 export class WallService {
@@ -141,6 +142,165 @@ export class WallService {
     public hasWall(loc: CellTarget): boolean {
         return this.wallData.has(loc.hash());
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    static getIndexOfCellInQueue(cell: XyPair, queue: {cell: XyPair, range: number, diagAsDouble: boolean}[]): number {
+        let index = 0;
+        for (let element of queue) {
+            if (element.cell.hash() === cell.hash()) {
+                return index;
+            }
+            index = index + 1;
+        }
+        return -1;
+    }
+
+    calcTraversableCells(sourceCell: XyPair, range: number): Array<XyPair> {
+        const returnMe = Array<XyPair>();
+
+        const queue: {cell: XyPair, range: number, diagAsDouble: boolean}[] = [];
+        const touched: {cell: XyPair, range: number, diagAsDouble: boolean}[] = [];
+
+        queue.push({cell: sourceCell, range: range, diagAsDouble: false});
+        touched.push({cell: sourceCell, range: range, diagAsDouble: false});
+
+        while (queue.length > 0) {
+            const curCell = queue.shift();
+
+            if (curCell.range >= 0 ) {
+                // check if traversal to each adjacent cell
+                if (this.canMoveN(curCell.cell)) {
+                    const northCell = new XyPair(curCell.cell.x, curCell.cell.y - 1);
+                    if (WallService.getIndexOfCellInQueue(northCell, touched) === -1) {
+                        queue.push({cell: northCell, range: curCell.range -1, diagAsDouble: curCell.diagAsDouble});
+                        touched.push({cell: northCell, range: curCell.range -1, diagAsDouble: curCell.diagAsDouble});
+                    }
+                }
+
+
+                if (this.canMoveE(curCell.cell)) {
+                    const eastCell = new XyPair(curCell.cell.x + 1, curCell.cell.y);
+                    if (WallService.getIndexOfCellInQueue(eastCell, touched) === -1) {
+                        queue.push({cell: eastCell, range: curCell.range -1, diagAsDouble: curCell.diagAsDouble});
+                        touched.push({cell: eastCell, range: curCell.range -1, diagAsDouble: curCell.diagAsDouble});
+                    }
+                }
+
+
+                if (this.canMoveS(curCell.cell)) {
+                    const southCell = new XyPair(curCell.cell.x, curCell.cell.y + 1);
+                    if (WallService.getIndexOfCellInQueue(southCell, touched) === -1) {
+                        queue.push({cell: southCell, range: curCell.range -1, diagAsDouble: curCell.diagAsDouble});
+                        touched.push({cell: southCell, range: curCell.range -1, diagAsDouble: curCell.diagAsDouble});
+                    }
+                }
+
+
+                if (this.canMoveW(curCell.cell)) {
+                    const westCell = new XyPair(curCell.cell.x - 1, curCell.cell.y);
+                    if (WallService.getIndexOfCellInQueue(westCell, touched) === -1) {
+                        queue.push({cell: westCell, range: curCell.range -1, diagAsDouble: curCell.diagAsDouble});
+                        touched.push({cell: westCell, range: curCell.range -1, diagAsDouble: curCell.diagAsDouble});
+                    }
+                }
+
+                if (this.canMoveNE(curCell.cell)) {
+                    const northEastCell = new XyPair(curCell.cell.x + 1, curCell.cell.y - 1);
+                    if (WallService.getIndexOfCellInQueue(northEastCell, touched) === -1) {
+                        let rangeDelta;
+                        if (curCell.diagAsDouble) {
+                            rangeDelta = -2;
+                        } else {
+                            rangeDelta = -1;
+                        }
+                        queue.push({cell: northEastCell, range: curCell.range + rangeDelta, diagAsDouble: !curCell.diagAsDouble});
+                        touched.push({cell: northEastCell, range: curCell.range + rangeDelta, diagAsDouble: !curCell.diagAsDouble});
+                    }
+                }
+
+                if (this.canMoveNW(curCell.cell)) {
+                    const northWestCell = new XyPair(curCell.cell.x - 1, curCell.cell.y - 1);
+                    if (WallService.getIndexOfCellInQueue(northWestCell, touched) === -1) {
+                        let rangeDelta;
+                        if (curCell.diagAsDouble) {
+                            rangeDelta = -2;
+                        } else {
+                            rangeDelta = -1;
+                        }
+                        queue.push({cell: northWestCell, range: curCell.range + rangeDelta, diagAsDouble: !curCell.diagAsDouble});
+                        touched.push({cell: northWestCell, range: curCell.range + rangeDelta, diagAsDouble: !curCell.diagAsDouble});
+                    }
+                }
+
+                if (this.canMoveSE(curCell.cell)) {
+                    const southEastCell = new XyPair(curCell.cell.x + 1, curCell.cell.y + 1);
+                    if (WallService.getIndexOfCellInQueue(southEastCell, touched) === -1) {
+                        let rangeDelta;
+                        if (curCell.diagAsDouble) {
+                            rangeDelta = -2;
+                        } else {
+                            rangeDelta = -1;
+                        }
+                        queue.push({cell: southEastCell, range: curCell.range + rangeDelta, diagAsDouble: !curCell.diagAsDouble});
+                        touched.push({cell: southEastCell, range: curCell.range + rangeDelta, diagAsDouble: !curCell.diagAsDouble});
+                    }
+                }
+
+                if (this.canMoveSW(curCell.cell)) {
+                    const southWestCell = new XyPair(curCell.cell.x - 1, curCell.cell.y + 1);
+                    if (WallService.getIndexOfCellInQueue(southWestCell, touched) === -1) {
+                        let rangeDelta;
+                        if (curCell.diagAsDouble) {
+                            rangeDelta = -2;
+                        } else {
+                            rangeDelta = -1;
+                        }
+                        queue.push({cell: southWestCell, range: curCell.range + rangeDelta, diagAsDouble: !curCell.diagAsDouble});
+                        touched.push({cell: southWestCell, range: curCell.range + rangeDelta, diagAsDouble: !curCell.diagAsDouble});
+                    }
+                }
+
+
+                returnMe.push(curCell.cell);
+            }
+
+
+        }
+        return returnMe;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public canMoveN(loc: XyPair): boolean {
         if (this.hasWall(new CellTarget(new XyPair(loc.x, loc.y), CellZone.NORTH)) ||
