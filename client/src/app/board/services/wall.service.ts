@@ -143,84 +143,54 @@ export class WallService {
         return this.wallData.has(loc.hash());
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    static getIndexOfCellInQueue(cell: XyPair, queue: {cell: XyPair, range: number, diagAsDouble: boolean}[]): number {
-        let index = 0;
-        for (let element of queue) {
-            if (element.cell.hash() === cell.hash()) {
-                return index;
-            }
-            index = index + 1;
-        }
-        return -1;
-    }
-
     calcTraversableCells(sourceCell: XyPair, range: number): Array<XyPair> {
         const returnMe = Array<XyPair>();
 
-        const queue: {cell: XyPair, range: number, diagAsDouble: boolean}[] = [];
-        const touched: {cell: XyPair, range: number, diagAsDouble: boolean}[] = [];
+        const queue: { cell: XyPair, range: number, diagAsDouble: boolean }[] = [];
+        const touched: Array<string> = [];
 
         queue.push({cell: sourceCell, range: range, diagAsDouble: false});
-        touched.push({cell: sourceCell, range: range, diagAsDouble: false});
+        touched.push(sourceCell.hash2());
 
         while (queue.length > 0) {
             const curCell = queue.shift();
 
-            if (curCell.range >= 0 ) {
-                // check if traversal to each adjacent cell
+            if (curCell.range >= 0) {
                 if (this.canMoveN(curCell.cell)) {
                     const northCell = new XyPair(curCell.cell.x, curCell.cell.y - 1);
-                    if (WallService.getIndexOfCellInQueue(northCell, touched) === -1) {
-                        queue.push({cell: northCell, range: curCell.range -1, diagAsDouble: curCell.diagAsDouble});
-                        touched.push({cell: northCell, range: curCell.range -1, diagAsDouble: curCell.diagAsDouble});
+                    if (touched.indexOf(northCell.hash2()) === -1) {
+                        queue.push({cell: northCell, range: curCell.range - 1, diagAsDouble: curCell.diagAsDouble});
+                        touched.push(northCell.hash2());
                     }
                 }
-
 
                 if (this.canMoveE(curCell.cell)) {
                     const eastCell = new XyPair(curCell.cell.x + 1, curCell.cell.y);
-                    if (WallService.getIndexOfCellInQueue(eastCell, touched) === -1) {
-                        queue.push({cell: eastCell, range: curCell.range -1, diagAsDouble: curCell.diagAsDouble});
-                        touched.push({cell: eastCell, range: curCell.range -1, diagAsDouble: curCell.diagAsDouble});
+                    if (touched.indexOf(eastCell.hash2()) === -1) {
+                        queue.push({cell: eastCell, range: curCell.range - 1, diagAsDouble: curCell.diagAsDouble});
+                        touched.push(eastCell.hash2());
                     }
                 }
-
 
                 if (this.canMoveS(curCell.cell)) {
                     const southCell = new XyPair(curCell.cell.x, curCell.cell.y + 1);
-                    if (WallService.getIndexOfCellInQueue(southCell, touched) === -1) {
-                        queue.push({cell: southCell, range: curCell.range -1, diagAsDouble: curCell.diagAsDouble});
-                        touched.push({cell: southCell, range: curCell.range -1, diagAsDouble: curCell.diagAsDouble});
+                    if (touched.indexOf(southCell.hash2()) === -1) {
+                        queue.push({cell: southCell, range: curCell.range - 1, diagAsDouble: curCell.diagAsDouble});
+                        touched.push(southCell.hash2());
                     }
                 }
 
-
                 if (this.canMoveW(curCell.cell)) {
                     const westCell = new XyPair(curCell.cell.x - 1, curCell.cell.y);
-                    if (WallService.getIndexOfCellInQueue(westCell, touched) === -1) {
-                        queue.push({cell: westCell, range: curCell.range -1, diagAsDouble: curCell.diagAsDouble});
-                        touched.push({cell: westCell, range: curCell.range -1, diagAsDouble: curCell.diagAsDouble});
+                    if (touched.indexOf(westCell.hash2()) === -1) {
+                        queue.push({cell: westCell, range: curCell.range - 1, diagAsDouble: curCell.diagAsDouble});
+                        touched.push(westCell.hash2());
                     }
                 }
 
                 if (this.canMoveNE(curCell.cell)) {
                     const northEastCell = new XyPair(curCell.cell.x + 1, curCell.cell.y - 1);
-                    if (WallService.getIndexOfCellInQueue(northEastCell, touched) === -1) {
+                    if (touched.indexOf(northEastCell.hash2()) === -1) {
                         let rangeDelta;
                         if (curCell.diagAsDouble) {
                             rangeDelta = -2;
@@ -228,13 +198,13 @@ export class WallService {
                             rangeDelta = -1;
                         }
                         queue.push({cell: northEastCell, range: curCell.range + rangeDelta, diagAsDouble: !curCell.diagAsDouble});
-                        touched.push({cell: northEastCell, range: curCell.range + rangeDelta, diagAsDouble: !curCell.diagAsDouble});
+                        touched.push(northEastCell.hash2());
                     }
                 }
 
                 if (this.canMoveNW(curCell.cell)) {
                     const northWestCell = new XyPair(curCell.cell.x - 1, curCell.cell.y - 1);
-                    if (WallService.getIndexOfCellInQueue(northWestCell, touched) === -1) {
+                    if (touched.indexOf(northWestCell.hash2()) === -1) {
                         let rangeDelta;
                         if (curCell.diagAsDouble) {
                             rangeDelta = -2;
@@ -242,13 +212,13 @@ export class WallService {
                             rangeDelta = -1;
                         }
                         queue.push({cell: northWestCell, range: curCell.range + rangeDelta, diagAsDouble: !curCell.diagAsDouble});
-                        touched.push({cell: northWestCell, range: curCell.range + rangeDelta, diagAsDouble: !curCell.diagAsDouble});
+                        touched.push(northWestCell.hash2());
                     }
                 }
 
                 if (this.canMoveSE(curCell.cell)) {
                     const southEastCell = new XyPair(curCell.cell.x + 1, curCell.cell.y + 1);
-                    if (WallService.getIndexOfCellInQueue(southEastCell, touched) === -1) {
+                    if (touched.indexOf(southEastCell.hash2()) === -1) {
                         let rangeDelta;
                         if (curCell.diagAsDouble) {
                             rangeDelta = -2;
@@ -256,13 +226,13 @@ export class WallService {
                             rangeDelta = -1;
                         }
                         queue.push({cell: southEastCell, range: curCell.range + rangeDelta, diagAsDouble: !curCell.diagAsDouble});
-                        touched.push({cell: southEastCell, range: curCell.range + rangeDelta, diagAsDouble: !curCell.diagAsDouble});
+                        touched.push(southEastCell.hash2());
                     }
                 }
 
                 if (this.canMoveSW(curCell.cell)) {
                     const southWestCell = new XyPair(curCell.cell.x - 1, curCell.cell.y + 1);
-                    if (WallService.getIndexOfCellInQueue(southWestCell, touched) === -1) {
+                    if (touched.indexOf(southWestCell.hash2()) === -1) {
                         let rangeDelta;
                         if (curCell.diagAsDouble) {
                             rangeDelta = -2;
@@ -270,42 +240,20 @@ export class WallService {
                             rangeDelta = -1;
                         }
                         queue.push({cell: southWestCell, range: curCell.range + rangeDelta, diagAsDouble: !curCell.diagAsDouble});
-                        touched.push({cell: southWestCell, range: curCell.range + rangeDelta, diagAsDouble: !curCell.diagAsDouble});
+                        touched.push(southWestCell.hash2());
                     }
                 }
-
-
                 returnMe.push(curCell.cell);
             }
-
-
         }
         return returnMe;
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     public canMoveN(loc: XyPair): boolean {
         if (this.hasWall(new CellTarget(new XyPair(loc.x, loc.y), CellZone.NORTH)) ||
             this.hasWall(new CellTarget(new XyPair(loc.x, loc.y - 1), CellZone.FWR)) ||
-            this.hasWall(new CellTarget(new XyPair(loc.x, loc.y - 1), CellZone.BKW)) ) {
+            this.hasWall(new CellTarget(new XyPair(loc.x, loc.y - 1), CellZone.BKW))) {
             return false;
         }
         return true;
@@ -326,7 +274,7 @@ export class WallService {
     public canMoveE(loc: XyPair): boolean {
         if (this.hasWall(new CellTarget(new XyPair(loc.x + 1, loc.y), CellZone.WEST)) ||
             this.hasWall(new CellTarget(new XyPair(loc.x + 1, loc.y), CellZone.FWR)) ||
-            this.hasWall(new CellTarget(new XyPair(loc.x + 1, loc.y), CellZone.BKW)) ) {
+            this.hasWall(new CellTarget(new XyPair(loc.x + 1, loc.y), CellZone.BKW))) {
             return false;
         }
         return true;
@@ -347,7 +295,7 @@ export class WallService {
     public canMoveS(loc: XyPair): boolean {
         if (this.hasWall(new CellTarget(new XyPair(loc.x, loc.y + 1), CellZone.NORTH)) ||
             this.hasWall(new CellTarget(new XyPair(loc.x, loc.y + 1), CellZone.FWR)) ||
-            this.hasWall(new CellTarget(new XyPair(loc.x, loc.y + 1), CellZone.BKW)) ) {
+            this.hasWall(new CellTarget(new XyPair(loc.x, loc.y + 1), CellZone.BKW))) {
             return false;
         }
         return true;
@@ -368,7 +316,7 @@ export class WallService {
     public canMoveW(loc: XyPair): boolean {
         if (this.hasWall(new CellTarget(new XyPair(loc.x, loc.y), CellZone.WEST)) ||
             this.hasWall(new CellTarget(new XyPair(loc.x - 1, loc.y), CellZone.FWR)) ||
-            this.hasWall(new CellTarget(new XyPair(loc.x - 1, loc.y), CellZone.BKW)) ) {
+            this.hasWall(new CellTarget(new XyPair(loc.x - 1, loc.y), CellZone.BKW))) {
             return false;
         }
         return true;
