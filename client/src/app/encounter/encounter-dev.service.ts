@@ -71,10 +71,8 @@ export class EncounterDevService {
             for (const player of this.players) {
                 if (player.loc.x === loc_cell.x && player.loc.y === loc_cell.y) {
 
-                    const start = window.performance.now();
                     player.traversableCells_near = this.wallService.calcTraversableCells(player.loc, player.speed);
                     player.traversableCells_far = this.wallService.calcTraversableCells(player.loc, player.speed * 2);
-                    console.log('time to calc trav cells: ' + (window.performance.now() - start));
 
                     player.isSelected = true;
                     this.playerSelected = true;

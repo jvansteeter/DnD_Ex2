@@ -35,28 +35,17 @@ export class TokenRendererComponent implements OnInit {
             if (player.isSelected) {
                 this.boardCanvasService.draw_fill_all(this.ctx, player.loc, 'rgba(0, 0, 180, 0.2)');
 
-                // const cells = this.boardService.calcTraversableCells(player.loc, 7);
-                // for (const cell of cells) {
-                //     this.boardCanvasService.draw_fill_all(this.ctx, cell, 'rgba(0, 0, 180, 0.1)');
-                // }
-
                 for (const cell of player.traversableCells_near) {
-                    this.boardCanvasService.draw_fill_all(this.ctx, cell, 'rgba(0, 0, 180, 0.2)');
+                    if (this.boardService.coorInBounds(cell.x, cell.y)) {
+                        this.boardCanvasService.draw_fill_all(this.ctx, cell, 'rgba(0, 0, 180, 0.2)');
+                    }
                 }
 
                 for (const cell of player.traversableCells_far) {
-                    this.boardCanvasService.draw_fill_all(this.ctx, cell, 'rgba(0, 0, 180, 0.2)');
+                    if (this.boardService.coorInBounds(cell.x, cell.y)) {
+                        this.boardCanvasService.draw_fill_all(this.ctx, cell, 'rgba(0, 0, 180, 0.2)');
+                    }
                 }
-
-                // const near_cells = this.boardService.calcCellsWithinRangeOfCell(player.loc, player.speed);
-                // const far_cells = this.boardService.calcCellsWithinRangeOfCell(player.loc, player.speed * 2);
-                //
-                // for (const cell of near_cells) {
-                //     this.boardCanvasService.draw_fill_all(this.ctx, cell, 'rgba(0, 0, 180, 0.1)');
-                // }
-                // for (const cell of far_cells) {
-                //     this.boardCanvasService.draw_fill_all(this.ctx, cell, 'rgba(0, 0, 180, 0.1)');
-                // }
             }
 
             this.boardCanvasService.draw_img(this.ctx, new XyPair(player.loc.x * this.boardStateService.cell_res, player.loc.y * this.boardStateService.cell_res), player.token_img)

@@ -729,6 +729,6 @@ export class BoardService {
     }
 
     coorInBounds(x: number, y: number): boolean {
-        return !((x > this.boardStateService.mapDimX) || (y > this.boardStateService.mapDimY) || (x < 0) || (y < 0));
+        return !((x >= this.boardStateService.mapDimX) || (y >= this.boardStateService.mapDimY) || (x < 0) || (y < 0));
     }
 }
