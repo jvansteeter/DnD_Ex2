@@ -3,7 +3,7 @@
 		<mat-grid-tile [colspan]="1" [rowspan]="1">
 			<dashboard-card>
 				<div class="home-profilePhoto">
-					<a class="thumbnail" (click)="upload()">
+					<a (click)="upload()">
 						<img class="home-profilePhotoImg" [src]="profilePhotoUrl"/>
 					</a>
 					<input type="file" accept="image/*" (change)="loadImage()" #fileInput>
