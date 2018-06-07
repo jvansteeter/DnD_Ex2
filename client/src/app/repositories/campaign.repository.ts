@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { Campaign } from '../../../../shared/types/campaign';
 import 'rxjs-compat/add/operator/map';
 import { UserProfile } from '../types/userProfile';
-import { Encounter } from '../../../../shared/types/encounter/encounter';
+import { EncounterState } from '../../../../shared/types/encounter/encounterState';
 
 @Injectable()
 export class CampaignRepository {
@@ -44,7 +44,7 @@ export class CampaignRepository {
         });
     }
 
-    public getAllEncounters(campaignId: string): Observable<Encounter[]> {
-        return this.http.get<Encounter[]>('api/campaign/encounters/' + campaignId, {responseType: 'json'});
+    public getAllEncounters(campaignId: string): Observable<EncounterState[]> {
+        return this.http.get<EncounterState[]>('api/campaign/encounters/' + campaignId, {responseType: 'json'});
     }
 }

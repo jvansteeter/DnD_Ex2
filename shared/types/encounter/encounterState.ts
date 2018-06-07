@@ -1,6 +1,6 @@
 import { Player } from './player';
 
-export interface Encounter {
+export interface EncounterState {
 	_id: string;
 	label: string;
 	date: Date;

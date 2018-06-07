@@ -1,9 +1,9 @@
 import * as mongoose from 'mongoose';
 import Promise from 'bluebird';
-import { Encounter } from '../../../../shared/types/encounter/encounter';
+import { EncounterState } from '../../../../shared/types/encounter/encounterState';
 import { Player } from '../../../../shared/types/encounter/player';
 
-export class EncounterModel extends mongoose.Schema implements Encounter {
+export class EncounterModel extends mongoose.Schema implements EncounterState {
 	public _id;
 	public label: string;
 	public date: Date;

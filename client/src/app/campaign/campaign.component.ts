@@ -8,7 +8,7 @@ import { SelectFriendsComponent } from '../social/select-friends/select-friends.
 import { CampaignService } from './campaign.service';
 import { NewEncounterDialogComponent } from './dialog/new-encounter-dialog.component';
 import { SubjectDataSource } from '../utilities/subjectDataSource';
-import { Encounter } from '../../../../shared/types/encounter/encounter';
+import { EncounterState } from '../../../../shared/types/encounter/encounterState';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { mergeMap, tap } from 'rxjs/operators';
 import { DashboardCard } from '../cdk/dashboard-card/dashboard-card';
@@ -25,9 +25,9 @@ export class CampaignComponent implements OnInit {
 	public memberDataSource: MatTableDataSource<UserProfile>;
 	public memberTableCols = ['users', 'gm'];
 
-	public encounterDataSource: SubjectDataSource<Encounter>;
+	public encounterDataSource: SubjectDataSource<EncounterState>;
 	public encounterTableCols = ['label', 'date'];
-	public encounterSubject: BehaviorSubject<Encounter[]>;
+	public encounterSubject: BehaviorSubject<EncounterState[]>;
 
 	public encountersCard: DashboardCard;
 
@@ -80,14 +80,14 @@ export class CampaignComponent implements OnInit {
 	//   }
 	// }
 
-	public enterEncounter(encounter: Encounter): void {
+	public enterEncounter(encounter: EncounterState): void {
 		this.router.navigate(['encounter', encounter._id])
 	}
 
 	private initEncounterDataSource(): void {
-		this.encounterSubject = new BehaviorSubject<Encounter[]>(this.campaignService.encounters);
-		this.encounterDataSource = new SubjectDataSource<Encounter>(this.encounterSubject);
-		this.campaignService.encounterObservable.subscribe((encounters: Encounter[]) => {
+		this.encounterSubject = new BehaviorSubject<EncounterState[]>(this.campaignService.encounters);
+		this.encounterDataSource = new SubjectDataSource<EncounterState>(this.encounterSubject);
+		this.campaignService.encounterObservable.subscribe((encounters: EncounterState[]) => {
 			this.encounterSubject.next(encounters);
 		});
 	}

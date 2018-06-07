@@ -1,5 +1,5 @@
 import { UserProfile } from '../types/userProfile';
-import { Encounter } from '../../../../shared/types/encounter/encounter';
+import { EncounterState } from '../../../../shared/types/encounter/encounterState';
 import { Campaign } from '../../../../shared/types/campaign';
 
 export class CampaignState implements Campaign {
@@ -8,7 +8,7 @@ export class CampaignState implements Campaign {
   ruleSetId: string;
 
   private _members: UserProfile[];
-  private _encounters: Encounter[];
+  private _encounters: EncounterState[];
   private _isGameMaster: boolean;
 
   constructor(campaign: Campaign) {
@@ -26,11 +26,11 @@ export class CampaignState implements Campaign {
     this._members = value;
   }
 
-  get encounters(): Encounter[] {
+  get encounters(): EncounterState[] {
     return this._encounters;
   }
 
-  set encounters(value: Encounter[]) {
+  set encounters(value: EncounterState[]) {
     this._encounters = value;
   }
 }
