@@ -378,7 +378,7 @@ export class BoardService {
                 traceCount++;
             }
         }
-        return traceCount >= this.boardStateService.traceHitCountForVisibility;
+        return traceCount >= 3;
     }
 
     cellHasLOSToEast(origin_cell: XyPair, target_cell: XyPair): boolean {
@@ -390,7 +390,7 @@ export class BoardService {
                 traceCount++;
             }
         }
-        return traceCount >= this.boardStateService.traceHitCountForVisibility;
+        return traceCount >= 3;
     }
 
     cellHasLOSToSouth(origin_cell: XyPair, target_cell: XyPair): boolean {
@@ -402,7 +402,7 @@ export class BoardService {
                 traceCount++;
             }
         }
-        return traceCount >= this.boardStateService.traceHitCountForVisibility;
+        return traceCount >= 3;
     }
 
     cellHasLOSToWest(origin_cell: XyPair, target_cell: XyPair): boolean {
@@ -414,7 +414,7 @@ export class BoardService {
                 traceCount++;
             }
         }
-        return traceCount >= this.boardStateService.traceHitCountForVisibility;
+        return traceCount >= 3;
     }
 
     // *************************************************************************************************************************************************************
