@@ -22,6 +22,8 @@ import {TokenRendererComponent} from './renderer/token-renderer/token-renderer.c
 import {PopService} from "./pop/pop.service";
 import {PopRootComponent} from "./pop/pop-root.component";
 import {NpcPopComponent} from "./pop/npcPop/npc-pop.component";
+import { TempModule } from '../temp/temp.module';
+import { AddPlayerComponent } from '../temp/add-player.component';
 
 
 @NgModule({
@@ -47,7 +49,8 @@ import {NpcPopComponent} from "./pop/npcPop/npc-pop.component";
         MatCheckboxModule,
         FormsModule,
         MatSliderModule,
-		 		MatButtonModule
+		 		MatButtonModule,
+        TempModule
     ],
     providers: [
         BoardService,
@@ -58,7 +61,8 @@ import {NpcPopComponent} from "./pop/npcPop/npc-pop.component";
         TileService
     ],
     entryComponents: [
-        NpcPopComponent
+        NpcPopComponent,
+		    AddPlayerComponent
     ],
     bootstrap: [],
     exports: [

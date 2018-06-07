@@ -5,6 +5,8 @@ import {TileService} from '../services/tile.service';
 import {ViewMode} from '../shared/view-mode';
 import {BoardMode} from '../shared/board-mode';
 import {LightValue} from '../shared/light-value';
+import { MatDialog } from '@angular/material';
+import { AddPlayerComponent } from '../../temp/add-player.component';
 
 @Component({
     selector: 'board-controller',
@@ -77,7 +79,8 @@ export class BoardControllerComponent implements OnInit{
     constructor(
         public boardService: BoardService,
         public boardStateService: BoardStateService,
-        public ts: TileService
+        public ts: TileService,
+        private dialog: MatDialog
     ) {
     }
 
@@ -224,5 +227,7 @@ export class BoardControllerComponent implements OnInit{
         this.ts.activeTileUrl = id;
     }
 
-
+		addPlayer(): void {
+    	  this.dialog.open(AddPlayerComponent);
+		}
 }

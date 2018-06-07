@@ -18,7 +18,7 @@ export class Line {
     this.c = (this.a * point_1.x) + (this.b * point_1.y);
   }
 
-  findIntersectWithLine(line: Line): XyPair {
+  findIntersectWithLine(line: Line): XyPair | null {
     const returnMe = new XyPair(0, 0);
     const det = (this.a * line.b) - (line.a * this.b);
 
