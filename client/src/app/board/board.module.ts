@@ -1,5 +1,5 @@
 import {BrowserModule} from '@angular/platform-browser';
-import {MatCheckboxModule, MatRadioModule, MatSliderModule} from '@angular/material';
+import { MatButtonModule, MatCheckboxModule, MatRadioModule, MatSliderModule } from '@angular/material';
 import {NgModule} from '@angular/core';
 import {MapRendererComponent} from "./renderer/map-renderer/map-renderer.component";
 import {GridRendererComponent} from "./renderer/grid-renderer/grid-renderer";
@@ -46,7 +46,8 @@ import {NpcPopComponent} from "./pop/npcPop/npc-pop.component";
         MatRadioModule,
         MatCheckboxModule,
         FormsModule,
-        MatSliderModule
+        MatSliderModule,
+		 		MatButtonModule
     ],
     providers: [
         BoardService,

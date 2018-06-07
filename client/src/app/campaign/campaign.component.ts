@@ -8,7 +8,7 @@ import { SelectFriendsComponent } from '../social/select-friends/select-friends.
 import { CampaignService } from './campaign.service';
 import { NewEncounterDialogComponent } from './dialog/new-encounter-dialog.component';
 import { SubjectDataSource } from '../utilities/subjectDataSource';
-import { Encounter } from '../../../../shared/types/encounter';
+import { Encounter } from '../../../../shared/types/encounter/encounter';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { mergeMap, tap } from 'rxjs/operators';
 import { DashboardCard } from '../cdk/dashboard-card/dashboard-card';

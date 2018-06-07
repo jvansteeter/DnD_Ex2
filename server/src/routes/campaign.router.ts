@@ -5,7 +5,7 @@ import { EncounterService } from "../services/encounter.service";
 import { EncounterModel } from "../db/models/encounter.model";
 import { ServerError } from '../../../shared/errors/ServerError';
 import { Campaign } from '../../../shared/types/campaign';
-import { Encounter } from '../../../shared/types/encounter';
+import { Encounter } from '../../../shared/types/encounter/encounter';
 
 
 /**********************************************************************************************************

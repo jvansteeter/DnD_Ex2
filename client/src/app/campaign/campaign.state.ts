@@ -1,5 +1,5 @@
 import { UserProfile } from '../types/userProfile';
-import { Encounter } from '../../../../shared/types/encounter';
+import { Encounter } from '../../../../shared/types/encounter/encounter';
 import { Campaign } from '../../../../shared/types/campaign';
 
 export class CampaignState implements Campaign {

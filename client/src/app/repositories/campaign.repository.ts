@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { Campaign } from '../../../../shared/types/campaign';
 import 'rxjs-compat/add/operator/map';
 import { UserProfile } from '../types/userProfile';
-import { Encounter } from '../../../../shared/types/encounter';
+import { Encounter } from '../../../../shared/types/encounter/encounter';
 
 @Injectable()
 export class CampaignRepository {
