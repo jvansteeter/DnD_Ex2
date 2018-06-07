@@ -1,14 +1,21 @@
+:host {
+	display: flex;
+	flex: 1;
+}
+
 .main-content {
-  margin-left: 15px;
-  margin-right: 15px;
-  padding-top: 70px;
+	margin-left: 15px;
+	margin-right: 15px;
+	padding-top: 70px;
+	display: flex;
+	flex: 1;
 }
 
 .main-toolbar {
-  position: fixed;
-  z-index: 99;
+	position: fixed;
+	z-index: 99;
 }
 
 .right-toolbarButtons {
-  position: absolute;
+	position: absolute;
 }
