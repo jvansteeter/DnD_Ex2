@@ -4,7 +4,7 @@ import {CellTarget} from '../../shared/cell-target';
 import {CellZone} from '../../shared/cell-zone';
 import {BoardMode} from '../../shared/board-mode';
 import {BoardStateService} from '../../services/board-state.service';
-import {BoardCanvasService} from '../../services/board-canvas-service';
+import {BoardCanvasService} from '../../services/board-canvas.service';
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 
 @Component({
@@ -31,7 +31,7 @@ export class HoverRendererComponent implements OnInit {
     this.boardCanvasService.clear_canvas(this.ctx);
     this.boardCanvasService.updateTransform(this.ctx);
 
-    if (!isNullOrUndefined(this.boardStateService.mouse_cell_target) && this.boardService.mouseOnMap) {
+    if (!isNullOrUndefined(this.boardStateService.mouse_cell_target) && this.boardStateService.mouseOnMap) {
       switch (this.boardStateService.board_edit_mode) {
         case BoardMode.WALLS:
           if (!isNullOrUndefined(this.boardService.source_click_location)) {

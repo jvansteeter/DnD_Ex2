@@ -5,7 +5,7 @@ import {XyPair} from '../geometry/xy-pair';
 import {expressionChangedAfterItHasBeenCheckedError} from '@angular/core/src/view/errors';
 
 @Injectable()
-export class TileService {
+export class BoardTileService {
 
   public activeTileUrl = '';
   public tileData = [];

@@ -3,7 +3,7 @@ import {ViewMode} from '../../shared/view-mode';
 import {CellLightConfig} from '../../shared/cell-light-state';
 import {LightValue} from '../../shared/light-value';
 import {BoardStateService} from '../../services/board-state.service';
-import {BoardCanvasService} from '../../services/board-canvas-service';
+import {BoardCanvasService} from '../../services/board-canvas.service';
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 
 @Component({

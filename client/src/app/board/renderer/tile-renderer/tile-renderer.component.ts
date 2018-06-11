@@ -2,8 +2,8 @@ import {BoardService} from '../../services/board.service';
 import {ViewMode} from '../../shared/view-mode';
 import {XyPair} from '../../geometry/xy-pair';
 import {BoardStateService} from '../../services/board-state.service';
-import {BoardCanvasService} from '../../services/board-canvas-service';
-import {TileService} from '../../services/tile.service';
+import {BoardCanvasService} from '../../services/board-canvas.service';
+import {BoardTileService} from '../../services/board-tile.service';
 import {BoardMode} from '../../shared/board-mode';
 import {CellZone} from '../../shared/cell-zone';
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
@@ -21,7 +21,7 @@ export class TileRendererComponent implements OnInit {
     private boardService: BoardService,
     private boardStateService: BoardStateService,
     private boardCanvasService: BoardCanvasService,
-    private ts: TileService
+    private ts: BoardTileService
   ) {}
 
   ngOnInit() {
@@ -77,7 +77,7 @@ export class TileRendererComponent implements OnInit {
             tileImage.src = this.ts.activeTileUrl;
             const canvasPattern = this.ctx.createPattern(tileImage, 'no-repeat');
 
-            if (this.boardService.shiftDown) {
+            if (this.boardStateService.shiftDown) {
               switch (this.boardStateService.mouse_cell_target.zone) {
                 case CellZone.TOP:
                   this.boardCanvasService.draw_fill_N(this.ctx, this.boardStateService.mouse_loc_cell, canvasPattern);

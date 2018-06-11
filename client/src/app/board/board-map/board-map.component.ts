@@ -1,9 +1,9 @@
 import {Component, ViewChild, ElementRef, OnInit, HostListener, AfterViewInit, AfterViewChecked} from '@angular/core';
 import {BoardService} from "../services/board.service";
-import {BoardCanvasService} from "../services/board-canvas-service";
+import {BoardCanvasService} from "../services/board-canvas.service";
 import {BoardStateService} from "../services/board-state.service";
-import {WallService} from "../services/wall.service";
-import {TileService} from "../services/tile.service";
+import {BoardWallService} from "../services/board-wall.service";
+import {BoardTileService} from "../services/board-tile.service";
 
 
 @Component({
@@ -67,11 +67,29 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
     }
 
     handleMouseUp(event) {
-        this.boardService.handleMouseUp(event);
+        switch (event.which) {
+            case 1:
+                this.boardService.handleMouseLeftUp(event);
+                break;
+            case 2:
+                break;
+            case 3:
+                this.boardService.handleMouseRightUp(event);
+                break;
+        }
     }
 
     handleMouseDown(event) {
-        this.boardService.handleMouseDown(event);
+        switch (event.which) {
+            case 1:
+                this.boardService.handleMouseLeftDown(event);
+                break;
+            case 2:
+                break;
+            case 3:
+                this.boardService.handleMouseRightDown(event);
+                break;
+        }
     }
 
     handleMouseWheelUp(event) {
@@ -91,22 +109,6 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
     }
 
     handleContextMenu(event) {
-        // Produce a permanent context menu
-        // if (!this.secondaryIsActive) {
-        //     timer(0)
-        //         .subscribe((x) => {
-        //             this.secondaryIsHover = false;
-        //             this.secondaryIsActive = true;
-        //             this.addComponent(false, this.purpleRef.nativeElement.offsetLeft + this.purpleRef.nativeElement.offsetWidth, this.purpleRef.nativeElement.offsetTop, 200, 50);
-        //         });
-        // } else {
-        //     if (this.secondaryIsHover) {
-        //         this.destroyComponent();
-        //         this.secondaryIsHover = false;
-        //         this.secondaryIsActive = true;
-        //         this.addComponent(false, this.purpleRef.nativeElement.offsetLeft + this.purpleRef.nativeElement.offsetWidth, this.purpleRef.nativeElement.offsetTop, 200, 50);
-        //     }
-        // }
         return false;
     }
 
@@ -124,13 +126,13 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
         const key_code = event.code;
         switch (key_code) {
             case 'ShiftLeft' :
-                this.boardService.shiftDown = true;
+                this.boardStateService.shiftDown = true;
                 this.boardService.refreshMouseLocation();
                 break;
             case 'ShiftRight' :
                 break;
             case 'Space' :
-                this.boardService.spaceDown = true;
+                this.boardStateService.spaceDown = true;
                 break;
         }
     }
@@ -140,13 +142,13 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
         const key_code = event.code;
         switch (key_code) {
             case 'ShiftLeft' :
-                this.boardService.shiftDown = false;
+                this.boardStateService.shiftDown = false;
                 this.boardService.refreshMouseLocation();
                 break;
             case 'ShiftRight' :
                 break;
             case 'Space' :
-                this.boardService.spaceDown = false;
+                this.boardStateService.spaceDown = false;
                 break;
             case 'Escape':
                 this.boardService.source_click_location = null;

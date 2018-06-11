@@ -8,31 +8,13 @@ import {BoardMode} from '../shared/board-mode';
 import {LightSource} from '../map-objects/light-source';
 import {LightValue} from '../shared/light-value';
 import {BoardStateService} from './board-state.service';
-import {WallService} from './wall.service';
-import {BoardCanvasService} from './board-canvas-service';
-import {TileService} from './tile.service';
+import {BoardWallService} from './board-wall.service';
+import {BoardCanvasService} from './board-canvas.service';
+import {BoardTileService} from './board-tile.service';
 import {ViewMode} from '../shared/view-mode';
 import { EncounterService } from '../../encounter/encounter.service';
+import {BoardTransformService} from './board-transform.service';
 
-/*************************************************************************************************************************************
- * BoardConfigService
- *************************************************************************************************************************************
- * RESPONSIBLE FOR ...
- *
- *
- *
- * GENERAL NOTES
- * --- When it comes to locating things on the screen, there are a handful of coordinate systems
- *     to be aware of. Variables and/or functions that require/return a specific value in a given
- *     coordinate scope will suffix the varible/function in an identifier for that scope
- *     --- '_screen': refers to the pixel coor on the screen, considered global
- *     --- '_canvas': refers to the pixel coor on the mapCanvas, relative to its top corner
- *     --- '_map'   : refers to the pixel coor on the map, influenced by map transforms
- *     --- '_cell'  : refers to a simple tile on the board-map. By taking the global 'squareSize' and
- *                    multiplying by the '_cell's X and Y values, one would get the '_canvas' value
- *                    for the cell
- *     --- 'cell_pix' : refers to the pixel coordinate within the cell
- */
 
 @Injectable()
 export class BoardService {
@@ -45,17 +27,18 @@ export class BoardService {
 
     // input control
     source_click_location: CellTarget;
-    mouseOnMap = false;
-    shiftDown = false;
-    spaceDown = false;
-    mouseDown = false;
-    mouseDrag = false;
-    mouseDownStartTime: number;
+    // mouseOnMap = false;
+    // shiftDown = false;
+    // spaceDown = false;
+    // mouseLeftDown = false;
+    // mouseDrag = false;
+    mouseLeftDownStartTime: number;
 
     constructor(public boardStateService: BoardStateService,
                 public boardCanvasService: BoardCanvasService,
-                private wallService: WallService,
-                private tileService: TileService,
+                public boardTransformService: BoardTransformService,
+                private wallService: BoardWallService,
+                private tileService: BoardTileService,
                 private encounterService: EncounterService) {
         this.cellLightData = new Array(this.boardStateService.mapDimX);
         for (let x = 0; x < this.boardStateService.mapDimX; x++) {
@@ -86,21 +69,21 @@ export class BoardService {
     updateMouseLocation(location: XyPair): void {
         // UPDATE GLOBAL MOUSE LOCATIONS
         this.boardStateService.mouse_loc_screen = location;
-        this.boardStateService.mouse_loc_canvas = this.screen_to_canvas(this.boardStateService.mouse_loc_screen);
-        this.boardStateService.mouse_loc_map = this.screen_to_map(this.boardStateService.mouse_loc_screen);
-        this.boardStateService.mouse_loc_cell = this.screen_to_cell(this.boardStateService.mouse_loc_screen);
+        this.boardStateService.mouse_loc_canvas = this.boardTransformService.screen_to_canvas(this.boardStateService.mouse_loc_screen);
+        this.boardStateService.mouse_loc_map = this.boardTransformService.screen_to_map(this.boardStateService.mouse_loc_screen);
+        this.boardStateService.mouse_loc_cell = this.boardTransformService.screen_to_cell(this.boardStateService.mouse_loc_screen);
         this.boardStateService.mouse_loc_cell_pix = new XyPair(this.boardStateService.mouse_loc_map.x - (this.boardStateService.mouse_loc_cell.x * this.boardStateService.cell_res), this.boardStateService.mouse_loc_map.y - (this.boardStateService.mouse_loc_cell.y * this.boardStateService.cell_res));
-        this.boardStateService.mouse_cell_target = this.calculate_cell_target(this.boardStateService.mouse_loc_cell_pix);
-        this.mouseOnMap = this.coorInBounds(this.boardStateService.mouse_loc_cell.x, this.boardStateService.mouse_loc_cell.y);
+        this.boardStateService.mouse_cell_target = this.boardTransformService.calculate_cell_target(this.boardStateService.mouse_loc_cell_pix);
+        this.boardStateService.mouseOnMap = this.coorInBounds(this.boardStateService.mouse_loc_cell.x, this.boardStateService.mouse_loc_cell.y);
     }
 
     refreshMouseLocation(): void {
-        this.boardStateService.mouse_loc_canvas = this.screen_to_canvas(this.boardStateService.mouse_loc_screen);
-        this.boardStateService.mouse_loc_map = this.screen_to_map(this.boardStateService.mouse_loc_screen);
-        this.boardStateService.mouse_loc_cell = this.screen_to_cell(this.boardStateService.mouse_loc_screen);
+        this.boardStateService.mouse_loc_canvas = this.boardTransformService.screen_to_canvas(this.boardStateService.mouse_loc_screen);
+        this.boardStateService.mouse_loc_map = this.boardTransformService.screen_to_map(this.boardStateService.mouse_loc_screen);
+        this.boardStateService.mouse_loc_cell = this.boardTransformService.screen_to_cell(this.boardStateService.mouse_loc_screen);
         this.boardStateService.mouse_loc_cell_pix = new XyPair(this.boardStateService.mouse_loc_map.x - (this.boardStateService.mouse_loc_cell.x * this.boardStateService.cell_res), this.boardStateService.mouse_loc_map.y - (this.boardStateService.mouse_loc_cell.y * this.boardStateService.cell_res));
-        this.boardStateService.mouse_cell_target = this.calculate_cell_target(this.boardStateService.mouse_loc_cell_pix);
-        this.mouseOnMap = this.coorInBounds(this.boardStateService.mouse_loc_cell.x, this.boardStateService.mouse_loc_cell.y);
+        this.boardStateService.mouse_cell_target = this.boardTransformService.calculate_cell_target(this.boardStateService.mouse_loc_cell_pix);
+        this.boardStateService.mouseOnMap = this.coorInBounds(this.boardStateService.mouse_loc_cell.x, this.boardStateService.mouse_loc_cell.y);
     }
 
     clearMouseLocation(): void {
@@ -109,7 +92,7 @@ export class BoardService {
         this.boardStateService.mouse_loc_cell = null;
         this.boardStateService.mouse_loc_cell_pix = null;
         this.boardStateService.mouse_cell_target = null;
-        this.mouseOnMap = false;
+        this.boardStateService.mouseOnMap = false;
     }
 
     handleMouseScroll(delta: number) {
@@ -145,14 +128,14 @@ export class BoardService {
 
     handleMouseLeave() {
         this.clearMouseLocation();
-        this.mouseDown = false;
+        this.boardStateService.mouseLeftDown = false;
     }
 
     handleMouseEnter() {
     }
 
-    handleMouseUp(event) {
-        if (!this.mouseDrag) {
+    handleMouseLeftUp(event) {
+        if (!this.boardStateService.mouseDrag) {
             switch (this.boardStateService.board_view_mode) {
                 case ViewMode.MASTER:
                     switch (this.boardStateService.board_edit_mode) {
@@ -252,22 +235,30 @@ export class BoardService {
             }
         }
 
-        this.mouseDown = false;
-        this.mouseDrag = false;
+        this.boardStateService.mouseLeftDown = false;
+        this.boardStateService.mouseDrag = false;
     }
 
-    handleMouseDown(event) {
-        this.mouseDown = true;
-        this.mouseDownStartTime = window.performance.now();
+    handleMouseLeftDown(event) {
+        this.boardStateService.mouseLeftDown = true;
+        this.mouseLeftDownStartTime = window.performance.now();
+    }
+
+    handleMouseRightDown(event) {
+
+    }
+
+    handleMouseRightUp(event) {
+
     }
 
     handleMouseMove(event) {
         const mouse_screen = new XyPair(event.clientX, event.clientY);
 
-        if (this.mouseDown) {
-            if ((window.performance.now() - this.mouseDownStartTime) > 90) {
-                this.mouseDrag = true;
-                const trans_coor = this.screen_to_map(event);
+        if (this.boardStateService.mouseLeftDown) {
+            if ((window.performance.now() - this.mouseLeftDownStartTime) > 90) {
+                this.boardStateService.mouseDrag = true;
+                const trans_coor = this.boardTransformService.screen_to_map(event);
 
                 const deltaX = this.boardStateService.mouse_loc_map.x - trans_coor.x;
                 const deltaY = this.boardStateService.mouse_loc_map.y - trans_coor.y;
@@ -278,10 +269,14 @@ export class BoardService {
         }
 
         this.updateMouseLocation(mouse_screen);
+
+
         this.encounterService.checkForPops(
             new XyPair(this.boardStateService.mouse_loc_cell.x, this.boardStateService.mouse_loc_cell.y),
-            this.map_to_screen(new XyPair((this.boardStateService.mouse_loc_cell.x + 1) * this.boardStateService.cell_res,((this.boardStateService.mouse_loc_cell.y) * this.boardStateService.cell_res)))
+            this.boardTransformService.map_to_screen(new XyPair((this.boardStateService.mouse_loc_cell.x + 1) * this.boardStateService.cell_res,((this.boardStateService.mouse_loc_cell.y) * this.boardStateService.cell_res)))
         );
+
+
     }
 
     // *************************************************************************************************************************************************************
@@ -590,143 +585,92 @@ export class BoardService {
     }
 
 
-    // *************************************************************************************************************************************************************
-    // COORDINATE TRANSFORM FUNCTIONS
-    // *************************************************************************************************************************************************************
 
-    /**
-     * takes the mouse position in terms on the monitor, and transforms them
-     * to a position relative to the top-left corner of the canvas element
-     * @param {XyPair} screenRes
-     * @returns {XyPair}
-     */
-    screen_to_canvas(screenRes: XyPair): XyPair {
-        const rect = this.boardCanvasService.canvasNativeElement.getBoundingClientRect();
-        return new XyPair(screenRes.x - rect.left, screenRes.y - rect.top);
-    }
-
-    /**
-     * takes the mouse position in terms of the monitor, and transforms them
-     * to a position relative to the top-left corner of the MAP itself, impacted by transforms
-     * @param {XyPair} screenRes
-     * @returns {XyPair}
-     */
-    screen_to_map(screenRes: XyPair): XyPair {
-        const canvasPixel = this.screen_to_canvas(screenRes);
-        const mapX = (canvasPixel.x - this.boardStateService.x_offset) / this.boardStateService.scale;
-        const mapY = (canvasPixel.y - this.boardStateService.y_offset) / this.boardStateService.scale;
-        return new XyPair(mapX, mapY);
-    }
-
-    screen_to_cell(screenRes: XyPair): XyPair {
-        const mapPixel = this.screen_to_map(screenRes);
-
-        const cellX = Math.floor(mapPixel.x / this.boardStateService.cell_res);
-        const cellY = Math.floor(mapPixel.y / this.boardStateService.cell_res);
-
-        return new XyPair(cellX, cellY);
-    }
-
-    map_to_canvas(mapRes: XyPair): XyPair {
-        const canvasX = (mapRes.x * this.boardStateService.scale) + this.boardStateService.x_offset;
-        const canvasY = (mapRes.y * this.boardStateService.scale) + this.boardStateService.y_offset;
-        return new XyPair(canvasX, canvasY);
-    }
-
-    map_to_screen(mapRes: XyPair): XyPair {
-        const canvas = this.map_to_canvas(mapRes);
-        const bound = this.boardCanvasService.canvasNativeElement.getBoundingClientRect();
-
-        const screenX = canvas.x + bound.left;
-        const screenY = canvas.y + bound.top;
-        return new XyPair(screenX, screenY);
-    }
-
-    calculate_cell_target(loc: XyPair): CellTarget {
-        const shift = this.boardStateService.cell_res * this.boardStateService.inputOffset;
-
-        // CENTER
-        if ((loc.x > shift) && (loc.x < (this.boardStateService.cell_res - shift) && (loc.y > shift) && (loc.y < (this.boardStateService.cell_res - shift)))) {
-
-            if (this.shiftDown && (this.boardStateService.board_edit_mode === BoardMode.TILES)) {
-                // Handles the isolation of the four triangles
-                if (loc.x >= loc.y) {
-                    // top of cell
-                    if ((loc.x + loc.y) <= this.boardStateService.cell_res) {
-                        // top-left
-                        return new CellTarget(this.boardStateService.mouse_loc_cell, CellZone.TOP);
-                    } else {
-                        // top-right
-                        return new CellTarget(this.boardStateService.mouse_loc_cell, CellZone.RIGHT);
-                    }
-                } else {
-                    // bottom of cell
-                    if ((loc.x + loc.y) <= this.boardStateService.cell_res) {
-                        // bottom-left
-                        return new CellTarget(this.boardStateService.mouse_loc_cell, CellZone.LEFT);
-                    } else {
-                        // bottom-right
-                        return new CellTarget(this.boardStateService.mouse_loc_cell, CellZone.BOTTOM);
-                    }
-                }
-            }
-
-            if (this.boardStateService.doDiagonals) {
-                if (loc.x > (this.boardStateService.cell_res / 2)) {
-                    // right side
-                    if (loc.y > (this.boardStateService.cell_res / 2)) {
-                        // bottom
-                        return new CellTarget(this.boardStateService.mouse_loc_cell, CellZone.BKW);
-                    } else {
-                        // top
-                        return new CellTarget(this.boardStateService.mouse_loc_cell, CellZone.FWR);
-                    }
-                } else {
-                    // left side
-                    if (loc.y > (this.boardStateService.cell_res / 2)) {
-                        // bottom
-                        return new CellTarget(this.boardStateService.mouse_loc_cell, CellZone.FWR);
-                    } else {
-                        // top
-                        return new CellTarget(this.boardStateService.mouse_loc_cell, CellZone.BKW);
-                    }
-                }
-            }
-
-            return new CellTarget(this.boardStateService.mouse_loc_cell, CellZone.CENTER);
-
-        }
-
-        // LEFT/RIGHT
-        if ((loc.x <= shift) && (loc.y > shift) && (loc.y < (this.boardStateService.cell_res - shift))) {
-            return new CellTarget(this.boardStateService.mouse_loc_cell, CellZone.WEST);
-        }
-        if ((loc.x >= (this.boardStateService.cell_res - shift)) && (loc.y > shift) && (loc.y < (this.boardStateService.cell_res - shift))) {
-            return new CellTarget(new XyPair(this.boardStateService.mouse_loc_cell.x + 1, this.boardStateService.mouse_loc_cell.y), CellZone.WEST);
-        }
-
-        // TOP/BOTTOM
-        if ((loc.y <= shift) && (loc.x > shift) && (loc.x < (this.boardStateService.cell_res - shift))) {
-            return new CellTarget(this.boardStateService.mouse_loc_cell, CellZone.NORTH);
-        }
-        if ((loc.y >= (this.boardStateService.cell_res - shift)) && (loc.x > shift) && (loc.x < (this.boardStateService.cell_res - shift))) {
-            return new CellTarget(new XyPair(this.boardStateService.mouse_loc_cell.x, this.boardStateService.mouse_loc_cell.y + 1), CellZone.NORTH);
-        }
-
-        // CORNERS
-        if ((loc.x <= shift) && (loc.y <= shift)) {
-            return new CellTarget(this.boardStateService.mouse_loc_cell, CellZone.CORNER);
-        }
-        if ((loc.x <= shift) && (loc.y >= (this.boardStateService.cell_res - shift))) {
-            return new CellTarget(new XyPair(this.boardStateService.mouse_loc_cell.x, this.boardStateService.mouse_loc_cell.y + 1), CellZone.CORNER);
-        }
-        if ((loc.x >= (this.boardStateService.cell_res - shift)) && (loc.y <= shift)) {
-            return new CellTarget(new XyPair(this.boardStateService.mouse_loc_cell.x + 1, this.boardStateService.mouse_loc_cell.y), CellZone.CORNER);
-        }
-        if ((loc.x >= (this.boardStateService.cell_res - shift)) && (loc.y >= (this.boardStateService.cell_res - shift))) {
-            return new CellTarget(new XyPair(this.boardStateService.mouse_loc_cell.x + 1, this.boardStateService.mouse_loc_cell.y + 1), CellZone.CORNER);
-        }
-    }
+    // calculate_cell_target(loc: XyPair): CellTarget {
+    //     const shift = this.boardStateService.cell_res * this.boardStateService.inputOffset;
+    //
+    //     // CENTER
+    //     if ((loc.x > shift) && (loc.x < (this.boardStateService.cell_res - shift) && (loc.y > shift) && (loc.y < (this.boardStateService.cell_res - shift)))) {
+    //
+    //         if (this.shiftDown && (this.boardStateService.board_edit_mode === BoardMode.TILES)) {
+    //             // Handles the isolation of the four triangles
+    //             if (loc.x >= loc.y) {
+    //                 // top of cell
+    //                 if ((loc.x + loc.y) <= this.boardStateService.cell_res) {
+    //                     // top-left
+    //                     return new CellTarget(this.boardStateService.mouse_loc_cell, CellZone.TOP);
+    //                 } else {
+    //                     // top-right
+    //                     return new CellTarget(this.boardStateService.mouse_loc_cell, CellZone.RIGHT);
+    //                 }
+    //             } else {
+    //                 // bottom of cell
+    //                 if ((loc.x + loc.y) <= this.boardStateService.cell_res) {
+    //                     // bottom-left
+    //                     return new CellTarget(this.boardStateService.mouse_loc_cell, CellZone.LEFT);
+    //                 } else {
+    //                     // bottom-right
+    //                     return new CellTarget(this.boardStateService.mouse_loc_cell, CellZone.BOTTOM);
+    //                 }
+    //             }
+    //         }
+    //
+    //         if (this.boardStateService.doDiagonals) {
+    //             if (loc.x > (this.boardStateService.cell_res / 2)) {
+    //                 // right side
+    //                 if (loc.y > (this.boardStateService.cell_res / 2)) {
+    //                     // bottom
+    //                     return new CellTarget(this.boardStateService.mouse_loc_cell, CellZone.BKW);
+    //                 } else {
+    //                     // top
+    //                     return new CellTarget(this.boardStateService.mouse_loc_cell, CellZone.FWR);
+    //                 }
+    //             } else {
+    //                 // left side
+    //                 if (loc.y > (this.boardStateService.cell_res / 2)) {
+    //                     // bottom
+    //                     return new CellTarget(this.boardStateService.mouse_loc_cell, CellZone.FWR);
+    //                 } else {
+    //                     // top
+    //                     return new CellTarget(this.boardStateService.mouse_loc_cell, CellZone.BKW);
+    //                 }
+    //             }
+    //         }
+    //
+    //         return new CellTarget(this.boardStateService.mouse_loc_cell, CellZone.CENTER);
+    //
+    //     }
+    //
+    //     // LEFT/RIGHT
+    //     if ((loc.x <= shift) && (loc.y > shift) && (loc.y < (this.boardStateService.cell_res - shift))) {
+    //         return new CellTarget(this.boardStateService.mouse_loc_cell, CellZone.WEST);
+    //     }
+    //     if ((loc.x >= (this.boardStateService.cell_res - shift)) && (loc.y > shift) && (loc.y < (this.boardStateService.cell_res - shift))) {
+    //         return new CellTarget(new XyPair(this.boardStateService.mouse_loc_cell.x + 1, this.boardStateService.mouse_loc_cell.y), CellZone.WEST);
+    //     }
+    //
+    //     // TOP/BOTTOM
+    //     if ((loc.y <= shift) && (loc.x > shift) && (loc.x < (this.boardStateService.cell_res - shift))) {
+    //         return new CellTarget(this.boardStateService.mouse_loc_cell, CellZone.NORTH);
+    //     }
+    //     if ((loc.y >= (this.boardStateService.cell_res - shift)) && (loc.x > shift) && (loc.x < (this.boardStateService.cell_res - shift))) {
+    //         return new CellTarget(new XyPair(this.boardStateService.mouse_loc_cell.x, this.boardStateService.mouse_loc_cell.y + 1), CellZone.NORTH);
+    //     }
+    //
+    //     // CORNERS
+    //     if ((loc.x <= shift) && (loc.y <= shift)) {
+    //         return new CellTarget(this.boardStateService.mouse_loc_cell, CellZone.CORNER);
+    //     }
+    //     if ((loc.x <= shift) && (loc.y >= (this.boardStateService.cell_res - shift))) {
+    //         return new CellTarget(new XyPair(this.boardStateService.mouse_loc_cell.x, this.boardStateService.mouse_loc_cell.y + 1), CellZone.CORNER);
+    //     }
+    //     if ((loc.x >= (this.boardStateService.cell_res - shift)) && (loc.y <= shift)) {
+    //         return new CellTarget(new XyPair(this.boardStateService.mouse_loc_cell.x + 1, this.boardStateService.mouse_loc_cell.y), CellZone.CORNER);
+    //     }
+    //     if ((loc.x >= (this.boardStateService.cell_res - shift)) && (loc.y >= (this.boardStateService.cell_res - shift))) {
+    //         return new CellTarget(new XyPair(this.boardStateService.mouse_loc_cell.x + 1, this.boardStateService.mouse_loc_cell.y + 1), CellZone.CORNER);
+    //     }
+    // }
 
     coorInBounds(x: number, y: number): boolean {
         return !((x >= this.boardStateService.mapDimX) || (y >= this.boardStateService.mapDimY) || (x < 0) || (y < 0));

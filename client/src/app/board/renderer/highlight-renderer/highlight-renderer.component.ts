@@ -2,7 +2,7 @@ import {XyPair} from '../../geometry/xy-pair';
 import {BoardService} from '../../services/board.service';
 import {isNullOrUndefined} from 'util';
 import {BoardStateService} from '../../services/board-state.service';
-import {BoardCanvasService} from '../../services/board-canvas-service';
+import {BoardCanvasService} from '../../services/board-canvas.service';
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ViewMode} from '../../shared/view-mode';
 

@@ -7,7 +7,7 @@ import {BoardStateService} from './board-state.service';
 import {BoardService} from "./board.service";
 
 @Injectable()
-export class WallService {
+export class BoardWallService {
 
     public wallData: Map<string, Wall> = new Map();
     private blockMap = [];

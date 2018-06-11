@@ -14,9 +14,9 @@ import {BoardControllerComponent} from "./board-control/board-controller.compone
 import {FormsModule} from "@angular/forms";
 import {BoardService} from "./services/board.service";
 import {BoardStateService} from "./services/board-state.service";
-import {BoardCanvasService} from "./services/board-canvas-service";
-import {WallService} from "./services/wall.service";
-import {TileService} from "./services/tile.service";
+import {BoardCanvasService} from "./services/board-canvas.service";
+import {BoardWallService} from "./services/board-wall.service";
+import {BoardTileService} from "./services/board-tile.service";
 import {BoardMapComponent} from './board-map/board-map.component';
 import {TokenRendererComponent} from './renderer/token-renderer/token-renderer.component';
 import {PopService} from "./pop/pop.service";
@@ -24,6 +24,7 @@ import {PopRootComponent} from "./pop/pop-root.component";
 import {NpcPopComponent} from "./pop/npcPop/npc-pop.component";
 import { TempModule } from '../temp/temp.module';
 import { AddPlayerComponent } from '../temp/add-player.component';
+import {BoardTransformService} from './services/board-transform.service';
 
 
 @NgModule({
@@ -57,8 +58,9 @@ import { AddPlayerComponent } from '../temp/add-player.component';
         PopService,
         BoardStateService,
         BoardCanvasService,
-        WallService,
-        TileService
+        BoardWallService,
+        BoardTileService,
+        BoardTransformService
     ],
     entryComponents: [
         NpcPopComponent,

@@ -4,7 +4,7 @@ import { BoardService } from '../board/services/board.service';
 import { XyPair } from '../board/geometry/xy-pair';
 import { BoardStateService } from '../board/services/board-state.service';
 import { Player } from './player';
-import { WallService } from '../board/services/wall.service';
+import { BoardWallService } from '../board/services/board-wall.service';
 import { EncounterService } from './encounter.service';
 import { EncounterRepository } from '../repositories/encounter.repository';
 
@@ -16,7 +16,7 @@ export class EncounterDevService extends EncounterService {
 	constructor(
 			private boardStateService: BoardStateService,
 			private popService: PopService,
-			private wallService: WallService,
+			private wallService: BoardWallService,
 			encounterRepo: EncounterRepository
 	) {
 		super(encounterRepo);
@@ -83,6 +83,10 @@ export class EncounterDevService extends EncounterService {
 				}
 			}
 		}
+
+	}
+
+	handleMouseRightUp(loc_cell: XyPair) {
 
 	}
 

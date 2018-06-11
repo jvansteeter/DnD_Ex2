@@ -1,7 +1,7 @@
 import {ViewMode} from '../../shared/view-mode';
 import {BoardStateService} from '../../services/board-state.service';
-import {BoardCanvasService} from '../../services/board-canvas-service';
-import {WallService} from '../../services/wall.service';
+import {BoardCanvasService} from '../../services/board-canvas.service';
+import {BoardWallService} from '../../services/board-wall.service';
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 
 @Component({
@@ -14,7 +14,7 @@ export class WallRendererComponent implements OnInit {
   private ctx: CanvasRenderingContext2D;
 
   constructor(
-    private wallService: WallService,
+    private wallService: BoardWallService,
     private boardStateService: BoardStateService,
     private boardCanvasService: BoardCanvasService
   ) {}

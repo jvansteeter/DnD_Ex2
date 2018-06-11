@@ -6,9 +6,10 @@ import {CellTarget} from "../shared/cell-target";
 import {XyPair} from "../geometry/xy-pair";
 
 /*************************************************************************************************************************************
- * BoardConfigService
+ * BoardStateService
  *************************************************************************************************************************************
  * RESPONSIBLE FOR ...
+ * --- being a global model for all the shared variables used by the various board services
  */
 
 @Injectable()
@@ -57,8 +58,14 @@ export class BoardStateService {
     public mouse_loc_cell_pix: XyPair;     // the pixel coor of the mouse relative to the current tile
     public mouse_cell_target: CellTarget;  // to current cell target under the pointer
 
+    // key states
+    public mouseOnMap = false;
+    public shiftDown = false;
+    public spaceDown = false;
+    public mouseLeftDown = false;
+    public mouseDrag = false;
 
-    constructor() {
-    }
+
+    constructor() {}
 
 }
