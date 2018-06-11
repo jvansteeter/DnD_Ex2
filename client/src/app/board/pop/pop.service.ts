@@ -5,7 +5,7 @@ import {Player} from "../../encounter/player";
 @Injectable()
 export class PopService {
     popRoot: ViewContainerRef;
-    persistPops: {id: number, ref: ComponentRef<NpcPopComponent>}[] = [];
+    playerPops: {id: number, ref: ComponentRef<NpcPopComponent>}[] = [];
 
     constructor(
         private componentFactoryResolver: ComponentFactoryResolver
@@ -17,7 +17,7 @@ export class PopService {
 
     addPlayerPop(x: number, y: number, player: Player) {
         let popFound = false;
-        for (const pop of this.persistPops) {
+        for (const pop of this.playerPops) {
             if (pop.id === player.id) {
                 popFound = true;
             }
@@ -29,18 +29,18 @@ export class PopService {
 
             const componentInst = (<NpcPopComponent>componentRef.instance);
             componentInst.initVars(this, false, x, y, player);
-            this.persistPops.push({id: player.id, ref: componentRef});
+            this.playerPops.push({id: player.id, ref: componentRef});
         }
     }
 
-    clearPop(id: number) {
+    clearPlayerPop(id: number) {
         let i;
-        for (i = 0; i < this.persistPops.length; i++) {
-            const pop = this.persistPops[i];
+        for (i = 0; i < this.playerPops.length; i++) {
+            const pop = this.playerPops[i];
 
             if (pop.id === id) {
                 pop.ref.destroy();
-                this.persistPops.splice(i, 1);
+                this.playerPops.splice(i, 1);
             }
         }
     }

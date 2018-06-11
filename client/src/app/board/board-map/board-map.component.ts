@@ -90,6 +90,26 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
         this.boardService.handleMouseEnter();
     }
 
+    handleContextMenu(event) {
+        // Produce a permanent context menu
+        // if (!this.secondaryIsActive) {
+        //     timer(0)
+        //         .subscribe((x) => {
+        //             this.secondaryIsHover = false;
+        //             this.secondaryIsActive = true;
+        //             this.addComponent(false, this.purpleRef.nativeElement.offsetLeft + this.purpleRef.nativeElement.offsetWidth, this.purpleRef.nativeElement.offsetTop, 200, 50);
+        //         });
+        // } else {
+        //     if (this.secondaryIsHover) {
+        //         this.destroyComponent();
+        //         this.secondaryIsHover = false;
+        //         this.secondaryIsActive = true;
+        //         this.addComponent(false, this.purpleRef.nativeElement.offsetLeft + this.purpleRef.nativeElement.offsetWidth, this.purpleRef.nativeElement.offsetTop, 200, 50);
+        //     }
+        // }
+        return false;
+    }
+
     @HostListener('window:resize', ['$event'])
     onResize(event) {
         this.boardCanvasService.canvasNativeElement = this.mapContainer.nativeElement;
