@@ -78,14 +78,7 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
                 this.boardStateService.y_offset -= (deltaY * this.boardStateService.scale);
             }
         }
-
         this.updateMouseLocation(mouse_screen);
-
-
-        this.encounterService.checkForPops(
-            new XyPair(this.boardStateService.mouse_loc_cell.x, this.boardStateService.mouse_loc_cell.y),
-            this.boardTransformService.map_to_screen(new XyPair((this.boardStateService.mouse_loc_cell.x + 1) * this.boardStateService.cell_res, ((this.boardStateService.mouse_loc_cell.y) * this.boardStateService.cell_res)))
-        );
     }
 
     handleMouseUp(event) {
@@ -99,6 +92,10 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
                 break;
             case 3:
                 // right click
+                this.encounterService.checkForPops(
+                    new XyPair(this.boardStateService.mouse_loc_cell.x, this.boardStateService.mouse_loc_cell.y),
+                    this.boardTransformService.map_to_screen(new XyPair((this.boardStateService.mouse_loc_cell.x + 1) * this.boardStateService.cell_res, ((this.boardStateService.mouse_loc_cell.y) * this.boardStateService.cell_res)))
+                );
                 break;
         }
     }

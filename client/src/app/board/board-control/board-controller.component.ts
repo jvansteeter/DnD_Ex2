@@ -138,7 +138,7 @@ export class BoardControllerComponent implements OnInit{
                 break;
             case 'Walls' :
                 this.boardStateService.board_edit_mode = BoardMode.WALLS;
-                this.boardStateService.inputOffset = 0.12;
+                this.boardStateService.inputOffset = 0.2;
                 this.boardStateService.doDiagonals = true;
                 break;
             case 'Doors' :

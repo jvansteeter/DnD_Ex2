@@ -44,4 +44,13 @@ export class PopService {
             }
         }
     }
+
+    popIsActive(id: number) {
+        for (const pop of this.playerPops) {
+            if (pop.id === id) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

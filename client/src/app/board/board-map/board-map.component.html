@@ -9,9 +9,9 @@
     <token-renderer></token-renderer>
 
     <canvas
+            #inputCanvas
             style="position: absolute"
             height={{getCanvasHeight()}} width={{getCanvasWidth()}}
-            #inputCanvas
             (mouseleave)="handleMouseLeave($event)"
             (mouseenter)="handleMouseEnter($event)"
             mouseWheel
