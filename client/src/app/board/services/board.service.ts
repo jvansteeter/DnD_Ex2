@@ -28,19 +28,14 @@ export class BoardService {
 
     // input control
     source_click_location: CellTarget;
-    // mouseOnMap = false;
-    // shiftDown = false;
-    // spaceDown = false;
-    // mouseLeftDown = false;
-    // mouseDrag = false;
     mouseLeftDownStartTime: number;
 
     constructor(public boardStateService: BoardStateService,
                 public boardCanvasService: BoardCanvasService,
                 public boardTransformService: BoardTransformService,
                 public boardLosService: BoardLosService,
-                private wallService: BoardWallService,
-                private tileService: BoardTileService,
+                private boardWallService: BoardWallService,
+                private boardTileService: BoardTileService,
                 private encounterService: EncounterService) {
         this.cellLightData = new Array(this.boardStateService.mapDimX);
         for (let x = 0; x < this.boardStateService.mapDimX; x++) {
@@ -164,7 +159,7 @@ export class BoardService {
                                     // MOUSE NOT DRAGGING - WALL EDIT MODE - MOUSE ON MAP - SOURCE IS DEFINED
                                     switch (this.boardStateService.mouse_cell_target.zone) {
                                         case CellZone.CORNER:
-                                            this.fillWallsBetweenCorners(this.source_click_location.coor, this.boardStateService.mouse_cell_target.coor);
+                                            this.boardWallService.fillWallsBetweenCorners(this.source_click_location.coor, this.boardStateService.mouse_cell_target.coor);
                                             this.updateLightValues();
                                             this.source_click_location = this.boardStateService.mouse_cell_target;
                                             break;
@@ -179,22 +174,22 @@ export class BoardService {
                                             break;
                                         case CellZone.NORTH:
                                             this.source_click_location = null;
-                                            this.wallService.toggleWall(this.boardStateService.mouse_cell_target);
+                                            this.boardWallService.toggleWall(this.boardStateService.mouse_cell_target);
                                             this.updateLightValues();
                                             break;
                                         case CellZone.WEST:
                                             this.source_click_location = null;
-                                            this.wallService.toggleWall(this.boardStateService.mouse_cell_target);
+                                            this.boardWallService.toggleWall(this.boardStateService.mouse_cell_target);
                                             this.updateLightValues();
                                             break;
                                         case CellZone.FWR:
                                             this.source_click_location = null;
-                                            this.wallService.toggleWall(this.boardStateService.mouse_cell_target);
+                                            this.boardWallService.toggleWall(this.boardStateService.mouse_cell_target);
                                             this.updateLightValues();
                                             break;
                                         case CellZone.BKW:
                                             this.source_click_location = null;
-                                            this.wallService.toggleWall(this.boardStateService.mouse_cell_target);
+                                            this.boardWallService.toggleWall(this.boardStateService.mouse_cell_target);
                                             this.updateLightValues();
                                             break;
                                     }
@@ -215,19 +210,19 @@ export class BoardService {
                             if (!isNullOrUndefined(this.boardStateService.mouse_cell_target)) {
                                 switch (this.boardStateService.mouse_cell_target.zone) {
                                     case CellZone.CENTER:
-                                        this.tileService.setTileData_All(this.boardStateService.mouse_loc_cell);
+                                        this.boardTileService.setTileData_All(this.boardStateService.mouse_loc_cell);
                                         break;
                                     case CellZone.TOP:
-                                        this.tileService.setTileData_Top(this.boardStateService.mouse_loc_cell);
+                                        this.boardTileService.setTileData_Top(this.boardStateService.mouse_loc_cell);
                                         break;
                                     case CellZone.LEFT:
-                                        this.tileService.setTileData_Left(this.boardStateService.mouse_loc_cell);
+                                        this.boardTileService.setTileData_Left(this.boardStateService.mouse_loc_cell);
                                         break;
                                     case CellZone.BOTTOM:
-                                        this.tileService.setTileData_Bottom(this.boardStateService.mouse_loc_cell);
+                                        this.boardTileService.setTileData_Bottom(this.boardStateService.mouse_loc_cell);
                                         break;
                                     case CellZone.RIGHT:
-                                        this.tileService.setTileData_Right(this.boardStateService.mouse_loc_cell);
+                                        this.boardTileService.setTileData_Right(this.boardStateService.mouse_loc_cell);
                                         break;
                                 }
                             }
@@ -322,182 +317,9 @@ export class BoardService {
         return returnMe;
     }
 
-    // genLOSNorthPoints(x_cell: number, y_cell: number): Array<XyPair> {
-    //     const returnMe = Array<XyPair>();
-    //     const _canvas = new XyPair(x_cell * this.boardStateService.cell_res, y_cell * this.boardStateService.cell_res);
-    //
-    //     returnMe.push(new XyPair(Math.floor(_canvas.x + this.boardStateService.cell_res * (1 / 3)), Math.floor(_canvas.y + this.boardStateService.cell_res * (1 / 6))));
-    //     returnMe.push(new XyPair(Math.floor(_canvas.x + this.boardStateService.cell_res * (2 / 3)), Math.floor(_canvas.y + this.boardStateService.cell_res * (1 / 6))));
-    //     returnMe.push(new XyPair(Math.floor(_canvas.x + this.boardStateService.cell_res * (1 / 2)), Math.floor(_canvas.y + this.boardStateService.cell_res * (2 / 6))));
-    //
-    //     return returnMe;
-    // }
-    //
-    // genLOSEastPoints(x_cell: number, y_cell: number): Array<XyPair> {
-    //     const returnMe = Array<XyPair>();
-    //     const _canvas = new XyPair(x_cell * this.boardStateService.cell_res, y_cell * this.boardStateService.cell_res);
-    //
-    //     returnMe.push(new XyPair(Math.floor(_canvas.x + this.boardStateService.cell_res * (5 / 6)), Math.floor(_canvas.y + this.boardStateService.cell_res * (1 / 3))));
-    //     returnMe.push(new XyPair(Math.floor(_canvas.x + this.boardStateService.cell_res * (5 / 6)), Math.floor(_canvas.y + this.boardStateService.cell_res * (2 / 3))));
-    //     returnMe.push(new XyPair(Math.floor(_canvas.x + this.boardStateService.cell_res * (4 / 6)), Math.floor(_canvas.y + this.boardStateService.cell_res * (1 / 2))));
-    //
-    //     return returnMe;
-    // }
-    //
-    // genLOSSouthPoints(x_cell: number, y_cell: number): Array<XyPair> {
-    //     const returnMe = Array<XyPair>();
-    //     const _canvas = new XyPair(x_cell * this.boardStateService.cell_res, y_cell * this.boardStateService.cell_res);
-    //
-    //     returnMe.push(new XyPair(Math.floor(_canvas.x + this.boardStateService.cell_res * (1 / 3)), Math.floor(_canvas.y + this.boardStateService.cell_res * (5 / 6))));
-    //     returnMe.push(new XyPair(Math.floor(_canvas.x + this.boardStateService.cell_res * (2 / 3)), Math.floor(_canvas.y + this.boardStateService.cell_res * (5 / 6))));
-    //     returnMe.push(new XyPair(Math.floor(_canvas.x + this.boardStateService.cell_res * (1 / 2)), Math.floor(_canvas.y + this.boardStateService.cell_res * (4 / 6))));
-    //
-    //     return returnMe;
-    // }
-    //
-    // genLOSWestPoints(x_cell: number, y_cell: number): Array<XyPair> {
-    //     const returnMe = Array<XyPair>();
-    //     const _canvas = new XyPair(x_cell * this.boardStateService.cell_res, y_cell * this.boardStateService.cell_res);
-    //
-    //     returnMe.push(new XyPair(Math.floor(_canvas.x + this.boardStateService.cell_res * (1 / 6)), Math.floor(_canvas.y + this.boardStateService.cell_res * (1 / 3))));
-    //     returnMe.push(new XyPair(Math.floor(_canvas.x + this.boardStateService.cell_res * (1 / 6)), Math.floor(_canvas.y + this.boardStateService.cell_res * (2 / 3))));
-    //     returnMe.push(new XyPair(Math.floor(_canvas.x + this.boardStateService.cell_res * (2 / 6)), Math.floor(_canvas.y + this.boardStateService.cell_res * (1 / 2))));
-    //
-    //     return returnMe;
-    // }
-    //
-    // cellHasLOSToNorth(origin_cell: XyPair, target_cell: XyPair): boolean {
-    //     const origin_point = new XyPair(origin_cell.x * this.boardStateService.cell_res + this.boardStateService.cell_res / 2, origin_cell.y * this.boardStateService.cell_res + this.boardStateService.cell_res / 2);
-    //     const target_points = this.genLOSNorthPoints(target_cell.x, target_cell.y);
-    //     let traceCount = 0;
-    //     for (const target_point of target_points) {
-    //         if (this.losTrace(origin_point, target_point)) {
-    //             traceCount++;
-    //         }
-    //     }
-    //     return traceCount >= 3;
-    // }
-    //
-    // cellHasLOSToEast(origin_cell: XyPair, target_cell: XyPair): boolean {
-    //     const origin_point = new XyPair(origin_cell.x * this.boardStateService.cell_res + this.boardStateService.cell_res / 2, origin_cell.y * this.boardStateService.cell_res + this.boardStateService.cell_res / 2);
-    //     const target_points = this.genLOSEastPoints(target_cell.x, target_cell.y);
-    //     let traceCount = 0;
-    //     for (const target_point of target_points) {
-    //         if (this.losTrace(origin_point, target_point)) {
-    //             traceCount++;
-    //         }
-    //     }
-    //     return traceCount >= 3;
-    // }
-    //
-    // cellHasLOSToSouth(origin_cell: XyPair, target_cell: XyPair): boolean {
-    //     const origin_point = new XyPair(origin_cell.x * this.boardStateService.cell_res + this.boardStateService.cell_res / 2, origin_cell.y * this.boardStateService.cell_res + this.boardStateService.cell_res / 2);
-    //     const target_points = this.genLOSSouthPoints(target_cell.x, target_cell.y);
-    //     let traceCount = 0;
-    //     for (const target_point of target_points) {
-    //         if (this.losTrace(origin_point, target_point)) {
-    //             traceCount++;
-    //         }
-    //     }
-    //     return traceCount >= 3;
-    // }
-    //
-    // cellHasLOSToWest(origin_cell: XyPair, target_cell: XyPair): boolean {
-    //     const origin_point = new XyPair(origin_cell.x * this.boardStateService.cell_res + this.boardStateService.cell_res / 2, origin_cell.y * this.boardStateService.cell_res + this.boardStateService.cell_res / 2);
-    //     const target_points = this.genLOSWestPoints(target_cell.x, target_cell.y);
-    //     let traceCount = 0;
-    //     for (const target_point of target_points) {
-    //         if (this.losTrace(origin_point, target_point)) {
-    //             traceCount++;
-    //         }
-    //     }
-    //     return traceCount >= 3;
-    // }
-
     // *************************************************************************************************************************************************************
     // MAP MANIPULATION FUNCTIONS
     // *************************************************************************************************************************************************************
-    fillWallsBetweenCorners(corner1: XyPair, corner2: XyPair): void {
-        const delta_x = corner2.x - corner1.x;
-        const delta_y = corner2.y - corner1.y;
-        const currentCell = corner1;
-
-        // handle up
-        if ((delta_x === 0) && (delta_y < 0)) {
-            while (currentCell.y !== corner2.y) {
-                currentCell.y--;
-
-                const target: CellTarget = new CellTarget(new XyPair(currentCell.x, currentCell.y), CellZone.WEST);
-                this.wallService.addWall(target);
-            }
-        }
-        // handle down
-        if ((delta_x === 0) && (delta_y > 0)) {
-            while (currentCell.y !== corner2.y) {
-                const target: CellTarget = new CellTarget(new XyPair(currentCell.x, currentCell.y), CellZone.WEST);
-                this.wallService.addWall(target);
-
-                currentCell.y++;
-            }
-        }
-        // handle left
-        if ((delta_x < 0) && (delta_y === 0)) {
-            while (currentCell.x !== corner2.x) {
-                currentCell.x--;
-
-                const target: CellTarget = new CellTarget(new XyPair(currentCell.x, currentCell.y), CellZone.NORTH);
-                this.wallService.addWall(target);
-            }
-        }
-        // handle right
-        if ((delta_x > 0) && (delta_y === 0)) {
-            while (currentCell.x !== corner2.x) {
-                const target: CellTarget = new CellTarget(new XyPair(currentCell.x, currentCell.y), CellZone.NORTH);
-                this.wallService.addWall(target);
-                currentCell.x++;
-            }
-        }
-        // handle up/right
-        if ((delta_x > 0) && (delta_y < 0)) {
-            while (currentCell.x !== corner2.x) {
-                currentCell.y--;
-
-                const target: CellTarget = new CellTarget(new XyPair(currentCell.x, currentCell.y), CellZone.FWR);
-                this.wallService.addWall(target);
-                currentCell.x++;
-            }
-        }
-        // handle down/right
-        if ((delta_x > 0) && (delta_y > 0)) {
-            while (currentCell.x !== corner2.x) {
-                const target: CellTarget = new CellTarget(new XyPair(currentCell.x, currentCell.y), CellZone.BKW);
-                this.wallService.addWall(target);
-
-                currentCell.y++;
-                currentCell.x++;
-            }
-        }
-        // handle down/left
-        if ((delta_x < 0) && (delta_y > 0)) {
-            while (currentCell.x !== corner2.x) {
-                currentCell.x--;
-
-                const target: CellTarget = new CellTarget(new XyPair(currentCell.x, currentCell.y), CellZone.FWR);
-                this.wallService.addWall(target);
-                currentCell.y++;
-            }
-        }
-        // handle up/left
-        if ((delta_x < 0) && (delta_y < 0)) {
-            while (currentCell.x !== corner2.x) {
-                currentCell.x--;
-                currentCell.y--;
-
-                const target: CellTarget = new CellTarget(new XyPair(currentCell.x, currentCell.y), CellZone.BKW);
-                this.wallService.addWall(target);
-            }
-        }
-    }
 
     updateLightValues(): void {
         for (let x = 0; x < this.boardStateService.mapDimX; x++) {
@@ -581,10 +403,6 @@ export class BoardService {
             this.lightSourceData.set(target.hash(), new LightSource(x, y, 5));
         }
     }
-
-    // losTrace(origin_canvas: XyPair, target_canvas: XyPair): boolean {
-    //     return this.wallService.rayCast(origin_canvas, target_canvas);
-    // }
 
     coorInBounds(x: number, y: number): boolean {
         return !((x >= this.boardStateService.mapDimX) || (y >= this.boardStateService.mapDimY) || (x < 0) || (y < 0));

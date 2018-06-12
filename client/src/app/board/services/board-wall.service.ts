@@ -39,7 +39,6 @@ export class BoardWallService {
     public removeWall(loc: CellTarget): void {
         if (this.hasWall(loc)) {
             this.wallData.delete(loc.hash());
-            // this.wallData.set(loc.hash(), new Wall(loc, this.boardStateService.cell_res));
 
             switch (loc.zone) {
                 case CellZone.NORTH:
@@ -63,6 +62,73 @@ export class BoardWallService {
             this.removeWall(loc);
         } else {
             this.addWall(loc);
+        }
+    }
+
+    public fillWallsBetweenCorners(corner1: XyPair, corner2: XyPair): void {
+        const delta_x = corner2.x - corner1.x;
+        const delta_y = corner2.y - corner1.y;
+        const currentCell = corner1;
+
+        // handle up
+        if ((delta_x === 0) && (delta_y < 0)) {
+            while (currentCell.y !== corner2.y) {
+                currentCell.y--;
+                this.addWall(new CellTarget(new XyPair(currentCell.x, currentCell.y), CellZone.WEST));
+            }
+        }
+        // handle down
+        if ((delta_x === 0) && (delta_y > 0)) {
+            while (currentCell.y !== corner2.y) {
+                this.addWall(new CellTarget(new XyPair(currentCell.x, currentCell.y), CellZone.WEST));
+                currentCell.y++;
+            }
+        }
+        // handle left
+        if ((delta_x < 0) && (delta_y === 0)) {
+            while (currentCell.x !== corner2.x) {
+                currentCell.x--;
+                this.addWall(new CellTarget(new XyPair(currentCell.x, currentCell.y), CellZone.NORTH));
+            }
+        }
+        // handle right
+        if ((delta_x > 0) && (delta_y === 0)) {
+            while (currentCell.x !== corner2.x) {
+                this.addWall(new CellTarget(new XyPair(currentCell.x, currentCell.y), CellZone.NORTH));
+                currentCell.x++;
+            }
+        }
+        // handle up/right
+        if ((delta_x > 0) && (delta_y < 0)) {
+            while (currentCell.x !== corner2.x) {
+                currentCell.y--;
+                this.addWall(new CellTarget(new XyPair(currentCell.x, currentCell.y), CellZone.FWR));
+                currentCell.x++;
+            }
+        }
+        // handle down/right
+        if ((delta_x > 0) && (delta_y > 0)) {
+            while (currentCell.x !== corner2.x) {
+                this.addWall(new CellTarget(new XyPair(currentCell.x, currentCell.y), CellZone.BKW));
+                currentCell.y++;
+                currentCell.x++;
+            }
+        }
+        // handle down/left
+        if ((delta_x < 0) && (delta_y > 0)) {
+            while (currentCell.x !== corner2.x) {
+                currentCell.x--;
+                this.addWall(new CellTarget(new XyPair(currentCell.x, currentCell.y), CellZone.FWR));
+                currentCell.y++;
+            }
+        }
+        // handle up/left
+        if ((delta_x < 0) && (delta_y < 0)) {
+            while (currentCell.x !== corner2.x) {
+                currentCell.x--;
+                currentCell.y--;
+                this.addWall(new CellTarget(new XyPair(currentCell.x, currentCell.y), CellZone.BKW));
+            }
         }
     }
 
