@@ -1,4 +1,3 @@
-import {BoardService} from '../../services/board.service';
 import {BoardStateService} from '../../services/board-state.service';
 import {BoardCanvasService} from '../../services/board-canvas.service';
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
@@ -13,7 +12,6 @@ export class GridRendererComponent implements OnInit {
   private ctx: CanvasRenderingContext2D;
 
   constructor(
-    private boardService: BoardService,
     private boardStateService: BoardStateService,
     private boardCanvasService: BoardCanvasService
   ) {}

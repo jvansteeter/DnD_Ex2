@@ -1,5 +1,4 @@
 import {XyPair} from '../../geometry/xy-pair';
-import {BoardService} from '../../services/board.service';
 import {isNullOrUndefined} from 'util';
 import {BoardStateService} from '../../services/board-state.service';
 import {BoardCanvasService} from '../../services/board-canvas.service';
@@ -17,7 +16,6 @@ export class HighlightRendererComponent implements OnInit {
   private ctx: CanvasRenderingContext2D;
 
   constructor(
-    private boardService: BoardService,
     private boardStateService: BoardStateService,
     private boardCanvasService: BoardCanvasService,
     private boardLightService: BoardLightService

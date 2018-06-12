@@ -1,5 +1,4 @@
 import {Component, ViewChild, ElementRef, OnInit, HostListener, AfterViewInit, AfterViewChecked} from '@angular/core';
-import {BoardService} from "../services/board.service";
 import {BoardCanvasService} from "../services/board-canvas.service";
 import {BoardStateService} from "../services/board-state.service";
 import {BoardWallService} from "../services/board-wall.service";
@@ -29,8 +28,15 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
 
     private ctx: CanvasRenderingContext2D;
 
+    ngOnInit(): void {
+        this.ctx = this.inputCanvas.nativeElement.getContext('2d');
+        this.boardCanvasService.cvs_height = this.mapContainer.nativeElement.clientHeight;
+        this.boardCanvasService.cvs_width = this.mapContainer.nativeElement.clientWidth;
+        this.boardStateService.mapOffsetTop = this.mapContainer.nativeElement.offsetTop;
+        this.boardStateService.mapOffsetLeft = this.mapContainer.nativeElement.offsetLeft;
+    }
+
     constructor(
-        private boardService: BoardService,
         private boardCanvasService: BoardCanvasService,
         private boardStateService: BoardStateService,
         private boardTransformService: BoardTransformService,
@@ -39,14 +45,6 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
         private boardTileService: BoardTileService,
         private boardLightService: BoardLightService
     ) {
-    }
-
-    ngOnInit(): void {
-        this.ctx = this.inputCanvas.nativeElement.getContext('2d');
-        this.boardCanvasService.cvs_height = this.mapContainer.nativeElement.clientHeight;
-        this.boardCanvasService.cvs_width = this.mapContainer.nativeElement.clientWidth;
-        this.boardStateService.mapOffsetTop = this.mapContainer.nativeElement.offsetTop;
-        this.boardStateService.mapOffsetLeft = this.mapContainer.nativeElement.offsetLeft;
     }
 
     ngAfterViewChecked(): void {

@@ -1,4 +1,3 @@
-import {BoardService} from '../../services/board.service';
 import {ViewMode} from '../../shared/view-mode';
 import {XyPair} from '../../geometry/xy-pair';
 import {BoardStateService} from '../../services/board-state.service';
@@ -18,7 +17,6 @@ export class TileRendererComponent implements OnInit {
   private ctx: CanvasRenderingContext2D;
 
   constructor(
-    private boardService: BoardService,
     private boardStateService: BoardStateService,
     private boardCanvasService: BoardCanvasService,
     private ts: BoardTileService

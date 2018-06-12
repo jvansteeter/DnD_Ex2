@@ -2,7 +2,6 @@ import {Injectable} from '@angular/core';
 import {CellLightConfig} from '../shared/cell-light-state';
 import {LightSource} from '../map-objects/light-source';
 import {BoardStateService} from './board-state.service';
-import {BoardService} from './board.service';
 import {XyPair} from '../geometry/xy-pair';
 import {BoardLosService} from './board-los.service';
 
@@ -46,7 +45,7 @@ export class BoardLightService {
                 // sort light sources by distance to cell, removing any beyond influence distance
                 const mapped_light_sources = new Map<number, Array<LightSource>>();
                 for (const light_source of Array.from(this.lightSourceData.values())) {
-                    const distance = BoardService.distanceCellToCell(new XyPair(cell.coor.x, cell.coor.y), light_source.coor);
+                    const distance = BoardStateService.distanceCellToCell(new XyPair(cell.coor.x, cell.coor.y), light_source.coor);
                     if (distance <= light_source.dim_range) {
                         if (!mapped_light_sources.has(distance)) {
                             mapped_light_sources.set(distance, new Array<LightSource>());

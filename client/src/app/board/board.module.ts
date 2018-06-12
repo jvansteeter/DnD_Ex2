@@ -12,7 +12,6 @@ import {HighlightRendererComponent} from "./renderer/highlight-renderer/highligh
 import {MouseWheelDirective} from "./mousewheel.directive";
 import {BoardControllerComponent} from "./board-control/board-controller.component";
 import {FormsModule} from "@angular/forms";
-import {BoardService} from "./services/board.service";
 import {BoardStateService} from "./services/board-state.service";
 import {BoardCanvasService} from "./services/board-canvas.service";
 import {BoardWallService} from "./services/board-wall.service";
@@ -56,7 +55,6 @@ import {BoardLightService} from './services/board-light.service';
         TempModule
     ],
     providers: [
-        BoardService,
         PopService,
         BoardStateService,
         BoardCanvasService,

@@ -1,4 +1,3 @@
-import {BoardService} from '../../services/board.service';
 import {ViewMode} from '../../shared/view-mode';
 import {CellLightConfig} from '../../shared/cell-light-state';
 import {LightValue} from '../../shared/light-value';
@@ -17,7 +16,6 @@ export class LightRendererComponent implements OnInit {
     private ctx: CanvasRenderingContext2D;
 
     constructor(
-        private boardService: BoardService,
         private boardStateService: BoardStateService,
         private boardCanvasService: BoardCanvasService,
         private boardLightService: BoardLightService

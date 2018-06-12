@@ -1,5 +1,4 @@
-import {BoardService} from '../../services/board.service';
-import {isNull, isNullOrUndefined} from 'util';
+import {isNullOrUndefined} from 'util';
 import {CellTarget} from '../../shared/cell-target';
 import {CellZone} from '../../shared/cell-zone';
 import {BoardMode} from '../../shared/board-mode';
@@ -17,7 +16,6 @@ export class HoverRendererComponent implements OnInit {
   private ctx: CanvasRenderingContext2D;
 
   constructor(
-    private boardService: BoardService,
     private boardStateService: BoardStateService,
     private boardCanvasService: BoardCanvasService
   ) {}

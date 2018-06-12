@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {BoardStateService} from '../services/board-state.service';
-import {BoardService} from '../services/board.service';
 import {BoardTileService} from '../services/board-tile.service';
 import {ViewMode} from '../shared/view-mode';
 import {BoardMode} from '../shared/board-mode';
@@ -78,7 +77,6 @@ export class BoardControllerComponent implements OnInit{
     ];
 
     constructor(
-        public boardService: BoardService,
         public boardStateService: BoardStateService,
         public boardLightService: BoardLightService,
         public ts: BoardTileService,

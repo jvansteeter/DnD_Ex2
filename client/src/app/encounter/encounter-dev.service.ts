@@ -1,6 +1,5 @@
 import { Injectable, OnInit } from '@angular/core';
 import { PopService } from '../board/pop/pop.service';
-import { BoardService } from '../board/services/board.service';
 import { XyPair } from '../board/geometry/xy-pair';
 import { BoardStateService } from '../board/services/board-state.service';
 import { Player } from './player';
