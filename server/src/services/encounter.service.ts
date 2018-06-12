@@ -1,7 +1,7 @@
-import { CampaignModel } from '../db/models/campaign.model';
-import { Promise } from 'bluebird';
-import { EncounterRepository } from "../db/repositories/encounter.repository";
-import { EncounterModel } from "../db/models/encounter.model";
+import {CampaignModel} from '../db/models/campaign.model';
+import {Promise} from 'bluebird';
+import {EncounterRepository} from "../db/repositories/encounter.repository";
+import {EncounterModel} from "../db/models/encounter.model";
 
 export class EncounterService {
     private encounterRespository: EncounterRepository;

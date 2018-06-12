@@ -70,4 +70,8 @@ export class BoardStateService {
 
     constructor() {}
 
+    coorInBounds(x: number, y: number): boolean {
+        return !((x >= this.mapDimX) || (y >= this.mapDimY) || (x < 0) || (y < 0));
+    }
+
 }

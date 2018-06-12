@@ -36,19 +36,19 @@ export class TokenRendererComponent implements OnInit {
                 this.boardCanvasService.draw_fill_all(this.ctx, player.loc, 'rgba(0, 0, 180, 0.2)');
 
                 for (const cell of player.traversableCells_near) {
-                    if (this.boardService.coorInBounds(cell.x, cell.y)) {
+                    if (this.boardStateService.coorInBounds(cell.x, cell.y)) {
                         this.boardCanvasService.draw_fill_all(this.ctx, cell, 'rgba(0, 0, 180, 0.2)');
                     }
                 }
 
                 for (const cell of player.traversableCells_far) {
-                    if (this.boardService.coorInBounds(cell.x, cell.y)) {
+                    if (this.boardStateService.coorInBounds(cell.x, cell.y)) {
                         this.boardCanvasService.draw_fill_all(this.ctx, cell, 'rgba(0, 0, 180, 0.2)');
                     }
                 }
             }
 
-            this.boardCanvasService.draw_img(this.ctx, new XyPair(player.loc.x * this.boardStateService.cell_res, player.loc.y * this.boardStateService.cell_res), player.token_img)
+            this.boardCanvasService.draw_img(this.ctx, new XyPair(player.loc.x * this.boardStateService.cell_res, player.loc.y * this.boardStateService.cell_res), player.token_img);
             if (this.boardStateService.show_health) {
                 this.boardCanvasService.draw_health(this.ctx, player.loc, player.hp/player.maxHp);
             }

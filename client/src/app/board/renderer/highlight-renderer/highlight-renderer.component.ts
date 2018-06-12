@@ -5,6 +5,7 @@ import {BoardStateService} from '../../services/board-state.service';
 import {BoardCanvasService} from '../../services/board-canvas.service';
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ViewMode} from '../../shared/view-mode';
+import {BoardLightService} from '../../services/board-light.service';
 
 @Component({
   selector: 'highlight-renderer',
@@ -18,7 +19,8 @@ export class HighlightRendererComponent implements OnInit {
   constructor(
     private boardService: BoardService,
     private boardStateService: BoardStateService,
-    private boardCanvasService: BoardCanvasService
+    private boardCanvasService: BoardCanvasService,
+    private boardLightService: BoardLightService
   ) {}
 
   ngOnInit() {
@@ -33,7 +35,7 @@ export class HighlightRendererComponent implements OnInit {
     switch (this.boardStateService.board_view_mode) {
       case ViewMode.BOARD_MAKER:
         // render the source boxes for the light sources
-        for (const lightSource of Array.from(this.boardService.lightSourceData.values())) {
+        for (const lightSource of Array.from(this.boardLightService.lightSourceData.values())) {
           this.boardCanvasService.draw_center(this.ctx, lightSource.coor, 'rgba(255, 255, 0, 1)', 0.35);
           this.boardCanvasService.stroke_center(this.ctx, lightSource.coor, 'rgba(0, 0, 0, 1)', 0.35);
         }
@@ -45,8 +47,8 @@ export class HighlightRendererComponent implements OnInit {
     }
 
     // render corner to corner grid
-    if (!isNullOrUndefined(this.boardService.source_click_location)) {
-      const sc_loc = this.boardService.source_click_location.coor;
+    if (!isNullOrUndefined(this.boardStateService.source_click_location)) {
+      const sc_loc = this.boardStateService.source_click_location.coor;
       this.render_corner_to_corner(sc_loc);
     }
 
@@ -58,35 +60,35 @@ export class HighlightRendererComponent implements OnInit {
 
     let y = sc_loc.y;
     let x = sc_loc.x;
-    while (this.boardService.coorInBounds(x + 1, y)) {
+    while (this.boardStateService.coorInBounds(x + 1, y)) {
       this.boardCanvasService.draw_corner(this.ctx, new XyPair(x + 1, y), 'rgba(0, 220, 0, 0.3)', this.boardStateService.inputOffset);
       x++;
     }
 
     y = sc_loc.y;
     x = sc_loc.x;
-    while (this.boardService.coorInBounds(x - 1, y)) {
+    while (this.boardStateService.coorInBounds(x - 1, y)) {
       this.boardCanvasService.draw_corner(this.ctx, new XyPair(x - 1, y), 'rgba(0, 220, 0, 0.3)', this.boardStateService.inputOffset);
       x--;
     }
 
     y = sc_loc.y;
     x = sc_loc.x;
-    while (this.boardService.coorInBounds(x, y - 1)) {
+    while (this.boardStateService.coorInBounds(x, y - 1)) {
       this.boardCanvasService.draw_corner(this.ctx, new XyPair(x, y - 1), 'rgba(0, 220, 0, 0.3)', this.boardStateService.inputOffset);
       y--;
     }
 
     y = sc_loc.y;
     x = sc_loc.x;
-    while (this.boardService.coorInBounds(x, y + 1)) {
+    while (this.boardStateService.coorInBounds(x, y + 1)) {
       this.boardCanvasService.draw_corner(this.ctx, new XyPair(x, y + 1), 'rgba(0, 220, 0, 0.3)', this.boardStateService.inputOffset);
       y++;
     }
 
     y = sc_loc.y;
     x = sc_loc.x;
-    while (this.boardService.coorInBounds(x + 1, y + 1)) {
+    while (this.boardStateService.coorInBounds(x + 1, y + 1)) {
       this.boardCanvasService.draw_corner(this.ctx, new XyPair(x + 1, y + 1), 'rgba(0, 220, 0, 0.3)', this.boardStateService.inputOffset);
       y++;
       x++;
@@ -94,7 +96,7 @@ export class HighlightRendererComponent implements OnInit {
 
     y = sc_loc.y;
     x = sc_loc.x;
-    while (this.boardService.coorInBounds(x - 1, y + 1)) {
+    while (this.boardStateService.coorInBounds(x - 1, y + 1)) {
       this.boardCanvasService.draw_corner(this.ctx, new XyPair(x - 1, y + 1), 'rgba(0, 220, 0, 0.3)', this.boardStateService.inputOffset);
       y++;
       x--;
@@ -102,7 +104,7 @@ export class HighlightRendererComponent implements OnInit {
 
     y = sc_loc.y;
     x = sc_loc.x;
-    while (this.boardService.coorInBounds(x + 1, y - 1)) {
+    while (this.boardStateService.coorInBounds(x + 1, y - 1)) {
       this.boardCanvasService.draw_corner(this.ctx, new XyPair(x + 1, y - 1), 'rgba(0, 220, 0, 0.3)', this.boardStateService.inputOffset);
       y--;
       x++;
@@ -110,7 +112,7 @@ export class HighlightRendererComponent implements OnInit {
 
     y = sc_loc.y;
     x = sc_loc.x;
-    while (this.boardService.coorInBounds(x - 1, y - 1)) {
+    while (this.boardStateService.coorInBounds(x - 1, y - 1)) {
       this.boardCanvasService.draw_corner(this.ctx, new XyPair(x - 1, y - 1), 'rgba(0, 220, 0, 0.3)', this.boardStateService.inputOffset);
       y--;
       x--;

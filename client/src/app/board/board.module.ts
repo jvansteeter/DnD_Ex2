@@ -1,5 +1,5 @@
 import {BrowserModule} from '@angular/platform-browser';
-import { MatButtonModule, MatCheckboxModule, MatRadioModule, MatSliderModule } from '@angular/material';
+import {MatButtonModule, MatCheckboxModule, MatRadioModule, MatSliderModule} from '@angular/material';
 import {NgModule} from '@angular/core';
 import {MapRendererComponent} from "./renderer/map-renderer/map-renderer.component";
 import {GridRendererComponent} from "./renderer/grid-renderer/grid-renderer";
@@ -22,10 +22,11 @@ import {TokenRendererComponent} from './renderer/token-renderer/token-renderer.c
 import {PopService} from "./pop/pop.service";
 import {PopRootComponent} from "./pop/pop-root.component";
 import {NpcPopComponent} from "./pop/npcPop/npc-pop.component";
-import { TempModule } from '../temp/temp.module';
-import { AddPlayerComponent } from '../temp/add-player.component';
+import {TempModule} from '../temp/temp.module';
+import {AddPlayerComponent} from '../temp/add-player.component';
 import {BoardTransformService} from './services/board-transform.service';
 import {BoardLosService} from './services/board-los.service';
+import {BoardLightService} from './services/board-light.service';
 
 
 @NgModule({
@@ -51,7 +52,7 @@ import {BoardLosService} from './services/board-los.service';
         MatCheckboxModule,
         FormsModule,
         MatSliderModule,
-		 		MatButtonModule,
+        MatButtonModule,
         TempModule
     ],
     providers: [
@@ -62,11 +63,12 @@ import {BoardLosService} from './services/board-los.service';
         BoardWallService,
         BoardTileService,
         BoardTransformService,
-        BoardLosService
+        BoardLosService,
+        BoardLightService
     ],
     entryComponents: [
         NpcPopComponent,
-		    AddPlayerComponent
+        AddPlayerComponent
     ],
     bootstrap: [],
     exports: [

@@ -11,6 +11,9 @@ import {isNullOrUndefined} from "util";
 import {BoardMode} from '../shared/board-mode';
 import {CellZone} from '../shared/cell-zone';
 import {ViewMode} from '../shared/view-mode';
+import {LightSource} from '../map-objects/light-source';
+import {CellTarget} from '../shared/cell-target';
+import {BoardLightService} from '../services/board-light.service';
 
 
 @Component({
@@ -18,7 +21,6 @@ import {ViewMode} from '../shared/view-mode';
     templateUrl: 'board-map.component.html',
     styleUrls: ['board-map.component.scss']
 })
-
 
 
 export class BoardMapComponent implements OnInit, AfterViewChecked {
@@ -34,7 +36,8 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
         private boardTransformService: BoardTransformService,
         private encounterService: EncounterService,
         private boardWallService: BoardWallService,
-        private boardTileService: BoardTileService
+        private boardTileService: BoardTileService,
+        private boardLightService: BoardLightService
     ) {
     }
 
@@ -83,7 +86,7 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
 
         this.encounterService.checkForPops(
             new XyPair(this.boardStateService.mouse_loc_cell.x, this.boardStateService.mouse_loc_cell.y),
-            this.boardTransformService.map_to_screen(new XyPair((this.boardStateService.mouse_loc_cell.x + 1) * this.boardStateService.cell_res,((this.boardStateService.mouse_loc_cell.y) * this.boardStateService.cell_res)))
+            this.boardTransformService.map_to_screen(new XyPair((this.boardStateService.mouse_loc_cell.x + 1) * this.boardStateService.cell_res, ((this.boardStateService.mouse_loc_cell.y) * this.boardStateService.cell_res)))
         );
     }
 
@@ -212,7 +215,7 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
         this.boardStateService.mouse_loc_cell = this.boardTransformService.screen_to_cell(this.boardStateService.mouse_loc_screen);
         this.boardStateService.mouse_loc_cell_pix = new XyPair(this.boardStateService.mouse_loc_map.x - (this.boardStateService.mouse_loc_cell.x * this.boardStateService.cell_res), this.boardStateService.mouse_loc_map.y - (this.boardStateService.mouse_loc_cell.y * this.boardStateService.cell_res));
         this.boardStateService.mouse_cell_target = this.boardTransformService.calculate_cell_target(this.boardStateService.mouse_loc_cell_pix);
-        this.boardStateService.mouseOnMap = this.coorInBounds(this.boardStateService.mouse_loc_cell.x, this.boardStateService.mouse_loc_cell.y);
+        this.boardStateService.mouseOnMap = this.boardStateService.coorInBounds(this.boardStateService.mouse_loc_cell.x, this.boardStateService.mouse_loc_cell.y);
     }
 
     refreshMouseLocation(): void {
@@ -221,7 +224,7 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
         this.boardStateService.mouse_loc_cell = this.boardTransformService.screen_to_cell(this.boardStateService.mouse_loc_screen);
         this.boardStateService.mouse_loc_cell_pix = new XyPair(this.boardStateService.mouse_loc_map.x - (this.boardStateService.mouse_loc_cell.x * this.boardStateService.cell_res), this.boardStateService.mouse_loc_map.y - (this.boardStateService.mouse_loc_cell.y * this.boardStateService.cell_res));
         this.boardStateService.mouse_cell_target = this.boardTransformService.calculate_cell_target(this.boardStateService.mouse_loc_cell_pix);
-        this.boardStateService.mouseOnMap = this.coorInBounds(this.boardStateService.mouse_loc_cell.x, this.boardStateService.mouse_loc_cell.y);
+        this.boardStateService.mouseOnMap = this.boardStateService.coorInBounds(this.boardStateService.mouse_loc_cell.x, this.boardStateService.mouse_loc_cell.y);
     }
 
     clearMouseLocation(): void {
@@ -233,9 +236,9 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
         this.boardStateService.mouseOnMap = false;
     }
 
-    coorInBounds(x: number, y: number): boolean {
-        return !((x >= this.boardStateService.mapDimX) || (y >= this.boardStateService.mapDimY) || (x < 0) || (y < 0));
-    }
+    // coorInBounds(x: number, y: number): boolean {
+    //     return !((x >= this.boardStateService.mapDimX) || (y >= this.boardStateService.mapDimY) || (x < 0) || (y < 0));
+    // }
 
     private doMouseLeftUp(event) {
 
@@ -267,7 +270,7 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
                                     switch (this.boardStateService.mouse_cell_target.zone) {
                                         case CellZone.CORNER:
                                             this.boardWallService.fillWallsBetweenCorners(this.boardStateService.source_click_location.coor, this.boardStateService.mouse_cell_target.coor);
-                                            this.boardService.updateLightValues();
+                                            this.boardLightService.updateLightValues();
                                             this.boardStateService.source_click_location = this.boardStateService.mouse_cell_target;
                                             break;
                                         default:
@@ -282,22 +285,22 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
                                         case CellZone.NORTH:
                                             this.boardStateService.source_click_location = null;
                                             this.boardWallService.toggleWall(this.boardStateService.mouse_cell_target);
-                                            this.boardService.updateLightValues();
+                                            this.boardLightService.updateLightValues();
                                             break;
                                         case CellZone.WEST:
                                             this.boardStateService.source_click_location = null;
                                             this.boardWallService.toggleWall(this.boardStateService.mouse_cell_target);
-                                            this.boardService.updateLightValues();
+                                            this.boardLightService.updateLightValues();
                                             break;
                                         case CellZone.FWR:
                                             this.boardStateService.source_click_location = null;
                                             this.boardWallService.toggleWall(this.boardStateService.mouse_cell_target);
-                                            this.boardService.updateLightValues();
+                                            this.boardLightService.updateLightValues();
                                             break;
                                         case CellZone.BKW:
                                             this.boardStateService.source_click_location = null;
                                             this.boardWallService.toggleWall(this.boardStateService.mouse_cell_target);
-                                            this.boardService.updateLightValues();
+                                            this.boardLightService.updateLightValues();
                                             break;
                                     }
                                 }
@@ -308,8 +311,8 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
                         case BoardMode.LIGHTS:
                             if (!isNullOrUndefined(this.boardStateService.mouse_cell_target)) {
                                 if (this.boardStateService.mouse_cell_target.zone === CellZone.CENTER) {
-                                    this.boardService.toggleLight(this.boardStateService.mouse_cell_target.coor.x, this.boardStateService.mouse_cell_target.coor.y);
-                                    this.boardService.updateLightValues();
+                                    this.toggleLight(this.boardStateService.mouse_cell_target.coor.x, this.boardStateService.mouse_cell_target.coor.y);
+                                    this.boardLightService.updateLightValues();
                                 }
                             }
                             break;
@@ -341,5 +344,14 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
 
         this.boardStateService.mouseLeftDown = false;
         this.boardStateService.mouseDrag = false;
+    }
+
+    toggleLight(x: number, y: number): void {
+        const target = new CellTarget(new XyPair(x, y), CellZone.CENTER);
+        if (this.boardLightService.lightSourceData.has(target.hash())) {
+            this.boardLightService.lightSourceData.delete(target.hash());
+        } else {
+            this.boardLightService.lightSourceData.set(target.hash(), new LightSource(x, y, 5));
+        }
     }
 }

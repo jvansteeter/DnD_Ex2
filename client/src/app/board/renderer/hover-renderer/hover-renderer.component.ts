@@ -34,7 +34,7 @@ export class HoverRendererComponent implements OnInit {
     if (!isNullOrUndefined(this.boardStateService.mouse_cell_target) && this.boardStateService.mouseOnMap) {
       switch (this.boardStateService.board_edit_mode) {
         case BoardMode.WALLS:
-          if (!isNullOrUndefined(this.boardService.source_click_location)) {
+          if (!isNullOrUndefined(this.boardStateService.source_click_location)) {
             // MOUSE ON MAP - WALL EDIT MODE - SOURCE IS DEFINED
             switch (this.boardStateService.mouse_cell_target.zone) {
               case CellZone.CORNER:

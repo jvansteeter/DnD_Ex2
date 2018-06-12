@@ -1,28 +1,28 @@
 <div style="height: 100%; width: 100%" #mapContainer>
-  <map-renderer></map-renderer>
-  <grid-renderer></grid-renderer>
-  <tile-renderer></tile-renderer>
-  <wall-renderer></wall-renderer>
-  <highlight-renderer></highlight-renderer>
-  <hover-renderer></hover-renderer>
-  <light-renderer></light-renderer>
-  <token-renderer></token-renderer>
+    <map-renderer></map-renderer>
+    <grid-renderer></grid-renderer>
+    <tile-renderer></tile-renderer>
+    <wall-renderer></wall-renderer>
+    <highlight-renderer></highlight-renderer>
+    <hover-renderer></hover-renderer>
+    <light-renderer></light-renderer>
+    <token-renderer></token-renderer>
 
-  <canvas
-    style="position: absolute"
-    height={{getCanvasHeight()}} width={{getCanvasWidth()}}
-    #inputCanvas
-    (mouseleave)="handleMouseLeave($event)"
-    (mouseenter)="handleMouseEnter($event)"
-    mouseWheel
-    (mouseWheelUp)="handleMouseWheel($event)"
-    (mouseWheelDown)="handleMouseWheel($event)"
-    (mousemove)="mouseMove($event)"
-    (mousedown)="handleMouseDown($event)"
-    (mouseup)="handleMouseUp($event)"
-    (contextmenu)="handleContextMenu($event)"
-    (click)="clickResponse()">
-  </canvas>
+    <canvas
+            style="position: absolute"
+            height={{getCanvasHeight()}} width={{getCanvasWidth()}}
+            #inputCanvas
+            (mouseleave)="handleMouseLeave($event)"
+            (mouseenter)="handleMouseEnter($event)"
+            mouseWheel
+            (mouseWheelUp)="handleMouseWheel($event)"
+            (mouseWheelDown)="handleMouseWheel($event)"
+            (mousemove)="mouseMove($event)"
+            (mousedown)="handleMouseDown($event)"
+            (mouseup)="handleMouseUp($event)"
+            (contextmenu)="handleContextMenu($event)"
+            (click)="clickResponse()">
+    </canvas>
 </div>
 
 

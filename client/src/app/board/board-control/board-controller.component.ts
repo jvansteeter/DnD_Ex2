@@ -7,6 +7,7 @@ import {BoardMode} from '../shared/board-mode';
 import {LightValue} from '../shared/light-value';
 import { MatDialog } from '@angular/material';
 import { AddPlayerComponent } from '../../temp/add-player.component';
+import {BoardLightService} from '../services/board-light.service';
 
 @Component({
     selector: 'board-controller',
@@ -79,6 +80,7 @@ export class BoardControllerComponent implements OnInit{
     constructor(
         public boardService: BoardService,
         public boardStateService: BoardStateService,
+        public boardLightService: BoardLightService,
         public ts: BoardTileService,
         private dialog: MatDialog
     ) {
@@ -131,7 +133,7 @@ export class BoardControllerComponent implements OnInit{
     onModeChange() {
         switch (this.currentMode) {
             case 'Player' :
-                this.boardService.source_click_location = null;
+                this.boardStateService.source_click_location = null;
                 this.boardStateService.board_edit_mode = BoardMode.PLAYER;
                 this.boardStateService.doDiagonals = false;
                 this.boardStateService.inputOffset = 0;
@@ -142,19 +144,19 @@ export class BoardControllerComponent implements OnInit{
                 this.boardStateService.doDiagonals = true;
                 break;
             case 'Doors' :
-                this.boardService.source_click_location = null;
+                this.boardStateService.source_click_location = null;
                 this.boardStateService.board_edit_mode = BoardMode.DOORS;
                 this.boardStateService.inputOffset = 0.10;
                 this.boardStateService.doDiagonals = true;
                 break;
             case 'Lights' :
-                this.boardService.source_click_location = null;
+                this.boardStateService.source_click_location = null;
                 this.boardStateService.board_edit_mode = BoardMode.LIGHTS;
                 this.boardStateService.inputOffset = 0;
                 this.boardStateService.doDiagonals = false;
                 break;
             case 'Tiles' :
-                this.boardService.source_click_location = null;
+                this.boardStateService.source_click_location = null;
                 this.boardStateService.board_edit_mode = BoardMode.TILES;
                 this.boardStateService.inputOffset = 0;
                 this.boardStateService.doDiagonals = false;
@@ -166,21 +168,21 @@ export class BoardControllerComponent implements OnInit{
     onViewChange() {
         switch (this.currentView) {
             case 'Board Maker':
-                this.boardService.source_click_location = null;
+                this.boardStateService.source_click_location = null;
                 this.boardStateService.board_view_mode = ViewMode.BOARD_MAKER;
                 this.boardStateService.board_edit_mode = BoardMode.WALLS;
                 this.boardStateService.do_pops = false;
                 this.boardStateService.show_health = true;
                 break;
             case 'Player View':
-                this.boardService.source_click_location = null;
+                this.boardStateService.source_click_location = null;
                 this.boardStateService.board_view_mode = ViewMode.PLAYER;
                 this.boardStateService.board_edit_mode = BoardMode.PLAYER;
                 this.boardStateService.do_pops = true;
                 this.boardStateService.show_health = false;
                 break;
             case 'Game Master':
-                this.boardService.source_click_location = null;
+                this.boardStateService.source_click_location = null;
                 this.boardStateService.board_view_mode = ViewMode.MASTER;
                 this.boardStateService.board_edit_mode = BoardMode.PLAYER;
                 this.boardStateService.do_pops = true;
@@ -200,7 +202,7 @@ export class BoardControllerComponent implements OnInit{
         } else if (this.boardStateService.ambientLight === LightValue.DIM) {
             this.boardStateService.ambientLight = LightValue.FULL;
         }
-        this.boardService.updateLightValues();
+        this.boardLightService.updateLightValues();
     }
 
     decreaseAmbientLight(): void {
@@ -209,7 +211,7 @@ export class BoardControllerComponent implements OnInit{
         } else if (this.boardStateService.ambientLight === LightValue.DIM) {
             this.boardStateService.ambientLight = LightValue.DARK;
         }
-        this.boardService.updateLightValues();
+        this.boardLightService.updateLightValues();
     }
 
     getLightValue(): string {
