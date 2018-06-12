@@ -64,6 +64,8 @@ export class BoardStateService {
     public spaceDown = false;
     public mouseLeftDown = false;
     public mouseDrag = false;
+    source_click_location: CellTarget;
+    mouseLeftDownStartTime: number;
 
 
     constructor() {}
