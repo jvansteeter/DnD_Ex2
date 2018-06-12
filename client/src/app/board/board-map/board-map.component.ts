@@ -7,6 +7,10 @@ import {BoardTileService} from "../services/board-tile.service";
 import {XyPair} from '../geometry/xy-pair';
 import {BoardTransformService} from '../services/board-transform.service';
 import {EncounterService} from '../../encounter/encounter.service';
+import {isNullOrUndefined} from "util";
+import {BoardMode} from '../shared/board-mode';
+import {CellZone} from '../shared/cell-zone';
+import {ViewMode} from '../shared/view-mode';
 
 
 @Component({
@@ -15,18 +19,7 @@ import {EncounterService} from '../../encounter/encounter.service';
     styleUrls: ['board-map.component.scss']
 })
 
-/*************************************************************************************************************************************
- * BoardComponent
- *************************************************************************************************************************************
- * RESPONSIBLE FOR ...
- * - interfacing with the canvas component in the html, functionally passes the responsibility of 'VIEW' to the renderer classes
- * --- sets the canvas height and width
- * --- starts the render loop
- *
- * - handling user input, clicks and key presses, ultimately passing all to the BoardService
- *
- * - Manual loader for passing references to Service classes
- */
+
 
 export class BoardMapComponent implements OnInit, AfterViewChecked {
     @ViewChild('inputCanvas') inputCanvas: ElementRef;
@@ -39,7 +32,9 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
         private boardCanvasService: BoardCanvasService,
         private boardStateService: BoardStateService,
         private boardTransformService: BoardTransformService,
-        private encounterService: EncounterService
+        private encounterService: EncounterService,
+        private boardWallService: BoardWallService,
+        private boardTileService: BoardTileService
     ) {
     }
 
@@ -64,7 +59,6 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
     }
 
     clickResponse(): void {
-        this.boardService.handleClickResponse();
     }
 
     mouseMove(event): void {
@@ -96,12 +90,14 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
     handleMouseUp(event) {
         switch (event.which) {
             case 1:
-                this.boardService.handleMouseLeftUp(event);
+                // left click
+                this.doMouseLeftUp(event);
                 break;
             case 2:
+                // middle click
                 break;
             case 3:
-                this.boardService.handleMouseRightUp(event);
+                // right click
                 break;
         }
     }
@@ -109,12 +105,15 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
     handleMouseDown(event) {
         switch (event.which) {
             case 1:
-                this.boardService.handleMouseLeftDown(event);
+                // left click
+                this.boardStateService.mouseLeftDown = true;
+                this.boardStateService.mouseLeftDownStartTime = window.performance.now();
                 break;
             case 2:
+                // middle click
                 break;
             case 3:
-                this.boardService.handleMouseRightDown(event);
+                // right click
                 break;
         }
     }
@@ -155,7 +154,6 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
     }
 
     handleMouseEnter(event) {
-        this.boardService.handleMouseEnter();
     }
 
     handleContextMenu(event) {
@@ -237,5 +235,111 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
 
     coorInBounds(x: number, y: number): boolean {
         return !((x >= this.boardStateService.mapDimX) || (y >= this.boardStateService.mapDimY) || (x < 0) || (y < 0));
+    }
+
+    private doMouseLeftUp(event) {
+
+        if (!this.boardStateService.mouseDrag) {
+            switch (this.boardStateService.board_view_mode) {
+                case ViewMode.MASTER:
+                    switch (this.boardStateService.board_edit_mode) {
+                        case BoardMode.PLAYER:
+                            this.encounterService.handleClick(this.boardStateService.mouse_loc_cell);
+                            break;
+                    }
+                    break;
+                case ViewMode.PLAYER:
+                    switch (this.boardStateService.board_edit_mode) {
+                        case BoardMode.PLAYER:
+                            this.encounterService.handleClick(this.boardStateService.mouse_loc_cell);
+                            break;
+                    }
+                    break;
+                case ViewMode.BOARD_MAKER:
+                    switch (this.boardStateService.board_edit_mode) {
+                        case BoardMode.PLAYER:
+                            this.encounterService.handleClick(this.boardStateService.mouse_loc_cell);
+                            break;
+                        case BoardMode.WALLS:
+                            if (!isNullOrUndefined(this.boardStateService.mouse_cell_target)) {
+                                if (!isNullOrUndefined(this.boardStateService.source_click_location)) {
+                                    // MOUSE NOT DRAGGING - WALL EDIT MODE - MOUSE ON MAP - SOURCE IS DEFINED
+                                    switch (this.boardStateService.mouse_cell_target.zone) {
+                                        case CellZone.CORNER:
+                                            this.boardWallService.fillWallsBetweenCorners(this.boardStateService.source_click_location.coor, this.boardStateService.mouse_cell_target.coor);
+                                            this.boardService.updateLightValues();
+                                            this.boardStateService.source_click_location = this.boardStateService.mouse_cell_target;
+                                            break;
+                                        default:
+                                            this.boardStateService.source_click_location = null;
+                                    }
+                                } else {
+                                    switch (this.boardStateService.mouse_cell_target.zone) {
+                                        // MOUSE NOT DRAGGING - WALL EDIT MODE - MOUSE ON MAP - SOURCE IS NOT DEFINED
+                                        case CellZone.CORNER:
+                                            this.boardStateService.source_click_location = this.boardStateService.mouse_cell_target;
+                                            break;
+                                        case CellZone.NORTH:
+                                            this.boardStateService.source_click_location = null;
+                                            this.boardWallService.toggleWall(this.boardStateService.mouse_cell_target);
+                                            this.boardService.updateLightValues();
+                                            break;
+                                        case CellZone.WEST:
+                                            this.boardStateService.source_click_location = null;
+                                            this.boardWallService.toggleWall(this.boardStateService.mouse_cell_target);
+                                            this.boardService.updateLightValues();
+                                            break;
+                                        case CellZone.FWR:
+                                            this.boardStateService.source_click_location = null;
+                                            this.boardWallService.toggleWall(this.boardStateService.mouse_cell_target);
+                                            this.boardService.updateLightValues();
+                                            break;
+                                        case CellZone.BKW:
+                                            this.boardStateService.source_click_location = null;
+                                            this.boardWallService.toggleWall(this.boardStateService.mouse_cell_target);
+                                            this.boardService.updateLightValues();
+                                            break;
+                                    }
+                                }
+                            }
+                            break;
+                        case BoardMode.DOORS:
+                            break;
+                        case BoardMode.LIGHTS:
+                            if (!isNullOrUndefined(this.boardStateService.mouse_cell_target)) {
+                                if (this.boardStateService.mouse_cell_target.zone === CellZone.CENTER) {
+                                    this.boardService.toggleLight(this.boardStateService.mouse_cell_target.coor.x, this.boardStateService.mouse_cell_target.coor.y);
+                                    this.boardService.updateLightValues();
+                                }
+                            }
+                            break;
+                        case BoardMode.TILES:
+                            if (!isNullOrUndefined(this.boardStateService.mouse_cell_target)) {
+                                switch (this.boardStateService.mouse_cell_target.zone) {
+                                    case CellZone.CENTER:
+                                        this.boardTileService.setTileData_All(this.boardStateService.mouse_loc_cell);
+                                        break;
+                                    case CellZone.TOP:
+                                        this.boardTileService.setTileData_Top(this.boardStateService.mouse_loc_cell);
+                                        break;
+                                    case CellZone.LEFT:
+                                        this.boardTileService.setTileData_Left(this.boardStateService.mouse_loc_cell);
+                                        break;
+                                    case CellZone.BOTTOM:
+                                        this.boardTileService.setTileData_Bottom(this.boardStateService.mouse_loc_cell);
+                                        break;
+                                    case CellZone.RIGHT:
+                                        this.boardTileService.setTileData_Right(this.boardStateService.mouse_loc_cell);
+                                        break;
+                                }
+                            }
+                            break;
+                    }
+                    break;
+            }
+        }
+
+        this.boardStateService.mouseLeftDown = false;
+        this.boardStateService.mouseDrag = false;
     }
 }
