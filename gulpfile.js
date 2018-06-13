@@ -27,7 +27,7 @@ gulp.task('serverscripts', function() {
         .pipe(sourcemaps.init())
         .pipe(serverTsProject())
         .js
-        .pipe(uglify())
+        // .pipe(uglify())
         .pipe(gulp.dest('server/dist'));
 });
 

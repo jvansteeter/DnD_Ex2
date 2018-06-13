@@ -7,7 +7,7 @@ export class LightSource {
   public full_range: number;
   public dim_range: number;
 
-  constructor(x: number, y: number, full_range: number, dim_range: number = null) {
+  constructor(x: number, y: number, full_range: number, dim_range?: number) {
     this.coor = new XyPair(x, y);
     if (isNullOrUndefined(dim_range)) {
       this.full_range = full_range;

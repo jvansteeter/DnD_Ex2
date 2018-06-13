@@ -134,8 +134,8 @@ class App {
   }
 
   private isDevMode(): boolean {
-    for (let arg of process.argv) {
-      if (arg === '-dev') {
+    for (let i = 0; i < process.argv.length; i++) {
+      if (process.argv[i] === '-dev') {
         return true;
       }
     }

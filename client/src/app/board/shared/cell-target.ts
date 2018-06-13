@@ -15,7 +15,7 @@ export class CellTarget {
     return 'X' + this.coor.x + '_Y' + this.coor.y + '_' + this.zone.toString();
   }
 
-  hash(): string {
+  hash(): string | null {
     const hashValue = Md5.hashStr(this.toString());
     if (typeof hashValue === 'string') {
       return hashValue;

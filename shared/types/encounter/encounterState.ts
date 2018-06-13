@@ -27,13 +27,13 @@ export interface EncounterState {
     /**************************************
      * WALL RELATED VARIABLES
      **************************************/
-    wallData: Map<string, Wall>;
+    wallData: Object;
     playerWallsEnabled: boolean;
 
     /**************************************
      * LIGHT RELATED VARIABLES
      **************************************/
-    lightSourceData: Map<string, LightSource>;
+    lightSourceData: Object;
     lightEnabled: boolean;
     ambientLight: LightValue;
 }

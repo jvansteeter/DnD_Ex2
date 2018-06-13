@@ -13,7 +13,7 @@ export class XyPair {
         return this.x + ',' + this.y;
     }
 
-    hash(): string {
+    hash(): string | null{
         const hashValue = Md5.hashStr(this.toString());
         if (typeof hashValue === 'string') {
             return hashValue;

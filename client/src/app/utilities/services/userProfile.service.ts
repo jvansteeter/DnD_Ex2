@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
 import { UserProfile } from '../../types/userProfile';
 import { HttpClient } from '@angular/common/http';
 import { SocialService } from "../../social/social.service";
+import { Injectable } from '@angular/core';
 
 
 @Injectable()

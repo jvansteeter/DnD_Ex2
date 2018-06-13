@@ -24,26 +24,41 @@ export class LoginRouter {
             res.send('OK')
         });
 
-        this.router.post('/register', (req: Request, res: Response) => {
+        this.router.post('/register', async (req: Request, res: Response) => {
             let username = req.body.username;
             let password = req.body.password;
             let firstName = req.body.firstName;
             let lastName = req.body.lastName;
 
-            this.userRepo.findByUsername(username).then((user: UserModel) => {
+            // this.userRepo.findByUsername(username).then((user: UserModel) => {
+            //     if (user) {
+            //         res.status(403).send('Username already exists');
+            //         return;
+            //     }
+            //
+            //     this.userRepo.create(username, password, firstName, lastName)
+            //         .then(() => {
+            //             res.send('OK');
+            //         }, (error) => {
+            //             console.error(error);
+            //             res.status(500).send(error);
+            //         });
+            // })
+
+            try {
+                const user: UserModel = await this.userRepo.findByUsername(username);
                 if (user) {
                     res.status(403).send('Username already exists');
                     return;
                 }
 
-                this.userRepo.create(username, password, firstName, lastName)
-                    .then(() => {
-                        res.send('OK');
-                    }, (error) => {
-                        console.error(error);
-                        res.status(500).send(error);
-                    });
-            })
+                await this.userRepo.create(username, password, firstName, lastName);
+                res.send('OK');
+            }
+            catch (error) {
+                console.error(error);
+                res.status(500).send(error);
+            }
         });
     }
 

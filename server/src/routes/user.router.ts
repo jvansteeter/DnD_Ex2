@@ -29,17 +29,28 @@ export class UserRouter {
              }).catch(error => res.status(500).send(error));
         });
 
-        this.router.post('/find', (req: Request, res: Response) => {
+        this.router.post('/find', async (req: Request, res: Response) => {
             let criteria = req.body.search;
-            this.userRepository.findBySearch(criteria).then((users: UserModel[]) => {
+            // this.userRepository.findBySearch(criteria).then((users: UserModel[]) => {
+            //     for (let i = 0; i < users.length; i++) {
+            //         users[i].passwordHash = undefined;
+            //     }
+            //     res.json(users);
+            // }).catch(error => {
+            //     console.error(error);
+            // });
+            //     res.status(500).send(error)
+            try {
+                const users: UserModel[] = await this.userRepository.findBySearch(criteria);
                 for (let i = 0; i < users.length; i++) {
                     users[i].passwordHash = undefined;
                 }
                 res.json(users);
-            }).catch(error => {
+            }
+            catch (error) {
                 console.error(error);
-                res.status(500).send(error)
-            });
+                res.status(500).send(error);
+            }
         });
     }
 }
