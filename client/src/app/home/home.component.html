@@ -25,7 +25,14 @@
 		</mat-grid-tile>
 		<mat-grid-tile>
 			<dashboard-card [dashboardCard]="friendsCard">
-				... to be continued
+				<mat-table [dataSource]="friendDataSource">
+					<ng-container matColumnDef="label">
+						<mat-header-cell *matHeaderCellDef>Friends</mat-header-cell>
+						<mat-cell *matCellDef="let friend">{{friend.username}}</mat-cell>
+					</ng-container>
+					<mat-header-row *matHeaderRowDef="ruleSetTableColumns"></mat-header-row>
+					<mat-row *matRowDef="let friend; columns: friendTableColumns"></mat-row>
+				</mat-table>
 			</dashboard-card>
 		</mat-grid-tile>
 		<mat-grid-tile [colspan]="2" [rowspan]="1">

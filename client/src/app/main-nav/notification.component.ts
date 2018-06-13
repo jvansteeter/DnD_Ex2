@@ -2,7 +2,6 @@ import { Component } from "@angular/core";
 import { UserProfile } from "../types/userProfile";
 import { SocialService } from "../social/social.service";
 import { NotificationsService } from "../utilities/services/notifications.service";
-import { UserProfileService } from "../utilities/services/userProfile.service";
 import { NotificationType } from '../../../../shared/types/notification-type';
 import { NotificationData } from '../../../../shared/types/notification-data';
 import { CampaignInviteNotification } from '../../../../shared/types/campaign-invite-notification';
@@ -16,15 +15,13 @@ export class NotificationComponent {
     public notificationType = NotificationType;
 
     constructor(private socialService: SocialService,
-                public notificationsService: NotificationsService,
-                private profileService: UserProfileService) {
+                public notificationsService: NotificationsService) {
 
     }
 
     public acceptRequest(requester: UserProfile): void {
         this.socialService.acceptRequest(requester._id);
         this.notificationsService.removeFriendRequest(requester._id);
-        this.profileService.getFriends();
     }
 
     public rejectRequest(requester: UserProfile): void {

@@ -1,6 +1,5 @@
 import { UserProfile } from '../../types/userProfile';
 import { HttpClient } from '@angular/common/http';
-import { SocialService } from "../../social/social.service";
 import { Injectable } from '@angular/core';
 
 
@@ -9,10 +8,7 @@ export class UserProfileService {
     public userProfile: UserProfile;
     private profilePromise: Promise<void>;
 
-    public friends: UserProfile[];
-
-    constructor(private http: HttpClient,
-                private socialService: SocialService) {
+    constructor(private http: HttpClient) {
         this.profilePromise = this.getProfileData();
     }
 
@@ -42,14 +38,6 @@ export class UserProfileService {
 
     public setProfilePhotoUrl(url: string): void {
         this.http.post('api/user/profilephoto', {imageUrl: url}, {responseType: 'text'}).subscribe();
-    }
-
-    public getFriends(): void {
-        this.socialService.getFriends().subscribe((friends: UserProfile[]) => {
-            console.log('these are my friends')
-            console.log(friends)
-            this.friends = friends;
-        });
     }
 
     private getProfileData(): Promise<void> {

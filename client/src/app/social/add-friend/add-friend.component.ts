@@ -2,12 +2,12 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { DataSource } from '@angular/cdk/collections';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
-import { SocialRepository } from '../social.repository';
 import { UserProfile } from '../../types/userProfile';
 import { MatDialogRef } from '@angular/material';
 import { SocialService } from '../social.service';
 import { UserProfileService } from '../../utilities/services/userProfile.service';
 import { NotificationsService } from '../../utilities/services/notifications.service';
+import { FriendService } from '../friend.service';
 
 
 @Component({
@@ -27,7 +27,8 @@ export class AddFriendComponent {
     constructor(private socialService: SocialService,
                 private dialogRef: MatDialogRef<AddFriendComponent>,
                 private userProfileService: UserProfileService,
-                private notificationsService: NotificationsService) {
+                private notificationsService: NotificationsService,
+                private friendService: FriendService) {
         this.userSubject = new Subject();
         this.userDataSource = new UserDataSource(this.userSubject);
         this.users = [];
@@ -42,8 +43,8 @@ export class AddFriendComponent {
                     i--;
                 }
                 else {
-                    for (let j = 0; j < this.userProfileService.friends.length; j++) {
-                        let friend = this.userProfileService.friends[j];
+                    for (let j = 0; j < this.friendService.friends.length; j++) {
+                        let friend = this.friendService.friends[j];
                         if (users[i]._id === friend._id) {
                             users.splice(i, 1);
                             i--;

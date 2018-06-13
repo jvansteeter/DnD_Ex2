@@ -11,6 +11,8 @@ import { Router } from '@angular/router';
 import { UserDataService } from '../utilities/user-data/userData.service';
 import { DashboardCard } from '../cdk/dashboard-card/dashboard-card';
 import { AddFriendComponent } from '../social/add-friend/add-friend.component';
+import { UserProfile } from '../types/userProfile';
+import { FriendService } from '../social/friend.service';
 
 @Component({
   selector: 'home-page',
@@ -34,18 +36,29 @@ export class HomeComponent implements OnInit {
   public campaignCard: DashboardCard;
   public friendsCard: DashboardCard;
 
+	public friendTableColumns = ['label'];
+	private readonly friendSubject: Subject<UserProfile[]>;
+	public friendDataSource: SubjectDataSource<UserProfile>;
+
   constructor(private dialog: MatDialog,
               private router: Router,
               private userProfileService: UserProfileService,
               private ruleSetRepository: RuleSetRepository,
               private campaignRepository: CampaignRepository,
-              public userDataService: UserDataService) {
+              public userDataService: UserDataService,
+              private friendService: FriendService) {
 
     this.userProfileService.getUserProfile().then(() => {
       this.profilePhotoUrl = this.userProfileService.getProfilePhotoUrl();
     });
     this.ruleSetSubject = new Subject<any>();
     this.ruleSetDataSource = new SubjectDataSource(this.ruleSetSubject);
+
+    this.friendSubject = new Subject<UserProfile[]>();
+    this.friendDataSource = new SubjectDataSource(this.friendSubject);
+    this.friendService.getFriends().subscribe((friends: UserProfile[]) => {
+    	this.friendSubject.next(friends);
+    });
   }
 
   public ngOnInit(): void {
