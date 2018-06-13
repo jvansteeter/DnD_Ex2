@@ -5,10 +5,10 @@ import { UserProfile } from '../types/userProfile';
 import { SocialRepository } from '../social/social.repository';
 import { Campaign } from '../../../../shared/types/campaign';
 import { CampaignState } from './campaign.state';
-import { EncounterState } from '../../../../shared/types/encounter/encounterState';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { mergeMap, tap } from 'rxjs/operators';
+import { EncounterStateData } from '../../../../shared/types/encounter/encounterState';
 
 
 @Injectable()
@@ -16,7 +16,7 @@ export class CampaignService extends IsReadyService {
 	public campaignId: string;
 	public campaignState: CampaignState;
 
-	private encounterSubject: BehaviorSubject<EncounterState[]>;
+	private encounterSubject: BehaviorSubject<EncounterStateData[]>;
 
 	constructor(private campaignRepo: CampaignRepository,
 							private socialRepo: SocialRepository) {
@@ -38,9 +38,9 @@ export class CampaignService extends IsReadyService {
 			mergeMap(() => {
 				return this.campaignRepo.getAllEncounters(this.campaignState._id);
 			})
-		 ).subscribe((encounters: EncounterState[]) => {
+		 ).subscribe((encounters: EncounterStateData[]) => {
 			this.campaignState.encounters = encounters;
-			this.encounterSubject = new BehaviorSubject<EncounterState[]>(this.campaignState.encounters);
+			this.encounterSubject = new BehaviorSubject<EncounterStateData[]>(this.campaignState.encounters);
 			this.setReady(true);
 		});
 	}
@@ -63,7 +63,7 @@ export class CampaignService extends IsReadyService {
 			mergeMap(() => {
 				return this.campaignRepo.getAllEncounters(this.campaignState._id)
 			})
-		 ).subscribe((encounters: EncounterState[]) => {
+		 ).subscribe((encounters: EncounterStateData[]) => {
 			this.campaignState.encounters = encounters;
 			this.encounterSubject.next(this.campaignState.encounters);
 		});
@@ -73,11 +73,11 @@ export class CampaignService extends IsReadyService {
 		return this.campaignState.members;
 	}
 
-	get encounters(): EncounterState[] {
+	get encounters(): EncounterStateData[] {
 		return this.campaignState.encounters;
 	}
 
-	get encounterObservable(): Observable<EncounterState[]> {
+	get encounterObservable(): Observable<EncounterStateData[]> {
 		return this.encounterSubject.asObservable();
 	}
 }

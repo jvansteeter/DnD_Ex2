@@ -1,4 +1,4 @@
-export interface Player {
+export interface PlayerData {
 	_id: number;
 	name: string;
 	tokenUrl: string;

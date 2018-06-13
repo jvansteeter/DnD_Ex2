@@ -38,7 +38,7 @@ export class NpcPopComponent {
     }
 
     close() {
-        this.parentRef.clearPlayerPop(this.player.id);
+        this.parentRef.clearPlayerPop(this.player._id);
     }
 
     mouseDown(event) {

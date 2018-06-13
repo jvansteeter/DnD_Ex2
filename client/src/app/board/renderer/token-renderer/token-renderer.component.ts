@@ -31,7 +31,7 @@ export class TokenRendererComponent implements OnInit {
         // do stuff here
         for (const player of this.encounterService.players) {
             if (player.isSelected) {
-                this.boardCanvasService.draw_fill_all(this.ctx, player.loc, 'rgba(0, 0, 180, 0.2)');
+                this.boardCanvasService.draw_fill_all(this.ctx, player.location, 'rgba(0, 0, 180, 0.2)');
 
                 for (const cell of player.traversableCells_near) {
                     if (this.boardStateService.coorInBounds(cell.x, cell.y)) {
@@ -46,9 +46,9 @@ export class TokenRendererComponent implements OnInit {
                 }
             }
 
-            this.boardCanvasService.draw_img(this.ctx, new XyPair(player.loc.x * this.boardStateService.cell_res, player.loc.y * this.boardStateService.cell_res), player.token_img);
+            this.boardCanvasService.draw_img(this.ctx, new XyPair(player.location.x * this.boardStateService.cell_res, player.location.y * this.boardStateService.cell_res), player.token_img);
             if (this.boardStateService.show_health) {
-                this.boardCanvasService.draw_health(this.ctx, player.loc, player.hp/player.maxHp);
+                this.boardCanvasService.draw_health(this.ctx, player.location, player.hp/player.maxHp);
             }
         }
 

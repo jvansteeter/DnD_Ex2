@@ -1,15 +1,15 @@
-import {Player} from './player';
 import {Wall} from '../../../client/src/app/board/map-objects/wall';
 import {LightSource} from '../../../client/src/app/board/map-objects/light-source';
 import {LightValue} from '../../../client/src/app/board/shared/light-value';
+import { PlayerData } from './player';
 
-export interface EncounterState {
+export interface EncounterStateData {
     _id: string;
     label: string;
     date: Date;
     campaignId: string;
     gameMasters: string[];
-    players: Player[];
+    players: PlayerData[];
 
     /**************************************
      * GENERAL BOARD VARIABLES

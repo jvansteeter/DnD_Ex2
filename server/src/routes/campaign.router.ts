@@ -4,7 +4,7 @@ import { CampaignModel } from '../db/models/campaign.model';
 import { EncounterService } from "../services/encounter.service";
 import { ServerError } from '../../../shared/errors/ServerError';
 import { Campaign } from '../../../shared/types/campaign';
-import { EncounterState } from '../../../shared/types/encounter/encounterState';
+import { EncounterModel } from '../db/models/encounter.model';
 
 
 /**********************************************************************************************************
@@ -70,7 +70,7 @@ export class CampaignRouter {
         });
 
         this.router.get('/encounters/:campaignId', (req: Request, res: Response) => {
-            this.encounterService.getAllForCampaignId(req.params.campaignId).then((encounters: EncounterState[]) => {
+            this.encounterService.getAllForCampaignId(req.params.campaignId).then((encounters: EncounterModel[]) => {
                 res.json(encounters);
             }).catch(error => res.status(500).send(error));
         });

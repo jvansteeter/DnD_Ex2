@@ -45,9 +45,9 @@ export class EncounterDevService extends EncounterService {
     checkForPops(loc_cell: XyPair, pop_origin: XyPair) {
         if (this.boardStateService.do_pops) {
             for (const player of this.players) {
-                if (player.loc.x === loc_cell.x && player.loc.y === loc_cell.y) {
-                    if (this.popService.popIsActive(player.id)) {
-                        this.popService.clearPlayerPop(player.id);
+                if (player.location.x === loc_cell.x && player.location.y === loc_cell.y) {
+                    if (this.popService.popIsActive(player._id)) {
+                        this.popService.clearPlayerPop(player._id);
                     } else {
                         const x = (loc_cell.x + 1) * this.boardStateService.cell_res;
                         const y = (loc_cell.y) * this.boardStateService.cell_res;
@@ -61,7 +61,7 @@ export class EncounterDevService extends EncounterService {
     handleClick(loc_cell: XyPair) {
         if (this.playerSelected) {
             for (const player of this.players) {
-                if (player.loc.x === loc_cell.x && player.loc.y === loc_cell.y) {
+                if (player.location.x === loc_cell.x && player.location.y === loc_cell.y) {
                     this.deselectAllPlayers();
                     return;
                 }
@@ -69,16 +69,16 @@ export class EncounterDevService extends EncounterService {
 
             for (const player of this.players) {
                 if (player.isSelected) {
-                    player.loc = loc_cell;
+                    player.location = loc_cell;
                     this.deselectAllPlayers();
                 }
             }
         } else {
             for (const player of this.players) {
-                if (player.loc.x === loc_cell.x && player.loc.y === loc_cell.y) {
+                if (player.location.x === loc_cell.x && player.location.y === loc_cell.y) {
 
-                    player.traversableCells_near = this.wallService.calcTraversableCells(player.loc, player.speed);
-                    player.traversableCells_far = this.wallService.calcTraversableCells(player.loc, player.speed * 2);
+                    player.traversableCells_near = this.wallService.calcTraversableCells(player.location, player.speed);
+                    player.traversableCells_far = this.wallService.calcTraversableCells(player.location, player.speed * 2);
 
                     player.isSelected = true;
                     this.playerSelected = true;

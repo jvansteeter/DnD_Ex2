@@ -1,16 +1,15 @@
 import * as mongoose from 'mongoose';
-import Promise from 'bluebird';
-import {EncounterState} from '../../../../shared/types/encounter/encounterState';
-import {Player} from '../../../../shared/types/encounter/player';
 import {LightValue} from "../../../../client/src/app/board/shared/light-value";
+import { PlayerData } from '../../../../shared/types/encounter/player';
+import { EncounterStateData } from '../../../../shared/types/encounter/encounterState';
 
-export class EncounterModel extends mongoose.Schema implements EncounterState {
+export class EncounterModel extends mongoose.Schema implements EncounterStateData {
     public _id;
     public label: string;
     public date: Date;
     public campaignId: string;
     public gameMasters: string[];
-    public players: Player[];
+    public players: PlayerData[];
 
     cell_res: number;
     mapDimX: number;

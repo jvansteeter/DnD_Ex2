@@ -8,10 +8,10 @@ import { SelectFriendsComponent } from '../social/select-friends/select-friends.
 import { CampaignService } from './campaign.service';
 import { NewEncounterDialogComponent } from './dialog/new-encounter-dialog.component';
 import { SubjectDataSource } from '../utilities/subjectDataSource';
-import { EncounterState } from '../../../../shared/types/encounter/encounterState';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { mergeMap, tap } from 'rxjs/operators';
 import { DashboardCard } from '../cdk/dashboard-card/dashboard-card';
+import { EncounterStateData } from '../../../../shared/types/encounter/encounterState';
 
 
 @Component({
@@ -25,9 +25,9 @@ export class CampaignComponent implements OnInit {
 	public memberDataSource: MatTableDataSource<UserProfile>;
 	public memberTableCols = ['users', 'gm'];
 
-	public encounterDataSource: SubjectDataSource<EncounterState>;
+	public encounterDataSource: SubjectDataSource<EncounterStateData>;
 	public encounterTableCols = ['label', 'date'];
-	public encounterSubject: BehaviorSubject<EncounterState[]>;
+	public encounterSubject: BehaviorSubject<EncounterStateData[]>;
 
 	public encountersCard: DashboardCard;
 
@@ -80,14 +80,14 @@ export class CampaignComponent implements OnInit {
 	//   }
 	// }
 
-	public enterEncounter(encounter: EncounterState): void {
+	public enterEncounter(encounter: EncounterStateData): void {
 		this.router.navigate(['encounter', encounter._id])
 	}
 
 	private initEncounterDataSource(): void {
-		this.encounterSubject = new BehaviorSubject<EncounterState[]>(this.campaignService.encounters);
-		this.encounterDataSource = new SubjectDataSource<EncounterState>(this.encounterSubject);
-		this.campaignService.encounterObservable.subscribe((encounters: EncounterState[]) => {
+		this.encounterSubject = new BehaviorSubject<EncounterStateData[]>(this.campaignService.encounters);
+		this.encounterDataSource = new SubjectDataSource<EncounterStateData>(this.encounterSubject);
+		this.campaignService.encounterObservable.subscribe((encounters: EncounterStateData[]) => {
 			this.encounterSubject.next(encounters);
 		});
 	}

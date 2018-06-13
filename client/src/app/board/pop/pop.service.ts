@@ -18,7 +18,7 @@ export class PopService {
     addPlayerPop(x: number, y: number, player: Player) {
         let popFound = false;
         for (const pop of this.playerPops) {
-            if (pop.id === player.id) {
+            if (pop.id === player._id) {
                 popFound = true;
             }
         }
@@ -29,7 +29,7 @@ export class PopService {
 
             const componentInst = (<NpcPopComponent>componentRef.instance);
             componentInst.initVars(this, false, x, y, player);
-            this.playerPops.push({id: player.id, ref: componentRef});
+            this.playerPops.push({id: player._id, ref: componentRef});
         }
     }
 

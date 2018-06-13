@@ -78,7 +78,6 @@
     "@types/passport": "^0.3.5",
     "angular2-grid": "^2.1.0",
     "bcryptjs": "^2.4.3",
-    "bluebird": "^3.5.1",
     "body-parser": "^1.18.2",
     "bootstrap": "^3.3.7",
     "core-js": "^2.5.6",

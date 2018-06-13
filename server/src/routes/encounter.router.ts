@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { EncounterService } from "../services/encounter.service";
 import { EncounterModel } from "../db/models/encounter.model";
+import { PlayerData } from '../../../shared/types/encounter/player';
 
 
 /**********************************************************************************************************
@@ -9,24 +10,35 @@ import { EncounterModel } from "../db/models/encounter.model";
  * Responsible for all routes related to campaigns
  *********************************************************************************************************/
 export class EncounterRouter {
-    router: Router;
+	router: Router;
 
-    private encounterService: EncounterService;
+	private encounterService: EncounterService;
 
-    constructor() {
-        this.router = Router();
+	constructor() {
+		this.router = Router();
 
-        this.encounterService = new EncounterService();
-        this.init();
-    }
+		this.encounterService = new EncounterService();
+		this.init();
+	}
 
-    init() {
-        this.router.get('/encounter/:encounterId', (req: Request, res: Response) => {
-            this.encounterService.getEncounter(req.params.encounterId).then((encounter: EncounterModel) => {
-                res.json(encounter);
-            }).catch(error => res.status(500).send(error));
-        });
-    }
+	init() {
+		this.router.get('/encounter/:encounterId', (req: Request, res: Response) => {
+			this.encounterService.getEncounter(req.params.encounterId).then((encounter: EncounterModel) => {
+				res.json(encounter);
+			}).catch(error => res.status(500).send(error));
+		});
+
+		this.router.post('/addplayer', (req: Request, res: Response) => {
+			try {
+				const player: PlayerData = req.body.player;
+
+			}
+			catch (error) {
+				console.log(error);
+				res.status(500).send(error);
+			}
+		});
+	}
 }
 
 export default new EncounterRouter().router;

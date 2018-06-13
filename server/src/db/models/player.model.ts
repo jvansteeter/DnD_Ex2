@@ -1,9 +1,8 @@
 import * as mongoose from 'mongoose';
-import Promise from 'bluebird';
-import { Player } from '../../../../shared/types/encounter/player';
+import { PlayerData } from '../../../../shared/types/encounter/player';
 
 
-export class PlayerModel extends mongoose.Schema implements Player {
+export class PlayerModel extends mongoose.Schema implements PlayerData {
 	public _id;
 	name: string;
 	tokenUrl: string;
