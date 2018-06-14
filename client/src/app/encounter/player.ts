@@ -30,7 +30,6 @@ export class Player {
             this.token_img.src = this.tokenUrl;
         }
         this.actions = [];
-        // this.id = window.crypto.getRandomValues(new Uint32Array(1))[0];
     }
 
     addAction(action: string, detail: string) {
