@@ -3,7 +3,7 @@ import {CellLightConfig} from '../shared/cell-light-state';
 import {LightSource} from '../map-objects/light-source';
 import {BoardStateService} from './board-state.service';
 import {XyPair} from '../geometry/xy-pair';
-import {BoardLosService} from './board-los.service';
+import {BoardVisibilityService} from './board-visibility.service';
 
 @Injectable()
 export class BoardLightService {
@@ -13,7 +13,7 @@ export class BoardLightService {
 
     constructor(
         private boardStateService: BoardStateService,
-        private boardLosService: BoardLosService
+        private boardVisibilityService: BoardVisibilityService
     ) {
         this.cellLightData = new Array(this.boardStateService.mapDimX);
         for (let x = 0; x < this.boardStateService.mapDimX; x++) {
@@ -68,25 +68,25 @@ export class BoardLightService {
                     for (const light_source of mapped_light_sources.get(dist)) {
                         if (!(north && east && south && west)) {
                             if (!north) {
-                                if (this.boardLosService.cellHasLOSToNorth(light_source.coor, cell.coor)) {
+                                if (this.boardVisibilityService.cellHasLOSToNorth(light_source.coor, cell.coor)) {
                                     cell.updateLightIntensityNorth(light_source.lightImpactAtDistance(dist));
                                     north = true;
                                 }
                             }
                             if (!east) {
-                                if (this.boardLosService.cellHasLOSToEast(light_source.coor, cell.coor)) {
+                                if (this.boardVisibilityService.cellHasLOSToEast(light_source.coor, cell.coor)) {
                                     cell.updateLightIntensityEast(light_source.lightImpactAtDistance(dist));
                                     east = true;
                                 }
                             }
                             if (!south) {
-                                if (this.boardLosService.cellHasLOSToSouth(light_source.coor, cell.coor)) {
+                                if (this.boardVisibilityService.cellHasLOSToSouth(light_source.coor, cell.coor)) {
                                     cell.updateLightIntensitySouth(light_source.lightImpactAtDistance(dist));
                                     south = true;
                                 }
                             }
                             if (!west) {
-                                if (this.boardLosService.cellHasLOSToWest(light_source.coor, cell.coor)) {
+                                if (this.boardVisibilityService.cellHasLOSToWest(light_source.coor, cell.coor)) {
                                     cell.updateLightIntensityWest(light_source.lightImpactAtDistance(dist));
                                     west = true;
                                 }

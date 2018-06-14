@@ -10,6 +10,7 @@ import {EncounterStateData} from '../../../../shared/types/encounter/encounterSt
 import {PopService} from '../board/pop/pop.service';
 import {BoardWallService} from '../board/services/board-wall.service';
 import {BoardStateService} from '../board/services/board-state.service';
+import {BoardTraverseService} from '../board/services/board-traverse.service';
 
 @Injectable()
 export class EncounterService extends IsReadyService {
@@ -21,7 +22,7 @@ export class EncounterService extends IsReadyService {
     constructor(
         private boardStateService: BoardStateService,
         private popService: PopService,
-        private wallService: BoardWallService,
+        private boardTraverseService: BoardTraverseService,
         private encounterRepo: EncounterRepository
     ) {
         super();
@@ -75,8 +76,8 @@ export class EncounterService extends IsReadyService {
             for (const player of this.players) {
                 if (player.location.x === loc_cell.x && player.location.y === loc_cell.y) {
 
-                    player.traversableCells_near = this.wallService.calcTraversableCells(player.location, player.speed);
-                    player.traversableCells_far = this.wallService.calcTraversableCells(player.location, player.speed * 2);
+                    player.traversableCells_near = this.boardTraverseService.calcTraversableCells(player.location, player.speed);
+                    player.traversableCells_far = this.boardTraverseService.calcTraversableCells(player.location, player.speed * 2);
 
                     player.isSelected = true;
                     this.playerSelected = true;

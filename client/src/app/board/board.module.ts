@@ -24,8 +24,9 @@ import {NpcPopComponent} from "./pop/npcPop/npc-pop.component";
 import {TempModule} from '../temp/temp.module';
 import {AddPlayerComponent} from '../temp/add-player.component';
 import {BoardTransformService} from './services/board-transform.service';
-import {BoardLosService} from './services/board-los.service';
+import {BoardVisibilityService} from './services/board-visibility.service';
 import {BoardLightService} from './services/board-light.service';
+import {BoardTraverseService} from './services/board-traverse.service';
 
 
 @NgModule({
@@ -61,7 +62,8 @@ import {BoardLightService} from './services/board-light.service';
         BoardWallService,
         BoardTileService,
         BoardTransformService,
-        BoardLosService,
+        BoardVisibilityService,
+        BoardTraverseService,
         BoardLightService
     ],
     entryComponents: [

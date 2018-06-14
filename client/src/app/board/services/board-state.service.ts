@@ -19,8 +19,8 @@ export class BoardStateService {
      * To be moved into encounter state
      ***********************************************************************************/
     public cell_res = 50;
-    public mapDimX = 28;
-    public mapDimY = 22;
+    public mapDimX = 10;
+    public mapDimY = 8;
 
     // board-map controls
     public map_enabled = false;

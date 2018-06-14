@@ -7,6 +7,7 @@ import {BoardWallService} from '../board/services/board-wall.service';
 import {EncounterService} from './encounter.service';
 import {EncounterRepository} from '../repositories/encounter.repository';
 import {EncounterState} from './encounter.state';
+import {BoardTraverseService} from '../board/services/board-traverse.service';
 
 @Injectable()
 export class EncounterDevService extends EncounterService {
@@ -15,13 +16,13 @@ export class EncounterDevService extends EncounterService {
     constructor(
         boardStateService: BoardStateService,
         popService: PopService,
-        wallService: BoardWallService,
+        boardTraverseService: BoardTraverseService,
         encounterRepo: EncounterRepository
     ) {
         super(
             boardStateService,
             popService,
-            wallService,
+            boardTraverseService,
             encounterRepo
         );
 

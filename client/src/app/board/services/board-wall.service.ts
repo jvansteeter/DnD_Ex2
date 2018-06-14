@@ -4,7 +4,8 @@ import {XyPair} from '../geometry/xy-pair';
 import {CellTarget} from '../shared/cell-target';
 import {CellZone} from '../shared/cell-zone';
 import {BoardStateService} from './board-state.service';
-import {BoardLosService} from './board-los.service';
+import {BoardVisibilityService} from './board-visibility.service';
+import {BoardTraverseService} from './board-traverse.service';
 
 @Injectable()
 export class BoardWallService {
@@ -12,25 +13,33 @@ export class BoardWallService {
 
     constructor(
         private boardStateService: BoardStateService,
-        private boardLosService: BoardLosService
-    ) {}
+        private boardVisibilityService: BoardVisibilityService,
+        private boardTraverseService: BoardTraverseService
+    ) {
+    }
 
     public addWall(loc: CellTarget) {
         if (!this.hasWall(loc)) {
             this.wallData.set(loc.hash(), new Wall(loc, this.boardStateService.cell_res));
-
             switch (loc.zone) {
                 case CellZone.NORTH:
-                    this.boardLosService.blockNorth(loc.coor);
+                    this.boardVisibilityService.blockNorth(loc.coor);
+                    this.boardTraverseService.blockNorth(loc.coor);
                     break;
                 case CellZone.WEST:
-                    this.boardLosService.blockWest(loc.coor);
+                    this.boardVisibilityService.blockWest(loc.coor);
+                    this.boardTraverseService.blockWest(loc.coor);
+
                     break;
                 case CellZone.FWR:
-                    this.boardLosService.blockFwd(loc.coor);
+                    this.boardVisibilityService.blockFwd(loc.coor);
+                    this.boardTraverseService.blockFwd(loc.coor);
+
                     break;
                 case CellZone.BKW:
-                    this.boardLosService.blockBkw(loc.coor);
+                    this.boardVisibilityService.blockBkw(loc.coor);
+                    this.boardTraverseService.blockBkw(loc.coor);
+
                     break;
             }
         }
@@ -39,19 +48,25 @@ export class BoardWallService {
     public removeWall(loc: CellTarget): void {
         if (this.hasWall(loc)) {
             this.wallData.delete(loc.hash());
-
             switch (loc.zone) {
                 case CellZone.NORTH:
-                    this.boardLosService.unblockNorth(loc.coor);
+                    this.boardVisibilityService.unblockNorth(loc.coor);
+                    this.boardTraverseService.unblockNorth(loc.coor);
                     break;
                 case CellZone.WEST:
-                    this.boardLosService.unblockWest(loc.coor);
+                    this.boardVisibilityService.unblockWest(loc.coor);
+                    this.boardTraverseService.unblockWest(loc.coor);
+
                     break;
                 case CellZone.FWR:
-                    this.boardLosService.unblockFwd(loc.coor);
+                    this.boardVisibilityService.unblockFwd(loc.coor);
+                    this.boardTraverseService.unblockFwd(loc.coor);
+
                     break;
                 case CellZone.BKW:
-                    this.boardLosService.unblockBkw(loc.coor);
+                    this.boardVisibilityService.unblockBkw(loc.coor);
+                    this.boardTraverseService.unblockBkw(loc.coor);
+
                     break;
             }
         }
@@ -136,194 +151,194 @@ export class BoardWallService {
         return this.wallData.has(loc.hash());
     }
 
-    calcTraversableCells(sourceCell: XyPair, range: number): Array<XyPair> {
-        const returnMe = Array<XyPair>();
-
-        const queue: { cell: XyPair, range: number, diagAsDouble: boolean }[] = [];
-        const touched: Array<string> = [];
-
-        queue.push({cell: sourceCell, range: range, diagAsDouble: false});
-        touched.push(sourceCell.hash2());
-
-        while (queue.length > 0) {
-            const curCell = queue.shift();
-
-            if (curCell.range >= 0) {
-                if (this.canMoveN(curCell.cell)) {
-                    const northCell = new XyPair(curCell.cell.x, curCell.cell.y - 1);
-                    if (touched.indexOf(northCell.hash2()) === -1) {
-                        queue.push({cell: northCell, range: curCell.range - 1, diagAsDouble: curCell.diagAsDouble});
-                        touched.push(northCell.hash2());
-                    }
-                }
-
-                if (this.canMoveE(curCell.cell)) {
-                    const eastCell = new XyPair(curCell.cell.x + 1, curCell.cell.y);
-                    if (touched.indexOf(eastCell.hash2()) === -1) {
-                        queue.push({cell: eastCell, range: curCell.range - 1, diagAsDouble: curCell.diagAsDouble});
-                        touched.push(eastCell.hash2());
-                    }
-                }
-
-                if (this.canMoveS(curCell.cell)) {
-                    const southCell = new XyPair(curCell.cell.x, curCell.cell.y + 1);
-                    if (touched.indexOf(southCell.hash2()) === -1) {
-                        queue.push({cell: southCell, range: curCell.range - 1, diagAsDouble: curCell.diagAsDouble});
-                        touched.push(southCell.hash2());
-                    }
-                }
-
-                if (this.canMoveW(curCell.cell)) {
-                    const westCell = new XyPair(curCell.cell.x - 1, curCell.cell.y);
-                    if (touched.indexOf(westCell.hash2()) === -1) {
-                        queue.push({cell: westCell, range: curCell.range - 1, diagAsDouble: curCell.diagAsDouble});
-                        touched.push(westCell.hash2());
-                    }
-                }
-
-                if (this.canMoveNE(curCell.cell)) {
-                    const northEastCell = new XyPair(curCell.cell.x + 1, curCell.cell.y - 1);
-                    if (touched.indexOf(northEastCell.hash2()) === -1) {
-                        let rangeDelta;
-                        if (curCell.diagAsDouble) {
-                            rangeDelta = -2;
-                        } else {
-                            rangeDelta = -1;
-                        }
-                        queue.push({cell: northEastCell, range: curCell.range + rangeDelta, diagAsDouble: !curCell.diagAsDouble});
-                        touched.push(northEastCell.hash2());
-                    }
-                }
-
-                if (this.canMoveNW(curCell.cell)) {
-                    const northWestCell = new XyPair(curCell.cell.x - 1, curCell.cell.y - 1);
-                    if (touched.indexOf(northWestCell.hash2()) === -1) {
-                        let rangeDelta;
-                        if (curCell.diagAsDouble) {
-                            rangeDelta = -2;
-                        } else {
-                            rangeDelta = -1;
-                        }
-                        queue.push({cell: northWestCell, range: curCell.range + rangeDelta, diagAsDouble: !curCell.diagAsDouble});
-                        touched.push(northWestCell.hash2());
-                    }
-                }
-
-                if (this.canMoveSE(curCell.cell)) {
-                    const southEastCell = new XyPair(curCell.cell.x + 1, curCell.cell.y + 1);
-                    if (touched.indexOf(southEastCell.hash2()) === -1) {
-                        let rangeDelta;
-                        if (curCell.diagAsDouble) {
-                            rangeDelta = -2;
-                        } else {
-                            rangeDelta = -1;
-                        }
-                        queue.push({cell: southEastCell, range: curCell.range + rangeDelta, diagAsDouble: !curCell.diagAsDouble});
-                        touched.push(southEastCell.hash2());
-                    }
-                }
-
-                if (this.canMoveSW(curCell.cell)) {
-                    const southWestCell = new XyPair(curCell.cell.x - 1, curCell.cell.y + 1);
-                    if (touched.indexOf(southWestCell.hash2()) === -1) {
-                        let rangeDelta;
-                        if (curCell.diagAsDouble) {
-                            rangeDelta = -2;
-                        } else {
-                            rangeDelta = -1;
-                        }
-                        queue.push({cell: southWestCell, range: curCell.range + rangeDelta, diagAsDouble: !curCell.diagAsDouble});
-                        touched.push(southWestCell.hash2());
-                    }
-                }
-                returnMe.push(curCell.cell);
-            }
-        }
-        return returnMe;
-    }
-
-
-    public canMoveN(loc: XyPair): boolean {
-        if (this.hasWall(new CellTarget(new XyPair(loc.x, loc.y), CellZone.NORTH)) ||
-            this.hasWall(new CellTarget(new XyPair(loc.x, loc.y - 1), CellZone.FWR)) ||
-            this.hasWall(new CellTarget(new XyPair(loc.x, loc.y - 1), CellZone.BKW))) {
-            return false;
-        }
-        return true;
-    }
-
-    public canMoveNE(loc: XyPair): boolean {
-        if (this.hasWall(new CellTarget(new XyPair(loc.x + 1, loc.y - 1), CellZone.FWR)) ||
-            this.hasWall(new CellTarget(new XyPair(loc.x + 1, loc.y - 1), CellZone.BKW)) ||
-            (this.hasWall(new CellTarget(new XyPair(loc.x + 1, loc.y - 1), CellZone.WEST)) && this.hasWall(new CellTarget(new XyPair(loc.x + 1, loc.y), CellZone.NORTH))) ||
-            (this.hasWall(new CellTarget(new XyPair(loc.x + 1, loc.y - 1), CellZone.WEST)) && this.hasWall(new CellTarget(new XyPair(loc.x + 1, loc.y), CellZone.WEST))) ||
-            (this.hasWall(new CellTarget(new XyPair(loc.x, loc.y), CellZone.NORTH)) && this.hasWall(new CellTarget(new XyPair(loc.x + 1, loc.y), CellZone.NORTH))) ||
-            (this.hasWall(new CellTarget(new XyPair(loc.x, loc.y), CellZone.NORTH)) && this.hasWall(new CellTarget(new XyPair(loc.x + 1, loc.y), CellZone.WEST)))) {
-            return false;
-        }
-        return true;
-    }
-
-    public canMoveE(loc: XyPair): boolean {
-        if (this.hasWall(new CellTarget(new XyPair(loc.x + 1, loc.y), CellZone.WEST)) ||
-            this.hasWall(new CellTarget(new XyPair(loc.x + 1, loc.y), CellZone.FWR)) ||
-            this.hasWall(new CellTarget(new XyPair(loc.x + 1, loc.y), CellZone.BKW))) {
-            return false;
-        }
-        return true;
-    }
-
-    public canMoveSE(loc: XyPair): boolean {
-        if (this.hasWall(new CellTarget(new XyPair(loc.x + 1, loc.y + 1), CellZone.FWR)) ||
-            this.hasWall(new CellTarget(new XyPair(loc.x + 1, loc.y + 1), CellZone.BKW)) ||
-            (this.hasWall(new CellTarget(new XyPair(loc.x + 1, loc.y), CellZone.WEST)) && this.hasWall(new CellTarget(new XyPair(loc.x, loc.y + 1), CellZone.NORTH))) ||
-            (this.hasWall(new CellTarget(new XyPair(loc.x + 1, loc.y), CellZone.WEST)) && this.hasWall(new CellTarget(new XyPair(loc.x + 1, loc.y + 1), CellZone.WEST))) ||
-            (this.hasWall(new CellTarget(new XyPair(loc.x, loc.y + 1), CellZone.NORTH)) && this.hasWall(new CellTarget(new XyPair(loc.x + 1, loc.y + 1), CellZone.NORTH))) ||
-            (this.hasWall(new CellTarget(new XyPair(loc.x + 1, loc.y + 1), CellZone.NORTH)) && this.hasWall(new CellTarget(new XyPair(loc.x + 1, loc.y + 1), CellZone.WEST)))) {
-            return false;
-        }
-        return true;
-    }
-
-    public canMoveS(loc: XyPair): boolean {
-        if (this.hasWall(new CellTarget(new XyPair(loc.x, loc.y + 1), CellZone.NORTH)) ||
-            this.hasWall(new CellTarget(new XyPair(loc.x, loc.y + 1), CellZone.FWR)) ||
-            this.hasWall(new CellTarget(new XyPair(loc.x, loc.y + 1), CellZone.BKW))) {
-            return false;
-        }
-        return true;
-    }
-
-    public canMoveSW(loc: XyPair): boolean {
-        if (this.hasWall(new CellTarget(new XyPair(loc.x - 1, loc.y + 1), CellZone.FWR)) ||
-            this.hasWall(new CellTarget(new XyPair(loc.x - 1, loc.y + 1), CellZone.BKW)) ||
-            (this.hasWall(new CellTarget(new XyPair(loc.x - 1, loc.y + 1), CellZone.NORTH)) && this.hasWall(new CellTarget(new XyPair(loc.x, loc.y + 1), CellZone.WEST))) ||
-            (this.hasWall(new CellTarget(new XyPair(loc.x, loc.y), CellZone.WEST)) && this.hasWall(new CellTarget(new XyPair(loc.x, loc.y + 1), CellZone.NORTH))) ||
-            (this.hasWall(new CellTarget(new XyPair(loc.x, loc.y), CellZone.WEST)) && this.hasWall(new CellTarget(new XyPair(loc.x, loc.y + 1), CellZone.WEST))) ||
-            (this.hasWall(new CellTarget(new XyPair(loc.x - 1, loc.y + 1), CellZone.NORTH)) && this.hasWall(new CellTarget(new XyPair(loc.x, loc.y + 1), CellZone.NORTH)))) {
-            return false;
-        }
-        return true;
-    }
-
-    public canMoveW(loc: XyPair): boolean {
-        if (this.hasWall(new CellTarget(new XyPair(loc.x, loc.y), CellZone.WEST)) ||
-            this.hasWall(new CellTarget(new XyPair(loc.x - 1, loc.y), CellZone.FWR)) ||
-            this.hasWall(new CellTarget(new XyPair(loc.x - 1, loc.y), CellZone.BKW))) {
-            return false;
-        }
-        return true;
-    }
-
-    public canMoveNW(loc: XyPair): boolean {
-        if (this.hasWall(new CellTarget(new XyPair(loc.x - 1, loc.y - 1), CellZone.FWR)) ||
-            this.hasWall(new CellTarget(new XyPair(loc.x - 1, loc.y - 1), CellZone.BKW)) ||
-            (this.hasWall(new CellTarget(new XyPair(loc.x, loc.y), CellZone.NORTH)) && this.hasWall(new CellTarget(new XyPair(loc.x - 1, loc.y), CellZone.NORTH))) ||
-            (this.hasWall(new CellTarget(new XyPair(loc.x, loc.y), CellZone.WEST)) && this.hasWall(new CellTarget(new XyPair(loc.x, loc.y - 1), CellZone.WEST))) ||
-            (this.hasWall(new CellTarget(new XyPair(loc.x, loc.y), CellZone.WEST)) && this.hasWall(new CellTarget(new XyPair(loc.x, loc.y), CellZone.NORTH))) ||
-            (this.hasWall(new CellTarget(new XyPair(loc.x - 1, loc.y), CellZone.NORTH)) && this.hasWall(new CellTarget(new XyPair(loc.x, loc.y - 1), CellZone.WEST)))) {
-            return false;
-        }
-        return true;
-    }
+    // calcTraversableCells(sourceCell: XyPair, range: number): Array<XyPair> {
+    //     const returnMe = Array<XyPair>();
+    //
+    //     const queue: { cell: XyPair, range: number, diagAsDouble: boolean }[] = [];
+    //     const touched: Array<string> = [];
+    //
+    //     queue.push({cell: sourceCell, range: range, diagAsDouble: false});
+    //     touched.push(sourceCell.hash2());
+    //
+    //     while (queue.length > 0) {
+    //         const curCell = queue.shift();
+    //
+    //         if (curCell.range >= 0) {
+    //             if (this.canMoveN(curCell.cell)) {
+    //                 const northCell = new XyPair(curCell.cell.x, curCell.cell.y - 1);
+    //                 if (touched.indexOf(northCell.hash2()) === -1) {
+    //                     queue.push({cell: northCell, range: curCell.range - 1, diagAsDouble: curCell.diagAsDouble});
+    //                     touched.push(northCell.hash2());
+    //                 }
+    //             }
+    //
+    //             if (this.canMoveE(curCell.cell)) {
+    //                 const eastCell = new XyPair(curCell.cell.x + 1, curCell.cell.y);
+    //                 if (touched.indexOf(eastCell.hash2()) === -1) {
+    //                     queue.push({cell: eastCell, range: curCell.range - 1, diagAsDouble: curCell.diagAsDouble});
+    //                     touched.push(eastCell.hash2());
+    //                 }
+    //             }
+    //
+    //             if (this.canMoveS(curCell.cell)) {
+    //                 const southCell = new XyPair(curCell.cell.x, curCell.cell.y + 1);
+    //                 if (touched.indexOf(southCell.hash2()) === -1) {
+    //                     queue.push({cell: southCell, range: curCell.range - 1, diagAsDouble: curCell.diagAsDouble});
+    //                     touched.push(southCell.hash2());
+    //                 }
+    //             }
+    //
+    //             if (this.canMoveW(curCell.cell)) {
+    //                 const westCell = new XyPair(curCell.cell.x - 1, curCell.cell.y);
+    //                 if (touched.indexOf(westCell.hash2()) === -1) {
+    //                     queue.push({cell: westCell, range: curCell.range - 1, diagAsDouble: curCell.diagAsDouble});
+    //                     touched.push(westCell.hash2());
+    //                 }
+    //             }
+    //
+    //             if (this.canMoveNE(curCell.cell)) {
+    //                 const northEastCell = new XyPair(curCell.cell.x + 1, curCell.cell.y - 1);
+    //                 if (touched.indexOf(northEastCell.hash2()) === -1) {
+    //                     let rangeDelta;
+    //                     if (curCell.diagAsDouble) {
+    //                         rangeDelta = -2;
+    //                     } else {
+    //                         rangeDelta = -1;
+    //                     }
+    //                     queue.push({cell: northEastCell, range: curCell.range + rangeDelta, diagAsDouble: !curCell.diagAsDouble});
+    //                     touched.push(northEastCell.hash2());
+    //                 }
+    //             }
+    //
+    //             if (this.canMoveNW(curCell.cell)) {
+    //                 const northWestCell = new XyPair(curCell.cell.x - 1, curCell.cell.y - 1);
+    //                 if (touched.indexOf(northWestCell.hash2()) === -1) {
+    //                     let rangeDelta;
+    //                     if (curCell.diagAsDouble) {
+    //                         rangeDelta = -2;
+    //                     } else {
+    //                         rangeDelta = -1;
+    //                     }
+    //                     queue.push({cell: northWestCell, range: curCell.range + rangeDelta, diagAsDouble: !curCell.diagAsDouble});
+    //                     touched.push(northWestCell.hash2());
+    //                 }
+    //             }
+    //
+    //             if (this.canMoveSE(curCell.cell)) {
+    //                 const southEastCell = new XyPair(curCell.cell.x + 1, curCell.cell.y + 1);
+    //                 if (touched.indexOf(southEastCell.hash2()) === -1) {
+    //                     let rangeDelta;
+    //                     if (curCell.diagAsDouble) {
+    //                         rangeDelta = -2;
+    //                     } else {
+    //                         rangeDelta = -1;
+    //                     }
+    //                     queue.push({cell: southEastCell, range: curCell.range + rangeDelta, diagAsDouble: !curCell.diagAsDouble});
+    //                     touched.push(southEastCell.hash2());
+    //                 }
+    //             }
+    //
+    //             if (this.canMoveSW(curCell.cell)) {
+    //                 const southWestCell = new XyPair(curCell.cell.x - 1, curCell.cell.y + 1);
+    //                 if (touched.indexOf(southWestCell.hash2()) === -1) {
+    //                     let rangeDelta;
+    //                     if (curCell.diagAsDouble) {
+    //                         rangeDelta = -2;
+    //                     } else {
+    //                         rangeDelta = -1;
+    //                     }
+    //                     queue.push({cell: southWestCell, range: curCell.range + rangeDelta, diagAsDouble: !curCell.diagAsDouble});
+    //                     touched.push(southWestCell.hash2());
+    //                 }
+    //             }
+    //             returnMe.push(curCell.cell);
+    //         }
+    //     }
+    //     return returnMe;
+    // }
+    //
+    //
+    // public canMoveN(loc: XyPair): boolean {
+    //     if (this.hasWall(new CellTarget(new XyPair(loc.x, loc.y), CellZone.NORTH)) ||
+    //         this.hasWall(new CellTarget(new XyPair(loc.x, loc.y - 1), CellZone.FWR)) ||
+    //         this.hasWall(new CellTarget(new XyPair(loc.x, loc.y - 1), CellZone.BKW))) {
+    //         return false;
+    //     }
+    //     return true;
+    // }
+    //
+    // public canMoveNE(loc: XyPair): boolean {
+    //     if (this.hasWall(new CellTarget(new XyPair(loc.x + 1, loc.y - 1), CellZone.FWR)) ||
+    //         this.hasWall(new CellTarget(new XyPair(loc.x + 1, loc.y - 1), CellZone.BKW)) ||
+    //         (this.hasWall(new CellTarget(new XyPair(loc.x + 1, loc.y - 1), CellZone.WEST)) && this.hasWall(new CellTarget(new XyPair(loc.x + 1, loc.y), CellZone.NORTH))) ||
+    //         (this.hasWall(new CellTarget(new XyPair(loc.x + 1, loc.y - 1), CellZone.WEST)) && this.hasWall(new CellTarget(new XyPair(loc.x + 1, loc.y), CellZone.WEST))) ||
+    //         (this.hasWall(new CellTarget(new XyPair(loc.x, loc.y), CellZone.NORTH)) && this.hasWall(new CellTarget(new XyPair(loc.x + 1, loc.y), CellZone.NORTH))) ||
+    //         (this.hasWall(new CellTarget(new XyPair(loc.x, loc.y), CellZone.NORTH)) && this.hasWall(new CellTarget(new XyPair(loc.x + 1, loc.y), CellZone.WEST)))) {
+    //         return false;
+    //     }
+    //     return true;
+    // }
+    //
+    // public canMoveE(loc: XyPair): boolean {
+    //     if (this.hasWall(new CellTarget(new XyPair(loc.x + 1, loc.y), CellZone.WEST)) ||
+    //         this.hasWall(new CellTarget(new XyPair(loc.x + 1, loc.y), CellZone.FWR)) ||
+    //         this.hasWall(new CellTarget(new XyPair(loc.x + 1, loc.y), CellZone.BKW))) {
+    //         return false;
+    //     }
+    //     return true;
+    // }
+    //
+    // public canMoveSE(loc: XyPair): boolean {
+    //     if (this.hasWall(new CellTarget(new XyPair(loc.x + 1, loc.y + 1), CellZone.FWR)) ||
+    //         this.hasWall(new CellTarget(new XyPair(loc.x + 1, loc.y + 1), CellZone.BKW)) ||
+    //         (this.hasWall(new CellTarget(new XyPair(loc.x + 1, loc.y), CellZone.WEST)) && this.hasWall(new CellTarget(new XyPair(loc.x, loc.y + 1), CellZone.NORTH))) ||
+    //         (this.hasWall(new CellTarget(new XyPair(loc.x + 1, loc.y), CellZone.WEST)) && this.hasWall(new CellTarget(new XyPair(loc.x + 1, loc.y + 1), CellZone.WEST))) ||
+    //         (this.hasWall(new CellTarget(new XyPair(loc.x, loc.y + 1), CellZone.NORTH)) && this.hasWall(new CellTarget(new XyPair(loc.x + 1, loc.y + 1), CellZone.NORTH))) ||
+    //         (this.hasWall(new CellTarget(new XyPair(loc.x + 1, loc.y + 1), CellZone.NORTH)) && this.hasWall(new CellTarget(new XyPair(loc.x + 1, loc.y + 1), CellZone.WEST)))) {
+    //         return false;
+    //     }
+    //     return true;
+    // }
+    //
+    // public canMoveS(loc: XyPair): boolean {
+    //     if (this.hasWall(new CellTarget(new XyPair(loc.x, loc.y + 1), CellZone.NORTH)) ||
+    //         this.hasWall(new CellTarget(new XyPair(loc.x, loc.y + 1), CellZone.FWR)) ||
+    //         this.hasWall(new CellTarget(new XyPair(loc.x, loc.y + 1), CellZone.BKW))) {
+    //         return false;
+    //     }
+    //     return true;
+    // }
+    //
+    // public canMoveSW(loc: XyPair): boolean {
+    //     if (this.hasWall(new CellTarget(new XyPair(loc.x - 1, loc.y + 1), CellZone.FWR)) ||
+    //         this.hasWall(new CellTarget(new XyPair(loc.x - 1, loc.y + 1), CellZone.BKW)) ||
+    //         (this.hasWall(new CellTarget(new XyPair(loc.x - 1, loc.y + 1), CellZone.NORTH)) && this.hasWall(new CellTarget(new XyPair(loc.x, loc.y + 1), CellZone.WEST))) ||
+    //         (this.hasWall(new CellTarget(new XyPair(loc.x, loc.y), CellZone.WEST)) && this.hasWall(new CellTarget(new XyPair(loc.x, loc.y + 1), CellZone.NORTH))) ||
+    //         (this.hasWall(new CellTarget(new XyPair(loc.x, loc.y), CellZone.WEST)) && this.hasWall(new CellTarget(new XyPair(loc.x, loc.y + 1), CellZone.WEST))) ||
+    //         (this.hasWall(new CellTarget(new XyPair(loc.x - 1, loc.y + 1), CellZone.NORTH)) && this.hasWall(new CellTarget(new XyPair(loc.x, loc.y + 1), CellZone.NORTH)))) {
+    //         return false;
+    //     }
+    //     return true;
+    // }
+    //
+    // public canMoveW(loc: XyPair): boolean {
+    //     if (this.hasWall(new CellTarget(new XyPair(loc.x, loc.y), CellZone.WEST)) ||
+    //         this.hasWall(new CellTarget(new XyPair(loc.x - 1, loc.y), CellZone.FWR)) ||
+    //         this.hasWall(new CellTarget(new XyPair(loc.x - 1, loc.y), CellZone.BKW))) {
+    //         return false;
+    //     }
+    //     return true;
+    // }
+    //
+    // public canMoveNW(loc: XyPair): boolean {
+    //     if (this.hasWall(new CellTarget(new XyPair(loc.x - 1, loc.y - 1), CellZone.FWR)) ||
+    //         this.hasWall(new CellTarget(new XyPair(loc.x - 1, loc.y - 1), CellZone.BKW)) ||
+    //         (this.hasWall(new CellTarget(new XyPair(loc.x, loc.y), CellZone.NORTH)) && this.hasWall(new CellTarget(new XyPair(loc.x - 1, loc.y), CellZone.NORTH))) ||
+    //         (this.hasWall(new CellTarget(new XyPair(loc.x, loc.y), CellZone.WEST)) && this.hasWall(new CellTarget(new XyPair(loc.x, loc.y - 1), CellZone.WEST))) ||
+    //         (this.hasWall(new CellTarget(new XyPair(loc.x, loc.y), CellZone.WEST)) && this.hasWall(new CellTarget(new XyPair(loc.x, loc.y), CellZone.NORTH))) ||
+    //         (this.hasWall(new CellTarget(new XyPair(loc.x - 1, loc.y), CellZone.NORTH)) && this.hasWall(new CellTarget(new XyPair(loc.x, loc.y - 1), CellZone.WEST)))) {
+    //         return false;
+    //     }
+    //     return true;
+    // }
 }
