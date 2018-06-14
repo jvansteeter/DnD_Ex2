@@ -10,6 +10,7 @@ export class EncounterModel extends mongoose.Schema implements EncounterStateDat
     public campaignId: string;
     public gameMasters: string[];
     public players: PlayerData[];
+    public playerIds: string[];
 
     cell_res: number;
     mapDimX: number;
@@ -40,7 +41,7 @@ export class EncounterModel extends mongoose.Schema implements EncounterStateDat
             date: Date,
             campaignId: String,
             gameMasters: [String],
-            players: [Object]
+            playerIds: [String]
         });
 
         this._id = this.methods._id;
@@ -48,14 +49,21 @@ export class EncounterModel extends mongoose.Schema implements EncounterStateDat
         this.date = this.methods.date;
         this.campaignId = this.methods.campaignId;
         this.gameMasters = this.methods.gameMasters;
-        this.players = this.methods.players;
+        this.players = [];
+        this.playerIds = this.methods.playerIds;
 
         this.methods.addGameMaster = this.addGameMaster;
+        this.methods.addPlayer = this.addPlayer;
     }
 
     public addGameMaster(userId: string): Promise<EncounterModel> {
         this.gameMasters.push(userId);
         return this.save();
+    }
+
+    public addPlayer(player: PlayerData): Promise<EncounterModel> {
+    	this.playerIds.push(player._id);
+    	return this.save();
     }
 
     private save(): Promise<EncounterModel> {

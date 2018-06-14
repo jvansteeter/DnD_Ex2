@@ -33,8 +33,6 @@ export class AppComponent extends SocketComponent implements OnInit {
             this.notificationsService.getPendingFriendRequests();
         });
         this.socketOn(NotificationType.CAMPAIGN_INVITE).subscribe((data) => {
-            console.log('CampaignInvite')
-            console.log(data)
             this.notificationsService.getPendingNotifications();
         });
     }

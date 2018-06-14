@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import { Promise } from 'bluebird';
+// import { Promise } from 'bluebird';
 import { CampaignRepository } from './campaign.repository';
 import { UserCampaignModel } from '../models/user-campaign.model';
 

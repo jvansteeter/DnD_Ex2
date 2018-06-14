@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import { Promise } from 'bluebird';
+// import { Promise } from 'bluebird';
 import { NotificationData } from "../../../../shared/types/notification-data";
 import { NotificationType } from '../../../../shared/types/notification-type';
 

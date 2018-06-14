@@ -30,7 +30,7 @@ export class EncounterService extends IsReadyService {
 
     public init(): void {
         this.encounterRepo.getEncounter(this.encounterId).subscribe((encounter: EncounterStateData) => {
-            this.encounterState = encounter as EncounterState;
+            this.encounterState = new EncounterState(encounter);
             this.setReady(true);
         });
     }

@@ -2,6 +2,7 @@ import { Router, Request, Response } from 'express';
 import { EncounterService } from "../services/encounter.service";
 import { EncounterModel } from "../db/models/encounter.model";
 import { PlayerData } from '../../../shared/types/encounter/player';
+import { EncounterState } from '../../../client/src/app/encounter/encounter.state';
 
 
 /**********************************************************************************************************
@@ -22,17 +23,23 @@ export class EncounterRouter {
 	}
 
 	init() {
-		this.router.get('/encounter/:encounterId', (req: Request, res: Response) => {
-			this.encounterService.getEncounter(req.params.encounterId).then((encounter: EncounterModel) => {
+		this.router.get('/encounter/:encounterId', async (req: Request, res: Response) => {
+			try {
+				const encounter: EncounterState = await this.encounterService.getEncounter(req.params.encounterId);
+				console.log('get encounter')
+				console.log(encounter)
 				res.json(encounter);
-			}).catch(error => res.status(500).send(error));
+			}
+			catch (error) {
+				res.status(500).send(error);
+			}
 		});
 
-		this.router.post('/addplayer', (req: Request, res: Response) => {
-			console.log('add player route')
+		this.router.post('/addplayer', async (req: Request, res: Response) => {
 			try {
 				const player: PlayerData = req.body.player;
-				this.encounterService.addPlayer(req.body.campaignId, player);
+				await this.encounterService.addPlayer(req.body.encounterId, player);
+				res.status(200).send('OK');
 			}
 			catch (error) {
 				console.log(error);

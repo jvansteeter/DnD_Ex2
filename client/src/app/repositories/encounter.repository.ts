@@ -3,6 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs/Observable";
 import {PlayerData} from "../../../../shared/types/encounter/player";
 import { EncounterStateData } from '../../../../shared/types/encounter/encounterState';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class EncounterRepository {
@@ -19,6 +20,8 @@ export class EncounterRepository {
 			encounterId: encounterId,
 			player: player
 		};
-		return this.http.post<void>('api/encounter/addplayer', data);
+		return this.http.post('api/encounter/addplayer', data, {responseType: 'text'}).pipe(map(() => {
+			return;
+		}));
 	}
 }

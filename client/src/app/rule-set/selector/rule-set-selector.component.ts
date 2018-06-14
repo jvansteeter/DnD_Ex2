@@ -18,7 +18,6 @@ export class RuleSetSelectorComponent implements OnInit {
     public ngOnInit(): void {
         this.ruleSetRepository.getRuleSets().subscribe((ruleSets: RuleSet[])=> {
             this.ruleSets = ruleSets;
-            console.log(ruleSets)
         });
     }
 

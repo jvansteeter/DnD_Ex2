@@ -1,10 +1,11 @@
 import { CampaignModel } from '../db/models/campaign.model';
-import { Promise } from 'bluebird';
+// import { Promise } from 'bluebird';
 import { EncounterRepository } from "../db/repositories/encounter.repository";
 import { EncounterModel } from "../db/models/encounter.model";
 import { PlayerModel } from '../db/models/player.model';
 import { PlayerData } from '../../../shared/types/encounter/player';
 import { PlayerRepository } from "../db/repositories/player.repository";
+import { EncounterState } from '../../../client/src/app/encounter/encounter.state';
 
 export class EncounterService {
 	private encounterRepo: EncounterRepository;
@@ -25,12 +26,15 @@ export class EncounterService {
 		});
 	}
 
-	public getEncounter(encounterId: string): Promise<EncounterModel> {
-		return new Promise<EncounterModel>((resolve, reject) => {
-			this.encounterRepo.findById(encounterId).then((encounter: EncounterModel) => {
-				resolve(encounter);
-			}).catch(error => reject(error));
-		});
+	public async getEncounter(encounterId: string): Promise<EncounterState> {
+		try {
+			const encounter = await this.encounterRepo.findById(encounterId);
+			const encounterState = await this.buildEncounterState(encounter);
+			return encounterState;
+		}
+		catch (error) {
+			throw error;
+		}
 	}
 
 	public getAllForCampaignId(campaignId: string): Promise<EncounterModel[]> {
@@ -42,11 +46,28 @@ export class EncounterService {
 	}
 
 	public async addPlayer(campaignId: string, player: PlayerData): Promise<PlayerModel> {
-		const playerModel: PlayerModel = await this.playerRepo.create(player.name, player.tokenUrl, player.maxHp, player.speed);
-		// this.
+		try {
+			const playerModel: PlayerModel = await this.playerRepo.create(player.name, player.tokenUrl, player.maxHp, player.speed);
+			const encounterModel: EncounterModel = await this.encounterRepo.findById(campaignId);
+			await encounterModel.addPlayer(playerModel);
+			return playerModel;
+		}
+		catch (error) {
+			throw error;
+		}
 	}
 
-	// private buildEncounterState(encounterData): EncounterState {
-	//
-	// }
+	private async buildEncounterState(encounterModel: EncounterModel): Promise<EncounterState> {
+		console.log('buildEncounterState')
+		let encounterState: EncounterState = JSON.parse(JSON.stringify(encounterModel));
+		encounterState.players = [];
+		for (let playerId of encounterModel.playerIds) {
+			console.log('playerId: ', playerId);
+			const playerData = await this.playerRepo.findById(playerId);
+			console.log(playerData);
+			encounterState.players.push(playerData);
+		}
+		delete encounterState['playerIds'];
+		return encounterState;
+	}
 }

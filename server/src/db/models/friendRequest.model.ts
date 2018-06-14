@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import { Promise } from 'bluebird';
+// import { Promise } from 'bluebird';
 
 
 export class FriendRequestModel extends mongoose.Schema {

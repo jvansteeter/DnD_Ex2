@@ -20,7 +20,6 @@ export class NewCharacterSheetDialogComponent {
             label: this.characterSheetLabel
         };
         this.http.post('api/ruleset/new/charactersheet', body, {responseType: 'json'}).subscribe(characterSheet => {
-            console.log(characterSheet)
             this.dialogRef.close();
         });
     }

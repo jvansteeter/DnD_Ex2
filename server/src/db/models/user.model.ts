@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 import * as bcrypt from 'bcryptjs';
-import Promise from 'bluebird';
+// import Promise from 'bluebird';
 
 
 export class UserModel extends mongoose.Schema {

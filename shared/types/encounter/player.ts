@@ -1,9 +1,9 @@
 export interface PlayerData {
-	_id?: number;
+	_id: string;
 	name: string;
 	tokenUrl: string;
 	maxHp: number;
 	hp: number;
 	speed: number;
-	location: {};
+	location: {x: number, y: number};
 }

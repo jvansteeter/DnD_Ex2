@@ -10,7 +10,7 @@ export class AddPlayerComponent {
 	@ViewChild('tokenImport') tokenImport: ElementRef;
 	private fileReader: FileReader = new FileReader();
 
-	public name: String;
+	public name: string;
 	public hp: number;
 	public speed: number;
 
@@ -22,6 +22,7 @@ export class AddPlayerComponent {
 	submit(): void {
 		this.fileReader.addEventListener('load', () => {
 			this.encounterService.addPlayer({
+				_id: undefined,
 				name: this.name,
 				tokenUrl: this.fileReader.result,
 				maxHp: this.hp,

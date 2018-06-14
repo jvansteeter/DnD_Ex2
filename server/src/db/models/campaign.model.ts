@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import Promise from 'bluebird';
+// import Promise from 'bluebird';
 import { Campaign } from '../../../../shared/types/campaign';
 
 

@@ -5,9 +5,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class DateFormatPipe implements PipeTransform {
   transform(value: any, ...args: any[]): any {
-    console.log(value)
     let dateToFormat = new Date(value);
-    console.log(dateToFormat)
     let dateString = dateToFormat.getMonth() + '/' + dateToFormat.getDay() + '/' + dateToFormat.getFullYear();
     if (this.isToday(dateToFormat)) {
       dateString += ' ' + dateToFormat.getHours() + ':' + dateToFormat.getMinutes();

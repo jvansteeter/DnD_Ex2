@@ -1,5 +1,5 @@
 import { CharacterSheetRepository } from '../db/repositories/characterSheet.repository';
-import { Promise } from 'bluebird';
+// import { Promise } from 'bluebird';
 import { CharacterSheetModel } from '../db/models/characterSheet.model';
 import { CharacterAspectRepository } from '../db/repositories/characterAspect.repository';
 import { CharacterAspectModel } from '../db/models/characterAspect.model';

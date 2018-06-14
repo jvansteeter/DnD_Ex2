@@ -1,7 +1,7 @@
 import {XyPair} from "../board/geometry/xy-pair";
 
 export class Player {
-    _id: number;
+    _id: string;
     name: string;
     hp: number;
     maxHp: number;

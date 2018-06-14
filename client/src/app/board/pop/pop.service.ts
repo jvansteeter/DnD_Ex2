@@ -5,7 +5,7 @@ import {Player} from "../../encounter/player";
 @Injectable()
 export class PopService {
     popRoot: ViewContainerRef;
-    playerPops: {id: number, ref: ComponentRef<NpcPopComponent>}[] = [];
+    playerPops: {id: string, ref: ComponentRef<NpcPopComponent>}[] = [];
 
     constructor(
         private componentFactoryResolver: ComponentFactoryResolver
@@ -33,7 +33,7 @@ export class PopService {
         }
     }
 
-    clearPlayerPop(id: number) {
+    clearPlayerPop(id: string) {
         let i;
         for (i = 0; i < this.playerPops.length; i++) {
             const pop = this.playerPops[i];
@@ -45,7 +45,7 @@ export class PopService {
         }
     }
 
-    popIsActive(id: number) {
+    popIsActive(id: string) {
         for (const pop of this.playerPops) {
             if (pop.id === id) {
                 return true;

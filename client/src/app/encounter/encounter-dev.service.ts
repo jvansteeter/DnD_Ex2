@@ -8,6 +8,7 @@ import {EncounterService} from './encounter.service';
 import {EncounterRepository} from '../repositories/encounter.repository';
 import {EncounterState} from './encounter.state';
 import {BoardTraverseService} from '../board/services/board-traverse.service';
+import { LightValue } from '../board/shared/light-value';
 
 @Injectable()
 export class EncounterDevService extends EncounterService {
@@ -27,7 +28,23 @@ export class EncounterDevService extends EncounterService {
         );
 
         // manually instate the encounterState for dev mode
-        this.encounterState = new EncounterState();
+        this.encounterState = new EncounterState({
+	        _id: undefined,
+	        label: 'Dev Encounter',
+	        date: new Date(),
+	        campaignId: 'dev',
+	        gameMasters: [],
+	        players: [],
+	        cell_res: 50,
+	        mapDimX: 50,
+	        mapDimY: 50,
+	        map_enabled: false,
+	        wallData: {},
+	        playerWallsEnabled: true,
+	        lightSourceData: {},
+	        lightEnabled: false,
+	        ambientLight: {} as LightValue,
+        });
         this.encounterState.players = [];
 
         let player = new Player('Joe', 10, 15, 17, 6, 5, 'resources/images/player-tokens/human fighter 1.png');

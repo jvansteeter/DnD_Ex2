@@ -2,7 +2,7 @@ import { CampaignModel } from '../db/models/campaign.model';
 import { CampaignRepository } from '../db/repositories/campaign.repository';
 import { UserCampaignModel } from '../db/models/user-campaign.model';
 import { UserCampaignRepository } from '../db/repositories/user-campaign.repository';
-import { Promise } from 'bluebird';
+// import { Promise } from 'bluebird';
 import { UserRepository } from '../db/repositories/user.repository';
 import { UserModel } from '../db/models/user.model';
 import { NotificationRepository } from '../db/repositories/notification.repository';
