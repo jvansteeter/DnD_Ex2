@@ -4,17 +4,20 @@ import { EncounterRepository } from "../db/repositories/encounter.repository";
 import { EncounterModel } from "../db/models/encounter.model";
 import { PlayerModel } from '../db/models/player.model';
 import { PlayerData } from '../../../shared/types/encounter/player';
+import { PlayerRepository } from "../db/repositories/player.repository";
 
 export class EncounterService {
-	private encounterRespository: EncounterRepository;
+	private encounterRepo: EncounterRepository;
+	private playerRepo: PlayerRepository;
 
 	constructor() {
-		this.encounterRespository = new EncounterRepository();
+		this.encounterRepo = new EncounterRepository();
+		this.playerRepo = new PlayerRepository();
 	}
 
 	public create(hostId: string, label: string, campaignId: string): Promise<CampaignModel> {
 		return new Promise((resolve, reject) => {
-			this.encounterRespository.create(label, campaignId).then((encounterModel: EncounterModel) => {
+			this.encounterRepo.create(label, campaignId).then((encounterModel: EncounterModel) => {
 				encounterModel.addGameMaster(hostId).then(() => {
 					resolve();
 				}).catch(error => reject(error));
@@ -24,7 +27,7 @@ export class EncounterService {
 
 	public getEncounter(encounterId: string): Promise<EncounterModel> {
 		return new Promise<EncounterModel>((resolve, reject) => {
-			this.encounterRespository.findById(encounterId).then((encounter: EncounterModel) => {
+			this.encounterRepo.findById(encounterId).then((encounter: EncounterModel) => {
 				resolve(encounter);
 			}).catch(error => reject(error));
 		});
@@ -32,14 +35,15 @@ export class EncounterService {
 
 	public getAllForCampaignId(campaignId: string): Promise<EncounterModel[]> {
 		return new Promise<EncounterModel[]>((resolve, reject) => {
-			this.encounterRespository.findByCampaignId(campaignId).then((encounters: EncounterModel[]) => {
+			this.encounterRepo.findByCampaignId(campaignId).then((encounters: EncounterModel[]) => {
 				resolve(encounters);
 			}).catch(error => reject(error));
 		});
 	}
 
-	public addPlayer(campaignId: string, player: PlayerData): Promise<PlayerModel> {
-
+	public async addPlayer(campaignId: string, player: PlayerData): Promise<PlayerModel> {
+		const playerModel: PlayerModel = await this.playerRepo.create(player.name, player.tokenUrl, player.maxHp, player.speed);
+		// this.
 	}
 
 	// private buildEncounterState(encounterData): EncounterState {

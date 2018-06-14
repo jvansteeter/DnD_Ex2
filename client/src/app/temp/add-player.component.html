@@ -1,15 +1,15 @@
 <mat-list>
 	<mat-list-item>
-		<input placeholder="Name">
+		<input placeholder="Name" [(ngModel)]="name">
 	</mat-list-item>
 	<mat-list-item>
-		<input type="number" placeholder="HP">
+		<input type="number" placeholder="HP" [(ngModel)]="hp">
 	</mat-list-item>
 	<mat-list-item>
-		<input type="number" placeholder="speed">
+		<input type="number" placeholder="speed" [(ngModel)]="speed">
 	</mat-list-item>
 	<mat-list-item>
-		<input type="file" accept="image/*" placeholder="icon">
+		<input type="file" accept="image/*" placeholder="icon" #tokenImport>
 	</mat-list-item>
 	<mat-list-item>
 		<button (click)="submit()">Submit</button>

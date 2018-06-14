@@ -4,6 +4,8 @@ import { EncounterRepository } from '../repositories/encounter.repository';
 import { XyPair } from '../board/geometry/xy-pair';
 import { Player } from './player';
 import { EncounterStateData } from '../../../../shared/types/encounter/encounterState';
+import {Observable} from "rxjs/Observable";
+import {PlayerData} from "../../../../shared/types/encounter/player";
 
 @Injectable()
 export class EncounterService extends IsReadyService {
@@ -39,10 +41,20 @@ export class EncounterService extends IsReadyService {
 
 	}
 
+	public addPlayer(playerData: PlayerData): Observable<void> {
+		return this.encounterRepo.addPlayer(this.encounterState._id, playerData);
+	}
+
 	get players(): Player[] {
 		if (this.encounterState) {
 			return this.encounterState.players as Player[];
 		}
 		return [];
+	}
+
+	set players(value) {
+		if (this.encounterState) {
+			this.encounterState.players = value;
+		}
 	}
 }

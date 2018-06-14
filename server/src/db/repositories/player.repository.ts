@@ -10,7 +10,7 @@ export class PlayerRepository {
 		this.Player = mongoose.model('Player');
 	}
 
-	public create(name: string, tokenUrl: string, hp: string, speed: number): Promise<Error | PlayerModel> {
+	public create(name: string, tokenUrl: string, hp: number, speed: number): Promise<Error | PlayerModel> {
 		return new Promise(async (resolve, reject) => {
 			try {
 				const playerModel = await this.Player.create({

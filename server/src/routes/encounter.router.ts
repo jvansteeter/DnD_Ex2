@@ -29,9 +29,10 @@ export class EncounterRouter {
 		});
 
 		this.router.post('/addplayer', (req: Request, res: Response) => {
+			console.log('add player route')
 			try {
 				const player: PlayerData = req.body.player;
-
+				this.encounterService.addPlayer(req.body.campaignId, player);
 			}
 			catch (error) {
 				console.log(error);
