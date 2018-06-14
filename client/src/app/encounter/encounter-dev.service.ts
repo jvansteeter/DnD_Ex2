@@ -19,6 +19,7 @@ export class EncounterDevService extends EncounterService {
         encounterRepo: EncounterRepository
     ) {
         super(encounterRepo);
+        console.log('using dev service')
         let player = new Player('Joe', 10, 15, 17, 9, 8, 'resources/images/player-tokens/human fighter 1.png');
         player.addAction('Longsword:', '+4 Attack, 1d10 + 5');
         player.addAction('Crossbow:', ' +2 Attack,  1d6 + 1');
