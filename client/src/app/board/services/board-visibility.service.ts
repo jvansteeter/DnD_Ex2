@@ -22,6 +22,20 @@ export class BoardVisibilityService {
         }
     }
 
+    public cellsVisibleFromCell(source: XyPair): Array<XyPair> {
+        const returnMe = [];
+
+        for (let x = 0; x < this.boardStateService.mapDimX; x += 1) {
+            for (let y = 0; y < this.boardStateService.mapDimY; y += 1) {
+                const curCell = new XyPair(x, y);
+                if (this.cellHasLOSToNorth(source, curCell)){
+                    returnMe.push(curCell)
+                }
+            }
+        }
+
+        return returnMe;
+    }
 
     /*******************************************************************************************************************
      * Block/Unblock functions

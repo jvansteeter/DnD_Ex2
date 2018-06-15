@@ -210,6 +210,15 @@ export class BoardCanvasService {
         }
     }
 
+    clip_all(ctx: CanvasRenderingContext2D, xy_pair: XyPair) {
+        const loc = new XyPair(xy_pair.x * this.boardStateService.cell_res, xy_pair.y * this.boardStateService.cell_res);
+
+        ctx.save();
+        ctx.translate(loc.x, loc.y);
+        ctx.clearRect(0, 0, this.boardStateService.cell_res, this.boardStateService.cell_res);
+        ctx.restore();
+    }
+
     draw_fill_all(ctx: CanvasRenderingContext2D, xy_pair: XyPair, fill_code: string | CanvasGradient | CanvasPattern) {
         const loc = new XyPair(xy_pair.x * this.boardStateService.cell_res, xy_pair.y * this.boardStateService.cell_res);
 

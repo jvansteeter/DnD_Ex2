@@ -14,6 +14,9 @@ import {BoardTraverseService} from '../board/services/board-traverse.service';
 
 @Injectable()
 export class EncounterService extends IsReadyService {
+    protected claimedPlayerId: string;
+    protected hasClaimedPlayer = false;
+
     private encounterId: string;
     public encounterState: EncounterState;
 

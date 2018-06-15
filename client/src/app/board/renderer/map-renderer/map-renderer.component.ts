@@ -58,7 +58,7 @@ export class MapRendererComponent implements OnInit {
             // this.boardWallService.addWall(new CellTarget(new XyPair(5, 3), CellZone.WEST));              // DOOR
             this.boardWallService.addWall(new CellTarget(new XyPair(5, 2), CellZone.WEST));
 
-            this.boardLightService.addLightSource(new LightSource(new XyPair(7, 5), 5));
+            this.boardLightService.addLightSource(new LightSource(new XyPair(7, 3), 5));
         }
 
         this.render();

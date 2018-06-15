@@ -12,6 +12,7 @@ export class Player {
     token_img: HTMLImageElement;
     actions: {action: string, detail: string}[];
     isSelected = false;
+
     traversableCells_near: Array<XyPair>;
     traversableCells_far: Array<XyPair>;
 

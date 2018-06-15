@@ -69,6 +69,8 @@ export class EncounterDevService extends EncounterService {
 
         player = new Player('Stevie', 2, 36, 17, 6, 3, 'resources/images/player-tokens/human fatty 1.png');
         player._id = window.crypto.getRandomValues(new Uint32Array(1))[0];
+        this.claimedPlayerId = player._id;
+        this.hasClaimedPlayer = true;
         player.addAction('Longsword:', '+4 Attack, 1d10 + 5');
         player.addAction('Crossbow:', ' +2 Attack,  1d6 + 1');
         this.players.push(player);
