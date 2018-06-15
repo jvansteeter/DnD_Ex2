@@ -31,19 +31,19 @@ export class WallRendererComponent implements OnInit {
     switch (this.boardStateService.board_view_mode) {
       case ViewMode.BOARD_MAKER:
         for (const wall of Array.from(this.wallService.wallData.values())) {
-          this.boardCanvasService.draw_wall(this.ctx, wall.loc, 4, 'rgba(0, 255, 0, 0.75)');
+          this.boardCanvasService.draw_wall(this.ctx, wall.loc, 6, 'rgba(0, 255, 0, 0.75)');
         }
         break;
       case ViewMode.PLAYER:
         if (this.boardStateService.playerWallsEnabled) {
           for (const wall of Array.from(this.wallService.wallData.values())) {
-            this.boardCanvasService.draw_wall(this.ctx, wall.loc, 8, 'rgba(0, 0, 0, 1)');
+            this.boardCanvasService.draw_wall(this.ctx, wall.loc, 10, 'rgba(25, 25, 25, 1)');
           }
         }
         break;
       case ViewMode.MASTER:
         for (const wall of Array.from(this.wallService.wallData.values())) {
-          this.boardCanvasService.draw_wall(this.ctx, wall.loc, 4, 'rgba(0, 255, 0, 0.75)');
+          this.boardCanvasService.draw_wall(this.ctx, wall.loc, 6, 'rgba(0, 255, 0, 0.75)');
         }
         break;
     }

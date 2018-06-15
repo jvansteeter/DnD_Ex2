@@ -265,7 +265,6 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
                                     switch (this.boardStateService.mouse_cell_target.zone) {
                                         case CellZone.CORNER:
                                             this.boardWallService.fillWallsBetweenCorners(this.boardStateService.source_click_location.coor, this.boardStateService.mouse_cell_target.coor);
-                                            this.boardLightService.updateLightValues();
                                             this.boardStateService.source_click_location = this.boardStateService.mouse_cell_target;
                                             break;
                                         default:
@@ -280,22 +279,18 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
                                         case CellZone.NORTH:
                                             this.boardStateService.source_click_location = null;
                                             this.boardWallService.toggleWall(this.boardStateService.mouse_cell_target);
-                                            this.boardLightService.updateLightValues();
                                             break;
                                         case CellZone.WEST:
                                             this.boardStateService.source_click_location = null;
                                             this.boardWallService.toggleWall(this.boardStateService.mouse_cell_target);
-                                            this.boardLightService.updateLightValues();
                                             break;
                                         case CellZone.FWR:
                                             this.boardStateService.source_click_location = null;
                                             this.boardWallService.toggleWall(this.boardStateService.mouse_cell_target);
-                                            this.boardLightService.updateLightValues();
                                             break;
                                         case CellZone.BKW:
                                             this.boardStateService.source_click_location = null;
                                             this.boardWallService.toggleWall(this.boardStateService.mouse_cell_target);
-                                            this.boardLightService.updateLightValues();
                                             break;
                                     }
                                 }
@@ -306,8 +301,7 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
                         case BoardMode.LIGHTS:
                             if (!isNullOrUndefined(this.boardStateService.mouse_cell_target)) {
                                 if (this.boardStateService.mouse_cell_target.zone === CellZone.CENTER) {
-                                    this.toggleLight(this.boardStateService.mouse_cell_target.coor.x, this.boardStateService.mouse_cell_target.coor.y);
-                                    this.boardLightService.updateLightValues();
+                                    this.boardLightService.toggleLightSource(this.boardStateService.mouse_loc_cell);
                                 }
                             }
                             break;
@@ -339,14 +333,5 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
 
         this.boardStateService.mouseLeftDown = false;
         this.boardStateService.mouseDrag = false;
-    }
-
-    toggleLight(x: number, y: number): void {
-        const target = new CellTarget(new XyPair(x, y), CellZone.CENTER);
-        if (this.boardLightService.lightSourceData.has(target.hash())) {
-            this.boardLightService.lightSourceData.delete(target.hash());
-        } else {
-            this.boardLightService.lightSourceData.set(target.hash(), new LightSource(x, y, 5));
-        }
     }
 }

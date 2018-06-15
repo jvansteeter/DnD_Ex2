@@ -33,7 +33,6 @@ export class LightRendererComponent implements OnInit {
 
         switch (this.boardStateService.board_view_mode) {
             case ViewMode.BOARD_MAKER:
-                // render the covers for the light values for each cell
                 if (this.boardStateService.lightEnabled) {
                     for (let x = 0; x < this.boardLightService.cellLightData.length; x++) {
                         for (let y = 0; y < this.boardLightService.cellLightData[0].length; y++) {
@@ -56,13 +55,6 @@ export class LightRendererComponent implements OnInit {
                 }
                 break;
             case ViewMode.MASTER:
-                // render the source boxes for the light sources
-                for (const lightSource of Array.from(this.boardLightService.lightSourceData.values())) {
-                    this.boardCanvasService.draw_center(this.ctx, lightSource.coor, 'rgba(255, 255, 0, .6)', 0.35);
-                    this.boardCanvasService.stroke_center(this.ctx, lightSource.coor, 'rgba(0, 0, 0, .3)', 0.33);
-                }
-
-                // render the covers for the light values for each cell
                 if (this.boardStateService.lightEnabled) {
                     for (let x = 0; x < this.boardLightService.cellLightData.length; x++) {
                         for (let y = 0; y < this.boardLightService.cellLightData[0].length; y++) {

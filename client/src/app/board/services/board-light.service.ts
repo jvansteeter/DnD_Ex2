@@ -9,7 +9,7 @@ import {BoardVisibilityService} from './board-visibility.service';
 export class BoardLightService {
     public cellLightData: Array<Array<CellLightConfig>>;
 
-    public lightSourceData: Map<string, LightSource> = new Map();
+    public lightSourceData: Map<string, LightSource> = new Map();           // maps XyPair location hashes (should just be unique toString) to LightSourceObjects
 
     constructor(
         private boardStateService: BoardStateService,
@@ -21,6 +21,26 @@ export class BoardLightService {
             for (let y = 0; y < this.boardStateService.mapDimY; y++) {
                 this.cellLightData[x][y] = new CellLightConfig(x, y);
             }
+        }
+    }
+
+    addLightSource(source: LightSource) {
+        this.lightSourceData.set(source.location.hash(), source);
+        this.updateLightValues();
+    }
+
+    deleteLightSource(location: XyPair) {
+        if (this.lightSourceData.has(location.hash())) {
+            this.lightSourceData.delete(location.hash());
+        }
+        this.updateLightValues();
+    }
+
+    toggleLightSource(location: XyPair, source = new LightSource(location, 5)) {
+        if (this.lightSourceData.has(location.hash())) {
+            this.deleteLightSource(location);
+        } else {
+            this.addLightSource(source);
         }
     }
 
@@ -45,7 +65,7 @@ export class BoardLightService {
                 // sort light sources by distance to cell, removing any beyond influence distance
                 const mapped_light_sources = new Map<number, Array<LightSource>>();
                 for (const light_source of Array.from(this.lightSourceData.values())) {
-                    const distance = BoardStateService.distanceCellToCell(new XyPair(cell.coor.x, cell.coor.y), light_source.coor);
+                    const distance = BoardStateService.distanceCellToCell(new XyPair(cell.coor.x, cell.coor.y), light_source.location);
                     if (distance <= light_source.dim_range) {
                         if (!mapped_light_sources.has(distance)) {
                             mapped_light_sources.set(distance, new Array<LightSource>());
@@ -68,25 +88,25 @@ export class BoardLightService {
                     for (const light_source of mapped_light_sources.get(dist)) {
                         if (!(north && east && south && west)) {
                             if (!north) {
-                                if (this.boardVisibilityService.cellHasLOSToNorth(light_source.coor, cell.coor)) {
+                                if (this.boardVisibilityService.cellHasLOSToNorth(light_source.location, cell.coor)) {
                                     cell.updateLightIntensityNorth(light_source.lightImpactAtDistance(dist));
                                     north = true;
                                 }
                             }
                             if (!east) {
-                                if (this.boardVisibilityService.cellHasLOSToEast(light_source.coor, cell.coor)) {
+                                if (this.boardVisibilityService.cellHasLOSToEast(light_source.location, cell.coor)) {
                                     cell.updateLightIntensityEast(light_source.lightImpactAtDistance(dist));
                                     east = true;
                                 }
                             }
                             if (!south) {
-                                if (this.boardVisibilityService.cellHasLOSToSouth(light_source.coor, cell.coor)) {
+                                if (this.boardVisibilityService.cellHasLOSToSouth(light_source.location, cell.coor)) {
                                     cell.updateLightIntensitySouth(light_source.lightImpactAtDistance(dist));
                                     south = true;
                                 }
                             }
                             if (!west) {
-                                if (this.boardVisibilityService.cellHasLOSToWest(light_source.coor, cell.coor)) {
+                                if (this.boardVisibilityService.cellHasLOSToWest(light_source.location, cell.coor)) {
                                     cell.updateLightIntensityWest(light_source.lightImpactAtDistance(dist));
                                     west = true;
                                 }
