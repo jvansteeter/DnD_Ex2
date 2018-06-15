@@ -12,6 +12,7 @@
   <div class="sectionHeader"><span>Board Maker Controls</span></div>
   <div class="sectionContents">
     <mat-checkbox style="display: block" [(ngModel)]="boardStateService.gridEnabled">Grid Enabled</mat-checkbox>
+    <mat-checkbox style="display: block" [(ngModel)]="boardStateService.show_health">Health Bars Enabled</mat-checkbox>
     <mat-checkbox style="display: block" [(ngModel)]="boardStateService.playerWallsEnabled">Show Walls to Player</mat-checkbox>
     <mat-checkbox style="display: block" [(ngModel)]="boardStateService.map_enabled">Map Enabled</mat-checkbox>
     <div *ngIf="boardStateService.map_enabled">
@@ -32,6 +33,7 @@
   <div class="sectionHeader"><span>Game Master Controls</span></div>
   <div class="sectionContents">
     <mat-checkbox style="display: block" [(ngModel)]="boardStateService.gridEnabled">Grid Enabled</mat-checkbox>
+    <mat-checkbox style="display: block" [(ngModel)]="boardStateService.show_health">Health Bars Enabled</mat-checkbox>
     <mat-checkbox style="display: block" [(ngModel)]="boardStateService.playerWallsEnabled">Show Walls to Player</mat-checkbox>
     <mat-checkbox style="display: block" [(ngModel)]="boardStateService.map_enabled">Map Enabled</mat-checkbox>
   </div>

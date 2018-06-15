@@ -48,7 +48,7 @@ export class TokenRendererComponent implements OnInit {
 
             this.boardCanvasService.draw_img(this.ctx, new XyPair(player.location.x * this.boardStateService.cell_res, player.location.y * this.boardStateService.cell_res), player.token_img);
             if (this.boardStateService.show_health) {
-                this.boardCanvasService.draw_health(this.ctx, player.location, player.hp/player.maxHp);
+                this.boardCanvasService.draw_health_basic(this.ctx, player.location, player.hp/player.maxHp);
             }
         }
 

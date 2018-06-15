@@ -4,8 +4,8 @@ import {BoardTileService} from '../services/board-tile.service';
 import {ViewMode} from '../shared/view-mode';
 import {BoardMode} from '../shared/board-mode';
 import {LightValue} from '../shared/light-value';
-import { MatDialog } from '@angular/material';
-import { AddPlayerComponent } from '../../temp/add-player.component';
+import {MatDialog} from '@angular/material';
+import {AddPlayerComponent} from '../../temp/add-player.component';
 import {BoardLightService} from '../services/board-light.service';
 
 @Component({
@@ -14,7 +14,7 @@ import {BoardLightService} from '../services/board-light.service';
     styleUrls: ['board-controller.component.scss']
 })
 
-export class BoardControllerComponent implements OnInit{
+export class BoardControllerComponent implements OnInit {
     public ViewMode = ViewMode;
     public BoardMode = BoardMode;
 
@@ -170,7 +170,6 @@ export class BoardControllerComponent implements OnInit{
                 this.boardStateService.board_view_mode = ViewMode.BOARD_MAKER;
                 this.boardStateService.board_edit_mode = BoardMode.WALLS;
                 this.boardStateService.do_pops = false;
-                this.boardStateService.show_health = true;
                 break;
             case 'Player View':
                 this.boardStateService.source_click_location = null;
@@ -184,7 +183,6 @@ export class BoardControllerComponent implements OnInit{
                 this.boardStateService.board_view_mode = ViewMode.MASTER;
                 this.boardStateService.board_edit_mode = BoardMode.PLAYER;
                 this.boardStateService.do_pops = true;
-                this.boardStateService.show_health = true;
                 break;
         }
         this.sync()
@@ -227,7 +225,7 @@ export class BoardControllerComponent implements OnInit{
         this.ts.activeTileUrl = id;
     }
 
-		addPlayer(): void {
-    	  this.dialog.open(AddPlayerComponent);
-		}
+    addPlayer(): void {
+        this.dialog.open(AddPlayerComponent);
+    }
 }

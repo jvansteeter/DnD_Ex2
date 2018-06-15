@@ -50,7 +50,7 @@ export class BoardCanvasService {
         ctx.fill();
     }
 
-    draw_health(ctx: CanvasRenderingContext2D, cell: XyPair, percent: number) {
+    draw_health_outside(ctx: CanvasRenderingContext2D, cell: XyPair, percent: number) {
         const strokeWidth = 6;
         const health_opacity = 0.5;
 
@@ -90,12 +90,33 @@ export class BoardCanvasService {
             }
         }
 
-        // ctx.strokeStyle = 'rgba(0, 0, 0, 1)';
         ctx.lineWidth = strokeWidth;
-        // ctx.lineJoin = 'round';
-        // ctx.lineCap = 'round';
         ctx.stroke();
     }
+
+    draw_health_basic(ctx: CanvasRenderingContext2D, cell: XyPair, percent: number) {
+        const strokeWidth = 10;
+        const health_opacity = 1.0;
+        const distanceFromTop = 0.75;   // Top: 0.0 - 1.0 :Bottom
+
+        switch(Math.floor((percent * 100) / 15)) {
+            case 6: ctx.strokeStyle = 'rgba(0, 166, 81, ' + health_opacity + ')'; break;
+            case 5: ctx.strokeStyle = 'rgba(57, 181, 74, ' + health_opacity + ')'; break;
+            case 4: ctx.strokeStyle = 'rgba(141, 198, 63, ' + health_opacity + ')'; break;
+            case 3: ctx.strokeStyle = 'rgba(255, 242, 0, ' + health_opacity + ')'; break;
+            case 2: ctx.strokeStyle = 'rgba(247, 148, 29, ' + health_opacity + ')'; break;
+            case 1: ctx.strokeStyle = 'rgba(242, 101, 34, ' + health_opacity + ')'; break;
+            case 0: ctx.strokeStyle = 'rgba(237, 28, 36, ' + health_opacity + ')'; break;
+        }
+
+        ctx.beginPath();
+        const topLeftCorner = new XyPair(cell.x  * this.boardStateService.cell_res, cell.y * this.boardStateService.cell_res);
+        ctx.moveTo(topLeftCorner.x, topLeftCorner.y + this.boardStateService.cell_res *  distanceFromTop);
+        ctx.lineTo(topLeftCorner.x + this.boardStateService.cell_res * percent, topLeftCorner.y + this.boardStateService.cell_res *  distanceFromTop);
+        ctx.lineWidth = strokeWidth;
+        ctx.stroke();
+    }
+
 
     draw_line(ctx: CanvasRenderingContext2D, origin: XyPair, target: XyPair, line_width?: number, rgba_code?: string, line_join?: string, line_cap?: string) {
         if (isNullOrUndefined(line_width)) {
