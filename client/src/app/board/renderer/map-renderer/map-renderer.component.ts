@@ -6,6 +6,8 @@ import {BoardWallService} from '../../services/board-wall.service';
 import {CellTarget} from '../../shared/cell-target';
 import {XyPair} from '../../geometry/xy-pair';
 import {CellZone} from '../../shared/cell-zone';
+import {BoardLightService} from '../../services/board-light.service';
+import {LightSource} from '../../map-objects/light-source';
 
 @Component({
     selector: 'map-renderer',
@@ -24,7 +26,8 @@ export class MapRendererComponent implements OnInit {
     constructor(
         private boardStateService: BoardStateService,
         private boardCanvasService: BoardCanvasService,
-        private boardWallService: BoardWallService
+        private boardWallService: BoardWallService,
+        private boardLightService: BoardLightService
     ) {
         this.bgImage.src = this.DEV_MAP_URL_STRING;
     }
@@ -54,6 +57,8 @@ export class MapRendererComponent implements OnInit {
             this.boardWallService.addWall(new CellTarget(new XyPair(5, 4), CellZone.WEST));
             // this.boardWallService.addWall(new CellTarget(new XyPair(5, 3), CellZone.WEST));              // DOOR
             this.boardWallService.addWall(new CellTarget(new XyPair(5, 2), CellZone.WEST));
+
+            this.boardLightService.addLightSource(new LightSource(new XyPair(7, 5), 5));
         }
 
         this.render();
