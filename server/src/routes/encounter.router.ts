@@ -1,8 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { EncounterService } from "../services/encounter.service";
-import { EncounterModel } from "../db/models/encounter.model";
 import { PlayerData } from '../../../shared/types/encounter/player';
-import { EncounterState } from '../../../client/src/app/encounter/encounter.state';
+import { EncounterStateData } from '../../../shared/types/encounter/encounterState';
 
 
 /**********************************************************************************************************
@@ -25,12 +24,22 @@ export class EncounterRouter {
 	init() {
 		this.router.get('/encounter/:encounterId', async (req: Request, res: Response) => {
 			try {
-				const encounter: EncounterState = await this.encounterService.getEncounter(req.params.encounterId);
-				console.log('get encounter')
-				console.log(encounter)
+				const encounter: EncounterStateData = await this.encounterService.getEncounter(req.params.encounterId);
 				res.json(encounter);
 			}
 			catch (error) {
+				console.log(error);
+				res.status(500).send(error);
+			}
+		});
+
+		this.router.post('/encounter/', async (req: Request, res: Response) => {
+			try {
+				await this.encounterService.setEncounter(req.body);
+				res.status(200).send("OK");
+			}
+			catch (error) {
+				console.log(error);
 				res.status(500).send(error);
 			}
 		});

@@ -2,8 +2,9 @@ import * as mongoose from 'mongoose';
 import {LightValue} from "../../../../client/src/app/board/shared/light-value";
 import { PlayerData } from '../../../../shared/types/encounter/player';
 import { EncounterStateData } from '../../../../shared/types/encounter/encounterState';
+import { MongooseModel } from './mongoose.model';
 
-export class EncounterModel extends mongoose.Schema implements EncounterStateData {
+export class EncounterModel extends MongooseModel implements EncounterStateData {
     public _id;
     public label: string;
     public date: Date;
@@ -66,17 +67,16 @@ export class EncounterModel extends mongoose.Schema implements EncounterStateDat
     	return this.save();
     }
 
-    private save(): Promise<EncounterModel> {
-        return new Promise((resolve, reject) => {
-            this.methods.save((error, encounter: EncounterModel) => {
-                if (error) {
-                    reject(error);
-                    return;
-                }
-
-                resolve(encounter);
-            })
-        });
+    public setEncounterState(encounterState: EncounterStateData): Promise<EncounterModel> {
+    	let playerIds: string[] = [];
+    	for (let player of encounterState.players) {
+    		playerIds.push(player._id);
+	    }
+    	for (let item in encounterState) {
+    		this[item] = encounterState[item];
+	    }
+	    this.playerIds = playerIds;
+    	return this.save();
     }
 }
 

@@ -5,7 +5,7 @@ import { EncounterModel } from "../db/models/encounter.model";
 import { PlayerModel } from '../db/models/player.model';
 import { PlayerData } from '../../../shared/types/encounter/player';
 import { PlayerRepository } from "../db/repositories/player.repository";
-import { EncounterState } from '../../../client/src/app/encounter/encounter.state';
+import { EncounterStateData } from '../../../shared/types/encounter/encounterState';
 
 export class EncounterService {
 	private encounterRepo: EncounterRepository;
@@ -26,11 +26,21 @@ export class EncounterService {
 		});
 	}
 
-	public async getEncounter(encounterId: string): Promise<EncounterState> {
+	public async getEncounter(encounterId: string): Promise<EncounterStateData> {
 		try {
 			const encounter = await this.encounterRepo.findById(encounterId);
 			const encounterState = await this.buildEncounterState(encounter);
 			return encounterState;
+		}
+		catch (error) {
+			throw error;
+		}
+	}
+
+	public async setEncounter(encounterData: EncounterStateData): Promise<EncounterModel> {
+		try {
+			const encounterModel = await this.encounterRepo.findById(encounterData._id);
+			return await encounterModel.setEncounterState(encounterData);
 		}
 		catch (error) {
 			throw error;
@@ -57,9 +67,9 @@ export class EncounterService {
 		}
 	}
 
-	private async buildEncounterState(encounterModel: EncounterModel): Promise<EncounterState> {
+	private async buildEncounterState(encounterModel: EncounterModel): Promise<EncounterStateData> {
 		console.log('buildEncounterState')
-		let encounterState: EncounterState = JSON.parse(JSON.stringify(encounterModel));
+		let encounterState: EncounterStateData = JSON.parse(JSON.stringify(encounterModel));
 		encounterState.players = [];
 		for (let playerId of encounterModel.playerIds) {
 			console.log('playerId: ', playerId);

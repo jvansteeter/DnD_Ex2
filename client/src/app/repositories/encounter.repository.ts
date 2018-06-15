@@ -15,6 +15,10 @@ export class EncounterRepository {
 		return this.http.get<EncounterStateData>('api/encounter/encounter/' + encounterId, {responseType: 'json'});
 	}
 
+	public setEncounter(encounterState: EncounterStateData): Observable<void> {
+		return this.http.post('api/encounter/encounter/', encounterState).pipe(map(() => {return;}));
+	}
+
 	public addPlayer(encounterId: string, player: PlayerData): Observable<void> {
 		const data = {
 			encounterId: encounterId,

@@ -9,7 +9,7 @@ export class PlayerModel extends mongoose.Schema implements PlayerData {
 	maxHp: number;
 	hp: number;
 	speed: number;
-	location: Object;
+	location: {x: number, y: number};
 
 	constructor() {
 		super({
