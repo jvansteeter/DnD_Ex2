@@ -8,7 +8,7 @@ import {BoardTransformService} from '../services/board-transform.service';
 import {EncounterService} from '../../encounter/encounter.service';
 import {isNullOrUndefined} from "util";
 import {BoardMode} from '../shared/board-mode';
-import {CellZone} from '../shared/cell-zone';
+import {CellRegion} from '../shared/cell-region';
 import {ViewMode} from '../shared/view-mode';
 import {LightSource} from '../map-objects/light-source';
 import {CellTarget} from '../shared/cell-target';
@@ -263,7 +263,7 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
                                 if (!isNullOrUndefined(this.boardStateService.source_click_location)) {
                                     // MOUSE NOT DRAGGING - WALL EDIT MODE - MOUSE ON MAP - SOURCE IS DEFINED
                                     switch (this.boardStateService.mouse_cell_target.zone) {
-                                        case CellZone.CORNER:
+                                        case CellRegion.CORNER:
                                             this.boardWallService.fillWallsBetweenCorners(this.boardStateService.source_click_location.coor, this.boardStateService.mouse_cell_target.coor);
                                             this.boardStateService.source_click_location = this.boardStateService.mouse_cell_target;
                                             break;
@@ -273,22 +273,22 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
                                 } else {
                                     switch (this.boardStateService.mouse_cell_target.zone) {
                                         // MOUSE NOT DRAGGING - WALL EDIT MODE - MOUSE ON MAP - SOURCE IS NOT DEFINED
-                                        case CellZone.CORNER:
+                                        case CellRegion.CORNER:
                                             this.boardStateService.source_click_location = this.boardStateService.mouse_cell_target;
                                             break;
-                                        case CellZone.NORTH:
+                                        case CellRegion.TOP_EDGE:
                                             this.boardStateService.source_click_location = null;
                                             this.boardWallService.toggleWall(this.boardStateService.mouse_cell_target);
                                             break;
-                                        case CellZone.WEST:
+                                        case CellRegion.LEFT_EDGE:
                                             this.boardStateService.source_click_location = null;
                                             this.boardWallService.toggleWall(this.boardStateService.mouse_cell_target);
                                             break;
-                                        case CellZone.FWR:
+                                        case CellRegion.FWRD_EDGE:
                                             this.boardStateService.source_click_location = null;
                                             this.boardWallService.toggleWall(this.boardStateService.mouse_cell_target);
                                             break;
-                                        case CellZone.BKW:
+                                        case CellRegion.BKWD_EDGE:
                                             this.boardStateService.source_click_location = null;
                                             this.boardWallService.toggleWall(this.boardStateService.mouse_cell_target);
                                             break;
@@ -300,7 +300,7 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
                             break;
                         case BoardMode.LIGHTS:
                             if (!isNullOrUndefined(this.boardStateService.mouse_cell_target)) {
-                                if (this.boardStateService.mouse_cell_target.zone === CellZone.CENTER) {
+                                if (this.boardStateService.mouse_cell_target.zone === CellRegion.CENTER) {
                                     this.boardLightService.toggleLightSource(this.boardStateService.mouse_loc_cell);
                                 }
                             }
@@ -308,19 +308,19 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
                         case BoardMode.TILES:
                             if (!isNullOrUndefined(this.boardStateService.mouse_cell_target)) {
                                 switch (this.boardStateService.mouse_cell_target.zone) {
-                                    case CellZone.CENTER:
+                                    case CellRegion.CENTER:
                                         this.boardTileService.setTileData_All(this.boardStateService.mouse_loc_cell);
                                         break;
-                                    case CellZone.TOP:
+                                    case CellRegion.TOP:
                                         this.boardTileService.setTileData_Top(this.boardStateService.mouse_loc_cell);
                                         break;
-                                    case CellZone.LEFT:
+                                    case CellRegion.LEFT:
                                         this.boardTileService.setTileData_Left(this.boardStateService.mouse_loc_cell);
                                         break;
-                                    case CellZone.BOTTOM:
+                                    case CellRegion.BOTTOM:
                                         this.boardTileService.setTileData_Bottom(this.boardStateService.mouse_loc_cell);
                                         break;
-                                    case CellZone.RIGHT:
+                                    case CellRegion.RIGHT:
                                         this.boardTileService.setTileData_Right(this.boardStateService.mouse_loc_cell);
                                         break;
                                 }

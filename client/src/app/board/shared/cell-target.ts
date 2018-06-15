@@ -1,12 +1,12 @@
 import {XyPair} from '../geometry/xy-pair';
-import {CellZone} from './cell-zone';
+import {CellRegion} from './cell-region';
 import {Md5} from 'ts-md5/dist/md5';
 
 export class CellTarget {
   public coor: XyPair;
-  public zone: CellZone;
+  public zone: CellRegion;
 
-  constructor(location: XyPair, zone: CellZone) {
+  constructor(location: XyPair, zone: CellRegion) {
     this.coor = location;
     this.zone = zone;
   }

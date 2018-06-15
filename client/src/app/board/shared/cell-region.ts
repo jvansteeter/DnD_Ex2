@@ -1,0 +1,14 @@
+export enum CellRegion {
+  CORNER = 'CORNER',
+  CENTER = 'CENTER',
+
+  TOP_EDGE = 'TOP_EDGE',
+  LEFT_EDGE = 'LEFT_EDGE',
+  FWRD_EDGE = 'FORWARD',
+  BKWD_EDGE = 'BACKWARD',
+
+  TOP = 'TOP',
+  BOTTOM = 'BOTTOM',
+  LEFT = 'LEFT',
+  RIGHT = 'RIGHT'
+}

@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {XyPair} from '../geometry/xy-pair';
 import {BoardStateService} from './board-state.service';
 import {CellTarget} from '../shared/cell-target';
-import {CellZone} from '../shared/cell-zone';
+import {CellRegion} from '../shared/cell-region';
 
 @Injectable()
 export class BoardVisibilityService {
@@ -45,43 +45,43 @@ export class BoardVisibilityService {
     }
 
     public blockNorth(cell: XyPair) {
-        this.blockingSegments.add((new CellTarget(cell, CellZone.NORTH)).hash());
+        this.blockingSegments.add((new CellTarget(cell, CellRegion.TOP_EDGE)).hash());
         for (const point of Array.from(this.northSet(cell).values())) {
             this.blockingBitmap[point.x][point.y] = 1;
         }
     }
 
     public unblockNorth(cell: XyPair) {
-        this.blockingSegments.delete((new CellTarget(cell, CellZone.NORTH)).hash());
+        this.blockingSegments.delete((new CellTarget(cell, CellRegion.TOP_EDGE)).hash());
         let unsetPoints = this.northSet(cell);
-        if (this.targetIsBlocked(new CellTarget(cell, CellZone.WEST))) {
+        if (this.targetIsBlocked(new CellTarget(cell, CellRegion.LEFT_EDGE))) {
             unsetPoints = BoardVisibilityService.setA_minus_setB(unsetPoints, this.westSet(cell));
         }
-        if (this.targetIsBlocked(new CellTarget(cell, CellZone.FWR))) {
+        if (this.targetIsBlocked(new CellTarget(cell, CellRegion.FWRD_EDGE))) {
             unsetPoints = BoardVisibilityService.setA_minus_setB(unsetPoints, this.fwdSet(cell));
         }
-        if (this.targetIsBlocked(new CellTarget(cell, CellZone.BKW))) {
+        if (this.targetIsBlocked(new CellTarget(cell, CellRegion.BKWD_EDGE))) {
             unsetPoints = BoardVisibilityService.setA_minus_setB(unsetPoints, this.bkwSet(cell));
         }
 
         const topCell = new XyPair(cell.x, cell.y - 1);
-        if (this.targetIsBlocked(new CellTarget(topCell, CellZone.WEST))) {
+        if (this.targetIsBlocked(new CellTarget(topCell, CellRegion.LEFT_EDGE))) {
             unsetPoints = BoardVisibilityService.setA_minus_setB(unsetPoints, this.westSet(topCell));
         }
-        if (this.targetIsBlocked(new CellTarget(topCell, CellZone.FWR))) {
+        if (this.targetIsBlocked(new CellTarget(topCell, CellRegion.FWRD_EDGE))) {
             unsetPoints = BoardVisibilityService.setA_minus_setB(unsetPoints, this.fwdSet(topCell));
         }
-        if (this.targetIsBlocked(new CellTarget(topCell, CellZone.BKW))) {
+        if (this.targetIsBlocked(new CellTarget(topCell, CellRegion.BKWD_EDGE))) {
             unsetPoints = BoardVisibilityService.setA_minus_setB(unsetPoints, this.bkwSet(topCell));
         }
 
         const rightCell = new XyPair(cell.x + 1, cell.y);
-        if (this.targetIsBlocked(new CellTarget(rightCell, CellZone.WEST))) {
+        if (this.targetIsBlocked(new CellTarget(rightCell, CellRegion.LEFT_EDGE))) {
             unsetPoints = BoardVisibilityService.setA_minus_setB(unsetPoints, this.westSet(rightCell));
         }
 
         const topRightCell = new XyPair(cell.x + 1, cell.y - 1);
-        if (this.targetIsBlocked(new CellTarget(topRightCell, CellZone.WEST))) {
+        if (this.targetIsBlocked(new CellTarget(topRightCell, CellRegion.LEFT_EDGE))) {
             unsetPoints = BoardVisibilityService.setA_minus_setB(unsetPoints, this.westSet(topRightCell));
         }
 
@@ -91,43 +91,43 @@ export class BoardVisibilityService {
     }
 
     public blockWest(cell: XyPair) {
-        this.blockingSegments.add((new CellTarget(cell, CellZone.WEST)).hash());
+        this.blockingSegments.add((new CellTarget(cell, CellRegion.LEFT_EDGE)).hash());
         for (const point of Array.from(this.westSet(cell).values())) {
             this.blockingBitmap[point.x][point.y] = 1;
         }
     }
 
     public unblockWest(cell: XyPair) {
-        this.blockingSegments.delete((new CellTarget(cell, CellZone.WEST)).hash());
+        this.blockingSegments.delete((new CellTarget(cell, CellRegion.LEFT_EDGE)).hash());
         let unsetPoints = this.westSet(cell);
-        if (this.targetIsBlocked(new CellTarget(cell, CellZone.NORTH))) {
+        if (this.targetIsBlocked(new CellTarget(cell, CellRegion.TOP_EDGE))) {
             unsetPoints = BoardVisibilityService.setA_minus_setB(unsetPoints, this.northSet(cell));
         }
-        if (this.targetIsBlocked(new CellTarget(cell, CellZone.FWR))) {
+        if (this.targetIsBlocked(new CellTarget(cell, CellRegion.FWRD_EDGE))) {
             unsetPoints = BoardVisibilityService.setA_minus_setB(unsetPoints, this.fwdSet(cell));
         }
-        if (this.targetIsBlocked(new CellTarget(cell, CellZone.BKW))) {
+        if (this.targetIsBlocked(new CellTarget(cell, CellRegion.BKWD_EDGE))) {
             unsetPoints = BoardVisibilityService.setA_minus_setB(unsetPoints, this.bkwSet(cell));
         }
 
         const leftCell = new XyPair(cell.x - 1, cell.y);
-        if (this.targetIsBlocked(new CellTarget(leftCell, CellZone.NORTH))) {
+        if (this.targetIsBlocked(new CellTarget(leftCell, CellRegion.TOP_EDGE))) {
             unsetPoints = BoardVisibilityService.setA_minus_setB(unsetPoints, this.northSet(leftCell));
         }
-        if (this.targetIsBlocked(new CellTarget(leftCell, CellZone.FWR))) {
+        if (this.targetIsBlocked(new CellTarget(leftCell, CellRegion.FWRD_EDGE))) {
             unsetPoints = BoardVisibilityService.setA_minus_setB(unsetPoints, this.fwdSet(leftCell));
         }
-        if (this.targetIsBlocked(new CellTarget(leftCell, CellZone.BKW))) {
+        if (this.targetIsBlocked(new CellTarget(leftCell, CellRegion.BKWD_EDGE))) {
             unsetPoints = BoardVisibilityService.setA_minus_setB(unsetPoints, this.bkwSet(leftCell));
         }
 
         const botCell = new XyPair(cell.x, cell.y + 1);
-        if (this.targetIsBlocked(new CellTarget(botCell, CellZone.NORTH))) {
+        if (this.targetIsBlocked(new CellTarget(botCell, CellRegion.TOP_EDGE))) {
             unsetPoints = BoardVisibilityService.setA_minus_setB(unsetPoints, this.northSet(botCell));
         }
 
         const botLeftCell = new XyPair(cell.x - 1, cell.y + 1);
-        if (this.targetIsBlocked(new CellTarget(botLeftCell, CellZone.NORTH))) {
+        if (this.targetIsBlocked(new CellTarget(botLeftCell, CellRegion.TOP_EDGE))) {
             unsetPoints = BoardVisibilityService.setA_minus_setB(unsetPoints, this.northSet(botLeftCell));
         }
 
@@ -137,32 +137,32 @@ export class BoardVisibilityService {
     }
 
     public blockFwd(cell: XyPair) {
-        this.blockingSegments.add((new CellTarget(cell, CellZone.FWR)).hash());
+        this.blockingSegments.add((new CellTarget(cell, CellRegion.FWRD_EDGE)).hash());
         for (const point of Array.from(this.fwdSet(cell).values())) {
             this.blockingBitmap[point.x][point.y] = 1;
         }
     }
 
     public unblockFwd(cell: XyPair) {
-        this.blockingSegments.delete((new CellTarget(cell, CellZone.FWR)).hash());
+        this.blockingSegments.delete((new CellTarget(cell, CellRegion.FWRD_EDGE)).hash());
         let unsetPoints = this.fwdSet(cell);
-        if (this.targetIsBlocked(new CellTarget(cell, CellZone.WEST))) {
+        if (this.targetIsBlocked(new CellTarget(cell, CellRegion.LEFT_EDGE))) {
             unsetPoints = BoardVisibilityService.setA_minus_setB(unsetPoints, this.westSet(cell));
         }
-        if (this.targetIsBlocked(new CellTarget(cell, CellZone.NORTH))) {
+        if (this.targetIsBlocked(new CellTarget(cell, CellRegion.TOP_EDGE))) {
             unsetPoints = BoardVisibilityService.setA_minus_setB(unsetPoints, this.northSet(cell));
         }
-        if (this.targetIsBlocked(new CellTarget(cell, CellZone.BKW))) {
+        if (this.targetIsBlocked(new CellTarget(cell, CellRegion.BKWD_EDGE))) {
             unsetPoints = BoardVisibilityService.setA_minus_setB(unsetPoints, this.bkwSet(cell));
         }
 
         const botCell = new XyPair(cell.x, cell.y + 1);
-        if (this.targetIsBlocked(new CellTarget(botCell, CellZone.NORTH))) {
+        if (this.targetIsBlocked(new CellTarget(botCell, CellRegion.TOP_EDGE))) {
             unsetPoints = BoardVisibilityService.setA_minus_setB(unsetPoints, this.northSet(botCell));
         }
 
         const rightCell = new XyPair(cell.x + 1, cell.y);
-        if (this.targetIsBlocked(new CellTarget(rightCell, CellZone.WEST))) {
+        if (this.targetIsBlocked(new CellTarget(rightCell, CellRegion.LEFT_EDGE))) {
             unsetPoints = BoardVisibilityService.setA_minus_setB(unsetPoints, this.westSet(rightCell));
         }
 
@@ -172,32 +172,32 @@ export class BoardVisibilityService {
     }
 
     public blockBkw(cell: XyPair) {
-        this.blockingSegments.add((new CellTarget(cell, CellZone.BKW)).hash());
+        this.blockingSegments.add((new CellTarget(cell, CellRegion.BKWD_EDGE)).hash());
         for (const point of Array.from(this.bkwSet(cell).values())) {
             this.blockingBitmap[point.x][point.y] = 1;
         }
     }
 
     public unblockBkw(cell: XyPair) {
-        this.blockingSegments.delete((new CellTarget(cell, CellZone.BKW)).hash());
+        this.blockingSegments.delete((new CellTarget(cell, CellRegion.BKWD_EDGE)).hash());
         let unsetPoints = this.bkwSet(cell);
-        if (this.targetIsBlocked(new CellTarget(cell, CellZone.WEST))) {
+        if (this.targetIsBlocked(new CellTarget(cell, CellRegion.LEFT_EDGE))) {
             unsetPoints = BoardVisibilityService.setA_minus_setB(unsetPoints, this.westSet(cell));
         }
-        if (this.targetIsBlocked(new CellTarget(cell, CellZone.FWR))) {
+        if (this.targetIsBlocked(new CellTarget(cell, CellRegion.FWRD_EDGE))) {
             unsetPoints = BoardVisibilityService.setA_minus_setB(unsetPoints, this.fwdSet(cell));
         }
-        if (this.targetIsBlocked(new CellTarget(cell, CellZone.NORTH))) {
+        if (this.targetIsBlocked(new CellTarget(cell, CellRegion.TOP_EDGE))) {
             unsetPoints = BoardVisibilityService.setA_minus_setB(unsetPoints, this.northSet(cell));
         }
 
         const botCell = new XyPair(cell.x, cell.y + 1);
-        if (this.targetIsBlocked(new CellTarget(botCell, CellZone.NORTH))) {
+        if (this.targetIsBlocked(new CellTarget(botCell, CellRegion.TOP_EDGE))) {
             unsetPoints = BoardVisibilityService.setA_minus_setB(unsetPoints, this.northSet(botCell));
         }
 
         const rightCell = new XyPair(cell.x + 1, cell.y);
-        if (this.targetIsBlocked(new CellTarget(rightCell, CellZone.WEST))) {
+        if (this.targetIsBlocked(new CellTarget(rightCell, CellRegion.LEFT_EDGE))) {
             unsetPoints = BoardVisibilityService.setA_minus_setB(unsetPoints, this.westSet(rightCell));
         }
 

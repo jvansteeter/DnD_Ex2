@@ -2,7 +2,7 @@ import {ElementRef, Injectable} from '@angular/core';
 import {isNullOrUndefined} from 'util';
 import {XyPair} from '../geometry/xy-pair';
 import {CellTarget} from '../shared/cell-target';
-import {CellZone} from '../shared/cell-zone';
+import {CellRegion} from '../shared/cell-region';
 import {BoardStateService} from './board-state.service';
 
 @Injectable()
@@ -195,16 +195,16 @@ export class BoardCanvasService {
         }
 
         switch (target.zone) {
-            case CellZone.NORTH:
+            case CellRegion.TOP_EDGE:
                 this.draw_line(ctx, new XyPair(loc.x, loc.y), new XyPair(loc.x + this.boardStateService.cell_res, loc.y), width, rgba_code);
                 break;
-            case CellZone.WEST:
+            case CellRegion.LEFT_EDGE:
                 this.draw_line(ctx, new XyPair(loc.x, loc.y), new XyPair(loc.x, loc.y + this.boardStateService.cell_res), width, rgba_code);
                 break;
-            case CellZone.FWR:
+            case CellRegion.FWRD_EDGE:
                 this.draw_line(ctx, new XyPair(loc.x, loc.y + this.boardStateService.cell_res), new XyPair(loc.x + this.boardStateService.cell_res, loc.y), width, rgba_code);
                 break;
-            case CellZone.BKW:
+            case CellRegion.BKWD_EDGE:
                 this.draw_line(ctx, new XyPair(loc.x, loc.y), new XyPair(loc.x + this.boardStateService.cell_res, loc.y + this.boardStateService.cell_res), width, rgba_code);
                 break;
         }

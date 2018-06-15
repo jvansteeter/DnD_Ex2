@@ -4,7 +4,7 @@ import {BoardStateService} from '../../services/board-state.service';
 import {BoardCanvasService} from '../../services/board-canvas.service';
 import {BoardTileService} from '../../services/board-tile.service';
 import {BoardMode} from '../../shared/board-mode';
-import {CellZone} from '../../shared/cell-zone';
+import {CellRegion} from '../../shared/cell-region';
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 
 @Component({
@@ -77,16 +77,16 @@ export class TileRendererComponent implements OnInit {
 
             if (this.boardStateService.shiftDown) {
               switch (this.boardStateService.mouse_cell_target.zone) {
-                case CellZone.TOP:
+                case CellRegion.TOP:
                   this.boardCanvasService.draw_fill_N(this.ctx, this.boardStateService.mouse_loc_cell, canvasPattern);
                   break;
-                case CellZone.BOTTOM:
+                case CellRegion.BOTTOM:
                   this.boardCanvasService.draw_fill_S(this.ctx, this.boardStateService.mouse_loc_cell, canvasPattern);
                   break;
-                case CellZone.LEFT:
+                case CellRegion.LEFT:
                   this.boardCanvasService.draw_fill_W(this.ctx, this.boardStateService.mouse_loc_cell, canvasPattern);
                   break;
-                case CellZone.RIGHT:
+                case CellRegion.RIGHT:
                   this.boardCanvasService.draw_fill_E(this.ctx, this.boardStateService.mouse_loc_cell, canvasPattern);
                   break;
               }

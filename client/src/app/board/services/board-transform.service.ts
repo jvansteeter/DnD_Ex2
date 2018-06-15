@@ -4,7 +4,7 @@ import {BoardStateService} from './board-state.service';
 import {BoardCanvasService} from './board-canvas.service';
 import {CellTarget} from '../shared/cell-target';
 import {BoardMode} from '../shared/board-mode';
-import {CellZone} from '../shared/cell-zone';
+import {CellRegion} from '../shared/cell-region';
 
 @Injectable()
 export class BoardTransformService {
@@ -91,19 +91,19 @@ export class BoardTransformService {
                     // top of cell
                     if ((loc.x + loc.y) <= this.boardStateService.cell_res) {
                         // top-left
-                        return new CellTarget(this.boardStateService.mouse_loc_cell, CellZone.TOP);
+                        return new CellTarget(this.boardStateService.mouse_loc_cell, CellRegion.TOP);
                     } else {
                         // top-right
-                        return new CellTarget(this.boardStateService.mouse_loc_cell, CellZone.RIGHT);
+                        return new CellTarget(this.boardStateService.mouse_loc_cell, CellRegion.RIGHT);
                     }
                 } else {
                     // bottom of cell
                     if ((loc.x + loc.y) <= this.boardStateService.cell_res) {
                         // bottom-left
-                        return new CellTarget(this.boardStateService.mouse_loc_cell, CellZone.LEFT);
+                        return new CellTarget(this.boardStateService.mouse_loc_cell, CellRegion.LEFT);
                     } else {
                         // bottom-right
-                        return new CellTarget(this.boardStateService.mouse_loc_cell, CellZone.BOTTOM);
+                        return new CellTarget(this.boardStateService.mouse_loc_cell, CellRegion.BOTTOM);
                     }
                 }
             }
@@ -113,55 +113,55 @@ export class BoardTransformService {
                     // right side
                     if (loc.y > (this.boardStateService.cell_res / 2)) {
                         // bottom
-                        return new CellTarget(this.boardStateService.mouse_loc_cell, CellZone.BKW);
+                        return new CellTarget(this.boardStateService.mouse_loc_cell, CellRegion.BKWD_EDGE);
                     } else {
                         // top
-                        return new CellTarget(this.boardStateService.mouse_loc_cell, CellZone.FWR);
+                        return new CellTarget(this.boardStateService.mouse_loc_cell, CellRegion.FWRD_EDGE);
                     }
                 } else {
                     // left side
                     if (loc.y > (this.boardStateService.cell_res / 2)) {
                         // bottom
-                        return new CellTarget(this.boardStateService.mouse_loc_cell, CellZone.FWR);
+                        return new CellTarget(this.boardStateService.mouse_loc_cell, CellRegion.FWRD_EDGE);
                     } else {
                         // top
-                        return new CellTarget(this.boardStateService.mouse_loc_cell, CellZone.BKW);
+                        return new CellTarget(this.boardStateService.mouse_loc_cell, CellRegion.BKWD_EDGE);
                     }
                 }
             }
 
-            return new CellTarget(this.boardStateService.mouse_loc_cell, CellZone.CENTER);
+            return new CellTarget(this.boardStateService.mouse_loc_cell, CellRegion.CENTER);
 
         }
 
         // LEFT/RIGHT
         if ((loc.x <= shift) && (loc.y > shift) && (loc.y < (this.boardStateService.cell_res - shift))) {
-            return new CellTarget(this.boardStateService.mouse_loc_cell, CellZone.WEST);
+            return new CellTarget(this.boardStateService.mouse_loc_cell, CellRegion.LEFT_EDGE);
         }
         if ((loc.x >= (this.boardStateService.cell_res - shift)) && (loc.y > shift) && (loc.y < (this.boardStateService.cell_res - shift))) {
-            return new CellTarget(new XyPair(this.boardStateService.mouse_loc_cell.x + 1, this.boardStateService.mouse_loc_cell.y), CellZone.WEST);
+            return new CellTarget(new XyPair(this.boardStateService.mouse_loc_cell.x + 1, this.boardStateService.mouse_loc_cell.y), CellRegion.LEFT_EDGE);
         }
 
         // TOP/BOTTOM
         if ((loc.y <= shift) && (loc.x > shift) && (loc.x < (this.boardStateService.cell_res - shift))) {
-            return new CellTarget(this.boardStateService.mouse_loc_cell, CellZone.NORTH);
+            return new CellTarget(this.boardStateService.mouse_loc_cell, CellRegion.TOP_EDGE);
         }
         if ((loc.y >= (this.boardStateService.cell_res - shift)) && (loc.x > shift) && (loc.x < (this.boardStateService.cell_res - shift))) {
-            return new CellTarget(new XyPair(this.boardStateService.mouse_loc_cell.x, this.boardStateService.mouse_loc_cell.y + 1), CellZone.NORTH);
+            return new CellTarget(new XyPair(this.boardStateService.mouse_loc_cell.x, this.boardStateService.mouse_loc_cell.y + 1), CellRegion.TOP_EDGE);
         }
 
         // CORNERS
         if ((loc.x <= shift) && (loc.y <= shift)) {
-            return new CellTarget(this.boardStateService.mouse_loc_cell, CellZone.CORNER);
+            return new CellTarget(this.boardStateService.mouse_loc_cell, CellRegion.CORNER);
         }
         if ((loc.x <= shift) && (loc.y >= (this.boardStateService.cell_res - shift))) {
-            return new CellTarget(new XyPair(this.boardStateService.mouse_loc_cell.x, this.boardStateService.mouse_loc_cell.y + 1), CellZone.CORNER);
+            return new CellTarget(new XyPair(this.boardStateService.mouse_loc_cell.x, this.boardStateService.mouse_loc_cell.y + 1), CellRegion.CORNER);
         }
         if ((loc.x >= (this.boardStateService.cell_res - shift)) && (loc.y <= shift)) {
-            return new CellTarget(new XyPair(this.boardStateService.mouse_loc_cell.x + 1, this.boardStateService.mouse_loc_cell.y), CellZone.CORNER);
+            return new CellTarget(new XyPair(this.boardStateService.mouse_loc_cell.x + 1, this.boardStateService.mouse_loc_cell.y), CellRegion.CORNER);
         }
         if ((loc.x >= (this.boardStateService.cell_res - shift)) && (loc.y >= (this.boardStateService.cell_res - shift))) {
-            return new CellTarget(new XyPair(this.boardStateService.mouse_loc_cell.x + 1, this.boardStateService.mouse_loc_cell.y + 1), CellZone.CORNER);
+            return new CellTarget(new XyPair(this.boardStateService.mouse_loc_cell.x + 1, this.boardStateService.mouse_loc_cell.y + 1), CellRegion.CORNER);
         }
     }
 

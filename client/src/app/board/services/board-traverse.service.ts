@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {CellTarget} from '../shared/cell-target';
 import {XyPair} from '../geometry/xy-pair';
-import {CellZone} from '../shared/cell-zone';
+import {CellRegion} from '../shared/cell-region';
 
 @Injectable()
 export class BoardTraverseService {
@@ -12,31 +12,31 @@ export class BoardTraverseService {
     }
 
     public blockNorth(cell: XyPair) {
-        this.blockingSegments.add(new CellTarget(cell, CellZone.NORTH).hash());
+        this.blockingSegments.add(new CellTarget(cell, CellRegion.TOP_EDGE).hash());
     }
     public unblockNorth(cell: XyPair) {
-        this.blockingSegments.delete(new CellTarget(cell, CellZone.NORTH).hash());
+        this.blockingSegments.delete(new CellTarget(cell, CellRegion.TOP_EDGE).hash());
     }
 
     public blockWest(cell: XyPair) {
-        this.blockingSegments.add(new CellTarget(cell, CellZone.WEST).hash());
+        this.blockingSegments.add(new CellTarget(cell, CellRegion.LEFT_EDGE).hash());
     }
     public unblockWest(cell: XyPair) {
-        this.blockingSegments.delete(new CellTarget(cell, CellZone.WEST).hash());
+        this.blockingSegments.delete(new CellTarget(cell, CellRegion.LEFT_EDGE).hash());
     }
 
     public blockFwd(cell: XyPair) {
-        this.blockingSegments.add(new CellTarget(cell, CellZone.FWR).hash());
+        this.blockingSegments.add(new CellTarget(cell, CellRegion.FWRD_EDGE).hash());
     }
     public unblockFwd(cell: XyPair) {
-        this.blockingSegments.delete(new CellTarget(cell, CellZone.FWR).hash());
+        this.blockingSegments.delete(new CellTarget(cell, CellRegion.FWRD_EDGE).hash());
     }
 
     public blockBkw(cell: XyPair) {
-        this.blockingSegments.add(new CellTarget(cell, CellZone.BKW).hash());
+        this.blockingSegments.add(new CellTarget(cell, CellRegion.BKWD_EDGE).hash());
     }
     public unblockBkw(cell: XyPair) {
-        this.blockingSegments.delete(new CellTarget(cell, CellZone.BKW).hash());
+        this.blockingSegments.delete(new CellTarget(cell, CellRegion.BKWD_EDGE).hash());
     }
 
     public calcTraversableCells(sourceCell: XyPair, range: number): Array<XyPair> {
@@ -151,84 +151,84 @@ export class BoardTraverseService {
 
 
     public canMoveN(loc: XyPair): boolean {
-        if (this.targetIsBlocked(new CellTarget(new XyPair(loc.x, loc.y), CellZone.NORTH)) ||
-            this.targetIsBlocked(new CellTarget(new XyPair(loc.x, loc.y - 1), CellZone.FWR)) ||
-            this.targetIsBlocked(new CellTarget(new XyPair(loc.x, loc.y - 1), CellZone.BKW))) {
+        if (this.targetIsBlocked(new CellTarget(new XyPair(loc.x, loc.y), CellRegion.TOP_EDGE)) ||
+            this.targetIsBlocked(new CellTarget(new XyPair(loc.x, loc.y - 1), CellRegion.FWRD_EDGE)) ||
+            this.targetIsBlocked(new CellTarget(new XyPair(loc.x, loc.y - 1), CellRegion.BKWD_EDGE))) {
             return false;
         }
         return true;
     }
 
     public canMoveNE(loc: XyPair): boolean {
-        if (this.targetIsBlocked(new CellTarget(new XyPair(loc.x + 1, loc.y - 1), CellZone.FWR)) ||
-            this.targetIsBlocked(new CellTarget(new XyPair(loc.x + 1, loc.y - 1), CellZone.BKW)) ||
-            (this.targetIsBlocked(new CellTarget(new XyPair(loc.x + 1, loc.y - 1), CellZone.WEST)) && this.targetIsBlocked(new CellTarget(new XyPair(loc.x + 1, loc.y), CellZone.NORTH))) ||
-            (this.targetIsBlocked(new CellTarget(new XyPair(loc.x + 1, loc.y - 1), CellZone.WEST)) && this.targetIsBlocked(new CellTarget(new XyPair(loc.x + 1, loc.y), CellZone.WEST))) ||
-            (this.targetIsBlocked(new CellTarget(new XyPair(loc.x, loc.y), CellZone.NORTH)) && this.targetIsBlocked(new CellTarget(new XyPair(loc.x + 1, loc.y), CellZone.NORTH))) ||
-            (this.targetIsBlocked(new CellTarget(new XyPair(loc.x, loc.y), CellZone.NORTH)) && this.targetIsBlocked(new CellTarget(new XyPair(loc.x + 1, loc.y), CellZone.WEST)))) {
+        if (this.targetIsBlocked(new CellTarget(new XyPair(loc.x + 1, loc.y - 1), CellRegion.FWRD_EDGE)) ||
+            this.targetIsBlocked(new CellTarget(new XyPair(loc.x + 1, loc.y - 1), CellRegion.BKWD_EDGE)) ||
+            (this.targetIsBlocked(new CellTarget(new XyPair(loc.x + 1, loc.y - 1), CellRegion.LEFT_EDGE)) && this.targetIsBlocked(new CellTarget(new XyPair(loc.x + 1, loc.y), CellRegion.TOP_EDGE))) ||
+            (this.targetIsBlocked(new CellTarget(new XyPair(loc.x + 1, loc.y - 1), CellRegion.LEFT_EDGE)) && this.targetIsBlocked(new CellTarget(new XyPair(loc.x + 1, loc.y), CellRegion.LEFT_EDGE))) ||
+            (this.targetIsBlocked(new CellTarget(new XyPair(loc.x, loc.y), CellRegion.TOP_EDGE)) && this.targetIsBlocked(new CellTarget(new XyPair(loc.x + 1, loc.y), CellRegion.TOP_EDGE))) ||
+            (this.targetIsBlocked(new CellTarget(new XyPair(loc.x, loc.y), CellRegion.TOP_EDGE)) && this.targetIsBlocked(new CellTarget(new XyPair(loc.x + 1, loc.y), CellRegion.LEFT_EDGE)))) {
             return false;
         }
         return true;
     }
 
     public canMoveE(loc: XyPair): boolean {
-        if (this.targetIsBlocked(new CellTarget(new XyPair(loc.x + 1, loc.y), CellZone.WEST)) ||
-            this.targetIsBlocked(new CellTarget(new XyPair(loc.x + 1, loc.y), CellZone.FWR)) ||
-            this.targetIsBlocked(new CellTarget(new XyPair(loc.x + 1, loc.y), CellZone.BKW))) {
+        if (this.targetIsBlocked(new CellTarget(new XyPair(loc.x + 1, loc.y), CellRegion.LEFT_EDGE)) ||
+            this.targetIsBlocked(new CellTarget(new XyPair(loc.x + 1, loc.y), CellRegion.FWRD_EDGE)) ||
+            this.targetIsBlocked(new CellTarget(new XyPair(loc.x + 1, loc.y), CellRegion.BKWD_EDGE))) {
             return false;
         }
         return true;
     }
 
     public canMoveSE(loc: XyPair): boolean {
-        if (this.targetIsBlocked(new CellTarget(new XyPair(loc.x + 1, loc.y + 1), CellZone.FWR)) ||
-            this.targetIsBlocked(new CellTarget(new XyPair(loc.x + 1, loc.y + 1), CellZone.BKW)) ||
-            (this.targetIsBlocked(new CellTarget(new XyPair(loc.x + 1, loc.y), CellZone.WEST)) && this.targetIsBlocked(new CellTarget(new XyPair(loc.x, loc.y + 1), CellZone.NORTH))) ||
-            (this.targetIsBlocked(new CellTarget(new XyPair(loc.x + 1, loc.y), CellZone.WEST)) && this.targetIsBlocked(new CellTarget(new XyPair(loc.x + 1, loc.y + 1), CellZone.WEST))) ||
-            (this.targetIsBlocked(new CellTarget(new XyPair(loc.x, loc.y + 1), CellZone.NORTH)) && this.targetIsBlocked(new CellTarget(new XyPair(loc.x + 1, loc.y + 1), CellZone.NORTH))) ||
-            (this.targetIsBlocked(new CellTarget(new XyPair(loc.x + 1, loc.y + 1), CellZone.NORTH)) && this.targetIsBlocked(new CellTarget(new XyPair(loc.x + 1, loc.y + 1), CellZone.WEST)))) {
+        if (this.targetIsBlocked(new CellTarget(new XyPair(loc.x + 1, loc.y + 1), CellRegion.FWRD_EDGE)) ||
+            this.targetIsBlocked(new CellTarget(new XyPair(loc.x + 1, loc.y + 1), CellRegion.BKWD_EDGE)) ||
+            (this.targetIsBlocked(new CellTarget(new XyPair(loc.x + 1, loc.y), CellRegion.LEFT_EDGE)) && this.targetIsBlocked(new CellTarget(new XyPair(loc.x, loc.y + 1), CellRegion.TOP_EDGE))) ||
+            (this.targetIsBlocked(new CellTarget(new XyPair(loc.x + 1, loc.y), CellRegion.LEFT_EDGE)) && this.targetIsBlocked(new CellTarget(new XyPair(loc.x + 1, loc.y + 1), CellRegion.LEFT_EDGE))) ||
+            (this.targetIsBlocked(new CellTarget(new XyPair(loc.x, loc.y + 1), CellRegion.TOP_EDGE)) && this.targetIsBlocked(new CellTarget(new XyPair(loc.x + 1, loc.y + 1), CellRegion.TOP_EDGE))) ||
+            (this.targetIsBlocked(new CellTarget(new XyPair(loc.x + 1, loc.y + 1), CellRegion.TOP_EDGE)) && this.targetIsBlocked(new CellTarget(new XyPair(loc.x + 1, loc.y + 1), CellRegion.LEFT_EDGE)))) {
             return false;
         }
         return true;
     }
 
     public canMoveS(loc: XyPair): boolean {
-        if (this.targetIsBlocked(new CellTarget(new XyPair(loc.x, loc.y + 1), CellZone.NORTH)) ||
-            this.targetIsBlocked(new CellTarget(new XyPair(loc.x, loc.y + 1), CellZone.FWR)) ||
-            this.targetIsBlocked(new CellTarget(new XyPair(loc.x, loc.y + 1), CellZone.BKW))) {
+        if (this.targetIsBlocked(new CellTarget(new XyPair(loc.x, loc.y + 1), CellRegion.TOP_EDGE)) ||
+            this.targetIsBlocked(new CellTarget(new XyPair(loc.x, loc.y + 1), CellRegion.FWRD_EDGE)) ||
+            this.targetIsBlocked(new CellTarget(new XyPair(loc.x, loc.y + 1), CellRegion.BKWD_EDGE))) {
             return false;
         }
         return true;
     }
 
     public canMoveSW(loc: XyPair): boolean {
-        if (this.targetIsBlocked(new CellTarget(new XyPair(loc.x - 1, loc.y + 1), CellZone.FWR)) ||
-            this.targetIsBlocked(new CellTarget(new XyPair(loc.x - 1, loc.y + 1), CellZone.BKW)) ||
-            (this.targetIsBlocked(new CellTarget(new XyPair(loc.x - 1, loc.y + 1), CellZone.NORTH)) && this.targetIsBlocked(new CellTarget(new XyPair(loc.x, loc.y + 1), CellZone.WEST))) ||
-            (this.targetIsBlocked(new CellTarget(new XyPair(loc.x, loc.y), CellZone.WEST)) && this.targetIsBlocked(new CellTarget(new XyPair(loc.x, loc.y + 1), CellZone.NORTH))) ||
-            (this.targetIsBlocked(new CellTarget(new XyPair(loc.x, loc.y), CellZone.WEST)) && this.targetIsBlocked(new CellTarget(new XyPair(loc.x, loc.y + 1), CellZone.WEST))) ||
-            (this.targetIsBlocked(new CellTarget(new XyPair(loc.x - 1, loc.y + 1), CellZone.NORTH)) && this.targetIsBlocked(new CellTarget(new XyPair(loc.x, loc.y + 1), CellZone.NORTH)))) {
+        if (this.targetIsBlocked(new CellTarget(new XyPair(loc.x - 1, loc.y + 1), CellRegion.FWRD_EDGE)) ||
+            this.targetIsBlocked(new CellTarget(new XyPair(loc.x - 1, loc.y + 1), CellRegion.BKWD_EDGE)) ||
+            (this.targetIsBlocked(new CellTarget(new XyPair(loc.x - 1, loc.y + 1), CellRegion.TOP_EDGE)) && this.targetIsBlocked(new CellTarget(new XyPair(loc.x, loc.y + 1), CellRegion.LEFT_EDGE))) ||
+            (this.targetIsBlocked(new CellTarget(new XyPair(loc.x, loc.y), CellRegion.LEFT_EDGE)) && this.targetIsBlocked(new CellTarget(new XyPair(loc.x, loc.y + 1), CellRegion.TOP_EDGE))) ||
+            (this.targetIsBlocked(new CellTarget(new XyPair(loc.x, loc.y), CellRegion.LEFT_EDGE)) && this.targetIsBlocked(new CellTarget(new XyPair(loc.x, loc.y + 1), CellRegion.LEFT_EDGE))) ||
+            (this.targetIsBlocked(new CellTarget(new XyPair(loc.x - 1, loc.y + 1), CellRegion.TOP_EDGE)) && this.targetIsBlocked(new CellTarget(new XyPair(loc.x, loc.y + 1), CellRegion.TOP_EDGE)))) {
             return false;
         }
         return true;
     }
 
     public canMoveW(loc: XyPair): boolean {
-        if (this.targetIsBlocked(new CellTarget(new XyPair(loc.x, loc.y), CellZone.WEST)) ||
-            this.targetIsBlocked(new CellTarget(new XyPair(loc.x - 1, loc.y), CellZone.FWR)) ||
-            this.targetIsBlocked(new CellTarget(new XyPair(loc.x - 1, loc.y), CellZone.BKW))) {
+        if (this.targetIsBlocked(new CellTarget(new XyPair(loc.x, loc.y), CellRegion.LEFT_EDGE)) ||
+            this.targetIsBlocked(new CellTarget(new XyPair(loc.x - 1, loc.y), CellRegion.FWRD_EDGE)) ||
+            this.targetIsBlocked(new CellTarget(new XyPair(loc.x - 1, loc.y), CellRegion.BKWD_EDGE))) {
             return false;
         }
         return true;
     }
 
     public canMoveNW(loc: XyPair): boolean {
-        if (this.targetIsBlocked(new CellTarget(new XyPair(loc.x - 1, loc.y - 1), CellZone.FWR)) ||
-            this.targetIsBlocked(new CellTarget(new XyPair(loc.x - 1, loc.y - 1), CellZone.BKW)) ||
-            (this.targetIsBlocked(new CellTarget(new XyPair(loc.x, loc.y), CellZone.NORTH)) && this.targetIsBlocked(new CellTarget(new XyPair(loc.x - 1, loc.y), CellZone.NORTH))) ||
-            (this.targetIsBlocked(new CellTarget(new XyPair(loc.x, loc.y), CellZone.WEST)) && this.targetIsBlocked(new CellTarget(new XyPair(loc.x, loc.y - 1), CellZone.WEST))) ||
-            (this.targetIsBlocked(new CellTarget(new XyPair(loc.x, loc.y), CellZone.WEST)) && this.targetIsBlocked(new CellTarget(new XyPair(loc.x, loc.y), CellZone.NORTH))) ||
-            (this.targetIsBlocked(new CellTarget(new XyPair(loc.x - 1, loc.y), CellZone.NORTH)) && this.targetIsBlocked(new CellTarget(new XyPair(loc.x, loc.y - 1), CellZone.WEST)))) {
+        if (this.targetIsBlocked(new CellTarget(new XyPair(loc.x - 1, loc.y - 1), CellRegion.FWRD_EDGE)) ||
+            this.targetIsBlocked(new CellTarget(new XyPair(loc.x - 1, loc.y - 1), CellRegion.BKWD_EDGE)) ||
+            (this.targetIsBlocked(new CellTarget(new XyPair(loc.x, loc.y), CellRegion.TOP_EDGE)) && this.targetIsBlocked(new CellTarget(new XyPair(loc.x - 1, loc.y), CellRegion.TOP_EDGE))) ||
+            (this.targetIsBlocked(new CellTarget(new XyPair(loc.x, loc.y), CellRegion.LEFT_EDGE)) && this.targetIsBlocked(new CellTarget(new XyPair(loc.x, loc.y - 1), CellRegion.LEFT_EDGE))) ||
+            (this.targetIsBlocked(new CellTarget(new XyPair(loc.x, loc.y), CellRegion.LEFT_EDGE)) && this.targetIsBlocked(new CellTarget(new XyPair(loc.x, loc.y), CellRegion.TOP_EDGE))) ||
+            (this.targetIsBlocked(new CellTarget(new XyPair(loc.x - 1, loc.y), CellRegion.TOP_EDGE)) && this.targetIsBlocked(new CellTarget(new XyPair(loc.x, loc.y - 1), CellRegion.LEFT_EDGE)))) {
             return false;
         }
         return true;

@@ -5,7 +5,7 @@ import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {BoardWallService} from '../../services/board-wall.service';
 import {CellTarget} from '../../shared/cell-target';
 import {XyPair} from '../../geometry/xy-pair';
-import {CellZone} from '../../shared/cell-zone';
+import {CellRegion} from '../../shared/cell-region';
 import {BoardLightService} from '../../services/board-light.service';
 import {LightSource} from '../../map-objects/light-source';
 
@@ -37,26 +37,26 @@ export class MapRendererComponent implements OnInit {
 
         if (this.DEV_MAP_URL_STRING === 'resources/images/maps/shack.jpg') {
             // top wall
-            this.boardWallService.addWall(new CellTarget(new XyPair(5, 2), CellZone.NORTH));
-            this.boardWallService.addWall(new CellTarget(new XyPair(6, 2), CellZone.NORTH));
-            this.boardWallService.addWall(new CellTarget(new XyPair(7, 2), CellZone.NORTH));
+            this.boardWallService.addWall(new CellTarget(new XyPair(5, 2), CellRegion.TOP_EDGE));
+            this.boardWallService.addWall(new CellTarget(new XyPair(6, 2), CellRegion.TOP_EDGE));
+            this.boardWallService.addWall(new CellTarget(new XyPair(7, 2), CellRegion.TOP_EDGE));
 
             // right wall
-            this.boardWallService.addWall(new CellTarget(new XyPair(8, 2), CellZone.WEST));
-            this.boardWallService.addWall(new CellTarget(new XyPair(8, 3), CellZone.WEST));
-            this.boardWallService.addWall(new CellTarget(new XyPair(8, 4), CellZone.WEST));
-            this.boardWallService.addWall(new CellTarget(new XyPair(8, 5), CellZone.WEST));
+            this.boardWallService.addWall(new CellTarget(new XyPair(8, 2), CellRegion.LEFT_EDGE));
+            this.boardWallService.addWall(new CellTarget(new XyPair(8, 3), CellRegion.LEFT_EDGE));
+            this.boardWallService.addWall(new CellTarget(new XyPair(8, 4), CellRegion.LEFT_EDGE));
+            this.boardWallService.addWall(new CellTarget(new XyPair(8, 5), CellRegion.LEFT_EDGE));
 
             // bottom wall
-            this.boardWallService.addWall(new CellTarget(new XyPair(7, 6), CellZone.NORTH));
-            this.boardWallService.addWall(new CellTarget(new XyPair(6, 6), CellZone.NORTH));
-            this.boardWallService.addWall(new CellTarget(new XyPair(5, 6), CellZone.NORTH));
+            this.boardWallService.addWall(new CellTarget(new XyPair(7, 6), CellRegion.TOP_EDGE));
+            this.boardWallService.addWall(new CellTarget(new XyPair(6, 6), CellRegion.TOP_EDGE));
+            this.boardWallService.addWall(new CellTarget(new XyPair(5, 6), CellRegion.TOP_EDGE));
 
             // left wall
-            this.boardWallService.addWall(new CellTarget(new XyPair(5, 5), CellZone.WEST));
-            this.boardWallService.addWall(new CellTarget(new XyPair(5, 4), CellZone.WEST));
-            // this.boardWallService.addWall(new CellTarget(new XyPair(5, 3), CellZone.WEST));              // DOOR
-            this.boardWallService.addWall(new CellTarget(new XyPair(5, 2), CellZone.WEST));
+            this.boardWallService.addWall(new CellTarget(new XyPair(5, 5), CellRegion.LEFT_EDGE));
+            this.boardWallService.addWall(new CellTarget(new XyPair(5, 4), CellRegion.LEFT_EDGE));
+            // this.boardWallService.addWall(new CellTarget(new XyPair(5, 3), CellRegion.LEFT_EDGE));              // DOOR
+            this.boardWallService.addWall(new CellTarget(new XyPair(5, 2), CellRegion.LEFT_EDGE));
 
             this.boardLightService.addLightSource(new LightSource(new XyPair(7, 3), 5));
         }

@@ -1,6 +1,6 @@
 import {isNullOrUndefined} from 'util';
 import {CellTarget} from '../../shared/cell-target';
-import {CellZone} from '../../shared/cell-zone';
+import {CellRegion} from '../../shared/cell-region';
 import {BoardMode} from '../../shared/board-mode';
 import {BoardStateService} from '../../services/board-state.service';
 import {BoardCanvasService} from '../../services/board-canvas.service';
@@ -35,26 +35,26 @@ export class HoverRendererComponent implements OnInit {
           if (!isNullOrUndefined(this.boardStateService.source_click_location)) {
             // MOUSE ON MAP - WALL EDIT MODE - SOURCE IS DEFINED
             switch (this.boardStateService.mouse_cell_target.zone) {
-              case CellZone.CORNER:
+              case CellRegion.CORNER:
                 this.boardCanvasService.draw_corner(this.ctx, this.boardStateService.mouse_cell_target.coor, 'rgba(255, 0, 0, 0.2)', this.boardStateService.inputOffset);
                 break;
             }
           } else {
             switch (this.boardStateService.mouse_cell_target.zone) {
               // MOUSE ON MAP - WALL EDIT MODE - SOURCE IS NOT DEFINED
-              case CellZone.WEST:
+              case CellRegion.LEFT_EDGE:
                 this.boardCanvasService.draw_wall(this.ctx, this.boardStateService.mouse_cell_target, 8, 'rgba(0, 0, 255, 0.2');
                 break;
-              case CellZone.NORTH:
+              case CellRegion.TOP_EDGE:
                 this.boardCanvasService.draw_wall(this.ctx, this.boardStateService.mouse_cell_target, 8, 'rgba(0, 0, 255, 0.2');
                 break;
-              case CellZone.CORNER:
+              case CellRegion.CORNER:
                 this.boardCanvasService.draw_corner(this.ctx, this.boardStateService.mouse_cell_target.coor, 'rgba(255, 0, 0, 0.2)', this.boardStateService.inputOffset);
                 break;
-              case CellZone.FWR:
+              case CellRegion.FWRD_EDGE:
                 this.boardCanvasService.draw_wall(this.ctx, this.boardStateService.mouse_cell_target, 8, 'rgba(0, 0, 255, 0.2');
                 break;
-              case CellZone.BKW:
+              case CellRegion.BKWD_EDGE:
                 this.boardCanvasService.draw_wall(this.ctx, this.boardStateService.mouse_cell_target, 8, 'rgba(0, 0, 255, 0.2');
                 break;
             }
@@ -62,27 +62,27 @@ export class HoverRendererComponent implements OnInit {
           break;
         case BoardMode.DOORS:
           switch (this.boardStateService.mouse_cell_target.zone) {
-            case CellZone.CENTER:
+            case CellRegion.CENTER:
               break;
-            case CellZone.WEST:
-              this.boardCanvasService.draw_wall(this.ctx, new CellTarget(this.boardStateService.mouse_cell_target.coor, CellZone.WEST), 6, 'rgba(255, 0, 0, 0.2)');
+            case CellRegion.LEFT_EDGE:
+              this.boardCanvasService.draw_wall(this.ctx, new CellTarget(this.boardStateService.mouse_cell_target.coor, CellRegion.LEFT_EDGE), 6, 'rgba(255, 0, 0, 0.2)');
               break;
-            case CellZone.NORTH:
-              this.boardCanvasService.draw_wall(this.ctx, new CellTarget(this.boardStateService.mouse_cell_target.coor, CellZone.NORTH), 6, 'rgba(255, 0, 0, 0.2)');
+            case CellRegion.TOP_EDGE:
+              this.boardCanvasService.draw_wall(this.ctx, new CellTarget(this.boardStateService.mouse_cell_target.coor, CellRegion.TOP_EDGE), 6, 'rgba(255, 0, 0, 0.2)');
               break;
-            case CellZone.CORNER:
+            case CellRegion.CORNER:
               break;
-            case CellZone.FWR:
-              this.boardCanvasService.draw_wall(this.ctx, new CellTarget(this.boardStateService.mouse_cell_target.coor, CellZone.FWR), 6, 'rgba(255, 0, 0, 0.2)');
+            case CellRegion.FWRD_EDGE:
+              this.boardCanvasService.draw_wall(this.ctx, new CellTarget(this.boardStateService.mouse_cell_target.coor, CellRegion.FWRD_EDGE), 6, 'rgba(255, 0, 0, 0.2)');
               break;
-            case CellZone.BKW:
-              this.boardCanvasService.draw_wall(this.ctx, new CellTarget(this.boardStateService.mouse_cell_target.coor, CellZone.BKW), 6, 'rgba(255, 0, 0, 0.2)');
+            case CellRegion.BKWD_EDGE:
+              this.boardCanvasService.draw_wall(this.ctx, new CellTarget(this.boardStateService.mouse_cell_target.coor, CellRegion.BKWD_EDGE), 6, 'rgba(255, 0, 0, 0.2)');
               break;
           }
           break;
         case BoardMode.LIGHTS:
           switch (this.boardStateService.mouse_cell_target.zone) {
-            case CellZone.CENTER:
+            case CellRegion.CENTER:
               this.boardCanvasService.draw_center(this.ctx, this.boardStateService.mouse_cell_target.coor, 'rgba(255, 0, 0, 0.2)', this.boardStateService.inputOffset);
               break;
           }
