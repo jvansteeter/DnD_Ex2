@@ -3,6 +3,7 @@ import {LightValue} from "../../../../client/src/app/board/shared/light-value";
 import { PlayerData } from '../../../../shared/types/encounter/player';
 import { EncounterStateData } from '../../../../shared/types/encounter/encounterState';
 import { MongooseModel } from './mongoose.model';
+import { Schema } from 'mongoose';
 
 export class EncounterModel extends MongooseModel implements EncounterStateData {
     public _id;
@@ -42,7 +43,7 @@ export class EncounterModel extends MongooseModel implements EncounterStateData 
             date: Date,
             campaignId: String,
             gameMasters: [String],
-            playerIds: [String]
+            playerIds: [Schema.Types.ObjectId]
         });
 
         this._id = this.methods._id;
