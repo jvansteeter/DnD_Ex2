@@ -3,6 +3,7 @@ import {XyPair} from '../geometry/xy-pair';
 import {BoardStateService} from './board-state.service';
 import {CellTarget} from '../shared/cell-target';
 import {CellRegion} from '../shared/cell-region';
+import {CellVisibilityState} from '../shared/cell-visibility-state';
 
 @Injectable()
 export class BoardVisibilityService {
@@ -22,15 +23,20 @@ export class BoardVisibilityService {
         }
     }
 
-    public cellsVisibleFromCell(source: XyPair): Array<XyPair> {
-        const returnMe = [];
+    public cellsVisibleFromCell(source: XyPair): Array<CellVisibilityState> {
+        const returnMe = new Array<CellVisibilityState>();
 
         for (let x = 0; x < this.boardStateService.mapDimX; x += 1) {
             for (let y = 0; y < this.boardStateService.mapDimY; y += 1) {
                 const curCell = new XyPair(x, y);
-                if (this.cellHasLOSToNorth(source, curCell)){
-                    returnMe.push(curCell)
-                }
+
+                returnMe.push(new CellVisibilityState(
+                    curCell,
+                    this.cellHasLOSToNorth(source, curCell),
+                    this.cellHasLOSToEast(source, curCell),
+                    this.cellHasLOSToSouth(source, curCell),
+                    this.cellHasLOSToWest(source, curCell),
+                    ));
             }
         }
 

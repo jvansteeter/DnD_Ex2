@@ -28,6 +28,7 @@ import {BoardVisibilityService} from './services/board-visibility.service';
 import {BoardLightService} from './services/board-light.service';
 import {BoardTraverseService} from './services/board-traverse.service';
 import {VisibilityRendererComponent} from './renderer/visibility-renderer/visibility-renderer.component';
+import {BoardPlayerService} from './services/board-player.service';
 
 
 @NgModule({
@@ -66,7 +67,8 @@ import {VisibilityRendererComponent} from './renderer/visibility-renderer/visibi
         BoardTransformService,
         BoardVisibilityService,
         BoardTraverseService,
-        BoardLightService
+        BoardLightService,
+        BoardPlayerService
     ],
     entryComponents: [
         NpcPopComponent,

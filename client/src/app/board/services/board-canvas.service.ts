@@ -25,9 +25,6 @@ export class BoardCanvasService {
         ctx.setTransform(scale, 0, 0, scale, x_offset, y_offset);
     }
 
-    // *************************************************************************************************************************************************************
-    // RENDERING FUNCTIONS
-    // *************************************************************************************************************************************************************
     clear_canvas(ctx: CanvasRenderingContext2D) {
         ctx.clearRect(-this.cvs_width, -this.cvs_height, this.cvs_width * 3, this.cvs_height * 3);
     }
@@ -210,7 +207,11 @@ export class BoardCanvasService {
         }
     }
 
-    clip_all(ctx: CanvasRenderingContext2D, xy_pair: XyPair) {
+    /*****************************************************************************************************
+     *  Cell CLEAR region functions
+     *****************************************************************************************************/
+
+    clear_all(ctx: CanvasRenderingContext2D, xy_pair: XyPair) {
         const loc = new XyPair(xy_pair.x * this.boardStateService.cell_res, xy_pair.y * this.boardStateService.cell_res);
 
         ctx.save();
@@ -218,6 +219,77 @@ export class BoardCanvasService {
         ctx.clearRect(0, 0, this.boardStateService.cell_res, this.boardStateService.cell_res);
         ctx.restore();
     }
+
+    clear_N(ctx: CanvasRenderingContext2D, cell: XyPair): void {
+        const loc_canvas = new XyPair(cell.x * this.boardStateService.cell_res, cell.y * this.boardStateService.cell_res);
+
+        ctx.save();
+
+        ctx.beginPath();
+        ctx.beginPath();
+        ctx.translate(loc_canvas.x, loc_canvas.y);
+        ctx.lineTo(this.boardStateService.cell_res, 0);
+        ctx.lineTo((this.boardStateService.cell_res / 2), (this.boardStateService.cell_res / 2));
+        ctx.lineTo(0, 0);
+        ctx.clip();
+        ctx.clearRect(0, 0, this.boardStateService.cell_res, this.boardStateService.cell_res);
+
+        ctx.restore();
+    }
+
+    clear_E(ctx: CanvasRenderingContext2D, cell: XyPair): void {
+        const loc_canvas = new XyPair(cell.x * this.boardStateService.cell_res, cell.y * this.boardStateService.cell_res);
+
+        ctx.save();
+
+        ctx.beginPath();
+        ctx.translate(loc_canvas.x, loc_canvas.y);
+        ctx.moveTo(this.boardStateService.cell_res, 0);
+        ctx.lineTo((this.boardStateService.cell_res / 2), (this.boardStateService.cell_res / 2));
+        ctx.lineTo(this.boardStateService.cell_res, this.boardStateService.cell_res);
+        ctx.lineTo(this.boardStateService.cell_res, 0);
+        ctx.clip();
+        ctx.clearRect(0, 0, this.boardStateService.cell_res, this.boardStateService.cell_res);
+
+        ctx.restore();
+    }
+
+    clear_S(ctx: CanvasRenderingContext2D, cell: XyPair): void {
+        const loc_canvas = new XyPair(cell.x * this.boardStateService.cell_res, cell.y * this.boardStateService.cell_res);
+        ctx.save();
+
+        ctx.beginPath();
+        ctx.translate(loc_canvas.x, loc_canvas.y);
+        ctx.moveTo(this.boardStateService.cell_res, this.boardStateService.cell_res);
+        ctx.lineTo((this.boardStateService.cell_res / 2), (this.boardStateService.cell_res / 2));
+        ctx.lineTo(0, this.boardStateService.cell_res);
+        ctx.lineTo(this.boardStateService.cell_res, this.boardStateService.cell_res);
+        ctx.clip();
+        ctx.clearRect(0, 0, this.boardStateService.cell_res, this.boardStateService.cell_res);
+
+        ctx.restore();
+    }
+
+    clear_W(ctx: CanvasRenderingContext2D, cell: XyPair): void {
+        const loc_canvas = new XyPair(cell.x * this.boardStateService.cell_res, cell.y * this.boardStateService.cell_res);
+
+        ctx.save();
+
+        ctx.beginPath();
+        ctx.translate(loc_canvas.x, loc_canvas.y);
+        ctx.moveTo(0, this.boardStateService.cell_res);
+        ctx.lineTo((this.boardStateService.cell_res / 2), (this.boardStateService.cell_res / 2));
+        ctx.lineTo(0, 0);
+        ctx.lineTo(0, this.boardStateService.cell_res);
+        ctx.clip();
+        ctx.clearRect(0, 0, this.boardStateService.cell_res, this.boardStateService.cell_res);
+
+        ctx.restore();
+    }
+
+    /*****************************************************************************************************
+     *  Cell FILL region functions
+     *****************************************************************************************************/
 
     draw_fill_all(ctx: CanvasRenderingContext2D, xy_pair: XyPair, fill_code: string | CanvasGradient | CanvasPattern) {
         const loc = new XyPair(xy_pair.x * this.boardStateService.cell_res, xy_pair.y * this.boardStateService.cell_res);
