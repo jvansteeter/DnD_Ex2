@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
-import {ViewMode} from '../shared/view-mode';
-import {BoardMode} from '../shared/board-mode';
-import {LightValue} from '../shared/light-value';
+import {ViewMode} from '../shared/enum/view-mode';
+import {BoardMode} from '../shared/enum/board-mode';
+import {LightValue} from '../shared/enum/light-value';
 import {CellTarget} from "../shared/cell-target";
 import {XyPair} from "../geometry/xy-pair";
 

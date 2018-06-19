@@ -1,7 +1,7 @@
 import {LineSeg} from '../geometry/line-seg';
 import {CellTarget} from '../shared/cell-target';
 import {XyPair} from '../geometry/xy-pair';
-import {CellRegion} from '../shared/cell-region';
+import {CellRegion} from '../shared/enum/cell-region';
 
 export class Wall {
   public line_data: LineSeg;

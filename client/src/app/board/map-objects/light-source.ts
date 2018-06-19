@@ -1,6 +1,6 @@
 import {XyPair} from '../geometry/xy-pair';
 import {isNullOrUndefined} from 'util';
-import {LightValue} from '../shared/light-value';
+import {LightValue} from '../shared/enum/light-value';
 
 export class LightSource {
     public location: XyPair;

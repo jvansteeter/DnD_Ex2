@@ -2,7 +2,7 @@ import {ElementRef, Injectable} from '@angular/core';
 import {isNullOrUndefined} from 'util';
 import {XyPair} from '../geometry/xy-pair';
 import {CellTarget} from '../shared/cell-target';
-import {CellRegion} from '../shared/cell-region';
+import {CellRegion} from '../shared/enum/cell-region';
 import {BoardStateService} from './board-state.service';
 
 @Injectable()

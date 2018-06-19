@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Wall} from '../map-objects/wall';
 import {XyPair} from '../geometry/xy-pair';
 import {CellTarget} from '../shared/cell-target';
-import {CellRegion} from '../shared/cell-region';
+import {CellRegion} from '../shared/enum/cell-region';
 import {BoardStateService} from './board-state.service';
 import {BoardVisibilityService} from './board-visibility.service';
 import {BoardTraverseService} from './board-traverse.service';

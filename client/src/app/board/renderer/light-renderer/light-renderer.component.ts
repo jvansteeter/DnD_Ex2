@@ -1,6 +1,6 @@
-import {ViewMode} from '../../shared/view-mode';
+import {ViewMode} from '../../shared/enum/view-mode';
 import {CellLightConfig} from '../../shared/cell-light-state';
-import {LightValue} from '../../shared/light-value';
+import {LightValue} from '../../shared/enum/light-value';
 import {BoardStateService} from '../../services/board-state.service';
 import {BoardCanvasService} from '../../services/board-canvas.service';
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';

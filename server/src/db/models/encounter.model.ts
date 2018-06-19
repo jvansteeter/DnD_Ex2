@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import {LightValue} from "../../../../client/src/app/board/shared/light-value";
+import {LightValue} from "../../../../client/src/app/board/shared/enum/light-value";
 import { PlayerData } from '../../../../shared/types/encounter/player';
 import { EncounterStateData } from '../../../../shared/types/encounter/encounterState';
 import { MongooseModel } from './mongoose.model';

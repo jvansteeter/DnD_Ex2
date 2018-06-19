@@ -8,7 +8,7 @@ import {EncounterService} from './encounter.service';
 import {EncounterRepository} from '../repositories/encounter.repository';
 import {EncounterState} from './encounter.state';
 import {BoardTraverseService} from '../board/services/board-traverse.service';
-import { LightValue } from '../board/shared/light-value';
+import { LightValue } from '../board/shared/enum/light-value';
 
 @Injectable()
 export class EncounterDevService extends EncounterService {

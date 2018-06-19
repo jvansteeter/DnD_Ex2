@@ -1,4 +1,4 @@
-import {LightValue} from './light-value';
+import {LightValue} from './enum/light-value';
 import {XyPair} from '../geometry/xy-pair';
 
 export class CellLightConfig {

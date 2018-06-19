@@ -3,7 +3,7 @@ import {isNullOrUndefined} from 'util';
 import {BoardStateService} from '../../services/board-state.service';
 import {BoardCanvasService} from '../../services/board-canvas.service';
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {ViewMode} from '../../shared/view-mode';
+import {ViewMode} from '../../shared/enum/view-mode';
 import {BoardLightService} from '../../services/board-light.service';
 
 @Component({

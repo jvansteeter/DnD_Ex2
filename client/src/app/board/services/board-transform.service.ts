@@ -3,8 +3,8 @@ import {XyPair} from '../geometry/xy-pair';
 import {BoardStateService} from './board-state.service';
 import {BoardCanvasService} from './board-canvas.service';
 import {CellTarget} from '../shared/cell-target';
-import {BoardMode} from '../shared/board-mode';
-import {CellRegion} from '../shared/cell-region';
+import {BoardMode} from '../shared/enum/board-mode';
+import {CellRegion} from '../shared/enum/cell-region';
 
 @Injectable()
 export class BoardTransformService {

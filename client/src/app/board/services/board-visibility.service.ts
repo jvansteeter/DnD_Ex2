@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {XyPair} from '../geometry/xy-pair';
 import {BoardStateService} from './board-state.service';
 import {CellTarget} from '../shared/cell-target';
-import {CellRegion} from '../shared/cell-region';
+import {CellRegion} from '../shared/enum/cell-region';
 import {CellVisibilityState} from '../shared/cell-visibility-state';
 
 @Injectable()

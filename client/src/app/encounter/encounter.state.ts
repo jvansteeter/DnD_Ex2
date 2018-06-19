@@ -1,5 +1,5 @@
 import { EncounterStateData } from '../../../../shared/types/encounter/encounterState';
-import { LightValue } from '../board/shared/light-value';
+import { LightValue } from '../board/shared/enum/light-value';
 import { PlayerData } from '../../../../shared/types/encounter/player';
 import { Player } from './player';
 

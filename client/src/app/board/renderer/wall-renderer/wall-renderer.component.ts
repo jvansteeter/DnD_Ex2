@@ -1,4 +1,4 @@
-import {ViewMode} from '../../shared/view-mode';
+import {ViewMode} from '../../shared/enum/view-mode';
 import {BoardStateService} from '../../services/board-state.service';
 import {BoardCanvasService} from '../../services/board-canvas.service';
 import {BoardWallService} from '../../services/board-wall.service';

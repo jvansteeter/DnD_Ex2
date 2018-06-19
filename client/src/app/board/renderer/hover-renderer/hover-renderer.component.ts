@@ -1,7 +1,7 @@
 import {isNullOrUndefined} from 'util';
 import {CellTarget} from '../../shared/cell-target';
-import {CellRegion} from '../../shared/cell-region';
-import {BoardMode} from '../../shared/board-mode';
+import {CellRegion} from '../../shared/enum/cell-region';
+import {BoardMode} from '../../shared/enum/board-mode';
 import {BoardStateService} from '../../services/board-state.service';
 import {BoardCanvasService} from '../../services/board-canvas.service';
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';

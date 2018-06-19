@@ -1,5 +1,5 @@
 import {XyPair} from '../geometry/xy-pair';
-import {CellRegion} from './cell-region';
+import {CellRegion} from './enum/cell-region';
 import {Md5} from 'ts-md5/dist/md5';
 
 export class CellTarget {

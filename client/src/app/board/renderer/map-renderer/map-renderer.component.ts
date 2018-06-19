@@ -1,11 +1,11 @@
-import {ViewMode} from '../../shared/view-mode';
+import {ViewMode} from '../../shared/enum/view-mode';
 import {BoardStateService} from '../../services/board-state.service';
 import {BoardCanvasService} from '../../services/board-canvas.service';
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {BoardWallService} from '../../services/board-wall.service';
 import {CellTarget} from '../../shared/cell-target';
 import {XyPair} from '../../geometry/xy-pair';
-import {CellRegion} from '../../shared/cell-region';
+import {CellRegion} from '../../shared/enum/cell-region';
 import {BoardLightService} from '../../services/board-light.service';
 import {LightSource} from '../../map-objects/light-source';
 
