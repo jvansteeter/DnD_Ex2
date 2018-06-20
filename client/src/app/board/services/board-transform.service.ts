@@ -22,32 +22,50 @@ export class BoardTransformService {
      * --- When it comes to locating things on the screen, there are a handful of coordinate systems
      *     to be aware of. Variables and/or functions that require/return a specific value in a given
      *     coordinate scope will suffix the varible/function in an identifier for that scope
-     *     --- '_screen': refers to the pixel coor on the screen, considered global
-     *     --- '_canvas': refers to the pixel coor on the mapCanvas, relative to its top corner
-     *     --- '_map'   : refers to the pixel coor on the map, influenced by map transforms
+     *     --- '_screen': refers to the pixel location on the screen, considered global
+     *     --- '_canvas': refers to the pixel location on the mapCanvas, relative to its top corner
+     *     --- '_map'   : refers to the pixel location on the map, influenced by map transforms
      *     --- '_cell'  : refers to a simple tile on the board-map. By taking the global 'squareSize' and
      *                    multiplying by the '_cell's X and Y values, one would get the '_canvas' value
      *                    for the cell
      *     --- 'cell_pix' : refers to the pixel coordinate within the cell
      */
 
-    /**
-     * takes the mouse position in terms on the monitor, and transforms them
-     * to a position relative to the top-left corner of the canvas element
-     * @param {XyPair} screenRes
-     * @returns {XyPair}
-     */
+    /********************************************************************************************************************
+     *  Cell Point Calculation
+     ********************************************************************************************************************/
+    public adjacentCellTargets(source: CellTarget): Map<string, CellTarget> {
+        const returnMe = new Map<string, CellTarget>();
+
+        if (source.region === CellRegion.CENTER) {
+            returnMe.set('NorthWest', new CellTarget(new XyPair(source.location.x, source.location.y), CellRegion.CORNER));
+            returnMe.set('NorthEast', new CellTarget(new XyPair(source.location.x + 1, source.location.y), CellRegion.CORNER));
+            returnMe.set('SouthWest', new CellTarget(new XyPair(source.location.x, source.location.y + 1), CellRegion.CORNER));
+            returnMe.set('SouthEast', new CellTarget(new XyPair(source.location.x + 1, source.location.y + 1), CellRegion.CORNER));
+        }
+
+        if (source.region === CellRegion.CORNER) {
+            returnMe.set('North', new CellTarget(new XyPair(source.location.x, source.location.y), CellRegion.CORNER));
+            returnMe.set('North', new CellTarget(new XyPair(source.location.x, source.location.y), CellRegion.CORNER));
+            returnMe.set('North', new CellTarget(new XyPair(source.location.x, source.location.y), CellRegion.CORNER));
+            returnMe.set('North', new CellTarget(new XyPair(source.location.x, source.location.y), CellRegion.CORNER));
+            returnMe.set('North', new CellTarget(new XyPair(source.location.x, source.location.y), CellRegion.CORNER));
+            returnMe.set('North', new CellTarget(new XyPair(source.location.x, source.location.y), CellRegion.CORNER));
+            returnMe.set('North', new CellTarget(new XyPair(source.location.x, source.location.y), CellRegion.CORNER));
+            returnMe.set('North', new CellTarget(new XyPair(source.location.x, source.location.y), CellRegion.CORNER));
+        }
+
+        return returnMe;
+    }
+
+    /********************************************************************************************************************
+     *  Coordinate space transforms
+     ********************************************************************************************************************/
     screen_to_canvas(screenRes: XyPair): XyPair {
         const rect = this.boardCanvasService.canvasNativeElement.getBoundingClientRect();
         return new XyPair(screenRes.x - rect.left, screenRes.y - rect.top);
     }
 
-    /**
-     * takes the mouse position in terms of the monitor, and transforms them
-     * to a position relative to the top-left corner of the MAP itself, impacted by transforms
-     * @param {XyPair} screenRes
-     * @returns {XyPair}
-     */
     screen_to_map(screenRes: XyPair): XyPair {
         const canvasPixel = this.screen_to_canvas(screenRes);
         const mapX = (canvasPixel.x - this.boardStateService.x_offset) / this.boardStateService.scale;
@@ -91,19 +109,19 @@ export class BoardTransformService {
                     // top of cell
                     if ((loc.x + loc.y) <= this.boardStateService.cell_res) {
                         // top-left
-                        return new CellTarget(this.boardStateService.mouse_loc_cell, CellRegion.TOP);
+                        return new CellTarget(this.boardStateService.mouse_loc_cell, CellRegion.TOP_QUAD);
                     } else {
                         // top-right
-                        return new CellTarget(this.boardStateService.mouse_loc_cell, CellRegion.RIGHT);
+                        return new CellTarget(this.boardStateService.mouse_loc_cell, CellRegion.RIGHT_QUAD);
                     }
                 } else {
                     // bottom of cell
                     if ((loc.x + loc.y) <= this.boardStateService.cell_res) {
                         // bottom-left
-                        return new CellTarget(this.boardStateService.mouse_loc_cell, CellRegion.LEFT);
+                        return new CellTarget(this.boardStateService.mouse_loc_cell, CellRegion.LEFT_QUAD);
                     } else {
                         // bottom-right
-                        return new CellTarget(this.boardStateService.mouse_loc_cell, CellRegion.BOTTOM);
+                        return new CellTarget(this.boardStateService.mouse_loc_cell, CellRegion.BOTTOM_QUAD);
                     }
                 }
             }
@@ -134,7 +152,7 @@ export class BoardTransformService {
 
         }
 
-        // LEFT/RIGHT
+        // LEFT_QUAD/RIGHT_QUAD
         if ((loc.x <= shift) && (loc.y > shift) && (loc.y < (this.boardStateService.cell_res - shift))) {
             return new CellTarget(this.boardStateService.mouse_loc_cell, CellRegion.LEFT_EDGE);
         }
@@ -142,7 +160,7 @@ export class BoardTransformService {
             return new CellTarget(new XyPair(this.boardStateService.mouse_loc_cell.x + 1, this.boardStateService.mouse_loc_cell.y), CellRegion.LEFT_EDGE);
         }
 
-        // TOP/BOTTOM
+        // TOP_QUAD/BOTTOM_QUAD
         if ((loc.y <= shift) && (loc.x > shift) && (loc.x < (this.boardStateService.cell_res - shift))) {
             return new CellTarget(this.boardStateService.mouse_loc_cell, CellRegion.TOP_EDGE);
         }

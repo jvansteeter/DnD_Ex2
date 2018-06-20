@@ -52,7 +52,7 @@ export class HighlightRendererComponent implements OnInit {
 
         // render corner to corner grid
         if (!isNullOrUndefined(this.boardStateService.source_click_location)) {
-            const sc_loc = this.boardStateService.source_click_location.coor;
+            const sc_loc = this.boardStateService.source_click_location.location;
             this.render_corner_to_corner(sc_loc);
         }
 

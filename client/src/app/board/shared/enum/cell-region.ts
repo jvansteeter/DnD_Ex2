@@ -7,8 +7,8 @@ export enum CellRegion {
   FWRD_EDGE = 'FORWARD',
   BKWD_EDGE = 'BACKWARD',
 
-  TOP = 'TOP',
-  BOTTOM = 'BOTTOM',
-  LEFT = 'LEFT',
-  RIGHT = 'RIGHT'
+  TOP_QUAD = 'TOP_QUAD',
+  BOTTOM_QUAD = 'BOTTOM_QUAD',
+  LEFT_QUAD = 'LEFT_QUAD',
+  RIGHT_QUAD = 'RIGHT_QUAD'
 }

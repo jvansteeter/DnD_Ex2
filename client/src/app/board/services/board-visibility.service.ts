@@ -23,20 +23,28 @@ export class BoardVisibilityService {
         }
     }
 
-    public cellsVisibleFromCell(source: XyPair): Array<CellVisibilityState> {
-        const returnMe = new Array<CellVisibilityState>();
+    public cellQuadsVisibleFromCell(source: XyPair): Array<CellTarget> {
+        const returnMe = new Array<CellTarget>();
 
         for (let x = 0; x < this.boardStateService.mapDimX; x += 1) {
             for (let y = 0; y < this.boardStateService.mapDimY; y += 1) {
                 const curCell = new XyPair(x, y);
 
-                returnMe.push(new CellVisibilityState(
-                    curCell,
-                    this.cellHasLOSToNorth(source, curCell),
-                    this.cellHasLOSToEast(source, curCell),
-                    this.cellHasLOSToSouth(source, curCell),
-                    this.cellHasLOSToWest(source, curCell),
-                    ));
+                if (this.cellHasLOSToNorth(source, curCell)) {
+                    returnMe.push(new CellTarget(curCell, CellRegion.TOP_QUAD));
+                }
+
+                if (this.cellHasLOSToEast(source, curCell)) {
+                    returnMe.push(new CellTarget(curCell, CellRegion.RIGHT_QUAD));
+                }
+
+                if (this.cellHasLOSToSouth(source, curCell)) {
+                    returnMe.push(new CellTarget(curCell, CellRegion.BOTTOM_QUAD));
+                }
+
+                if (this.cellHasLOSToWest(source, curCell)) {
+                    returnMe.push(new CellTarget(curCell, CellRegion.LEFT_QUAD));
+                }
             }
         }
 

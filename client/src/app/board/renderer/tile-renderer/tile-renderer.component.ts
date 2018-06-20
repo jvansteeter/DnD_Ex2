@@ -76,17 +76,17 @@ export class TileRendererComponent implements OnInit {
             const canvasPattern = this.ctx.createPattern(tileImage, 'no-repeat');
 
             if (this.boardStateService.shiftDown) {
-              switch (this.boardStateService.mouse_cell_target.zone) {
-                case CellRegion.TOP:
+              switch (this.boardStateService.mouse_cell_target.region) {
+                case CellRegion.TOP_QUAD:
                   this.boardCanvasService.draw_fill_N(this.ctx, this.boardStateService.mouse_loc_cell, canvasPattern);
                   break;
-                case CellRegion.BOTTOM:
+                case CellRegion.BOTTOM_QUAD:
                   this.boardCanvasService.draw_fill_S(this.ctx, this.boardStateService.mouse_loc_cell, canvasPattern);
                   break;
-                case CellRegion.LEFT:
+                case CellRegion.LEFT_QUAD:
                   this.boardCanvasService.draw_fill_W(this.ctx, this.boardStateService.mouse_loc_cell, canvasPattern);
                   break;
-                case CellRegion.RIGHT:
+                case CellRegion.RIGHT_QUAD:
                   this.boardCanvasService.draw_fill_E(this.ctx, this.boardStateService.mouse_loc_cell, canvasPattern);
                   break;
               }

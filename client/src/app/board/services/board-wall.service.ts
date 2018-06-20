@@ -23,24 +23,24 @@ export class BoardWallService {
     public addWall(loc: CellTarget, singleInstance = true) {
         if (!this.hasWall(loc)) {
             this.wallData.set(loc.hash(), new Wall(loc, this.boardStateService.cell_res));
-            switch (loc.zone) {
+            switch (loc.region) {
                 case CellRegion.TOP_EDGE:
-                    this.boardVisibilityService.blockNorth(loc.coor);
-                    this.boardTraverseService.blockNorth(loc.coor);
+                    this.boardVisibilityService.blockNorth(loc.location);
+                    this.boardTraverseService.blockNorth(loc.location);
                     break;
                 case CellRegion.LEFT_EDGE:
-                    this.boardVisibilityService.blockWest(loc.coor);
-                    this.boardTraverseService.blockWest(loc.coor);
+                    this.boardVisibilityService.blockWest(loc.location);
+                    this.boardTraverseService.blockWest(loc.location);
 
                     break;
                 case CellRegion.FWRD_EDGE:
-                    this.boardVisibilityService.blockFwd(loc.coor);
-                    this.boardTraverseService.blockFwd(loc.coor);
+                    this.boardVisibilityService.blockFwd(loc.location);
+                    this.boardTraverseService.blockFwd(loc.location);
 
                     break;
                 case CellRegion.BKWD_EDGE:
-                    this.boardVisibilityService.blockBkw(loc.coor);
-                    this.boardTraverseService.blockBkw(loc.coor);
+                    this.boardVisibilityService.blockBkw(loc.location);
+                    this.boardTraverseService.blockBkw(loc.location);
 
                     break;
             }
@@ -53,24 +53,24 @@ export class BoardWallService {
     public removeWall(loc: CellTarget , singleInstance = true): void {
         if (this.hasWall(loc)) {
             this.wallData.delete(loc.hash());
-            switch (loc.zone) {
+            switch (loc.region) {
                 case CellRegion.TOP_EDGE:
-                    this.boardVisibilityService.unblockNorth(loc.coor);
-                    this.boardTraverseService.unblockNorth(loc.coor);
+                    this.boardVisibilityService.unblockNorth(loc.location);
+                    this.boardTraverseService.unblockNorth(loc.location);
                     break;
                 case CellRegion.LEFT_EDGE:
-                    this.boardVisibilityService.unblockWest(loc.coor);
-                    this.boardTraverseService.unblockWest(loc.coor);
+                    this.boardVisibilityService.unblockWest(loc.location);
+                    this.boardTraverseService.unblockWest(loc.location);
 
                     break;
                 case CellRegion.FWRD_EDGE:
-                    this.boardVisibilityService.unblockFwd(loc.coor);
-                    this.boardTraverseService.unblockFwd(loc.coor);
+                    this.boardVisibilityService.unblockFwd(loc.location);
+                    this.boardTraverseService.unblockFwd(loc.location);
 
                     break;
                 case CellRegion.BKWD_EDGE:
-                    this.boardVisibilityService.unblockBkw(loc.coor);
-                    this.boardTraverseService.unblockBkw(loc.coor);
+                    this.boardVisibilityService.unblockBkw(loc.location);
+                    this.boardTraverseService.unblockBkw(loc.location);
 
                     break;
             }

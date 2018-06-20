@@ -50,12 +50,12 @@ export class BoardStateService {
     public gridEnabled = true;
     public show_health = true;
 
-    // mouse coor variables
-    public mouse_loc_screen: XyPair;       // the pixel coor of the mouse relative to the screen
-    public mouse_loc_canvas: XyPair;       // the pixel coor of the mouse relative to the window
+    // mouse location variables
+    public mouse_loc_screen: XyPair;       // the pixel location of the mouse relative to the screen
+    public mouse_loc_canvas: XyPair;       // the pixel location of the mouse relative to the window
     public mouse_loc_map: XyPair;
-    public mouse_loc_cell: XyPair;         // the board_grid coor the cell under the mouse
-    public mouse_loc_cell_pix: XyPair;     // the pixel coor of the mouse relative to the current tile
+    public mouse_loc_cell: XyPair;         // the board_grid location the cell under the mouse
+    public mouse_loc_cell_pix: XyPair;     // the pixel location of the mouse relative to the current tile
     public mouse_cell_target: CellTarget;  // to current cell target under the pointer
 
     // key states

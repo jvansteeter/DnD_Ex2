@@ -3,16 +3,16 @@ import {CellRegion} from './enum/cell-region';
 import {Md5} from 'ts-md5/dist/md5';
 
 export class CellTarget {
-  public coor: XyPair;
-  public zone: CellRegion;
+  public location: XyPair;
+  public region: CellRegion;
 
   constructor(location: XyPair, zone: CellRegion) {
-    this.coor = location;
-    this.zone = zone;
+    this.location = location;
+    this.region = zone;
   }
 
   toString(): string {
-    return 'X' + this.coor.x + '_Y' + this.coor.y + '_' + this.zone.toString();
+    return 'X' + this.location.x + '_Y' + this.location.y + '_' + this.region.toString();
   }
 
   hash(): string | null {

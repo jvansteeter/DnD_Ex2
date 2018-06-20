@@ -183,7 +183,7 @@ export class BoardCanvasService {
     }
 
     draw_wall(ctx: CanvasRenderingContext2D, target: CellTarget, width: number, rgba_code?: string): void {
-        const loc = new XyPair(target.coor.x * this.boardStateService.cell_res, target.coor.y * this.boardStateService.cell_res);
+        const loc = new XyPair(target.location.x * this.boardStateService.cell_res, target.location.y * this.boardStateService.cell_res);
 
         if (isNullOrUndefined(rgba_code)) {
             ctx.strokeStyle = 'rgba(50, 50, 50, 1)';
@@ -191,7 +191,7 @@ export class BoardCanvasService {
             ctx.strokeStyle = rgba_code;
         }
 
-        switch (target.zone) {
+        switch (target.region) {
             case CellRegion.TOP_EDGE:
                 this.draw_line(ctx, new XyPair(loc.x, loc.y), new XyPair(loc.x + this.boardStateService.cell_res, loc.y), width, rgba_code);
                 break;
@@ -218,6 +218,21 @@ export class BoardCanvasService {
         ctx.translate(loc.x, loc.y);
         ctx.clearRect(0, 0, this.boardStateService.cell_res, this.boardStateService.cell_res);
         ctx.restore();
+    }
+
+    clear_quad(ctx: CanvasRenderingContext2D, target: CellTarget) {
+        if (target.region === CellRegion.TOP_QUAD) {
+            this.clear_N(ctx, target.location);
+        }
+        if (target.region === CellRegion.RIGHT_QUAD) {
+            this.clear_E(ctx, target.location);
+        }
+        if (target.region === CellRegion.BOTTOM_QUAD) {
+            this.clear_S(ctx, target.location);
+        }
+        if (target.region === CellRegion.LEFT_QUAD) {
+            this.clear_W(ctx, target.location);
+        }
     }
 
     clear_N(ctx: CanvasRenderingContext2D, cell: XyPair): void {

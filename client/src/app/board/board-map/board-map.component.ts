@@ -262,16 +262,16 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
                             if (!isNullOrUndefined(this.boardStateService.mouse_cell_target)) {
                                 if (!isNullOrUndefined(this.boardStateService.source_click_location)) {
                                     // MOUSE NOT DRAGGING - WALL EDIT MODE - MOUSE ON MAP - SOURCE IS DEFINED
-                                    switch (this.boardStateService.mouse_cell_target.zone) {
+                                    switch (this.boardStateService.mouse_cell_target.region) {
                                         case CellRegion.CORNER:
-                                            this.boardWallService.fillWallsBetweenCorners(this.boardStateService.source_click_location.coor, this.boardStateService.mouse_cell_target.coor);
+                                            this.boardWallService.fillWallsBetweenCorners(this.boardStateService.source_click_location.location, this.boardStateService.mouse_cell_target.location);
                                             this.boardStateService.source_click_location = this.boardStateService.mouse_cell_target;
                                             break;
                                         default:
                                             this.boardStateService.source_click_location = null;
                                     }
                                 } else {
-                                    switch (this.boardStateService.mouse_cell_target.zone) {
+                                    switch (this.boardStateService.mouse_cell_target.region) {
                                         // MOUSE NOT DRAGGING - WALL EDIT MODE - MOUSE ON MAP - SOURCE IS NOT DEFINED
                                         case CellRegion.CORNER:
                                             this.boardStateService.source_click_location = this.boardStateService.mouse_cell_target;
@@ -300,27 +300,27 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
                             break;
                         case BoardMode.LIGHTS:
                             if (!isNullOrUndefined(this.boardStateService.mouse_cell_target)) {
-                                if (this.boardStateService.mouse_cell_target.zone === CellRegion.CENTER) {
+                                if (this.boardStateService.mouse_cell_target.region === CellRegion.CENTER) {
                                     this.boardLightService.toggleLightSource(this.boardStateService.mouse_loc_cell);
                                 }
                             }
                             break;
                         case BoardMode.TILES:
                             if (!isNullOrUndefined(this.boardStateService.mouse_cell_target)) {
-                                switch (this.boardStateService.mouse_cell_target.zone) {
+                                switch (this.boardStateService.mouse_cell_target.region) {
                                     case CellRegion.CENTER:
                                         this.boardTileService.setTileData_All(this.boardStateService.mouse_loc_cell);
                                         break;
-                                    case CellRegion.TOP:
+                                    case CellRegion.TOP_QUAD:
                                         this.boardTileService.setTileData_Top(this.boardStateService.mouse_loc_cell);
                                         break;
-                                    case CellRegion.LEFT:
+                                    case CellRegion.LEFT_QUAD:
                                         this.boardTileService.setTileData_Left(this.boardStateService.mouse_loc_cell);
                                         break;
-                                    case CellRegion.BOTTOM:
+                                    case CellRegion.BOTTOM_QUAD:
                                         this.boardTileService.setTileData_Bottom(this.boardStateService.mouse_loc_cell);
                                         break;
-                                    case CellRegion.RIGHT:
+                                    case CellRegion.RIGHT_QUAD:
                                         this.boardTileService.setTileData_Right(this.boardStateService.mouse_loc_cell);
                                         break;
                                 }

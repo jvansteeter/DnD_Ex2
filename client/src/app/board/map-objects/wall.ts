@@ -10,12 +10,12 @@ export class Wall {
   constructor(loc: CellTarget, square_size: number) {
     this.loc = loc;
 
-    const top_left_pixel: XyPair = new XyPair(loc.coor.x * square_size, loc.coor.y * square_size);
-    const bot_left_pixel: XyPair = new XyPair(loc.coor.x * square_size, (loc.coor.y * square_size) + square_size);
-    const top_right_pixel: XyPair = new XyPair((loc.coor.x * square_size) + square_size, loc.coor.y * square_size);
-    const bot_right_pixel: XyPair = new XyPair((loc.coor.x * square_size) + square_size, (loc.coor.y * square_size) + square_size);
+    const top_left_pixel: XyPair = new XyPair(loc.location.x * square_size, loc.location.y * square_size);
+    const bot_left_pixel: XyPair = new XyPair(loc.location.x * square_size, (loc.location.y * square_size) + square_size);
+    const top_right_pixel: XyPair = new XyPair((loc.location.x * square_size) + square_size, loc.location.y * square_size);
+    const bot_right_pixel: XyPair = new XyPair((loc.location.x * square_size) + square_size, (loc.location.y * square_size) + square_size);
 
-    switch (loc.zone) {
+    switch (loc.region) {
       case CellRegion.TOP_EDGE :
         this.line_data = new LineSeg(top_left_pixel, top_right_pixel);
         break;

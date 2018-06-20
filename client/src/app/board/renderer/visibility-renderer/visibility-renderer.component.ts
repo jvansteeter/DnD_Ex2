@@ -4,6 +4,7 @@ import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {XyPair} from '../../geometry/xy-pair';
 import {BoardVisibilityService} from '../../services/board-visibility.service';
 import {CellVisibilityState} from '../../shared/cell-visibility-state';
+import {CellTarget} from '../../shared/cell-target';
 
 @Component({
     selector: 'visibility-renderer',
@@ -14,7 +15,7 @@ export class VisibilityRendererComponent implements OnInit {
     @ViewChild('visibilityRenderCanvas') visibilityRenderCanvas: ElementRef;
     private ctx: CanvasRenderingContext2D;
 
-    private cellsToShow: Array<CellVisibilityState>;
+    private cellsToShow: Array<CellTarget>;
 
     constructor(
         private boardStateService: BoardStateService,
@@ -25,7 +26,15 @@ export class VisibilityRendererComponent implements OnInit {
 
     ngOnInit(): void {
         this.ctx = this.visibilityRenderCanvas.nativeElement.getContext('2d');
-        this.cellsToShow = this.boardVisibilityService.cellsVisibleFromCell(new XyPair(6, 3));
+
+
+
+
+        this.cellsToShow = this.boardVisibilityService.cellQuadsVisibleFromCell(new XyPair(6, 3));
+
+
+
+
         this.render();
     }
 
@@ -38,21 +47,11 @@ export class VisibilityRendererComponent implements OnInit {
         const map_height = this.boardStateService.mapDimY * this.boardStateService.cell_res;
         this.ctx.fillRect(0, 0, map_width, map_height);
 
-        for (const cellState of this.cellsToShow) {
-            if (cellState.topVisible) {
-                this.boardCanvasService.clear_N(this.ctx, cellState.location);
-            }
-            if (cellState.rightVisible) {
-                this.boardCanvasService.clear_E(this.ctx, cellState.location);
-            }
-            if (cellState.bottomVisible) {
-                this.boardCanvasService.clear_S(this.ctx, cellState.location);
-            }
-            if (cellState.leftVisible) {
-                this.boardCanvasService.clear_W(this.ctx, cellState.location);
-            }
+        for (const cellQuad of this.cellsToShow) {
+            this.boardCanvasService.clear_quad(this.ctx, cellQuad);
         }
 
         requestAnimationFrame(this.render);
     }
+
 }
