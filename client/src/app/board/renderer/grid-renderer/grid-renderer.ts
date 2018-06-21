@@ -29,11 +29,12 @@ export class GridRendererComponent implements OnInit {
       for (let x = 0; x < this.boardStateService.mapDimX; x += 1) {
         for (let y = 0; y < this.boardStateService.mapDimY; y += 1) {
           if (((x + y) % 2 === 0)) {
-            this.ctx.fillStyle = 'rgba(255, 255, 255, 0.03';
-            this.ctx.fillRect(x * this.boardStateService.cell_res, y * this.boardStateService.cell_res, this.boardStateService.cell_res, this.boardStateService.cell_res);
+            this.ctx.fillStyle = 'rgba(255, 255, 255, 0.15';
+            // this.ctx.fillStyle = 'rgba(255, 255, 255, 0.03';
+            this.ctx.fillRect(x * BoardStateService.cell_res, y * BoardStateService.cell_res, BoardStateService.cell_res, BoardStateService.cell_res);
           } else {
             this.ctx.fillStyle = 'rgba(0, 0, 0, 0.03';
-            this.ctx.fillRect(x * this.boardStateService.cell_res, y * this.boardStateService.cell_res, this.boardStateService.cell_res, this.boardStateService.cell_res);
+            this.ctx.fillRect(x * BoardStateService.cell_res, y * BoardStateService.cell_res, BoardStateService.cell_res, BoardStateService.cell_res);
           }
         }
       }

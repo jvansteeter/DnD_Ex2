@@ -22,7 +22,7 @@ export class BoardWallService {
 
     public addWall(loc: CellTarget, singleInstance = true) {
         if (!this.hasWall(loc)) {
-            this.wallData.set(loc.hash(), new Wall(loc, this.boardStateService.cell_res));
+            this.wallData.set(loc.hash(), new Wall(loc, BoardStateService.cell_res));
             switch (loc.region) {
                 case CellRegion.TOP_EDGE:
                     this.boardVisibilityService.blockNorth(loc.location);

@@ -18,7 +18,7 @@ export class BoardStateService {
     /***********************************************************************************
      * To be moved into encounter state
      ***********************************************************************************/
-    public cell_res = 50;
+    static cell_res = 50;
     public mapDimX = 10;
     public mapDimY = 8;
 

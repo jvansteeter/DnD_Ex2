@@ -15,9 +15,9 @@ export class BoardVisibilityService {
     ) {
         this.blockingSegments = new Set();
         this.blockingBitmap = [];
-        for (let x = 0; x < this.boardStateService.mapDimX * this.boardStateService.cell_res; x++) {
+        for (let x = 0; x < this.boardStateService.mapDimX * BoardStateService.cell_res; x++) {
             this.blockingBitmap[x] = [];
-            for (let y = 0; y < this.boardStateService.mapDimY * this.boardStateService.cell_res; y++) {
+            for (let y = 0; y < this.boardStateService.mapDimY * BoardStateService.cell_res; y++) {
                 this.blockingBitmap[x][y] = 0;
             }
         }
@@ -293,50 +293,50 @@ export class BoardVisibilityService {
 
     genLOSNorthPoints(x_cell: number, y_cell: number): Array<XyPair> {
         const returnMe = Array<XyPair>();
-        const _canvas = new XyPair(x_cell * this.boardStateService.cell_res, y_cell * this.boardStateService.cell_res);
+        const _canvas = new XyPair(x_cell * BoardStateService.cell_res, y_cell * BoardStateService.cell_res);
 
-        returnMe.push(new XyPair(Math.floor(_canvas.x + this.boardStateService.cell_res * (1 / 3)), Math.floor(_canvas.y + this.boardStateService.cell_res * (1 / 6))));
-        returnMe.push(new XyPair(Math.floor(_canvas.x + this.boardStateService.cell_res * (2 / 3)), Math.floor(_canvas.y + this.boardStateService.cell_res * (1 / 6))));
-        returnMe.push(new XyPair(Math.floor(_canvas.x + this.boardStateService.cell_res * (1 / 2)), Math.floor(_canvas.y + this.boardStateService.cell_res * (2 / 6))));
+        returnMe.push(new XyPair(Math.floor(_canvas.x + BoardStateService.cell_res * (1 / 3)), Math.floor(_canvas.y + BoardStateService.cell_res * (1 / 6))));
+        returnMe.push(new XyPair(Math.floor(_canvas.x + BoardStateService.cell_res * (2 / 3)), Math.floor(_canvas.y + BoardStateService.cell_res * (1 / 6))));
+        returnMe.push(new XyPair(Math.floor(_canvas.x + BoardStateService.cell_res * (1 / 2)), Math.floor(_canvas.y + BoardStateService.cell_res * (2 / 6))));
 
         return returnMe;
     }
 
     genLOSEastPoints(x_cell: number, y_cell: number): Array<XyPair> {
         const returnMe = Array<XyPair>();
-        const _canvas = new XyPair(x_cell * this.boardStateService.cell_res, y_cell * this.boardStateService.cell_res);
+        const _canvas = new XyPair(x_cell * BoardStateService.cell_res, y_cell * BoardStateService.cell_res);
 
-        returnMe.push(new XyPair(Math.floor(_canvas.x + this.boardStateService.cell_res * (5 / 6)), Math.floor(_canvas.y + this.boardStateService.cell_res * (1 / 3))));
-        returnMe.push(new XyPair(Math.floor(_canvas.x + this.boardStateService.cell_res * (5 / 6)), Math.floor(_canvas.y + this.boardStateService.cell_res * (2 / 3))));
-        returnMe.push(new XyPair(Math.floor(_canvas.x + this.boardStateService.cell_res * (4 / 6)), Math.floor(_canvas.y + this.boardStateService.cell_res * (1 / 2))));
+        returnMe.push(new XyPair(Math.floor(_canvas.x + BoardStateService.cell_res * (5 / 6)), Math.floor(_canvas.y + BoardStateService.cell_res * (1 / 3))));
+        returnMe.push(new XyPair(Math.floor(_canvas.x + BoardStateService.cell_res * (5 / 6)), Math.floor(_canvas.y + BoardStateService.cell_res * (2 / 3))));
+        returnMe.push(new XyPair(Math.floor(_canvas.x + BoardStateService.cell_res * (4 / 6)), Math.floor(_canvas.y + BoardStateService.cell_res * (1 / 2))));
 
         return returnMe;
     }
 
     genLOSSouthPoints(x_cell: number, y_cell: number): Array<XyPair> {
         const returnMe = Array<XyPair>();
-        const _canvas = new XyPair(x_cell * this.boardStateService.cell_res, y_cell * this.boardStateService.cell_res);
+        const _canvas = new XyPair(x_cell * BoardStateService.cell_res, y_cell * BoardStateService.cell_res);
 
-        returnMe.push(new XyPair(Math.floor(_canvas.x + this.boardStateService.cell_res * (1 / 3)), Math.floor(_canvas.y + this.boardStateService.cell_res * (5 / 6))));
-        returnMe.push(new XyPair(Math.floor(_canvas.x + this.boardStateService.cell_res * (2 / 3)), Math.floor(_canvas.y + this.boardStateService.cell_res * (5 / 6))));
-        returnMe.push(new XyPair(Math.floor(_canvas.x + this.boardStateService.cell_res * (1 / 2)), Math.floor(_canvas.y + this.boardStateService.cell_res * (4 / 6))));
+        returnMe.push(new XyPair(Math.floor(_canvas.x + BoardStateService.cell_res * (1 / 3)), Math.floor(_canvas.y + BoardStateService.cell_res * (5 / 6))));
+        returnMe.push(new XyPair(Math.floor(_canvas.x + BoardStateService.cell_res * (2 / 3)), Math.floor(_canvas.y + BoardStateService.cell_res * (5 / 6))));
+        returnMe.push(new XyPair(Math.floor(_canvas.x + BoardStateService.cell_res * (1 / 2)), Math.floor(_canvas.y + BoardStateService.cell_res * (4 / 6))));
 
         return returnMe;
     }
 
     genLOSWestPoints(x_cell: number, y_cell: number): Array<XyPair> {
         const returnMe = Array<XyPair>();
-        const _canvas = new XyPair(x_cell * this.boardStateService.cell_res, y_cell * this.boardStateService.cell_res);
+        const _canvas = new XyPair(x_cell * BoardStateService.cell_res, y_cell * BoardStateService.cell_res);
 
-        returnMe.push(new XyPair(Math.floor(_canvas.x + this.boardStateService.cell_res * (1 / 6)), Math.floor(_canvas.y + this.boardStateService.cell_res * (1 / 3))));
-        returnMe.push(new XyPair(Math.floor(_canvas.x + this.boardStateService.cell_res * (1 / 6)), Math.floor(_canvas.y + this.boardStateService.cell_res * (2 / 3))));
-        returnMe.push(new XyPair(Math.floor(_canvas.x + this.boardStateService.cell_res * (2 / 6)), Math.floor(_canvas.y + this.boardStateService.cell_res * (1 / 2))));
+        returnMe.push(new XyPair(Math.floor(_canvas.x + BoardStateService.cell_res * (1 / 6)), Math.floor(_canvas.y + BoardStateService.cell_res * (1 / 3))));
+        returnMe.push(new XyPair(Math.floor(_canvas.x + BoardStateService.cell_res * (1 / 6)), Math.floor(_canvas.y + BoardStateService.cell_res * (2 / 3))));
+        returnMe.push(new XyPair(Math.floor(_canvas.x + BoardStateService.cell_res * (2 / 6)), Math.floor(_canvas.y + BoardStateService.cell_res * (1 / 2))));
 
         return returnMe;
     }
 
     cellHasLOSToNorth(origin_cell: XyPair, target_cell: XyPair): boolean {
-        const origin_point = new XyPair(origin_cell.x * this.boardStateService.cell_res + this.boardStateService.cell_res / 2, origin_cell.y * this.boardStateService.cell_res + this.boardStateService.cell_res / 2);
+        const origin_point = new XyPair(origin_cell.x * BoardStateService.cell_res + BoardStateService.cell_res / 2, origin_cell.y * BoardStateService.cell_res + BoardStateService.cell_res / 2);
         const target_points = this.genLOSNorthPoints(target_cell.x, target_cell.y);
         let traceCount = 0;
         for (const target_point of target_points) {
@@ -348,7 +348,7 @@ export class BoardVisibilityService {
     }
 
     cellHasLOSToEast(origin_cell: XyPair, target_cell: XyPair): boolean {
-        const origin_point = new XyPair(origin_cell.x * this.boardStateService.cell_res + this.boardStateService.cell_res / 2, origin_cell.y * this.boardStateService.cell_res + this.boardStateService.cell_res / 2);
+        const origin_point = new XyPair(origin_cell.x * BoardStateService.cell_res + BoardStateService.cell_res / 2, origin_cell.y * BoardStateService.cell_res + BoardStateService.cell_res / 2);
         const target_points = this.genLOSEastPoints(target_cell.x, target_cell.y);
         let traceCount = 0;
         for (const target_point of target_points) {
@@ -360,7 +360,7 @@ export class BoardVisibilityService {
     }
 
     cellHasLOSToSouth(origin_cell: XyPair, target_cell: XyPair): boolean {
-        const origin_point = new XyPair(origin_cell.x * this.boardStateService.cell_res + this.boardStateService.cell_res / 2, origin_cell.y * this.boardStateService.cell_res + this.boardStateService.cell_res / 2);
+        const origin_point = new XyPair(origin_cell.x * BoardStateService.cell_res + BoardStateService.cell_res / 2, origin_cell.y * BoardStateService.cell_res + BoardStateService.cell_res / 2);
         const target_points = this.genLOSSouthPoints(target_cell.x, target_cell.y);
         let traceCount = 0;
         for (const target_point of target_points) {
@@ -372,7 +372,7 @@ export class BoardVisibilityService {
     }
 
     cellHasLOSToWest(origin_cell: XyPair, target_cell: XyPair): boolean {
-        const origin_point = new XyPair(origin_cell.x * this.boardStateService.cell_res + this.boardStateService.cell_res / 2, origin_cell.y * this.boardStateService.cell_res + this.boardStateService.cell_res / 2);
+        const origin_point = new XyPair(origin_cell.x * BoardStateService.cell_res + BoardStateService.cell_res / 2, origin_cell.y * BoardStateService.cell_res + BoardStateService.cell_res / 2);
         const target_points = this.genLOSWestPoints(target_cell.x, target_cell.y);
         let traceCount = 0;
         for (const target_point of target_points) {
@@ -389,8 +389,8 @@ export class BoardVisibilityService {
 
     private northSet(cell: XyPair): Map<string, XyPair> {
         const returnMe = new Map<string, XyPair>();
-        for (let y = cell.y * this.boardStateService.cell_res; y >= (cell.y * this.boardStateService.cell_res) - 1; y--) {
-            for (let x = cell.x * this.boardStateService.cell_res; x < cell.x * this.boardStateService.cell_res + this.boardStateService.cell_res; x++) {
+        for (let y = cell.y * BoardStateService.cell_res; y >= (cell.y * BoardStateService.cell_res) - 1; y--) {
+            for (let x = cell.x * BoardStateService.cell_res; x < cell.x * BoardStateService.cell_res + BoardStateService.cell_res; x++) {
                 const pair = new XyPair(x, y);
                 returnMe.set(pair.hash(), pair);
             }
@@ -400,8 +400,8 @@ export class BoardVisibilityService {
 
     private westSet(cell: XyPair): Map<string, XyPair> {
         const returnMe = new Map<string, XyPair>();
-        for (let x = cell.x * this.boardStateService.cell_res; x >= (cell.x * this.boardStateService.cell_res) - 1; x--) {
-            for (let y = cell.y * this.boardStateService.cell_res; y < cell.y * this.boardStateService.cell_res + this.boardStateService.cell_res; y++) {
+        for (let x = cell.x * BoardStateService.cell_res; x >= (cell.x * BoardStateService.cell_res) - 1; x--) {
+            for (let y = cell.y * BoardStateService.cell_res; y < cell.y * BoardStateService.cell_res + BoardStateService.cell_res; y++) {
                 const pair = new XyPair(x, y);
                 returnMe.set(pair.hash(), pair);
             }
@@ -411,20 +411,20 @@ export class BoardVisibilityService {
 
     private fwdSet(cell: XyPair): Map<string, XyPair> {
         const returnMe = new Map<string, XyPair>();
-        let y = cell.y * this.boardStateService.cell_res + this.boardStateService.cell_res - 1;
-        for (let x = cell.x * this.boardStateService.cell_res; x < cell.x * this.boardStateService.cell_res + this.boardStateService.cell_res; x++) {
+        let y = cell.y * BoardStateService.cell_res + BoardStateService.cell_res - 1;
+        for (let x = cell.x * BoardStateService.cell_res; x < cell.x * BoardStateService.cell_res + BoardStateService.cell_res; x++) {
             const pair = new XyPair(x, y);
             returnMe.set(pair.hash(), pair);
             y--;
         }
-        y = cell.y * this.boardStateService.cell_res + this.boardStateService.cell_res - 2;
-        for (let x = cell.x * this.boardStateService.cell_res; x < cell.x * this.boardStateService.cell_res + this.boardStateService.cell_res - 1; x++) {
+        y = cell.y * BoardStateService.cell_res + BoardStateService.cell_res - 2;
+        for (let x = cell.x * BoardStateService.cell_res; x < cell.x * BoardStateService.cell_res + BoardStateService.cell_res - 1; x++) {
             const pair = new XyPair(x, y);
             returnMe.set(pair.hash(), pair);
             y--;
         }
-        y = cell.y * this.boardStateService.cell_res + this.boardStateService.cell_res - 1;
-        for (let x = cell.x * this.boardStateService.cell_res + 1; x < cell.x * this.boardStateService.cell_res + this.boardStateService.cell_res; x++) {
+        y = cell.y * BoardStateService.cell_res + BoardStateService.cell_res - 1;
+        for (let x = cell.x * BoardStateService.cell_res + 1; x < cell.x * BoardStateService.cell_res + BoardStateService.cell_res; x++) {
             const pair = new XyPair(x, y);
             returnMe.set(pair.hash(), pair);
             y--;
@@ -434,20 +434,20 @@ export class BoardVisibilityService {
 
     private bkwSet(cell: XyPair): Map<string, XyPair> {
         const returnMe = new Map<string, XyPair>();
-        let y = cell.y * this.boardStateService.cell_res;
-        for (let x = cell.x * this.boardStateService.cell_res; x < cell.x * this.boardStateService.cell_res + this.boardStateService.cell_res; x++) {
+        let y = cell.y * BoardStateService.cell_res;
+        for (let x = cell.x * BoardStateService.cell_res; x < cell.x * BoardStateService.cell_res + BoardStateService.cell_res; x++) {
             const pair = new XyPair(x, y);
             returnMe.set(pair.hash(), pair);
             y++;
         }
-        y = cell.y * this.boardStateService.cell_res;
-        for (let x = cell.x * this.boardStateService.cell_res + 1; x < cell.x * this.boardStateService.cell_res + this.boardStateService.cell_res; x++) {
+        y = cell.y * BoardStateService.cell_res;
+        for (let x = cell.x * BoardStateService.cell_res + 1; x < cell.x * BoardStateService.cell_res + BoardStateService.cell_res; x++) {
             const pair = new XyPair(x, y);
             returnMe.set(pair.hash(), pair);
             y++;
         }
-        y = cell.y * this.boardStateService.cell_res + 1;
-        for (let x = cell.x * this.boardStateService.cell_res; x < cell.x * this.boardStateService.cell_res + this.boardStateService.cell_res - 1; x++) {
+        y = cell.y * BoardStateService.cell_res + 1;
+        for (let x = cell.x * BoardStateService.cell_res; x < cell.x * BoardStateService.cell_res + BoardStateService.cell_res - 1; x++) {
             const pair = new XyPair(x, y);
             returnMe.set(pair.hash(), pair);
             y++;

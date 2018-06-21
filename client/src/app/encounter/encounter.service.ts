@@ -51,8 +51,8 @@ export class EncounterService extends IsReadyService {
 					if (this.popService.popIsActive(player._id)) {
 						this.popService.clearPlayerPop(player._id);
 					} else {
-						const x = (loc_cell.x + 1) * this.boardStateService.cell_res;
-						const y = (loc_cell.y) * this.boardStateService.cell_res;
+						const x = (loc_cell.x + 1) * BoardStateService.cell_res;
+						const y = (loc_cell.y) * BoardStateService.cell_res;
 						this.popService.addPlayerPop(pop_origin.x, pop_origin.y, player);
 					}
 				}
