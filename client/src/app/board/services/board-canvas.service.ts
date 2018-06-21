@@ -210,18 +210,20 @@ export class BoardCanvasService {
     }
 
     stroke_polygon(ctx: CanvasRenderingContext2D, cell_target_points: Array<CellTarget>, stroke_code: string | CanvasGradient | CanvasPattern) {
-        let process_point = CellTargetStatics.getPointCanvasCoor(cell_target_points[0]);
         ctx.strokeStyle = stroke_code;
         ctx.lineWidth = 5;
         ctx.lineJoin = 'round';
         ctx.lineCap = 'round';
 
         ctx.beginPath();
+        let process_point;
         let index;
-        for (index = 1; index < cell_target_points.length; index++) {
+        for (index = 0; index < cell_target_points.length; index++) {
             process_point = CellTargetStatics.getPointCanvasCoor(cell_target_points[index]);
             ctx.lineTo(process_point.x, process_point.y);
         }
+        process_point = CellTargetStatics.getPointCanvasCoor(cell_target_points[0]);
+        ctx.lineTo(process_point.x, process_point.y);
         ctx.stroke();
     }
 
