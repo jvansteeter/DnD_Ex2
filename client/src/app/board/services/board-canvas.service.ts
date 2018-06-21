@@ -322,6 +322,23 @@ export class BoardCanvasService {
         ctx.restore();
     }
 
+    clear_polygon(ctx: CanvasRenderingContext2D, points: Array<CellTarget>) {
+        ctx.save();
+
+        ctx.beginPath();
+        let process_point;
+        let index;
+        for (index = 0; index < points.length; index++) {
+            process_point = CellTargetStatics.getPointCanvasCoor(points[index]);
+            ctx.lineTo(process_point.x, process_point.y);
+        }
+        process_point = CellTargetStatics.getPointCanvasCoor(points[0]);
+        ctx.lineTo(process_point.x, process_point.y);
+        ctx.clip();
+        this.clear_canvas(ctx);
+        ctx.restore();
+    }
+
     /*****************************************************************************************************
      *  Cell FILL region functions
      *****************************************************************************************************/

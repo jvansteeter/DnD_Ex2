@@ -50,20 +50,22 @@ export class VisibilityRendererComponent implements OnInit {
         this.boardCanvasService.clear_canvas(this.ctx);
         this.boardCanvasService.updateTransform(this.ctx);
 
-        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+        this.ctx.fillStyle = 'rgba(0, 0, 0, 1.0)';
         const map_width = this.boardStateService.mapDimX * BoardStateService.cell_res;
         const map_height = this.boardStateService.mapDimY * BoardStateService.cell_res;
         this.ctx.fillRect(0, 0, map_width, map_height);
 
-        for (const cellQuad of this.cellsToShow) {
-            this.boardCanvasService.clear_quad(this.ctx, cellQuad);
-        }
+        // for (const cellQuad of this.cellsToShow) {
+        //     this.boardCanvasService.clear_quad(this.ctx, cellQuad);
+        // }
 
-        for (const cellQuad of this.testFill) {
-            this.boardCanvasService.draw_fill_quad(this.ctx, cellQuad, 'rgba(255,215,0, 0.3)');
-        }
+        this.boardCanvasService.clear_polygon(this.ctx, this.testBorder);
 
-        this.boardCanvasService.stroke_polygon(this.ctx, this.testBorder, 'rgba(255, 215, 0, 1.0)');
+        // for (const cellQuad of this.testFill) {
+        //     this.boardCanvasService.draw_fill_quad(this.ctx, cellQuad, 'rgba(255,215,0, 0.3)');
+        // }
+
+        // this.boardCanvasService.stroke_polygon(this.ctx, this.testBorder, 'rgba(255, 215, 0, 1.0)');
 
         requestAnimationFrame(this.render);
     }
