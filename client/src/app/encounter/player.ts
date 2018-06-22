@@ -18,7 +18,6 @@ export class Player {
     traversableCells_far: Array<XyPair>;
 
     constructor(name: string, hp: number, maxHp: number, ac: number, x?: number, y?: number, token_url?: string) {
-    	  console.log('in player constructor')
         this.name = name;
         this.hp = hp;
         this.maxHp = maxHp;

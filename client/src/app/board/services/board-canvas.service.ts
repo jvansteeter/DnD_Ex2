@@ -343,6 +343,24 @@ export class BoardCanvasService {
      *  Cell FILL region functions
      *****************************************************************************************************/
 
+    draw_fill_polygon(ctx: CanvasRenderingContext2D, points: Array<CellTarget>, fill_code: string | CanvasGradient | CanvasPattern) {
+        ctx.save();
+
+        ctx.fillStyle = fill_code;
+
+        ctx.beginPath();
+        let process_point;
+        let index;
+        for (index = 0; index < points.length; index++) {
+            process_point = CellTargetStatics.getPointCanvasCoor(points[index]);
+            ctx.lineTo(process_point.x, process_point.y);
+        }
+        process_point = CellTargetStatics.getPointCanvasCoor(points[0]);
+        ctx.lineTo(process_point.x, process_point.y);
+        ctx.fill();
+        ctx.restore();
+    }
+
     draw_fill_quad(ctx: CanvasRenderingContext2D, target: CellTarget, fill_code: string | CanvasGradient | CanvasPattern) {
         if (target.region === CellRegion.TOP_QUAD) {
             this.draw_fill_N(ctx, target.location, fill_code);

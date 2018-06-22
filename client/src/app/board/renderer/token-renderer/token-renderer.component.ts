@@ -21,6 +21,7 @@ export class TokenRendererComponent implements OnInit {
 
     ngOnInit(): void {
         this.ctx = this.tokenRenderCanvas.nativeElement.getContext('2d');
+        this.encounterService.init_players();
         this.render();
     }
 
