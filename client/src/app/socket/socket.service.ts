@@ -3,6 +3,7 @@ import { Subject } from "rxjs/Subject";
 import { SocketApiLoader } from './socketApiLoader';
 import { StompService } from "@stomp/ng2-stompjs";
 import { Message } from '@stomp/stompjs';
+import { timer } from 'rxjs/internal/observable/timer';
 
 declare const io: any;
 
@@ -23,6 +24,9 @@ export class SocketService {
 			console.log('hello queue')
 			console.log(message)
 		});
+		timer(5000).subscribe(() => {
+			this.stompService.publish('/queue/hello', 'echo message');
+		})
 	}
 
 	on(eventName: string): Subject<any> {

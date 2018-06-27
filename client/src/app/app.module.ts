@@ -28,6 +28,7 @@ import { MainTableComponent } from './main-table/main-table.component';
 import { MainNavModule } from './main-nav/main-nav.module';
 import { StompConfig, StompService } from "@stomp/ng2-stompjs";
 import { StompConfiguration } from "./socket/StompConfig";
+import { MqService } from './mq/mq.service';
 
 @NgModule({
 	imports: [
@@ -65,7 +66,8 @@ import { StompConfiguration } from "./socket/StompConfig";
 		SocketService,
 		UserDataService,
 		StompService,
-		{ provide: StompConfig, useValue: StompConfiguration }
+		{provide: StompConfig, useValue: StompConfiguration},
+		MqService,
 	],
 	bootstrap: [AppComponent]
 })
