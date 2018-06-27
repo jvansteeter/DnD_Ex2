@@ -1,12 +1,15 @@
 import * as mongoose from 'mongoose';
 import { UserModel } from '../models/user.model';
 import { Promise } from 'bluebird';
+import { MqService } from '../../services/mq.service';
 
 export class UserRepository {
     private user: mongoose.Model<mongoose.Document>;
+    private mqSerice: MqService;
 
     constructor() {
         this.user = mongoose.model('User');
+        this.mqSerice = new MqService();
     }
 
     public create(username: string, password: string, firstName?: string, lastName?: string): Promise<UserModel> {
@@ -26,6 +29,8 @@ export class UserRepository {
                     newUser.setLastName(lastName);
                 }
 
+                console.log('gonna try calling the mq service')
+                this.mqSerice.createMqAccount(newUser);
                 resolve(newUser);
             });
         });

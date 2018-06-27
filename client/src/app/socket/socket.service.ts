@@ -2,8 +2,7 @@ import { Injectable } from "@angular/core";
 import { Subject } from "rxjs/Subject";
 import { SocketApiLoader } from './socketApiLoader';
 import { StompService } from "@stomp/ng2-stompjs";
-import { Message } from '@stomp/stompjs';
-import { timer } from 'rxjs/internal/observable/timer';
+import { MqService } from '../mq/mq.service';
 
 declare const io: any;
 
@@ -12,7 +11,7 @@ export class SocketService {
 	private socketLoadedPromise;
 	private socket;
 
-	constructor(private stompService: StompService) {
+	constructor(private mqService: MqService) {
 		this.socketLoadedPromise = new Promise((resolve, reject) => {
 			new SocketApiLoader().load().then(() => {
 				this.socket = io.connect();
@@ -20,13 +19,19 @@ export class SocketService {
 			}).catch(error => reject(error));
 		});
 
-		this.stompService.subscribe('/queue/hello').subscribe((message: Message) => {
-			console.log('hello queue')
-			console.log(message)
-		});
-		timer(5000).subscribe(() => {
-			this.stompService.publish('/queue/hello', 'echo message');
-		})
+		// this.stompService.subscribe('/exchange/encounterExchange/encounter.hello').subscribe((message: Message) => {
+		// 	console.log('hello queue')
+		// 	console.log(message)
+		// });
+		// let echo = () => {
+		// 	timer(2000).subscribe(() => {
+		// 		console.log('publishing')
+		// 		this.stompService.publish('/exchange/encounterExchange/encounter.hello', 'echo message', {header: 'test header'});
+		// 		// echo();
+		// 	});
+		// };
+		// echo();
+
 	}
 
 	on(eventName: string): Subject<any> {

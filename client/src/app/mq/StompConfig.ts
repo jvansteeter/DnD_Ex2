@@ -3,8 +3,8 @@ import { StompConfig } from "@stomp/ng2-stompjs";
 export const StompConfiguration: StompConfig = {
 	url: 'ws://' + window.location.hostname + ':15674/ws',
 	headers: {
-		login: 'guest',
-		passcode: 'guest'
+		login: undefined,
+		passcode: undefined
 	},
 	// How often to heartbeat?
 	// Interval in milliseconds, set to 0 to disable

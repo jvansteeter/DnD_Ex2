@@ -5,47 +5,53 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class UserProfileService {
-    public userProfile: UserProfile;
-    private profilePromise: Promise<void>;
+	public userProfile: UserProfile;
+	private passwordHash: string;
+	private profilePromise: Promise<void>;
 
-    constructor(private http: HttpClient) {
-        this.profilePromise = this.getProfileData();
-    }
+	constructor(private http: HttpClient) {
+		this.profilePromise = this.getProfileData();
+	}
 
-    public getUserProfile(): Promise<UserProfile> {
-        return new Promise((resolve, reject) => {
-            this.profilePromise.then(() => {
-                resolve(this.userProfile);
-            }).catch(error => reject(error));
-        });
-    }
+	public getUserProfile(): Promise<UserProfile> {
+		return new Promise((resolve, reject) => {
+			this.profilePromise.then(() => {
+				resolve(this.userProfile);
+			}).catch(error => reject(error));
+		});
+	}
 
-    public getProfilePhotoUrl(): string {
-        if (this.userProfile) {
-            return this.userProfile.profilePhotoUrl;
-        }
+	public getProfilePhotoUrl(): string {
+		if (this.userProfile) {
+			return this.userProfile.profilePhotoUrl;
+		}
 
-        return '';
-    }
+		return '';
+	}
 
-    public getUserId(): string {
-        if (this.userProfile) {
-            return this.userProfile._id;
-        }
+	public getUserId(): string {
+		if (this.userProfile) {
+			return this.userProfile._id;
+		}
 
-        return '';
-    }
+		return '';
+	}
 
-    public setProfilePhotoUrl(url: string): void {
-        this.http.post('api/user/profilephoto', {imageUrl: url}, {responseType: 'text'}).subscribe();
-    }
+	public setProfilePhotoUrl(url: string): void {
+		this.http.post('api/user/profilephoto', {imageUrl: url}, {responseType: 'text'}).subscribe();
+	}
 
-    private getProfileData(): Promise<void> {
-        return new Promise((resolve, reject) => {
-            this.http.get('/api/user/profile', {responseType: 'json'}).subscribe((data) => {
-                this.userProfile = new UserProfile(data);
-                resolve();
-            }, error => reject(error));
-        });
-    }
+	public getPasswordHash(): string {
+		return this.passwordHash;
+	}
+
+	private getProfileData(): Promise<void> {
+		return new Promise((resolve, reject) => {
+			this.http.get('/api/user/profile', {responseType: 'json'}).subscribe((data) => {
+        this.passwordHash = data['passwordHash'];
+				this.userProfile = new UserProfile(data);
+				resolve();
+			}, error => reject(error));
+		});
+	}
 }

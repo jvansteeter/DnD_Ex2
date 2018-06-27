@@ -43,7 +43,7 @@ export class UserRouter {
             try {
                 const users: UserModel[] = await this.userRepository.findBySearch(criteria);
                 for (let i = 0; i < users.length; i++) {
-                    users[i].passwordHash = undefined;
+                    delete users[i].passwordHash;
                 }
                 res.json(users);
             }

@@ -48,7 +48,7 @@ export class SocialService {
                 let requestsFromUsers: UserModel[] = [];
                 requests.forEach((request: FriendRequestModel) => {
                     this.userRepo.findById(request.fromUserId).then((fromUser: UserModel) => {
-                        fromUser.passwordHash = undefined;
+                        delete fromUser.passwordHash;
                         requestsFromUsers.push(fromUser);
                         if (--count === 0) {
                             resolve(requestsFromUsers);
@@ -115,7 +115,7 @@ export class SocialService {
                  let friendList: UserModel[] = [];
                  friends.forEach((friend: FriendModel) => {
                      this.userRepo.findById(friend.friendId).then((user: UserModel) => {
-                         user.passwordHash = undefined;
+                         delete user.passwordHash;
                          friendList.push(user);
 
                          if (--friendCount === 0) {

@@ -32,6 +32,7 @@ import RuleSetRouter from './routes/ruleSet.router';
 import SocialRouter from './routes/social.router';
 import CampaignRouter from './routes/campaign.router';
 import EncounterRouter from './routes/encounter.router';
+import { MqService } from './services/mq.service';
 
 /***********************************************************************************************************************
  * EXPRESS APP
@@ -123,6 +124,10 @@ class App {
     this.app.get('*', (req, res) => {
       res.redirect('/');
     });
+
+    new MqService().subscribeAllEncounters().subscribe((message) => {
+    	console.log('in subscribe method')
+    })
   }
 
   private isAuthenticated(req: Request, res: Response, next: NextFunction): void {

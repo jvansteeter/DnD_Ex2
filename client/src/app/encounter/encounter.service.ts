@@ -14,6 +14,7 @@ import {map, mergeMap, tap} from 'rxjs/operators';
 import {BoardPlayerService} from '../board/services/board-player.service';
 import {BoardVisibilityService} from '../board/services/board-visibility.service';
 import {CellPolygonGroup} from '../board/shared/cell-polygon-group';
+import { MqService } from '../mq/mq.service';
 
 @Injectable()
 export class EncounterService extends IsReadyService {
@@ -31,7 +32,8 @@ export class EncounterService extends IsReadyService {
         protected boardTraverseService: BoardTraverseService,
         protected boardVisibilityService: BoardVisibilityService,
         protected boardPlayerService: BoardPlayerService,
-        protected encounterRepo: EncounterRepository
+        protected encounterRepo: EncounterRepository,
+        protected mqService: MqService
     ) {
         super();
     }
@@ -39,6 +41,7 @@ export class EncounterService extends IsReadyService {
     public init(): void {
         this.encounterRepo.getEncounter(this.encounterId).subscribe((encounter: EncounterStateData) => {
             this.encounterState = new EncounterState(encounter);
+            this.mqService.getEncounterMessages(this.encounterId).subscribe();
             this.setReady(true);
         });
     }

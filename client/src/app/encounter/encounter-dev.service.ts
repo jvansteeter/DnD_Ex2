@@ -12,6 +12,7 @@ import { LightValue } from '../board/shared/enum/light-value';
 import {BoardPlayerService} from '../board/services/board-player.service';
 import {BoardVisibilityService} from '../board/services/board-visibility.service';
 import {CellPolygonGroup} from '../board/shared/cell-polygon-group';
+import { MqService } from '../mq/mq.service';
 
 @Injectable()
 export class EncounterDevService extends EncounterService{
@@ -23,7 +24,8 @@ export class EncounterDevService extends EncounterService{
         boardTraverseService: BoardTraverseService,
         boardVisibilityService: BoardVisibilityService,
         boardPlayerService: BoardPlayerService,
-        encounterRepo: EncounterRepository
+        encounterRepo: EncounterRepository,
+        mqService: MqService
     ) {
         super(
             boardStateService,
@@ -31,7 +33,8 @@ export class EncounterDevService extends EncounterService{
             boardTraverseService,
             boardVisibilityService,
             boardPlayerService,
-            encounterRepo
+            encounterRepo,
+		        mqService
         );
 
         // manually instate the encounterState for dev mode

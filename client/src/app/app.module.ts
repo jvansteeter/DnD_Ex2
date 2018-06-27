@@ -26,8 +26,7 @@ import { UserDataService } from './utilities/user-data/userData.service';
 import { MainDashComponent } from './main-dash/main-dash.component';
 import { MainTableComponent } from './main-table/main-table.component';
 import { MainNavModule } from './main-nav/main-nav.module';
-import { StompConfig, StompService } from "@stomp/ng2-stompjs";
-import { StompConfiguration } from "./socket/StompConfig";
+import { StompRService } from "@stomp/ng2-stompjs";
 import { MqService } from './mq/mq.service';
 
 @NgModule({
@@ -65,8 +64,7 @@ import { MqService } from './mq/mq.service';
 	providers: [
 		SocketService,
 		UserDataService,
-		StompService,
-		{provide: StompConfig, useValue: StompConfiguration},
+		StompRService,
 		MqService,
 	],
 	bootstrap: [AppComponent]

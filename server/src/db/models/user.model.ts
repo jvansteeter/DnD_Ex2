@@ -1,15 +1,16 @@
 import * as mongoose from 'mongoose';
 import * as bcrypt from 'bcryptjs';
+import { UserData } from '../../../../shared/types/user-data';
 // import Promise from 'bluebird';
 
 
-export class UserModel extends mongoose.Schema {
+export class UserModel extends mongoose.Schema implements UserData {
     public _id;
     public username: string;
     public profilePhotoUrl: string;
     public firstName: string;
     public lastName: string;
-    public passwordHash;
+    public passwordHash: string;
 
     constructor() {
         super ({
