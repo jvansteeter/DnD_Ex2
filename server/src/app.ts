@@ -126,7 +126,7 @@ class App {
     });
 
     new MqService().subscribeAllEncounters().subscribe((message) => {
-    	console.log('in subscribe method')
+    	console.log(message)
     })
   }
 

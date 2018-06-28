@@ -4,57 +4,56 @@ import { Promise } from 'bluebird';
 import { MqService } from '../../services/mq.service';
 
 export class UserRepository {
-    private user: mongoose.Model<mongoose.Document>;
-    private mqSerice: MqService;
+	private user: mongoose.Model<mongoose.Document>;
+	private mqSerice: MqService;
 
-    constructor() {
-        this.user = mongoose.model('User');
-        this.mqSerice = new MqService();
-    }
+	constructor() {
+		this.user = mongoose.model('User');
+		this.mqSerice = new MqService();
+	}
 
-    public create(username: string, password: string, firstName?: string, lastName?: string): Promise<UserModel> {
-        return new Promise((resolve, reject) => {
-            this.user.create({
-                username: username
-            }, (error, newUser) => {
-                if (error) {
-                    reject (error);
-                    return;
-                }
-                newUser.setPassword(password);
-                if (firstName) {
-                    newUser.setFirstName(firstName);
-                }
-                if (lastName) {
-                    newUser.setLastName(lastName);
-                }
+	public create(username: string, password: string, firstName?: string, lastName?: string): Promise<UserModel> {
+		return new Promise((resolve, reject) => {
+			this.user.create({
+				username: username
+			}, async (error, newUser) => {
+				if (error) {
+					reject(error);
+					return;
+				}
+				newUser.setPassword(password);
+				if (firstName) {
+					newUser.setFirstName(firstName);
+				}
+				if (lastName) {
+					newUser.setLastName(lastName);
+				}
 
-                console.log('gonna try calling the mq service')
-                this.mqSerice.createMqAccount(newUser);
-                resolve(newUser);
-            });
-        });
-    }
+				await this.mqSerice.createMqAccount(newUser);
+				resolve(newUser);
+			});
+		});
+	}
 
-    public findById(id: string): Promise<UserModel> {
-        return this.user.findById(id);
-    }
+	public findById(id: string): Promise<UserModel> {
+		return this.user.findById(id);
+	}
 
-    public findBySearch(searchCriteria: string): Promise<UserModel[]> {
-        let regexp = new RegExp('.*' + searchCriteria + '.*', 'i');
-        return new Promise((resolve, reject) => {
-            this.user.find({username: regexp}, (error, users: UserModel[]) => {
-                if (error) {
-                    reject(error);
-                    return;
-                }
+	public findBySearch(searchCriteria: string): Promise<UserModel[]> {
+		let regexp = new RegExp('.*' + searchCriteria + '.*', 'i');
+		return new Promise((resolve, reject) => {
+			this.user.find({username: regexp}, (error, users: UserModel[]) => {
+				if (error) {
+					reject(error);
+					return;
+				}
 
-                resolve(users);
-            });
-        });
-    }
+				resolve(users);
+			});
+		});
+	}
 
-    public findByUsername(username: string): Promise<UserModel> {
-        return this.user.findOne({username: username});
-    }
+	public findByUsername(username: string): Promise<UserModel> {
+		return this.user.findOne({username: username});
+	}
 }
