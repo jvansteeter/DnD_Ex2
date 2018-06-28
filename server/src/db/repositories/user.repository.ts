@@ -1,7 +1,8 @@
 import * as mongoose from 'mongoose';
 import { UserModel } from '../models/user.model';
 import { Promise } from 'bluebird';
-import { MqProxy } from '../../services/mqProxy';
+import { MqProxy } from '../../mq/mqProxy';
+import { MqServiceSingleton } from '../../mq/mq.service';
 
 export class UserRepository {
 	private user: mongoose.Model<mongoose.Document>;
@@ -29,7 +30,7 @@ export class UserRepository {
 					newUser.setLastName(lastName);
 				}
 
-				await this.mqSerice.createMqAccount(newUser);
+				await MqServiceSingleton.createMqAccount(newUser);
 				resolve(newUser);
 			});
 		});

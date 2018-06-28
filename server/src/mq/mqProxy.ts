@@ -45,7 +45,7 @@ export class MqProxy {
 		}
 	}
 
-	public subscribeAllEncounters(): Observable<any> {
+	public ObserveAllEncounters(): Observable<any> {
 		if (!this.connection) {
 			return throwError('Not connected to MQ Server');
 		}
@@ -152,3 +152,5 @@ export class MqProxy {
 		});
 	}
 }
+
+export const MqProxySingleton: MqProxy = new MqProxy();

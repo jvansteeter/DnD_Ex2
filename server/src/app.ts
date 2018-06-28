@@ -32,7 +32,8 @@ import RuleSetRouter from './routes/ruleSet.router';
 import SocialRouter from './routes/social.router';
 import CampaignRouter from './routes/campaign.router';
 import EncounterRouter from './routes/encounter.router';
-import { MqProxy } from './services/mqProxy';
+import { MqProxy, MqProxySingleton } from './mq/mqProxy';
+import { MqService, MqServiceSingleton } from './mq/mq.service';
 
 /***********************************************************************************************************************
  * EXPRESS APP
@@ -50,6 +51,7 @@ class App {
     this.config().then(() => {
 	    this.middleware();
 	    this.routes();
+	    this.handleMqMessages();
     });
   }
 
@@ -62,12 +64,12 @@ class App {
     }));
 
     // mongodb and mongoose
-    mongoose.connect('mongodb://localhost/ex2', {
+    await mongoose.connect('mongodb://localhost/ex2', {
       useMongoClient: true,
       promiseLibrary: bluebird
     });
 
-    this.mqProxy = new MqProxy();
+    this.mqProxy = MqProxySingleton;
     await this.mqProxy.connect();
 
     this.app.use(passport.initialize());
@@ -129,12 +131,10 @@ class App {
     this.app.get('*', (req, res) => {
       res.redirect('/');
     });
+  }
 
-    this.mqProxy.subscribeAllEncounters().subscribe((message) => {
-    	console.log(message)
-	    console.log('Headers:', message.properties)
-	    console.log(message.content.toString())
-    })
+  private handleMqMessages(): void {
+	  MqServiceSingleton.handleMessages();
   }
 
   private isAuthenticated(req: Request, res: Response, next: NextFunction): void {
