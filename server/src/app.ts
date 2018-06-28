@@ -32,7 +32,7 @@ import RuleSetRouter from './routes/ruleSet.router';
 import SocialRouter from './routes/social.router';
 import CampaignRouter from './routes/campaign.router';
 import EncounterRouter from './routes/encounter.router';
-import { MqService } from './services/mq.service';
+import { MqProxy } from './services/mqProxy';
 
 /***********************************************************************************************************************
  * EXPRESS APP
@@ -42,16 +42,18 @@ import { MqService } from './services/mq.service';
 class App {
   // ref to Express instance
   public app;
+  private mqProxy: MqProxy;
 
   //Run configuration methods on the Express instance.
   constructor() {
     this.app = Express();
-    this.config();
-    this.middleware();
-    this.routes();
+    this.config().then(() => {
+	    this.middleware();
+	    this.routes();
+    });
   }
 
-  private config(): void {
+  private async config(): Promise<void> {
     // passport
     this.app.use(session({
       secret: process.argv[ 2 ],
@@ -64,6 +66,9 @@ class App {
       useMongoClient: true,
       promiseLibrary: bluebird
     });
+
+    this.mqProxy = new MqProxy();
+    await this.mqProxy.connect();
 
     this.app.use(passport.initialize());
     this.app.use(passport.session());
@@ -125,8 +130,10 @@ class App {
       res.redirect('/');
     });
 
-    new MqService().subscribeAllEncounters().subscribe((message) => {
+    this.mqProxy.subscribeAllEncounters().subscribe((message) => {
     	console.log(message)
+	    console.log('Headers:', message.properties)
+	    console.log(message.content.toString())
     })
   }
 

@@ -15,11 +15,9 @@ export class MqService {
 	            private userProfileService: UserProfileService) {
 		this.userProfileService.getUserProfile().then((user: UserProfile) => {
 			let stompConfig = StompConfiguration;
-			stompConfig.headers.login = 'admin';
-			stompConfig.headers.passcode = 'admin';
+			stompConfig.headers.login = user._id;
+			stompConfig.headers.passcode = this.userProfileService.getPasswordHash();
 			this.stompService.config = stompConfig;
-			console.log('StompService:: attempt to initAndConnect()')
-			console.log(stompConfig)
 			this.stompService.initAndConnect();
 		});
 	}
@@ -31,8 +29,8 @@ export class MqService {
 		});
 		let echo = () => {
 			console.log('publishing')
-			this.stompService.publish(this.encounterMqUrl + encounterId, 'echo');
-			timer(2000).subscribe(() => echo());
+			this.stompService.publish(this.encounterMqUrl + encounterId, 'echo', {type: 'encounter'});
+			// timer(2000).subscribe(() => echo());
 		};
 		echo();
 		return of({});

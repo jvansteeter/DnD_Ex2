@@ -1,15 +1,15 @@
 import * as mongoose from 'mongoose';
 import { UserModel } from '../models/user.model';
 import { Promise } from 'bluebird';
-import { MqService } from '../../services/mq.service';
+import { MqProxy } from '../../services/mqProxy';
 
 export class UserRepository {
 	private user: mongoose.Model<mongoose.Document>;
-	private mqSerice: MqService;
+	private mqSerice: MqProxy;
 
 	constructor() {
 		this.user = mongoose.model('User');
-		this.mqSerice = new MqService();
+		this.mqSerice = new MqProxy();
 	}
 
 	public create(username: string, password: string, firstName?: string, lastName?: string): Promise<UserModel> {
