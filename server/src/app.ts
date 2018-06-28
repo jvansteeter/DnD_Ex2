@@ -69,8 +69,10 @@ class App {
       promiseLibrary: bluebird
     });
 
-    this.mqProxy = MqProxySingleton;
-    await this.mqProxy.connect();
+    if (!this.isDevMode()) {
+	    this.mqProxy = MqProxySingleton;
+	    await this.mqProxy.connect();
+    }
 
     this.app.use(passport.initialize());
     this.app.use(passport.session());
@@ -134,7 +136,9 @@ class App {
   }
 
   private handleMqMessages(): void {
-	  MqServiceSingleton.handleMessages();
+  	if (!this.isDevMode()) {
+		  MqServiceSingleton.handleMessages();
+	  }
   }
 
   private isAuthenticated(req: Request, res: Response, next: NextFunction): void {

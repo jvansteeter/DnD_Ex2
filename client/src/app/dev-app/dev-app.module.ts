@@ -26,6 +26,8 @@ import { DevAppComponent } from './dev-app.component';
 import { UserDataService } from '../utilities/user-data/userData.service';
 import {EncounterDevService} from '../encounter/encounter-dev.service';
 import { EncounterService } from '../encounter/encounter.service';
+import { MqService } from '../mq/mq.service';
+import { StompRService } from '@stomp/ng2-stompjs';
 
 @NgModule({
 	imports: [
@@ -58,7 +60,9 @@ import { EncounterService } from '../encounter/encounter.service';
 	],
 	providers: [
 		UserDataService,
-		{ provide: EncounterService, useClass: EncounterDevService }
+		{ provide: EncounterService, useClass: EncounterDevService },
+		StompRService,
+		MqService,
 	],
 	bootstrap: [ DevAppComponent ]
 })
