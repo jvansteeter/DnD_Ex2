@@ -60,7 +60,7 @@ export class BoardVisibilityService {
         queryArray.push(new CellTarget(source, CellRegion.TOP_QUAD));
         while (queryArray.length !== 0) {
             const target = queryArray.shift();
-            if (touchedSet.has(target.hash())){
+            if (touchedSet.has(target.hash()) || !this.boardStateService.coorInBounds(target.location.x, target.location.y)){
                 continue;
             }
 

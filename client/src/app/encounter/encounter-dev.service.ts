@@ -63,8 +63,9 @@ export class EncounterDevService extends EncounterService{
         player._id = window.crypto.getRandomValues(new Uint32Array(1))[0];
         player.addAction('Longsword:', '+4 Attack, 1d10 + 5');
         player.addAction('Crossbow:', ' +2 Attack,  1d6 + 1');
-        this.boardPlayerService.player_rgbaCode_map.set(player._id, 'rgba(255,165,0, 0.3)');
-        this.boardPlayerService.updatePlayerVisibility(player._id, new CellPolygonGroup(this.boardVisibilityService.cellQuadsVisibleFromCell(player.location)));
+        this.boardPlayerService.player_rgbaCode_map.set(player._id, 'rgba(255,255,0, 0.15)');
+        // this.boardPlayerService.updatePlayerVisibility(player._id, new CellPolygonGroup(this.boardVisibilityService.cellQuadsVisibleFromCell(player.location)));
+        this.boardPlayerService.updatePlayerVisibility(player._id, this.boardVisibilityService.cellPolygonVisibleFromCell(player.location));
         this.players.push(player);
 
         // player = new Player('Mary', 7, 9, 12, 4, 6, 'resources/images/player-tokens/human granny 1.png');
@@ -81,8 +82,9 @@ export class EncounterDevService extends EncounterService{
         player.addAction('Divine Judgement:', 'Rewrite the DM\'s will');
         player.addAction('Gaze of the Deep One:', 'Kill all living creatures, no saves, no escape');
         player.addAction('Disco Fever:', 'They can tell by the way you use your walk ...');
-        this.boardPlayerService.player_rgbaCode_map.set(player._id, 'rgba(50,205,50, 0.3)');
-        this.boardPlayerService.updatePlayerVisibility(player._id, new CellPolygonGroup(this.boardVisibilityService.cellQuadsVisibleFromCell(player.location)));
+        this.boardPlayerService.player_rgbaCode_map.set(player._id, 'rgba(0,0,255, 0.15)');
+        // this.boardPlayerService.updatePlayerVisibility(player._id, new CellPolygonGroup(this.boardVisibilityService.cellQuadsVisibleFromCell(player.location)));
+        this.boardPlayerService.updatePlayerVisibility(player._id, this.boardVisibilityService.cellPolygonVisibleFromCell(player.location));
         this.players.push(player);
 
         // player = new Player('Stevie', 2, 36, 17, 6, 3, 'resources/images/player-tokens/human fatty 1.png');

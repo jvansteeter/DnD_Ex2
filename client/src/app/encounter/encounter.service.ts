@@ -80,7 +80,8 @@ export class EncounterService extends IsReadyService {
             for (const player of this.players) {
                 if (player.isSelected) {
                     player.location = loc_cell;
-                    this.boardPlayerService.updatePlayerVisibility(player._id, new CellPolygonGroup(this.boardVisibilityService.cellQuadsVisibleFromCell(player.location)));
+                    // this.boardPlayerService.updatePlayerVisibility(player._id, new CellPolygonGroup(this.boardVisibilityService.cellQuadsVisibleFromCell(player.location)));
+                    this.boardPlayerService.updatePlayerVisibility(player._id, this.boardVisibilityService.cellPolygonVisibleFromCell(player.location));
                     this.deselectAllPlayers();
                 }
             }
