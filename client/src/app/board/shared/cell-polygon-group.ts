@@ -11,8 +11,12 @@ export class CellPolygonGroup {
         this.fill = fill;
         this.border = [];
 
+        this.syncBorder();
+    }
+
+    private syncBorder() {
         // process the fill set and identify the corners compromising the border
-        let edge_seeker = fill[0];
+        let edge_seeker = this.fill[0];
         const edge_seeker_set = new Set<string>();
         edge_seeker_set.add(edge_seeker.hash());
         while (!this.quadIsOnEdge(edge_seeker)) {

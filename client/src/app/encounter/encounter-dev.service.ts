@@ -67,14 +67,14 @@ export class EncounterDevService extends EncounterService{
         this.boardPlayerService.updatePlayerVisibility(player._id, new CellPolygonGroup(this.boardVisibilityService.cellQuadsVisibleFromCell(player.location)));
         this.players.push(player);
 
-        player = new Player('Mary', 7, 9, 12, 4, 6, 'resources/images/player-tokens/human granny 1.png');
-        player._id = window.crypto.getRandomValues(new Uint32Array(1))[0];
-        player.addAction('Fireball:', 'DC 18 Dexterity, 6d10, half on success');
-        player.addAction('Acid Cone:', '+4 Attack, +2 1d8 + 3, 30ft cone');
-        player.addAction('Read Thoughts:', 'DC 15 Wisdom, see manual');
-        this.boardPlayerService.player_rgbaCode_map.set(player._id, 'rgba(147,112,219, 0.3)');
-        this.boardPlayerService.updatePlayerVisibility(player._id, new CellPolygonGroup(this.boardVisibilityService.cellQuadsVisibleFromCell(player.location)));
-        this.players.push(player);
+        // player = new Player('Mary', 7, 9, 12, 4, 6, 'resources/images/player-tokens/human granny 1.png');
+        // player._id = window.crypto.getRandomValues(new Uint32Array(1))[0];
+        // player.addAction('Fireball:', 'DC 18 Dexterity, 6d10, half on success');
+        // player.addAction('Acid Cone:', '+4 Attack, +2 1d8 + 3, 30ft cone');
+        // player.addAction('Read Thoughts:', 'DC 15 Wisdom, see manual');
+        // this.boardPlayerService.player_rgbaCode_map.set(player._id, 'rgba(147,112,219, 0.3)');
+        // this.boardPlayerService.updatePlayerVisibility(player._id, new CellPolygonGroup(this.boardVisibilityService.cellQuadsVisibleFromCell(player.location)));
+        // this.players.push(player);
 
         player = new Player('Sue', 753, 1235, 29, 2, 3, 'resources/images/player-tokens/human handmaid 2.png');
         player._id = window.crypto.getRandomValues(new Uint32Array(1))[0];
@@ -85,14 +85,14 @@ export class EncounterDevService extends EncounterService{
         this.boardPlayerService.updatePlayerVisibility(player._id, new CellPolygonGroup(this.boardVisibilityService.cellQuadsVisibleFromCell(player.location)));
         this.players.push(player);
 
-        player = new Player('Stevie', 2, 36, 17, 6, 3, 'resources/images/player-tokens/human fatty 1.png');
-        player._id = window.crypto.getRandomValues(new Uint32Array(1))[0];
-        this.claimedPlayerId = player._id;
-        this.hasClaimedPlayer = true;
-        player.addAction('Longsword:', '+4 Attack, 1d10 + 5');
-        player.addAction('Crossbow:', ' +2 Attack,  1d6 + 1');
-        this.boardPlayerService.player_rgbaCode_map.set(player._id, 'rgba(255,105,180, 0.3)');
-        this.boardPlayerService.updatePlayerVisibility(player._id, new CellPolygonGroup(this.boardVisibilityService.cellQuadsVisibleFromCell(player.location)));
-        this.players.push(player);
+        // player = new Player('Stevie', 2, 36, 17, 6, 3, 'resources/images/player-tokens/human fatty 1.png');
+        // player._id = window.crypto.getRandomValues(new Uint32Array(1))[0];
+        // this.claimedPlayerId = player._id;
+        // this.hasClaimedPlayer = true;
+        // player.addAction('Longsword:', '+4 Attack, 1d10 + 5');
+        // player.addAction('Crossbow:', ' +2 Attack,  1d6 + 1');
+        // this.boardPlayerService.player_rgbaCode_map.set(player._id, 'rgba(255,105,180, 0.3)');
+        // this.boardPlayerService.updatePlayerVisibility(player._id, new CellPolygonGroup(this.boardVisibilityService.cellQuadsVisibleFromCell(player.location)));
+        // this.players.push(player);
     }
 }

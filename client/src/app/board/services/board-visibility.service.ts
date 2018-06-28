@@ -3,7 +3,8 @@ import {XyPair} from '../geometry/xy-pair';
 import {BoardStateService} from './board-state.service';
 import {CellTarget} from '../shared/cell-target';
 import {CellRegion} from '../shared/enum/cell-region';
-import {CellVisibilityState} from '../shared/cell-visibility-state';
+import {CellPolygonGroup} from '../shared/cell-polygon-group';
+import {CellTargetStatics} from './cell-target-statics';
 
 @Injectable()
 export class BoardVisibilityService {
@@ -30,25 +31,69 @@ export class BoardVisibilityService {
             for (let y = 0; y < this.boardStateService.mapDimY; y += 1) {
                 const curCell = new XyPair(x, y);
 
-                if (this.cellHasLOSToNorth(source, curCell)) {
+                if (this.cellHasLOSTo_TopQuad(source, curCell)) {
                     returnMe.push(new CellTarget(curCell, CellRegion.TOP_QUAD));
                 }
 
-                if (this.cellHasLOSToEast(source, curCell)) {
+                if (this.cellHasLOSTo_RightQuad(source, curCell)) {
                     returnMe.push(new CellTarget(curCell, CellRegion.RIGHT_QUAD));
                 }
 
-                if (this.cellHasLOSToSouth(source, curCell)) {
+                if (this.cellHasLOSTo_BottomQuad(source, curCell)) {
                     returnMe.push(new CellTarget(curCell, CellRegion.BOTTOM_QUAD));
                 }
 
-                if (this.cellHasLOSToWest(source, curCell)) {
+                if (this.cellHasLOSTo_LeftQuad(source, curCell)) {
                     returnMe.push(new CellTarget(curCell, CellRegion.LEFT_QUAD));
                 }
             }
         }
 
         return returnMe;
+    }
+
+    public cellPolygonVisibleFromCell(source: XyPair): CellPolygonGroup {
+        const touchedSet = new Set<string>();
+        const queryArray = Array<CellTarget>();
+        const fillArray = Array<CellTarget>();
+
+        queryArray.push(new CellTarget(source, CellRegion.TOP_QUAD));
+        while (queryArray.length !== 0) {
+            const target = queryArray.shift();
+            if (touchedSet.has(target.hash())){
+                continue;
+            }
+
+            touchedSet.add(target.hash());
+            switch (target.region) {
+                case CellRegion.TOP_QUAD:
+                    if ( this.cellHasLOSTo_TopQuad(source, target.location)) {
+                        fillArray.push(target);
+                        queryArray.push(...CellTargetStatics.getQuadsAdjacentToQuad(target));
+                    }
+                    break;
+                case CellRegion.RIGHT_QUAD:
+                    if ( this.cellHasLOSTo_RightQuad(source, target.location)) {
+                        fillArray.push(target);
+                        queryArray.push(...CellTargetStatics.getQuadsAdjacentToQuad(target));
+                    }
+                    break;
+                case CellRegion.BOTTOM_QUAD:
+                    if ( this.cellHasLOSTo_BottomQuad(source, target.location)) {
+                        fillArray.push(target);
+                        queryArray.push(...CellTargetStatics.getQuadsAdjacentToQuad(target));
+                    }
+                    break;
+                case CellRegion.LEFT_QUAD:
+                    if ( this.cellHasLOSTo_LeftQuad(source, target.location)) {
+                        fillArray.push(target);
+                        queryArray.push(...CellTargetStatics.getQuadsAdjacentToQuad(target));
+                    }
+                    break;
+            }
+        }
+
+        return new CellPolygonGroup(fillArray);
     }
 
     /*******************************************************************************************************************
@@ -335,7 +380,7 @@ export class BoardVisibilityService {
         return returnMe;
     }
 
-    cellHasLOSToNorth(origin_cell: XyPair, target_cell: XyPair): boolean {
+    cellHasLOSTo_TopQuad(origin_cell: XyPair, target_cell: XyPair): boolean {
         const origin_point = new XyPair(origin_cell.x * BoardStateService.cell_res + BoardStateService.cell_res / 2, origin_cell.y * BoardStateService.cell_res + BoardStateService.cell_res / 2);
         const target_points = this.genLOSNorthPoints(target_cell.x, target_cell.y);
         let traceCount = 0;
@@ -347,7 +392,7 @@ export class BoardVisibilityService {
         return traceCount >= 3;
     }
 
-    cellHasLOSToEast(origin_cell: XyPair, target_cell: XyPair): boolean {
+    cellHasLOSTo_RightQuad(origin_cell: XyPair, target_cell: XyPair): boolean {
         const origin_point = new XyPair(origin_cell.x * BoardStateService.cell_res + BoardStateService.cell_res / 2, origin_cell.y * BoardStateService.cell_res + BoardStateService.cell_res / 2);
         const target_points = this.genLOSEastPoints(target_cell.x, target_cell.y);
         let traceCount = 0;
@@ -359,7 +404,7 @@ export class BoardVisibilityService {
         return traceCount >= 3;
     }
 
-    cellHasLOSToSouth(origin_cell: XyPair, target_cell: XyPair): boolean {
+    cellHasLOSTo_BottomQuad(origin_cell: XyPair, target_cell: XyPair): boolean {
         const origin_point = new XyPair(origin_cell.x * BoardStateService.cell_res + BoardStateService.cell_res / 2, origin_cell.y * BoardStateService.cell_res + BoardStateService.cell_res / 2);
         const target_points = this.genLOSSouthPoints(target_cell.x, target_cell.y);
         let traceCount = 0;
@@ -371,7 +416,7 @@ export class BoardVisibilityService {
         return traceCount >= 3;
     }
 
-    cellHasLOSToWest(origin_cell: XyPair, target_cell: XyPair): boolean {
+    cellHasLOSTo_LeftQuad(origin_cell: XyPair, target_cell: XyPair): boolean {
         const origin_point = new XyPair(origin_cell.x * BoardStateService.cell_res + BoardStateService.cell_res / 2, origin_cell.y * BoardStateService.cell_res + BoardStateService.cell_res / 2);
         const target_points = this.genLOSWestPoints(target_cell.x, target_cell.y);
         let traceCount = 0;

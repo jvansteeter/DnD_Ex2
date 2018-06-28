@@ -88,25 +88,25 @@ export class BoardLightService {
                     for (const light_source of mapped_light_sources.get(dist)) {
                         if (!(north && east && south && west)) {
                             if (!north) {
-                                if (this.boardVisibilityService.cellHasLOSToNorth(light_source.location, cell.coor)) {
+                                if (this.boardVisibilityService.cellHasLOSTo_TopQuad(light_source.location, cell.coor)) {
                                     cell.updateLightIntensityNorth(light_source.lightImpactAtDistance(dist));
                                     north = true;
                                 }
                             }
                             if (!east) {
-                                if (this.boardVisibilityService.cellHasLOSToEast(light_source.location, cell.coor)) {
+                                if (this.boardVisibilityService.cellHasLOSTo_RightQuad(light_source.location, cell.coor)) {
                                     cell.updateLightIntensityEast(light_source.lightImpactAtDistance(dist));
                                     east = true;
                                 }
                             }
                             if (!south) {
-                                if (this.boardVisibilityService.cellHasLOSToSouth(light_source.location, cell.coor)) {
+                                if (this.boardVisibilityService.cellHasLOSTo_BottomQuad(light_source.location, cell.coor)) {
                                     cell.updateLightIntensitySouth(light_source.lightImpactAtDistance(dist));
                                     south = true;
                                 }
                             }
                             if (!west) {
-                                if (this.boardVisibilityService.cellHasLOSToWest(light_source.location, cell.coor)) {
+                                if (this.boardVisibilityService.cellHasLOSTo_LeftQuad(light_source.location, cell.coor)) {
                                     cell.updateLightIntensityWest(light_source.lightImpactAtDistance(dist));
                                     west = true;
                                 }
