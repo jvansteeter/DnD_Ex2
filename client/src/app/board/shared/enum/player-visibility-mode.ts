@@ -1,4 +1,4 @@
-export enum VisibilityMode {
+export enum PlayerVisibilityMode {
     GLOBAL,
     TEAM,
     PLAYER

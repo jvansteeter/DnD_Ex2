@@ -49,8 +49,6 @@ export class VisibilityRendererComponent implements OnInit {
                 const map_width = this.boardStateService.mapDimX * BoardStateService.cell_res;
                 const map_height = this.boardStateService.mapDimY * BoardStateService.cell_res;
                 this.ctx.fillRect(0, 0, map_width, map_height);
-                // this.boardCanvasService.clear_polygon(this.ctx, this.testBorder);
-
                 break;
         }
 
