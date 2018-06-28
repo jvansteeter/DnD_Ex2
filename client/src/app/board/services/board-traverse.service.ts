@@ -46,7 +46,7 @@ export class BoardTraverseService {
         const touched: Array<string> = [];
 
         queue.push({cell: sourceCell, range: range, diagAsDouble: false});
-        touched.push(sourceCell.hash2());
+        touched.push(sourceCell.hash());
 
         while (queue.length > 0) {
             const curCell = queue.shift();
@@ -54,39 +54,39 @@ export class BoardTraverseService {
             if (curCell.range >= 0) {
                 if (this.canMoveN(curCell.cell)) {
                     const northCell = new XyPair(curCell.cell.x, curCell.cell.y - 1);
-                    if (touched.indexOf(northCell.hash2()) === -1) {
+                    if (touched.indexOf(northCell.hash()) === -1) {
                         queue.push({cell: northCell, range: curCell.range - 1, diagAsDouble: curCell.diagAsDouble});
-                        touched.push(northCell.hash2());
+                        touched.push(northCell.hash());
                     }
                 }
 
                 if (this.canMoveE(curCell.cell)) {
                     const eastCell = new XyPair(curCell.cell.x + 1, curCell.cell.y);
-                    if (touched.indexOf(eastCell.hash2()) === -1) {
+                    if (touched.indexOf(eastCell.hash()) === -1) {
                         queue.push({cell: eastCell, range: curCell.range - 1, diagAsDouble: curCell.diagAsDouble});
-                        touched.push(eastCell.hash2());
+                        touched.push(eastCell.hash());
                     }
                 }
 
                 if (this.canMoveS(curCell.cell)) {
                     const southCell = new XyPair(curCell.cell.x, curCell.cell.y + 1);
-                    if (touched.indexOf(southCell.hash2()) === -1) {
+                    if (touched.indexOf(southCell.hash()) === -1) {
                         queue.push({cell: southCell, range: curCell.range - 1, diagAsDouble: curCell.diagAsDouble});
-                        touched.push(southCell.hash2());
+                        touched.push(southCell.hash());
                     }
                 }
 
                 if (this.canMoveW(curCell.cell)) {
                     const westCell = new XyPair(curCell.cell.x - 1, curCell.cell.y);
-                    if (touched.indexOf(westCell.hash2()) === -1) {
+                    if (touched.indexOf(westCell.hash()) === -1) {
                         queue.push({cell: westCell, range: curCell.range - 1, diagAsDouble: curCell.diagAsDouble});
-                        touched.push(westCell.hash2());
+                        touched.push(westCell.hash());
                     }
                 }
 
                 if (this.canMoveNE(curCell.cell)) {
                     const northEastCell = new XyPair(curCell.cell.x + 1, curCell.cell.y - 1);
-                    if (touched.indexOf(northEastCell.hash2()) === -1) {
+                    if (touched.indexOf(northEastCell.hash()) === -1) {
                         let rangeDelta;
                         if (curCell.diagAsDouble) {
                             rangeDelta = -2;
@@ -94,13 +94,13 @@ export class BoardTraverseService {
                             rangeDelta = -1;
                         }
                         queue.push({cell: northEastCell, range: curCell.range + rangeDelta, diagAsDouble: !curCell.diagAsDouble});
-                        touched.push(northEastCell.hash2());
+                        touched.push(northEastCell.hash());
                     }
                 }
 
                 if (this.canMoveNW(curCell.cell)) {
                     const northWestCell = new XyPair(curCell.cell.x - 1, curCell.cell.y - 1);
-                    if (touched.indexOf(northWestCell.hash2()) === -1) {
+                    if (touched.indexOf(northWestCell.hash()) === -1) {
                         let rangeDelta;
                         if (curCell.diagAsDouble) {
                             rangeDelta = -2;
@@ -108,13 +108,13 @@ export class BoardTraverseService {
                             rangeDelta = -1;
                         }
                         queue.push({cell: northWestCell, range: curCell.range + rangeDelta, diagAsDouble: !curCell.diagAsDouble});
-                        touched.push(northWestCell.hash2());
+                        touched.push(northWestCell.hash());
                     }
                 }
 
                 if (this.canMoveSE(curCell.cell)) {
                     const southEastCell = new XyPair(curCell.cell.x + 1, curCell.cell.y + 1);
-                    if (touched.indexOf(southEastCell.hash2()) === -1) {
+                    if (touched.indexOf(southEastCell.hash()) === -1) {
                         let rangeDelta;
                         if (curCell.diagAsDouble) {
                             rangeDelta = -2;
@@ -122,13 +122,13 @@ export class BoardTraverseService {
                             rangeDelta = -1;
                         }
                         queue.push({cell: southEastCell, range: curCell.range + rangeDelta, diagAsDouble: !curCell.diagAsDouble});
-                        touched.push(southEastCell.hash2());
+                        touched.push(southEastCell.hash());
                     }
                 }
 
                 if (this.canMoveSW(curCell.cell)) {
                     const southWestCell = new XyPair(curCell.cell.x - 1, curCell.cell.y + 1);
-                    if (touched.indexOf(southWestCell.hash2()) === -1) {
+                    if (touched.indexOf(southWestCell.hash()) === -1) {
                         let rangeDelta;
                         if (curCell.diagAsDouble) {
                             rangeDelta = -2;
@@ -136,7 +136,7 @@ export class BoardTraverseService {
                             rangeDelta = -1;
                         }
                         queue.push({cell: southWestCell, range: curCell.range + rangeDelta, diagAsDouble: !curCell.diagAsDouble});
-                        touched.push(southWestCell.hash2());
+                        touched.push(southWestCell.hash());
                     }
                 }
                 returnMe.push(curCell.cell);
