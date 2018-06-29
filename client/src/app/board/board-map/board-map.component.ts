@@ -32,6 +32,10 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
         this.boardCanvasService.cvs_width = this.mapContainer.nativeElement.clientWidth;
         this.boardStateService.mapOffsetTop = this.mapContainer.nativeElement.offsetTop;
         this.boardStateService.mapOffsetLeft = this.mapContainer.nativeElement.offsetLeft;
+
+        this.boardWallService.dev_mode_init();
+        this.boardLightService.dev_mode_init();
+        this.boardPlayerService.dev_mode_init();
     }
 
     constructor(

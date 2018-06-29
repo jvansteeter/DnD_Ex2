@@ -24,6 +24,13 @@ export class BoardPlayerService {
         this.player_traversibility_maps = new Map<string, Array<XyPair>>();
     }
 
+    public dev_mode_init() {
+        this.encounterService.init_players();
+        for (let player of this.encounterService.players) {
+            this.updatePlayerVisibility(player._id, new CellPolygonGroup(this.boardVisibilityService.cellQuadsVisibleFromCell(player.location)));
+        }
+    }
+
     public addPlayer() {
     }
 
@@ -77,8 +84,8 @@ export class BoardPlayerService {
             for (const player of this.encounterService.players) {
                 if (player.location.x === loc_cell.x && player.location.y === loc_cell.y) {
 
-                    player.traversableCells_near = this.boardTraverseService.calcTraversableCells(player.location, player.speed);
-                    player.traversableCells_far = this.boardTraverseService.calcTraversableCells(player.location, player.speed * 2);
+                    // player.traversableCells_near = this.boardTraverseService.calcTraversableCells(player.location, player.speed);
+                    // player.traversableCells_far = this.boardTraverseService.calcTraversableCells(player.location, player.speed * 2);
 
                     player.isSelected = true;
                     this.encounterService.playerSelected = true;

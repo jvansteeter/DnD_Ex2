@@ -15,7 +15,7 @@ import {LightSource} from '../../map-objects/light-source';
 })
 
 export class MapRendererComponent implements OnInit {
-    private DEV_MAP_URL_STRING = 'resources/images/maps/shack.jpg';
+    public static DEV_MAP_URL_STRING = 'resources/images/maps/shack.jpg';
 
 
     @ViewChild('mapRenderCanvas') mapRenderCanvas: ElementRef;
@@ -29,38 +29,11 @@ export class MapRendererComponent implements OnInit {
         private boardWallService: BoardWallService,
         private boardLightService: BoardLightService
     ) {
-        this.bgImage.src = this.DEV_MAP_URL_STRING;
+        this.bgImage.src = MapRendererComponent.DEV_MAP_URL_STRING;
     }
 
     ngOnInit(): void {
         this.ctx = this.mapRenderCanvas.nativeElement.getContext('2d');
-
-        if (this.DEV_MAP_URL_STRING === 'resources/images/maps/shack.jpg') {
-            // top wall
-            this.boardWallService.addWall(new CellTarget(new XyPair(5, 2), CellRegion.TOP_EDGE));
-            this.boardWallService.addWall(new CellTarget(new XyPair(6, 2), CellRegion.TOP_EDGE));
-            this.boardWallService.addWall(new CellTarget(new XyPair(7, 2), CellRegion.TOP_EDGE));
-
-            // right wall
-            this.boardWallService.addWall(new CellTarget(new XyPair(8, 2), CellRegion.LEFT_EDGE));
-            this.boardWallService.addWall(new CellTarget(new XyPair(8, 3), CellRegion.LEFT_EDGE));
-            this.boardWallService.addWall(new CellTarget(new XyPair(8, 4), CellRegion.LEFT_EDGE));
-            this.boardWallService.addWall(new CellTarget(new XyPair(8, 5), CellRegion.LEFT_EDGE));
-
-            // bottom wall
-            this.boardWallService.addWall(new CellTarget(new XyPair(7, 6), CellRegion.TOP_EDGE));
-            this.boardWallService.addWall(new CellTarget(new XyPair(6, 6), CellRegion.TOP_EDGE));
-            this.boardWallService.addWall(new CellTarget(new XyPair(5, 6), CellRegion.TOP_EDGE));
-
-            // left wall
-            this.boardWallService.addWall(new CellTarget(new XyPair(5, 5), CellRegion.LEFT_EDGE));
-            this.boardWallService.addWall(new CellTarget(new XyPair(5, 4), CellRegion.LEFT_EDGE));
-            // this.boardWallService.addWall(new CellTarget(new XyPair(5, 3), CellRegion.LEFT_EDGE));              // DOOR
-            this.boardWallService.addWall(new CellTarget(new XyPair(5, 2), CellRegion.LEFT_EDGE));
-
-            this.boardLightService.addLightSource(new LightSource(new XyPair(7, 3), 5));
-        }
-
         this.render();
     }
 

@@ -21,7 +21,6 @@ export class TokenRendererComponent implements OnInit {
 
     ngOnInit(): void {
         this.ctx = this.tokenRenderCanvas.nativeElement.getContext('2d');
-        this.encounterService.init_players();
         this.render();
     }
 
@@ -34,17 +33,17 @@ export class TokenRendererComponent implements OnInit {
             if (player.isSelected) {
                 this.boardCanvasService.draw_fill_all(this.ctx, player.location, 'rgba(0, 0, 180, 0.2)');
 
-                for (const cell of player.traversableCells_near) {
-                    if (this.boardStateService.coorInBounds(cell.x, cell.y)) {
-                        this.boardCanvasService.draw_fill_all(this.ctx, cell, 'rgba(0, 0, 180, 0.2)');
-                    }
-                }
+                // for (const cell of player.traversableCells_near) {
+                //     if (this.boardStateService.coorInBounds(cell.x, cell.y)) {
+                //         this.boardCanvasService.draw_fill_all(this.ctx, cell, 'rgba(0, 0, 180, 0.2)');
+                //     }
+                // }
 
-                for (const cell of player.traversableCells_far) {
-                    if (this.boardStateService.coorInBounds(cell.x, cell.y)) {
-                        this.boardCanvasService.draw_fill_all(this.ctx, cell, 'rgba(0, 0, 180, 0.2)');
-                    }
-                }
+                // for (const cell of player.traversableCells_far) {
+                //     if (this.boardStateService.coorInBounds(cell.x, cell.y)) {
+                //         this.boardCanvasService.draw_fill_all(this.ctx, cell, 'rgba(0, 0, 180, 0.2)');
+                //     }
+                // }
             }
 
             this.boardCanvasService.draw_img(this.ctx, new XyPair(player.location.x * BoardStateService.cell_res, player.location.y * BoardStateService.cell_res), player.token_img);

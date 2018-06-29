@@ -7,6 +7,8 @@ import {BoardStateService} from './board-state.service';
 import {BoardVisibilityService} from './board-visibility.service';
 import {BoardTraverseService} from './board-traverse.service';
 import {BoardLightService} from './board-light.service';
+import {LightSource} from '../map-objects/light-source';
+import {MapRendererComponent} from '../renderer/map-renderer/map-renderer.component';
 
 @Injectable()
 export class BoardWallService {
@@ -17,7 +19,32 @@ export class BoardWallService {
         private boardVisibilityService: BoardVisibilityService,
         private boardTraverseService: BoardTraverseService,
         private boardLightService: BoardLightService
-    ) {
+    ) {}
+
+    public dev_mode_init() {
+        if (MapRendererComponent.DEV_MAP_URL_STRING === 'resources/images/maps/shack.jpg') {
+            // top wall
+            this.addWall(new CellTarget(new XyPair(5, 2), CellRegion.TOP_EDGE));
+            this.addWall(new CellTarget(new XyPair(6, 2), CellRegion.TOP_EDGE));
+            this.addWall(new CellTarget(new XyPair(7, 2), CellRegion.TOP_EDGE));
+
+            // right wall
+            this.addWall(new CellTarget(new XyPair(8, 2), CellRegion.LEFT_EDGE));
+            this.addWall(new CellTarget(new XyPair(8, 3), CellRegion.LEFT_EDGE));
+            this.addWall(new CellTarget(new XyPair(8, 4), CellRegion.LEFT_EDGE));
+            this.addWall(new CellTarget(new XyPair(8, 5), CellRegion.LEFT_EDGE));
+
+            // bottom wall
+            this.addWall(new CellTarget(new XyPair(7, 6), CellRegion.TOP_EDGE));
+            this.addWall(new CellTarget(new XyPair(6, 6), CellRegion.TOP_EDGE));
+            this.addWall(new CellTarget(new XyPair(5, 6), CellRegion.TOP_EDGE));
+
+            // left wall
+            this.addWall(new CellTarget(new XyPair(5, 5), CellRegion.LEFT_EDGE));
+            this.addWall(new CellTarget(new XyPair(5, 4), CellRegion.LEFT_EDGE));
+            // this.addWall(new CellTarget(new XyPair(5, 3), CellRegion.LEFT_EDGE));              // DOOR
+            this.addWall(new CellTarget(new XyPair(5, 2), CellRegion.LEFT_EDGE));
+            }
     }
 
     public addWall(loc: CellTarget, singleInstance = true) {
