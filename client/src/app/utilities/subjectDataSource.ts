@@ -1,9 +1,8 @@
 import { DataSource } from '@angular/cdk/collections';
-import { Subject } from 'rxjs/Subject';
-import { Observable } from 'rxjs/Observable';
 import { MatPaginator, MatSort } from '@angular/material';
-import { BehaviorSubject, merge } from 'rxjs/index';
+import { BehaviorSubject, merge, Subject } from 'rxjs';
 import { map, mergeMap, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs/internal/Observable';
 
 
 export class SubjectDataSource<T> extends DataSource<T> {

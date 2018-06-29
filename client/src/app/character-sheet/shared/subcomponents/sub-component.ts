@@ -5,10 +5,9 @@ import {
 } from '@angular/core';
 import { SubComponentChild } from './sub-component-child';
 import { MatMenu } from '@angular/material';
-import { Observable } from 'rxjs/Observable';
 import { CharacterInterfaceService } from '../character-interface.service';
 import { CharacterInterfaceFactory } from '../character-interface.factory';
-import 'rxjs-compat/add/observable/timer';
+import { timer } from 'rxjs';
 
 @Component({
     selector: 'sub-component',
@@ -29,7 +28,7 @@ export class SubComponent implements AfterViewInit {
 
     ngAfterViewInit(): void {
         this.options = this.child.getMenuOptions();
-        Observable.timer(100).subscribe(() => this.characterService.registerSubComponent(this));
+        timer(100).subscribe(() => this.characterService.registerSubComponent(this));
     }
 
     getValue(): any {

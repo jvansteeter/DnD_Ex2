@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
-import {Observable} from "rxjs/Observable";
+import {Observable} from "rxjs";
 import {PlayerData} from "../../../../shared/types/encounter/player";
 import { EncounterStateData } from '../../../../shared/types/encounter/encounterState';
 import { map } from 'rxjs/operators';

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { timer } from 'rxjs';
 
 
 @Injectable()
@@ -15,6 +16,6 @@ export class AlertService {
     public showAlert(message: string): void {
         this.alertMessage = message;
         this.alertVisibility = 'alertShow';
-        Observable.timer(2000).subscribe(() => this.alertVisibility = 'alertHide');
+        timer(2000).subscribe(() => this.alertVisibility = 'alertHide');
     }
 }

@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
 import { CampaignRepository } from '../../repositories/campaign.repository';
 import { RuleSet } from '../../types/RuleSet';
-import { Subject } from 'rxjs/Subject';
-import { Observable } from 'rxjs/Observable';
+import { Observable, Subject } from 'rxjs';
 
 @Component({
     templateUrl: 'new-campaign-dialog.component.html',

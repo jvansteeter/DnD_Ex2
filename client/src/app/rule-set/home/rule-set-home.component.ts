@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material';
 import { NewCharacterSheetDialogComponent } from './dialog/new-character-sheet-dialog.component';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 import { NewNpcDialogComponent } from './dialog/new-npc-dialog.component';
 import { RuleSetRepository } from '../../repositories/rule-set.repository';
 import { SubjectDataSource } from '../../utilities/subjectDataSource';

@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { Campaign } from '../../../../shared/types/campaign';
-import 'rxjs-compat/add/operator/map';
 import { UserProfile } from '../types/userProfile';
 import { EncounterStateData } from '../../../../shared/types/encounter/encounterState';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class CampaignRepository {
@@ -21,9 +21,9 @@ export class CampaignRepository {
     }
 
     public joinCampaign(campaignId: string): Observable<void> {
-        return this.http.post('/api/campaign/join', {campaignId: campaignId}, {responseType: 'text'}).map(() => {
+        return this.http.post('/api/campaign/join', {campaignId: campaignId}, {responseType: 'text'}).pipe(map(() => {
             return;
-        });
+        }));
     }
 
     public getCampaigns(): Observable<Campaign[]> {
@@ -39,9 +39,9 @@ export class CampaignRepository {
     }
 
     public createNewEncounter(label: string, campaignId: string): Observable<void> {
-        return this.http.post('/api/campaign/newEncounter/' + campaignId, {label: label}, {responseType: 'text'}).map(() => {
+        return this.http.post('/api/campaign/newEncounter/' + campaignId, {label: label}, {responseType: 'text'}).pipe(map(() => {
             return;
-        });
+        }));
     }
 
     public getAllEncounters(campaignId: string): Observable<EncounterStateData[]> {

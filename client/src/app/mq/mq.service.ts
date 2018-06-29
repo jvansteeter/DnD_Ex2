@@ -4,7 +4,7 @@ import { Message } from '@stomp/stompjs';
 import { UserProfileService } from '../utilities/services/userProfile.service';
 import { UserProfile } from '../types/userProfile';
 import { StompConfiguration } from './StompConfig';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { of } from 'rxjs/internal/observable/of';
 import { timer } from 'rxjs/internal/observable/timer';
 

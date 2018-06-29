@@ -1,7 +1,6 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { DataSource } from '@angular/cdk/collections';
-import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
+import { Observable, Subject } from 'rxjs';
 import { UserProfile } from '../../types/userProfile';
 import { MatDialogRef } from '@angular/material';
 import { SocialService } from '../social.service';

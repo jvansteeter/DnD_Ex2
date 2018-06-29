@@ -5,7 +5,7 @@ import { FunctionDialogComponent } from './function-dialog.component';
 import { SubComponentChild } from '../sub-component-child';
 import { FunctionGrammar, FunctionTemplate } from './function.grammar';
 import { MatDialog, MatMenu } from '@angular/material';
-import { Observable } from 'rxjs/Observable';
+import { timer} from 'rxjs';
 import { CharacterInterfaceService } from '../../character-interface.service';
 import { CharacterInterfaceFactory } from '../../character-interface.factory';
 
@@ -81,6 +81,6 @@ export class FunctionComponent implements SubComponentChild, AfterViewInit {
     private setFunction(template: FunctionTemplate): void {
         this._function = new FunctionGrammar(this.characterService);
         this._function.initFromTemplate(template);
-        Observable.timer(100).subscribe(() => this.getValue());
+        timer(100).subscribe(() => this.getValue());
     }
 }

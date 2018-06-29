@@ -1,5 +1,4 @@
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 export abstract class IsReadyService {
     private isReadySubject: BehaviorSubject<boolean>;

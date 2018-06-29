@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { SocialRepository } from './social.repository';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { UserProfile } from '../types/userProfile';
 import { first, tap } from 'rxjs/operators';
 

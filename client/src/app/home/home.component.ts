@@ -5,7 +5,7 @@ import {RuleSetRepository} from '../repositories/rule-set.repository';
 import {NewCampaignDialogComponent} from './dialog/new-campaign-dialog.component';
 import {CampaignRepository} from '../repositories/campaign.repository';
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {Subject} from 'rxjs/Subject';
+import {Subject} from 'rxjs';
 import {MatDialog} from '@angular/material';
 import {Router} from '@angular/router';
 import {UserDataService} from '../utilities/user-data/userData.service';

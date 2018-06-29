@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {IsReadyService} from '../utilities/services/isReady.service';
 import {EncounterRepository} from '../repositories/encounter.repository';
 import {Player} from './player';
-import {Observable} from "rxjs/Observable";
+import {Observable} from "rxjs";
 import {PlayerData} from "../../../../shared/types/encounter/player";
 import {EncounterState} from './encounter.state';
 import {EncounterStateData} from '../../../../shared/types/encounter/encounterState';

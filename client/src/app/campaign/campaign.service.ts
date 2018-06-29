@@ -5,8 +5,7 @@ import { UserProfile } from '../types/userProfile';
 import { SocialRepository } from '../social/social.repository';
 import { Campaign } from '../../../../shared/types/campaign';
 import { CampaignState } from './campaign.state';
-import { Observable } from 'rxjs/Observable';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { mergeMap, tap } from 'rxjs/operators';
 import { EncounterStateData } from '../../../../shared/types/encounter/encounterState';
 
