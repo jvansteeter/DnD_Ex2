@@ -1,9 +1,20 @@
 <div id="viewControls" class="section">
-    <div class="sectionHeader"><span>View Mode</span></div>
+    <div class="sectionHeader"><span>Controls</span></div>
     <div class="sectionContents">
-        <mat-select [(value)]="currentView" (selectionChange)="onViewChange()">
-            <mat-option *ngFor="let view of viewModes" value="{{view}}">{{view}}</mat-option>
-        </mat-select>
+
+        <mat-form-field>
+            <mat-select [(value)]="currentView" (selectionChange)="onViewChange()" placeholder="View Mode">
+                <mat-option *ngFor="let view of viewModes" value="{{view}}">{{view}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field *ngIf="showModeControls()">
+            <mat-select [(value)]="currentMode" (selectionChange)="onModeChange()" placeholder="Edit Mode">
+                <mat-option *ngFor="let mode of modes" value="{{mode}}">{{mode}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+
     </div>
 </div>
 
@@ -49,16 +60,6 @@
             <span class="font" style="margin: auto">{{getLightValue()}}</span>
             <i style="margin-top: auto; margin-bottom: auto; cursor:pointer;" (click)="increaseAmbientLight()" class="material-icons">add</i>
         </div>
-    </div>
-</div>
-
-
-<div id="modeControls" class="section" *ngIf="showModeControls()">
-    <div class="sectionHeader"><span>Input Mode</span></div>
-    <div class="sectionContents">
-        <mat-radio-group [(ngModel)]="currentMode" (change)="onModeChange()">
-            <mat-radio-button *ngFor="let mode of modes" [value]="mode">{{mode}}</mat-radio-button>
-        </mat-radio-group>
     </div>
 </div>
 
