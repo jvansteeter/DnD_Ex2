@@ -1,10 +1,7 @@
 import {BoardStateService} from '../../services/board-state.service';
 import {BoardCanvasService} from '../../services/board-canvas.service';
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {XyPair} from '../../geometry/xy-pair';
 import {BoardVisibilityService} from '../../services/board-visibility.service';
-import {CellVisibilityState} from '../../shared/cell-visibility-state';
-import {CellTarget} from '../../shared/cell-target';
 import {CellPolygonGroup} from '../../shared/cell-polygon-group';
 import {ViewMode} from '../../shared/enum/view-mode';
 import {BoardPlayerService} from '../../services/board-player.service';
@@ -37,8 +34,8 @@ export class VisibilityRendererComponent implements OnInit {
 
         switch (this.boardStateService.board_view_mode) {
             case ViewMode.BOARD_MAKER:
-                this.boardPlayerService.player_visibility_map.forEach((value: CellPolygonGroup, key: string) => {
-                    const fillCode = this.boardPlayerService.player_rgbaCode_map.get(key);
+                this.boardPlayerService.player_visibility_map.forEach((value: CellPolygonGroup) => {
+                    const fillCode = 'rgba(255,0,0,0.15)';
                     this.boardCanvasService.draw_fill_polygon(this.ctx, value.border, fillCode);
                 });
                 break;
@@ -51,7 +48,6 @@ export class VisibilityRendererComponent implements OnInit {
                 this.ctx.fillRect(0, 0, map_width, map_height);
                 break;
         }
-
 
 
         requestAnimationFrame(this.render);

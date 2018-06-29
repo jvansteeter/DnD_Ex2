@@ -1,18 +1,16 @@
-import {Component, ViewChild, ElementRef, OnInit, HostListener, AfterViewInit, AfterViewChecked} from '@angular/core';
+import {Component, ViewChild, ElementRef, OnInit, HostListener, AfterViewChecked} from '@angular/core';
 import {BoardCanvasService} from "../services/board-canvas.service";
 import {BoardStateService} from "../services/board-state.service";
 import {BoardWallService} from "../services/board-wall.service";
 import {BoardTileService} from "../services/board-tile.service";
 import {XyPair} from '../geometry/xy-pair';
 import {BoardTransformService} from '../services/board-transform.service';
-import {EncounterService} from '../../encounter/encounter.service';
 import {isNullOrUndefined} from "util";
 import {BoardMode} from '../shared/enum/board-mode';
 import {CellRegion} from '../shared/enum/cell-region';
 import {ViewMode} from '../shared/enum/view-mode';
-import {LightSource} from '../map-objects/light-source';
-import {CellTarget} from '../shared/cell-target';
 import {BoardLightService} from '../services/board-light.service';
+import {BoardPlayerService} from '../services/board-player.service';
 
 
 @Component({
@@ -40,10 +38,10 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
         private boardCanvasService: BoardCanvasService,
         private boardStateService: BoardStateService,
         private boardTransformService: BoardTransformService,
-        private encounterService: EncounterService,
         private boardWallService: BoardWallService,
         private boardTileService: BoardTileService,
-        private boardLightService: BoardLightService
+        private boardLightService: BoardLightService,
+        private boardPlayerService: BoardPlayerService
     ) {
     }
 
@@ -92,7 +90,7 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
                 break;
             case 3:
                 // right click
-                this.encounterService.checkForPops(
+                this.boardPlayerService.checkForPops(
                     new XyPair(this.boardStateService.mouse_loc_cell.x, this.boardStateService.mouse_loc_cell.y),
                     this.boardTransformService.map_to_screen(new XyPair((this.boardStateService.mouse_loc_cell.x + 1) * BoardStateService.cell_res, ((this.boardStateService.mouse_loc_cell.y) * BoardStateService.cell_res)))
                 );
@@ -242,21 +240,21 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
                 case ViewMode.MASTER:
                     switch (this.boardStateService.board_edit_mode) {
                         case BoardMode.PLAYER:
-                            this.encounterService.handleClick(this.boardStateService.mouse_loc_cell);
+                            this.boardPlayerService.handleClick(this.boardStateService.mouse_loc_cell);
                             break;
                     }
                     break;
                 case ViewMode.PLAYER:
                     switch (this.boardStateService.board_edit_mode) {
                         case BoardMode.PLAYER:
-                            this.encounterService.handleClick(this.boardStateService.mouse_loc_cell);
+                            this.boardPlayerService.handleClick(this.boardStateService.mouse_loc_cell);
                             break;
                     }
                     break;
                 case ViewMode.BOARD_MAKER:
                     switch (this.boardStateService.board_edit_mode) {
                         case BoardMode.PLAYER:
-                            this.encounterService.handleClick(this.boardStateService.mouse_loc_cell);
+                            this.boardPlayerService.handleClick(this.boardStateService.mouse_loc_cell);
                             break;
                         case BoardMode.WALLS:
                             if (!isNullOrUndefined(this.boardStateService.mouse_cell_target)) {
