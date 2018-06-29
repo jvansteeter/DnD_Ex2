@@ -6,7 +6,7 @@ import { UserProfile } from '../types/userProfile';
 import { StompConfiguration } from './StompConfig';
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/internal/observable/of';
-import { timer } from "rxjs/internal/observable/timer";
+import { timer } from 'rxjs/internal/observable/timer';
 
 @Injectable()
 export class MqService {
@@ -30,9 +30,9 @@ export class MqService {
 		let echo = () => {
 			console.log('publishing')
 			this.stompService.publish(this.encounterMqUrl + encounterId, 'echo', {type: 'encounter'});
-			// timer(2000).subscribe(() => echo());
+			timer(2000).subscribe(() => echo());
 		};
-		echo();
+		// echo();
 		return of({});
 	}
 }

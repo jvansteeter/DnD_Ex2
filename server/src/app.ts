@@ -19,7 +19,6 @@ import './db/models/user-ruleSet.model';
 import './db/models/npc.model';
 import './db/models/notification.model';
 import './db/models/friend.model';
-import './db/models/friendRequest.model';
 import './db/models/campaign.model';
 import './db/models/encounter.model';
 import './db/models/user-campaign.model';
@@ -33,7 +32,7 @@ import SocialRouter from './routes/social.router';
 import CampaignRouter from './routes/campaign.router';
 import EncounterRouter from './routes/encounter.router';
 import { MqProxy, MqProxySingleton } from './mq/mqProxy';
-import { MqService, MqServiceSingleton } from './mq/mq.service';
+import { MqServiceSingleton } from './mq/mq.service';
 
 /***********************************************************************************************************************
  * EXPRESS APP

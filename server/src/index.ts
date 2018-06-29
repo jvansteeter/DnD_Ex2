@@ -2,7 +2,6 @@ import * as http from 'http';
 import * as debug from 'debug';
 
 import App from './App';
-import SocketService from './services/socket.service';
 
 /***********************************************************************************************************************
  * NODE SERVER
@@ -19,13 +18,6 @@ App.set('port', port);
  * @type {"http".Server}
  */
 const server = http.createServer(App);
-
-/**
- * Add socket listener to server
- */
-let io = require('socket.io').listen(server);
-io.sockets.on('connection', SocketService);
-io.sockets.on('error', onError);
 
 server.listen(port);
 server.on('error', onError);

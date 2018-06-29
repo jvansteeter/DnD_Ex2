@@ -19,4 +19,4 @@ export class MqService {
 	}
 }
 
-export const MqServiceSingleton = new MqService(MqProxySingleton);
+export const MqServiceSingleton: MqService = new MqService(MqProxySingleton);

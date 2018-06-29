@@ -15,7 +15,6 @@ import {
 } from '@angular/material';
 import { RuleSetModule } from './rule-set/rule-set.module';
 import { CharacterSheetModule } from './character-sheet/character-sheet.module';
-import { SocketService } from "./socket/socket.service";
 import { UtilityModule } from './utilities/utility.module';
 import { CampaignModule } from './campaign/campaign.module';
 import { AlertModule } from './alert/alert.module';
@@ -62,7 +61,6 @@ import { MqService } from './mq/mq.service';
 		MainTableComponent
 	],
 	providers: [
-		SocketService,
 		UserDataService,
 		StompRService,
 		MqService,
