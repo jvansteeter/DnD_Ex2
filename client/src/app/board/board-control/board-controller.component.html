@@ -1,83 +1,83 @@
 <div id="viewControls" class="section">
-  <div class="sectionHeader"><span>View Mode</span></div>
-  <div class="sectionContents">
-    <mat-radio-group [(ngModel)]="currentView" (change)="onViewChange()">
-      <mat-radio-button *ngFor="let view of viewModes" [value]="view">{{view}}</mat-radio-button>
-    </mat-radio-group>
-  </div>
+    <div class="sectionHeader"><span>View Mode</span></div>
+    <div class="sectionContents">
+        <mat-select [(value)]="currentView" (selectionChange)="onViewChange()">
+            <mat-option *ngFor="let view of viewModes" value="{{view}}">{{view}}</mat-option>
+        </mat-select>
+    </div>
 </div>
 
 
 <div id="Board Maker Controls" class="section" *ngIf="boardStateService.board_view_mode === ViewMode.BOARD_MAKER">
-  <div class="sectionHeader"><span>Board Maker Controls</span></div>
-  <div class="sectionContents">
-    <mat-checkbox style="display: block" [(ngModel)]="boardStateService.gridEnabled">Grid Enabled</mat-checkbox>
-    <mat-checkbox style="display: block" [(ngModel)]="boardStateService.show_health">Health Bars Enabled</mat-checkbox>
-    <mat-checkbox style="display: block" [(ngModel)]="boardStateService.playerWallsEnabled">Show Walls to Player</mat-checkbox>
-    <mat-checkbox style="display: block" [(ngModel)]="boardStateService.map_enabled">Map Enabled</mat-checkbox>
-    <div *ngIf="boardStateService.map_enabled">
-      <span class="font">Map Opacity </span>
-      <mat-slider min="0" max="1" step="0.05" [value]="boardStateService.board_maker_map_opacity" (input)="mapOpacitySliderInput($event)"></mat-slider>
+    <div class="sectionHeader"><span>Board Maker Controls</span></div>
+    <div class="sectionContents">
+        <mat-checkbox style="display: block" [(ngModel)]="boardStateService.gridEnabled">Grid Enabled</mat-checkbox>
+        <mat-checkbox style="display: block" [(ngModel)]="boardStateService.show_health">Health Bars Enabled</mat-checkbox>
+        <mat-checkbox style="display: block" [(ngModel)]="boardStateService.playerWallsEnabled">Show Walls to Player</mat-checkbox>
+        <mat-checkbox style="display: block" [(ngModel)]="boardStateService.map_enabled">Map Enabled</mat-checkbox>
+        <div *ngIf="boardStateService.map_enabled">
+            <span class="font">Map Opacity </span>
+            <mat-slider min="0" max="1" step="0.05" [value]="boardStateService.board_maker_map_opacity" (input)="mapOpacitySliderInput($event)"></mat-slider>
+        </div>
     </div>
-  </div>
 </div>
 
 <div id="Player Controls" class="section" *ngIf="boardStateService.board_view_mode === ViewMode.PLAYER">
-  <div class="sectionHeader"><span>Player Controls</span></div>
-  <div class="sectionContents">
-    <mat-checkbox style="display: block" [(ngModel)]="boardStateService.gridEnabled">Grid Enabled</mat-checkbox>
-  </div>
+    <div class="sectionHeader"><span>Player Controls</span></div>
+    <div class="sectionContents">
+        <mat-checkbox style="display: block" [(ngModel)]="boardStateService.gridEnabled">Grid Enabled</mat-checkbox>
+    </div>
 </div>
 
 <div id="Game Master Controls" class="section" *ngIf="boardStateService.board_view_mode === ViewMode.MASTER">
-  <div class="sectionHeader"><span>Game Master Controls</span></div>
-  <div class="sectionContents">
-    <mat-checkbox style="display: block" [(ngModel)]="boardStateService.gridEnabled">Grid Enabled</mat-checkbox>
-    <mat-checkbox style="display: block" [(ngModel)]="boardStateService.show_health">Health Bars Enabled</mat-checkbox>
-    <mat-checkbox style="display: block" [(ngModel)]="boardStateService.playerWallsEnabled">Show Walls to Player</mat-checkbox>
-    <mat-checkbox style="display: block" [(ngModel)]="boardStateService.map_enabled">Map Enabled</mat-checkbox>
-  </div>
+    <div class="sectionHeader"><span>Game Master Controls</span></div>
+    <div class="sectionContents">
+        <mat-checkbox style="display: block" [(ngModel)]="boardStateService.gridEnabled">Grid Enabled</mat-checkbox>
+        <mat-checkbox style="display: block" [(ngModel)]="boardStateService.show_health">Health Bars Enabled</mat-checkbox>
+        <mat-checkbox style="display: block" [(ngModel)]="boardStateService.playerWallsEnabled">Show Walls to Player</mat-checkbox>
+        <mat-checkbox style="display: block" [(ngModel)]="boardStateService.map_enabled">Map Enabled</mat-checkbox>
+    </div>
 </div>
 
 
 <div id="lightControls" class="section" *ngIf="showLightControls()">
-  <div class="sectionHeader"><span>Light Controls</span></div>
-  <div class="sectionContents">
-    <mat-checkbox [(ngModel)]="boardStateService.lightEnabled">Light Enabled</mat-checkbox>
-    <div style="display: flex; width: 100px; margin-left:auto; margin-right: auto">
-      <i style="margin-top: auto; margin-bottom: auto; cursor:pointer;" (click)="decreaseAmbientLight()" class="material-icons">remove</i>
-      <span class="font" style="margin: auto">{{getLightValue()}}</span>
-      <i style="margin-top: auto; margin-bottom: auto; cursor:pointer;" (click)="increaseAmbientLight()" class="material-icons">add</i>
+    <div class="sectionHeader"><span>Light Controls</span></div>
+    <div class="sectionContents">
+        <mat-checkbox [(ngModel)]="boardStateService.lightEnabled">Light Enabled</mat-checkbox>
+        <div style="display: flex; width: 100px; margin-left:auto; margin-right: auto">
+            <i style="margin-top: auto; margin-bottom: auto; cursor:pointer;" (click)="decreaseAmbientLight()" class="material-icons">remove</i>
+            <span class="font" style="margin: auto">{{getLightValue()}}</span>
+            <i style="margin-top: auto; margin-bottom: auto; cursor:pointer;" (click)="increaseAmbientLight()" class="material-icons">add</i>
+        </div>
     </div>
-  </div>
 </div>
 
 
 <div id="modeControls" class="section" *ngIf="showModeControls()">
-  <div class="sectionHeader"><span>Input Mode</span></div>
-  <div class="sectionContents">
-    <mat-radio-group [(ngModel)]="currentMode" (change)="onModeChange()">
-      <mat-radio-button *ngFor="let mode of modes" [value]="mode">{{mode}}</mat-radio-button>
-    </mat-radio-group>
-  </div>
+    <div class="sectionHeader"><span>Input Mode</span></div>
+    <div class="sectionContents">
+        <mat-radio-group [(ngModel)]="currentMode" (change)="onModeChange()">
+            <mat-radio-button *ngFor="let mode of modes" [value]="mode">{{mode}}</mat-radio-button>
+        </mat-radio-group>
+    </div>
 </div>
 
 <div id="tileControls" class="section" *ngIf="boardStateService.board_edit_mode === BoardMode.TILES">
-  <div class="sectionHeader"><span>Tile Selection</span></div>
-  <div class="sectionContents" style="width: 350px;">
-    <img
-      *ngFor="let tileUrl of tileUrls"
-      [ngClass]="{'activeTile': ts.activeTileUrl === tileUrl, 'defaultTile': ts.activeTileUrl !== tileUrl}"
-      style="height: 50px; width: 50px; cursor: pointer"
-      src="{{tileUrl}}"
-      (click)="updateTile(tileUrl)"
-    >
-  </div>
+    <div class="sectionHeader"><span>Tile Selection</span></div>
+    <div class="sectionContents" style="width: 350px;">
+        <img
+                *ngFor="let tileUrl of tileUrls"
+                [ngClass]="{'activeTile': ts.activeTileUrl === tileUrl, 'defaultTile': ts.activeTileUrl !== tileUrl}"
+                style="height: 50px; width: 50px; cursor: pointer"
+                src="{{tileUrl}}"
+                (click)="updateTile(tileUrl)"
+        >
+    </div>
 </div>
 
 <div class="section">
-	<div class="sectionHeader"><span>Temp Stuff</span></div>
-	<div class="sectionContents">
-		<button mat-raised-button color="primary" (click)="addPlayer()">Add Player</button>
-	</div>
+    <div class="sectionHeader"><span>Temp Stuff</span></div>
+    <div class="sectionContents">
+        <button mat-raised-button color="primary" (click)="addPlayer()">Add Player</button>
+    </div>
 </div>
