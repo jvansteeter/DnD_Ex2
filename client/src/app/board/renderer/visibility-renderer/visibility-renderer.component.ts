@@ -37,13 +37,8 @@ export class VisibilityRendererComponent implements OnInit {
             case ViewMode.BOARD_MAKER:
                 switch (this.boardStateService.playerVisibilityMode) {
                     case PlayerVisibilityMode.PLAYER:
-                        // if a player is in hover state, render their visibility
                         break;
                     case PlayerVisibilityMode.TEAM:
-                        this.boardPlayerService.player_visibility_map.forEach((value: CellPolygonGroup) => {
-                            const fillCode = 'rgba(255,0,0,0.15)';
-                            this.boardCanvasService.draw_fill_polygon(this.ctx, value.border, fillCode);
-                        });
                         break;
                     case PlayerVisibilityMode.GLOBAL:
                         break;
@@ -53,17 +48,21 @@ export class VisibilityRendererComponent implements OnInit {
             case ViewMode.MASTER:
                 switch (this.boardStateService.playerVisibilityMode) {
                     case PlayerVisibilityMode.PLAYER:
-                        const hoverPlayerId = this.boardPlayerService.hoveredPlayerId;
-                        if (hoverPlayerId !== '') {
-                            const fillCode = 'rgba(255,0,0,0.15)';
-                            this.boardCanvasService.draw_fill_polygon(this.ctx, this.boardPlayerService.player_visibility_map.get(hoverPlayerId).border, fillCode);
+                        if (this.boardStateService.visibilityHighlightEnabled) {
+                            const hoverPlayerId = this.boardPlayerService.hoveredPlayerId;
+                            if (hoverPlayerId !== '') {
+                                const fillCode = 'rgba(255,0,0,0.08)';
+                                this.boardCanvasService.draw_fill_polygon(this.ctx, this.boardPlayerService.player_visibility_map.get(hoverPlayerId).border, fillCode);
+                            }
                         }
                         break;
                     case PlayerVisibilityMode.TEAM:
-                        this.boardPlayerService.player_visibility_map.forEach((value: CellPolygonGroup) => {
-                            const fillCode = 'rgba(255,0,0,0.15)';
-                            this.boardCanvasService.draw_fill_polygon(this.ctx, value.border, fillCode);
-                        });
+                        if (this.boardStateService.visibilityHighlightEnabled) {
+                            this.boardPlayerService.player_visibility_map.forEach((value: CellPolygonGroup) => {
+                                const fillCode = 'rgba(255,0,0,0.08)';
+                                this.boardCanvasService.draw_fill_polygon(this.ctx, value.border, fillCode);
+                            });
+                        }
                         break;
                     case PlayerVisibilityMode.GLOBAL:
                         break;

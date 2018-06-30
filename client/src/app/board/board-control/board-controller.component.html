@@ -55,11 +55,13 @@
     <div class="sectionHeader"><span>Light and Visibility</span></div>
     <div class="sectionContents">
 
+        <mat-checkbox [(ngModel)]="boardStateService.visibilityHighlightEnabled">Visibility Highlight Enabled</mat-checkbox>
         <mat-form-field>
             <mat-select [(value)]="currentVisibility" (selectionChange)="onVisibilityChange()" placeholder="Visibility Mode">
                 <mat-option *ngFor="let mode of visibilityModes" value="{{mode}}">{{mode}}</mat-option>
             </mat-select>
         </mat-form-field>
+
 
         <mat-checkbox [(ngModel)]="boardStateService.lightEnabled">Light Enabled</mat-checkbox>
         <div style="display: flex; width: 100px; margin-left:auto; margin-right: auto">

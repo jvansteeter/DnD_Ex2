@@ -33,6 +33,8 @@ export class BoardStateService {
     /***********************************************************************************
      * To keep in the local board state
      ***********************************************************************************/
+    public visibilityHighlightEnabled = true;
+
     public mapOffsetTop: number;
     public mapOffsetLeft: number;
 
