@@ -3,6 +3,7 @@ import {BoardCanvasService} from '../../services/board-canvas.service';
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {XyPair} from '../../geometry/xy-pair';
 import { EncounterService } from '../../../encounter/encounter.service';
+import {BoardPlayerService} from "../../services/board-player.service";
 
 @Component({
     selector: 'token-renderer',
@@ -16,7 +17,8 @@ export class TokenRendererComponent implements OnInit {
     constructor(
         private boardStateService: BoardStateService,
         private boardCanvasService: BoardCanvasService,
-        private encounterService: EncounterService
+        private encounterService: EncounterService,
+        private boardPlayerService: BoardPlayerService
     ) {}
 
     ngOnInit(): void {
@@ -28,22 +30,21 @@ export class TokenRendererComponent implements OnInit {
         this.boardCanvasService.clear_canvas(this.ctx);
         this.boardCanvasService.updateTransform(this.ctx);
 
-        // do stuff here
         for (const player of this.encounterService.players) {
-            if (player.isSelected) {
+            if (this.boardPlayerService.selectedPlayerIds.has(player._id)) {
                 this.boardCanvasService.draw_fill_all(this.ctx, player.location, 'rgba(0, 0, 180, 0.2)');
 
-                // for (const cell of player.traversableCells_near) {
-                //     if (this.boardStateService.coorInBounds(cell.x, cell.y)) {
-                //         this.boardCanvasService.draw_fill_all(this.ctx, cell, 'rgba(0, 0, 180, 0.2)');
-                //     }
-                // }
+                for (const cell of this.boardPlayerService.player_traverse_map_near.get(player._id)) {
+                    if (this.boardStateService.coorInBounds(cell.x, cell.y)) {
+                        this.boardCanvasService.draw_fill_all(this.ctx, cell, 'rgba(0, 0, 180, 0.1)');
+                    }
+                }
 
-                // for (const cell of player.traversableCells_far) {
-                //     if (this.boardStateService.coorInBounds(cell.x, cell.y)) {
-                //         this.boardCanvasService.draw_fill_all(this.ctx, cell, 'rgba(0, 0, 180, 0.2)');
-                //     }
-                // }
+                for (const cell of this.boardPlayerService.player_traverse_map_far.get(player._id)) {
+                    if (this.boardStateService.coorInBounds(cell.x, cell.y)) {
+                        this.boardCanvasService.draw_fill_all(this.ctx, cell, 'rgba(0, 0, 180, 0.1)');
+                    }
+                }
             }
 
             this.boardCanvasService.draw_img(this.ctx, new XyPair(player.location.x * BoardStateService.cell_res, player.location.y * BoardStateService.cell_res), player.token_img);

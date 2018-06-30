@@ -12,10 +12,6 @@ export class Player {
     tokenUrl: string;
     token_img: HTMLImageElement;
     actions: {action: string, detail: string}[];
-    isSelected = false;
-
-    // traversableCells_near: Array<XyPair>;
-    // traversableCells_far: Array<XyPair>;
 
     constructor(name: string, hp: number, maxHp: number, ac: number, x?: number, y?: number, token_url?: string) {
         this.name = name;

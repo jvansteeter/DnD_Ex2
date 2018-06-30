@@ -9,21 +9,20 @@ import {PopService} from '../pop/pop.service';
 
 @Injectable()
 export class BoardPlayerService {
-
-    public selectedPlayerId = '';
-
     public player_visibility_map: Map<string, CellPolygonGroup>;
-    private player_traversibility_maps: Map<string, Array<XyPair>>;
+    public player_traverse_map_near: Map<string, Array<XyPair>>;
+    public player_traverse_map_far: Map<string, Array<XyPair>>;
+    public selectedPlayerIds: Set<string>;
 
-    constructor(
-        private popService: PopService,
-        private encounterService: EncounterService,
-        private boardVisibilityService: BoardVisibilityService,
-        private boardTraverseService: BoardTraverseService,
-        private boardStateService: BoardStateService
-    ) {
+    constructor(private popService: PopService,
+                private encounterService: EncounterService,
+                private boardVisibilityService: BoardVisibilityService,
+                private boardTraverseService: BoardTraverseService,
+                private boardStateService: BoardStateService) {
         this.player_visibility_map = new Map<string, CellPolygonGroup>();
-        this.player_traversibility_maps = new Map<string, Array<XyPair>>();
+        this.selectedPlayerIds = new Set<string>();
+        this.player_traverse_map_near = new Map<string, Array<XyPair>>();
+        this.player_traverse_map_far = new Map<string, Array<XyPair>>();
     }
 
     public dev_mode_init() {
@@ -67,30 +66,27 @@ export class BoardPlayerService {
     }
 
     public handleClick(loc_cell: XyPair) {
-        if (this.encounterService.playerSelected) {
+        if (this.selectedPlayerIds.size === 1) {
             for (const player of this.encounterService.players) {
                 if (player.location.x === loc_cell.x && player.location.y === loc_cell.y) {
-                    this.encounterService.deselectAllPlayers();
+                    this.selectedPlayerIds = new Set<string>();
                     return;
                 }
             }
-
             for (const player of this.encounterService.players) {
-                if (player.isSelected) {
+                if (this.selectedPlayerIds.has(player._id)) {
                     player.location = loc_cell;
                     this.updatePlayerVisibility(player._id, this.boardVisibilityService.cellPolygonVisibleFromCell(player.location));
-                    this.encounterService.deselectAllPlayers();
+                    this.selectedPlayerIds = new Set<string>();
                 }
             }
+
         } else {
             for (const player of this.encounterService.players) {
                 if (player.location.x === loc_cell.x && player.location.y === loc_cell.y) {
-
-                    // player.traversableCells_near = this.boardTraverseService.calcTraversableCells(player.location, player.speed);
-                    // player.traversableCells_far = this.boardTraverseService.calcTraversableCells(player.location, player.speed * 2);
-
-                    player.isSelected = true;
-                    this.encounterService.playerSelected = true;
+                    this.player_traverse_map_near.set(player._id, this.boardTraverseService.calcTraversableCells(player.location, player.speed));
+                    this.player_traverse_map_far.set(player._id, this.boardTraverseService.calcTraversableCells(player.location, player.speed * 2));
+                    this.selectedPlayerIds.add(player._id);
                 }
             }
         }

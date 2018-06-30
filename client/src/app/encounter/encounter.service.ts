@@ -18,8 +18,6 @@ export class EncounterService extends IsReadyService {
     private encounterId: string;
     public encounterState: EncounterState;
 
-    public playerSelected = false;
-
     constructor(
         protected boardStateService: BoardStateService,
         protected encounterRepo: EncounterRepository,
@@ -40,13 +38,6 @@ export class EncounterService extends IsReadyService {
         this.encounterId = id;
         this.setReady(false);
         this.init();
-    }
-
-    deselectAllPlayers() {
-        for (const player of this.players) {
-            player.isSelected = false;
-        }
-        this.playerSelected = false;
     }
 
     public init_players() {
