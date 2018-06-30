@@ -65,7 +65,6 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
     }
 
     mouseMove(event): void {
-        // this.boardService.handleMouseMove(event);
         const mouse_screen = new XyPair(event.clientX, event.clientY);
 
         if (this.boardStateService.mouseLeftDown) {
@@ -81,6 +80,7 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
             }
         }
         this.updateMouseLocation(mouse_screen);
+        this.boardPlayerService.syncPlayerHover(this.boardStateService.mouse_loc_cell);
     }
 
     handleMouseUp(event) {
@@ -232,10 +232,6 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
         this.boardStateService.mouse_cell_target = null;
         this.boardStateService.mouseOnMap = false;
     }
-
-    // coorInBounds(x: number, y: number): boolean {
-    //     return !((x >= this.boardStateService.mapDimX) || (y >= this.boardStateService.mapDimY) || (x < 0) || (y < 0));
-    // }
 
     private doMouseLeftUp(event) {
 

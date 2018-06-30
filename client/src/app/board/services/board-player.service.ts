@@ -13,6 +13,7 @@ export class BoardPlayerService {
     public player_traverse_map_near: Map<string, Array<XyPair>>;
     public player_traverse_map_far: Map<string, Array<XyPair>>;
     public selectedPlayerIds: Set<string>;
+    public hoveredPlayerId = '';
 
     constructor(private popService: PopService,
                 private encounterService: EncounterService,
@@ -46,7 +47,13 @@ export class BoardPlayerService {
     }
 
     public syncPlayerHover(cell: XyPair) {
-
+        this.hoveredPlayerId = '';
+        for (const player of this.encounterService.players) {
+            if (player.location.x === cell.x && player.location.y === cell.y) {
+                this.hoveredPlayerId = player._id;
+                return;
+            }
+        }
     }
 
     public checkForPops(loc_cell: XyPair, pop_origin: XyPair) {
