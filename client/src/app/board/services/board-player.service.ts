@@ -10,6 +10,8 @@ import {PopService} from '../pop/pop.service';
 @Injectable()
 export class BoardPlayerService {
 
+    public selectedPlayerId = '';
+
     public player_visibility_map: Map<string, CellPolygonGroup>;
     private player_traversibility_maps: Map<string, Array<XyPair>>;
 

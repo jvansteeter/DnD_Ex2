@@ -4,13 +4,13 @@
 
         <mat-form-field>
             <mat-select [(value)]="currentView" (selectionChange)="onViewChange()" placeholder="View Mode">
-                <mat-option *ngFor="let view of viewModes" value="{{view}}">{{view}}</mat-option>
+                <mat-option *ngFor="let mode of viewModes" value="{{mode}}">{{mode}}</mat-option>
             </mat-select>
         </mat-form-field>
 
         <mat-form-field *ngIf="showModeControls()">
-            <mat-select [(value)]="currentMode" (selectionChange)="onModeChange()" placeholder="Edit Mode">
-                <mat-option *ngFor="let mode of modes" value="{{mode}}">{{mode}}</mat-option>
+            <mat-select [(value)]="currentInput" (selectionChange)="onInputChange()" placeholder="Edit Mode">
+                <mat-option *ngFor="let mode of inputModes" value="{{mode}}">{{mode}}</mat-option>
             </mat-select>
         </mat-form-field>
 
@@ -52,8 +52,15 @@
 
 
 <div id="lightControls" class="section" *ngIf="showLightControls()">
-    <div class="sectionHeader"><span>Light Controls</span></div>
+    <div class="sectionHeader"><span>Light and Visibility</span></div>
     <div class="sectionContents">
+
+        <mat-form-field>
+            <mat-select [(value)]="currentVisibility" (selectionChange)="onVisibilityChange()" placeholder="Visibility Mode">
+                <mat-option *ngFor="let mode of visibilityModes" value="{{mode}}">{{mode}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+
         <mat-checkbox [(ngModel)]="boardStateService.lightEnabled">Light Enabled</mat-checkbox>
         <div style="display: flex; width: 100px; margin-left:auto; margin-right: auto">
             <i style="margin-top: auto; margin-bottom: auto; cursor:pointer;" (click)="decreaseAmbientLight()" class="material-icons">remove</i>

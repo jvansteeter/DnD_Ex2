@@ -5,6 +5,7 @@ import {BoardVisibilityService} from '../../services/board-visibility.service';
 import {CellPolygonGroup} from '../../shared/cell-polygon-group';
 import {ViewMode} from '../../shared/enum/view-mode';
 import {BoardPlayerService} from '../../services/board-player.service';
+import {PlayerVisibilityMode} from "../../shared/enum/player-visibility-mode";
 
 @Component({
     selector: 'visibility-renderer',
@@ -34,18 +35,48 @@ export class VisibilityRendererComponent implements OnInit {
 
         switch (this.boardStateService.board_view_mode) {
             case ViewMode.BOARD_MAKER:
-                this.boardPlayerService.player_visibility_map.forEach((value: CellPolygonGroup) => {
-                    const fillCode = 'rgba(255,0,0,0.15)';
-                    this.boardCanvasService.draw_fill_polygon(this.ctx, value.border, fillCode);
-                });
+                switch (this.boardStateService.playerVisibilityMode) {
+                    case PlayerVisibilityMode.PLAYER:
+                        // if a player is in hover state, render their visibility
+                        break;
+                    case PlayerVisibilityMode.TEAM:
+                        this.boardPlayerService.player_visibility_map.forEach((value: CellPolygonGroup) => {
+                            const fillCode = 'rgba(255,0,0,0.15)';
+                            this.boardCanvasService.draw_fill_polygon(this.ctx, value.border, fillCode);
+                        });
+                        break;
+                    case PlayerVisibilityMode.GLOBAL:
+                        break;
+                }
+
                 break;
             case ViewMode.MASTER:
+                switch (this.boardStateService.playerVisibilityMode) {
+                    case PlayerVisibilityMode.PLAYER:
+                        break;
+                    case PlayerVisibilityMode.TEAM:
+                        break;
+                    case PlayerVisibilityMode.GLOBAL:
+                        break;
+                }
                 break;
             case ViewMode.PLAYER:
-                this.ctx.fillStyle = 'rgba(0, 0, 0, 1.0)';
-                const map_width = this.boardStateService.mapDimX * BoardStateService.cell_res;
-                const map_height = this.boardStateService.mapDimY * BoardStateService.cell_res;
-                this.ctx.fillRect(0, 0, map_width, map_height);
+                switch (this.boardStateService.playerVisibilityMode) {
+                    case PlayerVisibilityMode.PLAYER:
+                        break;
+                    case PlayerVisibilityMode.TEAM:
+                        this.ctx.fillStyle = 'rgba(0, 0, 0, 1.0)';
+                        const map_width = this.boardStateService.mapDimX * BoardStateService.cell_res;
+                        const map_height = this.boardStateService.mapDimY * BoardStateService.cell_res;
+                        this.ctx.fillRect(0, 0, map_width, map_height);
+
+                        this.boardPlayerService.player_visibility_map.forEach((value: CellPolygonGroup) => {
+                            this.boardCanvasService.clear_polygon(this.ctx, value.border);
+                        });
+                        break;
+                    case PlayerVisibilityMode.GLOBAL:
+                        break;
+                }
                 break;
         }
 

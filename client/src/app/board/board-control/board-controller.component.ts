@@ -7,6 +7,7 @@ import {LightValue} from '../shared/enum/light-value';
 import {MatDialog} from '@angular/material';
 import {AddPlayerComponent} from '../../temp/add-player.component';
 import {BoardLightService} from '../services/board-light.service';
+import {PlayerVisibilityMode} from "../shared/enum/player-visibility-mode";
 
 @Component({
     selector: 'board-controller',
@@ -17,9 +18,17 @@ import {BoardLightService} from '../services/board-light.service';
 export class BoardControllerComponent implements OnInit {
     public ViewMode = ViewMode;
     public BoardMode = BoardMode;
+    public PlayerVisibilityMode = PlayerVisibilityMode;
 
-    currentMode: string;
-    modes: string[] = [
+    currentVisibility: string;
+    visibilityModes: string[] = [
+        'Global',
+        'Team',
+        'Player'
+    ];
+
+    currentInput: string;
+    inputModes: string[] = [
         'Player',
         'Walls',
         'Doors',
@@ -76,12 +85,10 @@ export class BoardControllerComponent implements OnInit {
         'resources/images/map-tiles/crate.jpg',
     ];
 
-    constructor(
-        public boardStateService: BoardStateService,
-        public boardLightService: BoardLightService,
-        public ts: BoardTileService,
-        private dialog: MatDialog
-    ) {
+    constructor(public boardStateService: BoardStateService,
+                public boardLightService: BoardLightService,
+                public ts: BoardTileService,
+                private dialog: MatDialog) {
     }
 
     ngOnInit(): void {
@@ -99,19 +106,19 @@ export class BoardControllerComponent implements OnInit {
     sync() {
         switch (this.boardStateService.board_edit_mode) {
             case BoardMode.PLAYER:
-                this.currentMode = 'Player';
+                this.currentInput = 'Player';
                 break;
             case BoardMode.WALLS:
-                this.currentMode = 'Walls';
+                this.currentInput = 'Walls';
                 break;
             case BoardMode.DOORS:
-                this.currentMode = 'Doors';
+                this.currentInput = 'Doors';
                 break;
             case BoardMode.LIGHTS:
-                this.currentMode = 'Lights';
+                this.currentInput = 'Lights';
                 break;
             case BoardMode.TILES:
-                this.currentMode = 'Tiles';
+                this.currentInput = 'Tiles';
                 break;
         }
 
@@ -126,10 +133,37 @@ export class BoardControllerComponent implements OnInit {
                 this.currentView = 'Game Master';
                 break;
         }
+
+        switch (this.boardStateService.playerVisibilityMode) {
+            case PlayerVisibilityMode.GLOBAL:
+                this.currentVisibility = 'Global';
+                break;
+            case PlayerVisibilityMode.TEAM:
+                this.currentVisibility = 'Team';
+                break;
+            case PlayerVisibilityMode.PLAYER:
+                this.currentVisibility = 'Player';
+                break;
+        }
     }
 
-    onModeChange() {
-        switch (this.currentMode) {
+    onVisibilityChange() {
+        switch (this.currentVisibility) {
+            case 'Global':
+                this.boardStateService.playerVisibilityMode = PlayerVisibilityMode.GLOBAL;
+                break;
+            case 'Team':
+                this.boardStateService.playerVisibilityMode = PlayerVisibilityMode.TEAM;
+                break;
+            case 'Player':
+                this.boardStateService.playerVisibilityMode = PlayerVisibilityMode.PLAYER;
+                break;
+        }
+        this.sync()
+    }
+
+    onInputChange() {
+        switch (this.currentInput) {
             case 'Player' :
                 this.boardStateService.source_click_location = null;
                 this.boardStateService.board_edit_mode = BoardMode.PLAYER;
