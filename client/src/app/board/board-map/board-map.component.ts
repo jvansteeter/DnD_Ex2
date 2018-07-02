@@ -238,31 +238,28 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
 
         switch (this.boardStateService.board_view_mode) {
             case ViewMode.BOARD_MAKER:
-                switch (this.boardStateService.board_edit_mode) {
-                    case BoardMode.DOORS:
-                        if (!isNullOrUndefined(this.boardStateService.mouse_cell_target)) {
-                            switch (this.boardStateService.mouse_cell_target.region) {
-                                case CellRegion.TOP_EDGE:
-                                    this.boardWallService.openCloseDoor(this.boardStateService.mouse_cell_target);
-                                    break;
-                                case CellRegion.LEFT_EDGE:
-                                    this.boardWallService.openCloseDoor(this.boardStateService.mouse_cell_target);
-                                    break;
-                                case CellRegion.FWRD_EDGE:
-                                    this.boardWallService.openCloseDoor(this.boardStateService.mouse_cell_target);
-                                    break;
-                                case CellRegion.BKWD_EDGE:
-                                    this.boardWallService.openCloseDoor(this.boardStateService.mouse_cell_target);
-                                    break;
-                            }
-                        }
-                        break;
-                }
                 break;
             case ViewMode.PLAYER:
                 break;
             case ViewMode.MASTER:
                 break;
+        }
+
+        if (!isNullOrUndefined(this.boardStateService.mouse_cell_target)) {
+            switch (this.boardStateService.mouse_cell_target.region) {
+                case CellRegion.TOP_EDGE:
+                    this.boardWallService.openCloseDoor(this.boardStateService.mouse_cell_target);
+                    break;
+                case CellRegion.LEFT_EDGE:
+                    this.boardWallService.openCloseDoor(this.boardStateService.mouse_cell_target);
+                    break;
+                case CellRegion.FWRD_EDGE:
+                    this.boardWallService.openCloseDoor(this.boardStateService.mouse_cell_target);
+                    break;
+                case CellRegion.BKWD_EDGE:
+                    this.boardWallService.openCloseDoor(this.boardStateService.mouse_cell_target);
+                    break;
+            }
         }
     }
 
