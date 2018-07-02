@@ -1,5 +1,6 @@
 import { MqProxy, MqProxySingleton } from './mqProxy';
 import { UserModel } from '../db/models/user.model';
+import { EncounterMessage } from './EncounterMessage';
 
 export class MqService {
 	constructor(private mqProxy: MqProxy) {
@@ -7,10 +8,10 @@ export class MqService {
 	}
 
 	public handleMessages(): void {
-		this.mqProxy.ObserveAllEncounters().subscribe((message) => {
+		this.mqProxy.ObserveAllEncounters().subscribe((message: EncounterMessage) => {
 			// console.log(message)
-			// console.log('Headers:', message.properties)
-			console.log(message.content.toString())
+			// console.log('Properties:', message.properties)
+			console.log(message)
 		});
 	}
 

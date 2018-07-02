@@ -1,11 +1,13 @@
 import * as amqp from 'amqplib/callback_api';
-import { Observable, Subject } from 'rxjs';
-import { throwError } from 'rxjs/internal/observable/throwError';
-import { merge } from 'rxjs/internal/observable/merge';
+import { Observable, Subject, throwError } from 'rxjs';
 import { UserModel } from '../db/models/user.model';
 import { Promise } from 'bluebird';
 import * as http from 'http';
 import { MqConfig } from '../config/mqConfig';
+import { merge } from 'rxjs/internal/observable/merge';
+import { MqMessage } from '../../../shared/types/mq/MqMessage';
+import { AmqpMessage } from './AmqpMessage';
+import { EncounterMessage } from './EncounterMessage';
 
 export class MqProxy {
 
@@ -45,7 +47,7 @@ export class MqProxy {
 		}
 	}
 
-	public ObserveAllEncounters(): Observable<any> {
+	public ObserveAllEncounters(): Observable<EncounterMessage> {
 		if (!this.connection) {
 			return throwError('Not connected to MQ Server');
 		}
@@ -57,7 +59,8 @@ export class MqProxy {
 
 			channel.bindQueue(MqConfig.encounterQueueName, MqConfig.encounterExchange, MqConfig.encounterTopic);
 			channel.consume(MqConfig.encounterQueueName, (message) => {
-				exchangeSubject.next(message);
+				// console.log(message);
+				exchangeSubject.next(new EncounterMessage(message));
 			}, {noAck: true});
 		});
 		return exchangeSubject.asObservable();

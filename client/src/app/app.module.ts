@@ -21,7 +21,6 @@ import { AlertModule } from './alert/alert.module';
 import { EncounterModule } from "./encounter/encounter.module";
 import { BoardModule } from "./board/board.module";
 import { HttpClientModule } from '@angular/common/http';
-import { MainDashComponent } from './main-dash/main-dash.component';
 import { MainTableComponent } from './main-table/main-table.component';
 import { MainNavModule } from './main-nav/main-nav.module';
 import { StompRService } from "@stomp/ng2-stompjs";
@@ -56,7 +55,6 @@ import { MqService } from './mq/mq.service';
 	],
 	declarations: [
 		AppComponent,
-		MainDashComponent,
 		MainTableComponent
 	],
 	providers: [

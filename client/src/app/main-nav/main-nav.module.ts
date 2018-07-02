@@ -12,6 +12,7 @@ import { MainNavComponent } from './main-nav.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from '../app-routing.module';
+import { NotificationComponent } from './notification.component';
 
 @NgModule({
     imports: [
@@ -29,7 +30,8 @@ import { AppRoutingModule } from '../app-routing.module';
         AppRoutingModule,
     ],
     declarations: [
-        MainNavComponent
+        MainNavComponent,
+		    NotificationComponent,
     ],
     providers: [
     ],

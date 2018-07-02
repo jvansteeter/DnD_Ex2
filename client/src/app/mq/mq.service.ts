@@ -4,8 +4,8 @@ import { Message } from '@stomp/stompjs';
 import { UserProfileService } from '../data-services/userProfile.service';
 import { StompConfiguration } from './StompConfig';
 import { Observable } from 'rxjs';
-import { of } from 'rxjs/internal/observable/of';
-import { timer } from 'rxjs/internal/observable/timer';
+import { map } from 'rxjs/operators';
+import { WsMessage } from './WsMessage';
 
 @Injectable()
 export class MqService {
@@ -19,17 +19,10 @@ export class MqService {
 		this.stompService.initAndConnect();
 	}
 
-	public getEncounterMessages(encounterId: string): Observable<any> {
-		this.stompService.subscribe(this.encounterMqUrl + encounterId).subscribe((message: Message) => {
-			console.log('encounter: ', encounterId)
-			console.log(message);
-		});
-		let echo = () => {
-			console.log('publishing')
-			this.stompService.publish(this.encounterMqUrl + encounterId, 'echo', {type: 'encounter'});
-			timer(2000).subscribe(() => echo());
-		};
-		// echo();
-		return of({});
+	public getEncounterMessages(encounterId: string): Observable<WsMessage> {
+		return this.stompService.subscribe(this.encounterMqUrl + encounterId)
+				.pipe(
+						map((message: Message) => {return new WsMessage(message)})
+				);
 	}
 }
