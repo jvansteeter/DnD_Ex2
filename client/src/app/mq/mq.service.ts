@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { StompRService } from '@stomp/ng2-stompjs';
 import { Message } from '@stomp/stompjs';
-import { UserProfileService } from '../utilities/services/userProfile.service';
-import { UserProfile } from '../types/userProfile';
+import { UserProfileService } from '../data-services/userProfile.service';
 import { StompConfiguration } from './StompConfig';
 import { Observable } from 'rxjs';
 import { of } from 'rxjs/internal/observable/of';
@@ -13,13 +12,11 @@ export class MqService {
 	private encounterMqUrl: string = '/exchange/encounterExchange/encounter.';
 	constructor(private stompService: StompRService,
 	            private userProfileService: UserProfileService) {
-		this.userProfileService.getUserProfile().then((user: UserProfile) => {
-			let stompConfig = StompConfiguration;
-			stompConfig.headers.login = user._id;
-			stompConfig.headers.passcode = this.userProfileService.getPasswordHash();
-			this.stompService.config = stompConfig;
-			this.stompService.initAndConnect();
-		});
+		let stompConfig = StompConfiguration;
+		stompConfig.headers.login = userProfileService.userId;
+		stompConfig.headers.passcode = this.userProfileService.passwordHash;
+		this.stompService.config = stompConfig;
+		this.stompService.initAndConnect();
 	}
 
 	public getEncounterMessages(encounterId: string): Observable<any> {

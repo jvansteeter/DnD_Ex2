@@ -2,16 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserProfile } from '../types/userProfile';
 import { AlertService } from '../alert/alert.service';
-import { UserProfileService } from '../utilities/services/userProfile.service';
+import { UserProfileService } from '../data-services/userProfile.service';
 import { MatDialog, MatTableDataSource } from '@angular/material';
 import { SelectFriendsComponent } from '../social/select-friends/select-friends.component';
-import { CampaignService } from './campaign.service';
 import { NewEncounterDialogComponent } from './dialog/new-encounter-dialog.component';
 import { SubjectDataSource } from '../utilities/subjectDataSource';
 import { BehaviorSubject } from 'rxjs';
 import { mergeMap, tap } from 'rxjs/operators';
 import { DashboardCard } from '../cdk/dashboard-card/dashboard-card';
 import { EncounterStateData } from '../../../../shared/types/encounter/encounterState';
+import { CampaignPageService } from './campaign-page.service';
 
 
 @Component({
@@ -32,7 +32,7 @@ export class CampaignComponent implements OnInit {
 	public encountersCard: DashboardCard;
 
 	constructor(private activatedRoute: ActivatedRoute,
-							private campaignService: CampaignService,
+							private campaignService: CampaignPageService,
 							private alertService: AlertService,
 							private userProfileService: UserProfileService,
 							private dialog: MatDialog,

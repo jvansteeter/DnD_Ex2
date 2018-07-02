@@ -21,7 +21,6 @@ import { AlertModule } from './alert/alert.module';
 import { EncounterModule } from "./encounter/encounter.module";
 import { BoardModule } from "./board/board.module";
 import { HttpClientModule } from '@angular/common/http';
-import { UserDataService } from './utilities/user-data/userData.service';
 import { MainDashComponent } from './main-dash/main-dash.component';
 import { MainTableComponent } from './main-table/main-table.component';
 import { MainNavModule } from './main-nav/main-nav.module';
@@ -61,7 +60,6 @@ import { MqService } from './mq/mq.service';
 		MainTableComponent
 	],
 	providers: [
-		UserDataService,
 		StompRService,
 		MqService,
 	],

@@ -11,7 +11,7 @@ import { EncounterStateData } from '../../../../shared/types/encounter/encounter
 
 
 @Injectable()
-export class CampaignService extends IsReadyService {
+export class CampaignPageService extends IsReadyService {
 	public campaignId: string;
 	public campaignState: CampaignState;
 

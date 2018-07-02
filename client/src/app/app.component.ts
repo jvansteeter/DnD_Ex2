@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { UserProfileService } from './utilities/services/userProfile.service';
-import { NotificationsService } from './utilities/services/notifications.service';
+import { UserProfileService } from './data-services/userProfile.service';
+import { NotificationsService } from './data-services/notifications.service';
 
 @Component({
   selector: 'web-app',

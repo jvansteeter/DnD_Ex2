@@ -4,7 +4,6 @@ import { SocialModule } from '../social/social.module';
 import { RuleSetRepository } from '../repositories/rule-set.repository';
 import { NewCampaignDialogComponent } from './dialog/new-campaign-dialog.component';
 import { RuleSetModule } from '../rule-set/rule-set.module';
-import { CampaignRepository } from '../repositories/campaign.repository';
 import {
   MatButtonModule, MatCardModule, MatExpansionModule, MatGridListModule, MatIconModule, MatInputModule, MatListModule,
   MatMenuModule, MatTableModule
@@ -14,6 +13,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppCDKModule } from '../cdk/cdk.module';
+import { CampaignService } from '../data-services/campaign.service';
 
 @NgModule({
   imports: [
@@ -40,7 +40,7 @@ import { AppCDKModule } from '../cdk/cdk.module';
   ],
   providers: [
     RuleSetRepository,
-    CampaignRepository
+	  CampaignService,
   ],
   exports: [
     HomeComponent

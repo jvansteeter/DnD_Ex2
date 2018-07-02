@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { UserProfileService } from '../utilities/services/userProfile.service';
-import { CampaignService } from './campaign.service';
+import { UserProfileService } from '../data-services/userProfile.service';
+import { CampaignPageService } from './campaign-page.service';
 
 @Pipe({
   name: 'isGameMaster'
@@ -8,14 +8,14 @@ import { CampaignService } from './campaign.service';
 export class IsGameMasterPipe implements PipeTransform {
 
   constructor(private userProfileService: UserProfileService,
-              private campaignService: CampaignService) {
+              private campaignService: CampaignPageService) {
 
   }
 
   transform(value: any, ...args: any[]): any {
     const members = this.campaignService.members;
     for (let member of members) {
-      if (member._id === this.userProfileService.getUserId()) {
+      if (member._id === this.userProfileService.userId) {
         return true;
       }
     }

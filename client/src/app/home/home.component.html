@@ -37,7 +37,7 @@
 		</mat-grid-tile>
 		<mat-grid-tile [colspan]="2" [rowspan]="1">
 			<dashboard-card [dashboardCard]="campaignCard">
-				<mat-table [dataSource]="userDataService.homeState.campaigns">
+				<mat-table [dataSource]="campaignService.campaigns">
 					<ng-container matColumnDef="label">
 						<mat-header-cell *matHeaderCellDef>Campaign</mat-header-cell>
 						<mat-cell *matCellDef="let campaign">{{campaign.label}}</mat-cell>

@@ -3,7 +3,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export abstract class IsReadyService {
     private isReadySubject: BehaviorSubject<boolean>;
 
-    constructor() {
+    protected constructor() {
         this.isReadySubject = new BehaviorSubject<boolean>(false);
     }
 

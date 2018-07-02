@@ -1,18 +1,17 @@
 import {NewRuleSetDialogComponent} from './dialog/new-rule-set-dialog.component';
-import {UserProfileService} from '../utilities/services/userProfile.service';
+import {UserProfileService} from '../data-services/userProfile.service';
 import {SubjectDataSource} from '../utilities/subjectDataSource';
 import {RuleSetRepository} from '../repositories/rule-set.repository';
 import {NewCampaignDialogComponent} from './dialog/new-campaign-dialog.component';
-import {CampaignRepository} from '../repositories/campaign.repository';
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {Subject} from 'rxjs';
 import {MatDialog} from '@angular/material';
 import {Router} from '@angular/router';
-import {UserDataService} from '../utilities/user-data/userData.service';
 import {DashboardCard} from '../cdk/dashboard-card/dashboard-card';
 import {AddFriendComponent} from '../social/add-friend/add-friend.component';
 import {UserProfile} from '../types/userProfile';
 import {FriendService} from '../social/friend.service';
+import { CampaignService } from '../data-services/campaign.service';
 
 @Component({
 	selector: 'home-page',
@@ -29,7 +28,6 @@ export class HomeComponent implements OnInit {
 	private readonly ruleSetSubject: Subject<any>;
 	private ruleSetDataSource: SubjectDataSource<any>;
 
-	public campaigns: any[];
 	public campaignTableColumns = ['label'];
 
 	public ruleSetCard: DashboardCard;
@@ -44,12 +42,12 @@ export class HomeComponent implements OnInit {
 	            private router: Router,
 	            private userProfileService: UserProfileService,
 	            private ruleSetRepository: RuleSetRepository,
-	            private campaignRepository: CampaignRepository,
-	            public userDataService: UserDataService,
-	            private friendService: FriendService) {
-
-		this.userProfileService.getUserProfile().then(() => {
-			this.profilePhotoUrl = this.userProfileService.getProfilePhotoUrl();
+	            private friendService: FriendService,
+	            public campaignService: CampaignService) {
+		this.userProfileService.isReady().subscribe((isReady: boolean) => {
+			if (isReady) {
+				this.profilePhotoUrl = this.userProfileService.profilePhotoUrl;
+			}
 		});
 		this.ruleSetSubject = new Subject<any>();
 		this.ruleSetDataSource = new SubjectDataSource(this.ruleSetSubject);
@@ -121,9 +119,7 @@ export class HomeComponent implements OnInit {
 	}
 
 	private getCampaigns(): void {
-		this.campaignRepository.getCampaigns().subscribe((campaigns: any[]) => {
-			this.userDataService.homeState.campaigns = campaigns;
-		});
+		this.campaignService.refreshCampaigns();
 	}
 
 	private newRuleSet = () => {

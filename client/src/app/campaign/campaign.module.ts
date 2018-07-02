@@ -14,11 +14,11 @@ import {
 	MatTableModule
 } from '@angular/material';
 import { SocialModule } from '../social/social.module';
-import { CampaignService } from './campaign.service';
 import { CampaignRepository } from '../repositories/campaign.repository';
 import { NewEncounterDialogComponent } from './dialog/new-encounter-dialog.component';
 import { UtilityModule } from '../utilities/utility.module';
 import { AppCDKModule } from '../cdk/cdk.module';
+import { CampaignPageService } from './campaign-page.service';
 
 
 @NgModule({
@@ -53,7 +53,7 @@ import { AppCDKModule } from '../cdk/cdk.module';
 	],
 	providers: [
 		CampaignRepository,
-		CampaignService
+		CampaignPageService,
 	]
 })
 export class CampaignModule {

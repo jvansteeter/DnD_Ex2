@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
-import { AppRoutingModule } from '../app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 import {
 	MatButtonModule, MatCardModule,
@@ -23,7 +22,6 @@ import { EncounterModule } from '../encounter/encounter.module';
 import { AlertModule } from '../alert/alert.module';
 import { MainNavModule } from '../main-nav/main-nav.module';
 import { DevAppComponent } from './dev-app.component';
-import { UserDataService } from '../utilities/user-data/userData.service';
 import {EncounterDevService} from '../encounter/encounter-dev.service';
 import { EncounterService } from '../encounter/encounter.service';
 import { MqService } from '../mq/mq.service';
@@ -59,7 +57,6 @@ import { StompRService } from '@stomp/ng2-stompjs';
 		DevAppComponent,
 	],
 	providers: [
-		UserDataService,
 		{ provide: EncounterService, useClass: EncounterDevService },
 		StompRService,
 		MqService,

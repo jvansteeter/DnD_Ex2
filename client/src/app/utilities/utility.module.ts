@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
-import { UserProfileService } from './services/userProfile.service';
-import { NotificationsService } from './services/notifications.service';
+import { UserProfileService } from '../data-services/userProfile.service';
+import { NotificationsService } from '../data-services/notifications.service';
 import { DateFormatPipe } from './pipes/date-format.pipe';
+import { UserRepository } from '../repositories/user.repository';
 
 @NgModule({
   declarations: [
@@ -10,7 +11,8 @@ import { DateFormatPipe } from './pipes/date-format.pipe';
   providers: [
     UserProfileService,
     NotificationsService,
-    DateFormatPipe
+    DateFormatPipe,
+	  UserRepository,
   ],
   exports: [
       DateFormatPipe

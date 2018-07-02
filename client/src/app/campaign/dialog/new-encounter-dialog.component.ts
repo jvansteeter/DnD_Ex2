@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
-import { CampaignService } from "../campaign.service";
 import { MatDialogRef } from "@angular/material";
+import { CampaignPageService } from '../campaign-page.service';
 
 
 @Component({
@@ -9,7 +9,7 @@ import { MatDialogRef } from "@angular/material";
 export class NewEncounterDialogComponent {
     public encounterLabel: string;
 
-    constructor(private campaignService: CampaignService,
+    constructor(private campaignService: CampaignPageService,
                 private dialogRef: MatDialogRef<NewEncounterDialogComponent>) {
 
     }

@@ -4,8 +4,8 @@ import { Observable, Subject } from 'rxjs';
 import { UserProfile } from '../../types/userProfile';
 import { MatDialogRef } from '@angular/material';
 import { SocialService } from '../social.service';
-import { UserProfileService } from '../../utilities/services/userProfile.service';
-import { NotificationsService } from '../../utilities/services/notifications.service';
+import { UserProfileService } from '../../data-services/userProfile.service';
+import { NotificationsService } from '../../data-services/notifications.service';
 import { FriendService } from '../friend.service';
 
 
@@ -37,7 +37,7 @@ export class AddFriendComponent {
     public search(): void {
         this.socialService.findUsers(this.searchInput.nativeElement.value).subscribe((users: UserProfile[]) => {
             for (let i = 0; i < users.length; i++) {
-                if (this.userProfileService.getUserId() === users[i]._id) {
+                if (this.userProfileService.userId === users[i]._id) {
                     users.splice(i, 1);
                     i--;
                 }
