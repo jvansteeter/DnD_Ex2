@@ -1,13 +1,13 @@
-import {Component, OnInit} from '@angular/core';
 import {BoardStateService} from '../services/board-state.service';
 import {BoardTileService} from '../services/board-tile.service';
 import {ViewMode} from '../shared/enum/view-mode';
 import {BoardMode} from '../shared/enum/board-mode';
 import {LightValue} from '../shared/enum/light-value';
-import {MatDialog} from '@angular/material';
 import {AddPlayerComponent} from '../../temp/add-player.component';
 import {BoardLightService} from '../services/board-light.service';
 import {PlayerVisibilityMode} from "../shared/enum/player-visibility-mode";
+import {Component, OnInit} from '@angular/core';
+import {MatDialog} from '@angular/material';
 
 @Component({
     selector: 'board-controller',

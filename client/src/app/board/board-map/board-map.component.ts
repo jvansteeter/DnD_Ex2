@@ -94,10 +94,7 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
                 break;
             case 3:
                 // right click
-                this.boardPlayerService.checkForPops(
-                    new XyPair(this.boardStateService.mouse_loc_cell.x, this.boardStateService.mouse_loc_cell.y),
-                    this.boardTransformService.map_to_screen(new XyPair((this.boardStateService.mouse_loc_cell.x + 1) * BoardStateService.cell_res, ((this.boardStateService.mouse_loc_cell.y) * BoardStateService.cell_res)))
-                );
+                this.doMouseRightUp(event);
                 break;
         }
     }
@@ -233,8 +230,43 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
         this.boardStateService.mouseOnMap = false;
     }
 
-    private doMouseLeftUp(event) {
+    private doMouseRightUp(event) {
+        this.boardPlayerService.checkForPops(
+            new XyPair(this.boardStateService.mouse_loc_cell.x, this.boardStateService.mouse_loc_cell.y),
+            this.boardTransformService.map_to_screen(new XyPair((this.boardStateService.mouse_loc_cell.x + 1) * BoardStateService.cell_res, ((this.boardStateService.mouse_loc_cell.y) * BoardStateService.cell_res)))
+        );
 
+        switch (this.boardStateService.board_view_mode) {
+            case ViewMode.BOARD_MAKER:
+                switch (this.boardStateService.board_edit_mode) {
+                    case BoardMode.DOORS:
+                        if (!isNullOrUndefined(this.boardStateService.mouse_cell_target)) {
+                            switch (this.boardStateService.mouse_cell_target.region) {
+                                case CellRegion.TOP_EDGE:
+                                    this.boardWallService.openCloseDoor(this.boardStateService.mouse_cell_target);
+                                    break;
+                                case CellRegion.LEFT_EDGE:
+                                    this.boardWallService.openCloseDoor(this.boardStateService.mouse_cell_target);
+                                    break;
+                                case CellRegion.FWRD_EDGE:
+                                    this.boardWallService.openCloseDoor(this.boardStateService.mouse_cell_target);
+                                    break;
+                                case CellRegion.BKWD_EDGE:
+                                    this.boardWallService.openCloseDoor(this.boardStateService.mouse_cell_target);
+                                    break;
+                            }
+                        }
+                        break;
+                }
+                break;
+            case ViewMode.PLAYER:
+                break;
+            case ViewMode.MASTER:
+                break;
+        }
+    }
+
+    private doMouseLeftUp(event) {
         if (!this.boardStateService.mouseDrag) {
             switch (this.boardStateService.board_view_mode) {
                 case ViewMode.MASTER:
@@ -295,6 +327,22 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
                             }
                             break;
                         case BoardMode.DOORS:
+                            if (!isNullOrUndefined(this.boardStateService.mouse_cell_target)) {
+                                switch (this.boardStateService.mouse_cell_target.region) {
+                                    case CellRegion.TOP_EDGE:
+                                        this.boardWallService.toggleDoor(this.boardStateService.mouse_cell_target);
+                                        break;
+                                    case CellRegion.LEFT_EDGE:
+                                        this.boardWallService.toggleDoor(this.boardStateService.mouse_cell_target);
+                                        break;
+                                    case CellRegion.FWRD_EDGE:
+                                        this.boardWallService.toggleDoor(this.boardStateService.mouse_cell_target);
+                                        break;
+                                    case CellRegion.BKWD_EDGE:
+                                        this.boardWallService.toggleDoor(this.boardStateService.mouse_cell_target);
+                                        break;
+                                }
+                            }
                             break;
                         case BoardMode.LIGHTS:
                             if (!isNullOrUndefined(this.boardStateService.mouse_cell_target)) {

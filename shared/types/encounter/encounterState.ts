@@ -1,5 +1,3 @@
-import {Wall} from '../../../client/src/app/board/map-objects/wall';
-import {LightSource} from '../../../client/src/app/board/map-objects/light-source';
 import {LightValue} from '../../../client/src/app/board/shared/enum/light-value';
 import { PlayerData } from './player';
 

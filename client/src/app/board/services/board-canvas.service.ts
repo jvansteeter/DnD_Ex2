@@ -209,6 +209,77 @@ export class BoardCanvasService {
         }
     }
 
+    draw_door(ctx: CanvasRenderingContext2D, target: CellTarget, isOpen = false) {
+        const loc = new XyPair(target.location.x * BoardStateService.cell_res, target.location.y * BoardStateService.cell_res);
+
+        ctx.strokeStyle = 'rgba(50, 50, 50, 1)';
+        if (isOpen) {
+            ctx.fillStyle = 'rgba(255, 255, 255, 1)';
+        } else {
+            ctx.fillStyle = 'rgba(120, 120, 120, 1)';
+        }
+        ctx.lineWidth = 3;
+        const radius = 6;
+
+        let x;
+        let y;
+
+        switch (target.region) {
+            case CellRegion.TOP_EDGE:
+                ctx.beginPath();
+                ctx.arc(loc.x + radius, loc.y, radius, 0.5 * Math.PI, 1.5 * Math.PI);
+                ctx.lineTo(loc.x + BoardStateService.cell_res - radius, loc.y - radius);
+                ctx.arc(loc.x + BoardStateService.cell_res - radius, loc.y, radius, 1.5 * Math.PI, 0.5 * Math.PI);
+                ctx.lineTo(loc.x + radius, loc.y + radius);
+                ctx.fill();
+                ctx.stroke();
+                break;
+            case CellRegion.LEFT_EDGE:
+                ctx.beginPath();
+                ctx.arc(loc.x, loc.y + radius, radius, Math.PI, 0);
+                ctx.lineTo(loc.x + radius, loc.y + BoardStateService.cell_res - radius);
+                ctx.arc(loc.x, loc.y + BoardStateService.cell_res - radius, radius, 0, Math.PI);
+                ctx.lineTo(loc.x - radius, loc.y + radius);
+                ctx.fill();
+                ctx.stroke();
+                break;
+            case CellRegion.FWRD_EDGE:
+                ctx.beginPath();
+                x = loc.x + radius;
+                y = loc.y + BoardStateService.cell_res - radius;
+                ctx.arc(x, y, radius, 0.25 * Math.PI, 1.25 * Math.PI);
+
+                x = loc.x + BoardStateService.cell_res - radius;
+                y = loc.y + radius;
+                ctx.lineTo(x + radius * Math.cos(1.25 * Math.PI), y + radius * Math.sin(1.25 * Math.PI));
+                ctx.arc(x, y, radius, 1.25 * Math.PI, 0.25 * Math.PI);
+
+                x = loc.x + radius;
+                y = loc.y + BoardStateService.cell_res - radius;
+                ctx.lineTo(x + radius * Math.cos(0.25 * Math.PI), y + radius * Math.sin(0.25 * Math.PI));
+                ctx.fill();
+                ctx.stroke();
+                break;
+            case CellRegion.BKWD_EDGE:
+                ctx.beginPath();
+                x = loc.x + radius;
+                y = loc.y + radius;
+                ctx.arc(x, y, radius, 0.75 * Math.PI, 1.75 * Math.PI);
+
+                x = loc.x + BoardStateService.cell_res - radius;
+                y = loc.y + BoardStateService.cell_res - radius;
+                ctx.lineTo(x + radius * Math.cos(1.75 * Math.PI), y + radius * Math.sin(1.75 * Math.PI));
+                ctx.arc(x, y, radius, 1.75 * Math.PI, 0.75 * Math.PI);
+
+                x = loc.x + radius;
+                y = loc.y + radius;
+                ctx.lineTo(x + radius * Math.cos(0.75 * Math.PI), y + radius * Math.sin(0.75 * Math.PI));
+                ctx.fill();
+                ctx.stroke();
+                break;
+        }
+    }
+
     stroke_polygon(ctx: CanvasRenderingContext2D, cell_target_points: Array<CellTarget>, stroke_code: string | CanvasGradient | CanvasPattern) {
         ctx.strokeStyle = stroke_code;
         ctx.lineWidth = 5;

@@ -1,5 +1,4 @@
 import {Injectable} from '@angular/core';
-import {Wall} from '../map-objects/wall';
 import {XyPair} from '../geometry/xy-pair';
 import {CellTarget} from '../shared/cell-target';
 import {CellRegion} from '../shared/enum/cell-region';
@@ -7,19 +6,22 @@ import {BoardStateService} from './board-state.service';
 import {BoardVisibilityService} from './board-visibility.service';
 import {BoardTraverseService} from './board-traverse.service';
 import {BoardLightService} from './board-light.service';
-import {LightSource} from '../map-objects/light-source';
 import {MapRendererComponent} from '../renderer/map-renderer/map-renderer.component';
+import {BoardDoor} from '../map-objects/board-door';
 
 @Injectable()
 export class BoardWallService {
-    public wallData: Map<string, Wall> = new Map();
+    public wallData: Map<string, CellTarget> = new Map<string, CellTarget>();
+    public doorData: Map<string, BoardDoor> = new Map<string, BoardDoor>();
+    public windowData: Map<string, CellTarget> = new Map<string, CellTarget>();
 
     constructor(
         private boardStateService: BoardStateService,
         private boardVisibilityService: BoardVisibilityService,
         private boardTraverseService: BoardTraverseService,
         private boardLightService: BoardLightService
-    ) {}
+    ) {
+    }
 
     public dev_mode_init() {
         if (MapRendererComponent.DEV_MAP_URL_STRING === 'resources/images/maps/shack.jpg') {
@@ -42,76 +44,176 @@ export class BoardWallService {
             // left wall
             this.addWall(new CellTarget(new XyPair(5, 5), CellRegion.LEFT_EDGE));
             this.addWall(new CellTarget(new XyPair(5, 4), CellRegion.LEFT_EDGE));
-            // this.addWall(new CellTarget(new XyPair(5, 3), CellRegion.LEFT_EDGE));              // DOOR
+            this.addDoor(new CellTarget(new XyPair(5, 3), CellRegion.LEFT_EDGE));              // DOOR
             this.addWall(new CellTarget(new XyPair(5, 2), CellRegion.LEFT_EDGE));
-            }
+        }
     }
 
-    public addWall(loc: CellTarget, singleInstance = true) {
-        if (!this.hasWall(loc)) {
-            this.wallData.set(loc.hash(), new Wall(loc, BoardStateService.cell_res));
-            switch (loc.region) {
+    public addDoor(target: CellTarget) {
+        if (!this.hasObstruction(target)) {
+            this.doorData.set(target.hash(), new BoardDoor(target));
+            switch (target.region) {
                 case CellRegion.TOP_EDGE:
-                    this.boardVisibilityService.blockNorth(loc.location);
-                    this.boardTraverseService.blockNorth(loc.location);
+                    this.boardVisibilityService.blockNorth(target.location);
+                    this.boardTraverseService.blockNorth(target.location);
                     break;
                 case CellRegion.LEFT_EDGE:
-                    this.boardVisibilityService.blockWest(loc.location);
-                    this.boardTraverseService.blockWest(loc.location);
-
+                    this.boardVisibilityService.blockWest(target.location);
+                    this.boardTraverseService.blockWest(target.location);
                     break;
                 case CellRegion.FWRD_EDGE:
-                    this.boardVisibilityService.blockFwd(loc.location);
-                    this.boardTraverseService.blockFwd(loc.location);
-
+                    this.boardVisibilityService.blockFwd(target.location);
+                    this.boardTraverseService.blockFwd(target.location);
                     break;
                 case CellRegion.BKWD_EDGE:
-                    this.boardVisibilityService.blockBkw(loc.location);
-                    this.boardTraverseService.blockBkw(loc.location);
-
+                    this.boardVisibilityService.blockBkw(target.location);
+                    this.boardTraverseService.blockBkw(target.location);
                     break;
             }
-        }
-        if (singleInstance) {
             this.boardLightService.updateLightValues();
         }
     }
 
-    public removeWall(loc: CellTarget , singleInstance = true): void {
-        if (this.hasWall(loc)) {
-            this.wallData.delete(loc.hash());
-            switch (loc.region) {
+    public removeDoor(target: CellTarget) {
+        if (this.hasObstruction(target) && this.doorData.has(target.hash())) {
+            this.doorData.delete(target.hash());
+            switch (target.region) {
                 case CellRegion.TOP_EDGE:
-                    this.boardVisibilityService.unblockNorth(loc.location);
-                    this.boardTraverseService.unblockNorth(loc.location);
+                    this.boardVisibilityService.unblockNorth(target.location);
+                    this.boardTraverseService.unblockNorth(target.location);
                     break;
                 case CellRegion.LEFT_EDGE:
-                    this.boardVisibilityService.unblockWest(loc.location);
-                    this.boardTraverseService.unblockWest(loc.location);
-
+                    this.boardVisibilityService.unblockWest(target.location);
+                    this.boardTraverseService.unblockWest(target.location);
                     break;
                 case CellRegion.FWRD_EDGE:
-                    this.boardVisibilityService.unblockFwd(loc.location);
-                    this.boardTraverseService.unblockFwd(loc.location);
-
+                    this.boardVisibilityService.unblockFwd(target.location);
+                    this.boardTraverseService.unblockFwd(target.location);
                     break;
                 case CellRegion.BKWD_EDGE:
-                    this.boardVisibilityService.unblockBkw(loc.location);
-                    this.boardTraverseService.unblockBkw(loc.location);
-
+                    this.boardVisibilityService.unblockBkw(target.location);
+                    this.boardTraverseService.unblockBkw(target.location);
                     break;
             }
         }
-        if (singleInstance) {
-            this.boardLightService.updateLightValues();
-        }
+        this.boardLightService.updateLightValues();
     }
 
-    public toggleWall(loc: CellTarget): void {
-        if (this.hasWall(loc)) {
-            this.removeWall(loc);
+    public toggleDoor(target: CellTarget) {
+        if (this.hasObstruction(target) && this.doorData.has(target.hash())) {
+            this.removeDoor(target);
         } else {
-            this.addWall(loc);
+            this.addDoor(target);
+        }
+    }
+
+    public openCloseDoor(target: CellTarget) {
+        if (this.doorData.has(target.hash())) {
+            if (this.doorData.get(target.hash()).isOpen) {
+                this.doorData.get(target.hash()).isOpen = false;
+                switch (target.region) {
+                    case CellRegion.TOP_EDGE:
+                        this.boardVisibilityService.blockNorth(target.location);
+                        this.boardTraverseService.blockNorth(target.location);
+                        break;
+                    case CellRegion.LEFT_EDGE:
+                        this.boardVisibilityService.blockWest(target.location);
+                        this.boardTraverseService.blockWest(target.location);
+                        break;
+                    case CellRegion.FWRD_EDGE:
+                        this.boardVisibilityService.blockFwd(target.location);
+                        this.boardTraverseService.blockFwd(target.location);
+                        break;
+                    case CellRegion.BKWD_EDGE:
+                        this.boardVisibilityService.blockBkw(target.location);
+                        this.boardTraverseService.blockBkw(target.location);
+                        break;
+                }
+            } else {
+                this.doorData.get(target.hash()).isOpen = true;
+                switch (target.region) {
+                    case CellRegion.TOP_EDGE:
+                        this.boardVisibilityService.unblockNorth(target.location);
+                        this.boardTraverseService.unblockNorth(target.location);
+                        break;
+                    case CellRegion.LEFT_EDGE:
+                        this.boardVisibilityService.unblockWest(target.location);
+                        this.boardTraverseService.unblockWest(target.location);
+                        break;
+                    case CellRegion.FWRD_EDGE:
+                        this.boardVisibilityService.unblockFwd(target.location);
+                        this.boardTraverseService.unblockFwd(target.location);
+                        break;
+                    case CellRegion.BKWD_EDGE:
+                        this.boardVisibilityService.unblockBkw(target.location);
+                        this.boardTraverseService.unblockBkw(target.location);
+                        break;
+                }
+            }
+        }
+
+        this.boardLightService.updateLightValues();
+    }
+
+    public addWall(target: CellTarget, singleInstance = true) {
+        if (!this.hasObstruction(target)) {
+            this.wallData.set(target.hash(), target);
+            switch (target.region) {
+                case CellRegion.TOP_EDGE:
+                    this.boardVisibilityService.blockNorth(target.location);
+                    this.boardTraverseService.blockNorth(target.location);
+                    break;
+                case CellRegion.LEFT_EDGE:
+                    this.boardVisibilityService.blockWest(target.location);
+                    this.boardTraverseService.blockWest(target.location);
+                    break;
+                case CellRegion.FWRD_EDGE:
+                    this.boardVisibilityService.blockFwd(target.location);
+                    this.boardTraverseService.blockFwd(target.location);
+                    break;
+                case CellRegion.BKWD_EDGE:
+                    this.boardVisibilityService.blockBkw(target.location);
+                    this.boardTraverseService.blockBkw(target.location);
+                    break;
+            }
+        }
+        if (singleInstance) {
+            this.boardLightService.updateLightValues();
+        }
+    }
+
+    public removeWall(target: CellTarget, singleInstance = true): void {
+        if (this.hasObstruction(target) && this.wallData.has(target.hash())) {
+            this.wallData.delete(target.hash());
+            switch (target.region) {
+                case CellRegion.TOP_EDGE:
+                    this.boardVisibilityService.unblockNorth(target.location);
+                    this.boardTraverseService.unblockNorth(target.location);
+                    break;
+                case CellRegion.LEFT_EDGE:
+                    this.boardVisibilityService.unblockWest(target.location);
+                    this.boardTraverseService.unblockWest(target.location);
+                    break;
+                case CellRegion.FWRD_EDGE:
+                    this.boardVisibilityService.unblockFwd(target.location);
+                    this.boardTraverseService.unblockFwd(target.location);
+                    break;
+                case CellRegion.BKWD_EDGE:
+                    this.boardVisibilityService.unblockBkw(target.location);
+                    this.boardTraverseService.unblockBkw(target.location);
+                    break;
+            }
+        }
+        if (singleInstance) {
+            this.boardLightService.updateLightValues();
+        }
+    }
+
+    public toggleWall(target: CellTarget): void {
+        if (this.hasObstruction(target) && this.wallData.has(target.hash())) {
+            this.removeWall(target);
+        } else {
+            this.addWall(target);
         }
     }
 
@@ -183,7 +285,7 @@ export class BoardWallService {
         this.boardLightService.updateLightValues();
     }
 
-    public hasWall(loc: CellTarget): boolean {
-        return this.wallData.has(loc.hash());
+    public hasObstruction(target: CellTarget): boolean {
+        return this.wallData.has(target.hash()) || this.doorData.has(target.hash()) || this.windowData.has(target.hash());
     }
 }
