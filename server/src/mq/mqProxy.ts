@@ -5,9 +5,10 @@ import { Promise } from 'bluebird';
 import * as http from 'http';
 import { MqConfig } from '../config/mqConfig';
 import { merge } from 'rxjs/internal/observable/merge';
-import { MqMessage } from '../../../shared/types/mq/MqMessage';
-import { AmqpMessage } from './AmqpMessage';
-import { EncounterMessage } from './EncounterMessage';
+import { EncounterUpdateMessage } from './encounter-update.message';
+import { FriendRequest } from '../../../shared/types/mq/FriendRequest';
+import { FriendRequestMessage } from './friend-request.message';
+import { MqFactory } from './mq.factory';
 
 export class MqProxy {
 
@@ -21,21 +22,23 @@ export class MqProxy {
 					return;
 				}
 
-				connection.createChannel((error, channel) => {
+				connection.createChannel(async (error, channel) => {
 					if (error) {
 						reject(error);
 						return;
 					}
 
-					channel.assertExchange(MqConfig.encounterExchange, 'topic', {durable: true});
-					channel.assertQueue(MqConfig.encounterQueueName, {durable: true}, (error) => {
-						if (error) {
-							reject(error);
-							return;
-						}
+					try {
+						channel.assertExchange(MqConfig.encounterExchange, 'topic', {durable: true});
+						channel.assertExchange(MqConfig.userExchange, 'topic', {durable: true});
+						await this.createEncounterQueue(channel);
+						await this.createFriendRequestQueue(channel);
 						this.connection = connection;
 						resolve();
-					});
+					}
+					catch (error) {
+						reject(error);
+					}
 				});
 			});
 		});
@@ -47,11 +50,11 @@ export class MqProxy {
 		}
 	}
 
-	public ObserveAllEncounters(): Observable<EncounterMessage> {
+	public observeAllEncounters(): Observable<EncounterUpdateMessage> {
 		if (!this.connection) {
 			return throwError('Not connected to MQ Server');
 		}
-		let exchangeSubject = new Subject<any>();
+		let exchangeSubject = new Subject<EncounterUpdateMessage>();
 		this.connection.createChannel((error, channel) => {
 			if (error) {
 				merge(exchangeSubject, throwError(new Error(error)));
@@ -60,10 +63,29 @@ export class MqProxy {
 			channel.bindQueue(MqConfig.encounterQueueName, MqConfig.encounterExchange, MqConfig.encounterTopic);
 			channel.consume(MqConfig.encounterQueueName, (message) => {
 				// console.log(message);
-				exchangeSubject.next(new EncounterMessage(message));
+				exchangeSubject.next(new EncounterUpdateMessage(message));
 			}, {noAck: true});
 		});
 		return exchangeSubject.asObservable();
+	}
+
+	public observeAllFriendRequests(): Observable<FriendRequest> {
+		if (!this.connection) {
+			return throwError('Not connected to MQ Server');
+		}
+		let friendRequestSubject = new Subject<any>();
+		this.connection.createChannel((error, channel) => {
+			if (error) {
+				merge(friendRequestSubject, throwError(new Error(error)));
+			}
+
+			channel.bindQueue(MqConfig.friendRequestQueueName, MqConfig.userExchange, MqConfig.friendRequestTopic);
+			channel.consume(MqConfig.friendRequestQueueName, (message) => {
+				friendRequestSubject.next(new FriendRequestMessage(message));
+			});
+		});
+
+		return friendRequestSubject.asObservable();
 	}
 
 	public createMqAccount(user: UserModel): Promise<void> {
@@ -80,7 +102,8 @@ export class MqProxy {
 			}, async (response) => {
 				response.setEncoding('utf8');
 				await this.grantUserVHostAccess(user);
-				await this.grantUserExchangeAccess(user);
+				await this.grantExchangeAccess(user, MqConfig.encounterExchange, MqConfig.encounterTopic, MqConfig.encounterTopic);
+				await this.grantExchangeAccess(user, MqConfig.userExchange, MqFactory.createUserExchangeReadExp(user._id), MqFactory.createUserExchangeWriteExp());
 				resolve();
 			});
 
@@ -126,7 +149,7 @@ export class MqProxy {
 		});
 	}
 
-	private grantUserExchangeAccess(user: UserModel): Promise<void> {
+	private grantExchangeAccess(user: UserModel, exchange: string, readExp: string, writeExp: string): Promise<void> {
 		return new Promise((resolve, reject) => {
 			let request = http.request({
 				hostname: MqConfig.hostname,
@@ -147,11 +170,35 @@ export class MqProxy {
 			});
 
 			request.write(JSON.stringify({
-				exchange: MqConfig.encounterExchange,
-				write: MqConfig.encounterTopic,
-				read: MqConfig.encounterTopic
+				exchange: exchange,
+				write: readExp,
+				read: writeExp
 			}));
 			request.end();
+		});
+	}
+
+	private createEncounterQueue(channel): Promise<void> {
+		return new Promise((resolve, reject) => {
+			channel.assertQueue(MqConfig.encounterQueueName, {durable: true}, (error) => {
+				if (error) {
+					reject(error);
+					return;
+				}
+				resolve();
+			});
+		});
+	}
+
+	private createFriendRequestQueue(channel): Promise<void> {
+		return new Promise((resolve, reject) => {
+			channel.assertQueue(MqConfig.friendRequestQueueName, {durable: true}, (error) => {
+				if (error) {
+					reject(error);
+					return;
+				}
+				resolve();
+			});
 		});
 	}
 }

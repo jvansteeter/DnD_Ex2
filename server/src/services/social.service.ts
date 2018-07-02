@@ -5,8 +5,6 @@ import { UserModel } from "../db/models/user.model";
 import { FriendModel } from '../db/models/friend.model';
 import { NotificationRepository } from "../db/repositories/notification.repository";
 import { NotificationModel } from "../db/models/notification.model";
-import { NotificationType } from "../../../shared/types/notification-type";
-import { FriendRequest } from "../../../shared/types/friend-request";
 import { NotificationData } from "../../../shared/types/notification-data";
 
 export class SocialService {

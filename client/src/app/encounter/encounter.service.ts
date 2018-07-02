@@ -9,7 +9,7 @@ import {EncounterStateData} from '../../../../shared/types/encounter/encounterSt
 import {BoardStateService} from '../board/services/board-state.service';
 import {map, mergeMap, tap} from 'rxjs/operators';
 import {MqService} from '../mq/mq.service';
-import { WsMessage } from '../mq/WsMessage';
+import { StompMessage } from '../mq/stompMessage';
 
 @Injectable()
 export class EncounterService extends IsReadyService {
@@ -30,7 +30,7 @@ export class EncounterService extends IsReadyService {
     public init(): void {
         this.encounterRepo.getEncounter(this.encounterId).subscribe((encounter: EncounterStateData) => {
             this.encounterState = new EncounterState(encounter);
-            this.mqService.getEncounterMessages(this.encounterId).subscribe((message: WsMessage) => {
+            this.mqService.getEncounterMessages(this.encounterId).subscribe((message: StompMessage) => {
             	this.handleWsMessage(message);
             });
             this.setReady(true);
@@ -78,7 +78,7 @@ export class EncounterService extends IsReadyService {
         }
     }
 
-    private handleWsMessage(message: WsMessage): void {
+    private handleWsMessage(message: StompMessage): void {
     	console.log(message);
     }
 }

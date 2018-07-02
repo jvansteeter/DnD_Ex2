@@ -1,6 +1,7 @@
 import { MqProxy, MqProxySingleton } from './mqProxy';
 import { UserModel } from '../db/models/user.model';
-import { EncounterMessage } from './EncounterMessage';
+import { EncounterUpdateMessage } from './encounter-update.message';
+import { FriendRequest } from '../../../shared/types/mq/FriendRequest';
 
 export class MqService {
 	constructor(private mqProxy: MqProxy) {
@@ -8,10 +9,15 @@ export class MqService {
 	}
 
 	public handleMessages(): void {
-		this.mqProxy.ObserveAllEncounters().subscribe((message: EncounterMessage) => {
+		this.mqProxy.observeAllEncounters().subscribe((message: EncounterUpdateMessage) => {
 			// console.log(message)
 			// console.log('Properties:', message.properties)
 			console.log(message)
+		});
+		console.log('---- Observe all friend requests ----')
+		this.mqProxy.observeAllFriendRequests().subscribe((friendRequest: FriendRequest) => {
+			console.log('---- Friend Request ----')
+			console.log(friendRequest)
 		});
 	}
 
