@@ -6,7 +6,9 @@ export class AmqpMessage implements MqMessage {
 	body: string | Object;
 
 	constructor(data) {
-		this.headers = data['properties'];
+		this.headers = {
+			type: data.properties.type
+		};
 		this.body = data.content.toString();
 	}
 }

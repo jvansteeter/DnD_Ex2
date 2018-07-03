@@ -1,11 +1,12 @@
 import { AmqpMessage } from './AmqpMessage';
 import { MqConfig } from '../config/mqConfig';
 import { MqMessageType } from '../../../shared/types/mq/message-type.enum';
+import { EncounterUpdate } from '../../../shared/types/mq/EncounterUpdate';
 
-export class EncounterUpdateMessage extends AmqpMessage {
+export class EncounterUpdateMessage extends AmqpMessage implements EncounterUpdate {
 	headers: {
 		type: MqMessageType.ENCOUNTER,
-		encounterId: String
+		encounterId: string,
 	};
 
 	constructor(data) {

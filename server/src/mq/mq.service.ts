@@ -10,13 +10,9 @@ export class MqService {
 
 	public handleMessages(): void {
 		this.mqProxy.observeAllEncounters().subscribe((message: EncounterUpdateMessage) => {
-			// console.log(message)
-			// console.log('Properties:', message.properties)
 			console.log(message)
 		});
-		console.log('---- Observe all friend requests ----')
 		this.mqProxy.observeAllFriendRequests().subscribe((friendRequest: FriendRequest) => {
-			console.log('---- Friend Request ----')
 			console.log(friendRequest)
 		});
 	}

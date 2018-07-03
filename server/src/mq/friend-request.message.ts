@@ -5,11 +5,13 @@ import { MqMessageType } from '../../../shared/types/mq/message-type.enum';
 export class FriendRequestMessage extends AmqpMessage implements FriendRequest {
 	headers: {
 		type: MqMessageType.FRIEND_REQUEST;
-		from: String;
-		to: String
+		from: string;
+		to: string;
 	};
 
 	constructor(data) {
 		super(data);
+		this.headers.to = data.properties.headers.to;
+		this.headers.from = data.properties.headers.from;
 	}
 }

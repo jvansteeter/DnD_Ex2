@@ -4,7 +4,7 @@ import { MqMessage } from './MqMessage';
 export interface FriendRequest extends MqMessage {
 	headers: {
 		type: MqMessageType.FRIEND_REQUEST,
-		from: String,
-		to: String,
+		from: string,
+		to: string,
 	}
 }
