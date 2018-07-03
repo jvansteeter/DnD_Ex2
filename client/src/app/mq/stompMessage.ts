@@ -3,11 +3,12 @@ import { Message } from '@stomp/stompjs';
 import { MqMessageType } from '../../../../shared/types/mq/message-type.enum';
 
 export abstract class StompMessage implements MqMessage {
-	properties: { type: MqMessageType };
+	headers: { type: MqMessageType };
 	body: string | Object;
 
 	protected constructor(message: Message) {
 		let type: MqMessageType;
+		console.log(message)
 		switch (message.headers.type.toUpperCase()) {
 			case 'ENCOUNTER': {
 				type = MqMessageType.ENCOUNTER;
@@ -15,7 +16,7 @@ export abstract class StompMessage implements MqMessage {
 			}
 		}
 
-		this.properties = {
+		this.headers = {
 			type: type
 		};
 

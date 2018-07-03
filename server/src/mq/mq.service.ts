@@ -24,6 +24,10 @@ export class MqService {
 	public createMqAccount(user: UserModel): Promise<void> {
 		return this.mqProxy.createMqAccount(user);
 	}
+
+	public userHasMqAccount(user: UserModel): Promise<boolean> {
+		return this.mqProxy.userHasMqAccount(user);
+	}
 }
 
 export const MqServiceSingleton: MqService = new MqService(MqProxySingleton);

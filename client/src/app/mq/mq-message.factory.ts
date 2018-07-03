@@ -5,7 +5,7 @@ import { MqClientConfig } from '../config/mq.config';
 export class MqMessageFactory {
 	public static createFriendRequest(toUserId: string, fromUserId: string): FriendRequest {
 		return {
-			properties: {
+			headers: {
 				type: MqMessageType.FRIEND_REQUEST,
 				from: fromUserId,
 				to: toUserId

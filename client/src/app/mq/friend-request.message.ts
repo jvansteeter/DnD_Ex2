@@ -4,7 +4,7 @@ import { FriendRequest } from '../../../../shared/types/mq/FriendRequest';
 import { MqMessageType } from '../../../../shared/types/mq/message-type.enum';
 
 export class FriendRequestMessage extends StompMessage implements FriendRequest {
-	properties: {
+	headers: {
 		type: MqMessageType.FRIEND_REQUEST;
 		from: String;
 		to: String;
@@ -12,7 +12,7 @@ export class FriendRequestMessage extends StompMessage implements FriendRequest 
 
 	constructor(message: Message) {
 		super(message);
-		this.properties.to = message.headers.to;
-		this.properties.from = message.headers.from;
+		this.headers.to = message.headers.to;
+		this.headers.from = message.headers.from;
 	}
 }

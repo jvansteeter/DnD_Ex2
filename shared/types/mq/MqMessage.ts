@@ -1,7 +1,7 @@
 import { MqMessageType } from './message-type.enum';
 
 export interface MqMessage {
-	properties: {
+	headers: {
 		type: MqMessageType
 	};
 	body: string | Object;

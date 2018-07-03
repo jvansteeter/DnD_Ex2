@@ -3,7 +3,7 @@ import { FriendRequest } from '../../../shared/types/mq/FriendRequest';
 import { MqMessageType } from '../../../shared/types/mq/message-type.enum';
 
 export class FriendRequestMessage extends AmqpMessage implements FriendRequest {
-	properties: {
+	headers: {
 		type: MqMessageType.FRIEND_REQUEST;
 		from: String;
 		to: String

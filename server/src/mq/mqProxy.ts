@@ -117,7 +117,32 @@ export class MqProxy {
 			}));
 			request.end();
 		});
+	}
 
+	public userHasMqAccount(user: UserModel): Promise<boolean> {
+		return new Promise((resolve, reject) => {
+			let request = http.request({
+				hostname: MqConfig.hostname,
+				port: MqConfig.port,
+				method: 'GET',
+				path: '/api/users/' + user._id,
+				auth: MqConfig.auth,
+				headers: {
+					'Content-Type': 'application/json',
+				}
+			}, (response) => {
+				if (response.statusCode === 200) {
+					resolve(true);
+				}
+				resolve(false);
+			});
+
+			request.on('error', (error) => {
+				reject(new Error(error.message));
+			});
+
+			request.end();
+		});
 	}
 
 	private grantUserVHostAccess(user: UserModel): Promise<void> {
@@ -171,8 +196,8 @@ export class MqProxy {
 
 			request.write(JSON.stringify({
 				exchange: exchange,
-				write: readExp,
-				read: writeExp
+				write: writeExp,
+				read: readExp
 			}));
 			request.end();
 		});
