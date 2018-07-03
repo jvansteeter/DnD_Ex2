@@ -59,7 +59,7 @@ export class MqService extends IsReadyService {
 		this.publishMessage(friendRequest);
 	}
 
-	public getFriendInvites(): Observable<FriendRequestMessage> {
+	public getIncomingFriendRequests(): Observable<FriendRequestMessage> {
 		return this.stompService.subscribe(MqMessageFactory.createGetFriendRequestURL(this.userProfileService.userId))
 				.pipe(
 						map((message: Message) => {
@@ -72,7 +72,7 @@ export class MqService extends IsReadyService {
 		let url = '';
 		switch (message.headers.type) {
 			case MqMessageType.FRIEND_REQUEST: {
-				url = MqMessageFactory.createSendFriendRequestURL((message as FriendRequestMessage).headers.to);
+				url = MqMessageFactory.createSendFriendRequestURL((message as FriendRequestMessage).headers.toUserId);
 				break;
 			}
 		}

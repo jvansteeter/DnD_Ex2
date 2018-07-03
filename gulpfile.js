@@ -31,13 +31,13 @@ gulp.task('serverscripts', function() {
         .pipe(gulp.dest('server/dist'));
 });
 
-// copy certain files like index.html to dist
+// copy certain files like index.html toUserId dist
 // gulp.task('copy', () => {
 //     return gulp.src(['client/index.html', 'client/systemjs.config.js'])
 //         .pipe(gulp.dest('client/dist'));
 // });
 
-// By adding this, we can run "gulp watch" to automatically
+// By adding this, we can run "gulp watch" toUserId automatically
 // run the build when we change a script
 gulp.task('watch', function() {
     // gulp.watch('client/src/**/*', [ 'clientscripts' ]);

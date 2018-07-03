@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { SocialRepository } from './social.repository';
 import { Observable } from 'rxjs';
 import { UserProfile } from '../types/userProfile';
-import { NotificationData } from "../../../../shared/types/notification-data";
 import { MqService } from '../mq/mq.service';
 import { FriendRequestMessage } from '../mq/friend-request.message';
 import { IsReadyService } from '../utilities/services/isReady.service';
+import { NotificationData } from '../../../../shared/types/notifications/NotificationData';
 
 @Injectable()
 export class SocialService extends IsReadyService {
@@ -42,10 +42,6 @@ export class SocialService extends IsReadyService {
 		this.socialRepo.rejectFriendRequest(fromUserId);
 	}
 
-	public getPendingFriendRequests(): Observable<UserProfile[]> {
-		return this.socialRepo.getPendingFriendRequests();
-	}
-
 	public getPendingNotifications(): Observable<NotificationData[]> {
 		return this.socialRepo.getPendingNotifications();
 	}
@@ -58,7 +54,11 @@ export class SocialService extends IsReadyService {
 
 	}
 
-	public getFriendInvites(): Observable<FriendRequestMessage> {
-		return this.mqService.getFriendInvites();
+	public getIncomingFriendRequests(): Observable<FriendRequestMessage> {
+		return this.mqService.getIncomingFriendRequests();
+	}
+
+	public getUserById(userId: string): Observable<UserProfile> {
+		return this.socialRepo.getUserById(userId);
 	}
 }

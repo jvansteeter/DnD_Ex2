@@ -21,7 +21,7 @@
         <span>Notifications</span>
         <mat-divider></mat-divider>
         <ng-container *ngFor="let notification of notificationsService.notifications">
-            <div *ngIf="notification.notificationType === notificationType.CAMPAIGN_INVITE" class="notification-friendRequest">
+            <div *ngIf="notification.type === notificationType.CAMPAIGN_INVITE" class="notification-friendRequest">
                 <span>Campaign Invite: </span>
                 <span>{{notification.campaignLabel}}</span>
                 <button mat-mini-fab class="acceptButton" (click)="acceptCampaignInvite(notification)"><mat-icon>check</mat-icon></button>

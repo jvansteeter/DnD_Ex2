@@ -52,7 +52,7 @@ export class MqProxy {
 
 	public observeAllEncounters(): Observable<EncounterUpdateMessage> {
 		if (!this.connection) {
-			return throwError('Not connected to MQ Server');
+			return throwError('Not connected toUserId MQ Server');
 		}
 		let exchangeSubject = new Subject<EncounterUpdateMessage>();
 		this.connection.createChannel((error, channel) => {
@@ -71,7 +71,7 @@ export class MqProxy {
 
 	public observeAllFriendRequests(): Observable<FriendRequest> {
 		if (!this.connection) {
-			return throwError('Not connected to MQ Server');
+			return throwError('Not connected toUserId MQ Server');
 		}
 		let friendRequestSubject = new Subject<any>();
 		this.connection.createChannel((error, channel) => {

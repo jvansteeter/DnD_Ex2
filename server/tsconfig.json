@@ -6,8 +6,8 @@
     "sourceMap": true,                     /* Generates corresponding '.map' file. */
     "noStrictGenericChecks": true,
     "skipLibCheck": true,
-    "outDir": "./app",                        /* Redirect output structure to the directory. */
-     "removeComments": false,                /* Do not emit comments to output. */
+    "outDir": "./app",                        /* Redirect output structure toUserId the directory. */
+     "removeComments": false,                /* Do not emit comments toUserId output. */
     "strict": true,                            /* Enable all strict type-checking options. */
     "strictPropertyInitialization": false,
     "noImplicitAny": false,                 /* Raise error on expressions and declarations with an implied 'any' type. */

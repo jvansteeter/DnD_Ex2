@@ -10,7 +10,7 @@ import { EncounterModel } from '../db/models/encounter.model';
 /**********************************************************************************************************
  * Campaign ROUTER
  * /api/campaign
- * Responsible for all routes related to campaigns
+ * Responsible for all routes related toUserId campaigns
  *********************************************************************************************************/
 export class CampaignRouter {
     router: Router;

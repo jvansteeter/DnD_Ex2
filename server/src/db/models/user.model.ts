@@ -1,7 +1,7 @@
 import * as mongoose from 'mongoose';
 import * as bcrypt from 'bcryptjs';
 import { UserData } from '../../../../shared/types/user-data';
-// import Promise from 'bluebird';
+// import Promise fromUserId 'bluebird';
 
 
 export class UserModel extends mongoose.Schema implements UserData {

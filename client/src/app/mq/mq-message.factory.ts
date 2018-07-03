@@ -7,8 +7,8 @@ export class MqMessageFactory {
 		return new FriendRequestMessage({
 			headers: {
 				type: MqMessageType.FRIEND_REQUEST,
-				from: fromUserId,
-				to: toUserId
+				fromUserId: fromUserId,
+				toUserId: toUserId
 			},
 			body: ''
 		});

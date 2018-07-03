@@ -40,7 +40,7 @@ import { MqServiceSingleton } from './mq/mq.service';
  **********************************************************************************************************************/
 
 class App {
-  // ref to Express instance
+  // ref toUserId Express instance
   public app;
   private mqProxy: MqProxy;
 
@@ -87,7 +87,7 @@ class App {
 
   // Configure API endpoints.
   private routes(): void {
-    // if the request is not authenticated, redirect to login
+    // if the request is not authenticated, redirect toUserId login
     let authenticationRouter = Express.Router();
     authenticationRouter.get('/', (req: Request, res: Response) => {
       if (!req.isAuthenticated()) {
@@ -128,7 +128,7 @@ class App {
     this.app.use('/api/campaign', this.isAuthenticated, CampaignRouter);
     this.app.use('/api/encounter', this.isAuthenticated, EncounterRouter);
 
-    //  All other requests, redirect to index
+    //  All other requests, redirect toUserId index
     this.app.get('*', (req, res) => {
       res.redirect('/');
     });

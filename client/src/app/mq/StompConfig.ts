@@ -6,13 +6,13 @@ export const StompConfiguration: StompConfig = {
 		login: undefined,
 		passcode: undefined
 	},
-	// How often to heartbeat?
-	// Interval in milliseconds, set to 0 to disable
+	// How often toUserId heartbeat?
+	// Interval in milliseconds, set toUserId 0 toUserId disable
 	heartbeat_in: 0, // Typical value 0 - disabled
 	heartbeat_out: 20000, // Typical value 20000 - every 20 seconds
 
 	// Wait in milliseconds before attempting auto reconnect
-	// Set to 0 to disable
+	// Set toUserId 0 toUserId disable
 	// Typical value 5000 (5 seconds)
 	reconnect_delay: 5000,
 

@@ -5,15 +5,15 @@ import { MqMessageType } from '../../../../shared/types/mq/message-type.enum';
 export class FriendRequestMessage extends StompMessage implements FriendRequest {
 	headers: {
 		type: MqMessageType.FRIEND_REQUEST;
-		from: string;
-		to: string;
+		fromUserId: string;
+		toUserId: string;
 	};
 
 	constructor(message) {
 		super(message);
 		this.headers.type = MqMessageType.FRIEND_REQUEST;
-		this.headers.to = message.headers.to;
-		this.headers.from = message.headers.from;
+		this.headers.toUserId = message.headers.toUserId;
+		this.headers.fromUserId = message.headers.fromUserId;
 	}
 
 	public serializeBody(): string {

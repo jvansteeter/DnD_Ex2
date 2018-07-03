@@ -10,7 +10,7 @@ import {MapRendererComponent} from '../renderer/map-renderer/map-renderer.compon
 export class BoardLightService {
     public cellLightData: Array<Array<CellLightConfig>>;
 
-    public lightSourceData: Map<string, LightSource> = new Map();           // maps XyPair location hashes (should just be unique toString) to LightSourceObjects
+    public lightSourceData: Map<string, LightSource> = new Map();           // maps XyPair location hashes (should just be unique toString) toUserId LightSourceObjects
 
     constructor(
         private boardStateService: BoardStateService,
@@ -69,7 +69,7 @@ export class BoardLightService {
                 let south = false;
                 let east = false;
 
-                // sort light sources by distance to cell, removing any beyond influence distance
+                // sort light sources by distance toUserId cell, removing any beyond influence distance
                 const mapped_light_sources = new Map<number, Array<LightSource>>();
                 for (const light_source of Array.from(this.lightSourceData.values())) {
                     const distance = BoardStateService.distanceCellToCell(new XyPair(cell.coor.x, cell.coor.y), light_source.location);

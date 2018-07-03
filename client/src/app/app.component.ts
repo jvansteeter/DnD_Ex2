@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { UserProfileService } from './data-services/userProfile.service';
-import { NotificationsService } from './data-services/notifications.service';
 
 @Component({
   selector: 'web-app',
@@ -10,10 +8,7 @@ import { NotificationsService } from './data-services/notifications.service';
 })
 export class AppComponent implements OnInit {
 
-    constructor(private router: Router,
-                private userProfileService: UserProfileService,
-                private notificationsService: NotificationsService) {
-        this.notificationsService.getPendingFriendRequests();
+    constructor(private router: Router) {
     }
 
     ngOnInit(): void {

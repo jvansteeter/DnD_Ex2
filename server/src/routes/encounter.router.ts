@@ -7,7 +7,7 @@ import { EncounterStateData } from '../../../shared/types/encounter/encounterSta
 /**********************************************************************************************************
  * Campaign ROUTER
  * /api/encounter
- * Responsible for all routes related to campaigns
+ * Responsible for all routes related toUserId campaigns
  *********************************************************************************************************/
 export class EncounterRouter {
 	router: Router;

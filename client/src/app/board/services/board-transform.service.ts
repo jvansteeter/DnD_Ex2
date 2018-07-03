@@ -19,16 +19,16 @@ export class BoardTransformService {
      **************************************************************************************************************************************
      * GENERAL NOTES
      *
-     * --- When it comes to locating things on the screen, there are a handful of coordinate systems
-     *     to be aware of. Variables and/or functions that require/return a specific value in a given
+     * --- When it comes toUserId locating things on the screen, there are a handful of coordinate systems
+     *     toUserId be aware of. Variables and/or functions that require/return a specific value in a given
      *     coordinate scope will suffix the varible/function in an identifier for that scope
-     *     --- '_screen': refers to the pixel location on the screen, considered global
-     *     --- '_canvas': refers to the pixel location on the mapCanvas, relative to its top corner
-     *     --- '_map'   : refers to the pixel location on the map, influenced by map transforms
-     *     --- '_cell'  : refers to a simple tile on the board-map. By taking the global 'squareSize' and
+     *     --- '_screen': refers toUserId the pixel location on the screen, considered global
+     *     --- '_canvas': refers toUserId the pixel location on the mapCanvas, relative toUserId its top corner
+     *     --- '_map'   : refers toUserId the pixel location on the map, influenced by map transforms
+     *     --- '_cell'  : refers toUserId a simple tile on the board-map. By taking the global 'squareSize' and
      *                    multiplying by the '_cell's X and Y values, one would get the '_canvas' value
      *                    for the cell
-     *     --- 'cell_pix' : refers to the pixel coordinate within the cell
+     *     --- 'cell_pix' : refers toUserId the pixel coordinate within the cell
      */
 
     /********************************************************************************************************************

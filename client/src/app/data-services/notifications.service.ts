@@ -1,8 +1,11 @@
 import { Injectable } from '@angular/core';
-import { NotificationData } from '../../../../shared/types/notification-data';
 import { UserProfile } from '../types/userProfile';
 import { SocialService } from '../social/social.service';
 import { IsReadyService } from '../utilities/services/isReady.service';
+import { NotificationData } from '../../../../shared/types/notifications/NotificationData';
+import { NotificationType } from '../../../../shared/types/notifications/notification-type.enum';
+import { FriendRequestNotification } from '../../../../shared/types/notifications/FriendRequestNotification';
+import { FriendRequestMessage } from '../mq/friend-request.message';
 
 @Injectable()
 export class NotificationsService extends IsReadyService {
@@ -13,14 +16,16 @@ export class NotificationsService extends IsReadyService {
 		super(socialService);
 		this.notifications = [];
 		this.friendRequests = [];
-
+		this.init();
 	}
 
 	public init(): void {
 		this.dependenciesReady().subscribe((isReady: boolean) => {
 			if (isReady) {
-				this.getPendingFriendRequests();
 				this.getPendingNotifications();
+				this.socialService.getIncomingFriendRequests().subscribe((request: FriendRequestMessage) => {
+					this.handleFriendRequest(request.headers.fromUserId);
+				});
 				this.setReady(true);
 			}
 			else {
@@ -29,15 +34,14 @@ export class NotificationsService extends IsReadyService {
 		});
 	}
 
-	public getPendingFriendRequests(): void {
-		this.socialService.getPendingFriendRequests().subscribe((fromUsers: UserProfile[]) => {
-			this.friendRequests = fromUsers;
-		});
-	}
-
 	public getPendingNotifications(): void {
 		this.socialService.getPendingNotifications().subscribe((notifications: NotificationData[]) => {
 			this.notifications = notifications;
+			this.notifications.forEach((notification: NotificationData) => {
+				if (notification.type === NotificationType.FRIEND_REQUEST) {
+					this.handleFriendRequest((notification as FriendRequestNotification).fromUserId);
+				}
+			});
 		});
 	}
 
@@ -56,5 +60,11 @@ export class NotificationsService extends IsReadyService {
 		//             this.homePageService.campaigns = campaigns;
 		//         });
 		//     });
+	}
+
+	private handleFriendRequest(fromUserId: string): void {
+		this.socialService.getUserById(fromUserId).subscribe((user: UserProfile) => {
+			this.friendRequests.push(user);
+		});
 	}
 }

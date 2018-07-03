@@ -1,10 +1,9 @@
 import * as mongoose from 'mongoose';
-// import { Promise } from 'bluebird';
-import { NotificationData } from "../../../../shared/types/notification-data";
-import { NotificationType } from '../../../../shared/types/notification-type';
+import { MongooseModel } from './mongoose.model';
+import { NotificationData } from '../../../../shared/types/notifications/NotificationData';
+import { NotificationType } from '../../../../shared/types/notifications/notification-type.enum';
 
-
-export class NotificationModel extends mongoose.Schema {
+export class NotificationModel extends MongooseModel {
     public _id: string;
     public toUserId: string;
     public notificationType: NotificationType;
@@ -19,21 +18,8 @@ export class NotificationModel extends mongoose.Schema {
 
         this._id = this.methods._id;
         this.toUserId = this.methods.toUserId;
-        this.notificationType = this.methods.notificationType;
+        this.notificationType = this.methods.type;
         this.notificationData = this.methods.notificationData;
-    }
-
-    private save(): Promise<void> {
-        return new Promise((resolve, reject) => {
-            this.methods.save((error) => {
-                if (error) {
-                    reject(error);
-                    return;
-                }
-
-                resolve();
-            });
-        });
     }
 }
 

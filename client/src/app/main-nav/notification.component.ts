@@ -2,9 +2,9 @@ import { Component } from "@angular/core";
 import { UserProfile } from "../types/userProfile";
 import { SocialService } from "../social/social.service";
 import { NotificationsService } from "../data-services/notifications.service";
-import { NotificationType } from '../../../../shared/types/notification-type';
-import { NotificationData } from '../../../../shared/types/notification-data';
-import { CampaignInviteNotification } from '../../../../shared/types/campaign-invite-notification';
+import { NotificationType } from '../../../../shared/types/notifications/notification-type.enum';
+import { NotificationData } from '../../../../shared/types/notifications/NotificationData';
+import { CampaignInviteNotification } from '../../../../shared/types/notifications/CampaignInviteNotification';
 
 @Component({
     selector: 'app-notifications',
