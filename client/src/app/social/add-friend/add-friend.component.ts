@@ -1,12 +1,12 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { DataSource } from '@angular/cdk/collections';
-import { Observable, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { UserProfile } from '../../types/userProfile';
 import { MatDialogRef } from '@angular/material';
 import { SocialService } from '../social.service';
 import { UserProfileService } from '../../data-services/userProfile.service';
 import { NotificationsService } from '../../data-services/notifications.service';
-import { FriendService } from '../friend.service';
+import { FriendService } from '../../data-services/friend.service';
+import { SubjectDataSource } from '../../utilities/subjectDataSource';
 
 
 @Component({
@@ -16,7 +16,7 @@ import { FriendService } from '../friend.service';
 })
 export class AddFriendComponent {
     @ViewChild('searchCriteria') private searchInput: ElementRef;
-    private userDataSource: UserDataSource;
+    private userDataSource: SubjectDataSource<UserProfile>;
     private userSubject: Subject<UserProfile[]>;
     public tableColumns = ['user', 'actions'];
 
@@ -29,7 +29,7 @@ export class AddFriendComponent {
                 private notificationsService: NotificationsService,
                 private friendService: FriendService) {
         this.userSubject = new Subject();
-        this.userDataSource = new UserDataSource(this.userSubject);
+        this.userDataSource = new SubjectDataSource<UserProfile>(this.userSubject);
         this.users = [];
         this.noUsersError = false;
     }
@@ -59,18 +59,18 @@ export class AddFriendComponent {
     }
 
     public sendRequest(user: UserProfile): void {
-        this.socialService.sendFriendRequest(user._id);
+        this.friendService.sendFriendRequest(user._id);
         this.dialogRef.close();
     }
 
     public acceptRequest(user: UserProfile): void {
-        this.socialService.acceptRequest(user._id);
+        this.friendService.acceptRequest(user._id);
         this.notificationsService.removeFriendRequest(user._id);
         this.dialogRef.close();
     }
 
     public rejectRequest(user: UserProfile): void {
-        this.socialService.rejectFriendRequest(user._id);
+        this.friendService.rejectFriendRequest(user._id);
         this.notificationsService.removeFriendRequest(user._id);
         this.dialogRef.close();
     }
@@ -83,18 +83,5 @@ export class AddFriendComponent {
         }
 
         return false;
-    }
-}
-
-class UserDataSource extends DataSource<UserProfile> {
-    constructor(private userSubject: Subject<UserProfile[]>) {
-        super();
-    }
-
-    connect(): Observable<UserProfile[]> {
-        return this.userSubject.asObservable();
-    }
-
-    disconnect(): void {
     }
 }

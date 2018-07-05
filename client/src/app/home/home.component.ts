@@ -10,7 +10,7 @@ import {Router} from '@angular/router';
 import {DashboardCard} from '../cdk/dashboard-card/dashboard-card';
 import {AddFriendComponent} from '../social/add-friend/add-friend.component';
 import {UserProfile} from '../types/userProfile';
-import {FriendService} from '../social/friend.service';
+import {FriendService} from '../data-services/friend.service';
 import { CampaignService } from '../data-services/campaign.service';
 
 @Component({
@@ -35,7 +35,6 @@ export class HomeComponent implements OnInit {
 	public friendsCard: DashboardCard;
 
 	public friendTableColumns = ['label'];
-	private readonly friendSubject: Subject<UserProfile[]>;
 	public friendDataSource: SubjectDataSource<UserProfile>;
 
 	constructor(private dialog: MatDialog,
@@ -52,11 +51,7 @@ export class HomeComponent implements OnInit {
 		this.ruleSetSubject = new Subject<any>();
 		this.ruleSetDataSource = new SubjectDataSource(this.ruleSetSubject);
 
-		this.friendSubject = new Subject<UserProfile[]>();
-		this.friendDataSource = new SubjectDataSource(this.friendSubject);
-		this.friendService.getFriends().subscribe((friends: UserProfile[]) => {
-			this.friendSubject.next(friends);
-		});
+		this.friendDataSource = new SubjectDataSource(this.friendService.getFriendsSubject());
 	}
 
 	public ngOnInit(): void {

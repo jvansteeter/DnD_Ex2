@@ -42,32 +42,24 @@ export class SocialRouter {
 	}
 
 	init() {
-		this.router.get('/pendingNotifications', (req: Request, res: Response) => {
-			this.socialService.getPendingNotifications(req.user._id).then((notifications: NotificationData[]) => {
-				res.json(notifications);
-			}).catch(error => {
-				console.error(error);
-				res.status(500).send(error);
-			})
+
+		this.router.post('/acceptFriendRequest', (req: Request, res: Response) => {
+		    this.socialService.acceptFriendRequest(req.user._id, req.body.userId).then(() => {
+		        res.send("OK");
+		    }).catch(error => {
+		        console.error(error);
+		        res.status(500).send(error);
+		    });
 		});
 
-		// this.router.post('/acceptRequest', (req: Request, res: Response) => {
-		//     this.socialService.acceptFriendRequest(req.user._id, req.body.userId).then(() => {
-		//         res.send("OK");
-		//     }).catch(error => {
-		//         console.error(error);
-		//         res.status(500).send(error);
-		//     });
-		// });
-		//
-		// this.router.post('/rejectRequest', (req: Request, res: Response) => {
-		//     this.socialService.rejectFriendRequest(req.user._id, req.body.userId).then(() => {
-		//         res.send('OK');
-		//     }).catch(error => {
-		//         console.error(error);
-		//         res.status(500).send(error);
-		//     });
-		// });
+		this.router.post('/rejectFriendRequest', (req: Request, res: Response) => {
+		    this.socialService.rejectFriendRequest(req.user._id, req.body.userId).then(() => {
+		        res.send('OK');
+		    }).catch(error => {
+		        console.error(error);
+		        res.status(500).send(error);
+		    });
+		});
 
 		this.router.get('/friendList', (req: Request, res: Response) => {
 			this.socialService.getFriendList(req.user._id).then((friendList: UserModel[]) => {

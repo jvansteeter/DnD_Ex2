@@ -19,7 +19,7 @@ export class MqService {
 			console.log(message)
 		});
 		this.mqProxy.observeAllFriendRequests().subscribe(async (friendRequest: FriendRequest) => {
-			await this.handleFriendRequest(friendRequest);
+			this.handleFriendRequest(friendRequest);
 		});
 	}
 

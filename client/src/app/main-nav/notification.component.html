@@ -10,8 +10,8 @@
             <div class="notification-friendRequest">
                 <img [src]="requester.profilePhotoUrl" class="img-rounded">
                 <span>{{requester.username}}</span>
-                <button mat-icon-button class="acceptButton" (click)="acceptRequest(requester)"><mat-icon>check</mat-icon></button>
-                <button mat-icon-button class="rejectButton" (click)="rejectRequest(requester)"><mat-icon>not_interested</mat-icon></button>
+                <button mat-icon-button class="acceptButton" (click)="acceptFriendRequest(requester)"><mat-icon>check</mat-icon></button>
+                <button mat-icon-button class="rejectButton" (click)="rejectFriendRequest(requester)"><mat-icon>not_interested</mat-icon></button>
             </div>
         </ng-container>
         <mat-divider></mat-divider>

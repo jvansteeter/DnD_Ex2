@@ -6,7 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { SocialService } from './social.service';
 import { SelectFriendsComponent } from './select-friends/select-friends.component';
-import { FriendService } from './friend.service';
+import { FriendService } from '../data-services/friend.service';
 
 @NgModule({
     imports: [

@@ -6,6 +6,8 @@ import { FriendModel } from '../db/models/friend.model';
 import { NotificationRepository } from "../db/repositories/notification.repository";
 import { NotificationModel } from "../db/models/notification.model";
 import { NotificationData } from '../../../shared/types/notifications/NotificationData';
+import { NotificationType } from '../../../shared/types/notifications/notification-type.enum';
+import { FriendRequestNotification } from '../../../shared/types/notifications/FriendRequestNotification';
 
 export class SocialService {
 	private userRepo: UserRepository;
@@ -17,15 +19,6 @@ export class SocialService {
 		this.friendRepo = new FriendRepository();
 		this.notificationRepo = new NotificationRepository();
 	}
-
-	// public sendFriendRequest(fromUserId: string, toUserId: string): Promise<void> {
-	//     return new Promise((resolve, reject) => {
-	//         this.friendRequestRepo.create(fromUserId, toUserId).then(() => {
-	//             this.loggedInUserService.emitToUser(toUserId, { fromUserId: fromUserId, type: NotificationType.FRIEND_REQUEST } as FriendRequest);
-	//             resolve();
-	//         }).catch(error => reject(error));
-	//     });
-	// }
 
 	// public getPendingFriendRequests(toUserId: string): Promise<FriendRequestModel[]> {
 	//     return new Promise((resolve, reject) => {
@@ -70,29 +63,39 @@ export class SocialService {
 		});
 	}
 
-	// public acceptFriendRequest(toUserId, fromUserId): Promise<void> {
-	//     return new Promise((resolve, reject) => {
-	//         this.friendRepo.create(toUserId, fromUserId).then(() => {
-	//             this.friendRepo.create(fromUserId, toUserId).then(() => {
-	//                 this.friendRequestRepo.findFromTo(fromUserId, toUserId).then((request: FriendRequestModel) => {
-	//                     this.friendRequestRepo.remove(request).then(() => {
-	//                         resolve();
-	//                     });
-	//                 }).catch(error => reject(error));
-	//             }).catch(error => reject(error));
-	//         }).catch(error => reject(error));
-	//     });
-	// }
+	public async acceptFriendRequest(toUserId, fromUserId): Promise<void> {
+		try {
+			let friendRequests: NotificationModel[] = await this.notificationRepo.findAllToByType(toUserId, NotificationType.FRIEND_REQUEST);
+			friendRequests.forEach(async (friendRequest: NotificationModel) => {
+				let data: FriendRequestNotification = friendRequest.notificationData as FriendRequestNotification;
+				if (data.fromUserId === fromUserId) {
+					await this.friendRepo.create(toUserId, fromUserId);
+					await this.friendRepo.create(fromUserId, toUserId);
+					await this.notificationRepo.removeById(friendRequest._id);
+					return;
+				}
+			});
+		}
+		catch (error) {
+			throw error;
+		}
+	}
 
-	// public rejectFriendRequest(toUserId, fromUserId): Promise<void> {
-	//     return new Promise((resolve, reject) => {
-	//         this.friendRequestRepo.findFromTo(fromUserId, toUserId).then((request: FriendRequestModel) => {
-	//             this.friendRequestRepo.remove(request).then(() => {
-	//                 resolve();
-	//             }).catch(error => reject(error));
-	//         }).catch(error => reject(error));
-	//     });
-	// }
+	public async rejectFriendRequest(toUserId, fromUserId): Promise<void> {
+		try {
+			let friendRequests: NotificationModel[] = await this.notificationRepo.findAllToByType(toUserId, NotificationType.FRIEND_REQUEST);
+			friendRequests.forEach(async (friendRequest: NotificationModel) => {
+				let data: FriendRequestNotification = friendRequest.notificationData as FriendRequestNotification;
+				if (data.fromUserId === fromUserId) {
+					await this.notificationRepo.removeById(friendRequest._id);
+					return;
+				}
+			});
+		}
+		catch (error) {
+			throw (error);
+		}
+	}
 
 	public getFriendList(userId: string): Promise<UserModel[]> {
 		return new Promise((resolve, reject) => {

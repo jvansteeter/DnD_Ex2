@@ -205,7 +205,7 @@ export class MqProxy {
 
 	private createEncounterQueue(channel): Promise<void> {
 		return new Promise((resolve, reject) => {
-			channel.assertQueue(MqConfig.encounterQueueName, {durable: true}, (error) => {
+			channel.assertQueue(MqConfig.encounterQueueName, {durable: false}, (error) => {
 				if (error) {
 					reject(error);
 					return;
@@ -217,7 +217,7 @@ export class MqProxy {
 
 	private createFriendRequestQueue(channel): Promise<void> {
 		return new Promise((resolve, reject) => {
-			channel.assertQueue(MqConfig.friendRequestQueueName, {durable: true}, (error) => {
+			channel.assertQueue(MqConfig.friendRequestQueueName, {durable: false}, (error) => {
 				if (error) {
 					reject(error);
 					return;

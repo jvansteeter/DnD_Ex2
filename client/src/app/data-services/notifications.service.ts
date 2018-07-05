@@ -1,19 +1,21 @@
 import { Injectable } from '@angular/core';
 import { UserProfile } from '../types/userProfile';
-import { SocialService } from '../social/social.service';
 import { IsReadyService } from '../utilities/services/isReady.service';
 import { NotificationData } from '../../../../shared/types/notifications/NotificationData';
 import { NotificationType } from '../../../../shared/types/notifications/notification-type.enum';
 import { FriendRequestNotification } from '../../../../shared/types/notifications/FriendRequestNotification';
 import { FriendRequestMessage } from '../mq/friend-request.message';
+import { FriendService } from './friend.service';
+import { SocialRepository } from '../social/social.repository';
 
 @Injectable()
 export class NotificationsService extends IsReadyService {
 	public notifications: NotificationData[];
 	public friendRequests: UserProfile[];
 
-	constructor(private socialService: SocialService) {
-		super(socialService);
+	constructor(private friendService: FriendService,
+	            private socialRepo: SocialRepository) {
+		super(friendService);
 		this.notifications = [];
 		this.friendRequests = [];
 		this.init();
@@ -23,7 +25,7 @@ export class NotificationsService extends IsReadyService {
 		this.dependenciesReady().subscribe((isReady: boolean) => {
 			if (isReady) {
 				this.getPendingNotifications();
-				this.socialService.getIncomingFriendRequests().subscribe((request: FriendRequestMessage) => {
+				this.friendService.getIncomingFriendRequests().subscribe((request: FriendRequestMessage) => {
 					this.handleFriendRequest(request.headers.fromUserId);
 				});
 				this.setReady(true);
@@ -35,7 +37,7 @@ export class NotificationsService extends IsReadyService {
 	}
 
 	public getPendingNotifications(): void {
-		this.socialService.getPendingNotifications().subscribe((notifications: NotificationData[]) => {
+		this.socialRepo.getPendingNotifications().subscribe((notifications: NotificationData[]) => {
 			this.notifications = notifications;
 			this.notifications.forEach((notification: NotificationData) => {
 				if (notification.type === NotificationType.FRIEND_REQUEST) {
@@ -63,7 +65,7 @@ export class NotificationsService extends IsReadyService {
 	}
 
 	private handleFriendRequest(fromUserId: string): void {
-		this.socialService.getUserById(fromUserId).subscribe((user: UserProfile) => {
+		this.socialRepo.getUserById(fromUserId).subscribe((user: UserProfile) => {
 			this.friendRequests.push(user);
 		});
 	}

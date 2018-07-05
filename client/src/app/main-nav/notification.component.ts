@@ -1,10 +1,10 @@
 import { Component } from "@angular/core";
 import { UserProfile } from "../types/userProfile";
-import { SocialService } from "../social/social.service";
 import { NotificationsService } from "../data-services/notifications.service";
 import { NotificationType } from '../../../../shared/types/notifications/notification-type.enum';
 import { NotificationData } from '../../../../shared/types/notifications/NotificationData';
 import { CampaignInviteNotification } from '../../../../shared/types/notifications/CampaignInviteNotification';
+import { FriendService } from '../data-services/friend.service';
 
 @Component({
     selector: 'app-notifications',
@@ -14,18 +14,17 @@ import { CampaignInviteNotification } from '../../../../shared/types/notificatio
 export class NotificationComponent {
     public notificationType = NotificationType;
 
-    constructor(private socialService: SocialService,
+    constructor(private friendService: FriendService,
                 public notificationsService: NotificationsService) {
-
     }
 
-    public acceptRequest(requester: UserProfile): void {
-        this.socialService.acceptRequest(requester._id);
+    public acceptFriendRequest(requester: UserProfile): void {
+        this.friendService.acceptRequest(requester._id);
         this.notificationsService.removeFriendRequest(requester._id);
     }
 
-    public rejectRequest(requester: UserProfile): void {
-        this.socialService.rejectFriendRequest(requester._id);
+    public rejectFriendRequest(requester: UserProfile): void {
+        this.friendService.rejectFriendRequest(requester._id);
         this.notificationsService.removeFriendRequest(requester._id);
     }
 
