@@ -28,7 +28,7 @@
         <mat-checkbox style="display: block" [(ngModel)]="boardStateService.map_enabled">Map Enabled</mat-checkbox>
         <div *ngIf="boardStateService.map_enabled">
             <span class="font">Map Opacity </span>
-            <mat-slider min="0" max="1" step="0.05" [value]="boardStateService.board_maker_map_opacity" (input)="mapOpacitySliderInput($event)"></mat-slider>
+            <mat-slider min="0" max="1" step="0.01" [value]="boardStateService.board_maker_map_opacity" (input)="mapOpacitySliderInput($event)"></mat-slider>
         </div>
     </div>
 </div>
@@ -47,6 +47,27 @@
         <mat-checkbox style="display: block" [(ngModel)]="boardStateService.show_health">Health Bars Enabled</mat-checkbox>
         <mat-checkbox style="display: block" [(ngModel)]="boardStateService.playerWallsEnabled">Show Walls to Player</mat-checkbox>
         <mat-checkbox style="display: block" [(ngModel)]="boardStateService.map_enabled">Map Enabled</mat-checkbox>
+    </div>
+</div>
+
+
+<div id="Notation Controls" class="section">
+    <div class="sectionHeader"><span>Notation Controls</span></div>
+    <div class="sectionContents">
+        <div style="display: flex; flex: 0 0 auto; margin-bottom: 5px;">
+            <mat-form-field>
+                <mat-select [(value)]="currentNotation" (selectionChange)="onInputChange()" placeholder="Notation Mode">
+                    <mat-option *ngFor="let mode of notationModes" value="{{mode}}">{{mode}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <i class="material-icons addButton" (click)="handleAddNotation()">add</i>
+        </div>
+
+        <div style="overflow-y: auto; overflow-x: hidden">
+            <div *ngFor="let notation of boardNotationService.notations">{{notation}}</div>
+        </div>
+
+
     </div>
 </div>
 

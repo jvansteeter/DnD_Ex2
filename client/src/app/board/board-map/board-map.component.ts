@@ -11,6 +11,7 @@ import {CellRegion} from '../shared/enum/cell-region';
 import {ViewMode} from '../shared/enum/view-mode';
 import {BoardLightService} from '../services/board-light.service';
 import {BoardPlayerService} from '../services/board-player.service';
+import {BoardNotationService} from '../services/board-notation-service';
 
 
 @Component({
@@ -45,7 +46,8 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
         private boardWallService: BoardWallService,
         private boardTileService: BoardTileService,
         private boardLightService: BoardLightService,
-        private boardPlayerService: BoardPlayerService
+        private boardPlayerService: BoardPlayerService,
+        private boardNotationService: BoardNotationService
     ) {
     }
 
@@ -80,6 +82,7 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
             }
         }
         this.updateMouseLocation(mouse_screen);
+        this.boardNotationService.setPixel(this.boardStateService.mouse_loc_map);
         this.boardPlayerService.syncPlayerHover(this.boardStateService.mouse_loc_cell);
     }
 

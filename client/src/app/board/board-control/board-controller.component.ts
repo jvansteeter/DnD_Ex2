@@ -7,7 +7,10 @@ import {AddPlayerComponent} from '../../temp/add-player.component';
 import {BoardLightService} from '../services/board-light.service';
 import {PlayerVisibilityMode} from "../shared/enum/player-visibility-mode";
 import {Component, OnInit} from '@angular/core';
-import {MatDialog} from '@angular/material';
+import {MatDialog, MatIconRegistry} from '@angular/material';
+import {NotationMode} from '../shared/enum/notation-mode';
+import {DomSanitizer} from '@angular/platform-browser';
+import {BoardNotationService} from '../services/board-notation-service';
 
 @Component({
     selector: 'board-controller',
@@ -19,6 +22,14 @@ export class BoardControllerComponent implements OnInit {
     public ViewMode = ViewMode;
     public BoardMode = BoardMode;
     public PlayerVisibilityMode = PlayerVisibilityMode;
+
+    currentNotation: string;
+    notationModes: string[] = [
+        'Polygon',
+        'Radius',
+        'Select',
+        'Freeform'
+    ];
 
     currentVisibility: string;
     visibilityModes: string[] = [
@@ -87,9 +98,10 @@ export class BoardControllerComponent implements OnInit {
 
     constructor(public boardStateService: BoardStateService,
                 public boardLightService: BoardLightService,
+                public boardNotationService: BoardNotationService,
                 public ts: BoardTileService,
-                private dialog: MatDialog) {
-    }
+                private dialog: MatDialog,
+    ) {}
 
     ngOnInit(): void {
         this.sync();
@@ -134,6 +146,21 @@ export class BoardControllerComponent implements OnInit {
                 break;
         }
 
+        switch (this.boardStateService.notationMode) {
+            case NotationMode.SELECT:
+                this.currentNotation = 'Select';
+                break;
+            case NotationMode.RADIUS:
+                this.currentNotation = 'Radius';
+                break;
+            case NotationMode.POLYGON:
+                this.currentNotation = 'Polygon';
+                break;
+            case NotationMode.FREEFORM:
+                this.currentNotation = 'Freeform';
+                break;
+        }
+
         switch (this.boardStateService.playerVisibilityMode) {
             case PlayerVisibilityMode.GLOBAL:
                 this.currentVisibility = 'Global';
@@ -157,6 +184,24 @@ export class BoardControllerComponent implements OnInit {
                 break;
             case 'Player':
                 this.boardStateService.playerVisibilityMode = PlayerVisibilityMode.PLAYER;
+                break;
+        }
+        this.sync()
+    }
+
+    onNotationChange() {
+        switch (this.currentNotation) {
+            case 'Polygon':
+                this.boardStateService.notationMode = NotationMode.POLYGON;
+                break;
+            case 'Radius':
+                this.boardStateService.notationMode = NotationMode.RADIUS;
+                break;
+            case 'Select':
+                this.boardStateService.notationMode = NotationMode.SELECT;
+                break;
+            case 'Freeform':
+                this.boardStateService.notationMode = NotationMode.FREEFORM;
                 break;
         }
         this.sync()
@@ -261,5 +306,9 @@ export class BoardControllerComponent implements OnInit {
 
     addPlayer(): void {
         this.dialog.open(AddPlayerComponent);
+    }
+
+    handleAddNotation() {
+        this.boardNotationService.addNotation('new notation');
     }
 }

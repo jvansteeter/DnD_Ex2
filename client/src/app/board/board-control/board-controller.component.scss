@@ -17,7 +17,8 @@ mat-radio-button {
 .section {
   margin: 5px;
   background-color: #fafafa;
-  border-radius: 5px; border: 1px solid #b7b7b7;
+  border-radius: 5px;
+  border: 1px solid #b7b7b7;
   display: flex;
   flex-direction: column;
 }
@@ -26,7 +27,7 @@ mat-radio-button {
   padding: 5px 10px;
   flex: 0 0 18px;
 
-  font-family: Roboto,"Helvetica Neue",sans-serif;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
   font-weight: bold;
 
   display: flex;
@@ -39,7 +40,7 @@ mat-radio-button {
 }
 
 .font {
-  font-family: Roboto,"Helvetica Neue",sans-serif;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
 .sectionContents {
@@ -58,4 +59,16 @@ mat-radio-button {
 
 .defaultTile {
   margin: 2px;
+}
+
+.addButton {
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-left: 15px;
+
+  cursor: pointer;
+
+  &:hover {
+    font-weight: bold;
+  }
 }

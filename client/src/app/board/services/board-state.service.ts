@@ -5,6 +5,7 @@ import {LightValue} from '../shared/enum/light-value';
 import {CellTarget} from "../shared/cell-target";
 import {XyPair} from "../geometry/xy-pair";
 import {PlayerVisibilityMode} from '../shared/enum/player-visibility-mode';
+import {NotationMode} from '../shared/enum/notation-mode';
 
 /*************************************************************************************************************************************
  * BoardStateService
@@ -29,6 +30,7 @@ export class BoardStateService {
     public lightEnabled = false;
     public ambientLight = LightValue.DARK;
     public playerVisibilityMode = PlayerVisibilityMode.GLOBAL;
+    public notationMode = NotationMode.SELECT;
 
     /***********************************************************************************
      * To keep in the local board state

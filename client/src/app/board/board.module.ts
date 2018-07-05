@@ -1,8 +1,8 @@
 import {BrowserModule} from '@angular/platform-browser';
-import {MatButtonModule, MatCheckboxModule, MatRadioModule, MatSelectModule, MatSliderModule} from '@angular/material';
+import {MatButtonModule, MatCheckboxModule, MatIconModule, MatRadioModule, MatSelectModule, MatSliderModule} from '@angular/material';
 import {NgModule} from '@angular/core';
 import {MapRendererComponent} from "./renderer/map-renderer/map-renderer.component";
-import {GridRendererComponent} from "./renderer/grid-renderer/grid-renderer";
+import {GridRendererComponent} from "./renderer/grid-renderer/grid-renderer.component";
 import {BoardZoneComponent} from "./board-zone.component";
 import {HoverRendererComponent} from "./renderer/hover-renderer/hover-renderer.component";
 import {TileRendererComponent} from "./renderer/tile-renderer/tile-renderer.component";
@@ -29,6 +29,8 @@ import {BoardLightService} from './services/board-light.service';
 import {BoardTraverseService} from './services/board-traverse.service';
 import {VisibilityRendererComponent} from './renderer/visibility-renderer/visibility-renderer.component';
 import {BoardPlayerService} from './services/board-player.service';
+import {BoardNotationService} from './services/board-notation-service';
+import {NotationRendererComponent} from './renderer/notation-renderer/notation-renderer.component';
 
 
 @NgModule({
@@ -44,6 +46,7 @@ import {BoardPlayerService} from './services/board-player.service';
         TileRendererComponent,
         LightRendererComponent,
         WallRendererComponent,
+        NotationRendererComponent,
         HighlightRendererComponent,
         TokenRendererComponent,
         VisibilityRendererComponent,
@@ -57,6 +60,7 @@ import {BoardPlayerService} from './services/board-player.service';
         MatSliderModule,
         MatButtonModule,
         MatSelectModule,
+        MatIconModule,
         TempModule
     ],
     providers: [
@@ -69,7 +73,8 @@ import {BoardPlayerService} from './services/board-player.service';
         BoardVisibilityService,
         BoardTraverseService,
         BoardLightService,
-        BoardPlayerService
+        BoardPlayerService,
+        BoardNotationService
     ],
     entryComponents: [
         NpcPopComponent,
