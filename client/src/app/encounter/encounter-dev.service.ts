@@ -51,7 +51,6 @@ export class EncounterDevService extends EncounterService {
         player._id = window.crypto.getRandomValues(new Uint32Array(1))[0];
         player.addAction('Longsword:', '+4 Attack, 1d10 + 5');
         player.addAction('Crossbow:', ' +2 Attack,  1d6 + 1');
-        // this.boardPlayerService.updatePlayerVisibility(player._id, this.boardVisibilityService.cellPolygonVisibleFromCell(player.location));
         this.players.push(player);
 
         player = new Player('Sue', 753, 1235, 29, 2, 3, 'resources/images/player-tokens/human handmaid 2.png');
@@ -59,7 +58,6 @@ export class EncounterDevService extends EncounterService {
         player.addAction('Divine Judgement:', 'Rewrite the DM\'s will');
         player.addAction('Gaze of the Deep One:', 'Kill all living creatures, no saves, no escape');
         player.addAction('Disco Fever:', 'They can tell by the way you use your walk ...');
-        // this.boardPlayerService.updatePlayerVisibility(player._id, this.boardVisibilityService.cellPolygonVisibleFromCell(player.location));
         this.players.push(player);
     }
 }

@@ -97,8 +97,8 @@ export class BoardTransformService {
         return new XyPair(screenX, screenY);
     }
 
-    calculate_cell_target(loc: XyPair): CellTarget {
-        const shift = BoardStateService.cell_res * this.boardStateService.inputOffset;
+    calculate_cell_target(loc: XyPair, input_offset = this.boardStateService.inputOffset, doDiagonals = this.boardStateService.doDiagonals): CellTarget {
+        const shift = BoardStateService.cell_res * input_offset;
 
         // CENTER
         if ((loc.x > shift) && (loc.x < (BoardStateService.cell_res - shift) && (loc.y > shift) && (loc.y < (BoardStateService.cell_res - shift)))) {
@@ -126,7 +126,7 @@ export class BoardTransformService {
                 }
             }
 
-            if (this.boardStateService.doDiagonals) {
+            if (doDiagonals) {
                 if (loc.x > (BoardStateService.cell_res / 2)) {
                     // right side
                     if (loc.y > (BoardStateService.cell_res / 2)) {

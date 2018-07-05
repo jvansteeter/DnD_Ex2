@@ -209,6 +209,7 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
         this.boardStateService.mouse_loc_cell = this.boardTransformService.screen_to_cell(this.boardStateService.mouse_loc_screen);
         this.boardStateService.mouse_loc_cell_pix = new XyPair(this.boardStateService.mouse_loc_map.x - (this.boardStateService.mouse_loc_cell.x * BoardStateService.cell_res), this.boardStateService.mouse_loc_map.y - (this.boardStateService.mouse_loc_cell.y * BoardStateService.cell_res));
         this.boardStateService.mouse_cell_target = this.boardTransformService.calculate_cell_target(this.boardStateService.mouse_loc_cell_pix);
+        this.boardStateService.mouse_right_cell_target = this.boardTransformService.calculate_cell_target(this.boardStateService.mouse_loc_cell_pix, 0.2);
         this.boardStateService.mouseOnMap = this.boardStateService.coorInBounds(this.boardStateService.mouse_loc_cell.x, this.boardStateService.mouse_loc_cell.y);
     }
 
@@ -218,6 +219,7 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
         this.boardStateService.mouse_loc_cell = this.boardTransformService.screen_to_cell(this.boardStateService.mouse_loc_screen);
         this.boardStateService.mouse_loc_cell_pix = new XyPair(this.boardStateService.mouse_loc_map.x - (this.boardStateService.mouse_loc_cell.x * BoardStateService.cell_res), this.boardStateService.mouse_loc_map.y - (this.boardStateService.mouse_loc_cell.y * BoardStateService.cell_res));
         this.boardStateService.mouse_cell_target = this.boardTransformService.calculate_cell_target(this.boardStateService.mouse_loc_cell_pix);
+        this.boardStateService.mouse_right_cell_target = this.boardTransformService.calculate_cell_target(this.boardStateService.mouse_loc_cell_pix, 0.2);
         this.boardStateService.mouseOnMap = this.boardStateService.coorInBounds(this.boardStateService.mouse_loc_cell.x, this.boardStateService.mouse_loc_cell.y);
     }
 
@@ -227,6 +229,7 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
         this.boardStateService.mouse_loc_cell = null;
         this.boardStateService.mouse_loc_cell_pix = null;
         this.boardStateService.mouse_cell_target = null;
+        this.boardStateService.mouse_right_cell_target = null;
         this.boardStateService.mouseOnMap = false;
     }
 
@@ -245,21 +248,23 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
                 break;
         }
 
-        if (!isNullOrUndefined(this.boardStateService.mouse_cell_target)) {
-            switch (this.boardStateService.mouse_cell_target.region) {
+        if (!isNullOrUndefined(this.boardStateService.mouse_right_cell_target)) {
+            switch (this.boardStateService.mouse_right_cell_target.region) {
                 case CellRegion.TOP_EDGE:
-                    this.boardWallService.openCloseDoor(this.boardStateService.mouse_cell_target);
+                    this.boardWallService.openCloseDoor(this.boardStateService.mouse_right_cell_target);
                     break;
                 case CellRegion.LEFT_EDGE:
-                    this.boardWallService.openCloseDoor(this.boardStateService.mouse_cell_target);
+                    this.boardWallService.openCloseDoor(this.boardStateService.mouse_right_cell_target);
                     break;
                 case CellRegion.FWRD_EDGE:
-                    this.boardWallService.openCloseDoor(this.boardStateService.mouse_cell_target);
+                    this.boardWallService.openCloseDoor(this.boardStateService.mouse_right_cell_target);
                     break;
                 case CellRegion.BKWD_EDGE:
-                    this.boardWallService.openCloseDoor(this.boardStateService.mouse_cell_target);
+                    this.boardWallService.openCloseDoor(this.boardStateService.mouse_right_cell_target);
                     break;
             }
+            this.boardPlayerService.updateAllPlayerVisibility();
+            this.boardPlayerService.updateAllPlayerTraverse();
         }
     }
 

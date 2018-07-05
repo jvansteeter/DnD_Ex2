@@ -65,6 +65,14 @@ export class EncounterService extends IsReadyService {
             );
     }
 
+    public getPlayerById(id: string): Player {
+        for (const player of this.players) {
+            if (player._id === id){
+                return player;
+            }
+        }
+    }
+
     get players(): Player[] {
         if (this.encounterState) {
             return this.encounterState.players as Player[];

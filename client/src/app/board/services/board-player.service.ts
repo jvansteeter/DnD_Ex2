@@ -28,9 +28,8 @@ export class BoardPlayerService {
 
     public dev_mode_init() {
         this.encounterService.init_players();
-        for (let player of this.encounterService.players) {
-            this.updatePlayerVisibility(player._id, new CellPolygonGroup(this.boardVisibilityService.cellQuadsVisibleFromCell(player.location)));
-        }
+        this.updateAllPlayerVisibility();
+        this.updateAllPlayerTraverse();
     }
 
     public addPlayer() {
@@ -42,8 +41,32 @@ export class BoardPlayerService {
     public movePlayer(id: string, location: XyPair) {
     }
 
-    public updatePlayerVisibility(id: string, visibilityPolygon: CellPolygonGroup) {
-        this.player_visibility_map.set(id, visibilityPolygon);
+    public updateAllPlayerVisibility() {
+        for (let player of this.encounterService.players) {
+            this.updatePlayerVisibility(player._id, new CellPolygonGroup(this.boardVisibilityService.cellQuadsVisibleFromCell(player.location)));
+        }
+    }
+    
+    public updateAllPlayerTraverse (){
+        for (const player of this.encounterService.players) {
+            this.player_traverse_map_near.set(player._id, this.boardTraverseService.calcTraversableCells(player.location, player.speed));
+            this.player_traverse_map_far.set(player._id, this.boardTraverseService.calcTraversableCells(player.location, player.speed * 2));
+        }
+    }
+
+    public updatePlayerTraverse (id: string) {
+        const player = this.encounterService.getPlayerById(id);
+        this.player_traverse_map_near.set(player._id, this.boardTraverseService.calcTraversableCells(player.location, player.speed));
+        this.player_traverse_map_far.set(player._id, this.boardTraverseService.calcTraversableCells(player.location, player.speed * 2));
+    }
+
+    public updatePlayerVisibility(id: string, visibilityPolygon?: CellPolygonGroup) {
+        if (!!visibilityPolygon) {
+            this.player_visibility_map.set(id, visibilityPolygon);
+        } else {
+            const player = this.encounterService.getPlayerById(id);
+            this.player_visibility_map.set(id, new CellPolygonGroup(this.boardVisibilityService.cellQuadsVisibleFromCell(player.location)));
+        }
     }
 
     public syncPlayerHover(cell: XyPair) {
@@ -84,6 +107,7 @@ export class BoardPlayerService {
                 if (this.selectedPlayerIds.has(player._id)) {
                     player.location = loc_cell;
                     this.updatePlayerVisibility(player._id, this.boardVisibilityService.cellPolygonVisibleFromCell(player.location));
+                    this.updatePlayerTraverse(player._id);
                     this.selectedPlayerIds = new Set<string>();
                 }
             }
@@ -91,8 +115,6 @@ export class BoardPlayerService {
         } else {
             for (const player of this.encounterService.players) {
                 if (player.location.x === loc_cell.x && player.location.y === loc_cell.y) {
-                    this.player_traverse_map_near.set(player._id, this.boardTraverseService.calcTraversableCells(player.location, player.speed));
-                    this.player_traverse_map_far.set(player._id, this.boardTraverseService.calcTraversableCells(player.location, player.speed * 2));
                     this.selectedPlayerIds.add(player._id);
                 }
             }
