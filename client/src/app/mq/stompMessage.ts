@@ -8,8 +8,16 @@ export abstract class StompMessage implements MqMessage {
 	protected constructor(message) {
 		let type: MqMessageType;
 		switch (message.headers.type.toUpperCase()) {
-			case 'ENCOUNTER': {
+			case MqMessageType.ENCOUNTER: {
 				type = MqMessageType.ENCOUNTER;
+				break;
+			}
+			case MqMessageType.FRIEND_REQUEST: {
+				type = MqMessageType.FRIEND_REQUEST;
+				break;
+			}
+			case MqMessageType.FRIEND_REQUEST_ACCEPTED: {
+				type = MqMessageType.FRIEND_REQUEST_ACCEPTED;
 				break;
 			}
 		}

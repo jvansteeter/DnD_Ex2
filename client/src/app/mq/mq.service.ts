@@ -12,6 +12,7 @@ import { IsReadyService } from "../utilities/services/isReady.service";
 import { StompMessage } from './stompMessage';
 import { MqMessageType } from '../../../../shared/types/mq/message-type.enum';
 import { FriendRequestMessage } from './friend-request.message';
+import { AcceptFriendRequest } from './friend-request-accepted.message';
 
 @Injectable()
 export class MqService extends IsReadyService {
@@ -55,28 +56,34 @@ export class MqService extends IsReadyService {
 	}
 
 	public sendFriendRequest(toUserId: string): void {
-		let friendRequest: FriendRequestMessage = MqMessageFactory.createFriendRequest(toUserId, this.userProfileService.userId);
-		this.publishMessage(friendRequest);
+		let message = MqMessageFactory.createFriendRequest(toUserId, this.userProfileService.userId);
+		let url = MqMessageFactory.createSendFriendRequestUrl(message.headers.toUserId);
+		this.stompService.publish(url, message.serializeBody(), message.headers);
 	}
 
-	public getIncomingFriendRequests(): Observable<FriendRequestMessage> {
-		return this.stompService.subscribe(MqMessageFactory.createGetFriendRequestURL(this.userProfileService.userId))
+	public acceptFriendRequest(fromUserId: string): void {
+		let message = MqMessageFactory.createAcceptFriendRequestMessage(fromUserId);
+		let url = MqMessageFactory.createAcceptFriendRequestUrl(fromUserId);
+		this.stompService.publish(url, message.serializeBody(), message.headers);
+	}
+
+	public getIncomingUserMessages(): Observable<StompMessage> {
+		return this.stompService.subscribe(MqMessageFactory.createGetUserMessagesUrl(this.userProfileService.userId))
 				.pipe(
 						map((message: Message) => {
-							return new FriendRequestMessage(message);
+							switch (message.headers['type']) {
+								case MqMessageType.FRIEND_REQUEST: {
+									return new FriendRequestMessage(message);
+								}
+								case MqMessageType.FRIEND_REQUEST_ACCEPTED: {
+									return new AcceptFriendRequest(message);
+								}
+								default: {
+									console.error('Message Type not recognized');
+									console.error(message);
+								}
+							}
 						})
 				);
-	}
-
-	private publishMessage(message: StompMessage) {
-		let url = '';
-		switch (message.headers.type) {
-			case MqMessageType.FRIEND_REQUEST: {
-				url = MqMessageFactory.createSendFriendRequestURL((message as FriendRequestMessage).headers.toUserId);
-				break;
-			}
-		}
-
-		this.stompService.publish(url, message.serializeBody(), message.headers);
 	}
 }
