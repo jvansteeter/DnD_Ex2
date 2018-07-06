@@ -68,8 +68,8 @@ export class MqService extends IsReadyService {
 		this.stompService.publish(url, message.serializeBody(), message.headers);
 	}
 
-	public sendCampaignInvite(toUserId: string): void {
-		let message = MqMessageFactory.createCampaignInvite(toUserId, this.userProfileService.userId);
+	public sendCampaignInvite(toUserId: string, campaignId: string): void {
+		let message = MqMessageFactory.createCampaignInvite(toUserId, campaignId);
 		let url = MqMessageUrlFactory.createSendCampaignInviteUrl(message.headers.toUserId);
 		this.stompService.publish(url, message.serializeBody(), message.headers);
 	}

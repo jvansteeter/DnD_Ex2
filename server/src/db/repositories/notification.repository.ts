@@ -30,6 +30,8 @@ export class NotificationRepository {
 	}
 
 	public async createCampaignInvite(toUserId: string, campaignId: string): Promise<NotificationModel> {
+		console.log('toUserId', toUserId)
+		console.log('campaignId', campaignId)
 		try {
 			let campaign: CampaignModel = await this.campaignRepo.findById(campaignId);
 			console.log(campaign);
