@@ -1,9 +1,9 @@
-import { MqMessage } from '../../../shared/types/mq/MqMessage';
-import { MqMessageType } from '../../../shared/types/mq/message-type.enum';
+import { MqMessage } from '../../../../shared/types/mq/MqMessage';
+import { MqMessageType } from '../../../../shared/types/mq/message-type.enum';
 
 export class AmqpMessage implements MqMessage {
 	headers: { type: MqMessageType };
-	body: string | Object;
+	body?: string | Object;
 
 	constructor(data) {
 		this.headers = {

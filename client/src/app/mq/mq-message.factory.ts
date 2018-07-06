@@ -1,8 +1,7 @@
 import { MqMessageType } from '../../../../shared/types/mq/message-type.enum';
-import { MqClientConfig } from '../config/mq.config';
-import { FriendRequestMessage } from './friend-request.message';
-import { StompMessage } from './stompMessage';
-import { AcceptFriendRequest } from './friend-request-accepted.message';
+import { FriendRequestMessage } from './messages/friend-request.message';
+import { AcceptFriendRequest } from './messages/friend-request-accepted.message';
+import { CampaignInviteMessage } from './messages/campaign-invite.message';
 
 export class MqMessageFactory {
 	public static createFriendRequest(toUserId: string, fromUserId: string): FriendRequestMessage {
@@ -11,34 +10,26 @@ export class MqMessageFactory {
 				type: MqMessageType.FRIEND_REQUEST,
 				fromUserId: fromUserId,
 				toUserId: toUserId
-			},
-			body: ''
+			}
 		});
 	}
 
-	public static createAcceptFriendRequestMessage(toUserId): StompMessage {
+	public static createAcceptFriendRequestMessage(toUserId): AcceptFriendRequest {
 		return new AcceptFriendRequest({
 			headers: {
 				type: MqMessageType.FRIEND_REQUEST_ACCEPTED,
 				toUserId: toUserId
-			},
-			body: ''
+			}
 		});
 	}
 
-	public static createSendFriendRequestUrl(toUserId: string): string {
-		return MqClientConfig.userExchangeUrl + toUserId + '.friendRequest';
-	}
-
-	public static createGetFriendRequestUrl(userId: string): string {
-		return MqClientConfig.userExchangeUrl + userId + '.friendRequest';
-	}
-
-	public static createAcceptFriendRequestUrl(toUserId: string): string {
-		return MqClientConfig.userExchangeUrl + toUserId + '.acceptRequest';
-	}
-
-	public static createGetUserMessagesUrl(userId: string): string {
-		return MqClientConfig.userExchangeUrl + userId + '.*';
+	public static createCampaignInvite(toUserId: string, campaignId: string): CampaignInviteMessage {
+		return new CampaignInviteMessage({
+			headers: {
+				type: MqMessageType.CAMPAIGN_INVITE,
+				toUserId: toUserId,
+				campaignId: campaignId
+			}
+		});
 	}
 }

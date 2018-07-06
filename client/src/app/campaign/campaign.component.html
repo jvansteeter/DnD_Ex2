@@ -1,8 +1,8 @@
-<ng-container *ngIf="campaignService.campaignState">
-	<h1>{{campaignService.campaignState.label}}</h1>
+<ng-container *ngIf="campaignPageService.campaignState">
+	<h1>{{campaignPageService.campaignState.label}}</h1>
 	<mat-grid-list cols="2" rowHeight="350px">
 		<mat-grid-tile [colspan]="1" [rowspan]="1">
-			<dashboard-card>
+			<dashboard-card [dashboardCard]="membersCard">
 				<mat-table [dataSource]="memberDataSource">
 					<ng-container matColumnDef="users">
 						<mat-header-cell *matHeaderCellDef>Campaign Members</mat-header-cell>

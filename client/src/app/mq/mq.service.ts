@@ -6,13 +6,14 @@ import { StompConfiguration } from './StompConfig';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { MqClientConfig } from '../config/mq.config';
-import { EncounterUpdateMessage } from './encounter-update.message';
+import { EncounterUpdateMessage } from './messages/encounter-update.message';
 import { MqMessageFactory } from './mq-message.factory';
 import { IsReadyService } from "../utilities/services/isReady.service";
-import { StompMessage } from './stompMessage';
 import { MqMessageType } from '../../../../shared/types/mq/message-type.enum';
-import { FriendRequestMessage } from './friend-request.message';
-import { AcceptFriendRequest } from './friend-request-accepted.message';
+import { FriendRequestMessage } from './messages/friend-request.message';
+import { AcceptFriendRequest } from './messages/friend-request-accepted.message';
+import { MqMessageUrlFactory } from './mq-message-url.factory';
+import { StompMessage } from './messages/stomp-message';
 
 @Injectable()
 export class MqService extends IsReadyService {
@@ -57,18 +58,24 @@ export class MqService extends IsReadyService {
 
 	public sendFriendRequest(toUserId: string): void {
 		let message = MqMessageFactory.createFriendRequest(toUserId, this.userProfileService.userId);
-		let url = MqMessageFactory.createSendFriendRequestUrl(message.headers.toUserId);
+		let url = MqMessageUrlFactory.createSendFriendRequestUrl(message.headers.toUserId);
 		this.stompService.publish(url, message.serializeBody(), message.headers);
 	}
 
 	public acceptFriendRequest(fromUserId: string): void {
 		let message = MqMessageFactory.createAcceptFriendRequestMessage(fromUserId);
-		let url = MqMessageFactory.createAcceptFriendRequestUrl(fromUserId);
+		let url = MqMessageUrlFactory.createAcceptFriendRequestUrl(fromUserId);
+		this.stompService.publish(url, message.serializeBody(), message.headers);
+	}
+
+	public sendCampaignInvite(toUserId: string): void {
+		let message = MqMessageFactory.createCampaignInvite(toUserId, this.userProfileService.userId);
+		let url = MqMessageUrlFactory.createSendCampaignInviteUrl(message.headers.toUserId);
 		this.stompService.publish(url, message.serializeBody(), message.headers);
 	}
 
 	public getIncomingUserMessages(): Observable<StompMessage> {
-		return this.stompService.subscribe(MqMessageFactory.createGetUserMessagesUrl(this.userProfileService.userId))
+		return this.stompService.subscribe(MqMessageUrlFactory.createGetUserMessagesUrl(this.userProfileService.userId))
 				.pipe(
 						map((message: Message) => {
 							switch (message.headers['type']) {

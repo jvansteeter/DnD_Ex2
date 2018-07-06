@@ -9,7 +9,7 @@ import {EncounterStateData} from '../../../../shared/types/encounter/encounterSt
 import {BoardStateService} from '../board/services/board-state.service';
 import {map, mergeMap, tap} from 'rxjs/operators';
 import {MqService} from '../mq/mq.service';
-import { StompMessage } from '../mq/stompMessage';
+import { StompMessage } from '../mq/messages/stomp-message';
 
 @Injectable()
 export class EncounterService extends IsReadyService {

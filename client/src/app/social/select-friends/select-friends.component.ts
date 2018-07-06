@@ -1,7 +1,8 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { UserProfile } from '../../types/userProfile';
-import { MatDialogRef, MatTableDataSource } from '@angular/material';
+import { MatDialogRef } from '@angular/material';
 import { FriendService } from '../../data-services/friend.service';
+import { SubjectDataSource } from '../../utilities/subjectDataSource';
 
 
 @Component({
@@ -12,15 +13,13 @@ export class SelectFriendsComponent {
 	@Output() public friendsSelected: EventEmitter<UserProfile[]> = new EventEmitter();
 
 	public selectedFriends: UserProfile[];
-	private friendDataSource: MatTableDataSource<UserProfile>;
+	private friendDataSource: SubjectDataSource<UserProfile>;
 	public friendColumns = ['icon', 'username', 'firstName', 'lastName'];
 
 	constructor(private friendService: FriendService,
 	            private dialogRef: MatDialogRef<SelectFriendsComponent>) {
 		this.selectedFriends = [];
-		this.friendService.getFriendsSubject().subscribe((friendList: UserProfile[]) => {
-			this.friendDataSource = new MatTableDataSource(friendList);
-		});
+		this.friendDataSource = new SubjectDataSource<UserProfile>(this.friendService.getFriendsSubject());
 	}
 
 	selectFriend(friend: UserProfile): void {

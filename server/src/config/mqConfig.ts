@@ -1,11 +1,13 @@
 export const MqConfig = {
 	encounterQueueName: 'serverQueue',
 	friendRequestQueueName: 'serverFriendRequestQueue',
+	campaignInviteQueueName: 'serverCampaignInviteQueue',
 	amqpUrl: 'amqp://admin:admin@localhost',
 	encounterExchange: 'encounterExchange',
 	userExchange: 'userExchange',
 	encounterTopic: 'encounter.*',
 	friendRequestTopic: 'user.*.friendRequest',
+	campaignInviteTopic: 'user.*.campaignInvite',
 	hostname: 'localhost',
 	port: 15672,
 	auth: 'guest:guest',

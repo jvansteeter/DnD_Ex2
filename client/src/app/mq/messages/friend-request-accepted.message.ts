@@ -1,5 +1,5 @@
-import { MqMessageType } from '../../../../shared/types/mq/message-type.enum';
-import { StompMessage } from './stompMessage';
+import { MqMessageType } from '../../../../../shared/types/mq/message-type.enum';
+import { StompMessage } from './stomp-message';
 
 export class AcceptFriendRequest extends StompMessage {
 	headers: {

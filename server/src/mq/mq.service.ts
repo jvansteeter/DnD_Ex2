@@ -1,11 +1,13 @@
 import { MqProxy, MqProxySingleton } from './mqProxy';
 import { UserModel } from '../db/models/user.model';
-import { EncounterUpdateMessage } from './encounter-update.message';
+import { EncounterUpdateMessage } from './messages/encounter-update.message';
 import { FriendRequest } from '../../../shared/types/mq/FriendRequest';
 import { NotificationRepository } from '../db/repositories/notification.repository';
 import { NotificationType } from '../../../shared/types/notifications/notification-type.enum';
-import { FriendRequestNotification } from '../../../shared/types/notifications/FriendRequestNotification';
 import { NotificationModel } from '../db/models/notification.model';
+import { FriendRequestNotification } from '../../../shared/types/notifications/friend-request-notification';
+import { CampaignInvite } from '../../../shared/types/mq/campaign-invite';
+import { CampaignInviteNotification } from '../../../shared/types/notifications/campaign-invite-notification';
 
 export class MqService {
 	private notificationRepo: NotificationRepository;
@@ -18,8 +20,11 @@ export class MqService {
 		this.mqProxy.observeAllEncounters().subscribe((message: EncounterUpdateMessage) => {
 			console.log(message)
 		});
-		this.mqProxy.observeAllFriendRequests().subscribe(async (friendRequest: FriendRequest) => {
+		this.mqProxy.observeAllFriendRequests().subscribe( (friendRequest: FriendRequest) => {
 			this.handleFriendRequest(friendRequest);
+		});
+		this.mqProxy.observeAllCampaignInvites().subscribe((campaignInvite: CampaignInvite) => {
+			this.handleCampaignInvite(campaignInvite);
 		});
 	}
 
@@ -46,6 +51,28 @@ export class MqService {
 				toUserId: toUserId,
 				fromUserId: fromUserId,
 			} as FriendRequestNotification);
+		}
+		catch (error) {
+			console.error(error);
+		}
+	}
+
+	private async handleCampaignInvite(campaignInvite: CampaignInvite): Promise<void> {
+		console.log('----- got to the handle campaign invite function -----')
+		console.log(campaignInvite)
+		let campaignId = campaignInvite.headers.campaignId;
+		let toUserId = campaignInvite.headers.toUserId;
+		try {
+			let pendingNotifications: NotificationModel[] = await this.notificationRepo.findAllToByType(toUserId, NotificationType.CAMPAIGN_INVITE);
+			for (let invite of pendingNotifications) {
+				let campaignInvite: CampaignInviteNotification = invite.notificationData as CampaignInviteNotification;
+				if (campaignInvite.campaignId && campaignInvite.campaignId === campaignId) {
+					console.log('this is a duplicate so do nothing')
+					return;
+				}
+			}
+			console.log('creating campaign invite notification')
+			this.notificationRepo.createCampaignInvite(toUserId, campaignId);
 		}
 		catch (error) {
 			console.error(error);

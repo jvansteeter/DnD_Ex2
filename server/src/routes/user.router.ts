@@ -1,8 +1,8 @@
 import { Router, Request, Response } from 'express';
 import { UserRepository } from '../db/repositories/user.repository';
 import { UserModel } from '../db/models/user.model';
-import { NotificationData } from '../../../shared/types/notifications/NotificationData';
 import { NotificationService } from '../services/notification.service';
+import { NotificationData } from '../../../shared/types/notifications/notification-data';
 
 
 /**********************************************************************************************************

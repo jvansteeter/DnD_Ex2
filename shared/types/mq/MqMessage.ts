@@ -4,5 +4,5 @@ export interface MqMessage {
 	headers: {
 		type: MqMessageType
 	};
-	body: string | Object;
+	body?: string | Object;
 }

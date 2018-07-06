@@ -1,6 +1,6 @@
-import { StompMessage } from './stompMessage';
-import { EncounterUpdate } from '../../../../shared/types/mq/EncounterUpdate';
-import { MqMessageType } from '../../../../shared/types/mq/message-type.enum';
+import { EncounterUpdate } from '../../../../../shared/types/mq/EncounterUpdate';
+import { MqMessageType } from '../../../../../shared/types/mq/message-type.enum';
+import { StompMessage } from './stomp-message';
 
 export class EncounterUpdateMessage extends StompMessage implements EncounterUpdate {
 	headers: {

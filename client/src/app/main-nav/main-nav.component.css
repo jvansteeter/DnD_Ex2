@@ -19,3 +19,7 @@
 .right-toolbarButtons {
 	position: absolute;
 }
+
+.app-title {
+    cursor: pointer;
+}

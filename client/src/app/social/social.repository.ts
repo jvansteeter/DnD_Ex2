@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { UserProfile } from '../types/userProfile';
-import { NotificationData } from '../../../../shared/types/notifications/NotificationData';
 import { map } from 'rxjs/operators';
+import { NotificationData } from '../../../../shared/types/notifications/notification-data';
 
 @Injectable()
 export class SocialRepository {

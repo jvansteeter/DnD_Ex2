@@ -3,14 +3,14 @@ import { SocialRepository } from '../social/social.repository';
 import { Observable } from 'rxjs';
 import { UserProfile } from '../types/userProfile';
 import { MqService } from '../mq/mq.service';
-import { FriendRequestMessage } from '../mq/friend-request.message';
+import { FriendRequestMessage } from '../mq/messages/friend-request.message';
 import { IsReadyService } from '../utilities/services/isReady.service';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subject } from 'rxjs/Subject';
 import { filter, map } from 'rxjs/operators';
-import { StompMessage } from '../mq/stompMessage';
 import { MqMessageType } from '../../../../shared/types/mq/message-type.enum';
-import { AcceptFriendRequest } from '../mq/friend-request-accepted.message';
+import { AcceptFriendRequest } from '../mq/messages/friend-request-accepted.message';
+import { StompMessage } from '../mq/messages/stomp-message';
 
 @Injectable()
 export class FriendService extends IsReadyService {

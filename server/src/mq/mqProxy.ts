@@ -5,10 +5,12 @@ import { Promise } from 'bluebird';
 import * as http from 'http';
 import { MqConfig } from '../config/mqConfig';
 import { merge } from 'rxjs/internal/observable/merge';
-import { EncounterUpdateMessage } from './encounter-update.message';
+import { EncounterUpdateMessage } from './messages/encounter-update.message';
 import { FriendRequest } from '../../../shared/types/mq/FriendRequest';
-import { FriendRequestMessage } from './friend-request.message';
+import { FriendRequestMessage } from './messages/friend-request.message';
 import { MqFactory } from './mq.factory';
+import { CampaignInvite } from '../../../shared/types/mq/campaign-invite';
+import { CampaignInviteMessage } from './messages/campaign-invite.message';
 
 export class MqProxy {
 
@@ -31,8 +33,9 @@ export class MqProxy {
 					try {
 						channel.assertExchange(MqConfig.encounterExchange, 'topic', {durable: true});
 						channel.assertExchange(MqConfig.userExchange, 'topic', {durable: true});
-						await this.createEncounterQueue(channel);
-						await this.createFriendRequestQueue(channel);
+						await this.createServerQueue(channel, MqConfig.encounterQueueName);
+						await this.createServerQueue(channel, MqConfig.friendRequestQueueName);
+						await this.createServerQueue(channel, MqConfig.campaignInviteQueueName);
 						this.connection = connection;
 						resolve();
 					}
@@ -71,9 +74,9 @@ export class MqProxy {
 
 	public observeAllFriendRequests(): Observable<FriendRequest> {
 		if (!this.connection) {
-			return throwError('Not connected toUserId MQ Server');
+			return throwError('Not connected to MQ Server');
 		}
-		let friendRequestSubject = new Subject<any>();
+		let friendRequestSubject = new Subject<FriendRequest>();
 		this.connection.createChannel((error, channel) => {
 			if (error) {
 				merge(friendRequestSubject, throwError(new Error(error)));
@@ -86,6 +89,25 @@ export class MqProxy {
 		});
 
 		return friendRequestSubject.asObservable();
+	}
+
+	public observeAllCampaignInvites(): Observable<CampaignInvite> {
+		if (!this.connection) {
+			return throwError('Not connected to MQ Server');
+		}
+		let campaignInviteSubject = new Subject<CampaignInvite>();
+		this.connection.createChannel((error, channel) => {
+			if (error) {
+				merge(campaignInviteSubject, throwError(new Error(error)));
+			}
+
+			channel.bindQueue(MqConfig.campaignInviteQueueName, MqConfig.userExchange, MqConfig.campaignInviteTopic);
+			channel.consume(MqConfig.campaignInviteQueueName, (message) => {
+				campaignInviteSubject.next(new CampaignInviteMessage(message));
+			});
+		});
+
+		return campaignInviteSubject.asObservable();
 	}
 
 	public createMqAccount(user: UserModel): Promise<void> {
@@ -203,21 +225,9 @@ export class MqProxy {
 		});
 	}
 
-	private createEncounterQueue(channel): Promise<void> {
+	private createServerQueue(channel, queueName: string): Promise<void> {
 		return new Promise((resolve, reject) => {
-			channel.assertQueue(MqConfig.encounterQueueName, {durable: false}, (error) => {
-				if (error) {
-					reject(error);
-					return;
-				}
-				resolve();
-			});
-		});
-	}
-
-	private createFriendRequestQueue(channel): Promise<void> {
-		return new Promise((resolve, reject) => {
-			channel.assertQueue(MqConfig.friendRequestQueueName, {durable: false}, (error) => {
+			channel.assertQueue(queueName, {durable: false}, (error) => {
 				if (error) {
 					reject(error);
 					return;

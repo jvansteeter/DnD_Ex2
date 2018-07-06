@@ -1,6 +1,6 @@
-import { StompMessage } from './stompMessage';
-import { FriendRequest } from '../../../../shared/types/mq/FriendRequest';
-import { MqMessageType } from '../../../../shared/types/mq/message-type.enum';
+import { FriendRequest } from '../../../../../shared/types/mq/FriendRequest';
+import { MqMessageType } from '../../../../../shared/types/mq/message-type.enum';
+import { StompMessage } from './stomp-message';
 
 export class FriendRequestMessage extends StompMessage implements FriendRequest {
 	headers: {
@@ -11,7 +11,6 @@ export class FriendRequestMessage extends StompMessage implements FriendRequest 
 
 	constructor(message) {
 		super(message);
-		this.headers.type = MqMessageType.FRIEND_REQUEST;
 		this.headers.toUserId = message.headers.toUserId;
 		this.headers.fromUserId = message.headers.fromUserId;
 	}

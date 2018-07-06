@@ -22,6 +22,7 @@ import { CampaignPageService } from './campaign-page.service';
 export class CampaignComponent implements OnInit {
 	private campaignId;
 
+	public membersCard: DashboardCard;
 	public memberDataSource: MatTableDataSource<UserProfile>;
 	public memberTableCols = ['users', 'gm'];
 
@@ -32,7 +33,7 @@ export class CampaignComponent implements OnInit {
 	public encountersCard: DashboardCard;
 
 	constructor(private activatedRoute: ActivatedRoute,
-							private campaignService: CampaignPageService,
+							private campaignPageService: CampaignPageService,
 							private alertService: AlertService,
 							private userProfileService: UserProfileService,
 							private dialog: MatDialog,
@@ -44,14 +45,14 @@ export class CampaignComponent implements OnInit {
 		 .pipe(
 		  tap((params) => {
 				this.campaignId = params['campaignId'];
-				this.campaignService.setCampaignId(this.campaignId);
+				this.campaignPageService.setCampaignId(this.campaignId);
 			}),
 			mergeMap(() => {
-				return this.campaignService.isReady();
+				return this.campaignPageService.isReady();
 			})
 		 ).subscribe((isReady: boolean) => {
 			if (isReady) {
-				this.memberDataSource = new MatTableDataSource(this.campaignService.members);
+				this.memberDataSource = new MatTableDataSource(this.campaignPageService.members);
 				this.initEncounterDataSource();
 			}
 		});
@@ -61,6 +62,15 @@ export class CampaignComponent implements OnInit {
 				{
 					title: 'New Encounter',
 					function: this.newEncounter
+				}
+			]
+		};
+
+		this.membersCard = {
+			menuOptions: [
+				{
+					title: 'Invite Friends',
+					function: this.inviteFriends
 				}
 			]
 		}
@@ -85,9 +95,9 @@ export class CampaignComponent implements OnInit {
 	}
 
 	private initEncounterDataSource(): void {
-		this.encounterSubject = new BehaviorSubject<EncounterStateData[]>(this.campaignService.encounters);
+		this.encounterSubject = new BehaviorSubject<EncounterStateData[]>(this.campaignPageService.encounters);
 		this.encounterDataSource = new SubjectDataSource<EncounterStateData>(this.encounterSubject);
-		this.campaignService.encounterObservable.subscribe((encounters: EncounterStateData[]) => {
+		this.campaignPageService.encounterObservable.subscribe((encounters: EncounterStateData[]) => {
 			this.encounterSubject.next(encounters);
 		});
 	}
@@ -95,7 +105,7 @@ export class CampaignComponent implements OnInit {
 	private inviteFriends = () => {
 		let dialogRef = this.dialog.open(SelectFriendsComponent);
 		dialogRef.componentInstance.friendsSelected.subscribe((friends: UserProfile[]) => {
-			this.campaignService.sendInvitations(friends);
+			this.campaignPageService.sendInvitations(friends);
 		});
 	};
 

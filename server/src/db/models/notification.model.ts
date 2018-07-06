@@ -1,7 +1,7 @@
 import * as mongoose from 'mongoose';
 import { MongooseModel } from './mongoose.model';
-import { NotificationData } from '../../../../shared/types/notifications/NotificationData';
 import { NotificationType } from '../../../../shared/types/notifications/notification-type.enum';
+import { NotificationData } from '../../../../shared/types/notifications/notification-data';
 
 export class NotificationModel extends MongooseModel {
     public _id: string;

@@ -3,7 +3,7 @@ import { UserRepository } from '../db/repositories/user.repository';
 import { FriendRepository } from '../db/repositories/friend.repository';
 import { NotificationRepository } from "../db/repositories/notification.repository";
 import { NotificationModel } from "../db/models/notification.model";
-import { NotificationData } from '../../../shared/types/notifications/NotificationData';
+import { NotificationData } from '../../../shared/types/notifications/notification-data';
 
 export class NotificationService {
 	private userRepo: UserRepository;

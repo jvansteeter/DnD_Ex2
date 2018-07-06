@@ -8,8 +8,6 @@ import { NpcRepository } from '../db/repositories/npc.repository';
 import { CharacterSheetService } from '../services/characterSheet-service';
 import { SocialService } from '../services/social.service';
 import { UserModel } from "../db/models/user.model";
-import { NotificationData } from '../../../shared/types/notifications/NotificationData';
-
 
 /**********************************************************************************************************
  * Social ROUTER
@@ -70,14 +68,14 @@ export class SocialRouter {
 			})
 		});
 
-		this.router.post('/campaignInvite', (req: Request, res: Response) => {
-			this.socialService.sendCampaignInvite(req.body.userId, req.body.campaignId).then(() => {
-				res.send('OK');
-			}).catch(error => {
-				console.error(error);
-				res.status(500).send(error);
-			})
-		});
+		// this.router.post('/campaignInvite', (req: Request, res: Response) => {
+		// 	this.socialService.sendCampaignInvite(req.body.userId, req.body.campaignId).then(() => {
+		// 		res.send('OK');
+		// 	}).catch(error => {
+		// 		console.error(error);
+		// 		res.status(500).send(error);
+		// 	})
+		// });
 
 		this.router.get('/user/:userId', async (req: Request, res: Response) => {
 			try {

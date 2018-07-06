@@ -5,9 +5,9 @@ import { UserModel } from "../db/models/user.model";
 import { FriendModel } from '../db/models/friend.model';
 import { NotificationRepository } from "../db/repositories/notification.repository";
 import { NotificationModel } from "../db/models/notification.model";
-import { NotificationData } from '../../../shared/types/notifications/NotificationData';
 import { NotificationType } from '../../../shared/types/notifications/notification-type.enum';
-import { FriendRequestNotification } from '../../../shared/types/notifications/FriendRequestNotification';
+import { NotificationData } from '../../../shared/types/notifications/notification-data';
+import { FriendRequestNotification } from '../../../shared/types/notifications/friend-request-notification';
 
 export class SocialService {
 	private userRepo: UserRepository;
@@ -42,26 +42,6 @@ export class SocialService {
 	//         }).catch(error => reject(error));
 	//     });
 	// }
-
-	public getPendingNotifications(toUserId: string): Promise<NotificationData[]> {
-		return new Promise((resolve, reject) => {
-			this.notificationRepo.findAllTo(toUserId).then((notifications: NotificationModel[]) => {
-				let count = notifications.length;
-				if (count === 0) {
-					resolve([]);
-					return;
-				}
-
-				let notificationsData: NotificationData[] = [];
-				notifications.forEach((notification: NotificationModel) => {
-					notificationsData.push(notification.notificationData);
-					if (--count === 0) {
-						resolve(notificationsData);
-					}
-				});
-			}).catch(error => reject(error));
-		});
-	}
 
 	public async acceptFriendRequest(toUserId, fromUserId): Promise<void> {
 		try {
@@ -121,13 +101,13 @@ export class SocialService {
 		});
 	}
 
-	public sendCampaignInvite(toUserId: string, campaignId: string): Promise<void> {
-		return new Promise((resolve, reject) => {
-			this.notificationRepo.createCampaignInvite(toUserId, campaignId).then((notification: NotificationModel) => {
-				resolve();
-			}).catch(error => reject(error));
-		});
-	}
+	// public sendCampaignInvite(toUserId: string, campaignId: string): Promise<void> {
+	// 	return new Promise((resolve, reject) => {
+	// 		this.notificationRepo.createCampaignInvite(toUserId, campaignId).then((notification: NotificationModel) => {
+	// 			resolve();
+	// 		}).catch(error => reject(error));
+	// 	});
+	// }
 
 	public async findUserById(userId: string): Promise<UserModel> {
 		try {

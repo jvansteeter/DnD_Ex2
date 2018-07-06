@@ -4,7 +4,7 @@ import { NotificationModel } from "../models/notification.model";
 import { CampaignRepository } from './campaign.repository';
 import { CampaignModel } from '../models/campaign.model';
 import { NotificationType } from '../../../../shared/types/notifications/notification-type.enum';
-import { NotificationData } from '../../../../shared/types/notifications/NotificationData';
+import { NotificationData } from '../../../../shared/types/notifications/notification-data';
 
 export class NotificationRepository {
 	private Notification: mongoose.Model<mongoose.Document>;
@@ -29,28 +29,23 @@ export class NotificationRepository {
 		}
 	}
 
-	public createCampaignInvite(toUserId: string, campaignId: string): Promise<NotificationModel> {
-		return new Promise((resolve, reject) => {
-			this.campaignRepo.findById(campaignId).then((campaign: CampaignModel) => {
-				this.Notification.create({
-					toUserId: toUserId,
+	public async createCampaignInvite(toUserId: string, campaignId: string): Promise<NotificationModel> {
+		try {
+			let campaign: CampaignModel = await this.campaignRepo.findById(campaignId);
+			console.log(campaign);
+			return await this.Notification.create({
+				toUserId: toUserId,
+				notificationType: NotificationType.CAMPAIGN_INVITE,
+				notificationData: {
 					notificationType: NotificationType.CAMPAIGN_INVITE,
-					notificationData: {
-						notificationType: NotificationType.CAMPAIGN_INVITE,
-						campaignId: campaignId,
-						campaignLabel: campaign.label
-					}
-				}, (error, notification: NotificationModel) => {
-					if (error) {
-						reject(error);
-						return;
-					}
-
-					resolve(notification);
-				});
+					campaignId: campaignId,
+					campaignLabel: campaign.label
+				}
 			});
-
-		});
+		}
+		catch (error) {
+			throw error;
+		}
 	}
 
 	public findAllTo(userId: string): Promise<NotificationModel[]> {

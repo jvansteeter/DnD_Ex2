@@ -4,10 +4,10 @@ import { BehaviorSubject, merge, Subject } from 'rxjs';
 import { map, mergeMap, tap } from 'rxjs/operators';
 import { Observable } from 'rxjs/internal/Observable';
 
-
 export class SubjectDataSource<T> extends DataSource<T> {
   private dataSubject: Subject<T[]>;
   public data: T[];
+  public filter: string;
 
   constructor(subject: Subject<T[]>,
               private paginator?: MatPaginator,
@@ -17,25 +17,6 @@ export class SubjectDataSource<T> extends DataSource<T> {
   }
 
   connect(): Observable<T[]> {
-    // const updateSubject = new Subject<T[]>();
-    //
-    // this.dataSubject.asObservable().subscribe((data: T[]) => {
-    //   this.data = data;
-    //   updateSubject.next(data);
-    // });
-    //
-    // let dataMutations: any[] = [updateSubject.asObservable()];
-    // if (this.paginator) {
-    //   dataMutations.push(this.paginator.page);
-    // }
-    // if (this.sort) {
-    //   dataMutations.push(this.sort.sortChange);
-    // }
-    //
-    // return merge(...dataMutations).pipe(map(() => {
-    //   return this.getPagedData(this.getSortedData([...this.data]));
-    // }));
-
     let updateSubject: BehaviorSubject<T[]>;
     let dataMutations: any[] = [];
     return this.dataSubject.asObservable().pipe(

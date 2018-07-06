@@ -9,7 +9,7 @@ import { NotificationRepository } from '../db/repositories/notification.reposito
 import { NotificationModel } from '../db/models/notification.model';
 import { ServerError } from '../../../shared/errors/ServerError';
 import { NotificationType } from '../../../shared/types/notifications/notification-type.enum';
-import { CampaignInviteNotification } from '../../../shared/types/notifications/CampaignInviteNotification';
+import { CampaignInviteNotification } from '../../../shared/types/notifications/campaign-invite-notification';
 
 export class CampaignService {
     private campaignRepository: CampaignRepository;

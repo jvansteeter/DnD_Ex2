@@ -1,6 +1,6 @@
 import { AmqpMessage } from './AmqpMessage';
-import { FriendRequest } from '../../../shared/types/mq/FriendRequest';
-import { MqMessageType } from '../../../shared/types/mq/message-type.enum';
+import { FriendRequest } from '../../../../shared/types/mq/FriendRequest';
+import { MqMessageType } from '../../../../shared/types/mq/message-type.enum';
 
 export class FriendRequestMessage extends AmqpMessage implements FriendRequest {
 	headers: {
@@ -11,6 +11,7 @@ export class FriendRequestMessage extends AmqpMessage implements FriendRequest {
 
 	constructor(data) {
 		super(data);
+		this.headers.type = MqMessageType.FRIEND_REQUEST;
 		this.headers.toUserId = data.properties.headers.toUserId;
 		this.headers.fromUserId = data.properties.headers.fromUserId;
 	}

@@ -1,5 +1,5 @@
-import { MqMessage } from '../../../../shared/types/mq/MqMessage';
-import { MqMessageType } from '../../../../shared/types/mq/message-type.enum';
+import { MqMessage } from '../../../../../shared/types/mq/MqMessage';
+import { MqMessageType } from '../../../../../shared/types/mq/message-type.enum';
 
 export abstract class StompMessage implements MqMessage {
 	headers: { type: MqMessageType };
@@ -18,6 +18,10 @@ export abstract class StompMessage implements MqMessage {
 			}
 			case MqMessageType.FRIEND_REQUEST_ACCEPTED: {
 				type = MqMessageType.FRIEND_REQUEST_ACCEPTED;
+				break;
+			}
+			case MqMessageType.CAMPAIGN_INVITE: {
+				type = MqMessageType.CAMPAIGN_INVITE;
 				break;
 			}
 		}
