@@ -12,6 +12,7 @@ export class CampaignInviteMessage extends StompMessage implements CampaignInvit
 	constructor(message) {
 		super(message);
 		this.headers.campaignId = message.headers.campaignId;
+		this.headers.toUserId = message.headers.toUserId;
 	}
 
 	serializeBody(): string {

@@ -62,7 +62,8 @@ export class MqService extends IsReadyService {
 		this.stompService.publish(url, message.serializeBody(), message.headers);
 	}
 
-	public acceptFriendRequest(fromUserId: string): void {
+	public sendAcceptFriendRequestMessage(fromUserId: string): void {
+		console.log('send accept friend request message')
 		let message = MqMessageFactory.createAcceptFriendRequestMessage(fromUserId);
 		let url = MqMessageUrlFactory.createAcceptFriendRequestUrl(fromUserId);
 		this.stompService.publish(url, message.serializeBody(), message.headers);
@@ -70,6 +71,7 @@ export class MqService extends IsReadyService {
 
 	public sendCampaignInvite(toUserId: string, campaignId: string): void {
 		let message = MqMessageFactory.createCampaignInvite(toUserId, campaignId);
+		console.log(message)
 		let url = MqMessageUrlFactory.createSendCampaignInviteUrl(message.headers.toUserId);
 		this.stompService.publish(url, message.serializeBody(), message.headers);
 	}

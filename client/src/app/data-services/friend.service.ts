@@ -45,7 +45,7 @@ export class FriendService extends IsReadyService {
 	public acceptRequest(fromUserId: string): void {
 		this.socialRepo.acceptRequest(fromUserId).subscribe(() => {
 			this.updateFriendList();
-			this.mqService.acceptFriendRequest(fromUserId);
+			this.mqService.sendAcceptFriendRequestMessage(fromUserId);
 		});
 	}
 
@@ -78,6 +78,7 @@ export class FriendService extends IsReadyService {
 				filter((message: StompMessage) => message.headers.type === MqMessageType.FRIEND_REQUEST_ACCEPTED),
 				map((message: StompMessage) => {return message as AcceptFriendRequest})
 		).subscribe(() => {
+			console.log('friend request accepted')
 			this.updateFriendList();
 		});
 	}

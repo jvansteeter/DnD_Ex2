@@ -1,18 +1,17 @@
 import { Promise } from 'bluebird';
-import { UserRepository } from '../db/repositories/user.repository';
 import { FriendRepository } from '../db/repositories/friend.repository';
 import { UserModel } from "../db/models/user.model";
 import { FriendModel } from '../db/models/friend.model';
 import { NotificationRepository } from "../db/repositories/notification.repository";
 import { NotificationModel } from "../db/models/notification.model";
 import { NotificationType } from '../../../shared/types/notifications/notification-type.enum';
-import { NotificationData } from '../../../shared/types/notifications/notification-data';
 import { FriendRequestNotification } from '../../../shared/types/notifications/friend-request-notification';
+import { UserRepository } from "../db/repositories/user.repository";
 
 export class SocialService {
-	private userRepo: UserRepository;
 	private friendRepo: FriendRepository;
 	private notificationRepo: NotificationRepository;
+	private userRepo: UserRepository;
 
 	constructor() {
 		this.userRepo = new UserRepository();
@@ -44,6 +43,7 @@ export class SocialService {
 	// }
 
 	public async acceptFriendRequest(toUserId, fromUserId): Promise<void> {
+		console.log('SocialService.acceptFriendRequest()')
 		try {
 			let friendRequests: NotificationModel[] = await this.notificationRepo.findAllToByType(toUserId, NotificationType.FRIEND_REQUEST);
 			friendRequests.forEach(async (friendRequest: NotificationModel) => {
@@ -74,6 +74,29 @@ export class SocialService {
 		}
 		catch (error) {
 			throw (error);
+		}
+	}
+
+	public async createFriendRequest(toUserId, fromUserId): Promise<void> {
+		try {
+			let pendingRequests: NotificationModel[] = await this.notificationRepo.findAllToByType(toUserId, NotificationType.FRIEND_REQUEST);
+			for (let request of pendingRequests) {
+				if (request.notificationData['fromUserId'] && request.notificationData['fromUserId'] === fromUserId) {
+					return;
+				}
+			}
+			let usersAreFriends: boolean = this.friendRepo.usersAreFriends(toUserId, fromUserId);
+			if (usersAreFriends) {
+				return;
+			}
+			await this.notificationRepo.create(toUserId, NotificationType.FRIEND_REQUEST, {
+				type: NotificationType.FRIEND_REQUEST,
+				toUserId: toUserId,
+				fromUserId: fromUserId,
+			} as FriendRequestNotification);
+		}
+		catch (error) {
+			console.error(error);
 		}
 	}
 

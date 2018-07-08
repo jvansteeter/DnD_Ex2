@@ -24,6 +24,8 @@ export class MqMessageFactory {
 	}
 
 	public static createCampaignInvite(toUserId: string, campaignId: string): CampaignInviteMessage {
+		console.log('createCampaignInvite')
+		console.log(toUserId)
 		return new CampaignInviteMessage({
 			headers: {
 				type: MqMessageType.CAMPAIGN_INVITE,

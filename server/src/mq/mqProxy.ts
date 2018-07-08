@@ -227,7 +227,7 @@ export class MqProxy {
 
 	private createServerQueue(channel, queueName: string): Promise<void> {
 		return new Promise((resolve, reject) => {
-			channel.assertQueue(queueName, {durable: false}, (error) => {
+			channel.assertQueue(queueName, {durable: false, autoDelete: true}, (error) => {
 				if (error) {
 					reject(error);
 					return;

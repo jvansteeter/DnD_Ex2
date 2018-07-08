@@ -5,14 +5,17 @@ import { FriendRequest } from '../../../shared/types/mq/FriendRequest';
 import { NotificationRepository } from '../db/repositories/notification.repository';
 import { NotificationType } from '../../../shared/types/notifications/notification-type.enum';
 import { NotificationModel } from '../db/models/notification.model';
-import { FriendRequestNotification } from '../../../shared/types/notifications/friend-request-notification';
 import { CampaignInvite } from '../../../shared/types/mq/campaign-invite';
 import { CampaignInviteNotification } from '../../../shared/types/notifications/campaign-invite-notification';
+import { FriendRequestNotification } from "../../../shared/types/notifications/friend-request-notification";
+import { FriendRepository } from "../db/repositories/friend.repository";
 
 export class MqService {
+	private friendRepo: FriendRepository;
 	private notificationRepo: NotificationRepository;
 
 	constructor(private mqProxy: MqProxy) {
+		this.friendRepo = new FriendRepository();
 		this.notificationRepo = new NotificationRepository();
 	}
 
@@ -37,6 +40,7 @@ export class MqService {
 	}
 
 	private async handleFriendRequest(friendRequest: FriendRequest): Promise<void> {
+		console.log('--- handle friend request')
 		let toUserId = friendRequest.headers.toUserId;
 		let fromUserId = friendRequest.headers.fromUserId;
 		try {
@@ -46,6 +50,13 @@ export class MqService {
 					return;
 				}
 			}
+			console.log('is not a repeat')
+			let usersAreFriends: boolean = await this.friendRepo.usersAreFriends(toUserId, fromUserId);
+			if (usersAreFriends) {
+				console.log('users are friends')
+				return;
+			}
+			console.log('create request')
 			await this.notificationRepo.create(toUserId, NotificationType.FRIEND_REQUEST, {
 				type: NotificationType.FRIEND_REQUEST,
 				toUserId: toUserId,
