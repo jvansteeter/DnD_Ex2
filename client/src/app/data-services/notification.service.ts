@@ -13,16 +13,14 @@ import { StompMessage } from '../mq/messages/stomp-message';
 import { MqMessageType } from '../../../../shared/types/mq/message-type.enum';
 
 @Injectable()
-export class NotificationsService extends IsReadyService {
+export class NotificationService extends IsReadyService {
 	public notifications: NotificationData[];
-	public friendRequests: UserProfile[];
 
 	constructor(private friendService: FriendService,
 	            private socialRepo: SocialRepository,
 	            private mqService: MqService) {
 		super(friendService, mqService);
 		this.notifications = [];
-		this.friendRequests = [];
 		this.init();
 	}
 
@@ -31,7 +29,12 @@ export class NotificationsService extends IsReadyService {
 			if (isReady) {
 				this.getPendingNotifications();
 				this.friendService.getIncomingFriendRequests().subscribe((request: FriendRequestMessage) => {
-					this.handleFriendRequest(request.headers.fromUserId);
+					// this.handleFriendRequest(request.headers.fromUserId);
+					this.notifications.push({
+						type: NotificationType.FRIEND_REQUEST,
+						toUserId: request.headers.toUserId,
+						fromUserId: request.headers.fromUserId,
+					} as FriendRequestNotification);
 				});
 				this.observeAllOtherNotifications();
 				this.setReady(true);
@@ -45,21 +48,23 @@ export class NotificationsService extends IsReadyService {
 	public getPendingNotifications(): void {
 		this.socialRepo.getPendingNotifications().subscribe((notifications: NotificationData[]) => {
 			this.notifications = notifications;
-			this.notifications.forEach((notification: NotificationData) => {
-				if (notification.type === NotificationType.FRIEND_REQUEST) {
-					this.handleFriendRequest((notification as FriendRequestNotification).fromUserId);
-				}
-			});
+			console.log('these are my notifications')
+			console.log(this.notifications)
+			// this.notifications.forEach((notification: NotificationData) => {
+			// 	if (notification.type === NotificationType.FRIEND_REQUEST) {
+			// 		this.handleFriendRequest((notification as FriendRequestNotification).fromUserId);
+			// 	}
+			// });
 		});
 	}
 
 	public removeFriendRequest(fromUserId: string): void {
-		for (let i = 0; i < this.friendRequests.length; i++) {
-			if (this.friendRequests[i]._id === fromUserId) {
-				this.friendRequests.splice(i, 1);
-				return;
-			}
-		}
+		// for (let i = 0; i < this.friendRequests.length; i++) {
+		// 	if (this.friendRequests[i]._id === fromUserId) {
+		// 		this.friendRequests.splice(i, 1);
+		// 		return;
+		// 	}
+		// }
 	}
 
 	public joinCampaign(campaignId: string): void {
@@ -70,21 +75,23 @@ export class NotificationsService extends IsReadyService {
 		//     });
 	}
 
-	private handleFriendRequest(fromUserId: string): void {
-		this.socialRepo.getUserById(fromUserId).subscribe((user: UserProfile) => {
-			for (let request of this.friendRequests) {
-				if (request._id === user._id) {
-					return;
-				}
-			}
-			this.friendRequests.push(user);
-		});
-	}
+	// private handleFriendRequest(fromUserId: string): void {
+	// 	this.socialRepo.getUserById(fromUserId).subscribe((user: UserProfile) => {
+	// 		for (let request of this.friendRequests) {
+	// 			if (request._id === user._id) {
+	// 				return;
+	// 			}
+	// 		}
+	// 		this.friendRequests.push(user);
+	// 	});
+	// }
 
 	private observeAllOtherNotifications(): void {
 		this.mqService.getIncomingUserMessages().pipe(
 				filter((message: StompMessage) => message.headers.type === MqMessageType.CAMPAIGN_INVITE),
 		).subscribe((message: StompMessage) => {
+			console.log('received campaign invite message')
+			console.log(message)
 			this.getPendingNotifications();
 		});
 	}

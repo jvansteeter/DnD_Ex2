@@ -14,6 +14,7 @@ import { FriendRequestMessage } from './messages/friend-request.message';
 import { AcceptFriendRequest } from './messages/friend-request-accepted.message';
 import { MqMessageUrlFactory } from './mq-message-url.factory';
 import { StompMessage } from './messages/stomp-message';
+import { CampaignInviteMessage } from './messages/campaign-invite.message';
 
 @Injectable()
 export class MqService extends IsReadyService {
@@ -63,7 +64,6 @@ export class MqService extends IsReadyService {
 	}
 
 	public sendAcceptFriendRequestMessage(fromUserId: string): void {
-		console.log('send accept friend request message')
 		let message = MqMessageFactory.createAcceptFriendRequestMessage(fromUserId);
 		let url = MqMessageUrlFactory.createAcceptFriendRequestUrl(fromUserId);
 		this.stompService.publish(url, message.serializeBody(), message.headers);
@@ -86,6 +86,9 @@ export class MqService extends IsReadyService {
 								}
 								case MqMessageType.FRIEND_REQUEST_ACCEPTED: {
 									return new AcceptFriendRequest(message);
+								}
+								case MqMessageType.CAMPAIGN_INVITE: {
+									return new CampaignInviteMessage(message);
 								}
 								default: {
 									console.error('Message Type not recognized');

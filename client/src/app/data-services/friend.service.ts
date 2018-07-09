@@ -78,7 +78,6 @@ export class FriendService extends IsReadyService {
 				filter((message: StompMessage) => message.headers.type === MqMessageType.FRIEND_REQUEST_ACCEPTED),
 				map((message: StompMessage) => {return message as AcceptFriendRequest})
 		).subscribe(() => {
-			console.log('friend request accepted')
 			this.updateFriendList();
 		});
 	}

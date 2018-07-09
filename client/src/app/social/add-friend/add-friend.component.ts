@@ -4,9 +4,9 @@ import { UserProfile } from '../../types/userProfile';
 import { MatDialogRef } from '@angular/material';
 import { SocialService } from '../social.service';
 import { UserProfileService } from '../../data-services/userProfile.service';
-import { NotificationsService } from '../../data-services/notifications.service';
 import { FriendService } from '../../data-services/friend.service';
 import { SubjectDataSource } from '../../utilities/subjectDataSource';
+import { NotificationService } from '../../data-services/notification.service';
 
 
 @Component({
@@ -17,7 +17,7 @@ import { SubjectDataSource } from '../../utilities/subjectDataSource';
 export class AddFriendComponent {
     @ViewChild('searchCriteria') private searchInput: ElementRef;
     private userDataSource: SubjectDataSource<UserProfile>;
-    private userSubject: Subject<UserProfile[]>;
+    private readonly userSubject: Subject<UserProfile[]>;
     public tableColumns = ['user', 'actions'];
 
     public users: UserProfile[];
@@ -26,7 +26,7 @@ export class AddFriendComponent {
     constructor(private socialService: SocialService,
                 private dialogRef: MatDialogRef<AddFriendComponent>,
                 private userProfileService: UserProfileService,
-                private notificationsService: NotificationsService,
+                private notificationsService: NotificationService,
                 private friendService: FriendService) {
         this.userSubject = new Subject();
         this.userDataSource = new SubjectDataSource<UserProfile>(this.userSubject);
@@ -76,11 +76,11 @@ export class AddFriendComponent {
     }
 
     public hasPendingRequestFrom(user: UserProfile): boolean {
-        for (let i = 0; i < this.notificationsService.friendRequests.length; i++) {
-            if (this.notificationsService.friendRequests[i]._id === user._id) {
-                return true;
-            }
-        }
+        // for (let i = 0; i < this.notificationService.friendRequests.length; i++) {
+        //     if (this.notificationService.friendRequests[i]._id === user._id) {
+        //         return true;
+        //     }
+        // }
 
         return false;
     }
