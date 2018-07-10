@@ -1,12 +1,13 @@
 import { NgModule } from '@angular/core';
 import {
-    MatButtonModule,
-    MatCardModule,
-    MatGridListModule, MatIconModule, MatListModule,
-    MatMenuModule,
-    MatSidenavModule,
-    MatSortModule,
-    MatToolbarModule
+	MatBadgeModule,
+	MatButtonModule,
+	MatCardModule,
+	MatGridListModule, MatIconModule, MatListModule,
+	MatMenuModule,
+	MatSidenavModule,
+	MatSortModule,
+	MatToolbarModule
 } from '@angular/material';
 import { MainNavComponent } from './main-nav.component';
 import { BrowserModule } from '@angular/platform-browser';
@@ -29,6 +30,7 @@ import { FriendRequestNotificationComponent } from './notification/notification-
         MatIconModule,
         MatButtonModule,
         AppRoutingModule,
+		    MatBadgeModule,
     ],
     declarations: [
         MainNavComponent,

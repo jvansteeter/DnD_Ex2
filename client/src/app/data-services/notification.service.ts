@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { UserProfile } from '../types/userProfile';
 import { IsReadyService } from '../utilities/services/isReady.service';
 import { NotificationType } from '../../../../shared/types/notifications/notification-type.enum';
 import { FriendRequestMessage } from '../mq/messages/friend-request.message';
@@ -29,12 +28,16 @@ export class NotificationService extends IsReadyService {
 			if (isReady) {
 				this.getPendingNotifications();
 				this.friendService.getIncomingFriendRequests().subscribe((request: FriendRequestMessage) => {
-					// this.handleFriendRequest(request.headers.fromUserId);
-					this.notifications.push({
+					this.handleFriendRequest({
 						type: NotificationType.FRIEND_REQUEST,
 						toUserId: request.headers.toUserId,
 						fromUserId: request.headers.fromUserId,
 					} as FriendRequestNotification);
+					// this.notifications.push({
+					// 	type: NotificationType.FRIEND_REQUEST,
+					// 	toUserId: request.headers.toUserId,
+					// 	fromUserId: request.headers.fromUserId,
+					// } as FriendRequestNotification);
 				});
 				this.observeAllOtherNotifications();
 				this.setReady(true);
@@ -75,16 +78,17 @@ export class NotificationService extends IsReadyService {
 		//     });
 	}
 
-	// private handleFriendRequest(fromUserId: string): void {
-	// 	this.socialRepo.getUserById(fromUserId).subscribe((user: UserProfile) => {
-	// 		for (let request of this.friendRequests) {
-	// 			if (request._id === user._id) {
-	// 				return;
-	// 			}
-	// 		}
-	// 		this.friendRequests.push(user);
-	// 	});
-	// }
+	private handleFriendRequest(notification: FriendRequestNotification): void {
+		for (let note of this.notifications) {
+			if (note.type === NotificationType.FRIEND_REQUEST) {
+				let friendRequest = note as FriendRequestNotification;
+				if (notification.fromUserId === friendRequest.fromUserId) {
+					return;
+				}
+			}
+		}
+		this.notifications.push(notification);
+	}
 
 	private observeAllOtherNotifications(): void {
 		this.mqService.getIncomingUserMessages().pipe(

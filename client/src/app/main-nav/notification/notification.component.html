@@ -1,45 +1,14 @@
-<button mat-button class="navbar-menuButton" [matMenuTriggerFor]="notifications">
-    <span class="badge navbar-noteAlert" *ngIf="notificationService.notifications.length > 0">{{notificationService.notifications.length}}</span>
+<button *ngIf="notificationService.notifications.length > 0" mat-button class="navbar-menuButton" [matMenuTriggerFor]="notifications">
+    <mat-icon matBadge="{{notificationService.notifications.length}}" matBadgePosition="below after" matBadgeColor="warn">book</mat-icon>
+</button>
+<button *ngIf="notificationService.notifications.length === 0" mat-button class="navBar-menuButton" [matMenuTriggerFor]="noNotifications">
     <mat-icon>book</mat-icon>
 </button>
 <mat-menu #notifications>
-    <!--<ng-container *ngIf="notificationService.friendRequests.length > 0">-->
-    <!--<span class="notification-friendRequestHeader">Friend Requests</span>-->
-    <!--<mat-divider></mat-divider>-->
-    <!--<ng-container *ngFor="let requester of notificationService.friendRequests">-->
-    <!--<div class="notification-friendRequest">-->
-    <!--<img [src]="requester.profilePhotoUrl" class="img-rounded">-->
-    <!--<span>{{requester.username}}</span>-->
-    <!--<button mat-icon-button class="acceptButton" (click)="acceptFriendRequest(requester)"><mat-icon>check</mat-icon></button>-->
-    <!--<button mat-icon-button class="rejectButton" (click)="rejectFriendRequest(requester)"><mat-icon>not_interested</mat-icon></button>-->
-    <!--</div>-->
-    <!--</ng-container>-->
-    <!--<mat-divider></mat-divider>-->
-    <!--</ng-container>-->
-
-    <!--<ng-container *ngIf="notificationService.notifications.length > 0">-->
-    <!--<span>Notifications</span>-->
-    <!--<mat-divider></mat-divider>-->
-    <!--<ng-container *ngFor="let notification of notificationService.notifications">-->
-    <!--<div *ngIf="notification.type === notificationType.CAMPAIGN_INVITE" class="notification-friendRequest">-->
-    <!--<span>Campaign Invite: </span>-->
-    <!--<span>{{notification.campaignLabel}}</span>-->
-    <!--<button mat-icon-button class="acceptButton" (click)="acceptCampaignInvite(notification)"><mat-icon>check</mat-icon></button>-->
-    <!--<button mat-icon-button class="rejectButton" (click)="rejectCampaignInvite(notification)"><mat-icon>not_interested</mat-icon></button>-->
-    <!--</div>-->
-
-    <!--</ng-container>-->
-    <!--<mat-divider></mat-divider>-->
-    <!--</ng-container>-->
-
-    <ng-container *ngIf="notificationService.notifications.length === 0">
-        <span>No Notifications</span>
+    <ng-container *ngFor="let notification of notificationService.notifications">
+        <friend-request-notification [friendRequest]="notification"></friend-request-notification>
     </ng-container>
-    <ng-container *ngIf="notificationService.notifications.length > 0">
-        <ng-container *ngFor="let notification of notificationService.notifications">
-            <!--<ng-container ngSwitch="notification.type">-->
-                <friend-request-notification [friendRequest]="notification"></friend-request-notification>
-            <!--</ng-container>-->
-        </ng-container>
-    </ng-container>
+</mat-menu>
+<mat-menu #noNotifications>
+    <span>No Notifications</span>
 </mat-menu>
