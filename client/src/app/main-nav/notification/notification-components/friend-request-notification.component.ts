@@ -4,6 +4,7 @@ import { FriendRequestNotification } from '../../../../../../shared/types/notifi
 import { SocialRepository } from '../../../social/social.repository';
 import { NotificationService } from '../../../data-services/notification.service';
 import { FriendService } from '../../../data-services/friend.service';
+import { NotificationData } from '../../../../../../shared/types/notifications/notification-data';
 
 @Component({
 	selector: 'friend-request-notification',
@@ -11,8 +12,9 @@ import { FriendService } from '../../../data-services/friend.service';
 	styleUrls: ['../notification.component.scss']
 })
 export class FriendRequestNotificationComponent implements OnInit {
-	@Input('friendRequest')
-	request: FriendRequestNotification;
+	@Input('notification')
+	notification: NotificationData;
+	friendRequest: FriendRequestNotification;
 	requestingUser: UserProfile;
 
 	constructor(private socialRepo: SocialRepository,
@@ -22,18 +24,18 @@ export class FriendRequestNotificationComponent implements OnInit {
 	}
 
 	public ngOnInit(): void {
-		this.socialRepo.getUserById(this.request.fromUserId).subscribe((user: UserProfile) => {
+		this.friendRequest = this.notification.body as FriendRequestNotification;
+		this.socialRepo.getUserById(this.friendRequest.fromUserId).subscribe((user: UserProfile) => {
 			this.requestingUser = user;
 		});
 	}
 
-	public acceptFriendRequest(requester: UserProfile): void {
-		this.friendService.acceptRequest(requester._id);
-		this.notificationService.removeFriendRequest(requester._id);
+	public acceptFriendRequest(): void {
+		this.friendService.acceptRequest(this.friendRequest.fromUserId);
+		this.notificationService.removeNotification(this.notification);
 	}
 
-	public rejectFriendRequest(requester: UserProfile): void {
-		this.friendService.rejectFriendRequest(requester._id);
-		this.notificationService.removeFriendRequest(requester._id);
+	public rejectFriendRequest(): void {
+		this.notificationService.removeNotification(this.notification, true);
 	}
 }

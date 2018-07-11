@@ -58,9 +58,6 @@ export class FriendRepository {
 					reject(error);
 					return;
 				}
-				console.log('usersAreFriends()')
-				console.log(friends)
-				console.log(friends.length > 0)
 
 				resolve(friends.length > 0);
 			});

@@ -1,10 +1,10 @@
-<mat-list *ngIf="requestingUser" class="notification-friendRequest">
+<mat-list *ngIf="requestingUser" class="notification">
     <mat-list-item>
         <img [src]="requestingUser.profilePhotoUrl" class="img-rounded">
         <span>Friend request from: {{requestingUser.username}}</span>
     </mat-list-item>
     <mat-list-item>
-        <button mat-icon-button class="acceptButton" (click)="acceptFriendRequest(requestingUser)"><mat-icon>check</mat-icon></button>
-        <button mat-icon-button class="rejectButton" (click)="rejectFriendRequest(requestingUser)"><mat-icon>not_interested</mat-icon></button>
+        <button mat-icon-button class="acceptButton" (click)="acceptFriendRequest()"><mat-icon>check</mat-icon></button>
+        <button mat-icon-button class="rejectButton" (click)="rejectFriendRequest()"><mat-icon>not_interested</mat-icon></button>
     </mat-list-item>
 </mat-list>

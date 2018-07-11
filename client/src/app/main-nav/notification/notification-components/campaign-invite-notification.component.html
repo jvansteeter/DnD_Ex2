@@ -1,0 +1,9 @@
+<mat-list *ngIf="campaign" class="notification">
+    <mat-list-item>
+        <span>Campaign Invite: {{campaign.label}}</span>
+    </mat-list-item>
+    <mat-list-item>
+        <button mat-icon-button class="acceptButton" (click)="acceptInvite()"><mat-icon>check</mat-icon></button>
+        <button mat-icon-button class="rejectButton" (click)="rejectInvite()"><mat-icon>not_interested</mat-icon></button>
+    </mat-list-item>
+</mat-list>

@@ -1,9 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { UserRepository } from '../db/repositories/user.repository';
 import { UserModel } from '../db/models/user.model';
-import { NotificationService } from '../services/notification.service';
-import { NotificationData } from '../../../shared/types/notifications/notification-data';
-
 
 /**********************************************************************************************************
  * User ROUTER
@@ -13,12 +10,10 @@ import { NotificationData } from '../../../shared/types/notifications/notificati
 export class UserRouter {
 	router: Router;
 	userRepository: UserRepository;
-	private notificationService: NotificationService;
 
 	constructor() {
 		this.router = Router();
 		this.userRepository = new UserRepository();
-		this.notificationService = new NotificationService();
 		this.init();
 	}
 
@@ -32,18 +27,6 @@ export class UserRouter {
 				user.setProfilePhotoUrl(req.body.imageUrl).then(() => res.status(200).send()).catch(error => res.status(500).send(error));
 			}).catch(error => res.status(500).send(error));
 		});
-
-		this.router.get('/pendingNotifications', async (req: Request, res: Response) => {
-			try {
-				let notifications: NotificationData[] = await this.notificationService.getPendingNotifications(req.user._id);
-				res.json(notifications);
-			}
-			catch (error) {
-				console.error(error);
-				res.status(500).send(error);
-			}
-		});
-
 
 		this.router.post('/find', async (req: Request, res: Response) => {
 			let criteria = req.body.search;

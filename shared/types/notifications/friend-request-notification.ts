@@ -1,6 +1,6 @@
-import { NotificationData } from './notification-data';
+import { NotificationBody } from './notification-body';
 
-export interface FriendRequestNotification extends NotificationData {
+export interface FriendRequestNotification extends NotificationBody {
 	toUserId: string;
 	fromUserId: string;
 }

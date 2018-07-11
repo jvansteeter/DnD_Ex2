@@ -19,35 +19,12 @@ export class SocialService {
 		this.notificationRepo = new NotificationRepository();
 	}
 
-	// public getPendingFriendRequests(toUserId: string): Promise<FriendRequestModel[]> {
-	//     return new Promise((resolve, reject) => {
-	//         this.friendRequestRepo.findAllTo(toUserId).then((requests: FriendRequestModel[]) => {
-	//             let count = requests.length;
-	//             if (count === 0) {
-	//                 resolve([]);
-	//                 return;
-	//             }
-	//
-	//             let requestsFromUsers: UserModel[] = [];
-	//             requests.forEach((request: FriendRequestModel) => {
-	//                 this.userRepo.findById(request.fromUserId).then((fromUser: UserModel) => {
-	//                     delete fromUser.passwordHash;
-	//                     requestsFromUsers.push(fromUser);
-	//                     if (--count === 0) {
-	//                         resolve(requestsFromUsers);
-	//                     }
-	//                 })
-	//             });
-	//         }).catch(error => reject(error));
-	//     });
-	// }
-
 	public async acceptFriendRequest(toUserId, fromUserId): Promise<void> {
 		console.log('SocialService.acceptFriendRequest()')
 		try {
 			let friendRequests: NotificationModel[] = await this.notificationRepo.findAllToByType(toUserId, NotificationType.FRIEND_REQUEST);
 			friendRequests.forEach(async (friendRequest: NotificationModel) => {
-				let data: FriendRequestNotification = friendRequest.notificationData as FriendRequestNotification;
+				let data: FriendRequestNotification = friendRequest.body as FriendRequestNotification;
 				if (data.fromUserId === fromUserId) {
 					await this.friendRepo.create(toUserId, fromUserId);
 					await this.friendRepo.create(fromUserId, toUserId);
@@ -65,7 +42,7 @@ export class SocialService {
 		try {
 			let friendRequests: NotificationModel[] = await this.notificationRepo.findAllToByType(toUserId, NotificationType.FRIEND_REQUEST);
 			friendRequests.forEach(async (friendRequest: NotificationModel) => {
-				let data: FriendRequestNotification = friendRequest.notificationData as FriendRequestNotification;
+				let data: FriendRequestNotification = friendRequest.body as FriendRequestNotification;
 				if (data.fromUserId === fromUserId) {
 					await this.notificationRepo.removeById(friendRequest._id);
 					return;
@@ -74,29 +51,6 @@ export class SocialService {
 		}
 		catch (error) {
 			throw (error);
-		}
-	}
-
-	public async createFriendRequest(toUserId, fromUserId): Promise<void> {
-		try {
-			let pendingRequests: NotificationModel[] = await this.notificationRepo.findAllToByType(toUserId, NotificationType.FRIEND_REQUEST);
-			for (let request of pendingRequests) {
-				if (request.notificationData['fromUserId'] && request.notificationData['fromUserId'] === fromUserId) {
-					return;
-				}
-			}
-			let usersAreFriends: boolean = this.friendRepo.usersAreFriends(toUserId, fromUserId);
-			if (usersAreFriends) {
-				return;
-			}
-			await this.notificationRepo.create(toUserId, NotificationType.FRIEND_REQUEST, {
-				type: NotificationType.FRIEND_REQUEST,
-				toUserId: toUserId,
-				fromUserId: fromUserId,
-			} as FriendRequestNotification);
-		}
-		catch (error) {
-			console.error(error);
 		}
 	}
 
@@ -123,14 +77,6 @@ export class SocialService {
 			}).catch(error => reject(error));
 		});
 	}
-
-	// public sendCampaignInvite(toUserId: string, campaignId: string): Promise<void> {
-	// 	return new Promise((resolve, reject) => {
-	// 		this.notificationRepo.createCampaignInvite(toUserId, campaignId).then((notification: NotificationModel) => {
-	// 			resolve();
-	// 		}).catch(error => reject(error));
-	// 	});
-	// }
 
 	public async findUserById(userId: string): Promise<UserModel> {
 		try {

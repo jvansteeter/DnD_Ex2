@@ -1,6 +1,5 @@
-import { NotificationData } from './notification-data';
+import { NotificationBody } from './notification-body';
 
-export interface CampaignInviteNotification extends NotificationData {
+export interface CampaignInviteNotification extends NotificationBody {
 	campaignId: string;
-	campaignLabel: string;
 }

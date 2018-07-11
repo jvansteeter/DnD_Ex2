@@ -48,7 +48,7 @@ export class CampaignService {
                 }
 
                 notifications.forEach((notification: NotificationModel) => {
-                    let campaignInvite = notification.notificationData as CampaignInviteNotification;
+                    let campaignInvite = notification.body as CampaignInviteNotification;
                     if (campaignInvite.campaignId === campaignId) {
                         this.notificationRepo.removeById(notification._id).then(() => {
                             this.userCampaignRepository.create(userId, campaignId, false).then((userCampaign: UserCampaignModel) => {

@@ -1,5 +1,9 @@
 import { NotificationType } from './notification-type.enum';
+import { NotificationBody } from './notification-body';
 
 export interface NotificationData {
-    type: NotificationType;
+	_id: string;
+	userId: string;
+	type: NotificationType;
+	body: NotificationBody;
 }

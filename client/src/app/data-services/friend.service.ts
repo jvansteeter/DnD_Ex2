@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { SocialRepository } from '../social/social.repository';
-import { Observable } from 'rxjs';
 import { UserProfile } from '../types/userProfile';
 import { MqService } from '../mq/mq.service';
-import { FriendRequestMessage } from '../mq/messages/friend-request.message';
 import { IsReadyService } from '../utilities/services/isReady.service';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subject } from 'rxjs/Subject';
@@ -49,18 +47,14 @@ export class FriendService extends IsReadyService {
 		});
 	}
 
-	public rejectFriendRequest(fromUserId: string): void {
-		this.socialRepo.rejectFriendRequest(fromUserId);
-	}
-
-	public getIncomingFriendRequests(): Observable<FriendRequestMessage> {
-		return this.mqService.getIncomingUserMessages().pipe(
-				filter((message: StompMessage) => message.headers.type === MqMessageType.FRIEND_REQUEST),
-				map((message: StompMessage) => {
-					return message as FriendRequestMessage
-				})
-		);
-	}
+	// public getIncomingFriendRequests(): Observable<FriendRequestMessage> {
+	// 	return this.mqService.getIncomingUserMessages().pipe(
+	// 			filter((message: StompMessage) => message.headers.type === MqMessageType.FRIEND_REQUEST),
+	// 			map((message: StompMessage) => {
+	// 				return message as FriendRequestMessage
+	// 			})
+	// 	);
+	// }
 
 	public getFriendsSubject(): Subject<UserProfile[]> {
 		return this.friendsSubject;

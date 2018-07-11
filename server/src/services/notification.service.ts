@@ -2,8 +2,7 @@ import { Promise } from 'bluebird';
 import { UserRepository } from '../db/repositories/user.repository';
 import { FriendRepository } from '../db/repositories/friend.repository';
 import { NotificationRepository } from "../db/repositories/notification.repository";
-import { NotificationModel } from "../db/models/notification.model";
-import { NotificationData } from '../../../shared/types/notifications/notification-data';
+import { NotificationModel } from '../db/models/notification.model';
 
 export class NotificationService {
 	private userRepo: UserRepository;
@@ -16,15 +15,18 @@ export class NotificationService {
 		this.notificationRepo = new NotificationRepository();
 	}
 
-	public async getPendingNotifications(toUserId: string): Promise<NotificationData[]> {
+	public async getPendingNotifications(toUserId: string): Promise<NotificationModel[]> {
 		try {
-			let notifications: NotificationModel[] = await this.notificationRepo.findAllTo(toUserId);
-			let notificationData: NotificationData[] = [];
-			for (let notification of notifications) {
-				notificationData.push(notification.notificationData);
-			}
+			return await this.notificationRepo.findAllTo(toUserId);
+		}
+		catch (error) {
+			throw error;
+		}
+	}
 
-			return notificationData;
+	public async delete(notificationId: string): Promise<void> {
+		try {
+			return await this.notificationRepo.removeById(notificationId);
 		}
 		catch (error) {
 			throw error;

@@ -30,8 +30,8 @@ export class CampaignRepository {
         return this.http.get<Campaign[]>('/api/campaign/all', {responseType: 'json'});
     }
 
-    public getCampaign(campaignId): Observable<any> {
-        return this.http.get('/api/campaign/campaign/' + campaignId, {responseType: 'json'});
+    public getCampaign(campaignId): Observable<Campaign> {
+        return this.http.get<Campaign>('/api/campaign/campaign/' + campaignId, {responseType: 'json'});
     }
 
     public getCampaignMembers(campaignId): Observable<UserProfile[]> {

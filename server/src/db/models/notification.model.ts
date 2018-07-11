@@ -2,24 +2,25 @@ import * as mongoose from 'mongoose';
 import { MongooseModel } from './mongoose.model';
 import { NotificationType } from '../../../../shared/types/notifications/notification-type.enum';
 import { NotificationData } from '../../../../shared/types/notifications/notification-data';
+import { NotificationBody } from '../../../../shared/types/notifications/notification-body';
 
-export class NotificationModel extends MongooseModel {
+export class NotificationModel extends MongooseModel implements NotificationData {
     public _id: string;
-    public toUserId: string;
-    public notificationType: NotificationType;
-    public notificationData: NotificationData;
+    public userId: string;
+    public type: NotificationType;
+    public body: NotificationBody;
 
     constructor() {
         super ({
-            toUserId: {type: String, required: true},
-            notificationType: {type: String, required: true},
-            notificationData: {type: Object, required: true}
+	        userId: {type: String, required: true},
+	        type: {type: String, required: true},
+	        body: {type: Object, required: true}
         });
 
         this._id = this.methods._id;
-        this.toUserId = this.methods.toUserId;
-        this.notificationType = this.methods.type;
-        this.notificationData = this.methods.notificationData;
+        this.userId = this.methods.userId;
+        this.type = this.methods.type;
+        this.body = this.methods.body;
     }
 }
 
