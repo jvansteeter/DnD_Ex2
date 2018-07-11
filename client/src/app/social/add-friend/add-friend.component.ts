@@ -7,6 +7,8 @@ import { UserProfileService } from '../../data-services/userProfile.service';
 import { FriendService } from '../../data-services/friend.service';
 import { SubjectDataSource } from '../../utilities/subjectDataSource';
 import { NotificationService } from '../../data-services/notification.service';
+import { NotificationType } from "../../../../../shared/types/notifications/notification-type.enum";
+import { FriendRequestNotification } from "../../../../../shared/types/notifications/friend-request-notification";
 
 
 @Component({
@@ -26,7 +28,7 @@ export class AddFriendComponent {
     constructor(private socialService: SocialService,
                 private dialogRef: MatDialogRef<AddFriendComponent>,
                 private userProfileService: UserProfileService,
-                private notificationsService: NotificationService,
+                private notificationService: NotificationService,
                 private friendService: FriendService) {
         this.userSubject = new Subject();
         this.userDataSource = new SubjectDataSource<UserProfile>(this.userSubject);
@@ -65,22 +67,25 @@ export class AddFriendComponent {
 
     public acceptRequest(user: UserProfile): void {
         this.friendService.acceptRequest(user._id);
-        this.notificationsService.removeFriendRequest(user._id);
+        this.notificationService.removeFriendRequest(user._id);
         this.dialogRef.close();
     }
 
     public rejectRequest(user: UserProfile): void {
         this.friendService.rejectFriendRequest(user._id);
-        this.notificationsService.removeFriendRequest(user._id);
+        this.notificationService.removeFriendRequest(user._id);
         this.dialogRef.close();
     }
 
     public hasPendingRequestFrom(user: UserProfile): boolean {
-        // for (let i = 0; i < this.notificationService.friendRequests.length; i++) {
-        //     if (this.notificationService.friendRequests[i]._id === user._id) {
-        //         return true;
-        //     }
-        // }
+        for (let notification of this.notificationService.notifications) {
+            if (notification.type === NotificationType.FRIEND_REQUEST) {
+                let friendRequest = notification as FriendRequestNotification;
+                if (friendRequest.fromUserId === user._id) {
+                    return true;
+                }
+            }
+        }
 
         return false;
     }

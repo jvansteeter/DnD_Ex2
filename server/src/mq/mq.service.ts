@@ -40,7 +40,6 @@ export class MqService {
 	}
 
 	private async handleFriendRequest(friendRequest: FriendRequest): Promise<void> {
-		console.log('--- handle friend request')
 		let toUserId = friendRequest.headers.toUserId;
 		let fromUserId = friendRequest.headers.fromUserId;
 		try {
@@ -50,13 +49,10 @@ export class MqService {
 					return;
 				}
 			}
-			console.log('is not a repeat')
 			let usersAreFriends: boolean = await this.friendRepo.usersAreFriends(toUserId, fromUserId);
 			if (usersAreFriends) {
-				console.log('users are friends')
 				return;
 			}
-			console.log('create request')
 			await this.notificationRepo.create(toUserId, NotificationType.FRIEND_REQUEST, {
 				type: NotificationType.FRIEND_REQUEST,
 				toUserId: toUserId,

@@ -6,7 +6,9 @@
 </button>
 <mat-menu #notifications>
     <ng-container *ngFor="let notification of notificationService.notifications">
-        <friend-request-notification [friendRequest]="notification"></friend-request-notification>
+        <ng-container ngSwitch="notification.type">
+            <friend-request-notification *ngSwitchCase="notificationType.FRIEND_REQUEST" [friendRequest]="notification"></friend-request-notification>
+        </ng-container>
     </ng-container>
 </mat-menu>
 <mat-menu #noNotifications>

@@ -2,7 +2,7 @@ export const MqConfig = {
 	encounterQueueName: 'serverQueue',
 	friendRequestQueueName: 'serverFriendRequestQueue',
 	campaignInviteQueueName: 'serverCampaignInviteQueue',
-	amqpUrl: 'amqp://admin:admin@localhost',
+	amqpUrl: 'amqp://guest:guest@localhost',
 	encounterExchange: 'encounterExchange',
 	userExchange: 'userExchange',
 	encounterTopic: 'encounter.*',
