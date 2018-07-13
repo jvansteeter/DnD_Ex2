@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { CampaignRepository } from '../repositories/campaign.repository';
 import { Campaign } from '../../../../shared/types/campaign';
 import { IsReadyService } from '../utilities/services/isReady.service';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class CampaignService extends IsReadyService {
@@ -24,6 +25,14 @@ export class CampaignService extends IsReadyService {
 	public refreshCampaigns(): void {
 		this.setReady(false);
 		this.init();
+	}
+
+	public getCampaign(campaignId: string): Observable<Campaign> {
+		return this.campaignRepository.getCampaign(campaignId);
+	}
+
+	public joinCampaign(campaignId: string): Observable<void> {
+		return this.campaignRepository.joinCampaign(campaignId);
 	}
 
 	get campaigns(): Campaign[] {

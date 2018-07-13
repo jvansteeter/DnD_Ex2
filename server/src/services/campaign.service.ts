@@ -12,107 +12,121 @@ import { NotificationType } from '../../../shared/types/notifications/notificati
 import { CampaignInviteNotification } from '../../../shared/types/notifications/campaign-invite-notification';
 
 export class CampaignService {
-    private campaignRepository: CampaignRepository;
-    private userRepository: UserRepository;
-    private notificationRepo: NotificationRepository;
-    private userCampaignRepository: UserCampaignRepository;
+	private campaignRepository: CampaignRepository;
+	private userRepository: UserRepository;
+	private notificationRepo: NotificationRepository;
+	private userCampaignRepository: UserCampaignRepository;
 
-    constructor() {
-        this.campaignRepository = new CampaignRepository();
-        this.userRepository = new UserRepository();
-        this.notificationRepo = new NotificationRepository();
-        this.userCampaignRepository = new UserCampaignRepository();
-    }
+	constructor() {
+		this.campaignRepository = new CampaignRepository();
+		this.userRepository = new UserRepository();
+		this.notificationRepo = new NotificationRepository();
+		this.userCampaignRepository = new UserCampaignRepository();
+	}
 
-    public create(label: string, ruleSetId: string, userId: string): Promise<CampaignModel> {
-        return new Promise((resolve, reject) => {
-            this.campaignRepository.create(label, ruleSetId).then((campaign: CampaignModel) => {
-                this.userCampaignRepository.create(userId, campaign._id, true).then(() => {
-                    resolve(campaign);
-                }).catch(error => reject(error));
-            }).catch(error => reject(error));
-        });
-    }
+	public create(label: string, ruleSetId: string, userId: string): Promise<CampaignModel> {
+		return new Promise((resolve, reject) => {
+			this.campaignRepository.create(label, ruleSetId).then((campaign: CampaignModel) => {
+				this.userCampaignRepository.create(userId, campaign._id, true).then(() => {
+					resolve(campaign);
+				}).catch(error => reject(error));
+			}).catch(error => reject(error));
+		});
+	}
 
-    public getCampaign(campaignId: string): Promise<CampaignModel> {
-        return this.campaignRepository.findById(campaignId);
-    }
+	public getCampaign(campaignId: string): Promise<CampaignModel> {
+		return this.campaignRepository.findById(campaignId);
+	}
 
-    public join(userId: string, campaignId: string): Promise<UserCampaignModel> {
-        return new Promise((resolve, reject) => {
-            this.notificationRepo.findAllToByType(userId, NotificationType.CAMPAIGN_INVITE).then((notifications: NotificationModel[]) => {
-                let count = notifications.length;
-                if (count === 0) {
-                    reject(new Error(ServerError.NOT_INVITED));
-                    return;
-                }
+	public async join(userId: string, campaignId: string): Promise<UserCampaignModel> {
+		// return new Promise((resolve, reject) => {
+		// 	this.notificationRepo.findAllToByType(userId, NotificationType.CAMPAIGN_INVITE).then((notifications: NotificationModel[]) => {
+		// 		let count = notifications.length;
+		// 		if (count === 0) {
+		// 			reject(new Error(ServerError.NOT_INVITED));
+		// 			return;
+		// 		}
+		//
+		// 		notifications.forEach((notification: NotificationModel) => {
+		// 			let campaignInvite = notification.body as CampaignInviteNotification;
+		// 			if (campaignInvite.campaignId === campaignId) {
+		// 				this.notificationRepo.removeById(notification._id).then(() => {
+		// 					this.userCampaignRepository.create(userId, campaignId, false).then((userCampaign: UserCampaignModel) => {
+		// 						resolve(userCampaign);
+		// 						return;
+		// 					});
+		// 				}).catch(error => reject(error));
+		// 			}
+		// 			else if (--count === 0) {
+		// 				reject(new Error(ServerError.NOT_INVITED));
+		// 			}
+		// 		});
+		//
+		// 	}).catch(error => reject(error));
+		// });
+		try {
+			let notifications: NotificationModel[] = await this.notificationRepo.findAllToByType(userId, NotificationType.CAMPAIGN_INVITE);
+			for (let notification of notifications) {
+				let campaignInvite = notification.body as CampaignInviteNotification;
+				if (campaignInvite.campaignId === campaignId) {
+					await this.notificationRepo.removeById(notification._id);
+					return await this.userCampaignRepository.create(userId, campaignId, false);
+				}
+			}
 
-                notifications.forEach((notification: NotificationModel) => {
-                    let campaignInvite = notification.body as CampaignInviteNotification;
-                    if (campaignInvite.campaignId === campaignId) {
-                        this.notificationRepo.removeById(notification._id).then(() => {
-                            this.userCampaignRepository.create(userId, campaignId, false).then((userCampaign: UserCampaignModel) => {
-                                resolve(userCampaign);
-                                return;
-                            });
-                        }).catch(error => reject(error));
-                    }
-                    else if (--count === 0) {
-                         reject(new Error(ServerError.NOT_INVITED));
-                    }
-                });
+			throw new Error(ServerError.NOT_INVITED);
+		}
+		catch (error) {
+			throw error;
+		}
+	}
 
-            }).catch(error => reject(error));
-        });
+	public findAllForUser(userId: string): Promise<CampaignModel[]> {
+		return new Promise((resolve, reject) => {
+			this.userCampaignRepository.findAllForUser(userId).then((userCampaigns: UserCampaignModel[]) => {
+				let userCampaignCount = userCampaigns.length;
+				if (userCampaignCount === 0) {
+					resolve([]);
+					return;
+				}
 
-    }
+				let campaigns: CampaignModel[] = [];
+				userCampaigns.forEach((userCampaign: UserCampaignModel) => {
+					this.campaignRepository.findById(userCampaign.campaignId).then((campaign: CampaignModel) => {
+						campaigns.push(campaign);
 
-    public findAllForUser(userId: string): Promise<CampaignModel[]> {
-        return new Promise((resolve, reject) => {
-            this.userCampaignRepository.findAllForUser(userId).then((userCampaigns: UserCampaignModel[]) => {
-                 let userCampaignCount = userCampaigns.length;
-                 if (userCampaignCount === 0) {
-                     resolve([]);
-                     return;
-                 }
+						if (--userCampaignCount === 0) {
+							resolve(campaigns);
+						}
+					}).catch(error => reject(error));
+				});
+			}, error => reject(error));
+		});
+	}
 
-                 let campaigns: CampaignModel[] = [];
-                 userCampaigns.forEach((userCampaign : UserCampaignModel) => {
-                     this.campaignRepository.findById(userCampaign.campaignId).then((campaign: CampaignModel) => {
-                         campaigns.push(campaign);
+	public findAllForCampaign(campaignId: string): Promise<any> {
+		return new Promise((resolve, reject) => {
+			this.userCampaignRepository.findAllForCampaign(campaignId).then((userCampaigns: UserCampaignModel[]) => {
+				let userCampaignCount = userCampaigns.length;
+				if (userCampaignCount === 0) {
+					resolve([]);
+					return;
+				}
 
-                         if (--userCampaignCount === 0) {
-                             resolve(campaigns);
-                         }
-                     }).catch(error => reject(error));
-                 });
-            }, error => reject(error));
-        });
-    }
+				let members: any[] = [];
+				userCampaigns.forEach((userCampaign: UserCampaignModel) => {
+					this.userRepository.findById(userCampaign.userId).then((user: UserModel) => {
+						var userData = JSON.parse(JSON.stringify(user));
+						delete userData.passwordHash;
+						userData['gameMaster'] = userCampaign.gameMaster;
+						members.push(userData);
 
-    public findAllForCampaign(campaignId: string): Promise<any> {
-        return new Promise((resolve, reject) => {
-            this.userCampaignRepository.findAllForCampaign(campaignId).then((userCampaigns: UserCampaignModel[]) => {
-                let userCampaignCount = userCampaigns.length;
-                if (userCampaignCount === 0) {
-                    resolve([]);
-                    return;
-                }
-
-                let members: any[] = [];
-                userCampaigns.forEach((userCampaign : UserCampaignModel) => {
-                    this.userRepository.findById(userCampaign.userId).then((user: UserModel) => {
-                        var userData = JSON.parse(JSON.stringify(user));
-                        delete userData.passwordHash;
-                        userData['gameMaster'] = userCampaign.gameMaster;
-                        members.push(userData);
-
-                        if (--userCampaignCount === 0) {
-                            resolve(members);
-                        }
-                    }).catch(error => reject(error));
-                });
-            }, error => reject(error));
-        });
-    }
+						if (--userCampaignCount === 0) {
+							resolve(members);
+						}
+					}).catch(error => reject(error));
+				});
+			}, error => reject(error));
+		});
+	}
 }
