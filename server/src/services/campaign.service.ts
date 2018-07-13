@@ -2,7 +2,6 @@ import { CampaignModel } from '../db/models/campaign.model';
 import { CampaignRepository } from '../db/repositories/campaign.repository';
 import { UserCampaignModel } from '../db/models/user-campaign.model';
 import { UserCampaignRepository } from '../db/repositories/user-campaign.repository';
-// import { Promise } fromUserId 'bluebird';
 import { UserRepository } from '../db/repositories/user.repository';
 import { UserModel } from '../db/models/user.model';
 import { NotificationRepository } from '../db/repositories/notification.repository';
@@ -39,31 +38,6 @@ export class CampaignService {
 	}
 
 	public async join(userId: string, campaignId: string): Promise<UserCampaignModel> {
-		// return new Promise((resolve, reject) => {
-		// 	this.notificationRepo.findAllToByType(userId, NotificationType.CAMPAIGN_INVITE).then((notifications: NotificationModel[]) => {
-		// 		let count = notifications.length;
-		// 		if (count === 0) {
-		// 			reject(new Error(ServerError.NOT_INVITED));
-		// 			return;
-		// 		}
-		//
-		// 		notifications.forEach((notification: NotificationModel) => {
-		// 			let campaignInvite = notification.body as CampaignInviteNotification;
-		// 			if (campaignInvite.campaignId === campaignId) {
-		// 				this.notificationRepo.removeById(notification._id).then(() => {
-		// 					this.userCampaignRepository.create(userId, campaignId, false).then((userCampaign: UserCampaignModel) => {
-		// 						resolve(userCampaign);
-		// 						return;
-		// 					});
-		// 				}).catch(error => reject(error));
-		// 			}
-		// 			else if (--count === 0) {
-		// 				reject(new Error(ServerError.NOT_INVITED));
-		// 			}
-		// 		});
-		//
-		// 	}).catch(error => reject(error));
-		// });
 		try {
 			let notifications: NotificationModel[] = await this.notificationRepo.findAllToByType(userId, NotificationType.CAMPAIGN_INVITE);
 			for (let notification of notifications) {

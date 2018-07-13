@@ -47,15 +47,6 @@ export class FriendService extends IsReadyService {
 		});
 	}
 
-	// public getIncomingFriendRequests(): Observable<FriendRequestMessage> {
-	// 	return this.mqService.getIncomingUserMessages().pipe(
-	// 			filter((message: StompMessage) => message.headers.type === MqMessageType.FRIEND_REQUEST),
-	// 			map((message: StompMessage) => {
-	// 				return message as FriendRequestMessage
-	// 			})
-	// 	);
-	// }
-
 	public getFriendsSubject(): Subject<UserProfile[]> {
 		return this.friendsSubject;
 	}

@@ -71,7 +71,6 @@ export class MqService extends IsReadyService {
 
 	public sendCampaignInvite(toUserId: string, campaignId: string): void {
 		let message = MqMessageFactory.createCampaignInvite(toUserId, campaignId);
-		console.log(message)
 		let url = MqMessageUrlFactory.createSendCampaignInviteUrl(message.headers.toUserId);
 		this.stompService.publish(url, message.serializeBody(), message.headers);
 	}

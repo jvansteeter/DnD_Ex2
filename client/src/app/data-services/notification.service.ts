@@ -36,8 +36,6 @@ export class NotificationService extends IsReadyService {
 	public getPendingNotifications(): void {
 		this.notificationRepo.getPendingNotifications().subscribe((notifications: NotificationData[]) => {
 			this.notifications = notifications;
-			console.log('here are my notifications')
-			console.log(this.notifications)
 		});
 	}
 
@@ -52,23 +50,13 @@ export class NotificationService extends IsReadyService {
 		}
 	}
 
-	public joinCampaign(campaignId: string): void {
-		//     this.campaignRepo.joinCampaign(campaignId).subscribe(() => {
-		//         this.campaignRepo.refreshCampaigns().subscribe((campaigns: Campaign[]) => {
-		//             this.homePageService.campaigns = campaigns;
-		//         });
-		//     });
-	}
-
 	private observeIncomingNotifications(): void {
 		this.mqService.getIncomingUserMessages().pipe(
 				filter((message: StompMessage) =>
 						message.headers.type === MqMessageType.CAMPAIGN_INVITE  ||
 						message.headers.type === MqMessageType.FRIEND_REQUEST
 				),
-		).subscribe((message: StompMessage) => {
-			console.log('received campaign invite message')
-			console.log(message)
+		).subscribe(() => {
 			this.getPendingNotifications();
 		});
 	}
