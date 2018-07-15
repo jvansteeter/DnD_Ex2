@@ -16,4 +16,8 @@ export class MqMessageUrlFactory {
 	public static createGetUserMessagesUrl(userId: string): string {
 		return MqClientConfig.userExchangeUrl + userId + '.*';
 	}
+
+	public static createCampaignMessagesUrl(campaignId: string): string {
+		return MqClientConfig.campaignExchangeUrl + campaignId;
+	}
 }

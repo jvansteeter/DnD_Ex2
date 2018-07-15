@@ -24,6 +24,10 @@ export abstract class StompMessage implements MqMessage {
 				type = MqMessageType.CAMPAIGN_INVITE;
 				break;
 			}
+			case MqMessageType.CAMPAIGN_UPDATE: {
+				type = MqMessageType.CAMPAIGN_UPDATE;
+				break;
+			}
 		}
 
 		this.headers = {

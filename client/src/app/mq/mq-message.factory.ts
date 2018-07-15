@@ -2,6 +2,7 @@ import { MqMessageType } from '../../../../shared/types/mq/message-type.enum';
 import { FriendRequestMessage } from './messages/friend-request.message';
 import { AcceptFriendRequest } from './messages/friend-request-accepted.message';
 import { CampaignInviteMessage } from './messages/campaign-invite.message';
+import { CampaignUpdate } from "../../../../shared/types/mq/campaign-update";
 
 export class MqMessageFactory {
 	public static createFriendRequest(toUserId: string, fromUserId: string): FriendRequestMessage {
@@ -24,8 +25,6 @@ export class MqMessageFactory {
 	}
 
 	public static createCampaignInvite(toUserId: string, campaignId: string): CampaignInviteMessage {
-		console.log('createCampaignInvite')
-		console.log(toUserId)
 		return new CampaignInviteMessage({
 			headers: {
 				type: MqMessageType.CAMPAIGN_INVITE,

@@ -75,6 +75,11 @@ export class MqService extends IsReadyService {
 		this.stompService.publish(url, message.serializeBody(), message.headers);
 	}
 
+	public sendCampaignUpdate(campaignId: string): void {
+		let url = MqMessageUrlFactory.createCampaignMessagesUrl(campaignId);
+		this.stompService.publish(url, '', {type: MqMessageType.CAMPAIGN_UPDATE});
+	}
+
 	public getIncomingUserMessages(): Observable<StompMessage> {
 		return this.stompService.subscribe(MqMessageUrlFactory.createGetUserMessagesUrl(this.userProfileService.userId))
 				.pipe(
@@ -94,6 +99,23 @@ export class MqService extends IsReadyService {
 									console.error(message);
 								}
 							}
+						})
+				);
+	}
+
+	public getIncomingCampaignMessages(campaignId: string): Observable<StompMessage> {
+		return this.stompService.subscribe(MqMessageUrlFactory.createCampaignMessagesUrl(campaignId))
+				.pipe(
+						map((message: Message) => {
+							return new class CampaignMessage extends StompMessage {
+								constructor(data) {
+									super(data);
+								}
+
+								serializeBody(): string {
+									return '';
+								}
+							}(message);
 						})
 				);
 	}
