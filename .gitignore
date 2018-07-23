@@ -65,3 +65,5 @@ client/typings/
 
 # intellij files
 .idea/
+
+docs/

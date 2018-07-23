@@ -12,7 +12,8 @@
     "build": "npm run clean && gulp && webpack",
     "test": "mocha --reporter spec --compilers ts:ts-node/register test/helloWorld.test.ts",
     "clean": "rimraf client/dist client/typings server/dist",
-    "prod": "cross-env ENV=production npm run clean && gulp && webpack --config client/config/webpack.prod.js && node server/dist/src/index.js secretArg"
+    "prod": "cross-env ENV=production npm run clean && gulp && webpack --config client/config/webpack.prod.js && node server/dist/src/index.js secretArg",
+    "docs": "./node_modules/.bin/compodoc -p client/tsconfig.json -d docs/client"
   },
   "repository": {
     "type": "git",
@@ -28,6 +29,7 @@
   "devDependencies": {
     "@angular/compiler": "^6.0.7",
     "@angular/platform-browser-dynamic": "^6.0.7",
+    "@compodoc/compodoc": "^1.1.3",
     "@types/body-parser": "0.0.33",
     "@types/chai": "^3.4.34",
     "@types/chai-http": "0.0.29",
