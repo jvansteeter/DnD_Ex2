@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { EncounterService } from './encounter.service';
 import { ActivatedRoute } from '@angular/router';
+import { EncounterConcurrencyService } from './encounter-concurrency.service';
 
 @Component({
 	selector: 'encounter',
@@ -11,8 +12,9 @@ export class EncounterComponent implements OnInit {
 	public ready: boolean = false;
 
 	constructor(private encounterService: EncounterService,
-							private activatedRoute: ActivatedRoute) {
-
+							private activatedRoute: ActivatedRoute,
+	            private encounterConcurrencyService: EncounterConcurrencyService) {
+		this.encounterConcurrencyService.init();
 	}
 
 	ngOnInit(): void {

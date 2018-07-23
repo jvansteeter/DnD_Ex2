@@ -20,4 +20,8 @@ export class MqMessageUrlFactory {
 	public static createCampaignMessagesUrl(campaignId: string): string {
 		return MqClientConfig.campaignExchangeUrl + campaignId;
 	}
+
+	public static createEncounterMessagesUrl(encounterId: string): string {
+		return MqClientConfig.encounterMqUrl + encounterId;
+	}
 }

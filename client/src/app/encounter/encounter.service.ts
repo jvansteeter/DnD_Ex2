@@ -8,8 +8,6 @@ import {EncounterState} from './encounter.state';
 import {EncounterStateData} from '../../../../shared/types/encounter/encounterState';
 import {BoardStateService} from '../board/services/board-state.service';
 import {map, mergeMap, tap} from 'rxjs/operators';
-import {MqService} from '../mq/mq.service';
-import { StompMessage } from '../mq/messages/stomp-message';
 
 @Injectable()
 export class EncounterService extends IsReadyService {
@@ -22,7 +20,6 @@ export class EncounterService extends IsReadyService {
     constructor(
         protected boardStateService: BoardStateService,
         protected encounterRepo: EncounterRepository,
-        protected mqService: MqService
     ) {
         super();
     }
@@ -30,9 +27,6 @@ export class EncounterService extends IsReadyService {
     public init(): void {
         this.encounterRepo.getEncounter(this.encounterId).subscribe((encounter: EncounterStateData) => {
             this.encounterState = new EncounterState(encounter);
-            this.mqService.getEncounterMessages(this.encounterId).subscribe((message: StompMessage) => {
-            	this.handleWsMessage(message);
-            });
             this.setReady(true);
         });
     }
@@ -67,7 +61,7 @@ export class EncounterService extends IsReadyService {
 
     public getPlayerById(id: string): Player {
         for (const player of this.players) {
-            if (player._id === id){
+            if (player.id === id){
                 return player;
             }
         }
@@ -84,9 +78,5 @@ export class EncounterService extends IsReadyService {
         if (this.encounterState) {
             this.encounterState.players = value;
         }
-    }
-
-    private handleWsMessage(message: StompMessage): void {
-    	console.log(message);
     }
 }

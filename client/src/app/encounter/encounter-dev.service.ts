@@ -9,6 +9,7 @@ import {BoardTraverseService} from '../board/services/board-traverse.service';
 import {LightValue} from '../board/shared/enum/light-value';
 import {BoardVisibilityService} from '../board/services/board-visibility.service';
 import {MqService} from '../mq/mq.service';
+import { PlayerData } from '../../../../shared/types/encounter/player';
 
 @Injectable()
 export class EncounterDevService extends EncounterService {
@@ -17,12 +18,10 @@ export class EncounterDevService extends EncounterService {
     constructor(
         boardStateService: BoardStateService,
         encounterRepo: EncounterRepository,
-        mqService: MqService
     ) {
         super(
             boardStateService,
-            encounterRepo,
-            mqService
+            encounterRepo
         );
 
         // manually instate the encounterState for dev mode
@@ -47,13 +46,29 @@ export class EncounterDevService extends EncounterService {
     }
 
     public init_players() {
-        let player = new Player('Joe', 10, 15, 17, 6, 5, 'resources/images/player-tokens/human fighter 1.png');
+        let player = new Player({
+	        name:'Joe',
+	        hp: 10,
+	        maxHp: 15,
+	        speed: 6,
+	        tokenUrl: 'resources/images/player-tokens/human fighter 1.png'
+        } as PlayerData);
         player._id = window.crypto.getRandomValues(new Uint32Array(1))[0];
         player.addAction('Longsword:', '+4 Attack, 1d10 + 5');
         player.addAction('Crossbow:', ' +2 Attack,  1d6 + 1');
         this.players.push(player);
 
-        player = new Player('Sue', 753, 1235, 29, 2, 3, 'resources/images/player-tokens/human handmaid 2.png');
+        player = new Player({
+	        name: 'Sue',
+	        hp: 753,
+	        maxHp: 1235,
+	        speed: 29,
+	        location: {
+	        	x: 2,
+		        y: 3
+	        },
+	        tokenUrl: 'resources/images/player-tokens/human handmaid 2.png'
+        } as PlayerData);
         player._id = window.crypto.getRandomValues(new Uint32Array(1))[0];
         player.addAction('Divine Judgement:', 'Rewrite the DM\'s will');
         player.addAction('Gaze of the Deep One:', 'Kill all living creatures, no saves, no escape');

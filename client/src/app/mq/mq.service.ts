@@ -5,7 +5,6 @@ import { UserProfileService } from '../data-services/userProfile.service';
 import { StompConfiguration } from './StompConfig';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { MqClientConfig } from '../config/mq.config';
 import { EncounterUpdateMessage } from './messages/encounter-update.message';
 import { MqMessageFactory } from './mq-message.factory';
 import { IsReadyService } from "../utilities/services/isReady.service";
@@ -18,7 +17,6 @@ import { CampaignInviteMessage } from './messages/campaign-invite.message';
 
 @Injectable()
 export class MqService extends IsReadyService {
-	private encounterMqUrl: string = MqClientConfig.encounterMqUrl;
 	private stompState: StompState = StompState.CLOSED;
 	private userQueue: Observable<StompMessage>;
 
@@ -53,10 +51,15 @@ export class MqService extends IsReadyService {
 	}
 
 	public getEncounterMessages(encounterId: string): Observable<EncounterUpdateMessage> {
-		return this.stompService.subscribe(this.encounterMqUrl + encounterId)
+		return this.stompService.subscribe(MqMessageUrlFactory.createEncounterMessagesUrl(encounterId))
 				.pipe(
 						map((message: Message) => {return new EncounterUpdateMessage(message)})
 				);
+	}
+
+	public publishEncounterUpdate(encounterId: string, message: any): void {
+		let url = MqMessageUrlFactory.createEncounterMessagesUrl(encounterId);
+		this.stompService.publish(url, JSON.stringify(message), {type: MqMessageType.ENCOUNTER})
 	}
 
 	public sendFriendRequest(toUserId: string): void {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserProfile } from '../types/userProfile';
 import { AlertService } from '../alert/alert.service';
@@ -18,7 +18,7 @@ import { CampaignPageService } from './campaign-page.service';
 	templateUrl: 'campaign.component.html',
 	styleUrls: ['campaign.component.css']
 })
-export class CampaignComponent implements OnInit {
+export class CampaignComponent implements OnInit, OnDestroy {
 	private campaignId;
 
 	public membersCard: DashboardCard;
@@ -71,6 +71,10 @@ export class CampaignComponent implements OnInit {
 				}
 			]
 		}
+	}
+
+	ngOnDestroy(): void {
+		this.campaignPageService.unInit();
 	}
 
 	// public changeGameMaster(member: any): void {

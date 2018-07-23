@@ -13,7 +13,7 @@ import { Subject } from 'rxjs/Subject';
 
 
 @Injectable()
-export class CampaignPageService extends IsReadyService implements OnDestroy {
+export class CampaignPageService extends IsReadyService {
 	public campaignId: string;
 	public campaignState: CampaignState;
 
@@ -43,7 +43,8 @@ export class CampaignPageService extends IsReadyService implements OnDestroy {
 		});
 	}
 
-	ngOnDestroy(): void {
+	unInit(): void {
+		super.unInit();
 		this.campaignMessageSubscription.unsubscribe();
 	}
 

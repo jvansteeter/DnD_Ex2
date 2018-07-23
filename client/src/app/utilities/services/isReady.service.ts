@@ -14,6 +14,10 @@ export abstract class IsReadyService {
 
 	public abstract init(): void;
 
+	public unInit(): void {
+		this.setReady(false);
+	}
+
 	public isReady(): BehaviorSubject<boolean> {
 		return this.isReadySubject;
 	}

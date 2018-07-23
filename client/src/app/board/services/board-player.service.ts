@@ -6,9 +6,10 @@ import {BoardVisibilityService} from './board-visibility.service';
 import {BoardTraverseService} from './board-traverse.service';
 import {BoardStateService} from './board-state.service';
 import {PopService} from '../pop/pop.service';
+import { IsReadyService } from '../../utilities/services/isReady.service';
 
 @Injectable()
-export class BoardPlayerService {
+export class BoardPlayerService extends IsReadyService {
     public player_visibility_map: Map<string, CellPolygonGroup>;
     public player_traverse_map_near: Map<string, Array<XyPair>>;
     public player_traverse_map_far: Map<string, Array<XyPair>>;
@@ -20,10 +21,22 @@ export class BoardPlayerService {
                 private boardVisibilityService: BoardVisibilityService,
                 private boardTraverseService: BoardTraverseService,
                 private boardStateService: BoardStateService) {
+    	super(encounterService);
         this.player_visibility_map = new Map<string, CellPolygonGroup>();
         this.selectedPlayerIds = new Set<string>();
         this.player_traverse_map_near = new Map<string, Array<XyPair>>();
         this.player_traverse_map_far = new Map<string, Array<XyPair>>();
+        this.init();
+    }
+
+    public init(): void {
+    	this.dependenciesReady().subscribe((isReady: boolean) => {
+    		if (isReady) {
+			    this.updateAllPlayerVisibility();
+			    this.updateAllPlayerTraverse();
+			    this.setReady(true);
+		    }
+	    })
     }
 
     public dev_mode_init() {

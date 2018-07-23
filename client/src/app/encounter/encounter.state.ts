@@ -27,7 +27,7 @@ export class EncounterState implements EncounterStateData {
 
 		this.players = [];
 		for (let player of encounterStateData.players) {
-			this.players.push(new Player(player.name, player.hp, player.maxHp, 10, player.location.x, player.location.y, player.tokenUrl));
+			this.players.push(new Player(player));
 		}
 	}
 
