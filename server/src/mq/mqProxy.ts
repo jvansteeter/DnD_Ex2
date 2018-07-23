@@ -33,6 +33,7 @@ export class MqProxy {
 					try {
 						channel.assertExchange(MqConfig.encounterExchange, 'topic', {durable: true});
 						channel.assertExchange(MqConfig.userExchange, 'topic', {durable: true});
+						channel.assertExchange(MqConfig.campaignExchange, 'topic', {durable: true});
 						await this.createServerQueue(channel, MqConfig.encounterQueueName);
 						await this.createServerQueue(channel, MqConfig.friendRequestQueueName);
 						await this.createServerQueue(channel, MqConfig.campaignInviteQueueName);
@@ -126,6 +127,7 @@ export class MqProxy {
 				await this.grantUserVHostAccess(user);
 				await this.grantExchangeAccess(user, MqConfig.encounterExchange, MqConfig.encounterTopic, MqConfig.encounterTopic);
 				await this.grantExchangeAccess(user, MqConfig.userExchange, MqFactory.createUserExchangeReadExp(user._id), MqFactory.createUserExchangeWriteExp());
+				await this.grantExchangeAccess(user, MqConfig.campaignExchange, MqConfig.campaignTopic, MqConfig.campaignTopic);
 				resolve();
 			});
 

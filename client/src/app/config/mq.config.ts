@@ -1,5 +1,5 @@
 export const MqClientConfig = {
 	encounterMqUrl: '/exchange/encounterExchange/encounter.',
 	userExchangeUrl: '/exchange/userExchange/user.',
-	campaignExchangeUrl: '/exchange/userExchange/campaign.'
+	campaignExchangeUrl: '/exchange/campaignExchange/campaign.'
 };

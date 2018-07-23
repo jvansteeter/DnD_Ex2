@@ -3,11 +3,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UserProfile } from '../types/userProfile';
 import { AlertService } from '../alert/alert.service';
 import { UserProfileService } from '../data-services/userProfile.service';
-import { MatDialog, MatTableDataSource } from '@angular/material';
+import { MatDialog } from '@angular/material';
 import { SelectFriendsComponent } from '../social/select-friends/select-friends.component';
 import { NewEncounterDialogComponent } from './dialog/new-encounter-dialog.component';
 import { SubjectDataSource } from '../utilities/subjectDataSource';
-import { BehaviorSubject } from 'rxjs';
 import { mergeMap, tap } from 'rxjs/operators';
 import { DashboardCard } from '../cdk/dashboard-card/dashboard-card';
 import { EncounterStateData } from '../../../../shared/types/encounter/encounterState';
@@ -23,14 +22,12 @@ export class CampaignComponent implements OnInit {
 	private campaignId;
 
 	public membersCard: DashboardCard;
-	public memberDataSource: MatTableDataSource<UserProfile>;
+	public memberDataSource: SubjectDataSource<UserProfile>;
 	public memberTableCols = ['users', 'gm'];
 
+	public encountersCard: DashboardCard;
 	public encounterDataSource: SubjectDataSource<EncounterStateData>;
 	public encounterTableCols = ['label', 'date'];
-	public encounterSubject: BehaviorSubject<EncounterStateData[]>;
-
-	public encountersCard: DashboardCard;
 
 	constructor(private activatedRoute: ActivatedRoute,
 							private campaignPageService: CampaignPageService,
@@ -52,8 +49,8 @@ export class CampaignComponent implements OnInit {
 			})
 		 ).subscribe((isReady: boolean) => {
 			if (isReady) {
-				this.memberDataSource = new MatTableDataSource(this.campaignPageService.members);
-				this.initEncounterDataSource();
+				this.memberDataSource = new SubjectDataSource(this.campaignPageService.membersSubject);
+				this.encounterDataSource = new SubjectDataSource(this.campaignPageService.encounterSubject);
 			}
 		});
 
@@ -92,14 +89,6 @@ export class CampaignComponent implements OnInit {
 
 	public enterEncounter(encounter: EncounterStateData): void {
 		this.router.navigate(['encounter', encounter._id])
-	}
-
-	private initEncounterDataSource(): void {
-		this.encounterSubject = new BehaviorSubject<EncounterStateData[]>(this.campaignPageService.encounters);
-		this.encounterDataSource = new SubjectDataSource<EncounterStateData>(this.encounterSubject);
-		this.campaignPageService.encounterObservable.subscribe((encounters: EncounterStateData[]) => {
-			this.encounterSubject.next(encounters);
-		});
 	}
 
 	private inviteFriends = () => {

@@ -3,12 +3,15 @@ import { CampaignRepository } from '../repositories/campaign.repository';
 import { Campaign } from '../../../../shared/types/campaign';
 import { IsReadyService } from '../utilities/services/isReady.service';
 import { Observable } from 'rxjs/Observable';
+import { tap } from 'rxjs/operators';
+import { MqService } from '../mq/mq.service';
 
 @Injectable()
 export class CampaignService extends IsReadyService {
 	private _campaigns: Campaign[];
 
-	constructor(private campaignRepository: CampaignRepository) {
+	constructor(private campaignRepository: CampaignRepository,
+	            private mqService: MqService) {
 		super();
 		this._campaigns = [];
 		this.init();
@@ -32,7 +35,11 @@ export class CampaignService extends IsReadyService {
 	}
 
 	public joinCampaign(campaignId: string): Observable<void> {
-		return this.campaignRepository.joinCampaign(campaignId);
+		return this.campaignRepository.joinCampaign(campaignId).pipe(
+				tap(() => {
+					this.mqService.sendCampaignUpdate(campaignId);
+				})
+		);
 	}
 
 	get campaigns(): Campaign[] {

@@ -6,6 +6,8 @@ export const MqConfig = {
 	encounterExchange: 'encounterExchange',
 	userExchange: 'userExchange',
 	encounterTopic: 'encounter.*',
+	campaignExchange: 'campaignExchange',
+	campaignTopic: 'campaign.*',
 	friendRequestTopic: 'user.*.friendRequest',
 	campaignInviteTopic: 'user.*.campaignInvite',
 	hostname: 'localhost',

@@ -20,6 +20,7 @@ import { CampaignInviteMessage } from './messages/campaign-invite.message';
 export class MqService extends IsReadyService {
 	private encounterMqUrl: string = MqClientConfig.encounterMqUrl;
 	private stompState: StompState = StompState.CLOSED;
+	private userQueue: Observable<StompMessage>;
 
 	constructor(private stompService: StompRService,
 	            private userProfileService: UserProfileService) {
@@ -38,6 +39,7 @@ export class MqService extends IsReadyService {
 					if (this.stompState !== state) {
 						this.stompState = state;
 						if (state === StompState.CONNECTED) {
+							this.connectToUserQueue();
 							this.setReady(true);
 						}
 						else {
@@ -47,7 +49,7 @@ export class MqService extends IsReadyService {
 				});
 				this.stompService.initAndConnect();
 			}
-		})
+		});
 	}
 
 	public getEncounterMessages(encounterId: string): Observable<EncounterUpdateMessage> {
@@ -81,7 +83,11 @@ export class MqService extends IsReadyService {
 	}
 
 	public getIncomingUserMessages(): Observable<StompMessage> {
-		return this.stompService.subscribe(MqMessageUrlFactory.createGetUserMessagesUrl(this.userProfileService.userId))
+		return this.userQueue;
+	}
+
+	private connectToUserQueue(): void {
+		this.userQueue = this.stompService.subscribe(MqMessageUrlFactory.createGetUserMessagesUrl(this.userProfileService.userId))
 				.pipe(
 						map((message: Message) => {
 							switch (message.headers['type']) {
