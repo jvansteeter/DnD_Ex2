@@ -4,31 +4,32 @@ import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {BoardNotationService} from '../../services/board-notation-service';
 
 @Component({
-  selector: 'notation-renderer',
-  templateUrl: 'notation-renderer.component.html'
+    selector: 'notation-renderer',
+    templateUrl: 'notation-renderer.component.html'
 })
 
 export class NotationRendererComponent implements OnInit {
-  @ViewChild('notationRenderCanvas') gridRenderCanvas: ElementRef;
-  private ctx: CanvasRenderingContext2D;
+    @ViewChild('notationRenderCanvas') gridRenderCanvas: ElementRef;
+    private ctx: CanvasRenderingContext2D;
 
-  constructor(
-    private boardStateService: BoardStateService,
-    private boardCanvasService: BoardCanvasService,
-    private boardNotationService: BoardNotationService
-  ) {}
+    constructor(
+        private boardStateService: BoardStateService,
+        private boardCanvasService: BoardCanvasService,
+        private boardNotationService: BoardNotationService
+    ) {
+    }
 
-  ngOnInit(): void {
-    this.ctx = this.gridRenderCanvas.nativeElement.getContext('2d');
-    this.render();
-  }
+    ngOnInit(): void {
+        this.ctx = this.gridRenderCanvas.nativeElement.getContext('2d');
+        this.render();
+    }
 
-  render = () => {
-    this.boardCanvasService.clear_canvas(this.ctx);
-    this.boardCanvasService.updateTransform(this.ctx);
+    render = () => {
+        this.boardCanvasService.clear_canvas(this.ctx);
+        this.boardCanvasService.updateTransform(this.ctx);
 
-    this.ctx.putImageData(this.boardNotationService.genCanvasBitmap(this.ctx),0, 0);
+        this.boardCanvasService.draw_polyline(this.ctx, this.boardNotationService.freeformNotationPolyline);
 
-    requestAnimationFrame(this.render);
-  }
+        requestAnimationFrame(this.render);
+    }
 }

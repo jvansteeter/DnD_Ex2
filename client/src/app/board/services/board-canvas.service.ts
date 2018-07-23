@@ -116,6 +116,19 @@ export class BoardCanvasService {
         ctx.stroke();
     }
 
+    draw_polyline(ctx:CanvasRenderingContext2D, points: Array<XyPair>) {
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = 'rgba(255, 0, 0, 1)';
+        ctx.lineJoin = 'round';
+        ctx.lineCap = 'round';
+
+        ctx.beginPath();
+        for (let point of points) {
+            ctx.lineTo(point.x, point.y);
+        }
+        ctx.stroke();
+    }
+
 
     draw_line(ctx: CanvasRenderingContext2D, origin: XyPair, target: XyPair, line_width?: number, rgba_code?: string, line_join?: string, line_cap?: string) {
         if (isNullOrUndefined(line_width)) {

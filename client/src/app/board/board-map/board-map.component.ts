@@ -82,7 +82,8 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
             }
         }
         this.updateMouseLocation(mouse_screen);
-        this.boardNotationService.setPixel(this.boardStateService.mouse_loc_map);
+
+        this.boardNotationService.appendToPolyLine(this.boardStateService.mouse_loc_map);
         this.boardPlayerService.syncPlayerHover(this.boardStateService.mouse_loc_cell);
     }
 
