@@ -20,6 +20,7 @@ export class Player {
 
 	// constructor(name: string, hp: number, maxHp: number, ac: number, x?: number, y?: number, token_url?: string) {
 	constructor(playerData: PlayerData) {
+		this._id = playerData._id;
 		this._name = playerData.name;
 		this._hp = playerData.hp;
 		this._maxHp = playerData.maxHp;
@@ -49,6 +50,19 @@ export class Player {
 			speed: this._speed,
 			location : this._location
 		}
+	}
+
+	public setPlayerData(playerData: PlayerData): void {
+		if (playerData._id !== this._id) {
+			return;
+		}
+
+		this._name = playerData.name;
+		this._tokenUrl = playerData.tokenUrl;
+		this._maxHp = playerData.maxHp;
+		this._hp = playerData.hp;
+		this._speed = playerData.speed;
+		this._location = new XyPair(playerData.location.x, playerData.location.y);
 	}
 
 	addAction(action: string, detail: string) {

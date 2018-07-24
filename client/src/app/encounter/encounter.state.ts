@@ -5,6 +5,7 @@ import { Player } from './player';
 
 export class EncounterState implements EncounterStateData {
 	_id: string;
+	version: number;
 	ambientLight: LightValue;
 	campaignId: string;
 	cell_res: number;

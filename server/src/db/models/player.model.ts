@@ -30,7 +30,7 @@ export class PlayerModel extends mongoose.Schema implements PlayerData {
 		this.location = this.methods.location;
 	}
 
-	private save(): Promise<PlayerModel> {
+	public save(): Promise<PlayerModel> {
 		return new Promise((resolve, reject) => {
 			this.methods.save((error, encounter: PlayerModel) => {
 				if (error) {

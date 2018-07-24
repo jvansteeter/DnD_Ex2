@@ -14,6 +14,7 @@ import { AcceptFriendRequest } from './messages/friend-request-accepted.message'
 import { MqMessageUrlFactory } from './mq-message-url.factory';
 import { StompMessage } from './messages/stomp-message';
 import { CampaignInviteMessage } from './messages/campaign-invite.message';
+import { EncounterCommand } from '../../../../shared/types/encounter/encounter-command.enum';
 
 @Injectable()
 export class MqService extends IsReadyService {
@@ -57,9 +58,10 @@ export class MqService extends IsReadyService {
 				);
 	}
 
-	public publishEncounterUpdate(encounterId: string, message: any): void {
+	public publishEncounterUpdate(encounterId: string, encounterVersion: number, dataType: EncounterCommand, data: any): void {
+		let message = MqMessageFactory.createEncounterUpdate(encounterVersion, this.userProfileService.userId, encounterId, dataType, data);
 		let url = MqMessageUrlFactory.createEncounterMessagesUrl(encounterId);
-		this.stompService.publish(url, JSON.stringify(message), {type: MqMessageType.ENCOUNTER})
+		this.stompService.publish(url, message.serializeBody(), {type: MqMessageType.ENCOUNTER})
 	}
 
 	public sendFriendRequest(toUserId: string): void {

@@ -27,6 +27,7 @@ export class EncounterDevService extends EncounterService {
         // manually instate the encounterState for dev mode
         this.encounterState = new EncounterState({
             _id: undefined,
+	          version: 0,
             label: 'Dev Encounter',
             date: new Date(),
             campaignId: 'dev',

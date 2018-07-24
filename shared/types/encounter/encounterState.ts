@@ -3,6 +3,7 @@ import { PlayerData } from './player';
 
 export interface EncounterStateData {
     _id: string;
+    version: number;
     label: string;
     date: Date;
     campaignId: string;

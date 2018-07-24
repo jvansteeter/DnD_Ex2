@@ -9,19 +9,24 @@ import { CampaignInvite } from '../../../shared/types/mq/campaign-invite';
 import { CampaignInviteNotification } from '../../../shared/types/notifications/campaign-invite-notification';
 import { FriendRequestNotification } from "../../../shared/types/notifications/friend-request-notification";
 import { FriendRepository } from "../db/repositories/friend.repository";
+import { EncounterCommand } from '../../../shared/types/encounter/encounter-command.enum';
+import { PlayerRepository } from '../db/repositories/player.repository';
+import { PlayerData } from '../../../shared/types/encounter/player';
 
 export class MqService {
 	private friendRepo: FriendRepository;
 	private notificationRepo: NotificationRepository;
+	private playerRepository: PlayerRepository;
 
 	constructor(private mqProxy: MqProxy) {
 		this.friendRepo = new FriendRepository();
 		this.notificationRepo = new NotificationRepository();
+		this.playerRepository = new PlayerRepository();
 	}
 
 	public handleMessages(): void {
 		this.mqProxy.observeAllEncounters().subscribe((message: EncounterUpdateMessage) => {
-			console.log(message)
+			this.handleEncounterUpdates(message);
 		});
 		this.mqProxy.observeAllFriendRequests().subscribe( (friendRequest: FriendRequest) => {
 			this.handleFriendRequest(friendRequest);
@@ -37,6 +42,18 @@ export class MqService {
 
 	public userHasMqAccount(user: UserModel): Promise<boolean> {
 		return this.mqProxy.userHasMqAccount(user);
+	}
+
+	private async handleEncounterUpdates(encounterUpdate: EncounterUpdateMessage): Promise<void> {
+		switch (encounterUpdate.body.dataType) {
+			case (EncounterCommand.PLAYER_UPDATE): {
+				await this.playerRepository.updatePlayer(encounterUpdate.body.data as PlayerData);
+				return;
+			}
+			default: {
+				console.error('Unrecognized Command Type')
+			}
+		}
 	}
 
 	private async handleFriendRequest(friendRequest: FriendRequest): Promise<void> {
