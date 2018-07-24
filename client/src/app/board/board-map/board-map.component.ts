@@ -88,16 +88,14 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
         }
 
         if (this.boardStateService.mouseMiddleDown || (this.boardStateService.spaceDown && this.boardStateService.mouseLeftDown)) {
-            if ((window.performance.now() - this.boardStateService.mouseLeftDownStartTime) > 90) {
-                this.boardStateService.mouseDrag = true;
-                const trans_coor = this.boardTransformService.screen_to_map(event);
+            this.boardStateService.mouseDrag = true;
+            const trans_coor = this.boardTransformService.screen_to_map(event);
 
-                const deltaX = this.boardStateService.mouse_loc_map.x - trans_coor.x;
-                const deltaY = this.boardStateService.mouse_loc_map.y - trans_coor.y;
+            const deltaX = this.boardStateService.mouse_loc_map.x - trans_coor.x;
+            const deltaY = this.boardStateService.mouse_loc_map.y - trans_coor.y;
 
-                this.boardStateService.x_offset -= (deltaX * this.boardStateService.scale);
-                this.boardStateService.y_offset -= (deltaY * this.boardStateService.scale);
-            }
+            this.boardStateService.x_offset -= (deltaX * this.boardStateService.scale);
+            this.boardStateService.y_offset -= (deltaY * this.boardStateService.scale);
         }
 
         this.updateMouseLocation(mouse_screen);
@@ -127,7 +125,6 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
             case 1:
                 // left click
                 this.boardStateService.mouseLeftDown = true;
-                this.boardStateService.mouseLeftDownStartTime = window.performance.now();
                 break;
             case 2:
                 // middle click

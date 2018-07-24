@@ -51,7 +51,7 @@ export class BoardStateService {
     public board_maker_map_opacity = 1.0;
     public doDiagonals = true;
     public do_pops = false;
-    public notationModeEnabled = false;
+    public notationModeEnabled = true;
 
     public inputOffset = 0.2;    // offset used for input boundaries
     public gridEnabled = true;
@@ -78,7 +78,6 @@ export class BoardStateService {
 
     public mouseDrag = false;
     source_click_location: CellTarget;
-    mouseLeftDownStartTime: number;
 
 
     static distanceCellToCell(cell1: XyPair, cell2: XyPair): number {
