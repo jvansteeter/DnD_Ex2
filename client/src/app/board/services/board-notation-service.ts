@@ -15,6 +15,12 @@ export class BoardNotationService {
         this.freeformNotationPolyline = [];
     }
 
+    public handleMouseMove() {
+        if (this.boardStateService.mouseLeftDown) {
+            this.appendToPolyLine(this.boardStateService.mouse_loc_map);
+        }
+    }
+
     public addNotation(name: string) {
         this.notations.push(name);
     }

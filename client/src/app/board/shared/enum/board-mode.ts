@@ -1,7 +1,7 @@
 export enum BoardMode {
-  PLAYER,
-  WALLS,
-  DOORS,
-  LIGHTS,
-  TILES
+    PLAYER,
+    WALLS,
+    DOORS,
+    LIGHTS,
+    TILES
 }

@@ -51,6 +51,7 @@ export class BoardStateService {
     public board_maker_map_opacity = 1.0;
     public doDiagonals = true;
     public do_pops = false;
+    public notationModeEnabled = false;
 
     public inputOffset = 0.2;    // offset used for input boundaries
     public gridEnabled = true;
@@ -68,9 +69,13 @@ export class BoardStateService {
 
     // key states
     public mouseOnMap = false;
+
     public shiftDown = false;
     public spaceDown = false;
+
     public mouseLeftDown = false;
+    public mouseMiddleDown = false;
+
     public mouseDrag = false;
     source_click_location: CellTarget;
     mouseLeftDownStartTime: number;

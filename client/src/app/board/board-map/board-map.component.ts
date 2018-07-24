@@ -55,6 +55,22 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
         this.boardCanvasService.canvasNativeElement = this.mapContainer.nativeElement;
     }
 
+    getCursor(): string {
+        if (this.boardStateService.spaceDown) {
+            if (this.boardStateService.mouseLeftDown) {
+                return 'url(\'../../../resources/icons/grab_closed.png\'), auto'
+            } else {
+                return 'url(\'../../../resources/icons/grab_open.png\'), auto'
+            }
+        }
+
+        if (this.boardStateService.mouseMiddleDown) {
+            return 'url(\'../../../resources/icons/grab_closed.png\'), auto'
+        }
+
+        return 'auto';
+    }
+
     getCanvasHeight(): number {
         return this.boardCanvasService.cvs_height;
     }
@@ -69,7 +85,11 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
     mouseMove(event): void {
         const mouse_screen = new XyPair(event.clientX, event.clientY);
 
-        if (this.boardStateService.mouseLeftDown) {
+        if (this.boardStateService.notationModeEnabled) {
+            this.boardNotationService.handleMouseMove();
+        }
+
+        if (this.boardStateService.mouseMiddleDown || (this.boardStateService.spaceDown && this.boardStateService.mouseLeftDown)) {
             if ((window.performance.now() - this.boardStateService.mouseLeftDownStartTime) > 90) {
                 this.boardStateService.mouseDrag = true;
                 const trans_coor = this.boardTransformService.screen_to_map(event);
@@ -81,9 +101,9 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
                 this.boardStateService.y_offset -= (deltaY * this.boardStateService.scale);
             }
         }
+
         this.updateMouseLocation(mouse_screen);
 
-        this.boardNotationService.appendToPolyLine(this.boardStateService.mouse_loc_map);
         this.boardPlayerService.syncPlayerHover(this.boardStateService.mouse_loc_cell);
     }
 
@@ -95,6 +115,7 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
                 break;
             case 2:
                 // middle click
+                this.boardStateService.mouseMiddleDown = false;
                 break;
             case 3:
                 // right click
@@ -112,6 +133,7 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
                 break;
             case 2:
                 // middle click
+                this.boardStateService.mouseMiddleDown = true;
                 break;
             case 3:
                 // right click
