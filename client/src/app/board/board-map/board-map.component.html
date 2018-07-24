@@ -13,7 +13,7 @@
     <canvas
             #inputCanvas
             class="inputCanvas"
-            [ngStyle]="{'cursor': getCursor()}"
+            [ngClass]="getCursorClass()"
             height={{getCanvasHeight()}} width={{getCanvasWidth()}}
             (mouseleave)="handleMouseLeave($event)"
             (mouseenter)="handleMouseEnter($event)"

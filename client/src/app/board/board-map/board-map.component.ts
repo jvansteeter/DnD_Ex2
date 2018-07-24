@@ -55,20 +55,18 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
         this.boardCanvasService.canvasNativeElement = this.mapContainer.nativeElement;
     }
 
-    getCursor(): string {
+    getCursorClass(): string {
         if (this.boardStateService.spaceDown) {
             if (this.boardStateService.mouseLeftDown) {
-                return 'url(\'../../../resources/icons/grab_closed.png\'), auto'
+                return 'cursorGrabbing'
             } else {
-                return 'url(\'../../../resources/icons/grab_open.png\'), auto'
+                return 'cursorGrab'
             }
         }
 
         if (this.boardStateService.mouseMiddleDown) {
-            return 'url(\'../../../resources/icons/grab_closed.png\'), auto'
+            return 'cursorGrabbing'
         }
-
-        return 'auto';
     }
 
     getCanvasHeight(): number {
