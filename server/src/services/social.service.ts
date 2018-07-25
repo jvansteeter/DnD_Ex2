@@ -20,7 +20,6 @@ export class SocialService {
 	}
 
 	public async acceptFriendRequest(toUserId, fromUserId): Promise<void> {
-		console.log('SocialService.acceptFriendRequest()')
 		try {
 			let friendRequests: NotificationModel[] = await this.notificationRepo.findAllToByType(toUserId, NotificationType.FRIEND_REQUEST);
 			friendRequests.forEach(async (friendRequest: NotificationModel) => {

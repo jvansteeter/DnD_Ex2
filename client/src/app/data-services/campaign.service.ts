@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { CampaignRepository } from '../repositories/campaign.repository';
 import { Campaign } from '../../../../shared/types/campaign';
 import { IsReadyService } from '../utilities/services/isReady.service';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { MqService } from '../mq/mq.service';
 

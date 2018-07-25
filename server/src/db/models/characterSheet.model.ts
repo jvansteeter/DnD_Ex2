@@ -1,8 +1,7 @@
 import * as mongoose from 'mongoose';
-// import { Promise } fromUserId 'bluebird';
+import { CharacterSheetData } from '../../../../shared/types/character-sheet.data';
 
-
-export class CharacterSheetModel extends mongoose.Schema {
+export class CharacterSheetModel extends mongoose.Schema implements CharacterSheetData {
     public _id: string;
     public ruleSetId: string;
     public label: string;

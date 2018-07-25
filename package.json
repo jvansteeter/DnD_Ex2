@@ -80,7 +80,6 @@
     "@types/bcryptjs": "^2.4.1",
     "@types/passport": "^0.3.5",
     "amqplib": "^0.5.2",
-    "angular2-grid": "^2.2.3",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "bootstrap": "^3.3.7",
@@ -99,7 +98,6 @@
     "passport-local": "^1.0.0",
     "reflect-metadata": "^0.1.12",
     "rxjs": "^6.2.1",
-    "rxjs-compat": "^6.2.1",
     "serve-favicon": "^2.5.0",
     "socket.io": "^2.1.1",
     "zone.js": "^0.8.26"

@@ -1,52 +1,83 @@
 <div *ngIf="ruleSet">
 	<h1>{{ruleSet.label}}</h1>
-	<mat-accordion>
-		<mat-expansion-panel>
-			<mat-expansion-panel-header>
-				<mat-panel-title>Admin</mat-panel-title>
-			</mat-expansion-panel-header>
-			<mat-table [dataSource]="adminDataSource">
-				<ng-container matColumnDef="username">
-					<mat-header-cell *matHeaderCellDef>Username</mat-header-cell>
-					<mat-cell *matCellDef="let row">{{row.username}}</mat-cell>
-				</ng-container>
-				<ng-container matColumnDef="role">
-					<mat-header-cell *matHeaderCellDef>Role</mat-header-cell>
-					<mat-cell *matCellDef="let row">{{row.role}}</mat-cell>
-				</ng-container>
-				<mat-header-row *matHeaderRowDef="adminColumns"></mat-header-row>
-				<mat-row *matRowDef="let row; columns: adminColumns"></mat-row>
-			</mat-table>
-		</mat-expansion-panel>
-		<mat-expansion-panel>
-			<mat-expansion-panel-header>
-				<mat-panel-title>Character Sheets</mat-panel-title>
-				<mat-panel-description>Character Sheets description</mat-panel-description>
-			</mat-expansion-panel-header>
-			<mat-list>
-				<mat-list-item *ngFor="let characterSheet of characterSheets"><a (click)="editCharacterSheet(characterSheet._id)">{{characterSheet.label}}</a></mat-list-item>
-			</mat-list>
-			<button mat-raised-button color="primary" (click)="newCharacterSheet()">New</button>
-		</mat-expansion-panel>
-		<mat-expansion-panel>
-			<mat-expansion-panel-header>
-				<mat-panel-title>NPCs</mat-panel-title>
-			</mat-expansion-panel-header>
-			<mat-table [dataSource]="npcDataSource">
-				<ng-container matColumnDef="label">
-					<mat-header-cell *matHeaderCellDef>NPC</mat-header-cell>
-					<mat-cell *matCellDef="let npc">{{npc.label}}</mat-cell>
-				</ng-container>
-				<ng-container matColumnDef="edit">
-					<mat-header-cell *matHeaderCellDef></mat-header-cell>
-					<mat-cell *matCellDef="let npc">
-						<button mat-raised-button color="primary" (click)="editNpc(npc._id)">Edit</button>
-					</mat-cell>
-				</ng-container>
-				<mat-header-row *matHeaderRowDef="npcColumns"></mat-header-row>
-				<mat-row *matRowDef="let npc; columns: npcColumns"></mat-row>
-			</mat-table>
-			<button mat-raised-button color="primary" (click)="createNPC()">New</button>
-		</mat-expansion-panel>
-	</mat-accordion>
+	<!--<mat-accordion>-->
+		<!--<mat-expansion-panel>-->
+			<!--<mat-expansion-panel-header>-->
+				<!--<mat-panel-title>Admin</mat-panel-title>-->
+			<!--</mat-expansion-panel-header>-->
+			<!--<mat-table [dataSource]="adminDataSource">-->
+				<!--<ng-container matColumnDef="username">-->
+					<!--<mat-header-cell *matHeaderCellDef>Username</mat-header-cell>-->
+					<!--<mat-cell *matCellDef="let row">{{row.username}}</mat-cell>-->
+				<!--</ng-container>-->
+				<!--<ng-container matColumnDef="role">-->
+					<!--<mat-header-cell *matHeaderCellDef>Role</mat-header-cell>-->
+					<!--<mat-cell *matCellDef="let row">{{row.role}}</mat-cell>-->
+				<!--</ng-container>-->
+				<!--<mat-header-row *matHeaderRowDef="adminColumns"></mat-header-row>-->
+				<!--<mat-row *matRowDef="let row; columns: adminColumns"></mat-row>-->
+			<!--</mat-table>-->
+		<!--</mat-expansion-panel>-->
+		<!--<mat-expansion-panel>-->
+			<!--<mat-expansion-panel-header>-->
+				<!--<mat-panel-title>Character Sheets</mat-panel-title>-->
+				<!--<mat-panel-description>Character Sheets description</mat-panel-description>-->
+			<!--</mat-expansion-panel-header>-->
+			<!--<mat-list>-->
+				<!--<mat-list-item *ngFor="let characterSheet of characterSheets"><a-->
+						<!--(click)="editCharacterSheet(characterSheet._id)">{{characterSheet.label}}</a></mat-list-item>-->
+			<!--</mat-list>-->
+			<!--<button mat-raised-button color="primary" (click)="newCharacterSheet()">New</button>-->
+		<!--</mat-expansion-panel>-->
+		<!--<mat-expansion-panel>-->
+			<!--<mat-expansion-panel-header>-->
+				<!--<mat-panel-title>NPCs</mat-panel-title>-->
+			<!--</mat-expansion-panel-header>-->
+			<!--<mat-table [dataSource]="npcDataSource">-->
+				<!--<ng-container matColumnDef="label">-->
+					<!--<mat-header-cell *matHeaderCellDef>NPC</mat-header-cell>-->
+					<!--<mat-cell *matCellDef="let npc">{{npc.label}}</mat-cell>-->
+				<!--</ng-container>-->
+				<!--<ng-container matColumnDef="edit">-->
+					<!--<mat-header-cell *matHeaderCellDef></mat-header-cell>-->
+					<!--<mat-cell *matCellDef="let npc">-->
+						<!--<button mat-raised-button color="primary" (click)="editNpc(npc._id)">Edit</button>-->
+					<!--</mat-cell>-->
+				<!--</ng-container>-->
+				<!--<mat-header-row *matHeaderRowDef="npcColumns"></mat-header-row>-->
+				<!--<mat-row *matRowDef="let npc; columns: npcColumns"></mat-row>-->
+			<!--</mat-table>-->
+			<!--<button mat-raised-button color="primary" (click)="createNPC()">New</button>-->
+		<!--</mat-expansion-panel>-->
+	<!--</mat-accordion>-->
+	<mat-grid-list [cols]="3" rowHeight="350px">
+		<mat-grid-tile [colspan]="1" [rowspan]="1">
+			<dashboard-card>
+				<mat-table [dataSource]="adminDataSource">
+					<ng-container matColumnDef="username">
+						<mat-header-cell *matHeaderCellDef>Username</mat-header-cell>
+						<mat-cell *matCellDef="let row">{{row.username}}</mat-cell>
+					</ng-container>
+					<ng-container matColumnDef="role">
+						<mat-header-cell *matHeaderCellDef>Role</mat-header-cell>
+						<mat-cell *matCellDef="let row">{{row.role}}</mat-cell>
+					</ng-container>
+					<mat-header-row *matHeaderRowDef="adminColumns"></mat-header-row>
+					<mat-row *matRowDef="let row; columns: adminColumns"></mat-row>
+				</mat-table>
+			</dashboard-card>
+		</mat-grid-tile>
+		<mat-grid-tile [colspan]="1" [rowspan]="1">
+			<dashboard-card [dashboardCard]="characterSheetCard">
+				<mat-table [dataSource]="characterSheetDataSource">
+					<ng-container matColumnDef="label">
+						<mat-header-cell *matHeaderCellDef>Character Sheet</mat-header-cell>
+						<mat-cell *matCellDef="let characterSheet">{{characterSheet.label}}</mat-cell>
+					</ng-container>
+					<mat-header-row *matHeaderRowDef="characterSheetColumns"></mat-header-row>
+					<mat-row class="clickable-row" *matRowDef="let characterSheet; columns: characterSheetColumns" (click)="editCharacterSheet(characterSheet._id)"></mat-row>
+				</mat-table>
+			</dashboard-card>
+		</mat-grid-tile>
+	</mat-grid-list>
 </div>

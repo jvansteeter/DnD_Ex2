@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { CharacterSheetData } from '../../../../shared/types/character-sheet.data';
 
 
 @Injectable()
@@ -17,8 +18,8 @@ export class RuleSetRepository {
         return this.http.get('/api/ruleset/ruleset/' + ruleSetId, {responseType: 'json'});
     }
 
-    public getCharacterSheets(ruleSetId: string): Observable<any> {
-        return this.http.get('/api/ruleset/charactersheets/' + ruleSetId, {responseType: 'json'});
+    public getCharacterSheets(ruleSetId: string): Observable<CharacterSheetData[]> {
+        return this.http.get<CharacterSheetData[]>('/api/ruleset/charactersheets/' + ruleSetId, {responseType: 'json'});
     }
 
     public getAdmin(ruleSetId: string): Observable<any> {

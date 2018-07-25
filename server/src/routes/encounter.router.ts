@@ -28,7 +28,7 @@ export class EncounterRouter {
 				res.json(encounter);
 			}
 			catch (error) {
-				console.log(error);
+				console.error(error);
 				res.status(500).send(error);
 			}
 		});
@@ -39,7 +39,7 @@ export class EncounterRouter {
 				res.status(200).send("OK");
 			}
 			catch (error) {
-				console.log(error);
+				console.error(error);
 				res.status(500).send(error);
 			}
 		});
@@ -51,7 +51,7 @@ export class EncounterRouter {
 				res.status(200).send('OK');
 			}
 			catch (error) {
-				console.log(error);
+				console.error(error);
 				res.status(500).send(error);
 			}
 		});

@@ -1,33 +1,33 @@
 <div class="app-container">
-    <h1 *ngIf="characterSheetData">{{characterSheetData.label}}</h1>
-    <mat-toolbar>
-        <button mat-icon-button mat-raised-button color="primary" (click)="openAddDialog()" class="characterSheet-addButton"
-                matTooltip="Add SubComponent">
-            <mat-icon>add</mat-icon>
-        </button>
-        <button mat-icon-button mat-raised-button color="primary" (click)="save()" class="characterSheet-saveButton"
-                matTooltip="Save">
-            <mat-icon>sd_card</mat-icon>
-        </button>
-    </mat-toolbar>
-    <div class="characterSheet-gridContainer">
-        <div class="well well-lg characterSheet" [ngGrid]="gridConfig" #characterSheet>
-            <div *ngFor="let aspect of characterService.aspects; let i = index" [(ngGridItem)]="aspect.config"
-                 (mouseenter)="hoverStart(i)" (mouseleave)="hoverEnd(i)">
-                <div class="sub-component-header" [style.z-index]="hoveredZIndex[i]">
-                    <mat-icon class="sub-component-reorder">reorder</mat-icon>
-                    <button *ngIf="characterService.subComponentOptions[i] && characterService.subComponents[i].child.hasOptions"
-                            mat-icon-button (mousedown)="openOptions()"
-                            [matMenuTriggerFor]="characterService.subComponentOptions[i]" class="sub-component-options">
-                        <mat-icon>settings</mat-icon>
-                    </button>
-                    <button mat-icon-button (click)="removeComponent(aspect)" class="sub-component-close">
-                        <mat-icon>close</mat-icon>
-                    </button>
-                </div>
-                <sub-component [aspect]="aspect"></sub-component>
-            </div>
-        </div>
-    </div>
+	<h1 *ngIf="characterSheetData">{{characterSheetData.label}}</h1>
+	<mat-toolbar>
+		<button mat-icon-button mat-raised-button color="primary" (click)="openAddDialog()" class="characterSheet-addButton"
+		        matTooltip="Add SubComponent">
+			<mat-icon>add</mat-icon>
+		</button>
+		<button mat-icon-button mat-raised-button color="primary" (click)="save()" class="characterSheet-saveButton"
+		        matTooltip="Save">
+			<mat-icon>sd_card</mat-icon>
+		</button>
+	</mat-toolbar>
+	<div class="characterSheet-gridContainer">
+		<div class="well well-lg characterSheet" #characterSheet>
+			<div *ngFor="let aspect of characterService.aspects; let i = index"
+			     (mouseenter)="hoverStart(i)" (mouseleave)="hoverEnd(i)">
+				<div class="sub-component-header" [style.z-index]="hoveredZIndex[i]">
+					<mat-icon class="sub-component-reorder">reorder</mat-icon>
+					<button *ngIf="characterService.subComponentOptions[i] && characterService.subComponents[i].child.hasOptions"
+					        mat-icon-button (mousedown)="openOptions()"
+					        [matMenuTriggerFor]="characterService.subComponentOptions[i]" class="sub-component-options">
+						<mat-icon>settings</mat-icon>
+					</button>
+					<button mat-icon-button (click)="removeComponent(aspect)" class="sub-component-close">
+						<mat-icon>close</mat-icon>
+					</button>
+				</div>
+				<sub-component [aspect]="aspect"></sub-component>
+			</div>
+		</div>
+	</div>
 </div>
 

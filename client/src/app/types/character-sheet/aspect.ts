@@ -1,4 +1,3 @@
-import { NgGridItemConfig } from 'angular2-grid';
 
 export enum AspectType {
     TEXT = 'TEXT',
@@ -21,7 +20,7 @@ export class Aspect {
     items: any[];
     ruleFunction: any;
 
-    config: NgGridItemConfig;
+    // config: NgGridItemConfig;
     isNew: boolean = true;
 
     constructor(label: string, aspectType: AspectType, required: boolean) {
@@ -30,10 +29,10 @@ export class Aspect {
         this.required = required;
         this.fontSize = 14;
 
-        this.config = this.defaultConfig();
+        // this.config = this.defaultConfig();
     }
 
-    private defaultConfig(): NgGridItemConfig {
-        return { 'dragHandle': '.sub-component-header', 'col': 1, 'row': 1, 'sizex': 15, 'sizey': 5 } as NgGridItemConfig;
-    }
+    // private defaultConfig(): NgGridItemConfig {
+    //     return { 'dragHandle': '.sub-component-header', 'col': 1, 'row': 1, 'sizex': 15, 'sizey': 5 } as NgGridItemConfig;
+    // }
 }

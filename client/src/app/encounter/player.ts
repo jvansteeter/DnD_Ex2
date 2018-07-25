@@ -1,7 +1,7 @@
 import { XyPair } from "../board/geometry/xy-pair";
 import { isUndefined } from 'util';
 import { EventEmitter } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { PlayerData } from '../../../../shared/types/encounter/player';
 
 export class Player {

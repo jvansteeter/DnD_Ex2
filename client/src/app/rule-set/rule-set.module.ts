@@ -4,14 +4,15 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import {
-    MatButtonModule, MatDialogModule, MatExpansionModule, MatInputModule, MatListModule,
-    MatSelectModule,
-    MatTableModule
+	MatButtonModule, MatDialogModule, MatExpansionModule, MatGridListModule, MatInputModule, MatListModule,
+	MatSelectModule,
+	MatTableModule
 } from '@angular/material';
 import { NewCharacterSheetDialogComponent } from './home/dialog/new-character-sheet-dialog.component';
 import { NewNpcDialogComponent } from './home/dialog/new-npc-dialog.component';
 import { RuleSetRepository } from '../repositories/rule-set.repository';
 import { RuleSetSelectorComponent } from './selector/rule-set-selector.component';
+import { AppCDKModule } from '../cdk/cdk.module';
 
 @NgModule({
     imports: [
@@ -24,7 +25,9 @@ import { RuleSetSelectorComponent } from './selector/rule-set-selector.component
         MatInputModule,
         MatListModule,
         MatTableModule,
-        MatSelectModule
+        MatSelectModule,
+		    MatGridListModule,
+		    AppCDKModule,
     ],
     declarations: [
         RuleSetHomeComponent,

@@ -66,7 +66,6 @@ export class MqProxy {
 
 			channel.bindQueue(MqConfig.encounterQueueName, MqConfig.encounterExchange, MqConfig.encounterTopic);
 			channel.consume(MqConfig.encounterQueueName, (message) => {
-				// console.log(message);
 				exchangeSubject.next(new EncounterUpdateMessage(message));
 			}, {noAck: true});
 		});

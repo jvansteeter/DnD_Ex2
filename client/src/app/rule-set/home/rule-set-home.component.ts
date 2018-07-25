@@ -6,111 +6,106 @@ import { Subject } from 'rxjs';
 import { NewNpcDialogComponent } from './dialog/new-npc-dialog.component';
 import { RuleSetRepository } from '../../repositories/rule-set.repository';
 import { SubjectDataSource } from '../../utilities/subjectDataSource';
+import { CharacterSheetData } from '../../../../../shared/types/character-sheet.data';
+import { DashboardCard } from '../../cdk/dashboard-card/dashboard-card';
 
 @Component({
-    selector: 'rule-set-home',
-    templateUrl: 'rule-set-home.component.html',
-    styleUrls: ['rule-set-home.component.css']
+	selector: 'rule-set-home',
+	templateUrl: 'rule-set-home.component.html',
+	styleUrls: ['rule-set-home.component.css']
 })
 export class RuleSetHomeComponent implements OnInit {
-    private ruleSetId: string;
-    private ruleSet: any;
+	private ruleSetId: string;
+	private ruleSet: any;
 
-    public characterSheets: any[];
-    public admins: any[];
-    public npcs: any[];
+	public characterSheets: CharacterSheetData[];
+	public admins: any[];
+	public npcs: any[];
 
-    private adminDataSource: SubjectDataSource<AdminData>;
-    private adminSubject: Subject<AdminData[]>;
-    public adminColumns = ['username', 'role'];
+	private readonly adminSubject: Subject<AdminData[]>;
+	private adminDataSource: SubjectDataSource<AdminData>;
+	public adminColumns = ['username', 'role'];
 
-    private npcDataSource: SubjectDataSource<NpcData>;
-    private npcSubject: Subject<NpcData[]>;
-    public npcColumns = ['label', 'edit'];
+	public characterSheetCard: DashboardCard;
+	private readonly characterSheetSubject: Subject<CharacterSheetData[]>;
+	private characterSheetDataSource: SubjectDataSource<CharacterSheetData>;
+	public characterSheetColumns = ['label'];
 
-    constructor(private activatedRoute: ActivatedRoute,
-                private dialog: MatDialog,
-                private router: Router,
-                private ruleSetRepository: RuleSetRepository) {
-        this.adminSubject = new Subject<AdminData[]>();
-        this.adminDataSource = new SubjectDataSource(this.adminSubject);
+	private readonly npcSubject: Subject<NpcData[]>;
+	private npcDataSource: SubjectDataSource<NpcData>;
+	public npcColumns = ['label', 'edit'];
 
-        this.npcSubject = new Subject<NpcData[]>();
-        this.npcDataSource = new SubjectDataSource(this.npcSubject);
-    }
+	constructor(private activatedRoute: ActivatedRoute,
+	            private dialog: MatDialog,
+	            private router: Router,
+	            private ruleSetRepository: RuleSetRepository) {
+		this.adminSubject = new Subject<AdminData[]>();
+		this.adminDataSource = new SubjectDataSource(this.adminSubject);
 
-    ngOnInit(): void {
-        this.activatedRoute.params.subscribe((params) => {
-            this.ruleSetId = params['ruleSetId'];
-            this.ruleSetRepository.getRuleSet(this.ruleSetId).subscribe((ruleSet: any) => {
-                this.ruleSet = ruleSet;
-            });
-            this.ruleSetRepository.getCharacterSheets(this.ruleSetId).subscribe((characterSheets: any[]) => {
-                this.characterSheets = characterSheets;
-            });
-            this.ruleSetRepository.getAdmin(this.ruleSetId).subscribe((admins: any[]) => {
-                this.admins = admins;
-                this.adminSubject.next(admins);
-            });
-            this.ruleSetRepository.getNpcs(this.ruleSetId).subscribe((npcs: any[]) => {
-                this.npcs = npcs;
-                this.npcSubject.next(npcs);
-            });
-        });
-    }
+		this.characterSheetCard = {
+			menuOptions: [
+				{
+					title: 'New Character Sheet',
+					function: this.newCharacterSheet
+				}
+			]
+		};
+		this.characterSheetSubject = new Subject<CharacterSheetData[]>();
+		this.characterSheetDataSource = new SubjectDataSource<CharacterSheetData>(this.characterSheetSubject);
 
-    newCharacterSheet(): void {
-        this.dialog.open(NewCharacterSheetDialogComponent, {data: {ruleSetId: this.ruleSetId}});
-    }
+		this.npcSubject = new Subject<NpcData[]>();
+		this.npcDataSource = new SubjectDataSource(this.npcSubject);
+	}
 
-    editCharacterSheet(characterSheetId: string): void {
-        this.router.navigate(['character-sheet', characterSheetId]);
-    }
+	ngOnInit(): void {
+		this.activatedRoute.params.subscribe((params) => {
+			this.ruleSetId = params['ruleSetId'];
+			this.ruleSetRepository.getRuleSet(this.ruleSetId).subscribe((ruleSet: any) => {
+				this.ruleSet = ruleSet;
+			});
+			this.ruleSetRepository.getCharacterSheets(this.ruleSetId).subscribe((characterSheets: CharacterSheetData[]) => {
+				this.characterSheets = characterSheets;
+				this.characterSheetSubject.next(characterSheets);
+			});
+			this.ruleSetRepository.getAdmin(this.ruleSetId).subscribe((admins: any[]) => {
+				this.admins = admins;
+				this.adminSubject.next(admins);
+			});
+			this.ruleSetRepository.getNpcs(this.ruleSetId).subscribe((npcs: any[]) => {
+				this.npcs = npcs;
+				this.npcSubject.next(npcs);
+			});
+		});
+	}
 
-    createNPC(): void {
-        this.dialog.open(NewNpcDialogComponent, {data: {characterSheets: this.characterSheets}});
-    }
+	private newCharacterSheet = () => {
+		this.dialog.open(NewCharacterSheetDialogComponent, {data: {ruleSetId: this.ruleSetId}}).afterClosed().subscribe((characterSheet: CharacterSheetData) => {
+			this.router.navigate(['character-sheet', characterSheet._id]);
+		});
+	};
 
-    editNpc(npcId: string): void {
-        this.router.navigate(['npc', npcId]);
-    }
+	editCharacterSheet(characterSheetId: string): void {
+		this.router.navigate(['character-sheet', characterSheetId]);
+	}
+
+	createNPC(): void {
+		this.dialog.open(NewNpcDialogComponent, {data: {characterSheets: this.characterSheets}});
+	}
+
+	editNpc(npcId: string): void {
+		this.router.navigate(['npc', npcId]);
+	}
 }
 
 interface AdminData {
-    username: string,
-    role: string
+	username: string,
+	role: string
 }
-
-// class AdminDataSource extends DataSource<AdminData> {
-//     constructor(private adminSubject: Subject<AdminData[]>){
-//         super();
-//     }
-//
-//     connect(): Observable<AdminData[]> {
-//         return this.adminSubject.asObservable();
-//     }
-//
-//     disconnect(): void {
-//     }
-// }
 
 interface NpcData {
-    _id: string,
-    label: string,
-    characterSheetId: string,
-    ruleSetId: string,
-    values: any[]
+	_id: string,
+	label: string,
+	characterSheetId: string,
+	ruleSetId: string,
+	values: any[]
 }
-
-// class NpcDataSource extends DataSource<NpcData> {
-//     constructor(private npcSubject: Subject<NpcData[]>){
-//         super();
-//     }
-//
-//     connect(): Observable<NpcData[]> {
-//         return this.npcSubject.asObservable();
-//     }
-//
-//     disconnect(): void {
-//     }
-// }

@@ -6,8 +6,8 @@
 		</button>
 	</mat-toolbar>
 	<div class="characterSheet-gridContainer">
-		<div class="well well-lg characterSheet" *ngIf="npcData" [ngGrid]="gridConfig">
-			<div *ngFor="let aspect of characterSheetService.aspects" [(ngGridItem)]="aspect.config">
+		<div class="well well-lg characterSheet" *ngIf="npcData">
+			<div *ngFor="let aspect of characterSheetService.aspects">
 				<sub-component [aspect]="aspect"></sub-component>
 			</div>
 		</div>

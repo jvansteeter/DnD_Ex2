@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { CampaignRepository } from '../repositories/campaign.repository';
 import { IsReadyService } from '../utilities/services/isReady.service';
 import { UserProfile } from '../types/userProfile';
@@ -8,9 +8,7 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { first, map, mergeMap, tap } from 'rxjs/operators';
 import { EncounterStateData } from '../../../../shared/types/encounter/encounterState';
 import { MqService } from '../mq/mq.service';
-import { Subscription } from 'rxjs/Subscription';
-import { Subject } from 'rxjs/Subject';
-
+import { Subscription, Subject } from 'rxjs';
 
 @Injectable()
 export class CampaignPageService extends IsReadyService {

@@ -68,13 +68,10 @@ export class EncounterService {
 	}
 
 	private async buildEncounterState(encounterModel: EncounterModel): Promise<EncounterStateData> {
-		console.log('buildEncounterState')
 		let encounterState: EncounterStateData = JSON.parse(JSON.stringify(encounterModel));
 		encounterState.players = [];
 		for (let playerId of encounterModel.playerIds) {
-			console.log('playerId: ', playerId);
 			const playerData = await this.playerRepo.findById(playerId);
-			console.log(playerData);
 			encounterState.players.push(playerData);
 		}
 		delete encounterState['playerIds'];

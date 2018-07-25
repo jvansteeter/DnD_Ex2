@@ -1,8 +1,12 @@
+:host {
+	 flex: 1;
+}
+
 .admin-row {
-    display: flex;
-    justify-content: space-between;
+	display: flex;
+	justify-content: space-between;
 }
 
 .admin-row span {
-    flex: 1;
+	flex: 1;
 }

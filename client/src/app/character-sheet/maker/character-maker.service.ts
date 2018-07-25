@@ -9,7 +9,6 @@ import { CharacterInterfaceService } from '../shared/character-interface.service
 import { MatMenu } from '@angular/material';
 import { CharacterSheetRepository } from '../shared/character-sheet.repository';
 
-
 @Injectable()
 export class CharacterMakerService implements CharacterInterfaceService {
     private characterSheetId: string;
@@ -103,7 +102,7 @@ export class CharacterMakerService implements CharacterInterfaceService {
                 aspectType: aspect.aspectType,
                 required: aspect.required,
                 fontSize: aspect.fontSize,
-                config: aspect.config
+                // config: aspect.config
             };
             if (aspect.aspectType === AspectType.CATEGORICAL) {
                 aspectObj['items'] = (<CategoryComponent>this.getChildOf(aspect)).getCategories();
@@ -141,9 +140,9 @@ export class CharacterMakerService implements CharacterInterfaceService {
             aspect._id = aspectObj._id;
             aspect.fontSize = aspectObj.fontSize;
             aspect.isNew = false;
-            if (!!aspectObj.config) {
-                aspect.config = aspectObj.config;
-            }
+            // if (!!aspectObj.config) {
+            //     aspect.config = aspectObj.config;
+            // }
             if (aspectObj.hasOwnProperty('items')) {
                 aspect.items = aspectObj.items;
             }

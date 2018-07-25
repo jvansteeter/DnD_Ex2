@@ -2,7 +2,6 @@ import * as mongoose from 'mongoose';
 import { Promise } from 'bluebird';
 import { NotificationModel } from "../models/notification.model";
 import { CampaignRepository } from './campaign.repository';
-import { CampaignModel } from '../models/campaign.model';
 import { NotificationType } from '../../../../shared/types/notifications/notification-type.enum';
 import { NotificationBody } from '../../../../shared/types/notifications/notification-body';
 
@@ -28,27 +27,6 @@ export class NotificationRepository {
 			throw error;
 		}
 	}
-
-	// public async createCampaignInvite(toUserId: string, campaignId: string): Promise<NotificationModel> {
-	// 	console.log('toUserId', toUserId)
-	// 	console.log('campaignId', campaignId)
-	// 	try {
-	// 		let campaign: CampaignModel = await this.campaignRepo.findById(campaignId);
-	// 		console.log(campaign);
-	// 		return await this.Notification.create({
-	// 			toUserId: toUserId,
-	// 			notificationType: NotificationType.CAMPAIGN_INVITE,
-	// 			notificationData: {
-	// 				notificationType: NotificationType.CAMPAIGN_INVITE,
-	// 				campaignId: campaignId,
-	// 				campaignLabel: campaign.label
-	// 			}
-	// 		});
-	// 	}
-	// 	catch (error) {
-	// 		throw error;
-	// 	}
-	// }
 
 	public findAllTo(userId: string): Promise<NotificationModel[]> {
 		return new Promise((resolve, reject) => {
