@@ -26,6 +26,8 @@ import { SubComponent } from './shared/subcomponents/sub-component';
 import { CharacterMakerService } from './maker/character-maker.service';
 import { CharacterSheetService } from './sheet/character-sheet.service';
 import { CharacterInterfaceFactory } from './shared/character-interface.factory';
+import { CharacterGridComponent } from './shared/character-grid.component';
+import { CharacterAspectComponent } from './shared/character-aspect.component';
 
 @NgModule({
     imports: [
@@ -45,7 +47,7 @@ import { CharacterInterfaceFactory } from './shared/character-interface.factory'
         MatMenuModule,
         MatChipsModule,
         MatToolbarModule,
-        MatTooltipModule
+        MatTooltipModule,
     ],
     declarations: [
         CharacterSheetComponent,
@@ -61,7 +63,9 @@ import { CharacterInterfaceFactory } from './shared/character-interface.factory'
         TokenComponent,
         FunctionComponent,
         FunctionDialogComponent,
-        NodePipe
+        NodePipe,
+		    CharacterGridComponent,
+		    CharacterAspectComponent,
     ],
     providers: [
         CharacterSheetRepository,

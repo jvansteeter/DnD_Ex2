@@ -12,7 +12,7 @@ interface TextItem {
 @Component({
     selector: 'characterMaker-textListComponent',
     templateUrl: 'text-list.component.html',
-    styleUrls: ['../sub-component.css']
+    styleUrls: ['../sub-component.scss']
 })
 export class TextListComponent implements SubComponentChild {
     @Input() aspect: Aspect;

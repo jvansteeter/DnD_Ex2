@@ -1,6 +1,5 @@
 import { Component, Input, ViewChild } from '@angular/core';
 import { Aspect } from '../../../../types/character-sheet/aspect';
-import { SubComponent } from '../sub-component';
 import { SubComponentChild } from '../sub-component-child';
 import { MatMenu } from '@angular/material';
 
@@ -8,7 +7,7 @@ import { MatMenu } from '@angular/material';
 @Component({
     selector:  'characterMaker-textComponent',
     templateUrl: 'text.component.html',
-    styleUrls: ['../sub-component.css']
+    styleUrls: ['../sub-component.scss']
 })
 export class TextComponent implements SubComponentChild {
     @Input() aspect: Aspect;

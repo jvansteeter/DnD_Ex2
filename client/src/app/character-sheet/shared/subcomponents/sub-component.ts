@@ -12,7 +12,7 @@ import { timer } from 'rxjs';
 @Component({
     selector: 'sub-component',
     templateUrl: 'sub-component.html',
-    styleUrls: ['sub-component.css']
+    styleUrls: ['sub-component.scss']
 })
 export class SubComponent implements AfterViewInit {
     @Input() aspect: Aspect;

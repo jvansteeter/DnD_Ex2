@@ -15,7 +15,7 @@ interface CheckboxItem {
 @Component({
     selector: 'characterMaker-checkBoxListComponent',
     templateUrl: 'checkbox-list.component.html',
-    styleUrls: ['../sub-component.css']
+    styleUrls: ['../sub-component.scss']
 })
 export class CheckboxListComponent implements SubComponentChild, AfterViewInit {
     @Input() aspect: Aspect;

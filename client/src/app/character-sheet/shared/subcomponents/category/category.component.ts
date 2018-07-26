@@ -13,7 +13,7 @@ interface CategoryOption {
 @Component({
     selector:  'characterMaker-categoryComponent',
     templateUrl: 'category.component.html',
-    styleUrls: ['../sub-component.css']
+    styleUrls: ['../sub-component.scss']
 })
 export class CategoryComponent implements SubComponentChild, AfterViewInit{
     @Input() aspect: Aspect;

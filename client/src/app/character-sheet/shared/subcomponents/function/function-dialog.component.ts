@@ -6,7 +6,7 @@ import { MatDialogRef } from '@angular/material';
 
 @Component({
     templateUrl: 'function-dialog.component.html',
-    styleUrls: ['../sub-component.css']
+    styleUrls: ['../sub-component.scss']
 })
 export class FunctionDialogComponent {
     next: GrammarNode[];

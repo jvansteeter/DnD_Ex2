@@ -10,7 +10,7 @@ import { CharacterInterfaceFactory } from '../../character-interface.factory';
 @Component({
     selector:  'characterMaker-numberComponent',
     templateUrl: 'number.component.html',
-    styleUrls: ['../sub-component.css']
+    styleUrls: ['../sub-component.scss']
 })
 export class NumberComponent implements SubComponentChild {
     @Input() aspect: Aspect;

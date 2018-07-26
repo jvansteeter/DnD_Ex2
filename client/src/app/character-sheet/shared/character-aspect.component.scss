@@ -1,0 +1,15 @@
+:host {
+	position: absolute;
+}
+
+.resize-handle {
+	position: absolute;
+	bottom: -2px;
+	right: -2px;
+	cursor: nw-resize;
+}
+
+.move-handle {
+	margin-right: auto;
+	cursor: move;
+}

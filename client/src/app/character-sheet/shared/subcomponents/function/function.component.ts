@@ -12,7 +12,7 @@ import { CharacterInterfaceFactory } from '../../character-interface.factory';
 @Component({
     selector: 'characterMaker-functionComponent',
     templateUrl: 'function.component.html',
-    styleUrls: ['../sub-component.css']
+    styleUrls: ['../sub-component.scss']
 })
 export class FunctionComponent implements SubComponentChild, AfterViewInit {
     @Input() aspect: Aspect;

@@ -1,3 +1,4 @@
+import { AspectConfig } from './aspect-config';
 
 export enum AspectType {
     TEXT = 'TEXT',
@@ -20,7 +21,12 @@ export class Aspect {
     items: any[];
     ruleFunction: any;
 
-    // config: NgGridItemConfig;
+    config: AspectConfig = {
+    	top: 1,
+	    left: 1,
+	    width: 200,
+	    height: 100
+    };
     isNew: boolean = true;
 
     constructor(label: string, aspectType: AspectType, required: boolean) {

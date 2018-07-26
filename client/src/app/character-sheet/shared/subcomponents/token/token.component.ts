@@ -7,7 +7,7 @@ import { MatMenu } from '@angular/material';
 @Component({
     selector:  'characterMaker-tokenComponent',
     templateUrl: 'token.component.html',
-    styleUrls: ['../sub-component.css']
+    styleUrls: ['../sub-component.scss']
 })
 export class TokenComponent implements SubComponentChild, AfterViewInit{
     @Input() aspect: Aspect;

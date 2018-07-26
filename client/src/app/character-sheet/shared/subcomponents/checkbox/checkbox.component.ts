@@ -9,7 +9,7 @@ import { MatMenu } from '@angular/material';
 @Component({
     selector: 'characterMaker-checkBoxComponent',
     templateUrl: 'checkbox.component.html',
-    styleUrls: ['../sub-component.css']
+    styleUrls: ['../sub-component.scss']
 })
 export class CheckboxComponent implements SubComponentChild {
     @Input() aspect: Aspect;
