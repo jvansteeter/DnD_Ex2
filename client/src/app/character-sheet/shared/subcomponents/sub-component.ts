@@ -20,6 +20,7 @@ export class SubComponent implements AfterViewInit {
     options: MatMenu;
     aspectType = AspectType;
     optionsOpen: boolean = false;
+    hasOptions: boolean = false;
     private characterService: CharacterInterfaceService;
 
     constructor(characterInterfaceFactory: CharacterInterfaceFactory) {
@@ -29,6 +30,7 @@ export class SubComponent implements AfterViewInit {
     ngAfterViewInit(): void {
         this.options = this.child.getMenuOptions();
         timer(100).subscribe(() => this.characterService.registerSubComponent(this));
+        this.hasOptions = this.child.hasOptions;
     }
 
     getValue(): any {

@@ -23,6 +23,7 @@ export class CharacterAspectComponent implements OnInit {
 	private resizeTempY: number = 0;
 
 	public headerZIndex = 0;
+	public hasOptions: boolean;
 
 	constructor (
 			private _elementRef: ElementRef,
