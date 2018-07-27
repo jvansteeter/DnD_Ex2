@@ -25,7 +25,7 @@ export class Aspect {
     	top: 1,
 	    left: 1,
 	    width: 200,
-	    // height: 100
+	    height: 100
     };
     isNew: boolean = true;
 

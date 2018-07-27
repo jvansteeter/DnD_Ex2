@@ -1,13 +1,11 @@
 <div class="sub-component-header" (drag)="onMoveDrag($event)" (dragstart)="onMoveDragStart($event)" (dragend)="onMoveDragEnd()" [style.width.px]="aspect.config.width" [style.zIndex]="headerZIndex">
 	<mat-icon class="move-handle" draggable="true">reorder</mat-icon>
-	<button *ngIf="subComponent.hasOptions"
-	        mat-icon-button (mousedown)="openOptions()"
-	        [matMenuTriggerFor]="characterService.subComponentOptions[i]" class="sub-component-options">
+	<button *ngIf="hasOptions" mat-icon-button [matMenuTriggerFor]="subComponent.options" class="sub-component-options">
 		<mat-icon>settings</mat-icon>
 	</button>
 	<button mat-icon-button (click)="removeComponent(aspect)" class="sub-component-close">
 		<mat-icon>close</mat-icon>
 	</button>
 </div>
-<sub-component [aspect]="aspect" #subComponent></sub-component>
+<sub-component [aspect]="aspect" #component></sub-component>
 <mat-icon class="resize-handle" (dragstart)="onResizeDragStart($event)" (drag)="onResizeDrag($event)" (dragend)="onResizeDragEnd()" draggable="true">signal_cellular_null</mat-icon>

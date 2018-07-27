@@ -1,12 +1,10 @@
 import { AfterViewInit, Component, Input, ViewChild } from '@angular/core';
 import { Aspect } from '../../../../types/character-sheet/aspect';
-import { SubComponent } from '../sub-component';
 import { SubComponentChild } from '../sub-component-child';
 import { CharacterMakerService } from '../../../maker/character-maker.service';
 import { MatMenu } from '@angular/material';
 
-
-interface CategoryOption {
+export interface CategoryOption {
     value: string
 }
 
@@ -77,7 +75,7 @@ export class CategoryComponent implements SubComponentChild, AfterViewInit{
         this.value = value;
     }
 
-    getCategories(): any[] {
+    getCategories(): CategoryOption[] {
         return this.categories;
     }
 

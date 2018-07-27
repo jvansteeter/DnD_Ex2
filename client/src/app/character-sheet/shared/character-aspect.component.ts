@@ -1,13 +1,15 @@
-import { Component, ElementRef, HostListener, Input, OnInit, Renderer2 } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { CharacterMakerService } from '../maker/character-maker.service';
 import { Aspect } from '../../types/character-sheet/aspect';
+import { SubComponent } from './subcomponents/sub-component';
+import { isUndefined } from 'util';
 
 @Component({
 	selector: 'character-aspect',
 	templateUrl: 'character-aspect.component.html',
-	styleUrls: ['character-sheet.css', 'character-aspect.component.scss']
+	styleUrls: ['character-sheet.scss', 'character-aspect.component.scss']
 })
-export class CharacterAspectComponent implements OnInit {
+export class CharacterAspectComponent implements OnInit, AfterViewInit {
 	@Input('aspect') aspect: Aspect;
 
 	private moveDeltaX: number = 0;
@@ -25,6 +27,9 @@ export class CharacterAspectComponent implements OnInit {
 	public headerZIndex = 0;
 	public hasOptions: boolean;
 
+	@ViewChild('component')
+	subComponent: SubComponent;
+
 	constructor (
 			private _elementRef: ElementRef,
 			private renderer: Renderer2,
@@ -33,6 +38,16 @@ export class CharacterAspectComponent implements OnInit {
 
 	ngOnInit(): void {
 		this.setConfigStyles();
+	}
+
+	ngAfterViewInit(): void {
+		if (!isUndefined(this.subComponent)) {
+			setTimeout(() => this.hasOptions = this.subComponent.hasOptions);
+		}
+	}
+
+	public removeComponent(aspect: Aspect): void {
+		this.characterService.removeComponent(aspect);
 	}
 
 	onMoveDragStart(event): void {
@@ -79,7 +94,7 @@ export class CharacterAspectComponent implements OnInit {
 		let width = this.resizeTempX - this.resizeDeltaX;
 
 		// if (height > 0) {
-		// 	this.aspect.config.height = height;
+			this.aspect.config.height = height;
 			// this.setConfigStyles();
 		// }
 		// if (width > 0) {
@@ -110,6 +125,6 @@ export class CharacterAspectComponent implements OnInit {
 		this.renderer.setStyle(this._elementRef.nativeElement, 'top', this.aspect.config.top + 'px');
 		this.renderer.setStyle(this._elementRef.nativeElement, 'left', this.aspect.config.left + 'px');
 		this.renderer.setStyle(this._elementRef.nativeElement, 'width', this.aspect.config.width + 'px');
-		// this.renderer.setStyle(this._elementRef.nativeElement, 'height', this.aspect.config.height + 'px');
+		this.renderer.setStyle(this._elementRef.nativeElement, 'height', this.aspect.config.height + 'px');
 	}
 }

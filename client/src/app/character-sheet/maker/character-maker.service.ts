@@ -1,21 +1,19 @@
 import { Injectable } from '@angular/core';
 import { Aspect, AspectType } from '../../types/character-sheet/aspect';
 import { SubComponent } from '../shared/subcomponents/sub-component';
-import { CategoryComponent } from '../shared/subcomponents/category/category.component';
+import { CategoryComponent, CategoryOption } from '../shared/subcomponents/category/category.component';
 import { CheckboxListComponent } from '../shared/subcomponents/checkbox-list/checkbox-list.component';
 import { FunctionComponent } from '../shared/subcomponents/function/function.component';
 import { SubComponentChild } from '../shared/subcomponents/sub-component-child';
 import { CharacterInterfaceService } from '../shared/character-interface.service';
-import { MatMenu } from '@angular/material';
 import { CharacterSheetRepository } from '../shared/character-sheet.repository';
+import { isUndefined } from 'util';
 
 @Injectable()
 export class CharacterMakerService implements CharacterInterfaceService {
 	private characterSheetId: string;
 
 	public aspects: Aspect[];
-	// public subComponents: SubComponent[];
-	// public subComponentOptions: MatMenu[];
 
 	public subComponents: Map<string, SubComponent>;
 
@@ -27,8 +25,6 @@ export class CharacterMakerService implements CharacterInterfaceService {
 
 	public init(): void {
 		this.aspects = [];
-		// this.subComponents = [];
-		// this.subComponentOptions = [];
 		this.subComponents = new Map<string, SubComponent>();
 	}
 
@@ -39,13 +35,9 @@ export class CharacterMakerService implements CharacterInterfaceService {
 	public removeComponent(aspect: any): void {
 		let index = this.aspects.indexOf(aspect);
 		this.aspects.splice(index, 1);
-		// this.subComponents.splice(index, 1);
-		// this.subComponentOptions.splice(index, 1);
 	}
 
 	public registerSubComponent(subComponent: SubComponent): void {
-		// this.subComponents.push(subComponent);
-		// this.subComponentOptions.push(subComponent.options);
 		this.subComponents.set(subComponent.aspect._id, subComponent);
 	}
 
@@ -68,33 +60,22 @@ export class CharacterMakerService implements CharacterInterfaceService {
 	}
 
 	public valueOfAspect(aspect: Aspect): any {
-		// for (let i = 0; i < this.subComponents.length; i++) {
-		//     let subComponent = this.subComponents[i];
-		//     if (subComponent.aspect.label === aspect.label) {
-		//         return subComponent.getValue();
-		//     }
-		// }
-
-		return null;
+		return this.subComponents.get(aspect._id) ? this.subComponents.get(aspect._id).getValue() : undefined;
 	}
 
 	public updateFunctionAspects(): void {
-		// this.subComponents.forEach(subComponent => {
-		//     if (subComponent.aspect.aspectType === AspectType.FUNCTION) {
-		//         subComponent.getValue();
-		//     }
-		// })
+		this.subComponents.forEach(subComponent => {
+		    if (subComponent.aspect.aspectType === AspectType.FUNCTION) {
+		        subComponent.getValue();
+		    }
+		});
 	}
 
-	public getAspectOptions(aspect: Aspect): any {
-		// for (let i = 0; i < this.subComponents.length; i++) {
-		//     let subComponent = this.subComponents[i];
-		//     if (subComponent.aspect === aspect && aspect.aspectType === AspectType.CATEGORICAL) {
-		//         return (<CategoryComponent>subComponent.child).getCategories();
-		//     }
-		// }
-
-		return null;
+	public getCategoryOptions(aspect: Aspect): CategoryOption[] {
+		if (aspect.aspectType !== AspectType.CATEGORICAL || isUndefined(this.subComponents.get(aspect._id))) {
+			return undefined;
+		}
+		return (<CategoryComponent>this.subComponents.get(aspect._id).child).getCategories();
 	}
 
 	public save() {
@@ -128,13 +109,7 @@ export class CharacterMakerService implements CharacterInterfaceService {
 	}
 
 	private getChildOf(aspect: Aspect): SubComponentChild | undefined {
-		// for (let i = 0; i < this.subComponents.length; i++) {
-		//     if (this.subComponents[i].aspect === aspect) {
-		//         return this.subComponents[i].child;
-		//     }
-		// }
-
-		return undefined;
+		return this.subComponents.get(aspect._id) ? this.subComponents.get(aspect._id).child : undefined;
 	}
 
 	public setCharacterSheetId(id: string): void {

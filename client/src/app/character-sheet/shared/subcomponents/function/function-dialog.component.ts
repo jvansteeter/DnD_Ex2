@@ -80,7 +80,7 @@ export class FunctionDialogComponent {
             }
             else if (selected.aspectType === AspectType.CATEGORICAL && this._function.previousNode() === GrammarNode.IF) {
                 this._function.push(GrammarNode.ASPECT_CATEGORY);
-                let categories = this.characterService.getAspectOptions(selected);
+                let categories = this.characterService.getCategoryOptions(selected);
                 this.currentListOptions = [];
                 for (let i = 0; i < categories.length; i++) {
                     this.currentListOptions.push(<never>categories[i]);

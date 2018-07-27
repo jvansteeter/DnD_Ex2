@@ -5,10 +5,20 @@ import { CharacterSheetRepository } from './shared/character-sheet.repository';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import {
-    MatAutocompleteModule, MatButtonModule, MatCardModule, MatCheckboxModule, MatChipsModule, MatDialogModule,
-    MatGridListModule,
-    MatIconModule, MatInputModule,
-    MatMenuModule, MatSelectModule, MatToolbarModule, MatTooltipModule
+	MatAutocompleteModule,
+	MatButtonModule,
+	MatCardModule,
+	MatCheckboxModule,
+	MatChipsModule,
+	MatDialogModule,
+	MatGridListModule,
+	MatIconModule,
+	MatInputModule,
+	MatListModule,
+	MatMenuModule,
+	MatSelectModule,
+	MatToolbarModule,
+	MatTooltipModule
 } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FunctionDialogComponent, NodePipe } from './shared/subcomponents/function/function-dialog.component';
@@ -48,6 +58,7 @@ import { CharacterAspectComponent } from './shared/character-aspect.component';
         MatChipsModule,
         MatToolbarModule,
         MatTooltipModule,
+		    MatListModule,
     ],
     declarations: [
         CharacterSheetComponent,

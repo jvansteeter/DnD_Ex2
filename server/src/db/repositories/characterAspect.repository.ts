@@ -73,7 +73,7 @@ export class CharacterAspectRepository {
                     reject(error);
                     return;
                 }
-                aspects.sort(this.orderByConfigCol);
+                // aspects.sort(this.orderByConfigCol);
 
                 resolve(aspects);
             });

@@ -6,7 +6,7 @@ import { MatDialogRef } from '@angular/material';
 
 @Component({
     templateUrl: 'add-component.component.html',
-    styleUrls: ['../../shared/character-sheet.css']
+    styleUrls: ['../../shared/character-sheet.scss']
 })
 export class AddComponentComponent {
     private aspectTypes: any[];

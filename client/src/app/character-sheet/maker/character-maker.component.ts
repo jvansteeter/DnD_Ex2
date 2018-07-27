@@ -10,7 +10,7 @@ import { Aspect } from '../../types/character-sheet/aspect';
 @Component({
 	selector: 'character-maker',
 	templateUrl: 'character-maker.component.html',
-	styleUrls: ['../shared/character-sheet.css']
+	styleUrls: ['../shared/character-sheet.scss']
 })
 export class CharacterMakerComponent implements OnInit, AfterViewInit {
 	@ViewChild('characterSheet') characterSheet: ElementRef;

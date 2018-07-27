@@ -1,5 +1,5 @@
-<span [style.font-size.px]="aspect.fontSize">{{aspect.label}}</span>
 <div class="checkbox-list">
+	<span [style.font-size.px]="aspect.fontSize" class="checkbox-list-header">{{aspect.label}}</span>
 	<span *ngFor="let checkbox of checkboxes" class="checkbox-list-item">
 		<mat-checkbox color="primary" [(ngModel)]="checkbox.value" (change)="valueChanged()"></mat-checkbox>
 		<input class="form-control checkbox-list-label" [(ngModel)]="checkbox.label" (change)="valueChanged()" [readonly]="characterService.immutable">

@@ -9,7 +9,7 @@ import { Npc } from '../../types/character-sheet/npc';
 @Component({
     selector: 'character-sheet',
     templateUrl: 'character-sheet.component.html',
-    styleUrls: ['../shared/character-sheet.css']
+    styleUrls: ['../shared/character-sheet.scss']
 })
 export class CharacterSheetComponent implements OnInit {
     private npcId: string;
