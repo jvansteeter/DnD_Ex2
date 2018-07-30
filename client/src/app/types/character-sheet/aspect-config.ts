@@ -3,4 +3,7 @@ export interface AspectConfig {
 	left: number;
 	width: number;
 	height: number;
+	resizeY: boolean;
+	minWidth: number;
+	minHeight: number;
 }

@@ -21,12 +21,7 @@ export class Aspect {
     items: any[];
     ruleFunction: any;
 
-    config: AspectConfig = {
-    	top: 1,
-	    left: 1,
-	    width: 200,
-	    height: 100
-    };
+    config: AspectConfig;
     isNew: boolean = true;
 
     constructor(label: string, aspectType: AspectType, required: boolean) {
@@ -35,14 +30,27 @@ export class Aspect {
         this.required = required;
         this.fontSize = 14;
 
-        // this.config = this.defaultConfig();
+        this.config = this.defaultConfig();
+        switch (aspectType) {
+	        case (AspectType.TOKEN): {
+	        	this.config.resizeY = true;
+	        }
+        }
     }
 
     equals(aspect: Aspect): boolean {
     	return aspect._id === this._id;
     }
 
-    // private defaultConfig(): NgGridItemConfig {
-    //     return { 'dragHandle': '.sub-component-header', 'col': 1, 'row': 1, 'sizex': 15, 'sizey': 5 } as NgGridItemConfig;
-    // }
+    private defaultConfig(): AspectConfig {
+        return {
+	        top: 1,
+	        left: 1,
+	        width: 200,
+	        height: 100,
+	        resizeY: false,
+	        minWidth: 100,
+	        minHeight: 100,
+        } as AspectConfig;
+    }
 }

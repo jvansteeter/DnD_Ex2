@@ -6,15 +6,13 @@ import { CheckboxListComponent } from '../shared/subcomponents/checkbox-list/che
 import { FunctionComponent } from '../shared/subcomponents/function/function.component';
 import { SubComponentChild } from '../shared/subcomponents/sub-component-child';
 import { CharacterInterfaceService } from '../shared/character-interface.service';
-import { CharacterSheetRepository } from '../shared/character-sheet.repository';
+import { CharacterSheetRepository } from '../../repositories/character-sheet.repository';
 import { isUndefined } from 'util';
 
 @Injectable()
 export class CharacterMakerService implements CharacterInterfaceService {
 	private characterSheetId: string;
-
 	public aspects: Aspect[];
-
 	public subComponents: Map<string, SubComponent>;
 
 	immutable = false;
@@ -91,7 +89,7 @@ export class CharacterMakerService implements CharacterInterfaceService {
 				aspectType: aspect.aspectType,
 				required: aspect.required,
 				fontSize: aspect.fontSize,
-				// config: aspect.config
+				config: aspect.config
 			};
 			if (aspect.aspectType === AspectType.CATEGORICAL) {
 				aspectObj['items'] = (<CategoryComponent>this.getChildOf(aspect)).getCategories();
@@ -123,9 +121,9 @@ export class CharacterMakerService implements CharacterInterfaceService {
 			aspect._id = aspectObj._id;
 			aspect.fontSize = aspectObj.fontSize;
 			aspect.isNew = false;
-			// if (!!aspectObj.config) {
-			//     aspect.config = aspectObj.config;
-			// }
+			if (!!aspectObj.config) {
+			    aspect.config = aspectObj.config;
+			}
 			if (aspectObj.hasOwnProperty('items')) {
 				aspect.items = aspectObj.items;
 			}

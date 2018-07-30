@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { CharacterSheetComponent } from './sheet/character-sheet.component';
-import { CharacterSheetRepository } from './shared/character-sheet.repository';
+import { CharacterSheetRepository } from '../repositories/character-sheet.repository';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import {
@@ -82,7 +82,7 @@ import { CharacterAspectComponent } from './shared/character-aspect.component';
         CharacterSheetRepository,
         CharacterMakerService,
         CharacterSheetService,
-        CharacterInterfaceFactory
+        CharacterInterfaceFactory,
     ],
     entryComponents: [
         AddComponentComponent,

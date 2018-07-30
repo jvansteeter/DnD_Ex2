@@ -24,6 +24,8 @@ export class CharacterAspectComponent implements OnInit, AfterViewInit {
 	private resizeTempX: number = 0;
 	private resizeTempY: number = 0;
 
+	private boundingWidth: number = 0;
+
 	public headerZIndex = 0;
 	public hasOptions: boolean;
 
@@ -34,13 +36,20 @@ export class CharacterAspectComponent implements OnInit, AfterViewInit {
 			private _elementRef: ElementRef,
 			private renderer: Renderer2,
 			public characterService: CharacterMakerService
-	) {}
+	) {	}
+
+	@HostListener('window:resize', ['$event.target'])
+	private setBoundingWidth(): void {
+		this.boundingWidth = document.getElementsByClassName('characterSheet-gridContainer')[0].getBoundingClientRect().width;
+		this.setConfigStyles();
+	}
 
 	ngOnInit(): void {
 		this.setConfigStyles();
 	}
 
 	ngAfterViewInit(): void {
+		this.setBoundingWidth();
 		if (!isUndefined(this.subComponent)) {
 			setTimeout(() => this.hasOptions = this.subComponent.hasOptions);
 		}
@@ -93,17 +102,13 @@ export class CharacterAspectComponent implements OnInit, AfterViewInit {
 		let height = this.resizeTempY - this.resizeDeltaY;
 		let width = this.resizeTempX - this.resizeDeltaX;
 
-		// if (height > 0) {
+		if (height >= this.aspect.config.minHeight) {
 			this.aspect.config.height = height;
-			// this.setConfigStyles();
-		// }
-		// if (width > 0) {
+		}
+		// if (width >= this.aspect.config.minWidth) {
 			this.aspect.config.width = width;
-			this.setConfigStyles();
 		// }
-		// this.aspect.config.width += event.x;
-		// this.aspect.config.height += event.y;
-		// this.setConfigStyles();
+		this.setConfigStyles();
 	}
 
 	onResizeDragEnd(): void {
@@ -124,7 +129,12 @@ export class CharacterAspectComponent implements OnInit, AfterViewInit {
 	private setConfigStyles(): void {
 		this.renderer.setStyle(this._elementRef.nativeElement, 'top', this.aspect.config.top + 'px');
 		this.renderer.setStyle(this._elementRef.nativeElement, 'left', this.aspect.config.left + 'px');
-		this.renderer.setStyle(this._elementRef.nativeElement, 'width', this.aspect.config.width + 'px');
-		this.renderer.setStyle(this._elementRef.nativeElement, 'height', this.aspect.config.height + 'px');
+		console.log(this.aspect.config.width)
+		console.log(this.boundingWidth)
+		console.log(this.aspect.config.width/this.boundingWidth)
+		this.renderer.setStyle(this._elementRef.nativeElement, 'width', this.aspect.config.width/this.boundingWidth + '%');
+		if (this.aspect.config.resizeY) {
+			this.renderer.setStyle(this._elementRef.nativeElement, 'height', this.aspect.config.height + 'px');
+		}
 	}
 }

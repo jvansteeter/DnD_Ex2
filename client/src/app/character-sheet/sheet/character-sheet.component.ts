@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { CharacterSheetRepository } from '../shared/character-sheet.repository';
+import { CharacterSheetRepository } from '../../repositories/character-sheet.repository';
 import { CharacterSheetService } from './character-sheet.service';
 import { CharacterInterfaceFactory } from '../shared/character-interface.factory';
 import { Npc } from '../../types/character-sheet/npc';
