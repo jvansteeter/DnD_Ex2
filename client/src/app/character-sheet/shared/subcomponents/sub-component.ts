@@ -1,8 +1,7 @@
 import { Aspect, AspectType } from '../../../types/character-sheet/aspect';
 import {
-	AfterViewInit, Component, Input, OnInit, Renderer2,
+	AfterViewInit, Component, Input, OnInit,
 	ViewChild,
-	ElementRef,
 } from '@angular/core';
 import { SubComponentChild } from './sub-component-child';
 import { MatMenu } from '@angular/material';
@@ -23,16 +22,11 @@ export class SubComponent implements OnInit, AfterViewInit {
 	hasOptions: boolean = false;
 	private characterService: CharacterInterfaceService;
 
-	constructor(characterInterfaceFactory: CharacterInterfaceFactory,
-	            private renderer: Renderer2,
-	            private element: ElementRef) {
+	constructor(characterInterfaceFactory: CharacterInterfaceFactory) {
 		this.characterService = characterInterfaceFactory.getCharacterInterface();
 	}
 
 	ngOnInit(): void {
-		if (this.aspect.aspectType !== AspectType.TOKEN) {
-			this.renderer.setStyle(this.element.nativeElement, 'display', 'flex');
-		}
 	}
 
 	ngAfterViewInit(): void {

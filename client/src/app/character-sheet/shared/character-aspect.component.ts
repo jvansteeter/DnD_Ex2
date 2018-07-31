@@ -41,15 +41,16 @@ export class CharacterAspectComponent implements OnInit, AfterViewInit {
 	@HostListener('window:resize', ['$event.target'])
 	private setBoundingWidth(): void {
 		this.boundingWidth = document.getElementsByClassName('characterSheet-gridContainer')[0].getBoundingClientRect().width;
-		this.setConfigStyles();
+		this.aspect.config.width = this.boundingWidth * this.getPercentWidth() / 100;
 	}
 
 	ngOnInit(): void {
-		this.setConfigStyles();
+
 	}
 
 	ngAfterViewInit(): void {
 		this.setBoundingWidth();
+		this.setConfigStyles();
 		if (!isUndefined(this.subComponent)) {
 			setTimeout(() => this.hasOptions = this.subComponent.hasOptions);
 		}
@@ -91,7 +92,7 @@ export class CharacterAspectComponent implements OnInit, AfterViewInit {
 	}
 
 	onResizeDragStart(event): void {
-		this.resizeDeltaX = event.x - Number(this._elementRef.nativeElement.style.width.replace('px', ''));
+		this.resizeDeltaX = event.x - this.aspect.config.width;
 		this.resizeDeltaY = event.y - Number(this._elementRef.nativeElement.style.height.replace('px', ''));
 	}
 
@@ -105,9 +106,9 @@ export class CharacterAspectComponent implements OnInit, AfterViewInit {
 		if (height >= this.aspect.config.minHeight) {
 			this.aspect.config.height = height;
 		}
-		// if (width >= this.aspect.config.minWidth) {
+		if (width >= this.aspect.config.minWidth && width < this.boundingWidth) {
 			this.aspect.config.width = width;
-		// }
+		}
 		this.setConfigStyles();
 	}
 
@@ -129,12 +130,13 @@ export class CharacterAspectComponent implements OnInit, AfterViewInit {
 	private setConfigStyles(): void {
 		this.renderer.setStyle(this._elementRef.nativeElement, 'top', this.aspect.config.top + 'px');
 		this.renderer.setStyle(this._elementRef.nativeElement, 'left', this.aspect.config.left + 'px');
-		console.log(this.aspect.config.width)
-		console.log(this.boundingWidth)
-		console.log(this.aspect.config.width/this.boundingWidth)
-		this.renderer.setStyle(this._elementRef.nativeElement, 'width', this.aspect.config.width/this.boundingWidth + '%');
+		this.renderer.setStyle(this._elementRef.nativeElement, 'width', this.getPercentWidth() + '%');
 		if (this.aspect.config.resizeY) {
 			this.renderer.setStyle(this._elementRef.nativeElement, 'height', this.aspect.config.height + 'px');
 		}
+	}
+
+	private getPercentWidth(): number {
+		return (this.aspect.config.width / this.boundingWidth) * 100;
 	}
 }
