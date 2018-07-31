@@ -72,3 +72,31 @@ mat-radio-button {
     font-weight: bold;
   }
 }
+
+.strokeButtonOverride {
+  padding: 0 0;
+  min-width: 0;
+  width: 36px;
+  margin: 3px;
+  border: 1px solid #dedede;
+  border-radius: 5px
+}
+
+.inputOverride {
+  font-family: Roboto,"Helvetica Neue",sans-serif;
+  width: 150px;
+}
+
+.notationGrid {
+  display: block;
+}
+
+.webkitHideScrollbar {
+  &::-webkit-scrollbar {
+    width: 0;
+  }
+}
+
+.selectedNotationMode {
+  background: #DEDEDE;
+}

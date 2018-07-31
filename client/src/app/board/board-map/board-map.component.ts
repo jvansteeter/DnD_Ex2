@@ -83,7 +83,7 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
     mouseMove(event): void {
         const mouse_screen = new XyPair(event.clientX, event.clientY);
 
-        if (this.boardStateService.notationModeEnabled) {
+        if (this.boardStateService.isEditingNotation) {
             this.boardNotationService.handleMouseMove();
         }
 

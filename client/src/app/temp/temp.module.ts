@@ -18,6 +18,9 @@ import { BrowserModule } from '@angular/platform-browser';
 	providers: [],
 	exports: [
 		AddPlayerComponent
+	],
+	entryComponents: [
+		AddPlayerComponent
 	]
 })
 export class TempModule {

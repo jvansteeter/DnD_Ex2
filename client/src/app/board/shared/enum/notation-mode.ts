@@ -1,6 +1,5 @@
 export enum NotationMode {
-    POLYGON,
-    RADIUS,
-    SELECT,
+    POINT_TO_POINT,
+    CELL,
     FREEFORM
 }

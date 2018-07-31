@@ -23,12 +23,15 @@
     <div class="sectionHeader"><span>Board Maker Controls</span></div>
     <div class="sectionContents">
         <mat-checkbox style="display: block" [(ngModel)]="boardStateService.gridEnabled">Grid Enabled</mat-checkbox>
-        <mat-checkbox style="display: block" [(ngModel)]="boardStateService.show_health">Health Bars Enabled</mat-checkbox>
-        <mat-checkbox style="display: block" [(ngModel)]="boardStateService.playerWallsEnabled">Show Walls to Player</mat-checkbox>
+        <mat-checkbox style="display: block" [(ngModel)]="boardStateService.show_health">Health Bars Enabled
+        </mat-checkbox>
+        <mat-checkbox style="display: block" [(ngModel)]="boardStateService.playerWallsEnabled">Show Walls to Player
+        </mat-checkbox>
         <mat-checkbox style="display: block" [(ngModel)]="boardStateService.map_enabled">Map Enabled</mat-checkbox>
         <div *ngIf="boardStateService.map_enabled">
             <span class="font">Map Opacity </span>
-            <mat-slider min="0" max="1" step="0.01" [value]="boardStateService.board_maker_map_opacity" (input)="mapOpacitySliderInput($event)"></mat-slider>
+            <mat-slider min="0" max="1" step="0.01" [value]="boardStateService.board_maker_map_opacity"
+                        (input)="mapOpacitySliderInput($event)"></mat-slider>
         </div>
     </div>
 </div>
@@ -44,30 +47,164 @@
     <div class="sectionHeader"><span>Game Master Controls</span></div>
     <div class="sectionContents">
         <mat-checkbox style="display: block" [(ngModel)]="boardStateService.gridEnabled">Grid Enabled</mat-checkbox>
-        <mat-checkbox style="display: block" [(ngModel)]="boardStateService.show_health">Health Bars Enabled</mat-checkbox>
-        <mat-checkbox style="display: block" [(ngModel)]="boardStateService.playerWallsEnabled">Show Walls to Player</mat-checkbox>
+        <mat-checkbox style="display: block" [(ngModel)]="boardStateService.show_health">Health Bars Enabled
+        </mat-checkbox>
+        <mat-checkbox style="display: block" [(ngModel)]="boardStateService.playerWallsEnabled">Show Walls to Player
+        </mat-checkbox>
         <mat-checkbox style="display: block" [(ngModel)]="boardStateService.map_enabled">Map Enabled</mat-checkbox>
     </div>
 </div>
 
 
-<div id="Notation Controls" class="section">
-    <div class="sectionHeader"><span>Notation Controls</span></div>
-    <div class="sectionContents">
-        <div style="display: flex; flex: 0 0 auto; margin-bottom: 5px;">
-            <mat-form-field>
-                <mat-select [(value)]="currentNotation" (selectionChange)="onInputChange()" placeholder="Notation Mode">
-                    <mat-option *ngFor="let mode of notationModes" value="{{mode}}">{{mode}}</mat-option>
-                </mat-select>
-            </mat-form-field>
-            <i class="material-icons addButton" (click)="handleAddNotation()">add</i>
+<div id="Notation Controls" class="section" style="width: 220px">
+    <div class="sectionHeader"><span>Notations</span></div>
+    <div class="sectionContents webkitHideScrollbar" style="padding: 3px;">
+
+        <!--DEFAULT NOTATIONS DIV-->
+        <div *ngIf="!boardStateService.isEditingNotation" class="notationGrid">
+            <ng-container *ngFor="let notation of boardNotationService.notations">
+                <button class="strokeButtonOverride"
+                        matTooltip="{{notation.name}}"
+                        mat-stroked-button
+                        (click)="handleEditNotation(notation.id)">
+                    <mat-icon [ngStyle]="{'color': notation.getRgbCode()}">{{notation.iconTag}}</mat-icon>
+                </button>
+            </ng-container>
+
+
+
+
+            <button mat-icon-button (click)="handleAddNotation()">
+                <mat-icon>add_circle_outline</mat-icon>
+            </button>
         </div>
 
-        <div style="overflow-y: auto; overflow-x: hidden">
-            <div *ngFor="let notation of boardNotationService.notations">{{notation}}</div>
+
+        <!--EDIT NOTATIONS DIV-->
+        <div *ngIf="boardStateService.isEditingNotation" style="display: flex; flex-direction: column">
+
+            <div style="display: flex;">
+                <button (click)="openIconDialog()"
+                        class="strokeButtonOverride"
+                        [ngStyle]="{'color': boardNotationService.getActiveNotation().getRgbCode()}"
+                        mat-stroked-button>
+                    <mat-icon>{{boardNotationService.getActiveNotation().iconTag}}</mat-icon>
+                </button>
+                <input matInput placeholder="Notation Id" class="inputOverride" [(ngModel)]="boardNotationService.getActiveNotation().name">
+            </div>
+
+            <div style="display: block">
+
+                <button matTooltip="cells"
+                        class="strokeButtonOverride"
+                        (click)="handleSetNotationModeToCell()"
+                        [ngClass]="{'selectedNotationMode': boardNotationService.activeNotationMode === NotationMode.CELL}"
+                        mat-stroked-button>
+                    <mat-icon>apps</mat-icon>
+                </button>
+
+                <button matTooltip="point to point"
+                        class="strokeButtonOverride"
+                        (click)="handleSetNotationModeToPointToPoint()"
+                        [ngClass]="{'selectedNotationMode': boardNotationService.activeNotationMode === NotationMode.POINT_TO_POINT}"
+                        mat-stroked-button>
+                    <mat-icon>timeline</mat-icon>
+                </button>
+
+                <button matTooltip="freeform"
+                        class="strokeButtonOverride"
+                        (click)="handleSetNotationModeToFreeform()"
+                        [ngClass]="{'selectedNotationMode': boardNotationService.activeNotationMode === NotationMode.FREEFORM}"
+                        mat-stroked-button>
+                    <mat-icon>gesture</mat-icon>
+                </button>
+
+                <button matTooltip="color"
+                        (click)="openColorDialog()"
+                        class="strokeButtonOverride"
+                        mat-stroked-button>
+                    <mat-icon>palette</mat-icon>
+                </button>
+
+                <button matTooltip="advanced"
+                        class="strokeButtonOverride"
+                        mat-stroked-button>
+                    <mat-icon>settings</mat-icon>
+                </button>
+
+                <ng-container ngSwitch="{{boardNotationService.getActiveNotation().visibilityState}}">
+                    <button matTooltip="full visibility"
+                            (click)="boardNotationService.getActiveNotation().toggleVisibility()"
+                            *ngSwitchCase="NotationVisibility.FULL"
+                            class="strokeButtonOverride"
+                            mat-stroked-button>
+                        <mat-icon>brightness_1</mat-icon>
+                    </button>
+
+                    <button matTooltip="partial visibility"
+                            (click)="boardNotationService.getActiveNotation().toggleVisibility()"
+                            *ngSwitchCase="NotationVisibility.PARTIAL"
+                            class="strokeButtonOverride"
+                            mat-stroked-button>
+                        <mat-icon>adjust</mat-icon>
+                    </button>
+
+                    <button matTooltip="visibility off"
+                            (click)="boardNotationService.getActiveNotation().toggleVisibility()"
+                            *ngSwitchCase="NotationVisibility.OFF"
+                            class="strokeButtonOverride"
+                            mat-stroked-button>
+                        <mat-icon>panorama_fish_eye</mat-icon>
+                    </button>
+                </ng-container>
+
+                <!--Notation Visibility-->
+                <button (click)="boardNotationService.getActiveNotation().toggleVisible()"
+                        *ngIf="boardNotationService.getActiveNotation().isVisible"
+                        matTooltip="visible"
+                        class="strokeButtonOverride"
+                        mat-stroked-button>
+                    <mat-icon>visibility</mat-icon>
+                </button>
+                <button (click)="boardNotationService.getActiveNotation().toggleVisible()"
+                        *ngIf="!boardNotationService.getActiveNotation().isVisible"
+                        matTooltip="hidden"
+                        class="strokeButtonOverride"
+                        mat-stroked-button>
+                    <mat-icon>visibility_off</mat-icon>
+                </button>
+
+                <!--Notation Player Lock-->
+                <button (click)="boardNotationService.getActiveNotation().toggleLocked()"
+                        *ngIf="boardNotationService.getActiveNotation().isLocked"
+                        matTooltip="player locked"
+                        class="strokeButtonOverride"
+                        mat-stroked-button>
+                    <mat-icon>lock</mat-icon>
+                </button>
+                <button (click)="boardNotationService.getActiveNotation().toggleLocked()"
+                        *ngIf="!boardNotationService.getActiveNotation().isLocked"
+                        matTooltip="player unlocked"
+                        class="strokeButtonOverride"
+                        mat-stroked-button>
+                    <mat-icon>lock_open</mat-icon>
+                </button>
+
+                <button matTooltip="delete"
+                        class="strokeButtonOverride"
+                        mat-stroked-button
+                        (click)="handleDeleteNotation()">
+                    <mat-icon>delete</mat-icon>
+                </button>
+
+                <button matTooltip="done"
+                        class="strokeButtonOverride"
+                        mat-stroked-button
+                        (click)="handleFinishNotation()">
+                    <mat-icon>done</mat-icon>
+                </button>
+            </div>
         </div>
-
-
     </div>
 </div>
 
@@ -76,9 +213,11 @@
     <div class="sectionHeader"><span>Light and Visibility</span></div>
     <div class="sectionContents">
 
-        <mat-checkbox [(ngModel)]="boardStateService.visibilityHighlightEnabled">Visibility Highlight Enabled</mat-checkbox>
+        <mat-checkbox [(ngModel)]="boardStateService.visibilityHighlightEnabled">Visibility Highlight Enabled
+        </mat-checkbox>
         <mat-form-field>
-            <mat-select [(value)]="currentVisibility" (selectionChange)="onVisibilityChange()" placeholder="Visibility Mode">
+            <mat-select [(value)]="currentVisibility" (selectionChange)="onVisibilityChange()"
+                        placeholder="Visibility Mode">
                 <mat-option *ngFor="let mode of visibilityModes" value="{{mode}}">{{mode}}</mat-option>
             </mat-select>
         </mat-form-field>
@@ -86,9 +225,11 @@
 
         <mat-checkbox [(ngModel)]="boardStateService.lightEnabled">Light Enabled</mat-checkbox>
         <div style="display: flex; width: 100px; margin-left:auto; margin-right: auto">
-            <i style="margin-top: auto; margin-bottom: auto; cursor:pointer;" (click)="decreaseAmbientLight()" class="material-icons">remove</i>
+            <i style="margin-top: auto; margin-bottom: auto; cursor:pointer;" (click)="decreaseAmbientLight()"
+               class="material-icons">remove</i>
             <span class="font" style="margin: auto">{{getLightValue()}}</span>
-            <i style="margin-top: auto; margin-bottom: auto; cursor:pointer;" (click)="increaseAmbientLight()" class="material-icons">add</i>
+            <i style="margin-top: auto; margin-bottom: auto; cursor:pointer;" (click)="increaseAmbientLight()"
+               class="material-icons">add</i>
         </div>
     </div>
 </div>

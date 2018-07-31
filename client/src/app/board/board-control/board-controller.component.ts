@@ -6,11 +6,14 @@ import {LightValue} from '../shared/enum/light-value';
 import {AddPlayerComponent} from '../../temp/add-player.component';
 import {BoardLightService} from '../services/board-light.service';
 import {PlayerVisibilityMode} from "../shared/enum/player-visibility-mode";
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatIconRegistry} from '@angular/material';
 import {NotationMode} from '../shared/enum/notation-mode';
 import {DomSanitizer} from '@angular/platform-browser';
 import {BoardNotationService} from '../services/board-notation-service';
+import {NotationVisibility} from "../shared/enum/notation-visibility";
+import {NotationIconSelectorComponent} from "./notation-icon-selector/notation-icon-selector.component";
+import {NotationColorSelectorComponent} from "./notation-color-selector/notation-color-selector.component";
 
 @Component({
     selector: 'board-controller',
@@ -19,9 +22,13 @@ import {BoardNotationService} from '../services/board-notation-service';
 })
 
 export class BoardControllerComponent implements OnInit {
+    public NotationVisibility = NotationVisibility;
+    public NotationMode = NotationMode;
     public ViewMode = ViewMode;
     public BoardMode = BoardMode;
     public PlayerVisibilityMode = PlayerVisibilityMode;
+
+    public notationIdValue: string;
 
     currentNotation: string;
     notationModes: string[] = [
@@ -146,21 +153,6 @@ export class BoardControllerComponent implements OnInit {
                 break;
         }
 
-        switch (this.boardStateService.notationMode) {
-            case NotationMode.SELECT:
-                this.currentNotation = 'Select';
-                break;
-            case NotationMode.RADIUS:
-                this.currentNotation = 'Radius';
-                break;
-            case NotationMode.POLYGON:
-                this.currentNotation = 'Polygon';
-                break;
-            case NotationMode.FREEFORM:
-                this.currentNotation = 'Freeform';
-                break;
-        }
-
         switch (this.boardStateService.playerVisibilityMode) {
             case PlayerVisibilityMode.GLOBAL:
                 this.currentVisibility = 'Global';
@@ -184,24 +176,6 @@ export class BoardControllerComponent implements OnInit {
                 break;
             case 'Player':
                 this.boardStateService.playerVisibilityMode = PlayerVisibilityMode.PLAYER;
-                break;
-        }
-        this.sync()
-    }
-
-    onNotationChange() {
-        switch (this.currentNotation) {
-            case 'Polygon':
-                this.boardStateService.notationMode = NotationMode.POLYGON;
-                break;
-            case 'Radius':
-                this.boardStateService.notationMode = NotationMode.RADIUS;
-                break;
-            case 'Select':
-                this.boardStateService.notationMode = NotationMode.SELECT;
-                break;
-            case 'Freeform':
-                this.boardStateService.notationMode = NotationMode.FREEFORM;
                 break;
         }
         this.sync()
@@ -309,6 +283,45 @@ export class BoardControllerComponent implements OnInit {
     }
 
     handleAddNotation() {
-        this.boardNotationService.addNotation('new notation');
+        this.boardNotationService.addNotation();
+        this.boardStateService.isEditingNotation = true;
+        this.boardNotationService.activeNotationMode = NotationMode.CELL;
+    }
+
+    handleDeleteNotation() {
+        this.boardNotationService.deleteActiveNotation();
+        this.boardStateService.isEditingNotation = false;
+        this.boardNotationService.activeNotationId = null;
+    }
+
+    handleEditNotation(notationId: string) {
+        this.boardStateService.isEditingNotation = true;
+        this.boardNotationService.activeNotationId = notationId;
+        this.boardNotationService.activeNotationMode = NotationMode.CELL;
+    }
+
+    handleFinishNotation() {
+        this.boardStateService.isEditingNotation = false;
+        this.boardNotationService.activeNotationId = null;
+    }
+
+    handleSetNotationModeToCell() {
+        this.boardNotationService.activeNotationMode = NotationMode.CELL;
+    }
+
+    handleSetNotationModeToPointToPoint() {
+        this.boardNotationService.activeNotationMode = NotationMode.POINT_TO_POINT;
+    }
+
+    handleSetNotationModeToFreeform() {
+        this.boardNotationService.activeNotationMode = NotationMode.FREEFORM;
+    }
+
+    openIconDialog() {
+        this.dialog.open(NotationIconSelectorComponent,{});
+    }
+
+    openColorDialog() {
+        this.dialog.open(NotationColorSelectorComponent);
     }
 }

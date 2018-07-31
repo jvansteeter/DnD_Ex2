@@ -1,0 +1,9 @@
+<div [style.width]="dimension" [style.height]="dimension">
+    <ng-container *ngFor="let icon of iconIds">
+        <button class="strokeButtonOverride"
+                (click)="commitIcon(icon)"
+                mat-stroked-button>
+            <mat-icon>{{icon}}</mat-icon>
+        </button>
+    </ng-container>
+</div>

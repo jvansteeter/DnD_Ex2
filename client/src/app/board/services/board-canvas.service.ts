@@ -116,9 +116,9 @@ export class BoardCanvasService {
         ctx.stroke();
     }
 
-    draw_polyline(ctx:CanvasRenderingContext2D, points: Array<XyPair>) {
-        ctx.lineWidth = 2;
-        ctx.strokeStyle = 'rgba(255, 0, 0, 1)';
+    draw_polyline(ctx:CanvasRenderingContext2D, points: Array<XyPair>, strokeStyle: string, width = 2) {
+        ctx.lineWidth = width;
+        ctx.strokeStyle = strokeStyle;
         ctx.lineJoin = 'round';
         ctx.lineCap = 'round';
 

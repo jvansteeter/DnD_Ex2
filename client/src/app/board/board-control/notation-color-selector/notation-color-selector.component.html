@@ -1,0 +1,74 @@
+<div style="display: flex; flex-direction: column; width: 325px;">
+
+
+
+
+
+    <div style="display: flex; flex-direction: row; flex: 0 0 154px;">
+        <div class="currentColor">
+            <div style="width: 100%; height: 100%;  border-radius: 5px;" [ngStyle]="{'background-color': currentColor}"></div>
+        </div>
+        <div style="display: flex; flex-wrap: wrap; margin-left: 5px; flex: 1 1 auto">
+            <ng-container *ngFor="let color of selectableColors">
+                <span
+                        [ngStyle]="{'background': color}"
+                        (click)="colorSelection(color)"
+                        style="height: 30px; width: 30px; border: 1px solid darkgray; border-radius: 3px; margin: 2px; cursor: pointer"></span>
+            </ng-container>
+        </div>
+    </div>
+
+
+
+
+    <div style="display: flex; flex-direction: row; align-items: center">
+        H:
+        <mat-slider
+                style="flex: 1 0 auto;"
+                [(ngModel)]="hue"
+                (input)="handleHueInput($event)"
+                [step]="0.01"
+                [min]="0"
+                [max]="1">
+        </mat-slider>
+    </div>
+    <div style="display: flex; flex-direction: row; align-items: center">
+        S:
+        <mat-slider
+                style="flex: 1 0 auto;"
+                [(ngModel)]="sat"
+                (input)="handleSatInput($event)"
+                [step]="0.01"
+                [min]="0"
+                [max]="1">
+        </mat-slider>
+    </div>
+    <div style="display: flex; flex-direction: row; align-items: center">
+        L:
+        <mat-slider
+                style="flex: 1 0 auto;"
+                [(ngModel)]="lig"
+                (input)="handleLigInput($event)"
+                [step]="0.01"
+                [min]="0"
+                [max]="1">
+        </mat-slider>
+    </div>
+    <div style="display: flex; flex-direction: row; align-items: center">
+        A:
+        <mat-slider
+                style="flex: 1 0 auto;"
+                [(ngModel)]="alpha"
+                (input)="handleAlphaInput($event)"
+                [step]="0.01"
+                [min]="0"
+                [max]="1">
+        </mat-slider>
+    </div>
+
+
+
+
+
+
+</div>

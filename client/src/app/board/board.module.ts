@@ -1,5 +1,15 @@
 import {BrowserModule} from '@angular/platform-browser';
-import {MatButtonModule, MatCheckboxModule, MatIconModule, MatRadioModule, MatSelectModule, MatSliderModule} from '@angular/material';
+import {
+    MatButtonModule,
+    MatButtonToggleModule,
+    MatCheckboxModule,
+    MatIconModule,
+    MatRadioModule,
+    MatSelectModule,
+    MatSliderModule,
+    MatFormFieldModule,
+    MatInputModule, MatTooltipModule, MatDialogModule
+} from '@angular/material';
 import {NgModule} from '@angular/core';
 import {MapRendererComponent} from "./renderer/map-renderer/map-renderer.component";
 import {GridRendererComponent} from "./renderer/grid-renderer/grid-renderer.component";
@@ -31,6 +41,8 @@ import {VisibilityRendererComponent} from './renderer/visibility-renderer/visibi
 import {BoardPlayerService} from './services/board-player.service';
 import {BoardNotationService} from './services/board-notation-service';
 import {NotationRendererComponent} from './renderer/notation-renderer/notation-renderer.component';
+import {NotationIconSelectorComponent} from "./board-control/notation-icon-selector/notation-icon-selector.component";
+import {NotationColorSelectorComponent} from "./board-control/notation-color-selector/notation-color-selector.component";
 
 
 @NgModule({
@@ -50,7 +62,9 @@ import {NotationRendererComponent} from './renderer/notation-renderer/notation-r
         HighlightRendererComponent,
         TokenRendererComponent,
         VisibilityRendererComponent,
-        NpcPopComponent
+        NpcPopComponent,
+        NotationIconSelectorComponent,
+        NotationColorSelectorComponent
     ],
     imports: [
         BrowserModule,
@@ -61,7 +75,12 @@ import {NotationRendererComponent} from './renderer/notation-renderer/notation-r
         MatButtonModule,
         MatSelectModule,
         MatIconModule,
-        TempModule
+        TempModule,
+        MatButtonToggleModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatTooltipModule,
+        MatDialogModule
     ],
     providers: [
         PopService,
@@ -78,7 +97,8 @@ import {NotationRendererComponent} from './renderer/notation-renderer/notation-r
     ],
     entryComponents: [
         NpcPopComponent,
-        AddPlayerComponent
+        NotationIconSelectorComponent,
+        NotationColorSelectorComponent
     ],
     bootstrap: [],
     exports: [

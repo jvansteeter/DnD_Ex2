@@ -30,7 +30,6 @@ export class BoardStateService {
     public lightEnabled = false;
     public ambientLight = LightValue.DARK;
     public playerVisibilityMode = PlayerVisibilityMode.GLOBAL;
-    public notationMode = NotationMode.SELECT;
 
     /***********************************************************************************
      * To keep in the local board state
@@ -51,7 +50,7 @@ export class BoardStateService {
     public board_maker_map_opacity = 1.0;
     public doDiagonals = true;
     public do_pops = false;
-    public notationModeEnabled = true;
+    public isEditingNotation = false;
 
     public inputOffset = 0.2;    // offset used for input boundaries
     public gridEnabled = true;

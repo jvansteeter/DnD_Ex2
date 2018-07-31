@@ -2,6 +2,7 @@ import {BoardStateService} from '../../services/board-state.service';
 import {BoardCanvasService} from '../../services/board-canvas.service';
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {BoardNotationService} from '../../services/board-notation-service';
+import {isUndefined} from "util";
 
 @Component({
     selector: 'notation-renderer',
@@ -28,7 +29,11 @@ export class NotationRendererComponent implements OnInit {
         this.boardCanvasService.clear_canvas(this.ctx);
         this.boardCanvasService.updateTransform(this.ctx);
 
-        this.boardCanvasService.draw_polyline(this.ctx, this.boardNotationService.freeformNotationPolyline);
+        for (let notation of this.boardNotationService.notations) {
+            for (let freeformPolyline of notation.freeformElements) {
+                this.boardCanvasService.draw_polyline(this.ctx, freeformPolyline, notation.getRgbaCode(), 5);
+            }
+        }
 
         requestAnimationFrame(this.render);
     }
