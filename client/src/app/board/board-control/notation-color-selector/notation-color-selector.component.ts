@@ -38,14 +38,22 @@ export class NotationColorSelectorComponent {
 
     currentColor = 'rgba(255,0,0,0.5)';
 
-    hue = 0.33;
-    sat = 1.0;
-    lig = 0.5;
-    alpha = 0.5;
+    hue: number;
+    sat: number;
+    lig: number;
+    alpha: number;
 
     constructor(
         public boardNotationService: BoardNotationService
-    ) {}
+    ) {
+        const rgba = ColorStatics.parseRgbaString(this.boardNotationService.getActiveNotation().getRgbaCode());
+        const hsl = ColorStatics.rgbToHsl(rgba[0], rgba[1], rgba[2]);
+        this.alpha = rgba[3];
+        this.hue = hsl[0];
+        this.sat = hsl[1];
+        this.lig = hsl[2];
+        this.syncColor();
+    }
 
     private colorSelection(inputColor: string) {
         this.boardNotationService.getActiveNotation().setRgbaWithString(inputColor);
