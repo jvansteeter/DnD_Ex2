@@ -34,6 +34,12 @@ export class Aspect {
         switch (aspectType) {
 	        case (AspectType.TOKEN): {
 	        	this.config.resizeY = true;
+	        	break;
+	        }
+	        case (AspectType.FUNCTION): {
+	        	this.config.minWidth = 50;
+	        	this.config.minHeight = 50;
+	        	break;
 	        }
         }
     }

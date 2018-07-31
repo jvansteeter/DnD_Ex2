@@ -54,4 +54,7 @@ export class CharacterSheetService implements CharacterInterfaceService {
         this.aspectValues = characterData.values;
         this.aspects = characterData.characterSheet.aspects;
     }
+
+	getValueOfAspectByLabel(label: string): any {
+	}
 }

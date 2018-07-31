@@ -31,8 +31,8 @@ export class SubComponent implements OnInit, AfterViewInit {
 
 	ngAfterViewInit(): void {
 		this.options = this.child.getMenuOptions();
-		setTimeout(() => this.characterService.registerSubComponent(this));
 		this.hasOptions = this.child.hasOptions;
+		setTimeout(() => this.characterService.registerSubComponent(this));
 	}
 
 	getValue(): any {

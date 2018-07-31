@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Aspect, AspectType } from '../../types/character-sheet/aspect';
 import { SubComponent } from '../shared/subcomponents/sub-component';
-import { CategoryComponent, CategoryOption } from '../shared/subcomponents/category/category.component';
+import { CategoryComponent } from '../shared/subcomponents/category/category.component';
 import { CheckboxListComponent } from '../shared/subcomponents/checkbox-list/checkbox-list.component';
 import { FunctionComponent } from '../shared/subcomponents/function/function.component';
 import { SubComponentChild } from '../shared/subcomponents/sub-component-child';
 import { CharacterInterfaceService } from '../shared/character-interface.service';
 import { CharacterSheetRepository } from '../../repositories/character-sheet.repository';
 import { isUndefined } from 'util';
+import { AspectData } from '../../../../../shared/types/aspect.data';
 
 @Injectable()
 export class CharacterMakerService implements CharacterInterfaceService {
@@ -26,42 +27,34 @@ export class CharacterMakerService implements CharacterInterfaceService {
 		this.subComponents = new Map<string, SubComponent>();
 	}
 
-	public addComponent(aspect: any): void {
+	public addComponent(aspect: Aspect): void {
+		if (!isUndefined(this.subComponents.get(aspect.label))) {
+			console.error('aspect with that name already exists')
+			return;
+		}
 		this.aspects.push(aspect);
 	}
 
-	public removeComponent(aspect: any): void {
+	public removeComponent(aspect: Aspect): void {
 		let index = this.aspects.indexOf(aspect);
 		this.aspects.splice(index, 1);
+		this.subComponents.delete(aspect.label);
 	}
 
 	public registerSubComponent(subComponent: SubComponent): void {
-		this.subComponents.set(subComponent.aspect._id, subComponent);
-	}
-
-	public getSubcomponent(aspect: Aspect): SubComponent {
-		return this.subComponents.get(aspect._id);
-	}
-
-	public getAspectsOfType(type?: AspectType): Aspect[] {
-		if (!type) {
-			return this.aspects;
-		}
-		let result: Aspect[] = [];
-		for (let i = 0; i < this.aspects.length; i++) {
-			if (this.aspects[i].aspectType === type) {
-				result.push(this.aspects[i]);
-			}
-		}
-
-		return result;
+		this.subComponents.set(subComponent.aspect.label, subComponent);
 	}
 
 	public valueOfAspect(aspect: Aspect): any {
-		return this.subComponents.get(aspect._id) ? this.subComponents.get(aspect._id).getValue() : undefined;
+		return this.subComponents.get(aspect.label) ? this.subComponents.get(aspect.label).getValue() : undefined;
+	}
+
+	public getValueOfAspectByLabel(label: string): any {
+		return this.subComponents.get(label) ? this.subComponents.get(label).getValue() : undefined;
 	}
 
 	public updateFunctionAspects(): void {
+		console.log('update functions')
 		this.subComponents.forEach(subComponent => {
 		    if (subComponent.aspect.aspectType === AspectType.FUNCTION) {
 		        subComponent.getValue();
@@ -69,36 +62,30 @@ export class CharacterMakerService implements CharacterInterfaceService {
 		});
 	}
 
-	public getCategoryOptions(aspect: Aspect): CategoryOption[] {
-		if (aspect.aspectType !== AspectType.CATEGORICAL || isUndefined(this.subComponents.get(aspect._id))) {
-			return undefined;
-		}
-		return (<CategoryComponent>this.subComponents.get(aspect._id).child).getCategories();
-	}
-
 	public save() {
 		let characterSheet = {
 			_id: this.characterSheetId,
 		};
-		let aspects: any[] = [];
+		let aspects: AspectData[] = [];
 		for (let i = 0; i < this.aspects.length; i++) {
 			let aspect = this.aspects[i];
-			let aspectObj = {
+			let aspectObj: AspectData = {
 				_id: aspect._id,
+				characterSheetId: this.characterSheetId,
 				label: aspect.label,
 				aspectType: aspect.aspectType,
 				required: aspect.required,
 				fontSize: aspect.fontSize,
-				config: aspect.config
+				config: aspect.config,
 			};
 			if (aspect.aspectType === AspectType.CATEGORICAL) {
-				aspectObj['items'] = (<CategoryComponent>this.getChildOf(aspect)).getCategories();
+				aspectObj.items = (<CategoryComponent>this.getChildOf(aspect)).getCategories();
 			}
 			else if (aspect.aspectType === AspectType.BOOLEAN_LIST) {
-				aspectObj['items'] = (<CheckboxListComponent>this.getChildOf(aspect)).getCheckboxLabels();
+				aspectObj.items = (<CheckboxListComponent>this.getChildOf(aspect)).getCheckboxLabels();
 			}
 			else if (aspect.aspectType === AspectType.FUNCTION) {
-				aspectObj['functionGrammar'] = (<FunctionComponent>this.getChildOf(aspect)).getFunction();
+				aspectObj.ruleFunction = (<FunctionComponent>this.getChildOf(aspect)).getFunction();
 			}
 			aspects.push(aspectObj);
 		}
@@ -107,7 +94,7 @@ export class CharacterMakerService implements CharacterInterfaceService {
 	}
 
 	private getChildOf(aspect: Aspect): SubComponentChild | undefined {
-		return this.subComponents.get(aspect._id) ? this.subComponents.get(aspect._id).child : undefined;
+		return this.subComponents.get(aspect.label) ? this.subComponents.get(aspect.label).child : undefined;
 	}
 
 	public setCharacterSheetId(id: string): void {

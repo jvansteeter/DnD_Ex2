@@ -16,7 +16,7 @@ export class AddComponentComponent {
     private required: boolean = false;
 
     constructor(private dialogRef: MatDialogRef<AddComponentComponent>,
-                private addComponentService: CharacterMakerService) {
+                private characterService: CharacterMakerService) {
         this.aspectTypes = [
             {
                 type: AspectType.TEXT,
@@ -56,7 +56,7 @@ export class AddComponentComponent {
     public addComponent(): void {
         if (this.label && this.aspectType !== undefined) {
             let aspect = new Aspect(this.label, this.aspectType, this.required);
-            this.addComponentService.addComponent(aspect);
+            this.characterService.addComponent(aspect);
             this.dialogRef.close();
         }
     }

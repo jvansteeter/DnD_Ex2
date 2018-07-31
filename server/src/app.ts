@@ -14,7 +14,6 @@ import './db/models/user.model';
 import './db/models/ruleSet.model';
 import './db/models/characterSheet.model';
 import './db/models/characterAspect.model';
-import './db/models/ruleFunction.model';
 import './db/models/user-ruleSet.model';
 import './db/models/npc.model';
 import './db/models/notification.model';

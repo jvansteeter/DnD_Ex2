@@ -1,86 +1,83 @@
 import { AfterViewInit, Component, Input, ViewChild } from '@angular/core';
 import { Aspect } from '../../../../types/character-sheet/aspect';
-import { SubComponent } from '../sub-component';
-import { FunctionDialogComponent } from './function-dialog.component';
 import { SubComponentChild } from '../sub-component-child';
-import { FunctionGrammar, FunctionTemplate } from './function.grammar';
 import { MatDialog, MatMenu } from '@angular/material';
-import { timer} from 'rxjs';
 import { CharacterInterfaceService } from '../../character-interface.service';
 import { CharacterInterfaceFactory } from '../../character-interface.factory';
+import { FunctionTextComponent } from './function-text.component';
+import { RuleFunction } from './rule-function';
 
 @Component({
-    selector: 'characterMaker-functionComponent',
-    templateUrl: 'function.component.html',
-    styleUrls: ['../sub-component.scss']
+	selector: 'characterMaker-functionComponent',
+	templateUrl: 'function.component.html',
+	styleUrls: ['../sub-component.scss']
 })
 export class FunctionComponent implements SubComponentChild, AfterViewInit {
-    @Input() aspect: Aspect;
-    @ViewChild('options') options: MatMenu;
+	@Input() aspect: Aspect;
+	@ViewChild('options') options: MatMenu;
 
-    readonly hasOptions: boolean = true;
-    value: any;
+	readonly hasOptions: boolean = true;
+	value: any = 'NaN';
 
-    private _function: FunctionGrammar;
-    private characterService: CharacterInterfaceService;
+	private ruleFunction: RuleFunction;
+	private readonly characterService: CharacterInterfaceService;
 
-    constructor(private dialog: MatDialog,
-                characterInterfaceFactory: CharacterInterfaceFactory) {
-        this.characterService = characterInterfaceFactory.getCharacterInterface();
-    }
+	constructor(private dialog: MatDialog,
+	            characterInterfaceFactory: CharacterInterfaceFactory) {
+		this.characterService = characterInterfaceFactory.getCharacterInterface();
+	}
 
-    ngAfterViewInit(): void {
-        if (!this.aspect.isNew && !!this.aspect.ruleFunction) {
-            this.setFunction(this.aspect.ruleFunction);
-        }
-    }
+	ngAfterViewInit(): void {
+		if (!this.aspect.isNew && !!this.aspect.ruleFunction) {
+			this.ruleFunction = new RuleFunction(this.aspect.ruleFunction, this.characterService);
+			setTimeout(() => {
+				this.value = this.ruleFunction.execute();
+			});
+		}
+	}
 
-    getMenuOptions(): MatMenu {
-        return this.options;
-    }
+	getMenuOptions(): MatMenu {
+		return this.options;
+	}
 
-    openFunctionDialog(): void {
-        this.dialog.open(FunctionDialogComponent).afterClosed().subscribe((result: FunctionGrammar) => {
-            if (result) {
-                this._function = result;
-                this.value = this._function.getValue();
-            }
-        });
-    }
+	openFunctionDialog(): void {
+    this.dialog.open(FunctionTextComponent, {data: {ruleFunction: this.aspect.ruleFunction}}).afterClosed().subscribe((ruleFunction: RuleFunction) => {
+    	if (!ruleFunction) {
+    		return;
+	    }
+	    this.aspect.ruleFunction = ruleFunction.functionText;
+    	this.ruleFunction = ruleFunction;
+    	this.value = this.ruleFunction.execute();
+		});
+	}
 
-    stopClickPropagate(event): void {
-        event.stopPropagation();
-    }
+	stopClickPropagate(event): void {
+		event.stopPropagation();
+	}
 
-    closeMenu(): void {
-        // this.options._emitCloseEvent();
-    }
+	closeMenu(): void {
+		// this.options._emitCloseEvent();
+	}
 
-    getValue(): any {
-        if (this._function) {
-            this.value = this._function.getValue();
-        }
-        return this.value;
-    }
+	getValue(): any {
+		if (this.ruleFunction) {
+			this.value = this.ruleFunction.execute();
+		}
+		else {
+			this.value = 'NaN';
+		}
+		return this.value;
+	}
 
-    setValue(value: any): any {
-        // do nothing
-    }
+	setValue(value: any): any {
+		// do nothing
+	}
 
-    getFunction(): FunctionTemplate | undefined {
-        if (this._function) {
-            return {
-                stack: this._function.getStack(),
-                mapValues: this._function.getMapValues()
-            };
-        }
+	getFunction(): string {
+		if (this.ruleFunction) {
+			return this.ruleFunction.functionText;
+		}
 
-        return undefined;
-    }
-
-    private setFunction(template: FunctionTemplate): void {
-        this._function = new FunctionGrammar(this.characterService);
-        this._function.initFromTemplate(template);
-        timer(100).subscribe(() => this.getValue());
-    }
+		return undefined;
+	}
 }

@@ -21,7 +21,6 @@ import {
 	MatTooltipModule
 } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FunctionDialogComponent, NodePipe } from './shared/subcomponents/function/function-dialog.component';
 import { FunctionComponent } from './shared/subcomponents/function/function.component';
 import { TokenComponent } from './shared/subcomponents/token/token.component';
 import { CategoryComponent } from './shared/subcomponents/category/category.component';
@@ -38,6 +37,7 @@ import { CharacterSheetService } from './sheet/character-sheet.service';
 import { CharacterInterfaceFactory } from './shared/character-interface.factory';
 import { CharacterGridComponent } from './shared/character-grid.component';
 import { CharacterAspectComponent } from './shared/character-aspect.component';
+import { FunctionTextComponent } from './shared/subcomponents/function/function-text.component';
 
 @NgModule({
     imports: [
@@ -73,10 +73,9 @@ import { CharacterAspectComponent } from './shared/character-aspect.component';
         CategoryComponent,
         TokenComponent,
         FunctionComponent,
-        FunctionDialogComponent,
-        NodePipe,
 		    CharacterGridComponent,
 		    CharacterAspectComponent,
+		    FunctionTextComponent,
     ],
     providers: [
         CharacterSheetRepository,
@@ -86,7 +85,7 @@ import { CharacterAspectComponent } from './shared/character-aspect.component';
     ],
     entryComponents: [
         AddComponentComponent,
-        FunctionDialogComponent
+		    FunctionTextComponent,
     ],
     exports: [
         CharacterSheetComponent,
