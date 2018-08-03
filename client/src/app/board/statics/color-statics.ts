@@ -90,4 +90,9 @@ export class ColorStatics {
         returnMe.push(parseFloat(colorSplit[2]));
         return returnMe;
     }
+
+    static resetRgbaStringAlpha(rgbaString: string, newAlpha: number): string {
+        const members = ColorStatics.parseRgbaString(rgbaString);
+        return 'rgba(' + members[0] + ',' + members[1] + ',' + members[2] + ',' + newAlpha + ')';
+    }
 }

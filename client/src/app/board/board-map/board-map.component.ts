@@ -290,6 +290,10 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
     }
 
     private doMouseLeftUp(event) {
+        if (this.boardStateService.isEditingNotation) {
+            this.boardNotationService.handleMouseLeftClick(event);
+        }
+
         if (!this.boardStateService.mouseDrag) {
             switch (this.boardStateService.board_view_mode) {
                 case ViewMode.MASTER:

@@ -8,6 +8,7 @@ export class BoardNotation {
     public iconTag = 'edit';
 
     public freeformElements: Array<Array<XyPair>>;
+    public cellElements: Array<XyPair>;
 
     public isVisible = false;
     public isLocked = false;
@@ -22,6 +23,7 @@ export class BoardNotation {
     constructor() {
         this.id = window.crypto.getRandomValues(new Uint32Array(1))[0];
         this.freeformElements = [];
+        this.cellElements = [];
     }
 
     public toggleVisible() {
@@ -75,5 +77,16 @@ export class BoardNotation {
 
     public appendToFreeform(point: XyPair) {
         this.freeformElements[this.freeformElements.length - 1].push(point);
+    }
+
+    public toggleCell(cell: XyPair) {
+        let i = 0;
+        for (let test_cell of this.cellElements) {
+            if (test_cell.hash() === cell.hash()) {
+                this.cellElements.splice(i, 1);
+                return;
+            }
+        }
+        this.cellElements.push(cell);
     }
 }

@@ -4,6 +4,7 @@ import {XyPair} from '../geometry/xy-pair';
 import {BoardNotation} from "../shared/board-notation";
 import {ViewMode} from "../shared/enum/view-mode";
 import {NotationMode} from "../shared/enum/notation-mode";
+import {switchMapTo} from "rxjs/operators";
 
 @Injectable()
 export class BoardNotationService {
@@ -37,6 +38,18 @@ export class BoardNotationService {
                 } else {
                     this.startNewFreeform = true;
                 }
+                break;
+            case NotationMode.POINT_TO_POINT:
+                break;
+        }
+    }
+
+    public handleMouseLeftClick(event: any) {
+        switch(this.activeNotationMode) {
+            case NotationMode.CELL:
+                this.getActiveNotation().toggleCell(this.boardStateService.mouse_loc_cell);
+                break;
+            case NotationMode.FREEFORM:
                 break;
             case NotationMode.POINT_TO_POINT:
                 break;
