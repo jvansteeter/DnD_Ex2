@@ -16,6 +16,8 @@ export class BoardNotationService {
     public startNewFreeform = true;
     public freeformNotationPolyline: Array<XyPair>;
 
+    private sourceCell: XyPair;
+
     constructor(
         private boardStateService: BoardStateService
     ) {

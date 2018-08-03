@@ -80,13 +80,35 @@ export class BoardNotation {
     }
 
     public toggleCell(cell: XyPair) {
-        let i = 0;
-        for (let test_cell of this.cellElements) {
-            if (test_cell.hash() === cell.hash()) {
-                this.cellElements.splice(i, 1);
-                return;
-            }
+        let i = this.cellPresent(cell);
+        if (i !== -1) {
+            this.cellElements.splice(i, 1);
+            return;
         }
         this.cellElements.push(cell);
+    }
+
+    public addCell(cell: XyPair) {
+        let i = this.cellPresent(cell);
+        if (i === -1) {
+            this.cellElements.push(cell);
+        }
+    }
+
+    public removeCell(cell: XyPair) {
+        const i = this.cellPresent(cell);
+        if (i !== -1) {
+            this.cellElements.splice(i, 1);
+        }
+    }
+
+    private cellPresent(cell: XyPair): number {
+        let i = 0;
+        for (let test_cell of this.cellElements) {
+            if (test_cell.hash === cell.hash) {
+                return i;
+            }
+        }
+        return -1;
     }
 }
