@@ -1,5 +1,5 @@
 <mat-form-field class="category-select">
-	<mat-select [placeholder]="aspect.label" [(ngModel)]="value" (change)="valueChanged()">
+	<mat-select [placeholder]="aspect.label" [(ngModel)]="value" (selectionChange)="valueChanged()">
 		<mat-option *ngFor="let category of categories" [value]="category.value">{{category.value}}</mat-option>
 	</mat-select>
 </mat-form-field>

@@ -20,20 +20,21 @@ export class RuleFunction {
 			if (executable.indexOf('${') > -1) {
 				executable = executable.replace(/\${([\w\s]+)}/g, (match, offset): string => {
 					let value = this.characterService.getValueOfAspectByLabel(offset);
-					if (value !== undefined) {
-						return value;
-					}
+					// if (value !== undefined) {
+					// 	return '\'' + value + '\'';
+					// }
 
-					throw new Error('Value: ' + value);
+					return value;
 				});
 			}
 
+			console.log(executable)
 			let ruleFunction = new Function(executable);
 			return ruleFunction();
 		}
 		catch (error) {
 			console.error(error);
-			return undefined;
+			return 'NaN';
 		}
 	}
 }

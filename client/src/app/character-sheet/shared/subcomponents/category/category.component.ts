@@ -24,7 +24,7 @@ export class CategoryComponent implements SubComponentChild, AfterViewInit {
 	private categoryInput: string = '';
 	private categoryToRemove: CategoryOption;
 
-	private categories: CategoryOption[];
+	private readonly categories: CategoryOption[];
 
 	constructor(private characterMakerService: CharacterMakerService) {
 		this.categories = [];
@@ -80,7 +80,6 @@ export class CategoryComponent implements SubComponentChild, AfterViewInit {
 	}
 
 	valueChanged(): void {
-    console.log('value changed')
 		this.characterMakerService.updateFunctionAspects();
 	}
 }

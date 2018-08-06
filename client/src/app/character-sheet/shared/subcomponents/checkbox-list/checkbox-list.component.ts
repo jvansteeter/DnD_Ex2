@@ -7,85 +7,85 @@ import { CharacterInterfaceService } from '../../character-interface.service';
 
 
 interface CheckboxItem {
-    label: string;
-    value: boolean;
+	label: string;
+	value: boolean;
 }
 
 @Component({
-    selector: 'characterMaker-checkBoxListComponent',
-    templateUrl: 'checkbox-list.component.html',
-    styleUrls: ['../sub-component.scss']
+	selector: 'characterMaker-checkBoxListComponent',
+	templateUrl: 'checkbox-list.component.html',
+	styleUrls: ['../sub-component.scss']
 })
 export class CheckboxListComponent implements SubComponentChild, AfterViewInit {
-    @Input() aspect: Aspect;
-    @ViewChild('options') options: MatMenu;
-    label: string;
-    required: boolean;
-    readonly hasOptions = true;
-    value: any;
+	@Input() aspect: Aspect;
+	@ViewChild('options') options: MatMenu;
+	label: string;
+	required: boolean;
+	readonly hasOptions = true;
+	value: any;
 
-    private checkboxes: CheckboxItem[];
+	private checkboxes: CheckboxItem[];
 
-    private characterService: CharacterInterfaceService;
+	private characterService: CharacterInterfaceService;
 
-    constructor(private characterInterfaceFactory: CharacterInterfaceFactory) {
-        this.characterService = this.characterInterfaceFactory.getCharacterInterface();
-        this.checkboxes = [];
-    }
+	constructor(private characterInterfaceFactory: CharacterInterfaceFactory) {
+		this.characterService = this.characterInterfaceFactory.getCharacterInterface();
+		this.checkboxes = [];
+	}
 
-    ngAfterViewInit(): void {
-        if (this.aspect.hasOwnProperty('items') && this.aspect.items.length > 0) {
-            for (let i = 0; i < this.aspect.items.length; i++) {
-                this.checkboxes.push({
-                    label: this.aspect.items[i],
-                    value: false
-                });
-            }
-        }
-    }
+	ngAfterViewInit(): void {
+		if (this.aspect.hasOwnProperty('items') && this.aspect.items.length > 0) {
+			for (let i = 0; i < this.aspect.items.length; i++) {
+				this.checkboxes.push({
+					label: this.aspect.items[i],
+					value: false
+				});
+			}
+		}
+	}
 
-    getMenuOptions(): MatMenu {
-        return this.options;
-    }
+	getMenuOptions(): MatMenu {
+		return this.options;
+	}
 
-    addCheckbox(): void {
-        this.checkboxes.push({
-            label: '',
-            value: false
-        });
-    }
+	addCheckbox(): void {
+		this.checkboxes.push({
+			label: '',
+			value: false
+		});
+	}
 
-    removeCheckbox(): void {
-        this.checkboxes.splice(this.checkboxes.length - 1, 1);
-    }
+	removeCheckbox(): void {
+		this.checkboxes.splice(this.checkboxes.length - 1, 1);
+	}
 
-    stopClickPropagate(event): void {
-        event.stopPropagation();
-    }
+	stopClickPropagate(event): void {
+		event.stopPropagation();
+	}
 
-    closeMenu(): void {
-        // this.options._emitCloseEvent();
-    }
+	closeMenu(): void {
+		// this.options._emitCloseEvent();
+	}
 
-    valueChanged(): void {
-        this.characterService.updateFunctionAspects();
-    }
+	valueChanged(): void {
+		this.characterService.updateFunctionAspects();
+	}
 
-    getValue(): any {
-        return this.checkboxes;
-    }
+	getValue(): CheckboxItem[] {
+		return this.checkboxes;
+	}
 
-    setValue(value: any): any {
-        this.checkboxes = value;
-    }
+	setValue(value: any): any {
+		this.checkboxes = value;
+	}
 
-    getCheckboxLabels(): string[] {
-        let labels: string[] = [];
-        for (let i = 0; i < this.checkboxes.length; i++) {
-            labels.push(this.checkboxes[i].label);
-        }
+	getCheckboxLabels(): string[] {
+		let labels: string[] = [];
+		for (let i = 0; i < this.checkboxes.length; i++) {
+			labels.push(this.checkboxes[i].label);
+		}
 
-        return labels;
-    }
+		return labels;
+	}
 }
 

@@ -1,7 +1,6 @@
-<span [style.fontSize.px]="aspect.fontSize">{{aspect.label}}</span>
-<div class="function-value">
-	<span [style.fontSize.px]="aspect.fontSize">{{value}}</span>
-</div>
+<mat-form-field [style.fontSize.px]="aspect.fontSize">
+	<input matInput [placeholder]="aspect.label" class="align-center" [(ngModel)]="value" disabled>
+</mat-form-field>
 <mat-menu #options="matMenu">
 	<span mat-menu-item (click)="openFunctionDialog()">Define Function</span>
 	<div class="changeFontSize" (click)="stopClickPropagate($event)" (keyup.enter)="closeMenu()">

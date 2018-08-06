@@ -18,7 +18,7 @@ export class CheckboxComponent implements SubComponentChild {
     width: number;
     height: number;
     hasOptions = false;
-    value: any;
+    value: boolean;
 
     @ViewChild('options') options: MatMenu;
 

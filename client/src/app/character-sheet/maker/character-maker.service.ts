@@ -54,7 +54,6 @@ export class CharacterMakerService implements CharacterInterfaceService {
 	}
 
 	public updateFunctionAspects(): void {
-		console.log('update functions')
 		this.subComponents.forEach(subComponent => {
 		    if (subComponent.aspect.aspectType === AspectType.FUNCTION) {
 		        subComponent.getValue();
