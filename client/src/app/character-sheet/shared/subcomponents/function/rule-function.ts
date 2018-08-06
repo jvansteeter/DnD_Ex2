@@ -18,8 +18,15 @@ export class RuleFunction {
 
 			// replace aspects with their values
 			if (executable.indexOf('${') > -1) {
-				executable = executable.replace(/\${([\w\s]+)}/g, (match, offset): string => {
+				executable = executable.replace(/\${([\w\s]+(\[\d+])?)}/g, (match: string, offset: string): string => {
+					console.log(offset)
+					if (offset.match(/[\w\s]+\[\d+]/)) {
+
+					}
 					let value = this.characterService.getValueOfAspectByLabel(offset);
+					if (Array.isArray(value)) {
+
+					}
 					// if (value !== undefined) {
 					// 	return '\'' + value + '\'';
 					// }
