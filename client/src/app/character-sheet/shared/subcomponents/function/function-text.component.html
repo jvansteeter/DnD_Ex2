@@ -1,8 +1,2 @@
-<mat-list>
-	<mat-list-item>
-		<textarea [(ngModel)]="functionText" cols="50" rows="8"></textarea>
-	</mat-list-item>
-	<mat-list-item>
-		<button (click)="submit()" mat-raised-button color="primary">Submit</button>
-	</mat-list-item>
-</mat-list>
+<textarea class="function-textarea" [(ngModel)]="functionText" cols="50" rows="30"></textarea>
+<button class="function-submit-button" (click)="submit()" mat-raised-button color="primary">Submit</button>

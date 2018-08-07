@@ -1,0 +1,13 @@
+:host {
+	display: flex;
+	flex-direction: column;
+}
+
+.function-textarea {
+	height: 100px;
+}
+
+.function-submit-button {
+	align-self: flex-end;
+	margin-top: 5px;
+}

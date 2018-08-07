@@ -18,26 +18,14 @@ export class RuleFunction {
 
 			// replace aspects with their values
 			if (executable.indexOf('${') > -1) {
-				executable = executable.replace(/\${([\w\s]+(\[\d+])?)}/g, (match: string, offset: string): string => {
-					console.log(offset)
-					if (offset.match(/[\w\s]+\[\d+]/)) {
-
-					}
-					let value = this.characterService.getValueOfAspectByLabel(offset);
-					if (Array.isArray(value)) {
-
-					}
-					// if (value !== undefined) {
-					// 	return '\'' + value + '\'';
-					// }
-
-					return value;
+				executable = executable.replace(/\${([\w\s]+)}/g, (match, offset: string): string => {
+					return JSON.stringify(this.characterService.getValueOfAspectByLabel(offset));
 				});
 			}
 
 			console.log(executable)
-			let ruleFunction = new Function(executable);
-			return ruleFunction();
+			let result = new Function(executable)();
+			return result;
 		}
 		catch (error) {
 			console.error(error);

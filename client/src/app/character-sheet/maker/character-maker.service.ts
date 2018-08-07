@@ -14,7 +14,7 @@ import { AspectData } from '../../../../../shared/types/aspect.data';
 export class CharacterMakerService implements CharacterInterfaceService {
 	private characterSheetId: string;
 	public aspects: Aspect[];
-	public subComponents: Map<string, SubComponent>;
+	private subComponents: Map<string, SubComponent>;
 
 	immutable = false;
 
@@ -28,7 +28,7 @@ export class CharacterMakerService implements CharacterInterfaceService {
 	}
 
 	public addComponent(aspect: Aspect): void {
-		if (!isUndefined(this.subComponents.get(aspect.label))) {
+		if (!isUndefined(this.subComponents.get(aspect.label.toLowerCase()))) {
 			console.error('aspect with that name already exists')
 			return;
 		}
@@ -38,19 +38,19 @@ export class CharacterMakerService implements CharacterInterfaceService {
 	public removeComponent(aspect: Aspect): void {
 		let index = this.aspects.indexOf(aspect);
 		this.aspects.splice(index, 1);
-		this.subComponents.delete(aspect.label);
+		this.subComponents.delete(aspect.label.toLowerCase());
 	}
 
 	public registerSubComponent(subComponent: SubComponent): void {
-		this.subComponents.set(subComponent.aspect.label, subComponent);
+		this.subComponents.set(subComponent.aspect.label.toLowerCase(), subComponent);
 	}
 
 	public valueOfAspect(aspect: Aspect): any {
-		return this.subComponents.get(aspect.label) ? this.subComponents.get(aspect.label).getValue() : undefined;
+		return this.subComponents.get(aspect.label.toLowerCase()) ? this.subComponents.get(aspect.label.toLowerCase()).getValue() : undefined;
 	}
 
 	public getValueOfAspectByLabel(label: string): any {
-		return this.subComponents.get(label) ? this.subComponents.get(label).getValue() : undefined;
+		return this.subComponents.get(label.toLowerCase()) ? this.subComponents.get(label.toLowerCase()).getValue() : undefined;
 	}
 
 	public updateFunctionAspects(): void {
@@ -93,7 +93,7 @@ export class CharacterMakerService implements CharacterInterfaceService {
 	}
 
 	private getChildOf(aspect: Aspect): SubComponentChild | undefined {
-		return this.subComponents.get(aspect.label) ? this.subComponents.get(aspect.label).child : undefined;
+		return this.subComponents.get(aspect.label.toLowerCase()) ? this.subComponents.get(aspect.label.toLowerCase()).child : undefined;
 	}
 
 	public setCharacterSheetId(id: string): void {

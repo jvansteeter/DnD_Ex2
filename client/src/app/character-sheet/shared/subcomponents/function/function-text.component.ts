@@ -6,7 +6,7 @@ import { RuleFunction } from './rule-function';
 
 @Component({
 	templateUrl: 'function-text.component.html',
-	styleUrls: ['../sub-component.scss']
+	styleUrls: ['function-text.component.scss'],
 })
 export class FunctionTextComponent {
 	public functionText: string;
