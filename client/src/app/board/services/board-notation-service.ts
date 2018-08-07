@@ -29,6 +29,7 @@ export class BoardNotationService {
     public handleMouseMove() {
         switch (this.activeNotationMode) {
             case NotationMode.CELL:
+                
                 break;
             case NotationMode.FREEFORM:
                 if (this.boardStateService.mouseLeftDown) {

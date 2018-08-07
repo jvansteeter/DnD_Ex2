@@ -105,9 +105,10 @@ export class BoardNotation {
     private cellPresent(cell: XyPair): number {
         let i = 0;
         for (let test_cell of this.cellElements) {
-            if (test_cell.hash === cell.hash) {
+            if (test_cell.hash() === cell.hash()) {
                 return i;
             }
+            i++;
         }
         return -1;
     }

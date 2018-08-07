@@ -200,6 +200,8 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
             case 'Space' :
                 this.boardStateService.spaceDown = true;
                 break;
+            case 'ControlLeft':
+                break;
         }
     }
 

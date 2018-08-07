@@ -74,6 +74,8 @@ export class BoardStateService {
 
     public mouseLeftDown = false;
     public mouseMiddleDown = false;
+    public ctrlDown = false;
+    public altDown = false;
 
     public mouseDrag = false;
     source_click_location: CellTarget;
