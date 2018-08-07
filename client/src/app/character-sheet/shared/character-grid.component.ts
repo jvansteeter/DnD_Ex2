@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, Renderer2 } from '@angular/core';
 import { CharacterMakerService } from '../maker/character-maker.service';
 
 @Component({
@@ -7,7 +7,13 @@ import { CharacterMakerService } from '../maker/character-maker.service';
 	styleUrls: ['character-grid.component.scss', 'character-sheet.scss']
 })
 export class CharacterGridComponent {
-	constructor(public characterService: CharacterMakerService) {
+	constructor(public characterService: CharacterMakerService,
+							private elementRef: ElementRef,
+							private renderer: Renderer2) {
+		this.changeHeight();
+	}
 
+	public changeHeight(): void {
+		this.renderer.setStyle(this.elementRef.nativeElement, 'height', this.characterService.getGridHeight() + 'px');
 	}
 }

@@ -14,4 +14,6 @@ export interface CharacterInterfaceService {
 	getValueOfAspectByLabel(label: string): any;
 
 	updateFunctionAspects(): void;
+
+	getGridHeight(): number;
 }

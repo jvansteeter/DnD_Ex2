@@ -1,4 +1,13 @@
-import { AfterViewInit, Component, ElementRef, HostListener, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
+import {
+	AfterViewInit,
+	Component,
+	ElementRef, EventEmitter,
+	HostListener,
+	Input,
+	Output,
+	Renderer2,
+	ViewChild
+} from '@angular/core';
 import { CharacterMakerService } from '../maker/character-maker.service';
 import { Aspect } from '../../types/character-sheet/aspect';
 import { SubComponent } from './subcomponents/sub-component';
@@ -9,8 +18,9 @@ import { isUndefined } from 'util';
 	templateUrl: 'character-aspect.component.html',
 	styleUrls: ['character-sheet.scss', 'character-aspect.component.scss']
 })
-export class CharacterAspectComponent implements OnInit, AfterViewInit {
+export class CharacterAspectComponent implements AfterViewInit {
 	@Input('aspect') aspect: Aspect;
+	@Output('heightChange') heightChange = new EventEmitter();
 
 	private moveDeltaX: number = 0;
 	private moveDeltaY: number = 0;
@@ -42,10 +52,7 @@ export class CharacterAspectComponent implements OnInit, AfterViewInit {
 	private setBoundingWidth(): void {
 		this.boundingWidth = document.getElementsByClassName('characterSheet-gridContainer')[0].getBoundingClientRect().width;
 		this.aspect.config.width = this.boundingWidth * this.getPercentWidth() / 100;
-	}
-
-	ngOnInit(): void {
-
+		this.aspect.config.left = this.boundingWidth * this.getPercentLeft() / 100;
 	}
 
 	ngAfterViewInit(): void {
@@ -54,6 +61,7 @@ export class CharacterAspectComponent implements OnInit, AfterViewInit {
 		if (!isUndefined(this.subComponent)) {
 			setTimeout(() => this.hasOptions = this.subComponent.hasOptions);
 		}
+		this.heightChange.emit();
 	}
 
 	public removeComponent(aspect: Aspect): void {
@@ -89,6 +97,7 @@ export class CharacterAspectComponent implements OnInit, AfterViewInit {
 	onMoveDragEnd(): void {
 		this.moveDeltaX = 0;
 		this.moveDeltaY = 0;
+		this.heightChange.emit();
 	}
 
 	onResizeDragStart(event): void {
@@ -115,6 +124,7 @@ export class CharacterAspectComponent implements OnInit, AfterViewInit {
 	onResizeDragEnd(): void {
 		this.resizeDeltaX = 0;
 		this.resizeDeltaY = 0;
+		this.heightChange.emit();
 	}
 
 	@HostListener('mouseenter')
@@ -129,7 +139,7 @@ export class CharacterAspectComponent implements OnInit, AfterViewInit {
 
 	private setConfigStyles(): void {
 		this.renderer.setStyle(this._elementRef.nativeElement, 'top', this.aspect.config.top + 'px');
-		this.renderer.setStyle(this._elementRef.nativeElement, 'left', this.aspect.config.left + 'px');
+		this.renderer.setStyle(this._elementRef.nativeElement, 'left', this.getPercentLeft() + '%');
 		this.renderer.setStyle(this._elementRef.nativeElement, 'width', this.getPercentWidth() + '%');
 		if (this.aspect.config.resizeY) {
 			this.renderer.setStyle(this._elementRef.nativeElement, 'height', this.aspect.config.height + 'px');
@@ -138,5 +148,9 @@ export class CharacterAspectComponent implements OnInit, AfterViewInit {
 
 	private getPercentWidth(): number {
 		return (this.aspect.config.width / this.boundingWidth) * 100;
+	}
+
+	private getPercentLeft(): number {
+		return (this.aspect.config.left / this.boundingWidth) * 100;
 	}
 }

@@ -1,6 +1,6 @@
 import { Aspect, AspectType } from '../../../types/character-sheet/aspect';
 import {
-	AfterViewInit, Component, Input, OnInit,
+	AfterViewInit, Component, Input,
 	ViewChild,
 } from '@angular/core';
 import { SubComponentChild } from './sub-component-child';
@@ -13,7 +13,7 @@ import { CharacterInterfaceFactory } from '../character-interface.factory';
 	templateUrl: 'sub-component.html',
 	styleUrls: ['sub-component.scss']
 })
-export class SubComponent implements OnInit, AfterViewInit {
+export class SubComponent implements AfterViewInit {
 	@Input() aspect: Aspect;
 	@ViewChild('child') child: SubComponentChild;
 	options: MatMenu;
@@ -24,9 +24,6 @@ export class SubComponent implements OnInit, AfterViewInit {
 
 	constructor(characterInterfaceFactory: CharacterInterfaceFactory) {
 		this.characterService = characterInterfaceFactory.getCharacterInterface();
-	}
-
-	ngOnInit(): void {
 	}
 
 	ngAfterViewInit(): void {

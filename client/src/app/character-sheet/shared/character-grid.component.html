@@ -1,1 +1,1 @@
-<character-aspect *ngFor="let aspect of characterService.aspects" [aspect]="aspect"></character-aspect>
+<character-aspect *ngFor="let aspect of characterService.aspects" [aspect]="aspect" (heightChange)="changeHeight()"></character-aspect>

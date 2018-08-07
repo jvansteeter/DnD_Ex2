@@ -120,4 +120,19 @@ export class CharacterMakerService implements CharacterInterfaceService {
 			this.aspects.push(aspect);
 		});
 	}
+
+	getGridHeight(): number {
+		let aspects = document.getElementsByTagName('character-aspect');
+		let height = 0;
+		for (let i = 0; i < aspects.length; i++) {
+			let aspect = aspects[i];
+			let clientRect = aspect.getBoundingClientRect();
+			let tempHeight = this.aspects[i].config.top + clientRect.height - 30;
+			if (tempHeight > height) {
+				height = tempHeight;
+			}
+		}
+
+		return height;
+	}
 }
