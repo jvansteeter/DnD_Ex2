@@ -8,6 +8,8 @@ import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {BoardNotationService} from "../../services/board-notation-service";
 import {NotationMode} from "../../shared/enum/notation-mode";
 import {ColorStatics} from "../../statics/color-statics";
+import {BoardTraverseService} from "../../services/board-traverse.service";
+import {BoardVisibilityService} from "../../services/board-visibility.service";
 
 @Component({
     selector: 'hover-renderer',
@@ -21,7 +23,8 @@ export class HoverRendererComponent implements OnInit {
     constructor(
         private boardStateService: BoardStateService,
         private boardCanvasService: BoardCanvasService,
-        private boardNotationService: BoardNotationService
+        private boardNotationService: BoardNotationService,
+        private boardVisibilityService: BoardVisibilityService
     ) {
     }
 
@@ -43,7 +46,15 @@ export class HoverRendererComponent implements OnInit {
                     case NotationMode.FREEFORM:
                         break;
                     case NotationMode.CELL:
-                        this.boardCanvasService.draw_center(this.ctx, this.boardStateService.mouse_cell_target.location, ColorStatics.resetRgbaStringAlpha(this.boardNotationService.getActiveNotation().getRgbaCode(), 0.25), 0);
+                        let cells;
+                        if (this.boardStateService.do_visibility_brush) {
+                            cells = this.boardVisibilityService.cellsVisibleFromCell(this.boardStateService.mouse_cell_target.location, this.boardStateService.brush_size);
+                        } else {
+                            cells = this.boardStateService.calcCellsWithinRangeOfCell(this.boardStateService.mouse_cell_target.location, this.boardStateService.brush_size);
+                        }
+                        for (let cell of cells) {
+                            this.boardCanvasService.draw_center(this.ctx, cell, ColorStatics.resetRgbaStringAlpha(this.boardNotationService.getActiveNotation().getRgbaCode(), 0.25), 0);
+                        }
                         break;
                 }
             } else {

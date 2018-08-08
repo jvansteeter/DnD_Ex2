@@ -5,6 +5,7 @@ import {CellTarget} from '../shared/cell-target';
 import {CellRegion} from '../shared/enum/cell-region';
 import {CellPolygonGroup} from '../shared/cell-polygon-group';
 import {CellTargetStatics} from './cell-target-statics';
+import {isNullOrUndefined} from "util";
 
 @Injectable()
 export class BoardVisibilityService {
@@ -22,6 +23,33 @@ export class BoardVisibilityService {
                 this.blockingBitmap[x][y] = 0;
             }
         }
+    }
+
+    public cellsVisibleFromCell(source: XyPair, range?:number) {
+        const returnMe = new Array<XyPair>();
+        let cellsToCheck = [];
+        if (isNullOrUndefined(range)) {
+            for (let x = 0; x < this.boardStateService.mapDimX; x += 1) {
+                for (let y = 0; y < this.boardStateService.mapDimY; y += 1) {
+                    cellsToCheck.push(new XyPair(x, y));
+                }
+            }
+        } else {
+            cellsToCheck = this.boardStateService.calcCellsWithinRangeOfCell(source, range);
+        }
+
+        for (let cell of cellsToCheck) {
+            if (
+                this.cellHasLOSTo_TopQuad(source, cell) ||
+                this.cellHasLOSTo_RightQuad(source, cell) ||
+                this.cellHasLOSTo_BottomQuad(source, cell) ||
+                this.cellHasLOSTo_LeftQuad(source, cell)
+            ) {
+                returnMe.push(cell);
+            }
+        }
+
+        return returnMe;
     }
 
     public cellQuadsVisibleFromCell(source: XyPair): Array<CellTarget> {

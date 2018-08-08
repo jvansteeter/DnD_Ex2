@@ -29,7 +29,9 @@ export class BoardNotationService {
     public handleMouseMove() {
         switch (this.activeNotationMode) {
             case NotationMode.CELL:
-                
+                if (this.boardStateService.mouseLeftDown) {
+                    this.getActiveNotation().addCell(this.boardStateService.mouse_loc_cell);
+                }
                 break;
             case NotationMode.FREEFORM:
                 if (this.boardStateService.mouseLeftDown) {
@@ -47,7 +49,7 @@ export class BoardNotationService {
         }
     }
 
-    public handleMouseLeftClick(event: any) {
+    public handleMouseLeftDown(event: any) {
         switch(this.activeNotationMode) {
             case NotationMode.CELL:
                 this.getActiveNotation().toggleCell(this.boardStateService.mouse_loc_cell);

@@ -1,0 +1,9 @@
+<mat-slider
+        style="flex: 1 0 auto;"
+        [(ngModel)]="boardStateService.brush_size"
+        [thumbLabel]="true"
+        [step]="1"
+        [min]="0"
+        [max]="9">
+</mat-slider>
+<mat-checkbox [(ngModel)]="boardStateService.do_visibility_brush"></mat-checkbox>

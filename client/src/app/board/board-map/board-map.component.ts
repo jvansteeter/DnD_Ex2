@@ -125,6 +125,9 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
             case 1:
                 // left click
                 this.boardStateService.mouseLeftDown = true;
+                if (this.boardStateService.isEditingNotation) {
+                    this.boardNotationService.handleMouseLeftDown(event);
+                }
                 break;
             case 2:
                 // middle click
@@ -293,7 +296,6 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
 
     private doMouseLeftUp(event) {
         if (this.boardStateService.isEditingNotation) {
-            this.boardNotationService.handleMouseLeftClick(event);
             this.boardStateService.mouseLeftDown = false;
             this.boardStateService.mouseDrag = false;
             return;

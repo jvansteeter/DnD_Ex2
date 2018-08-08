@@ -66,6 +66,10 @@ export class BoardStateService {
     public mouse_cell_target: CellTarget;  // to current cell target under the pointer
     public mouse_right_cell_target: CellTarget;
 
+    // notation variables
+    public brush_size = 0;
+    public do_visibility_brush = false;
+
     // key states
     public mouseOnMap = false;
 
@@ -105,16 +109,16 @@ export class BoardStateService {
             x_low = 0;
         }
         let x_high = source_cell.x + range;
-        if (x_high > this.mapDimX) {
-            x_high = this.mapDimX;
+        if (x_high >= this.mapDimX) {
+            x_high = this.mapDimX - 1;
         }
         let y_low = source_cell.y - range;
         if (y_low < 0) {
             y_low = 0;
         }
         let y_high = source_cell.y + range;
-        if (y_high > this.mapDimY) {
-            y_high = this.mapDimY;
+        if (y_high >= this.mapDimY) {
+            y_high = this.mapDimY - 1;
         }
 
         for (let x = x_low; x <= x_high; x++) {
