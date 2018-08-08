@@ -59,9 +59,11 @@ export class CharacterAspectComponent implements AfterViewInit {
 		this.setBoundingWidth();
 		this.setConfigStyles();
 		if (!isUndefined(this.subComponent)) {
-			setTimeout(() => this.hasOptions = this.subComponent.hasOptions);
+			setTimeout(() => {
+				this.hasOptions = this.subComponent.hasOptions;
+				this.heightChange.emit();
+			});
 		}
-		this.heightChange.emit();
 	}
 
 	public removeComponent(aspect: Aspect): void {

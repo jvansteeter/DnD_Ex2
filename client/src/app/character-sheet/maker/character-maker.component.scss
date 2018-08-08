@@ -1,0 +1,48 @@
+:host {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+}
+
+.characterSheet-gridContainer {
+	overflow-y: auto;
+}
+
+h1 {
+	margin: 10px 0 0 20px;
+}
+
+mat-grid-list {
+	flex: 1;
+}
+
+character-grid {
+	align-self: flex-start;
+}
+
+mat-accordion {
+	align-self: flex-start;
+	margin-top: 5px;
+	width: 90%;
+}
+
+mat-drawer-container {
+	flex: 1;
+	display: flex;
+}
+
+mat-drawer-content {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	background-color: #ffffff;
+}
+
+mat-drawer {
+	background-color: #fafafa;
+}
+
+::-webkit-scrollbar {
+	width: 0;  /* remove scrollbar space */
+	background: transparent;  /* optional: just make scrollbar invisible */
+}

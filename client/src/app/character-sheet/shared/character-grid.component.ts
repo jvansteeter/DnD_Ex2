@@ -1,4 +1,4 @@
-import { Component, ElementRef, Renderer2 } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Renderer2 } from '@angular/core';
 import { CharacterMakerService } from '../maker/character-maker.service';
 
 @Component({
@@ -10,7 +10,6 @@ export class CharacterGridComponent {
 	constructor(public characterService: CharacterMakerService,
 							private elementRef: ElementRef,
 							private renderer: Renderer2) {
-		this.changeHeight();
 	}
 
 	public changeHeight(): void {

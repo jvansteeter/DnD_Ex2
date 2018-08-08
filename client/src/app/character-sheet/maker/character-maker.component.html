@@ -1,17 +1,43 @@
-<div class="app-container">
-	<h1 *ngIf="characterSheetData">{{characterSheetData.label}}</h1>
-	<mat-toolbar>
-		<button mat-icon-button mat-raised-button color="primary" (click)="openAddDialog()" class="characterSheet-addButton"
-		        matTooltip="Add SubComponent">
-			<mat-icon>add</mat-icon>
-		</button>
-		<button mat-icon-button mat-raised-button color="primary" (click)="save()" class="characterSheet-saveButton"
-		        matTooltip="Save">
-			<mat-icon>sd_card</mat-icon>
-		</button>
-	</mat-toolbar>
-	<div class="characterSheet-gridContainer" #characterSheet>
-		<character-grid></character-grid>
-	</div>
-</div>
-
+<mat-drawer-container>
+	<mat-drawer #drawer [opened]="true" [mode]="'side'" [disableClose]="true">
+		<mat-list>
+			<mat-list-item>
+				<button mat-icon-button mat-raised-button color="primary" (click)="openAddDialog()"
+				        class="characterSheet-addButton" matTooltip="Add SubComponent">
+					<mat-icon>add</mat-icon>
+				</button>
+			</mat-list-item>
+			<mat-list-item>
+				<button mat-icon-button mat-raised-button color="primary" (click)="save()" class="characterSheet-saveButton"
+				        matTooltip="Save">
+					<mat-icon>save</mat-icon>
+				</button>
+			</mat-list-item>
+		</mat-list>
+	</mat-drawer>
+	<mat-drawer-content>
+		<h1 *ngIf="characterSheetData">{{characterSheetData.label}}</h1>
+		<mat-grid-list [cols]="4" [rowHeight]="'fit'">
+			<mat-grid-tile [colspan]="3" [rowspan]="2" class="characterSheet-gridContainer">
+				<character-grid></character-grid>
+			</mat-grid-tile>
+			<mat-grid-tile [colspan]="1" [rowspan]="1">
+				<mat-accordion>
+					<mat-expansion-panel>
+						<mat-expansion-panel-header>Pre-defined Aspects</mat-expansion-panel-header>
+						<div style="display: flex; flex-direction: column">
+							<mat-checkbox color="primary">Map Token</mat-checkbox>
+							<mat-checkbox color="primary">Name</mat-checkbox>
+							<mat-checkbox color="primary">Health</mat-checkbox>
+						</div>
+					</mat-expansion-panel>
+				</mat-accordion>
+			</mat-grid-tile>
+			<mat-grid-tile [rowspan]="1" [colspan]="1">
+				<dashboard-card>
+					<span>Card content</span>
+				</dashboard-card>
+			</mat-grid-tile>
+		</mat-grid-list>
+	</mat-drawer-content>
+</mat-drawer-container>

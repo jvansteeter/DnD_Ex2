@@ -1,23 +1,19 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { AddComponentComponent } from './dialog/add-component.component';
 import { CharacterMakerService } from './character-maker.service';
 import { MatDialog } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
 import { CharacterInterfaceFactory } from '../shared/character-interface.factory';
-import { Aspect } from '../../types/character-sheet/aspect';
 import { CharacterSheetRepository } from '../../repositories/character-sheet.repository';
 
 @Component({
 	selector: 'character-maker',
 	templateUrl: 'character-maker.component.html',
-	styleUrls: ['../shared/character-sheet.scss']
+	styleUrls: ['character-maker.component.scss']
 })
 export class CharacterMakerComponent implements OnInit, AfterViewInit {
-	@ViewChild('characterSheet') characterSheet: ElementRef;
-
 	private characterSheetId: string;
 	private characterSheetData: any;
-	public hoveredZIndex: number[] = [];
 
 	constructor(private dialog: MatDialog,
 	            private activatedRoute: ActivatedRoute,
@@ -46,22 +42,7 @@ export class CharacterMakerComponent implements OnInit, AfterViewInit {
 		this.dialog.open(AddComponentComponent);
 	}
 
-	public removeComponent(aspect: Aspect): void {
-		this.characterService.removeComponent(aspect);
-	}
-
 	public save(): void {
 		this.characterService.save();
-	}
-
-	openOptions(): void {
-	}
-
-	hoverStart(index: number): void {
-		this.hoveredZIndex[index] = 2;
-	}
-
-	hoverEnd(index: number): void {
-		this.hoveredZIndex[index] = 0;
 	}
 }

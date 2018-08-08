@@ -10,13 +10,13 @@ import {
 	MatCardModule,
 	MatCheckboxModule,
 	MatChipsModule,
-	MatDialogModule,
+	MatDialogModule, MatExpansionModule,
 	MatGridListModule,
 	MatIconModule,
 	MatInputModule,
 	MatListModule,
 	MatMenuModule,
-	MatSelectModule,
+	MatSelectModule, MatSidenavModule, MatSlideToggleModule,
 	MatToolbarModule,
 	MatTooltipModule
 } from '@angular/material';
@@ -38,6 +38,7 @@ import { CharacterInterfaceFactory } from './shared/character-interface.factory'
 import { CharacterGridComponent } from './shared/character-grid.component';
 import { CharacterAspectComponent } from './shared/character-aspect.component';
 import { FunctionTextComponent } from './shared/subcomponents/function/function-text.component';
+import { AppCDKModule } from '../cdk/cdk.module';
 
 @NgModule({
     imports: [
@@ -59,6 +60,10 @@ import { FunctionTextComponent } from './shared/subcomponents/function/function-
         MatToolbarModule,
         MatTooltipModule,
 		    MatListModule,
+		    MatExpansionModule,
+		    AppCDKModule,
+		    MatSidenavModule,
+		    MatSlideToggleModule,
     ],
     declarations: [
         CharacterSheetComponent,
