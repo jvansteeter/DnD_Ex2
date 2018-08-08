@@ -98,6 +98,9 @@ export class BoardTransformService {
     }
 
     calculate_cell_target(loc: XyPair, input_offset = this.boardStateService.inputOffset, doDiagonals = this.boardStateService.doDiagonals): CellTarget {
+        if (this.boardStateService.isEditingNotation) {
+            input_offset = 0.0;
+        }
         const shift = BoardStateService.cell_res * input_offset;
 
         // CENTER

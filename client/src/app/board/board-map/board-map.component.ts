@@ -294,6 +294,9 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
     private doMouseLeftUp(event) {
         if (this.boardStateService.isEditingNotation) {
             this.boardNotationService.handleMouseLeftClick(event);
+            this.boardStateService.mouseLeftDown = false;
+            this.boardStateService.mouseDrag = false;
+            return;
         }
 
         if (!this.boardStateService.mouseDrag) {
