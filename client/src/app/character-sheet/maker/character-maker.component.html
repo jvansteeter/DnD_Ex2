@@ -26,15 +26,17 @@
 					<mat-expansion-panel>
 						<mat-expansion-panel-header>Pre-defined Aspects</mat-expansion-panel-header>
 						<div style="display: flex; flex-direction: column">
-							<mat-checkbox *ngFor="let aspectLabel of predefiendAspectLabels" color="primary"
-							              (change)="changePredefinedAspect(aspectLabel, $event.checked)">{{aspectLabel}}</mat-checkbox>
+							<mat-checkbox *ngFor="let aspect of preDefinedAspects; let i = index" color="primary"
+							              (change)="changePredefinedAspect(aspect.label, $event.checked)" [checked]="aspect.checked">{{aspect.label}}</mat-checkbox>
 						</div>
 					</mat-expansion-panel>
 				</mat-accordion>
 			</mat-grid-tile>
 			<mat-grid-tile [rowspan]="1" [colspan]="1">
-				<dashboard-card>
-					<span>Card content</span>
+				<dashboard-card [dashboardCard]="characterToolTipCard">
+					<div class="character-tooltip-builder">
+						<character-tooltip #characterTooltip></character-tooltip>
+					</div>
 				</dashboard-card>
 			</mat-grid-tile>
 		</mat-grid-list>

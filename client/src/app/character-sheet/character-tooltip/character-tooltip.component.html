@@ -1,0 +1,8 @@
+<div *ngFor="let aspect of tooltipConfig.aspects; let i = index" class="character-tooltip-aspect" (mouseenter)="startHover(i)"
+     (mouseleave)="endHover()">
+	<mat-icon>{{aspect.icon}}</mat-icon>
+	<span>{{aspect.label}}:</span>
+	<button mat-icon-button *ngIf="hoveredIndex === i" color="primary" (click)="moveUp(i)"><mat-icon>keyboard_arrow_up</mat-icon></button>
+	<button mat-icon-button *ngIf="hoveredIndex === i" color="primary" (click)="moveDown(i)"><mat-icon>keyboard_arrow_down</mat-icon></button>
+	<span class="aspect-value">{{aspectValue(aspect.label)}}</span>
+</div>

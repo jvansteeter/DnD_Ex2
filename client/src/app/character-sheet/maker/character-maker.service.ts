@@ -10,6 +10,7 @@ import { CharacterSheetRepository } from '../../repositories/character-sheet.rep
 import { isUndefined } from 'util';
 import { AspectData } from '../../../../../shared/types/aspect.data';
 import { Observable, Subject } from 'rxjs';
+import { AlertService } from '../../alert/alert.service';
 
 @Injectable()
 export class CharacterMakerService implements CharacterInterfaceService {
@@ -17,10 +18,12 @@ export class CharacterMakerService implements CharacterInterfaceService {
 	public aspects: Aspect[];
 	private subComponents: Map<string, SubComponent>;
 	private removeComponentSubject = new Subject<void>();
+	private registerSubComponentSubject = new Subject<SubComponent>();
 
 	immutable = false;
 
-	constructor(private characterSheetRepository: CharacterSheetRepository) {
+	constructor(private characterSheetRepository: CharacterSheetRepository,
+	            private alertService: AlertService) {
 		this.init();
 	}
 
@@ -31,14 +34,18 @@ export class CharacterMakerService implements CharacterInterfaceService {
 
 	public addComponent(aspect: Aspect): void {
 		if (!isUndefined(this.subComponents.get(aspect.label.toLowerCase()))) {
-			console.error('aspect with that name already exists')
+			console.error('aspect with that name already exists');
+			this.alertService.showAlert('Aspect with that name already exists');
 			return;
 		}
 		this.aspects.push(aspect);
 	}
 
 	public removeComponent(aspect: Aspect): void {
-		let index = this.aspects.indexOf(aspect);
+		// let index = this.aspects.indexOf(aspect);
+		let index: number = this.aspects.findIndex((nextAspect: Aspect) => {
+			return aspect.equals(nextAspect);
+		});
 		this.aspects.splice(index, 1);
 		this.subComponents.delete(aspect.label.toLowerCase());
 		setTimeout(() => this.removeComponentSubject.next());
@@ -50,6 +57,11 @@ export class CharacterMakerService implements CharacterInterfaceService {
 
 	public registerSubComponent(subComponent: SubComponent): void {
 		this.subComponents.set(subComponent.aspect.label.toLowerCase(), subComponent);
+		this.registerSubComponentSubject.next(subComponent);
+	}
+
+	get registerSubComponentObservable(): Observable<SubComponent> {
+		return this.registerSubComponentSubject.asObservable();
 	}
 
 	public valueOfAspect(aspect: Aspect): any {
@@ -58,6 +70,10 @@ export class CharacterMakerService implements CharacterInterfaceService {
 
 	public getValueOfAspectByLabel(label: string): any {
 		return this.subComponents.get(label.toLowerCase()) ? this.subComponents.get(label.toLowerCase()).getValue() : undefined;
+	}
+
+	public aspectExists(label: string): boolean {
+		return !isUndefined(this.subComponents.get(label.toLowerCase()));
 	}
 
 	public updateFunctionAspects(): void {

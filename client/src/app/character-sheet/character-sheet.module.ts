@@ -40,6 +40,8 @@ import { CharacterAspectComponent } from './shared/character-aspect.component';
 import { FunctionTextComponent } from './shared/subcomponents/function/function-text.component';
 import { AppCDKModule } from '../cdk/cdk.module';
 import { TextAreaComponent } from './shared/subcomponents/text-area/text-area.component';
+import { AlertModule } from '../alert/alert.module';
+import { CharacterTooltipComponent } from './character-tooltip/character-tooltip.component';
 
 @NgModule({
     imports: [
@@ -65,6 +67,7 @@ import { TextAreaComponent } from './shared/subcomponents/text-area/text-area.co
 		    AppCDKModule,
 		    MatSidenavModule,
 		    MatSlideToggleModule,
+		    AlertModule,
     ],
     declarations: [
         CharacterSheetComponent,
@@ -83,6 +86,7 @@ import { TextAreaComponent } from './shared/subcomponents/text-area/text-area.co
 		    CharacterAspectComponent,
 		    FunctionTextComponent,
 		    TextAreaComponent,
+		    CharacterTooltipComponent,
     ],
     providers: [
         CharacterSheetRepository,

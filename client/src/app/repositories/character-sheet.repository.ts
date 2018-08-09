@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { CharacterSheetData } from '../../../../shared/types/character-sheet.data';
+import { map } from 'rxjs/operators';
+import { CharacterSheetTooltipData } from '../../../../shared/types/character-sheet-tooltip.data';
 
 @Injectable()
 export class CharacterSheetRepository {
@@ -20,7 +23,14 @@ export class CharacterSheetRepository {
 		return this.http.post('/api/ruleset/charactersheet/save', characterSheet, {responseType: 'text'});
 	}
 
-	public getCharacterSheet(id: string): Observable<any> {
-		return this.http.get('/api/ruleset/charactersheet/' + id, {responseType: 'json'});
+	public getCharacterSheet(id: string): Observable<CharacterSheetData> {
+		return this.http.get<CharacterSheetData>('/api/ruleset/charactersheet/' + id, {responseType: 'json'});
+	}
+
+	public getCharacterSheetTooltipConfig(characterSheetId: string): Observable<CharacterSheetTooltipData> {
+		return this.http.get<CharacterSheetTooltipData>('/api/ruleset/charactersheet/' + characterSheetId)
+				.pipe(map((characterSheet: CharacterSheetData) => {
+					return characterSheet.tooltipConfig;
+				}));
 	}
 }

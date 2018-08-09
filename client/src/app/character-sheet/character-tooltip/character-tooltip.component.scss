@@ -1,0 +1,23 @@
+:host {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	width: 100%;
+}
+
+.character-tooltip-aspect {
+	display: flex;
+	align-items: center;
+}
+
+.aspect-value {
+	margin-left: auto;
+}
+
+button {
+	width: 24px;
+	height: 24px;
+	mat-icon {
+		margin-bottom: 16px;
+	}
+}
