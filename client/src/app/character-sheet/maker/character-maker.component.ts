@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
 import { CharacterInterfaceFactory } from '../shared/character-interface.factory';
 import { CharacterSheetRepository } from '../../repositories/character-sheet.repository';
+import { Aspect, AspectType } from '../../types/character-sheet/aspect';
 
 @Component({
 	selector: 'character-maker',
@@ -14,6 +15,12 @@ import { CharacterSheetRepository } from '../../repositories/character-sheet.rep
 export class CharacterMakerComponent implements OnInit, AfterViewInit {
 	private characterSheetId: string;
 	private characterSheetData: any;
+
+	public predefiendAspectLabels = [
+		'Map Token',
+		'Name',
+		'Health',
+	];
 
 	constructor(private dialog: MatDialog,
 	            private activatedRoute: ActivatedRoute,
@@ -44,5 +51,34 @@ export class CharacterMakerComponent implements OnInit, AfterViewInit {
 
 	public save(): void {
 		this.characterService.save();
+	}
+
+	public changePredefinedAspect(aspectLabel: string, checked: boolean): void {
+		let aspectType: AspectType;
+		switch (aspectLabel) {
+			case ('Map Token'): {
+				aspectType = AspectType.TOKEN;
+				break;
+			}
+			case ('Name'): {
+				aspectType = AspectType.TEXT;
+				break;
+			}
+			case ('Health'): {
+				aspectType = AspectType.NUMBER;
+				break;
+			}
+			default: {
+				console.error('Predefined Aspect not defined');
+				return;
+			}
+		}
+		let aspect = new Aspect(aspectLabel, aspectType, true);
+		if (checked) {
+			this.characterService.addComponent(aspect);
+		}
+		else {
+			this.characterService.removeComponent(aspect);
+		}
 	}
 }

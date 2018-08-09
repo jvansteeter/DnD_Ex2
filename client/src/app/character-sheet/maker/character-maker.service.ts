@@ -9,12 +9,14 @@ import { CharacterInterfaceService } from '../shared/character-interface.service
 import { CharacterSheetRepository } from '../../repositories/character-sheet.repository';
 import { isUndefined } from 'util';
 import { AspectData } from '../../../../../shared/types/aspect.data';
+import { Observable, Subject } from 'rxjs';
 
 @Injectable()
 export class CharacterMakerService implements CharacterInterfaceService {
 	private characterSheetId: string;
 	public aspects: Aspect[];
 	private subComponents: Map<string, SubComponent>;
+	private removeComponentSubject = new Subject<void>();
 
 	immutable = false;
 
@@ -39,6 +41,11 @@ export class CharacterMakerService implements CharacterInterfaceService {
 		let index = this.aspects.indexOf(aspect);
 		this.aspects.splice(index, 1);
 		this.subComponents.delete(aspect.label.toLowerCase());
+		setTimeout(() => this.removeComponentSubject.next());
+	}
+
+	get removeComponentObservable(): Observable<void> {
+		return this.removeComponentSubject.asObservable();
 	}
 
 	public registerSubComponent(subComponent: SubComponent): void {

@@ -39,6 +39,7 @@ import { CharacterGridComponent } from './shared/character-grid.component';
 import { CharacterAspectComponent } from './shared/character-aspect.component';
 import { FunctionTextComponent } from './shared/subcomponents/function/function-text.component';
 import { AppCDKModule } from '../cdk/cdk.module';
+import { TextAreaComponent } from './shared/subcomponents/text-area/text-area.component';
 
 @NgModule({
     imports: [
@@ -81,6 +82,7 @@ import { AppCDKModule } from '../cdk/cdk.module';
 		    CharacterGridComponent,
 		    CharacterAspectComponent,
 		    FunctionTextComponent,
+		    TextAreaComponent,
     ],
     providers: [
         CharacterSheetRepository,

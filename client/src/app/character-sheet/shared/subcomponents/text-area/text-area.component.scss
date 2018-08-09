@@ -1,0 +1,29 @@
+:host {
+	display: flex;
+	flex: 1;
+	height: 100%;
+}
+
+/deep/ mat-form-field.textArea-subcomponent {
+	flex: 1;
+	display: flex;
+	div {
+		flex: 1;
+		display: flex;
+		height: 100%;
+	}
+	.mat-form-field-underline {
+		visibility: hidden;
+	}
+}
+
+textarea {
+	flex: 1;
+	display: flex;
+	margin-bottom: 25px;
+}
+
+::-webkit-scrollbar {
+	width: 0;  /* remove scrollbar space */
+	background: transparent;  /* optional: just make scrollbar invisible */
+}
