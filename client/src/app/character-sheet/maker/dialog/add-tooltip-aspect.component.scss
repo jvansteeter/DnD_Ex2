@@ -1,0 +1,24 @@
+.icon-button {
+	padding: 0 0;
+	min-width: 0;
+	width: 36px;
+	margin: 3px;
+	border: 1px solid #dedede;
+	border-radius: 5px
+}
+
+.icon-selector {
+	overflow-y: auto;
+	width: 14vw;
+	height: 30vh;
+}
+
+.selected-button {
+	background-color: #aab1de;
+	border-color: #5061bb;
+}
+
+::-webkit-scrollbar {
+	width: 0;  /* remove scrollbar space */
+	background: transparent;  /* optional: just make scrollbar invisible */
+}

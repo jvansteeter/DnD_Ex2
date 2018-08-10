@@ -1,1 +1,11 @@
-<h1>Add to tooltip</h1>
+<mat-form-field>
+	<mat-select placeholder="Aspect" [(ngModel)]="selectedLabel" required>
+		<mat-option *ngFor="let aspect of aspects" [value]="aspect.label">{{aspect.label}}</mat-option>
+	</mat-select>
+</mat-form-field>
+<div class="icon-selector">
+	<button class="icon-button" mat-stroked-button *ngFor="let icon of iconOptions" [ngClass]="icon === selectedIcon ? 'selected-button' : ''" (click)="selectIcon(icon)">
+		<mat-icon>{{icon}}</mat-icon>
+	</button>
+</div>
+<button mat-raised-button color="primary" (click)="submit()">OK</button>

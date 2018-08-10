@@ -1,7 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CharacterSheetRepository } from '../../repositories/character-sheet.repository';
 import { CharacterSheetTooltipData } from '../../../../../shared/types/character-sheet-tooltip.data';
-import { Aspect } from '../../types/character-sheet/aspect';
 import { CharacterMakerService } from '../maker/character-maker.service';
 
 @Component({
@@ -18,15 +17,12 @@ export class CharacterTooltipComponent {
 
 	constructor(private characterSheetRepo: CharacterSheetRepository,
 	            private characterSheetService: CharacterMakerService) {
-		this.tooltipConfig = {
-			aspects: [] = []
-		} as CharacterSheetTooltipData;
 	}
 
-	public addAspect(newAspect: Aspect, icon: string): void {
+	public addAspect(aspectLabel: string, icon: string): void {
 		let unique = true;
 		for (let aspect of this.tooltipConfig.aspects) {
-			if (aspect.label.toLowerCase() === newAspect.label.toLowerCase()) {
+			if (aspect.label.toLowerCase() === aspectLabel.toLowerCase()) {
 				unique = false;
 				break;
 			}
@@ -34,7 +30,7 @@ export class CharacterTooltipComponent {
 		if (unique) {
 			this.tooltipConfig.aspects.push({
 				icon: icon,
-				label: newAspect.label
+				label: aspectLabel
 			});
 		}
 	}

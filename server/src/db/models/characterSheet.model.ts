@@ -13,6 +13,7 @@ export class CharacterSheetModel extends MongooseModel implements CharacterSheet
 		super({
 			ruleSetId: {type: String, required: true},
 			label: {type: String, required: true},
+			tooltipConfig: Object
 		});
 
 		this._id = this.methods._id;

@@ -22,7 +22,7 @@ export class RuleSetRouter {
 	private userRepository: UserRepository;
 	private ruleSetRepository: RuleSetRepository;
 	private sheetRepository: CharacterSheetRepository;
-	private sheetR: CharacterSheetService;
+	private characterSheetService: CharacterSheetService;
 	private characterAspectRepository: CharacterAspectRepository;
 	private userRuleSetRepository: UserRuleSetRepository;
 	private npcRepository: NpcRepository;
@@ -32,7 +32,7 @@ export class RuleSetRouter {
 		this.userRepository = new UserRepository();
 		this.ruleSetRepository = new RuleSetRepository();
 		this.sheetRepository = new CharacterSheetRepository();
-		this.sheetR = new CharacterSheetService();
+		this.characterSheetService = new CharacterSheetService();
 		this.characterAspectRepository = new CharacterAspectRepository();
 		this.userRuleSetRepository = new UserRuleSetRepository();
 		this.npcRepository = new NpcRepository();
@@ -48,7 +48,7 @@ export class RuleSetRouter {
 
 		this.router.post('/charactersheet/save', async (req: Request, res: Response) => {
 			try {
-				await this.sheetR.saveCharacterSheet(req.body);
+				await this.characterSheetService.saveCharacterSheet(req.body);
 				res.status(200).send();
 			}
 			catch (error) {

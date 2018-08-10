@@ -4,6 +4,7 @@ import { Aspect, AspectType } from '../../types/character-sheet/aspect';
 import { SubComponent } from '../shared/subcomponents/sub-component';
 import { Npc } from '../../types/character-sheet/npc';
 import { AspectValue } from '../../types/character-sheet/aspectValue';
+import { CharacterSheetData } from '../../../../../shared/types/character-sheet.data';
 
 
 @Injectable()
@@ -61,4 +62,6 @@ export class CharacterSheetService implements CharacterInterfaceService {
 	getGridHeight(): number {
 		return 0;
 	}
+
+	characterSheet: CharacterSheetData;
 }

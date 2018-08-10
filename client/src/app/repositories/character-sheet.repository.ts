@@ -23,14 +23,7 @@ export class CharacterSheetRepository {
 		return this.http.post('/api/ruleset/charactersheet/save', characterSheet, {responseType: 'text'});
 	}
 
-	public getCharacterSheet(id: string): Observable<CharacterSheetData> {
+	public getCharacterSheet(id: string): Observable<any> {
 		return this.http.get<CharacterSheetData>('/api/ruleset/charactersheet/' + id, {responseType: 'json'});
-	}
-
-	public getCharacterSheetTooltipConfig(characterSheetId: string): Observable<CharacterSheetTooltipData> {
-		return this.http.get<CharacterSheetTooltipData>('/api/ruleset/charactersheet/' + characterSheetId)
-				.pipe(map((characterSheet: CharacterSheetData) => {
-					return characterSheet.tooltipConfig;
-				}));
 	}
 }

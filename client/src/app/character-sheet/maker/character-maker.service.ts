@@ -11,11 +11,14 @@ import { isUndefined } from 'util';
 import { AspectData } from '../../../../../shared/types/aspect.data';
 import { Observable, Subject } from 'rxjs';
 import { AlertService } from '../../alert/alert.service';
+import { CharacterSheetData } from '../../../../../shared/types/character-sheet.data';
+import { CharacterSheetTooltipData } from '../../../../../shared/types/character-sheet-tooltip.data';
 
 @Injectable()
 export class CharacterMakerService implements CharacterInterfaceService {
-	private characterSheetId: string;
+	public characterSheet: CharacterSheetData;
 	public aspects: Aspect[];
+
 	private subComponents: Map<string, SubComponent>;
 	private removeComponentSubject = new Subject<void>();
 	private registerSubComponentSubject = new Subject<SubComponent>();
@@ -32,6 +35,11 @@ export class CharacterMakerService implements CharacterInterfaceService {
 		this.subComponents = new Map<string, SubComponent>();
 	}
 
+	public setCharacterSheet(sheet: CharacterSheetData): void {
+		this.characterSheet = sheet;
+		this.init();
+	}
+
 	public addComponent(aspect: Aspect): void {
 		if (!isUndefined(this.subComponents.get(aspect.label.toLowerCase()))) {
 			console.error('aspect with that name already exists');
@@ -42,7 +50,6 @@ export class CharacterMakerService implements CharacterInterfaceService {
 	}
 
 	public removeComponent(aspect: Aspect): void {
-		// let index = this.aspects.indexOf(aspect);
 		let index: number = this.aspects.findIndex((nextAspect: Aspect) => {
 			return aspect.equals(nextAspect);
 		});
@@ -72,10 +79,6 @@ export class CharacterMakerService implements CharacterInterfaceService {
 		return this.subComponents.get(label.toLowerCase()) ? this.subComponents.get(label.toLowerCase()).getValue() : undefined;
 	}
 
-	public aspectExists(label: string): boolean {
-		return !isUndefined(this.subComponents.get(label.toLowerCase()));
-	}
-
 	public updateFunctionAspects(): void {
 		this.subComponents.forEach(subComponent => {
 		    if (subComponent.aspect.aspectType === AspectType.FUNCTION) {
@@ -85,15 +88,13 @@ export class CharacterMakerService implements CharacterInterfaceService {
 	}
 
 	public save() {
-		let characterSheet = {
-			_id: this.characterSheetId,
-		};
+		let characterSheet = JSON.parse(JSON.stringify(this.characterSheet));
 		let aspects: AspectData[] = [];
 		for (let i = 0; i < this.aspects.length; i++) {
 			let aspect = this.aspects[i];
 			let aspectObj: AspectData = {
 				_id: aspect._id,
-				characterSheetId: this.characterSheetId,
+				characterSheetId: this.characterSheet._id,
 				label: aspect.label,
 				aspectType: aspect.aspectType,
 				required: aspect.required,
@@ -114,14 +115,6 @@ export class CharacterMakerService implements CharacterInterfaceService {
 		}
 		characterSheet['aspects'] = aspects;
 		this.characterSheetRepository.saveCharacterSheet(characterSheet).subscribe();
-	}
-
-	private getChildOf(aspect: Aspect): SubComponentChild | undefined {
-		return this.subComponents.get(aspect.label.toLowerCase()) ? this.subComponents.get(aspect.label.toLowerCase()).child : undefined;
-	}
-
-	public setCharacterSheetId(id: string): void {
-		this.characterSheetId = id;
 	}
 
 	public initAspects(aspects: AspectData[]): void {
@@ -145,7 +138,7 @@ export class CharacterMakerService implements CharacterInterfaceService {
 		});
 	}
 
-	getGridHeight(): number {
+	public getGridHeight(): number {
 		let aspects = document.getElementsByTagName('character-aspect');
 		let height = 0;
 		for (let i = 0; i < aspects.length; i++) {
@@ -158,5 +151,33 @@ export class CharacterMakerService implements CharacterInterfaceService {
 		}
 
 		return height;
+	}
+
+	public getTooltipAspects(): Aspect[] {
+		let result = [];
+		for (let aspect of this.aspects) {
+			if (aspect.aspectType === AspectType.TEXT ||
+					aspect.aspectType === AspectType.NUMBER ||
+					aspect.aspectType === AspectType.BOOLEAN ||
+					aspect.aspectType === AspectType.CATEGORICAL ||
+					aspect.aspectType === AspectType.FUNCTION) {
+				result.push(aspect);
+			}
+		}
+
+		return result;
+	}
+
+	get characterTooltipConfig(): CharacterSheetTooltipData {
+		if (isUndefined(this.characterSheet.tooltipConfig)) {
+			this.characterSheet.tooltipConfig = {
+				aspects: [] = []
+			} as CharacterSheetTooltipData;
+		}
+		return this.characterSheet.tooltipConfig;
+	}
+
+	private getChildOf(aspect: Aspect): SubComponentChild | undefined {
+		return this.subComponents.get(aspect.label.toLowerCase()) ? this.subComponents.get(aspect.label.toLowerCase()).child : undefined;
 	}
 }

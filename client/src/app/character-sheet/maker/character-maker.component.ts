@@ -18,7 +18,6 @@ import { AddTooltipAspectComponent } from "./dialog/add-tooltip-aspect.component
 })
 export class CharacterMakerComponent implements OnInit, AfterViewInit {
 	private characterSheetId: string;
-	private characterSheetData: any;
 
 	@ViewChild('characterTooltip')
 	private characterToolTipComponent: CharacterTooltipComponent;
@@ -48,34 +47,50 @@ export class CharacterMakerComponent implements OnInit, AfterViewInit {
 		this.characterInterfaceFactory.setCharacterInterface(this.characterService);
 		this.characterToolTipCard = {
 			title: 'Character Tooltip Preview',
-			menuOptions: [
-				{
-					title: 'Add Aspect to tooltip',
-					function: this.addTooltipAspect
-				}
-			]
 		}
 	}
 
 	ngOnInit(): void {
 		this.characterService.registerSubComponentObservable.subscribe((subComponent: SubComponent) => {
-			for (let preDefinedAspect of this.preDefinedAspects) {
-				if (preDefinedAspect.label.toLowerCase() === subComponent.aspect.label.toLowerCase()) {
-					preDefinedAspect.checked = true;
-					this.changePredefinedAspect(preDefinedAspect.label, true, true);
+			if (subComponent.aspect.isPredefined) {
+				for (let preDefinedAspect of this.preDefinedAspects) {
+					if (preDefinedAspect.label.toLowerCase() === subComponent.aspect.label.toLowerCase()) {
+						preDefinedAspect.checked = true;
+						this.changePredefinedAspect(preDefinedAspect.label, true, true);
+					}
 				}
 			}
+			else {
+				this.characterToolTipCard.menuOptions = [
+					{
+						title: 'Add Aspect to tooltip',
+						function: this.addTooltipAspect
+					}
+				]
+			}
 		});
-		this.characterService.init();
+		this.characterService.removeComponentObservable.subscribe(() => {
+			let tooltipAspects = this.characterService.getTooltipAspects();
+			let notPredefined = false;
+			for (let aspect of tooltipAspects) {
+				if (!aspect.isPredefined) {
+					notPredefined = true;
+					break;
+				}
+			}
+			if (!notPredefined) {
+				this.characterToolTipCard.menuOptions = undefined;
+			}
+		});
 	}
 
 	ngAfterViewInit(): void {
 		this.activatedRoute.params.subscribe(params => {
 			this.characterSheetId = params['characterSheetId'];
 			this.characterSheetRepository.getCharacterSheet(this.characterSheetId).subscribe((data: any) => {
-				this.characterSheetData = data;
-				this.characterService.setCharacterSheetId(this.characterSheetId);
+				this.characterService.setCharacterSheet(data);
 				this.characterService.initAspects(data.aspects);
+				this.characterToolTipComponent.tooltipConfig = this.characterService.characterTooltipConfig;
 			});
 		});
 	}
@@ -117,7 +132,7 @@ export class CharacterMakerComponent implements OnInit, AfterViewInit {
 				this.characterService.addComponent(aspect);
 			}
 			if (aspectType !== AspectType.TOKEN) {
-				this.characterToolTipComponent.addAspect(aspect, icon);
+				this.characterToolTipComponent.addAspect(aspect.label, icon);
 			}
 		}
 		else {
@@ -127,6 +142,23 @@ export class CharacterMakerComponent implements OnInit, AfterViewInit {
 	}
 
 	private addTooltipAspect = () => {
-		this.dialog.open(AddTooltipAspectComponent);
+		let tooltipAspects = this.characterService.getTooltipAspects();
+		for (let tooltipAspect of this.characterToolTipComponent.tooltipConfig.aspects) {
+			for (let i = 0; i < tooltipAspects.length; i++) {
+				if (tooltipAspects[i].label.toLowerCase() === tooltipAspect.label.toLowerCase()) {
+					tooltipAspects.splice(i, 1);
+					break;
+				}
+			}
+		}
+		this.dialog.open(AddTooltipAspectComponent, {
+			data: {
+				aspects: tooltipAspects
+			}
+		}).afterClosed().subscribe((tooltipAspect) => {
+			if (tooltipAspect) {
+				this.characterToolTipComponent.addAspect(tooltipAspect.label, tooltipAspect.icon);
+			}
+		});
 	};
 }

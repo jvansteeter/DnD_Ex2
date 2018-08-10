@@ -22,7 +22,8 @@ export class CharacterSheetService {
 				await this.aspectRepository.create(sheetModel._id, aspect);
 			}
 
-			return;
+			sheetModel.tooltipConfig = characterSheetObj.tooltipConfig;
+			return sheetModel.save();
 		}
 		catch (error) {
 			throw error;
