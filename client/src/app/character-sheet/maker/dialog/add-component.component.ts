@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Aspect, AspectType } from '../../../types/character-sheet/aspect';
+import { Aspect, AspectType } from '../../shared/aspect';
 import { CharacterMakerService } from '../character-maker.service';
 import { MatDialogRef } from '@angular/material';
 

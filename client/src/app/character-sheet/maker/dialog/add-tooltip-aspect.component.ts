@@ -1,6 +1,6 @@
 import { Component, Inject } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
-import { Aspect } from '../../../types/character-sheet/aspect';
+import { Aspect } from '../../shared/aspect';
 import { AlertService } from '../../../alert/alert.service';
 
 @Component({

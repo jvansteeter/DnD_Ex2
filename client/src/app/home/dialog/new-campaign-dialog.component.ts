@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
 import { CampaignRepository } from '../../repositories/campaign.repository';
-import { RuleSet } from '../../types/RuleSet';
 import { Observable, Subject } from 'rxjs';
+import { RuleSetData } from '../../../../../shared/types/rule-set/rule-set.data';
 
 @Component({
     templateUrl: 'new-campaign-dialog.component.html',
@@ -23,7 +23,7 @@ export class NewCampaignDialogComponent implements OnInit {
         this.selectedRuleSet = undefined;
     }
 
-    public ruleSetSelected(ruleSet: RuleSet): void {
+    public ruleSetSelected(ruleSet: RuleSetData): void {
         this.selectedRuleSet = ruleSet;
     }
 

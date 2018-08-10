@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
 import { CharacterInterfaceFactory } from '../shared/character-interface.factory';
 import { CharacterSheetRepository } from '../../repositories/character-sheet.repository';
-import { Aspect, AspectType } from '../../types/character-sheet/aspect';
+import { Aspect, AspectType } from '../shared/aspect';
 import { SubComponent } from '../shared/subcomponents/sub-component';
 import { CharacterTooltipComponent } from '../character-tooltip/character-tooltip.component';
 import { DashboardCard } from '../../cdk/dashboard-card/dashboard-card';

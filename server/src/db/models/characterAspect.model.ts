@@ -1,7 +1,7 @@
 import * as mongoose from 'mongoose';
 import { MongooseModel } from './mongoose.model';
 import { AspectData } from '../../../../shared/types/rule-set/aspect.data';
-import { AspectType } from '../../../../client/src/app/types/character-sheet/aspect';
+import { AspectType } from '../../../../client/src/app/character-sheet/shared/aspect';
 
 export class CharacterAspectModel extends MongooseModel implements AspectData {
 	public _id: string;

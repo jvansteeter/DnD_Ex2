@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, Input, ViewChild } from '@angular/core';
 import { SubComponentChild } from '../sub-component-child';
-import { Aspect } from '../../../../types/character-sheet/aspect';
+import { Aspect } from '../../aspect';
 import { MatMenu } from '@angular/material';
 import { CharacterInterfaceFactory } from '../../character-interface.factory';
 import { CharacterInterfaceService } from '../../character-interface.service';

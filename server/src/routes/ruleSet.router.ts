@@ -111,14 +111,25 @@ export class RuleSetRouter {
 			}).catch(error => res.status(500).send(error));
 		});
 
-		this.router.get('/npc/:npcId', (req: Request, res: Response) => {
-			this.npcRepository.findById(req.params.npcId).then((npc: NpcModel) => {
-				this.sheetRepository.getCompiledCharacterSheet(npc.characterSheetId).then((characterSheet: CharacterSheetModel) => {
-					let npcObj = JSON.parse(JSON.stringify(npc));
-					npcObj.characterSheet = JSON.parse(JSON.stringify(characterSheet));
-					res.json(npcObj);
-				}).catch(error => res.status(500).send(error));
-			}).catch(error => res.status(500).send(error));
+		this.router.get('/npc/:npcId', async (req: Request, res: Response) => {
+			// this.npcRepository.findById(req.params.npcId).then((npc: NpcModel) => {
+			// 	this.sheetRepository.getCompiledCharacterSheet(npc.characterSheetId).then((characterSheet: CharacterSheetModel) => {
+			// 		let npcObj = JSON.parse(JSON.stringify(npc));
+			// 		npcObj.characterSheet = JSON.parse(JSON.stringify(characterSheet));
+			// 		res.json(npcObj);
+			// 	}).catch(error => res.status(500).send(error));
+			// }).catch(error => res.status(500).send(error));
+			try {
+				let npc: NpcModel = await this.npcRepository.findById(req.params.npcId);
+				let characterSheet: CharacterSheetModel = await this.sheetRepository.getCompiledCharacterSheet(npc.characterSheetId);
+				let npcObj = JSON.parse(JSON.stringify(npc));
+				npcObj.characterSheet = JSON.parse(JSON.stringify(characterSheet));
+				res.json(npcObj);
+			}
+			catch (error) {
+				console.error(error);
+				res.status(500).send(error);
+			}
 		});
 
 		this.router.get('/npcs/:ruleSetId', (req: Request, res: Response) => {

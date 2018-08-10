@@ -1,5 +1,5 @@
-import { AspectType } from '../../../client/src/app/types/character-sheet/aspect';
-import { AspectConfig } from "../../../client/src/app/types/character-sheet/aspect-config";
+import { AspectType } from '../../../client/src/app/character-sheet/shared/aspect';
+import { AspectConfig } from "../../../client/src/app/character-sheet/shared/aspect-config";
 
 export interface AspectData {
 	_id: string;

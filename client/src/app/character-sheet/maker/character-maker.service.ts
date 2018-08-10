@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Aspect, AspectType } from '../../types/character-sheet/aspect';
+import { Aspect, AspectType } from '../shared/aspect';
 import { SubComponent } from '../shared/subcomponents/sub-component';
 import { CategoryComponent } from '../shared/subcomponents/category/category.component';
 import { CheckboxListComponent } from '../shared/subcomponents/checkbox-list/checkbox-list.component';

@@ -2,8 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CharacterSheetData } from '../../../../shared/types/rule-set/character-sheet.data';
-import { map } from 'rxjs/operators';
-import { CharacterSheetTooltipData } from '../../../../shared/types/rule-set/character-sheet-tooltip.data';
+import { CharacterData } from '../../../../shared/types/character.data';
 
 @Injectable()
 export class CharacterSheetRepository {
@@ -11,8 +10,8 @@ export class CharacterSheetRepository {
 
 	}
 
-	public getNpc(id: string): Observable<any> {
-		return this.http.get('/api/ruleset/npc/' + id, {responseType: 'json'});
+	public getNpc(id: string): Observable<CharacterData> {
+		return this.http.get<CharacterData>('/api/ruleset/npc/' + id, {responseType: 'json'});
 	}
 
 	public saveNpc(npcData: any): Observable<string> {

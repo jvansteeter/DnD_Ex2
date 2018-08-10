@@ -1,15 +1,39 @@
-<div>
-	<h1 *ngIf="npcData">{{npcData.label}}</h1>
-	<mat-toolbar>
-		<button mat-icon-button mat-raised-button color="primary" (click)="save()" class="characterSheet-saveButton" matTooltip="Save">
-			<mat-icon>sd_card</mat-icon>
-		</button>
-	</mat-toolbar>
-	<div class="characterSheet-gridContainer">
-		<div class="well well-lg characterSheet" *ngIf="npcData">
-			<div *ngFor="let aspect of characterSheetService.aspects">
-				<sub-component [aspect]="aspect"></sub-component>
-			</div>
-		</div>
-	</div>
-</div>
+<mat-drawer-container>
+	<mat-drawer #drawer [opened]="true" [mode]="'side'" [disableClose]="true">
+		<mat-list>
+			<mat-list-item>
+				<button mat-icon-button mat-raised-button color="primary" (click)="save()" class="characterSheet-saveButton"
+				        matTooltip="Save">
+					<mat-icon>save</mat-icon>
+				</button>
+			</mat-list-item>
+		</mat-list>
+	</mat-drawer>
+	<mat-drawer-content>
+		<h1 *ngIf="characterService.characterSheet">{{characterService.characterSheet.label}}</h1>
+		<mat-grid-list [cols]="4" [rowHeight]="'fit'">
+			<mat-grid-tile [colspan]="3" [rowspan]="2" class="characterSheet-gridContainer">
+				<character-grid></character-grid>
+			</mat-grid-tile>
+			<mat-grid-tile [colspan]="1" [rowspan]="1">
+				<mat-accordion>
+					<mat-expansion-panel>
+						<mat-expansion-panel-header>Abilities</mat-expansion-panel-header>
+						<!--<div class="predefined-aspects">-->
+							<!--<mat-checkbox *ngFor="let aspect of preDefinedAspects" color="primary"-->
+							              <!--(change)="changePredefinedAspect(aspect.label, $event.checked)" [checked]="aspect.checked">{{aspect.label}}</mat-checkbox>-->
+						<!--</div>-->
+					</mat-expansion-panel>
+				</mat-accordion>
+			</mat-grid-tile>
+			<mat-grid-tile [rowspan]="1" [colspan]="1">
+				<dashboard-card [dashboardCard]="characterToolTipCard">
+					<h3>Equipment</h3>
+					<div class="character-tooltip-builder">
+						<!--<character-tooltip #characterTooltip></character-tooltip>-->
+					</div>
+				</dashboard-card>
+			</mat-grid-tile>
+		</mat-grid-list>
+	</mat-drawer-content>
+</mat-drawer-container>

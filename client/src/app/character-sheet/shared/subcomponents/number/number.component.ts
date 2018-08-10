@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, ViewChild } from '@angular/core';
-import { Aspect } from '../../../../types/character-sheet/aspect';
+import { Aspect } from '../../aspect';
 import { SubComponent } from '../sub-component';
 import { SubComponentChild } from '../sub-component-child';
 import { MatMenu } from '@angular/material';

@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, Input, ViewChild } from '@angular/core';
-import { Aspect } from '../../../../types/character-sheet/aspect';
+import { Aspect } from '../../aspect';
 import { SubComponentChild } from '../sub-component-child';
 import { CharacterMakerService } from '../../../maker/character-maker.service';
 import { MatMenu } from '@angular/material';

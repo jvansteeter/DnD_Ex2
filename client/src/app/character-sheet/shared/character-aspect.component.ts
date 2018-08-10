@@ -9,7 +9,7 @@ import {
 	ViewChild
 } from '@angular/core';
 import { CharacterMakerService } from '../maker/character-maker.service';
-import { Aspect } from '../../types/character-sheet/aspect';
+import { Aspect } from './aspect';
 import { SubComponent } from './subcomponents/sub-component';
 import { isUndefined } from 'util';
 
