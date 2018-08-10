@@ -1,6 +1,6 @@
 import { Aspect } from '../../types/character-sheet/aspect';
 import { SubComponent } from './subcomponents/sub-component';
-import { CharacterSheetData } from '../../../../../shared/types/character-sheet.data';
+import { CharacterSheetData } from '../../../../../shared/types/rule-set/character-sheet.data';
 
 
 export interface CharacterInterfaceService {

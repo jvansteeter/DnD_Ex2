@@ -1,7 +1,7 @@
 import * as mongoose from 'mongoose';
 import { Promise } from 'bluebird';
 import { CharacterAspectModel } from '../models/characterAspect.model';
-import { AspectData } from '../../../../shared/types/aspect.data';
+import { AspectData } from '../../../../shared/types/rule-set/aspect.data';
 
 export class CharacterAspectRepository {
 	private CharacterAspect: mongoose.Model<mongoose.Document>;

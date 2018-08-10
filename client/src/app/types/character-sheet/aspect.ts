@@ -1,6 +1,6 @@
 import { AspectConfig } from './aspect-config';
 import { isUndefined } from 'util';
-import { AspectData } from "../../../../../shared/types/aspect.data";
+import { AspectData } from "../../../../../shared/types/rule-set/aspect.data";
 
 export enum AspectType {
 	TEXT = 'TEXT',

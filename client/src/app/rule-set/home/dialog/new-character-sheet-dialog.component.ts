@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-import { CharacterSheetData } from '../../../../../../shared/types/character-sheet.data';
+import { CharacterSheetData } from '../../../../../../shared/types/rule-set/character-sheet.data';
 
 @Component({
 	templateUrl: 'new-character-sheet-dialog.component.html'

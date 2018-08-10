@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { CharacterSheetData } from '../../../../shared/types/character-sheet.data';
+import { CharacterSheetData } from '../../../../shared/types/rule-set/character-sheet.data';
+import { RuleSetData } from '../../../../shared/types/rule-set/rule-set.data';
 
 
 @Injectable()
@@ -14,8 +15,8 @@ export class RuleSetRepository {
         return this.http.get('/api/ruleset/userrulesets', {responseType: 'json'});
     }
 
-    public getRuleSet(ruleSetId: string): Observable<any> {
-        return this.http.get('/api/ruleset/ruleset/' + ruleSetId, {responseType: 'json'});
+    public getRuleSet(ruleSetId: string): Observable<RuleSetData> {
+        return this.http.get<RuleSetData>('/api/ruleset/ruleset/' + ruleSetId, {responseType: 'json'});
     }
 
     public getCharacterSheets(ruleSetId: string): Observable<CharacterSheetData[]> {

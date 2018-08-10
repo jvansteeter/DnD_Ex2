@@ -2,32 +2,36 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material';
 import { NewCharacterSheetDialogComponent } from './dialog/new-character-sheet-dialog.component';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { NewNpcDialogComponent } from './dialog/new-npc-dialog.component';
 import { RuleSetRepository } from '../../repositories/rule-set.repository';
 import { SubjectDataSource } from '../../utilities/subjectDataSource';
-import { CharacterSheetData } from '../../../../../shared/types/character-sheet.data';
+import { CharacterSheetData } from '../../../../../shared/types/rule-set/character-sheet.data';
 import { DashboardCard } from '../../cdk/dashboard-card/dashboard-card';
+import { RuleSetData } from '../../../../../shared/types/rule-set/rule-set.data';
+import { ConfigService } from '../../data-services/config.service';
 
 @Component({
 	selector: 'rule-set-home',
 	templateUrl: 'rule-set-home.component.html',
-	styleUrls: ['rule-set-home.component.css']
+	styleUrls: ['rule-set-home.component.scss']
 })
 export class RuleSetHomeComponent implements OnInit {
 	private ruleSetId: string;
-	private ruleSet: any;
+	private ruleSet: RuleSetData;
 
 	public characterSheets: CharacterSheetData[];
 	public admins: any[];
 	public npcs: any[];
+
+	public configCard: DashboardCard;
 
 	private readonly adminSubject: Subject<AdminData[]>;
 	private adminDataSource: SubjectDataSource<AdminData>;
 	public adminColumns = ['username', 'role'];
 
 	public characterSheetCard: DashboardCard;
-	private readonly characterSheetSubject: Subject<CharacterSheetData[]>;
+	private readonly characterSheetSubject: BehaviorSubject<CharacterSheetData[]>;
 	private characterSheetDataSource: SubjectDataSource<CharacterSheetData>;
 	public characterSheetColumns = ['label'];
 
@@ -38,9 +42,14 @@ export class RuleSetHomeComponent implements OnInit {
 	constructor(private activatedRoute: ActivatedRoute,
 	            private dialog: MatDialog,
 	            private router: Router,
-	            private ruleSetRepository: RuleSetRepository) {
+	            private ruleSetRepository: RuleSetRepository,
+	            private configService: ConfigService) {
 		this.adminSubject = new Subject<AdminData[]>();
 		this.adminDataSource = new SubjectDataSource(this.adminSubject);
+
+		this.configCard = {
+			title: 'Rule Set Config'
+		};
 
 		this.characterSheetCard = {
 			menuOptions: [
@@ -50,7 +59,7 @@ export class RuleSetHomeComponent implements OnInit {
 				}
 			]
 		};
-		this.characterSheetSubject = new Subject<CharacterSheetData[]>();
+		this.characterSheetSubject = new BehaviorSubject<CharacterSheetData[]>([]);
 		this.characterSheetDataSource = new SubjectDataSource<CharacterSheetData>(this.characterSheetSubject);
 
 		this.npcSubject = new Subject<NpcData[]>();
@@ -60,7 +69,9 @@ export class RuleSetHomeComponent implements OnInit {
 	ngOnInit(): void {
 		this.activatedRoute.params.subscribe((params) => {
 			this.ruleSetId = params['ruleSetId'];
-			this.ruleSetRepository.getRuleSet(this.ruleSetId).subscribe((ruleSet: any) => {
+			this.ruleSetRepository.getRuleSet(this.ruleSetId).subscribe((ruleSet: RuleSetData) => {
+				let completeConfig = this.configService.completeConfig(ruleSet.config);
+				ruleSet.config = completeConfig;
 				this.ruleSet = ruleSet;
 			});
 			this.ruleSetRepository.getCharacterSheets(this.ruleSetId).subscribe((characterSheets: CharacterSheetData[]) => {

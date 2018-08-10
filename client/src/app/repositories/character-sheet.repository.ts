@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { CharacterSheetData } from '../../../../shared/types/character-sheet.data';
+import { CharacterSheetData } from '../../../../shared/types/rule-set/character-sheet.data';
 import { map } from 'rxjs/operators';
-import { CharacterSheetTooltipData } from '../../../../shared/types/character-sheet-tooltip.data';
+import { CharacterSheetTooltipData } from '../../../../shared/types/rule-set/character-sheet-tooltip.data';
 
 @Injectable()
 export class CharacterSheetRepository {

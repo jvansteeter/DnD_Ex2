@@ -8,11 +8,11 @@ import { SubComponentChild } from '../shared/subcomponents/sub-component-child';
 import { CharacterInterfaceService } from '../shared/character-interface.service';
 import { CharacterSheetRepository } from '../../repositories/character-sheet.repository';
 import { isUndefined } from 'util';
-import { AspectData } from '../../../../../shared/types/aspect.data';
+import { AspectData } from '../../../../../shared/types/rule-set/aspect.data';
 import { Observable, Subject } from 'rxjs';
 import { AlertService } from '../../alert/alert.service';
-import { CharacterSheetData } from '../../../../../shared/types/character-sheet.data';
-import { CharacterSheetTooltipData } from '../../../../../shared/types/character-sheet-tooltip.data';
+import { CharacterSheetData } from '../../../../../shared/types/rule-set/character-sheet.data';
+import { CharacterSheetTooltipData } from '../../../../../shared/types/rule-set/character-sheet-tooltip.data';
 
 @Injectable()
 export class CharacterMakerService implements CharacterInterfaceService {

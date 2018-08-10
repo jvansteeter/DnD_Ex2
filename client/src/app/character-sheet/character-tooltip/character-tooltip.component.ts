@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CharacterSheetRepository } from '../../repositories/character-sheet.repository';
-import { CharacterSheetTooltipData } from '../../../../../shared/types/character-sheet-tooltip.data';
+import { CharacterSheetTooltipData } from '../../../../../shared/types/rule-set/character-sheet-tooltip.data';
 import { CharacterMakerService } from '../maker/character-maker.service';
 
 @Component({

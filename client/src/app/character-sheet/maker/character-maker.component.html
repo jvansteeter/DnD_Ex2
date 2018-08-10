@@ -16,7 +16,7 @@
 		</mat-list>
 	</mat-drawer>
 	<mat-drawer-content>
-		<h1 *ngIf="characterSheetData">{{characterSheetData.label}}</h1>
+		<h1 *ngIf="characterService.characterSheet">{{characterService.characterSheet.label}}</h1>
 		<mat-grid-list [cols]="4" [rowHeight]="'fit'">
 			<mat-grid-tile [colspan]="3" [rowspan]="2" class="characterSheet-gridContainer">
 				<character-grid></character-grid>
