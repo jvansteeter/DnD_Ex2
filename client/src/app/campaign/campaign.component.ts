@@ -29,6 +29,8 @@ export class CampaignComponent implements OnInit, OnDestroy {
 	public encounterDataSource: SubjectDataSource<EncounterStateData>;
 	public encounterTableCols = ['label', 'date'];
 
+	public charactersCard: DashboardCard;
+
 	constructor(private activatedRoute: ActivatedRoute,
 							private campaignPageService: CampaignPageService,
 							private alertService: AlertService,

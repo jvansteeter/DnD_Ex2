@@ -35,9 +35,10 @@ export class RuleSetHomeComponent implements OnInit {
 	private characterSheetDataSource: SubjectDataSource<CharacterSheetData>;
 	public characterSheetColumns = ['label'];
 
+	public npcCard: DashboardCard;
 	private readonly npcSubject: Subject<NpcData[]>;
 	private npcDataSource: SubjectDataSource<NpcData>;
-	public npcColumns = ['label', 'edit'];
+	public npcColumns = ['label'];
 
 	constructor(private activatedRoute: ActivatedRoute,
 	            private dialog: MatDialog,
@@ -59,6 +60,16 @@ export class RuleSetHomeComponent implements OnInit {
 				}
 			]
 		};
+
+		this.npcCard = {
+			menuOptions: [
+				{
+					title: 'Create NPC',
+					function: this.createNPC
+				}
+			]
+		};
+
 		this.characterSheetSubject = new BehaviorSubject<CharacterSheetData[]>([]);
 		this.characterSheetDataSource = new SubjectDataSource<CharacterSheetData>(this.characterSheetSubject);
 
@@ -99,13 +110,18 @@ export class RuleSetHomeComponent implements OnInit {
 		this.router.navigate(['character-sheet', characterSheetId]);
 	}
 
-	createNPC(): void {
-		this.dialog.open(NewNpcDialogComponent, {data: {characterSheets: this.characterSheets}});
-	}
-
 	editNpc(npcId: string): void {
 		this.router.navigate(['npc', npcId]);
 	}
+
+	private createNPC = () => {
+		this.dialog.open(NewNpcDialogComponent, {data: {characterSheets: this.characterSheets}})
+				.afterClosed().subscribe((npc) => {
+					if (npc) {
+						this.router.navigate(['npc', npc._id]);
+					}
+		});
+	};
 }
 
 interface AdminData {

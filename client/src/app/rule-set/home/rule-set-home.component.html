@@ -34,5 +34,17 @@
 				</mat-table>
 			</dashboard-card>
 		</mat-grid-tile>
+		<mat-grid-tile [colspan]="2" [rowspan]="1">
+			<dashboard-card [dashboardCard]="npcCard">
+				<mat-table [dataSource]="npcDataSource">
+					<ng-container matColumnDef="label">
+						<mat-header-cell *matHeaderCellDef>NPCs</mat-header-cell>
+						<mat-cell *matCellDef="let npc">{{npc.label}}</mat-cell>
+					</ng-container>
+					<mat-header-row *matHeaderRowDef="npcColumns"></mat-header-row>
+					<mat-row class="clickable-row" *matRowDef="let npc; columns: characterSheetColumns" (click)="editNpc(npc._id)"></mat-row>
+				</mat-table>
+			</dashboard-card>
+		</mat-grid-tile>
 	</mat-grid-list>
 </div>
