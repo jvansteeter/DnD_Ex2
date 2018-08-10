@@ -25,8 +25,8 @@
 				<mat-accordion>
 					<mat-expansion-panel>
 						<mat-expansion-panel-header>Pre-defined Aspects</mat-expansion-panel-header>
-						<div style="display: flex; flex-direction: column">
-							<mat-checkbox *ngFor="let aspect of preDefinedAspects; let i = index" color="primary"
+						<div class="predefined-aspects">
+							<mat-checkbox *ngFor="let aspect of preDefinedAspects" color="primary"
 							              (change)="changePredefinedAspect(aspect.label, $event.checked)" [checked]="aspect.checked">{{aspect.label}}</mat-checkbox>
 						</div>
 					</mat-expansion-panel>

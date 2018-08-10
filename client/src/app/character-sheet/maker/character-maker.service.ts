@@ -97,6 +97,7 @@ export class CharacterMakerService implements CharacterInterfaceService {
 				label: aspect.label,
 				aspectType: aspect.aspectType,
 				required: aspect.required,
+				isPredefined: aspect.isPredefined,
 				fontSize: aspect.fontSize,
 				config: aspect.config,
 			};
@@ -123,10 +124,10 @@ export class CharacterMakerService implements CharacterInterfaceService {
 		this.characterSheetId = id;
 	}
 
-	public initAspects(aspects: any[]): void {
+	public initAspects(aspects: AspectData[]): void {
 		this.aspects = [];
-		aspects.forEach(aspectObj => {
-			let aspect = new Aspect(aspectObj.label, aspectObj.aspectType, aspectObj.required);
+		aspects.forEach((aspectObj: AspectData) => {
+			let aspect = new Aspect(aspectObj.label, aspectObj.aspectType, aspectObj.required, aspectObj.isPredefined);
 			aspect._id = aspectObj._id;
 			aspect.fontSize = aspectObj.fontSize;
 			aspect.isNew = false;

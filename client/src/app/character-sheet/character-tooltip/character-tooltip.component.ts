@@ -61,13 +61,14 @@ export class CharacterTooltipComponent {
 	}
 
 	public moveUp(index: number): void {
-
 		let aspect = this.tooltipConfig.aspects[index];
 		this.tooltipConfig.aspects.splice(index, 1);
-		// this.tooltipConfig.aspects.splice(index - 1, 0, aspect);
+		this.tooltipConfig.aspects.splice(index - 1, 0, aspect);
 	}
 
 	public moveDown(index: number): void {
-
+		let aspect = this.tooltipConfig.aspects[index];
+		this.tooltipConfig.aspects.splice(index, 1);
+		this.tooltipConfig.aspects.splice(index + 1, 0, aspect);
 	}
 }

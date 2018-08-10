@@ -9,6 +9,7 @@ export class CharacterAspectModel extends MongooseModel implements AspectData {
 	public label: string;
 	public aspectType: AspectType;
 	public required: boolean;
+	public isPredefined: boolean;
 	public fontSize: number;
 	public config: any;
 	public items?: any[];
@@ -20,6 +21,7 @@ export class CharacterAspectModel extends MongooseModel implements AspectData {
 			label: String,
 			aspectType: String,
 			required: Boolean,
+			isPredefined: {type: Boolean, default: false },
 			fontSize: Number,
 			config: {},
 			items: [],
@@ -31,6 +33,7 @@ export class CharacterAspectModel extends MongooseModel implements AspectData {
 		this.label = this.methods.label;
 		this.aspectType = this.methods.aspectType;
 		this.required = this.methods.required;
+		this.isPredefined = this.methods.isPredefined;
 		this.fontSize = this.methods.fontSize;
 		this.config = this.methods.config;
 		this.items = this.methods.items;

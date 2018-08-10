@@ -3,7 +3,7 @@
 	<button *ngIf="hasOptions" mat-icon-button [matMenuTriggerFor]="subComponent.options" class="sub-component-options">
 		<mat-icon>settings</mat-icon>
 	</button>
-	<button mat-icon-button (click)="removeComponent(aspect)" class="sub-component-close">
+	<button mat-icon-button (click)="removeComponent(aspect)" class="sub-component-close" *ngIf="!aspect.isPredefined">
 		<mat-icon>close</mat-icon>
 	</button>
 </div>

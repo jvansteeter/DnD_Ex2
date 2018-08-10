@@ -1,5 +1,6 @@
 import { AspectConfig } from './aspect-config';
 import { isUndefined } from 'util';
+import { AspectData } from "../../../../../shared/types/aspect.data";
 
 export enum AspectType {
 	TEXT = 'TEXT',
@@ -13,7 +14,7 @@ export enum AspectType {
 	FUNCTION = 'FUNCTION'
 }
 
-export class Aspect {
+export class Aspect implements AspectData {
 	_id: string;
 	label: string;
 	aspectType: AspectType;
@@ -23,6 +24,7 @@ export class Aspect {
 	fontSize: number;
 	items: any[];
 	ruleFunction: any;
+	characterSheetId: string;
 
 	config: AspectConfig;
 	isNew: boolean = true;

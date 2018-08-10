@@ -9,6 +9,7 @@ import { Aspect, AspectType } from '../../types/character-sheet/aspect';
 import { SubComponent } from '../shared/subcomponents/sub-component';
 import { CharacterTooltipComponent } from '../character-tooltip/character-tooltip.component';
 import { DashboardCard } from '../../cdk/dashboard-card/dashboard-card';
+import { AddTooltipAspectComponent } from "./dialog/add-tooltip-aspect.component";
 
 @Component({
 	selector: 'character-maker',
@@ -46,7 +47,13 @@ export class CharacterMakerComponent implements OnInit, AfterViewInit {
 	            public characterService: CharacterMakerService) {
 		this.characterInterfaceFactory.setCharacterInterface(this.characterService);
 		this.characterToolTipCard = {
-			title: 'Character Tooltip Preview'
+			title: 'Character Tooltip Preview',
+			menuOptions: [
+				{
+					title: 'Add Aspect to tooltip',
+					function: this.addTooltipAspect
+				}
+			]
 		}
 	}
 
@@ -118,4 +125,8 @@ export class CharacterMakerComponent implements OnInit, AfterViewInit {
 			this.characterToolTipComponent.removeAspect(aspect.label);
 		}
 	}
+
+	private addTooltipAspect = () => {
+		this.dialog.open(AddTooltipAspectComponent);
+	};
 }

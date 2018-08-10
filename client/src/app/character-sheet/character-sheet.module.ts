@@ -42,6 +42,7 @@ import { AppCDKModule } from '../cdk/cdk.module';
 import { TextAreaComponent } from './shared/subcomponents/text-area/text-area.component';
 import { AlertModule } from '../alert/alert.module';
 import { CharacterTooltipComponent } from './character-tooltip/character-tooltip.component';
+import { AddTooltipAspectComponent } from "./maker/dialog/add-tooltip-aspect.component";
 
 @NgModule({
     imports: [
@@ -87,6 +88,7 @@ import { CharacterTooltipComponent } from './character-tooltip/character-tooltip
 		    FunctionTextComponent,
 		    TextAreaComponent,
 		    CharacterTooltipComponent,
+		    AddTooltipAspectComponent,
     ],
     providers: [
         CharacterSheetRepository,
@@ -97,6 +99,7 @@ import { CharacterTooltipComponent } from './character-tooltip/character-tooltip
     entryComponents: [
         AddComponentComponent,
 		    FunctionTextComponent,
+		    AddTooltipAspectComponent,
     ],
     exports: [
         CharacterSheetComponent,

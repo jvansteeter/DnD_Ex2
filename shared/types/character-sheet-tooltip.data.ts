@@ -1,7 +1,8 @@
 export interface CharacterSheetTooltipData {
-	aspects:
+	aspects: [
 			{
 				icon: string;
 				label: string;
-			}[]
+			}
+		]
 }

@@ -17,6 +17,7 @@ export class CharacterAspectRepository {
 				label: characterAspectObj.label,
 				aspectType: characterAspectObj.aspectType,
 				required: characterAspectObj.required,
+				isPredefined: characterAspectObj.isPredefined,
 				fontSize: characterAspectObj.fontSize,
 				config: characterAspectObj.config,
 				ruleFunction: characterAspectObj.ruleFunction
