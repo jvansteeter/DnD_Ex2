@@ -12,6 +12,8 @@ import { CharacterMakerService } from '../maker/character-maker.service';
 import { Aspect } from './aspect';
 import { SubComponent } from './subcomponents/sub-component';
 import { isUndefined } from 'util';
+import { CharacterInterfaceService } from './character-interface.service';
+import { CharacterInterfaceFactory } from './character-interface.factory';
 
 @Component({
 	selector: 'character-aspect',
@@ -38,6 +40,7 @@ export class CharacterAspectComponent implements AfterViewInit {
 
 	public headerZIndex = 0;
 	public hasOptions: boolean;
+	public characterService: CharacterInterfaceService;
 
 	@ViewChild('component')
 	subComponent: SubComponent;
@@ -45,8 +48,10 @@ export class CharacterAspectComponent implements AfterViewInit {
 	constructor (
 			private _elementRef: ElementRef,
 			private renderer: Renderer2,
-			public characterService: CharacterMakerService
-	) {	}
+			characterInterfaceFactory: CharacterInterfaceFactory
+	) {
+		this.characterService = characterInterfaceFactory.getCharacterInterface();
+	}
 
 	@HostListener('window:resize', ['$event.target'])
 	private setBoundingWidth(): void {

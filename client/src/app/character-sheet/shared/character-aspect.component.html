@@ -1,4 +1,4 @@
-<div class="sub-component-header" (drag)="onMoveDrag($event)" (dragstart)="onMoveDragStart($event)" (dragend)="onMoveDragEnd()" [style.zIndex]="headerZIndex">
+<div class="sub-component-header" (drag)="onMoveDrag($event)" (dragstart)="onMoveDragStart($event)" (dragend)="onMoveDragEnd()" [style.zIndex]="headerZIndex" [style.display]="characterService.immutable ? 'none' : 'flex'">
 	<mat-icon class="move-handle" draggable="true">reorder</mat-icon>
 	<button *ngIf="hasOptions" mat-icon-button [matMenuTriggerFor]="subComponent.options" class="sub-component-options">
 		<mat-icon>settings</mat-icon>

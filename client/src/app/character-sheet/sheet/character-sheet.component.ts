@@ -12,7 +12,6 @@ import { CharacterData } from '../../../../../shared/types/character.data';
 })
 export class CharacterSheetComponent implements OnInit {
 	private npcId: string;
-	private npcData: CharacterData;
 
 	constructor(private activatedRoute: ActivatedRoute,
 	            private characterSheetRepository: CharacterSheetRepository,
@@ -26,25 +25,22 @@ export class CharacterSheetComponent implements OnInit {
 		this.activatedRoute.params.subscribe((params) => {
 			this.npcId = params['npcId'];
 			this.characterSheetRepository.getNpc(this.npcId).subscribe((npcData: CharacterData) => {
-				this.npcData = npcData;
-				if (npcData.characterSheet.aspects) {
-
-				}
+				this.characterService.setCharacterData(npcData);
 			});
 		});
 	}
 
 	save(): void {
-		this.npcData.values = [];
-		for (let i = 0; i < this.characterService.aspects.length; i++) {
-			let aspect = this.characterService.aspects[i];
-			let value = {
-				key: aspect._id,
-				value: this.characterService.valueOfAspect(aspect)
-			};
-			this.npcData.values.push(value);
-		}
-		this.characterSheetRepository.saveNpc(this.npcData).subscribe();
+		// this.npcData.values = [];
+		// for (let i = 0; i < this.characterService.aspects.length; i++) {
+		// 	let aspect = this.characterService.aspects[i];
+		// 	let value = {
+		// 		key: aspect._id,
+		// 		value: this.characterService.valueOfAspect(aspect)
+		// 	};
+		// 	this.npcData.values.push(value);
+		// }
+		// this.characterSheetRepository.saveNpc(this.npcData).subscribe();
 	}
 }
 

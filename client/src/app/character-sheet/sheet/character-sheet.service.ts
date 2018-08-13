@@ -4,21 +4,27 @@ import { Aspect, AspectType } from '../shared/aspect';
 import { SubComponent } from '../shared/subcomponents/sub-component';
 import { AspectValue } from '../shared/aspectValue';
 import { CharacterSheetData } from '../../../../../shared/types/rule-set/character-sheet.data';
-
+import { Observable, of } from 'rxjs';
+import { CharacterData } from '../../../../../shared/types/character.data';
+import { AspectData } from '../../../../../shared/types/rule-set/aspect.data';
 
 @Injectable()
 export class CharacterSheetService implements CharacterInterfaceService {
 	public aspects: Aspect[];
+	public characterSheet: CharacterSheetData;
+	public immutable = true;
+
 	private subComponents: SubComponent[];
 	private aspectValues: any[];
-
-	public immutable = true;
+	private characterData: CharacterData;
 
 	constructor() {
 		this.init();
 	}
 
 	init(): void {
+		this.aspects = [];
+		this.aspectValues = [];
 		this.subComponents = [];
 	}
 
@@ -54,8 +60,50 @@ export class CharacterSheetService implements CharacterInterfaceService {
 	}
 
 	getGridHeight(): number {
-		return 0;
+		let aspects = document.getElementsByTagName('character-aspect');
+		let height = 0;
+		for (let i = 0; i < aspects.length; i++) {
+			let aspect = aspects[i];
+			let clientRect = aspect.getBoundingClientRect();
+			let tempHeight = this.aspects[i].config.top + clientRect.height - 30;
+			if (tempHeight > height) {
+				height = tempHeight;
+			}
+		}
+
+		return height;
 	}
 
-	characterSheet: CharacterSheetData;
+	public setCharacterData(data: CharacterData): void {
+		this.characterData = data;
+		this.characterSheet = this.characterData.characterSheet;
+		this.aspectValues = this.characterData.values;
+		if (this.characterData.characterSheet.aspects) {
+			this.characterData.characterSheet.aspects.forEach((aspectObj: AspectData) => {
+				let aspect = new Aspect(aspectObj.label, aspectObj.aspectType, aspectObj.required, aspectObj.isPredefined);
+				aspect._id = aspectObj._id;
+				aspect.fontSize = aspectObj.fontSize;
+				aspect.isNew = false;
+				if (!!aspectObj.config) {
+					aspect.config = aspectObj.config;
+				}
+				if (aspectObj.hasOwnProperty('items')) {
+					aspect.items = aspectObj.items;
+				}
+				if (!!aspectObj.ruleFunction) {
+					aspect.ruleFunction = aspectObj.ruleFunction;
+				}
+
+				this.aspects.push(aspect);
+			});
+		}
+	}
+
+	get removeComponentObservable(): Observable<void> {
+		return of();
+	}
+
+	removeComponent(aspect: Aspect): void {
+
+	}
 }
