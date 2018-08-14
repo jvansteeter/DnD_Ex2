@@ -45,7 +45,7 @@ export class CharacterTooltipComponent {
 	}
 
 	public aspectValue(aspectLabel: string): string {
-		return this.characterSheetService.getValueOfAspectByLabel(aspectLabel);
+		return this.characterSheetService.valueOfAspect(aspectLabel);
 	}
 
 	public startHover(index: number): void {

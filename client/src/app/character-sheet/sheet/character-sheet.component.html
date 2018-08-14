@@ -10,7 +10,7 @@
 		</mat-list>
 	</mat-drawer>
 	<mat-drawer-content>
-		<h1 *ngIf="characterService.characterData">{{characterService.characterData.label}}</h1>
+		<h1 *ngIf="characterService.characterData" class="character-sheet-label">{{characterService.characterData.label}}</h1>
 		<mat-grid-list [cols]="4" [rowHeight]="'fit'">
 			<mat-grid-tile [colspan]="3" [rowspan]="2" class="characterSheet-gridContainer">
 				<character-grid></character-grid>
@@ -19,19 +19,12 @@
 				<mat-accordion>
 					<mat-expansion-panel>
 						<mat-expansion-panel-header>Abilities</mat-expansion-panel-header>
-						<!--<div class="predefined-aspects">-->
-							<!--<mat-checkbox *ngFor="let aspect of preDefinedAspects" color="primary"-->
-							              <!--(change)="changePredefinedAspect(aspect.label, $event.checked)" [checked]="aspect.checked">{{aspect.label}}</mat-checkbox>-->
-						<!--</div>-->
 					</mat-expansion-panel>
 				</mat-accordion>
 			</mat-grid-tile>
 			<mat-grid-tile [rowspan]="1" [colspan]="1">
 				<dashboard-card [dashboardCard]="characterToolTipCard">
 					<h3>Equipment</h3>
-					<div class="character-tooltip-builder">
-						<!--<character-tooltip #characterTooltip></character-tooltip>-->
-					</div>
 				</dashboard-card>
 			</mat-grid-tile>
 		</mat-grid-list>

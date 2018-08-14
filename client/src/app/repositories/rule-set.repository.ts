@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { CharacterSheetData } from '../../../../shared/types/rule-set/character-sheet.data';
 import { RuleSetData } from '../../../../shared/types/rule-set/rule-set.data';
 
-
 @Injectable()
 export class RuleSetRepository {
     constructor(private http: HttpClient) {
@@ -25,10 +24,6 @@ export class RuleSetRepository {
 
     public getAdmin(ruleSetId: string): Observable<any> {
         return this.http.get('/api/ruleset/admins/' + ruleSetId, {responseType: 'json'});
-    }
-
-    public createNewNpc(label: string, characterSheetId: string): Observable<any> {
-        return this.http.post('/api/ruleset/new/npc', {label: label, characterSheetId: characterSheetId}, {responseType: 'json'});
     }
 
     public getNpcs(ruleSetId: string): Observable<any> {

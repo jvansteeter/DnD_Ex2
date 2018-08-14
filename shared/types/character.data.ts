@@ -5,5 +5,7 @@ export interface CharacterData {
 	label: string;
 	characterSheetId: string;
 	characterSheet?: CharacterSheetData;
-	values: any[];
+	ruleSetId?: string;
+	campaignId?: string;
+	values: {};
 }

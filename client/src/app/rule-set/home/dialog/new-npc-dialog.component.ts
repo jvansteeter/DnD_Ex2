@@ -1,19 +1,20 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-import { RuleSetRepository } from '../../../repositories/rule-set.repository';
+import { CharacterRepository } from '../../../repositories/character.repository';
+import { CharacterData } from '../../../../../../shared/types/character.data';
 
 @Component({
 	templateUrl: 'new-npc-dialog.component.html',
 	styleUrls: ['new-npc-dialog.component.scss']
 })
 export class NewNpcDialogComponent {
-	private characterSheets: any[];
+	public characterSheets: any[];
 	private npcLabel: string;
 	private characterSheetId: string;
 
 	constructor(private dialogRef: MatDialogRef<NewNpcDialogComponent>,
 	            @Inject(MAT_DIALOG_DATA) private data: any,
-	            private ruleSetRepository: RuleSetRepository) {
+	            private characterRepo: CharacterRepository) {
 		this.characterSheets = data.characterSheets;
 	}
 
@@ -22,7 +23,7 @@ export class NewNpcDialogComponent {
 			return;
 		}
 
-		this.ruleSetRepository.createNewNpc(this.npcLabel, this.characterSheetId).subscribe((npc) => {
+		this.characterRepo.createNewCharacter(this.npcLabel, this.characterSheetId, true).subscribe((npc: CharacterData) => {
 			this.dialogRef.close(npc);
 		});
 	}

@@ -23,7 +23,7 @@ export class CharacterMakerService implements CharacterInterfaceService {
 	private removeComponentSubject = new Subject<void>();
 	private registerSubComponentSubject = new Subject<SubComponent>();
 
-	immutable = false;
+	public readonly immutable = false;
 
 	constructor(private characterSheetRepository: CharacterSheetRepository,
 	            private alertService: AlertService) {
@@ -71,12 +71,8 @@ export class CharacterMakerService implements CharacterInterfaceService {
 		return this.registerSubComponentSubject.asObservable();
 	}
 
-	public valueOfAspect(aspect: Aspect): any {
-		return this.subComponents.get(aspect.label.toLowerCase()) ? this.subComponents.get(aspect.label.toLowerCase()).getValue() : undefined;
-	}
-
-	public getValueOfAspectByLabel(label: string): any {
-		return this.subComponents.get(label.toLowerCase()) ? this.subComponents.get(label.toLowerCase()).getValue() : undefined;
+	public valueOfAspect(aspectLabel: string): any {
+		return this.subComponents.get(aspectLabel.toLowerCase()) ? this.subComponents.get(aspectLabel.toLowerCase()).getValue() : undefined;
 	}
 
 	public updateFunctionAspects(): void {
@@ -144,7 +140,7 @@ export class CharacterMakerService implements CharacterInterfaceService {
 		for (let i = 0; i < aspects.length; i++) {
 			let aspect = aspects[i];
 			let clientRect = aspect.getBoundingClientRect();
-			let tempHeight = this.aspects[i].config.top + clientRect.height - 30;
+			let tempHeight = this.aspects[i].config.top + clientRect.height + 10;
 			if (tempHeight > height) {
 				height = tempHeight;
 			}

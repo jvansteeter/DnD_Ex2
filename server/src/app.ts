@@ -15,7 +15,7 @@ import './db/models/ruleSet.model';
 import './db/models/characterSheet.model';
 import './db/models/characterAspect.model';
 import './db/models/user-ruleSet.model';
-import './db/models/npc.model';
+import './db/models/character.model';
 import './db/models/notification.model';
 import './db/models/friend.model';
 import './db/models/campaign.model';
@@ -31,6 +31,7 @@ import SocialRouter from './routes/social.router';
 import CampaignRouter from './routes/campaign.router';
 import EncounterRouter from './routes/encounter.router';
 import NotificationRouter from './routes/notification.router';
+import CharacterRouter from './routes/character.router';
 import { MqProxy, MqProxySingleton } from './mq/mqProxy';
 import { MqServiceSingleton } from './mq/mq.service';
 
@@ -123,11 +124,12 @@ class App {
     // ********************************************** API **********************************************************
     this.app.use('/auth', LoginRouter);
     this.app.use('/api/user', this.isAuthenticated, UserRouter);
-    this.app.use('/api/ruleset', this.isAuthenticated, RuleSetRouter);
     this.app.use('/api/social', this.isAuthenticated, SocialRouter);
-    this.app.use('/api/campaign', this.isAuthenticated, CampaignRouter);
+	  this.app.use('/api/ruleset', this.isAuthenticated, RuleSetRouter);
+	  this.app.use('/api/campaign', this.isAuthenticated, CampaignRouter);
     this.app.use('/api/encounter', this.isAuthenticated, EncounterRouter);
-    this.app.use('/api/notification', this.isAuthenticated, NotificationRouter);
+	  this.app.use('/api/character', this.isAuthenticated, CharacterRouter);
+	  this.app.use('/api/notification', this.isAuthenticated, NotificationRouter);
 
     //  All other requests, redirect toUserId index
     this.app.get('*', (req, res) => {

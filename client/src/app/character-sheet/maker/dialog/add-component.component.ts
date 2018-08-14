@@ -46,10 +46,10 @@ export class AddComponentComponent {
 				type: AspectType.CATEGORICAL,
 				label: 'Category'
 			},
-			{
-				type: AspectType.TOKEN,
-				label: 'Map Token'
-			},
+			// {
+			// 	type: AspectType.TOKEN,
+			// 	label: 'Map Token'
+			// },
 			{
 				type: AspectType.FUNCTION,
 				label: 'Function'

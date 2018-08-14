@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 export interface CharacterInterfaceService {
 	aspects: Aspect[];
 
-	immutable: boolean;
+	readonly immutable: boolean;
 
 	characterSheet: CharacterSheetData;
 
@@ -18,9 +18,7 @@ export interface CharacterInterfaceService {
 
 	removeComponent(aspect: Aspect): void;
 
-	valueOfAspect(aspect: Aspect): any;
-
-	getValueOfAspectByLabel(label: string): any;
+	valueOfAspect(aspectLabel: string): any;
 
 	updateFunctionAspects(): void;
 

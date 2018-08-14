@@ -4,10 +4,10 @@ import { UserRepository } from '../db/repositories/user.repository';
 import { CharacterSheetRepository } from '../db/repositories/characterSheet.repository';
 import { UserRuleSetRepository } from '../db/repositories/user-ruleSet.repository';
 import { CharacterAspectRepository } from '../db/repositories/characterAspect.repository';
-import { NpcRepository } from '../db/repositories/npc.repository';
 import { CharacterSheetService } from '../services/characterSheet-service';
 import { SocialService } from '../services/social.service';
 import { UserModel } from "../db/models/user.model";
+import { CharacterRepository } from '../db/repositories/character.repository';
 
 /**********************************************************************************************************
  * Social ROUTER
@@ -23,7 +23,7 @@ export class SocialRouter {
 	private characterSheetService: CharacterSheetService;
 	private characterAspectRepository: CharacterAspectRepository;
 	private userRuleSetRepository: UserRuleSetRepository;
-	private npcRepository: NpcRepository;
+	private characterRepo: CharacterRepository;
 	private socialService: SocialService;
 
 	constructor() {
@@ -34,7 +34,7 @@ export class SocialRouter {
 		this.characterSheetService = new CharacterSheetService();
 		this.characterAspectRepository = new CharacterAspectRepository();
 		this.userRuleSetRepository = new UserRuleSetRepository();
-		this.npcRepository = new NpcRepository();
+		this.characterRepo = new CharacterRepository();
 		this.socialService = new SocialService();
 		this.init();
 	}
@@ -42,21 +42,21 @@ export class SocialRouter {
 	init() {
 
 		this.router.post('/acceptFriendRequest', (req: Request, res: Response) => {
-		    this.socialService.acceptFriendRequest(req.user._id, req.body.userId).then(() => {
-		        res.send("OK");
-		    }).catch(error => {
-		        console.error(error);
-		        res.status(500).send(error);
-		    });
+			this.socialService.acceptFriendRequest(req.user._id, req.body.userId).then(() => {
+				res.send("OK");
+			}).catch(error => {
+				console.error(error);
+				res.status(500).send(error);
+			});
 		});
 
 		this.router.post('/rejectFriendRequest', (req: Request, res: Response) => {
-		    this.socialService.rejectFriendRequest(req.user._id, req.body.userId).then(() => {
-		        res.send('OK');
-		    }).catch(error => {
-		        console.error(error);
-		        res.status(500).send(error);
-		    });
+			this.socialService.rejectFriendRequest(req.user._id, req.body.userId).then(() => {
+				res.send('OK');
+			}).catch(error => {
+				console.error(error);
+				res.status(500).send(error);
+			});
 		});
 
 		this.router.get('/friendList', (req: Request, res: Response) => {
@@ -68,24 +68,15 @@ export class SocialRouter {
 			})
 		});
 
-		// this.router.post('/campaignInvite', (req: Request, res: Response) => {
-		// 	this.socialService.sendCampaignInvite(req.body.userId, req.body.campaignId).then(() => {
-		// 		res.send('OK');
-		// 	}).catch(error => {
-		// 		console.error(error);
-		// 		res.status(500).send(error);
-		// 	})
-		// });
-
 		this.router.get('/user/:userId', async (req: Request, res: Response) => {
 			try {
 				let user: UserModel = await this.socialService.findUserById(req.params.userId);
 				res.json(user);
 			}
-      catch (error) {
+			catch (error) {
 				console.error(error);
 				res.status(500).send(error);
-      }
+			}
 		});
 	}
 }

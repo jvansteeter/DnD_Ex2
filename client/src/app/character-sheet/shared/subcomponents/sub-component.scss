@@ -126,9 +126,38 @@ textarea {
 	height: 100%;
 }
 
-.token-component a.thumbnail {
-	width: 100%;
-	height: 100%;
+.token-component{
+	display: flex;
+
+	a.token-link {
+		flex: 1;
+		display: flex;
+		width: 100%;
+		height: 100%;
+
+		-webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		box-sizing: border-box;
+
+		padding: 4px;
+		line-height: 1.42857143;
+		background-color: #fff;
+		border: 1px solid #ddd;
+		border-radius: 4px;
+		-webkit-transition: border .2s ease-in-out;
+		-o-transition: border .2s ease-in-out;
+		transition: border .2s ease-in-out;
+
+		text-decoration: none;
+
+		img {
+			margin: auto;
+		}
+	}
+
+	a.token-link:hover {
+		border-color: #337ab7;
+	}
 }
 
 .category-select {

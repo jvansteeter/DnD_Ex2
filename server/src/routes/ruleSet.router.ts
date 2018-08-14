@@ -6,9 +6,9 @@ import { CharacterSheetRepository } from '../db/repositories/characterSheet.repo
 import { UserRuleSetRepository } from '../db/repositories/user-ruleSet.repository';
 import { CharacterSheetModel } from '../db/models/characterSheet.model';
 import { CharacterAspectRepository } from '../db/repositories/characterAspect.repository';
-import { NpcRepository } from '../db/repositories/npc.repository';
-import { NpcModel } from '../db/models/npc.model';
 import { CharacterSheetService } from '../services/characterSheet-service';
+import { CharacterRepository } from '../db/repositories/character.repository';
+import { CharacterModel } from '../db/models/character.model';
 
 
 /**********************************************************************************************************
@@ -25,7 +25,7 @@ export class RuleSetRouter {
 	private characterSheetService: CharacterSheetService;
 	private characterAspectRepository: CharacterAspectRepository;
 	private userRuleSetRepository: UserRuleSetRepository;
-	private npcRepository: NpcRepository;
+	private characterRepository: CharacterRepository;
 
 	constructor() {
 		this.router = Router();
@@ -35,7 +35,7 @@ export class RuleSetRouter {
 		this.characterSheetService = new CharacterSheetService();
 		this.characterAspectRepository = new CharacterAspectRepository();
 		this.userRuleSetRepository = new UserRuleSetRepository();
-		this.npcRepository = new NpcRepository();
+		this.characterRepository = new CharacterRepository();
 		this.init();
 	}
 
@@ -101,50 +101,15 @@ export class RuleSetRouter {
 			}).catch(error => res.status(500).send(error));
 		});
 
-		this.router.post('/new/npc', (req: Request, res: Response) => {
-			this.sheetRepository.findById(req.body.characterSheetId).then((characterSheet: CharacterSheetModel) => {
-				this.npcRepository.create(req.body.label, req.body.characterSheetId).then((npc: NpcModel) => {
-					npc.setRuleSetId(characterSheet.ruleSetId).then(() => {
-						res.json(npc);
-					}).catch(error => res.status(500).send(error));
-				}).catch(error => res.status(500).send(error));
-			}).catch(error => res.status(500).send(error));
-		});
-
-		this.router.get('/npc/:npcId', async (req: Request, res: Response) => {
-			// this.npcRepository.findById(req.params.npcId).then((npc: NpcModel) => {
-			// 	this.sheetRepository.getCompiledCharacterSheet(npc.characterSheetId).then((characterSheet: CharacterSheetModel) => {
-			// 		let npcObj = JSON.parse(JSON.stringify(npc));
-			// 		npcObj.characterSheet = JSON.parse(JSON.stringify(characterSheet));
-			// 		res.json(npcObj);
-			// 	}).catch(error => res.status(500).send(error));
-			// }).catch(error => res.status(500).send(error));
+		this.router.get('/npcs/:ruleSetId', async (req: Request, res: Response) => {
 			try {
-				let npc: NpcModel = await this.npcRepository.findById(req.params.npcId);
-				let characterSheet: CharacterSheetModel = await this.sheetRepository.getCompiledCharacterSheet(npc.characterSheetId);
-				let npcObj = JSON.parse(JSON.stringify(npc));
-				npcObj.characterSheet = JSON.parse(JSON.stringify(characterSheet));
-				res.json(npcObj);
+				let npcs: CharacterModel[] = await this.characterRepository.findAllForRuleSet(req.params.ruleSetId);
+				res.json(npcs);
 			}
 			catch (error) {
 				console.error(error);
 				res.status(500).send(error);
 			}
-		});
-
-		this.router.get('/npcs/:ruleSetId', (req: Request, res: Response) => {
-			this.npcRepository.findAllForRuleSet(req.params.ruleSetId).then((npcs: NpcModel) => {
-				res.json(npcs);
-			}).catch(error => res.status(500).send(error));
-		});
-
-		this.router.post('/npc/save/', (req: Request, res: Response) => {
-			let npcData = req.body;
-			this.npcRepository.findById(npcData._id).then((npc: NpcModel) => {
-				npc.setValues(npcData.values).then(() => {
-					res.status(200).send();
-				});
-			});
 		});
 	}
 }

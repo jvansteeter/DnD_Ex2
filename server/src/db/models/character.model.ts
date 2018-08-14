@@ -4,26 +4,32 @@ import { MongooseModel } from './mongoose.model';
 import { CharacterData } from '../../../../shared/types/character.data';
 import { CharacterSheetData } from '../../../../shared/types/rule-set/character-sheet.data';
 
-export class NpcModel extends MongooseModel implements CharacterData {
+export class CharacterModel extends MongooseModel implements CharacterData {
 	public _id: string;
 	public label: string;
 	public characterSheetId: string;
 	public characterSheet?: CharacterSheetData;
-	public ruleSetId: string;
-	public values: any[];
+	public ruleSetId?: string;
+	public campaignId?: string;
+	public npc: boolean;
+	public values: {};
 
 	constructor() {
 		super({
 			label: {type: String, required: true},
 			characterSheetId: String,
 			ruleSetId: String,
-			values: []
+			campaignId: String,
+			npc: {type: Boolean, default: true},
+			values: {type: Object, default: {}}
 		});
 
 		this._id = this.methods._id;
 		this.label = this.methods.label;
 		this.characterSheetId = this.methods.characterSheetId;
 		this.ruleSetId = this.methods.ruleSetId;
+		this.campaignId = this.methods.campaignId;
+		this.npc = this.methods.npc;
 		this.values = this.methods.values;
 
 		this.methods.setRuleSetId = this.setRuleSetId;
@@ -35,10 +41,10 @@ export class NpcModel extends MongooseModel implements CharacterData {
 		return this.save();
 	}
 
-	public setValues(values: any[]): Promise<void> {
+	public setValues(values): Promise<void> {
 		this.values = values;
 		return this.save();
 	}
 }
 
-mongoose.model('NPC', new NpcModel());
+mongoose.model('Character', new CharacterModel());

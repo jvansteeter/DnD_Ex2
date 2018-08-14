@@ -43,6 +43,7 @@ import { TextAreaComponent } from './shared/subcomponents/text-area/text-area.co
 import { AlertModule } from '../alert/alert.module';
 import { CharacterTooltipComponent } from './character-tooltip/character-tooltip.component';
 import { AddTooltipAspectComponent } from "./maker/dialog/add-tooltip-aspect.component";
+import { CharacterRepository } from '../repositories/character.repository';
 
 @NgModule({
     imports: [
@@ -95,6 +96,7 @@ import { AddTooltipAspectComponent } from "./maker/dialog/add-tooltip-aspect.com
         CharacterMakerService,
         CharacterSheetService,
         CharacterInterfaceFactory,
+		    CharacterRepository,
     ],
     entryComponents: [
         AddComponentComponent,

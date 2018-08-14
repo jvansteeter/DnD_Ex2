@@ -4,6 +4,7 @@ import { CharacterSheetRepository } from '../../repositories/character-sheet.rep
 import { CharacterSheetService } from './character-sheet.service';
 import { CharacterInterfaceFactory } from '../shared/character-interface.factory';
 import { CharacterData } from '../../../../../shared/types/character.data';
+import { CharacterRepository } from '../../repositories/character.repository';
 
 @Component({
 	selector: 'character-sheet',
@@ -16,7 +17,8 @@ export class CharacterSheetComponent implements OnInit {
 	constructor(private activatedRoute: ActivatedRoute,
 	            private characterSheetRepository: CharacterSheetRepository,
 	            public characterService: CharacterSheetService,
-	            private characterInterfaceFactory: CharacterInterfaceFactory) {
+	            private characterInterfaceFactory: CharacterInterfaceFactory,
+	            private characterRepo: CharacterRepository) {
 		this.characterInterfaceFactory.setCharacterInterface(this.characterService);
 	}
 
@@ -24,23 +26,14 @@ export class CharacterSheetComponent implements OnInit {
 		this.characterService.init();
 		this.activatedRoute.params.subscribe((params) => {
 			this.npcId = params['npcId'];
-			this.characterSheetRepository.getNpc(this.npcId).subscribe((npcData: CharacterData) => {
+			this.characterRepo.getCharacter(this.npcId).subscribe((npcData: CharacterData) => {
 				this.characterService.setCharacterData(npcData);
 			});
 		});
 	}
 
 	save(): void {
-		// this.npcData.values = [];
-		// for (let i = 0; i < this.characterService.aspects.length; i++) {
-		// 	let aspect = this.characterService.aspects[i];
-		// 	let value = {
-		// 		key: aspect._id,
-		// 		value: this.characterService.valueOfAspect(aspect)
-		// 	};
-		// 	this.npcData.values.push(value);
-		// }
-		// this.characterSheetRepository.saveNpc(this.npcData).subscribe();
+		this.characterService.save();
 	}
 }
 

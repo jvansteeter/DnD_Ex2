@@ -2,50 +2,38 @@ import { Injectable } from '@angular/core';
 import { CharacterInterfaceService } from '../shared/character-interface.service';
 import { Aspect, AspectType } from '../shared/aspect';
 import { SubComponent } from '../shared/subcomponents/sub-component';
-import { AspectValue } from '../shared/aspectValue';
 import { CharacterSheetData } from '../../../../../shared/types/rule-set/character-sheet.data';
 import { Observable, of } from 'rxjs';
 import { CharacterData } from '../../../../../shared/types/character.data';
 import { AspectData } from '../../../../../shared/types/rule-set/aspect.data';
+import { isUndefined } from 'util';
+import { CharacterRepository } from '../../repositories/character.repository';
 
 @Injectable()
 export class CharacterSheetService implements CharacterInterfaceService {
 	public aspects: Aspect[];
 	public characterSheet: CharacterSheetData;
-	public immutable = true;
+	public readonly immutable = true;
 
-	private subComponents: SubComponent[];
-	private aspectValues: any[];
 	private characterData: CharacterData;
+	private subComponents: Map<string, SubComponent>;
 
-	constructor() {
+	constructor(private characterRepo: CharacterRepository) {
 		this.init();
 	}
 
 	init(): void {
 		this.aspects = [];
-		this.aspectValues = [];
-		this.subComponents = [];
+		this.subComponents = new Map<string, SubComponent>();
 	}
 
 	registerSubComponent(subComponent: SubComponent): void {
-		this.subComponents.push(subComponent);
-		this.aspectValues.forEach((value: AspectValue) => {
-			if (value.key === subComponent.aspect._id) {
-				subComponent.child.setValue(value.value);
-			}
-		});
+		this.subComponents.set(subComponent.aspect.label.toLowerCase(), subComponent);
+		subComponent.child.setValue(this.characterData.values[subComponent.aspect.label]);
 	}
 
-	valueOfAspect(aspect: Aspect): any {
-		for (let i = 0; i < this.subComponents.length; i++) {
-			let subComponent = this.subComponents[i];
-			if (subComponent.aspect.label === aspect.label) {
-				return subComponent.getValue();
-			}
-		}
-
-		return null;
+	valueOfAspect(aspectLabel: string): any {
+		return this.subComponents.get(aspectLabel.toLowerCase()) ? this.subComponents.get(aspectLabel.toLowerCase()).getValue() : undefined;
 	}
 
 	updateFunctionAspects(): void {
@@ -56,16 +44,13 @@ export class CharacterSheetService implements CharacterInterfaceService {
 		})
 	}
 
-	getValueOfAspectByLabel(label: string): any {
-	}
-
 	getGridHeight(): number {
 		let aspects = document.getElementsByTagName('character-aspect');
 		let height = 0;
 		for (let i = 0; i < aspects.length; i++) {
 			let aspect = aspects[i];
 			let clientRect = aspect.getBoundingClientRect();
-			let tempHeight = this.aspects[i].config.top + clientRect.height - 30;
+			let tempHeight = this.aspects[i].config.top + clientRect.height + 10;
 			if (tempHeight > height) {
 				height = tempHeight;
 			}
@@ -77,7 +62,6 @@ export class CharacterSheetService implements CharacterInterfaceService {
 	public setCharacterData(data: CharacterData): void {
 		this.characterData = data;
 		this.characterSheet = this.characterData.characterSheet;
-		this.aspectValues = this.characterData.values;
 		if (this.characterData.characterSheet.aspects) {
 			this.characterData.characterSheet.aspects.forEach((aspectObj: AspectData) => {
 				let aspect = new Aspect(aspectObj.label, aspectObj.aspectType, aspectObj.required, aspectObj.isPredefined);
@@ -97,6 +81,9 @@ export class CharacterSheetService implements CharacterInterfaceService {
 				this.aspects.push(aspect);
 			});
 		}
+		if (isUndefined(this.characterData.values)) {
+			this.characterData.values = new Map<string, any>();
+		}
 	}
 
 	get removeComponentObservable(): Observable<void> {
@@ -105,5 +92,14 @@ export class CharacterSheetService implements CharacterInterfaceService {
 
 	removeComponent(aspect: Aspect): void {
 
+	}
+
+	public save(): void {
+		this.characterData.values = {};
+		for (let aspect of this.aspects) {
+			this.characterData.values[aspect.label] = this.valueOfAspect(aspect.label);
+		}
+
+		this.characterRepo.saveCharacter(this.characterData).subscribe();
 	}
 }

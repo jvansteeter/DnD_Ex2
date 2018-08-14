@@ -27,7 +27,6 @@ export class CharacterGridComponent implements OnInit, OnDestroy {
 	}
 
 	public changeHeight(): void {
-
 		this.renderer.setStyle(this.elementRef.nativeElement, 'height', this.characterService.getGridHeight() + 'px');
 	}
 }
