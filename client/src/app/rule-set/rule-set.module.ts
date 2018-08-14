@@ -9,11 +9,11 @@ import {
 	MatTableModule
 } from '@angular/material';
 import { NewCharacterSheetDialogComponent } from './home/dialog/new-character-sheet-dialog.component';
-import { NewNpcDialogComponent } from './home/dialog/new-npc-dialog.component';
 import { RuleSetRepository } from '../repositories/rule-set.repository';
 import { RuleSetSelectorComponent } from './selector/rule-set-selector.component';
 import { AppCDKModule } from '../cdk/cdk.module';
 import { ConfigService } from '../data-services/config.service';
+import { NewCharacterDialogComponent } from './home/dialog/new-character-dialog.component';
 
 @NgModule({
 	imports: [
@@ -34,8 +34,8 @@ import { ConfigService } from '../data-services/config.service';
 	declarations: [
 		RuleSetHomeComponent,
 		NewCharacterSheetDialogComponent,
-		NewNpcDialogComponent,
-		RuleSetSelectorComponent
+		NewCharacterDialogComponent,
+		RuleSetSelectorComponent,
 	],
 	providers: [
 		RuleSetRepository,
@@ -43,11 +43,11 @@ import { ConfigService } from '../data-services/config.service';
 	],
 	exports: [
 		RuleSetHomeComponent,
-		RuleSetSelectorComponent
+		RuleSetSelectorComponent,
 	],
 	entryComponents: [
 		NewCharacterSheetDialogComponent,
-		NewNpcDialogComponent
+		NewCharacterDialogComponent,
 	]
 })
 export class RuleSetModule {

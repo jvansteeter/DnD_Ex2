@@ -3,13 +3,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material';
 import { NewCharacterSheetDialogComponent } from './dialog/new-character-sheet-dialog.component';
 import { BehaviorSubject, Subject } from 'rxjs';
-import { NewNpcDialogComponent } from './dialog/new-npc-dialog.component';
 import { RuleSetRepository } from '../../repositories/rule-set.repository';
 import { SubjectDataSource } from '../../utilities/subjectDataSource';
 import { CharacterSheetData } from '../../../../../shared/types/rule-set/character-sheet.data';
 import { DashboardCard } from '../../cdk/dashboard-card/dashboard-card';
 import { RuleSetData } from '../../../../../shared/types/rule-set/rule-set.data';
 import { ConfigService } from '../../data-services/config.service';
+import { NewCharacterDialogComponent } from './dialog/new-character-dialog.component';
 
 @Component({
 	selector: 'rule-set-home',
@@ -106,17 +106,20 @@ export class RuleSetHomeComponent implements OnInit {
 		});
 	};
 
-	editCharacterSheet(characterSheetId: string): void {
+	public editCharacterSheet(characterSheetId: string): void {
 		this.router.navigate(['character-sheet', characterSheetId]);
 	}
 
-	editNpc(npcId: string): void {
+	public editNpc(npcId: string): void {
 		this.router.navigate(['npc', npcId]);
 	}
 
 	private createNPC = () => {
-		this.dialog.open(NewNpcDialogComponent, {data: {characterSheets: this.characterSheets}})
-				.afterClosed().subscribe((npc) => {
+		this.dialog.open(NewCharacterDialogComponent, {
+			data: {
+				characterSheets: this.characterSheets,
+				isNpc: true
+			}}).afterClosed().subscribe((npc) => {
 					if (npc) {
 						this.router.navigate(['npc', npc._id]);
 					}

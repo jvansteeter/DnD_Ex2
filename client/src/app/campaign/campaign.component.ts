@@ -11,6 +11,9 @@ import { mergeMap, tap } from 'rxjs/operators';
 import { DashboardCard } from '../cdk/dashboard-card/dashboard-card';
 import { EncounterStateData } from '../../../../shared/types/encounter/encounterState';
 import { CampaignPageService } from './campaign-page.service';
+import { NewCharacterDialogComponent } from '../rule-set/home/dialog/new-character-dialog.component';
+import { CharacterSheetData } from '../../../../shared/types/rule-set/character-sheet.data';
+import { RuleSetRepository } from '../repositories/rule-set.repository';
 
 
 @Component({
@@ -32,10 +35,11 @@ export class CampaignComponent implements OnInit, OnDestroy {
 	public charactersCard: DashboardCard;
 
 	constructor(private activatedRoute: ActivatedRoute,
-							private campaignPageService: CampaignPageService,
+							public campaignPageService: CampaignPageService,
 							private alertService: AlertService,
 							private userProfileService: UserProfileService,
 							private dialog: MatDialog,
+							private ruleSetRepo: RuleSetRepository,
 							private router: Router) {
 	}
 
@@ -72,7 +76,16 @@ export class CampaignComponent implements OnInit, OnDestroy {
 					function: this.inviteFriends
 				}
 			]
-		}
+		};
+
+		this.charactersCard = {
+			menuOptions: [
+				{
+					title: 'Create New Character',
+					function: this.createCharacter
+				}
+			]
+		};
 	}
 
 	ngOnDestroy(): void {
@@ -106,5 +119,19 @@ export class CampaignComponent implements OnInit, OnDestroy {
 
 	private newEncounter = () => {
 		this.dialog.open(NewEncounterDialogComponent);
+	};
+
+	private createCharacter = () => {
+		this.ruleSetRepo.getCharacterSheets(this.campaignPageService.campaignState.ruleSetId).subscribe((characterSheets: CharacterSheetData[]) => {
+			this.dialog.open(NewCharacterDialogComponent, {
+				data: {
+					characterSheets: characterSheets,
+					isNpc: true
+				}}).afterClosed().subscribe((npc) => {
+				if (npc) {
+					this.router.navigate(['npc', npc._id]);
+				}
+			});
+		});
 	};
 }
