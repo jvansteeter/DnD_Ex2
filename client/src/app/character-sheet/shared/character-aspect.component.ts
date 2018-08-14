@@ -8,7 +8,6 @@ import {
 	Renderer2,
 	ViewChild
 } from '@angular/core';
-import { CharacterMakerService } from '../maker/character-maker.service';
 import { Aspect } from './aspect';
 import { SubComponent } from './subcomponents/sub-component';
 import { isUndefined } from 'util';

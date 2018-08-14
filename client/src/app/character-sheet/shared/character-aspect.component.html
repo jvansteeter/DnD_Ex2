@@ -8,4 +8,4 @@
 	</button>
 </div>
 <sub-component [aspect]="aspect" #component></sub-component>
-<mat-icon class="resize-handle" (dragstart)="onResizeDragStart($event)" (drag)="onResizeDrag($event)" (dragend)="onResizeDragEnd()" draggable="true">signal_cellular_null</mat-icon>
+<mat-icon class="resize-handle" (dragstart)="onResizeDragStart($event)" (drag)="onResizeDrag($event)" (dragend)="onResizeDragEnd()" draggable="true" [style.display]="characterService.immutable ? 'none' : 'initial'">signal_cellular_null</mat-icon>

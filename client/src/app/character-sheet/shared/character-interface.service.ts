@@ -3,7 +3,6 @@ import { SubComponent } from './subcomponents/sub-component';
 import { CharacterSheetData } from '../../../../../shared/types/rule-set/character-sheet.data';
 import { Observable } from 'rxjs';
 
-
 export interface CharacterInterfaceService {
 	aspects: Aspect[];
 
