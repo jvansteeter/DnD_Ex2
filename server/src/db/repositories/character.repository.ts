@@ -13,10 +13,11 @@ export class CharacterRepository {
 		this.userRepository = new UserRepository();
 	}
 
-	public create(label: string, characterSheetId: string, npc: boolean = true): Promise<Error | CharacterModel> {
+	public create(label: string, creatorUserId: string, characterSheetId: string, npc: boolean = true): Promise<Error | CharacterModel> {
 		return new Promise((resolve, reject) => {
 			this.Character.create({
 				label: label,
+				creatorUserId: creatorUserId,
 				characterSheetId: characterSheetId,
 				npc: npc
 			}, (error, npc: CharacterModel) => {

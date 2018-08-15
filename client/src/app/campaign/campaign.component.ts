@@ -125,8 +125,9 @@ export class CampaignComponent implements OnInit, OnDestroy {
 		this.ruleSetRepo.getCharacterSheets(this.campaignPageService.campaignState.ruleSetId).subscribe((characterSheets: CharacterSheetData[]) => {
 			this.dialog.open(NewCharacterDialogComponent, {
 				data: {
+					campaignId: this.campaignId,
 					characterSheets: characterSheets,
-					isNpc: true
+					isNpc: false
 				}}).afterClosed().subscribe((npc) => {
 				if (npc) {
 					this.router.navigate(['npc', npc._id]);

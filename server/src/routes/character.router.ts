@@ -31,8 +31,13 @@ export class CharacterRouter {
 				let characterLabel = req.body.label;
 				let isNpc = req.body.npc;
 				let characterSheet = await this.sheetRepo.findById(sheetId);
-				let npc: CharacterModel = await this.characterRepo.create(characterLabel, sheetId, isNpc);
-				await npc.setRuleSetId(characterSheet.ruleSetId);
+				let npc: CharacterModel = await this.characterRepo.create(characterLabel, req.user._id, sheetId, isNpc);
+				if (!!req.body.campaignId) {
+					await npc.setCampaignId(req.body.campaignId);
+				}
+				else {
+					await npc.setRuleSetId(characterSheet.ruleSetId);
+				}
 				res.json(npc);
 			}
 			catch (error) {

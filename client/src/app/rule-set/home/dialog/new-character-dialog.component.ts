@@ -12,12 +12,16 @@ export class NewCharacterDialogComponent {
 	private npcLabel: string;
 	private isNpc: boolean;
 	private characterSheetId: string;
+	private campaignId?: string;
 
 	constructor(private dialogRef: MatDialogRef<NewCharacterDialogComponent>,
 	            @Inject(MAT_DIALOG_DATA) private data: any,
 	            private characterRepo: CharacterRepository) {
 		this.characterSheets = data.characterSheets;
 		this.isNpc = data.isNpc;
+		if (data.campaignId) {
+			this.campaignId = data.campaignId;
+		}
 	}
 
 	createNewNpc(): void {
@@ -25,7 +29,7 @@ export class NewCharacterDialogComponent {
 			return;
 		}
 
-		this.characterRepo.createNewCharacter(this.npcLabel, this.characterSheetId, this.isNpc).subscribe((npc: CharacterData) => {
+		this.characterRepo.createNewCharacter(this.npcLabel, this.characterSheetId, this.isNpc, this.campaignId).subscribe((npc: CharacterData) => {
 			this.dialogRef.close(npc);
 		});
 	}
