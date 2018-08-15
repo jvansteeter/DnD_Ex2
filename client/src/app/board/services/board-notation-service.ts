@@ -5,6 +5,8 @@ import {BoardNotation} from "../shared/board-notation";
 import {ViewMode} from "../shared/enum/view-mode";
 import {NotationMode} from "../shared/enum/notation-mode";
 import {switchMapTo} from "rxjs/operators";
+import {ColorStatics} from "../statics/color-statics";
+import {BoardVisibilityService} from "./board-visibility.service";
 
 @Injectable()
 export class BoardNotationService {
@@ -19,7 +21,8 @@ export class BoardNotationService {
     private sourceCell: XyPair;
 
     constructor(
-        private boardStateService: BoardStateService
+        private boardStateService: BoardStateService,
+        private boardVisibilityService: BoardVisibilityService
     ) {
         this.notations = [];
 
@@ -30,7 +33,15 @@ export class BoardNotationService {
         switch (this.activeNotationMode) {
             case NotationMode.CELL:
                 if (this.boardStateService.mouseLeftDown) {
-                    this.getActiveNotation().addCell(this.boardStateService.mouse_loc_cell);
+                    let cells;
+                    if (this.boardStateService.do_visibility_brush) {
+                        cells = this.boardVisibilityService.cellsVisibleFromCell(this.boardStateService.mouse_cell_target.location, this.boardStateService.brush_size);
+                    } else {
+                        cells = this.boardStateService.calcCellsWithinRangeOfCell(this.boardStateService.mouse_cell_target.location, this.boardStateService.brush_size);
+                    }
+                    for (let cell of cells) {
+                        this.getActiveNotation().addCell(cell);
+                    }
                 }
                 break;
             case NotationMode.FREEFORM:
@@ -52,7 +63,15 @@ export class BoardNotationService {
     public handleMouseLeftDown(event: any) {
         switch(this.activeNotationMode) {
             case NotationMode.CELL:
-                this.getActiveNotation().toggleCell(this.boardStateService.mouse_loc_cell);
+                let cells;
+                if (this.boardStateService.do_visibility_brush) {
+                    cells = this.boardVisibilityService.cellsVisibleFromCell(this.boardStateService.mouse_cell_target.location, this.boardStateService.brush_size);
+                } else {
+                    cells = this.boardStateService.calcCellsWithinRangeOfCell(this.boardStateService.mouse_cell_target.location, this.boardStateService.brush_size);
+                }
+                for (let cell of cells) {
+                    this.getActiveNotation().addCell(cell);
+                }
                 break;
             case NotationMode.FREEFORM:
                 break;

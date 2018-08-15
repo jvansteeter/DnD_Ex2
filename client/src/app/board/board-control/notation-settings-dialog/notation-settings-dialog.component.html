@@ -1,9 +1,23 @@
-<mat-slider
-        style="flex: 1 0 auto;"
-        [(ngModel)]="boardStateService.brush_size"
-        [thumbLabel]="true"
-        [step]="1"
-        [min]="0"
-        [max]="9">
-</mat-slider>
-<mat-checkbox [(ngModel)]="boardStateService.do_visibility_brush"></mat-checkbox>
+<ng-container *ngIf="boardNotationService.activeNotationMode === NotationMode.CELL">
+    <div>
+        <button matTooltip="decrease brush size"
+                (click)="decreaseBrushSize()"
+                class="strokeButtonOverride"
+                mat-stroked-button>
+            <mat-icon>remove</mat-icon>
+        </button>
+
+        <span style="font-size: large">
+            {{boardStateService.brush_size}}
+        </span>
+
+        <button matTooltip="decrease brush size"
+                (click)="increaseBrushSize()"
+                class="strokeButtonOverride"
+                mat-stroked-button>
+            <mat-icon>add</mat-icon>
+        </button>
+    </div>
+
+    <mat-checkbox [(ngModel)]="boardStateService.do_visibility_brush">Visibility Brush</mat-checkbox>
+</ng-container>
