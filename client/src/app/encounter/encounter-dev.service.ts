@@ -9,7 +9,7 @@ import {BoardTraverseService} from '../board/services/board-traverse.service';
 import {LightValue} from '../board/shared/enum/light-value';
 import {BoardVisibilityService} from '../board/services/board-visibility.service';
 import {MqService} from '../mq/mq.service';
-import { PlayerData } from '../../../../shared/types/encounter/player';
+import { PlayerData } from '../../../../shared/types/encounter/player.data';
 
 @Injectable()
 export class EncounterDevService extends EncounterService {

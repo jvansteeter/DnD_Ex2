@@ -1,9 +1,9 @@
 import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {PlayerData} from "../../../../shared/types/encounter/player";
-import { EncounterStateData } from '../../../../shared/types/encounter/encounterState';
 import { map } from 'rxjs/operators';
+import { EncounterData } from '../../../../shared/types/encounter/encounter.data';
+import { PlayerData } from '../../../../shared/types/encounter/player.data';
 
 @Injectable()
 export class EncounterRepository {
@@ -11,11 +11,11 @@ export class EncounterRepository {
 
 	}
 
-	public getEncounter(encounterId: string): Observable<EncounterStateData> {
-		return this.http.get<EncounterStateData>('api/encounter/encounter/' + encounterId, {responseType: 'json'});
+	public getEncounter(encounterId: string): Observable<EncounterData> {
+		return this.http.get<EncounterData>('api/encounter/encounter/' + encounterId, {responseType: 'json'});
 	}
 
-	public setEncounter(encounterState: EncounterStateData): Observable<void> {
+	public setEncounter(encounterState: EncounterData): Observable<void> {
 		return this.http.post('api/encounter/encounter/', encounterState).pipe(map(() => {return;}));
 	}
 

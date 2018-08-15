@@ -111,7 +111,7 @@ export class RuleSetHomeComponent implements OnInit {
 	}
 
 	public editNpc(npcId: string): void {
-		this.router.navigate(['npc', npcId]);
+		this.router.navigate(['character', npcId]);
 	}
 
 	private createNPC = () => {
@@ -121,7 +121,7 @@ export class RuleSetHomeComponent implements OnInit {
 				isNpc: true
 			}}).afterClosed().subscribe((npc) => {
 					if (npc) {
-						this.router.navigate(['npc', npc._id]);
+						this.router.navigate(['character', npc._id]);
 					}
 		});
 	};

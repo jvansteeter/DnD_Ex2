@@ -1,9 +1,9 @@
-import { EncounterStateData } from '../../../../shared/types/encounter/encounterState';
 import { LightValue } from '../board/shared/enum/light-value';
-import { PlayerData } from '../../../../shared/types/encounter/player';
 import { Player } from './player';
+import { EncounterData } from '../../../../shared/types/encounter/encounter.data';
+import { PlayerData } from '../../../../shared/types/encounter/player.data';
 
-export class EncounterState implements EncounterStateData {
+export class EncounterState implements EncounterData {
 	_id: string;
 	version: number;
 	ambientLight: LightValue;
@@ -21,7 +21,7 @@ export class EncounterState implements EncounterStateData {
 	players: PlayerData[];
 	wallData: Object;
 
-	constructor(encounterStateData: EncounterStateData) {
+	constructor(encounterStateData: EncounterData) {
 		for (let items in encounterStateData) {
 			this[items] = encounterStateData[items];
 		}

@@ -25,7 +25,7 @@ export class CharacterSheetComponent implements OnInit {
 	ngOnInit(): void {
 		this.characterService.init();
 		this.activatedRoute.params.subscribe((params) => {
-			this.npcId = params['npcId'];
+			this.npcId = params['characterId'];
 			this.characterRepo.getCharacter(this.npcId).subscribe((npcData: CharacterData) => {
 				this.characterService.setCharacterData(npcData);
 			});

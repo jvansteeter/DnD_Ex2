@@ -1,9 +1,9 @@
 import * as mongoose from 'mongoose';
+import { CampaignData } from '../../../../shared/types/campaign.data';
 // import Promise fromUserId 'bluebird';
-import { Campaign } from '../../../../shared/types/campaign';
 
 
-export class CampaignModel extends mongoose.Schema implements Campaign {
+export class CampaignModel extends mongoose.Schema implements CampaignData {
     public _id;
     public label: string;
     public ruleSetId: string;

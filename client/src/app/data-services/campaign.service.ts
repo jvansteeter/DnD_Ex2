@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { CampaignRepository } from '../repositories/campaign.repository';
-import { Campaign } from '../../../../shared/types/campaign';
 import { IsReadyService } from '../utilities/services/isReady.service';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { MqService } from '../mq/mq.service';
+import { CampaignData } from '../../../../shared/types/campaign.data';
 
 @Injectable()
 export class CampaignService extends IsReadyService {
-	private _campaigns: Campaign[];
+	private _campaigns: CampaignData[];
 
 	constructor(private campaignRepository: CampaignRepository,
 	            private mqService: MqService) {
@@ -30,7 +30,7 @@ export class CampaignService extends IsReadyService {
 		this.init();
 	}
 
-	public getCampaign(campaignId: string): Observable<Campaign> {
+	public getCampaign(campaignId: string): Observable<CampaignData> {
 		return this.campaignRepository.getCampaign(campaignId);
 	}
 
@@ -42,7 +42,7 @@ export class CampaignService extends IsReadyService {
 		);
 	}
 
-	get campaigns(): Campaign[] {
+	get campaigns(): CampaignData[] {
 		return this._campaigns;
 	}
 }

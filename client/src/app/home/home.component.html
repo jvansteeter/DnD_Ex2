@@ -1,9 +1,9 @@
 <div class="home-content">
 	<mat-grid-list cols="3" rowHeight="350px">
 		<mat-grid-tile [colspan]="1" [rowspan]="1">
-			<dashboard-card>
+			<dashboard-card class="profilePhoto-card">
 				<div class="home-profilePhoto">
-					<a (click)="upload()">
+					<a (click)="upload()" class="image-thumbnail">
 						<img class="home-profilePhotoImg" [src]="profilePhotoUrl"/>
 					</a>
 					<input type="file" accept="image/*" (change)="loadImage()" #fileInput>

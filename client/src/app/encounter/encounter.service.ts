@@ -3,11 +3,11 @@ import {IsReadyService} from '../utilities/services/isReady.service';
 import {EncounterRepository} from '../repositories/encounter.repository';
 import {Player} from './player';
 import {Observable} from "rxjs";
-import {PlayerData} from "../../../../shared/types/encounter/player";
 import {EncounterState} from './encounter.state';
-import {EncounterStateData} from '../../../../shared/types/encounter/encounterState';
 import {BoardStateService} from '../board/services/board-state.service';
 import {map, mergeMap, tap} from 'rxjs/operators';
+import { EncounterData } from '../../../../shared/types/encounter/encounter.data';
+import { PlayerData } from '../../../../shared/types/encounter/player.data';
 
 @Injectable()
 export class EncounterService extends IsReadyService {
@@ -25,7 +25,7 @@ export class EncounterService extends IsReadyService {
     }
 
     public init(): void {
-        this.encounterRepo.getEncounter(this.encounterId).subscribe((encounter: EncounterStateData) => {
+        this.encounterRepo.getEncounter(this.encounterId).subscribe((encounter: EncounterData) => {
             this.encounterState = new EncounterState(encounter);
             this.setReady(true);
         });
@@ -44,7 +44,7 @@ export class EncounterService extends IsReadyService {
     public addPlayer(playerData: PlayerData): Observable<void> {
         let getEncounterObservable = this.encounterRepo.getEncounter(this.encounterId)
             .pipe(
-                tap((encounterState: EncounterStateData) => {
+                tap((encounterState: EncounterData) => {
                     this.encounterState = new EncounterState(encounterState);
                 }),
                 map(() => {

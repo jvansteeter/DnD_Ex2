@@ -103,7 +103,7 @@ export class RuleSetRouter {
 
 		this.router.get('/npcs/:ruleSetId', async (req: Request, res: Response) => {
 			try {
-				let npcs: CharacterModel[] = await this.characterRepository.findAllForRuleSet(req.params.ruleSetId);
+				let npcs: CharacterModel[] = await this.characterRepository.findByRuleSetId(req.params.ruleSetId);
 				res.json(npcs);
 			}
 			catch (error) {

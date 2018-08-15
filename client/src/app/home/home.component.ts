@@ -16,7 +16,7 @@ import { CampaignService } from '../data-services/campaign.service';
 @Component({
 	selector: 'home-page',
 	templateUrl: 'home.component.html',
-	styleUrls: ['home.component.css']
+	styleUrls: ['home.component.scss']
 })
 export class HomeComponent implements OnInit {
 	@ViewChild('fileInput') fileInput: ElementRef;

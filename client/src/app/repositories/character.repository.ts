@@ -30,4 +30,8 @@ export class CharacterRepository {
 	public saveCharacter(characterData: CharacterData): Observable<string> {
 		return this.http.post('/api/character/save', characterData, {responseType: 'text'});
 	}
+
+	public getByCampaignId(campaignId: string): Observable<CharacterData[]> {
+		return this.http.get<CharacterData[]>('/api/character/all/campaign/' + campaignId, {responseType: 'json'});
+	}
 }

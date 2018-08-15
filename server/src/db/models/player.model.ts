@@ -1,6 +1,5 @@
 import * as mongoose from 'mongoose';
-import { PlayerData } from '../../../../shared/types/encounter/player';
-
+import { PlayerData } from '../../../../shared/types/encounter/player.data';
 
 export class PlayerModel extends mongoose.Schema implements PlayerData {
 	public _id;

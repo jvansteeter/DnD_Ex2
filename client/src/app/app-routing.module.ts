@@ -26,7 +26,7 @@ const routes: Routes = [
         component: CharacterMakerComponent
     },
     {
-        path: 'npc/:npcId',
+        path: 'character/:characterId',
         component: CharacterSheetComponent
     },
     {

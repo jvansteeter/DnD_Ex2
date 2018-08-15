@@ -1,7 +1,7 @@
 import * as mongoose from 'mongoose';
 import { Promise } from 'bluebird';
 import { PlayerModel } from '../models/player.model';
-import { PlayerData } from '../../../../shared/types/encounter/player';
+import { PlayerData } from '../../../../shared/types/encounter/player.data';
 
 export class PlayerRepository {
 	private Player: mongoose.Model<mongoose.Document>;

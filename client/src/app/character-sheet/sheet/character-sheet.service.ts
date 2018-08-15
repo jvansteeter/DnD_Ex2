@@ -50,7 +50,7 @@ export class CharacterSheetService implements CharacterInterfaceService {
 		for (let i = 0; i < aspects.length; i++) {
 			let aspect = aspects[i];
 			let clientRect = aspect.getBoundingClientRect();
-			let tempHeight = this.aspects[i].config.top + clientRect.height + 10;
+			let tempHeight = this.aspects[i].config.top + clientRect.height;
 			if (tempHeight > height) {
 				height = tempHeight;
 			}

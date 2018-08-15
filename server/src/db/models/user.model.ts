@@ -15,7 +15,7 @@ export class UserModel extends mongoose.Schema implements UserData {
     constructor() {
         super ({
             username: {type: String, index: true, unique: true},
-            profilePhotoUrl: {type: String, required: true, default: 'image/common/noImage.png'},
+            profilePhotoUrl: {type: String, required: true, default: 'resources/images/noImage.png'},
             firstName: String,
             lastName: String,
             passwordHash: String

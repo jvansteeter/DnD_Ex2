@@ -40,7 +40,17 @@
 		</mat-grid-tile>
 		<mat-grid-tile [colspan]="1" [rowspan]="1">
 			<dashboard-card [dashboardCard]="charactersCard">
-
+				<mat-table [dataSource]="characterDataSource">
+					<ng-container matColumnDef="label">
+						<mat-header-cell *matHeaderCellDef>Characters</mat-header-cell>
+						<mat-cell *matCellDef="let character">{{ character.label }}</mat-cell>
+					</ng-container>
+					<mat-header-row *matHeaderRowDef="characterTableCols"></mat-header-row>
+					<mat-row class="clickable-row"
+					         *matRowDef="let character; columns: characterTableCols"
+					         (click)="editCharacter(character._id)"
+					></mat-row>
+				</mat-table>
 			</dashboard-card>
 		</mat-grid-tile>
 	</mat-grid-list>

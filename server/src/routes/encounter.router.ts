@@ -1,7 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { EncounterService } from "../services/encounter.service";
-import { PlayerData } from '../../../shared/types/encounter/player';
-import { EncounterStateData } from '../../../shared/types/encounter/encounterState';
+import { EncounterData } from '../../../shared/types/encounter/encounter.data';
+import { PlayerData } from '../../../shared/types/encounter/player.data';
 
 
 /**********************************************************************************************************
@@ -24,7 +24,7 @@ export class EncounterRouter {
 	init() {
 		this.router.get('/encounter/:encounterId', async (req: Request, res: Response) => {
 			try {
-				const encounter: EncounterStateData = await this.encounterService.getEncounter(req.params.encounterId);
+				const encounter: EncounterData = await this.encounterService.getEncounter(req.params.encounterId);
 				res.json(encounter);
 			}
 			catch (error) {

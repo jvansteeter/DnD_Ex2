@@ -1,7 +1,7 @@
 import {LightValue} from '../../../client/src/app/board/shared/enum/light-value';
-import { PlayerData } from './player';
+import { PlayerData } from './player.data';
 
-export interface EncounterStateData {
+export interface EncounterData {
     _id: string;
     version: number;
     label: string;

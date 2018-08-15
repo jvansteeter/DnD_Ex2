@@ -1,7 +1,7 @@
-import {Component, ElementRef, ViewChild} from '@angular/core';
-import {EncounterService} from "../encounter/encounter.service";
-import { PlayerData } from "../../../../shared/types/encounter/player";
+import { Component, ElementRef, ViewChild } from '@angular/core';
+import { EncounterService } from "../encounter/encounter.service";
 import { MatDialogRef } from "@angular/material";
+import { PlayerData } from '../../../../shared/types/encounter/player.data';
 
 @Component({
 	templateUrl: 'add-player.component.html'

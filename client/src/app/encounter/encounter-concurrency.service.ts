@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
 import { EncounterService } from './encounter.service';
 import { IsReadyService } from '../utilities/services/isReady.service';
-import { StompMessage } from '../mq/messages/stomp-message';
 import { MqService } from '../mq/mq.service';
 import { EncounterUpdateMessage } from '../mq/messages/encounter-update.message';
-import { PlayerData } from '../../../../shared/types/encounter/player';
 import { UserProfileService } from '../data-services/userProfile.service';
 import { EncounterCommand } from '../../../../shared/types/encounter/encounter-command.enum';
+import { PlayerData } from '../../../../shared/types/encounter/player.data';
 
 @Injectable()
 export class EncounterConcurrencyService extends IsReadyService {

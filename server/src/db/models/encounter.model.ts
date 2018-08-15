@@ -1,11 +1,11 @@
 import * as mongoose from 'mongoose';
 import { LightValue } from "../../../../client/src/app/board/shared/enum/light-value";
-import { PlayerData } from '../../../../shared/types/encounter/player';
-import { EncounterStateData } from '../../../../shared/types/encounter/encounterState';
 import { MongooseModel } from './mongoose.model';
 import { Schema } from 'mongoose';
+import { EncounterData } from '../../../../shared/types/encounter/encounter.data';
+import { PlayerData } from '../../../../shared/types/encounter/player.data';
 
-export class EncounterModel extends MongooseModel implements EncounterStateData {
+export class EncounterModel extends MongooseModel implements EncounterData {
 	public _id;
 	public version: number;
 	public label: string;
@@ -71,7 +71,7 @@ export class EncounterModel extends MongooseModel implements EncounterStateData 
 		return this.save();
 	}
 
-	public setEncounterState(encounterState: EncounterStateData): Promise<EncounterModel> {
+	public setEncounterState(encounterState: EncounterData): Promise<EncounterModel> {
 		let playerIds: string[] = [];
 		for (let player of encounterState.players) {
 			playerIds.push(player._id);

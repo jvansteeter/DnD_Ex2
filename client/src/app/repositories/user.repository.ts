@@ -1,9 +1,9 @@
 import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {PlayerData} from "../../../../shared/types/encounter/player";
-import { EncounterStateData } from '../../../../shared/types/encounter/encounterState';
 import { map } from 'rxjs/operators';
+import { EncounterData } from '../../../../shared/types/encounter/encounter.data';
+import { PlayerData } from '../../../../shared/types/encounter/player.data';
 
 @Injectable()
 export class UserRepository {
@@ -12,7 +12,7 @@ export class UserRepository {
 	}
 
 	public getUserProfile(): Observable<any> {
-		return this.http.get<EncounterStateData>('/api/user/profile', {responseType: 'json'});
+		return this.http.get<EncounterData>('/api/user/profile', {responseType: 'json'});
 	}
 
 	public setProfilePhoto(url: string): Observable<void> {

@@ -44,15 +44,28 @@ export class CharacterRepository {
 		});
 	}
 
-	public findAllForRuleSet(ruleSetId: string): Promise<CharacterModel[]> {
+	public findByRuleSetId(ruleSetId: string): Promise<CharacterModel[]> {
 		return new Promise((resolve, reject) => {
-			this.Character.find({ruleSetId: ruleSetId}, (error, npcs: CharacterModel[]) => {
+			this.Character.find({ruleSetId: ruleSetId}, (error, characters: CharacterModel[]) => {
 				if (error) {
 					reject(error);
 					return;
 				}
 
-				resolve(npcs);
+				resolve(characters);
+			});
+		});
+	}
+
+	public findByCampaignId(campaignId: string): Promise<CharacterModel[]> {
+		return new Promise((resolve, reject) => {
+			this.Character.find({campaignId: campaignId}, (error, characters: CharacterModel[]) => {
+				if (error) {
+					reject(error);
+					return;
+				}
+
+				resolve(characters);
 			});
 		});
 	}

@@ -9,11 +9,13 @@ import { NewEncounterDialogComponent } from './dialog/new-encounter-dialog.compo
 import { SubjectDataSource } from '../utilities/subjectDataSource';
 import { mergeMap, tap } from 'rxjs/operators';
 import { DashboardCard } from '../cdk/dashboard-card/dashboard-card';
-import { EncounterStateData } from '../../../../shared/types/encounter/encounterState';
 import { CampaignPageService } from './campaign-page.service';
 import { NewCharacterDialogComponent } from '../rule-set/home/dialog/new-character-dialog.component';
 import { CharacterSheetData } from '../../../../shared/types/rule-set/character-sheet.data';
 import { RuleSetRepository } from '../repositories/rule-set.repository';
+import { CharacterData } from '../../../../shared/types/character.data';
+import { EncounterData } from '../../../../shared/types/encounter/encounter.data';
+import { MqService } from '../mq/mq.service';
 
 
 @Component({
@@ -29,34 +31,38 @@ export class CampaignComponent implements OnInit, OnDestroy {
 	public memberTableCols = ['users', 'gm'];
 
 	public encountersCard: DashboardCard;
-	public encounterDataSource: SubjectDataSource<EncounterStateData>;
+	public encounterDataSource: SubjectDataSource<EncounterData>;
 	public encounterTableCols = ['label', 'date'];
 
 	public charactersCard: DashboardCard;
+	public characterDataSource: SubjectDataSource<CharacterData>;
+	public characterTableCols = ['label'];
 
 	constructor(private activatedRoute: ActivatedRoute,
-							public campaignPageService: CampaignPageService,
-							private alertService: AlertService,
-							private userProfileService: UserProfileService,
-							private dialog: MatDialog,
-							private ruleSetRepo: RuleSetRepository,
-							private router: Router) {
+	            public campaignPageService: CampaignPageService,
+	            private alertService: AlertService,
+	            private userProfileService: UserProfileService,
+	            private dialog: MatDialog,
+	            private ruleSetRepo: RuleSetRepository,
+	            private mqService: MqService,
+	            private router: Router) {
 	}
 
 	ngOnInit(): void {
 		this.activatedRoute.params
-		 .pipe(
-		  tap((params) => {
-				this.campaignId = params['campaignId'];
-				this.campaignPageService.setCampaignId(this.campaignId);
-			}),
-			mergeMap(() => {
-				return this.campaignPageService.isReady();
-			})
-		 ).subscribe((isReady: boolean) => {
+				.pipe(
+						tap((params) => {
+							this.campaignId = params['campaignId'];
+							this.campaignPageService.setCampaignId(this.campaignId);
+						}),
+						mergeMap(() => {
+							return this.campaignPageService.isReady();
+						})
+				).subscribe((isReady: boolean) => {
 			if (isReady) {
 				this.memberDataSource = new SubjectDataSource(this.campaignPageService.membersSubject);
 				this.encounterDataSource = new SubjectDataSource(this.campaignPageService.encounterSubject);
+				this.characterDataSource = new SubjectDataSource(this.campaignPageService.characterSubject);
 			}
 		});
 
@@ -106,8 +112,12 @@ export class CampaignComponent implements OnInit, OnDestroy {
 	//   }
 	// }
 
-	public enterEncounter(encounter: EncounterStateData): void {
+	public enterEncounter(encounter: EncounterData): void {
 		this.router.navigate(['encounter', encounter._id])
+	}
+
+	public editCharacter(characterId: string): void {
+		this.router.navigate(['character', characterId]);
 	}
 
 	private inviteFriends = () => {
@@ -128,9 +138,11 @@ export class CampaignComponent implements OnInit, OnDestroy {
 					campaignId: this.campaignId,
 					characterSheets: characterSheets,
 					isNpc: false
-				}}).afterClosed().subscribe((npc) => {
-				if (npc) {
-					this.router.navigate(['npc', npc._id]);
+				}
+			}).afterClosed().subscribe((character) => {
+				this.mqService.sendCampaignUpdate(this.campaignId);
+				if (character) {
+					this.router.navigate(['character', character._id]);
 				}
 			});
 		});

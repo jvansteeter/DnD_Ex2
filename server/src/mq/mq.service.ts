@@ -11,7 +11,7 @@ import { FriendRequestNotification } from "../../../shared/types/notifications/f
 import { FriendRepository } from "../db/repositories/friend.repository";
 import { EncounterCommand } from '../../../shared/types/encounter/encounter-command.enum';
 import { PlayerRepository } from '../db/repositories/player.repository';
-import { PlayerData } from '../../../shared/types/encounter/player';
+import { PlayerData } from '../../../shared/types/encounter/player.data';
 
 export class MqService {
 	private friendRepo: FriendRepository;

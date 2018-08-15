@@ -72,6 +72,18 @@ export class CharacterRouter {
 				res.status(500).send(error);
 			}
 		});
+
+		this.router.get('/all/campaign/:campaignId', async (req: Request, res: Response) => {
+			try {
+				let campaignId = req.params.campaignId;
+				let characters: CharacterModel[] = await this.characterRepo.findByCampaignId(campaignId);
+				res.json(characters);
+			}
+			catch (error) {
+				console.error(error);
+				res.status(500).send(error);
+			}
+		});
 	}
 }
 

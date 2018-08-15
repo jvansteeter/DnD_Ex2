@@ -2,9 +2,8 @@ import { Router, Request, Response } from 'express';
 import { CampaignService } from '../services/campaign.service';
 import { CampaignModel } from '../db/models/campaign.model';
 import { EncounterService } from "../services/encounter.service";
-import { ServerError } from '../../../shared/errors/ServerError';
-import { Campaign } from '../../../shared/types/campaign';
 import { EncounterModel } from '../db/models/encounter.model';
+import { CampaignData } from '../../../shared/types/campaign.data';
 
 
 /**********************************************************************************************************
@@ -60,7 +59,7 @@ export class CampaignRouter {
 		});
 
 		this.router.get('/campaign/:campaignId', (req: Request, res: Response) => {
-			this.campaignService.getCampaign(req.params.campaignId).then((campaign: Campaign) => {
+			this.campaignService.getCampaign(req.params.campaignId).then((campaign: CampaignData) => {
 				res.json(campaign);
 			}).catch(error => res.status(500).send(error));
 		});

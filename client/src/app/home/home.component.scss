@@ -18,7 +18,7 @@
 }
 
 .home-profilePhotoImg {
-	width: 100%;
+	height: 100%;
 	border-radius: 5px;
 }
 
@@ -49,4 +49,8 @@
 .clickable-row:hover {
 	cursor: pointer;
 	background: #CFD8DC;
+}
+
+/deep/ .profilePhoto-card mat-card mat-card-content {
+	height: 100%;
 }

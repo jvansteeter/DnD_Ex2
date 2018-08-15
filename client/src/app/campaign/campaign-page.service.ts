@@ -2,28 +2,33 @@ import { Injectable } from '@angular/core';
 import { CampaignRepository } from '../repositories/campaign.repository';
 import { IsReadyService } from '../utilities/services/isReady.service';
 import { UserProfile } from '../types/userProfile';
-import { Campaign } from '../../../../shared/types/campaign';
 import { CampaignState } from './campaign.state';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { first, map, mergeMap, tap } from 'rxjs/operators';
-import { EncounterStateData } from '../../../../shared/types/encounter/encounterState';
 import { MqService } from '../mq/mq.service';
 import { Subscription, Subject } from 'rxjs';
+import { EncounterData } from '../../../../shared/types/encounter/encounter.data';
+import { CampaignData } from '../../../../shared/types/campaign.data';
+import { CharacterRepository } from '../repositories/character.repository';
+import { CharacterData } from '../../../../shared/types/character.data';
 
 @Injectable()
 export class CampaignPageService extends IsReadyService {
 	public campaignId: string;
 	public campaignState: CampaignState;
 
-	private readonly _encounterSubject: BehaviorSubject<EncounterStateData[]>;
-	private readonly _membersSubject: Subject<UserProfile[]>;
+	private readonly _encounterSubject: BehaviorSubject<EncounterData[]>;
+	private readonly _membersSubject: BehaviorSubject<UserProfile[]>;
+	private readonly _charactersSubject: BehaviorSubject<CharacterData[]>;
 	private campaignMessageSubscription: Subscription;
 
 	constructor(private campaignRepo: CampaignRepository,
+	            private characterRepo: CharacterRepository,
 	            private mqService: MqService) {
 		super(mqService);
-		this._encounterSubject = new BehaviorSubject<EncounterStateData[]>([]);
+		this._encounterSubject = new BehaviorSubject<EncounterData[]>([]);
 		this._membersSubject = new BehaviorSubject<UserProfile[]>([]);
+		this._charactersSubject = new BehaviorSubject<CharacterData[]>([]);
 	}
 
 	public init(): void {
@@ -43,7 +48,9 @@ export class CampaignPageService extends IsReadyService {
 
 	unInit(): void {
 		super.unInit();
-		this.campaignMessageSubscription.unsubscribe();
+		if (this.campaignMessageSubscription) {
+			this.campaignMessageSubscription.unsubscribe();
+		}
 	}
 
 	public setCampaignId(id: string): void {
@@ -64,7 +71,7 @@ export class CampaignPageService extends IsReadyService {
 			mergeMap(() => {
 				return this.campaignRepo.getAllEncounters(this.campaignState._id)
 			})
-		 ).subscribe((encounters: EncounterStateData[]) => {
+		 ).subscribe((encounters: EncounterData[]) => {
 			this.campaignState.encounters = encounters;
 			this._encounterSubject.next(this.campaignState.encounters);
 			this.mqService.sendCampaignUpdate(this.campaignId);
@@ -79,18 +86,22 @@ export class CampaignPageService extends IsReadyService {
 		return this._membersSubject;
 	}
 
-	get encounters(): EncounterStateData[] {
+	get encounters(): EncounterData[] {
 		return this.campaignState.encounters;
 	}
 
-	get encounterSubject(): Subject<EncounterStateData[]> {
+	get encounterSubject(): Subject<EncounterData[]> {
 		return this._encounterSubject;
+	}
+
+	get characterSubject(): Subject<CharacterData[]> {
+		return this._charactersSubject;
 	}
 
 	private getCampaignState(): Observable<void> {
 		return this.campaignRepo.getCampaign(this.campaignId)
 				.pipe(
-						tap((campaign: Campaign) => {
+						tap((campaign: CampaignData) => {
 							this.campaignState = new CampaignState(campaign);
 						}),
 						mergeMap(() => {
@@ -103,9 +114,16 @@ export class CampaignPageService extends IsReadyService {
 						mergeMap(() => {
 							return this.campaignRepo.getAllEncounters(this.campaignState._id);
 						}),
-						tap((encounters: EncounterStateData[]) => {
+						tap((encounters: EncounterData[]) => {
 							this.campaignState.encounters = encounters;
 							this._encounterSubject.next(this.campaignState.encounters);
+						}),
+						mergeMap(() => {
+							return this.characterRepo.getByCampaignId(this.campaignId);
+						}),
+						tap((characters: CharacterData[]) => {
+							this.campaignState.characters = characters;
+							this._charactersSubject.next(this.campaignState.characters);
 						}),
 						map(() => {
 							return;
