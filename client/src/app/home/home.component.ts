@@ -43,18 +43,17 @@ export class HomeComponent implements OnInit {
 	            private ruleSetRepository: RuleSetRepository,
 	            private friendService: FriendService,
 	            public campaignService: CampaignService) {
+		this.ruleSetSubject = new Subject<any>();
+		this.ruleSetDataSource = new SubjectDataSource(this.ruleSetSubject);
+		this.friendDataSource = new SubjectDataSource(this.friendService.getFriendsSubject());
+	}
+
+	public ngOnInit(): void {
 		this.userProfileService.isReady().subscribe((isReady: boolean) => {
 			if (isReady) {
 				this.profilePhotoUrl = this.userProfileService.profilePhotoUrl;
 			}
 		});
-		this.ruleSetSubject = new Subject<any>();
-		this.ruleSetDataSource = new SubjectDataSource(this.ruleSetSubject);
-
-		this.friendDataSource = new SubjectDataSource(this.friendService.getFriendsSubject());
-	}
-
-	public ngOnInit(): void {
 		this.getRuleSets();
 		this.getCampaigns();
 
