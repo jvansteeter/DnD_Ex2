@@ -1,19 +1,22 @@
 import { CampaignModel } from '../db/models/campaign.model';
-// import { Promise } fromUserId 'bluebird';
 import { EncounterRepository } from "../db/repositories/encounter.repository";
 import { EncounterModel } from "../db/models/encounter.model";
 import { PlayerModel } from '../db/models/player.model';
 import { PlayerRepository } from "../db/repositories/player.repository";
 import { PlayerData } from '../../../shared/types/encounter/player.data';
 import { EncounterData } from '../../../shared/types/encounter/encounter.data';
+import { CharacterData } from '../../../shared/types/character.data';
+import { CharacterService } from './character.service';
 
 export class EncounterService {
 	private encounterRepo: EncounterRepository;
 	private playerRepo: PlayerRepository;
+	private characterService: CharacterService;
 
 	constructor() {
 		this.encounterRepo = new EncounterRepository();
 		this.playerRepo = new PlayerRepository();
+		this.characterService = new CharacterService();
 	}
 
 	public create(hostId: string, label: string, campaignId: string): Promise<CampaignModel> {
@@ -55,12 +58,25 @@ export class EncounterService {
 		});
 	}
 
-	public async addPlayer(campaignId: string, player: PlayerData): Promise<PlayerModel> {
+	public async addPlayer(encounterId: string, player: PlayerData): Promise<PlayerModel> {
 		try {
 			const playerModel: PlayerModel = await this.playerRepo.create(player.name, player.tokenUrl, player.maxHp, player.speed);
-			const encounterModel: EncounterModel = await this.encounterRepo.findById(campaignId);
+			const encounterModel: EncounterModel = await this.encounterRepo.findById(encounterId);
 			await encounterModel.addPlayer(playerModel);
 			return playerModel;
+		}
+		catch (error) {
+			throw error;
+		}
+	}
+
+	public async addCharacters(encounterId: string, characters: CharacterData[]): Promise<void> {
+		try {
+			let encounter: EncounterModel = await this.encounterRepo.findById(encounterId);
+			for (let character of characters) {
+				// let player: PlayerData = await this.characterService.createPlayerDataFromCharacter(character._id);
+
+			}
 		}
 		catch (error) {
 			throw error;

@@ -1,14 +1,14 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {
-    MatButtonModule,
-    MatButtonToggleModule,
-    MatCheckboxModule,
-    MatIconModule,
-    MatRadioModule,
-    MatSelectModule,
-    MatSliderModule,
-    MatFormFieldModule,
-    MatInputModule, MatTooltipModule, MatDialogModule
+	MatButtonModule,
+	MatButtonToggleModule,
+	MatCheckboxModule,
+	MatIconModule,
+	MatRadioModule,
+	MatSelectModule,
+	MatSliderModule,
+	MatFormFieldModule,
+	MatInputModule, MatTooltipModule, MatDialogModule, MatTabsModule, MatTableModule, MatSortModule
 } from '@angular/material';
 import {NgModule} from '@angular/core';
 import {MapRendererComponent} from "./renderer/map-renderer/map-renderer.component";
@@ -31,8 +31,6 @@ import {TokenRendererComponent} from './renderer/token-renderer/token-renderer.c
 import {PopService} from "./pop/pop.service";
 import {PopRootComponent} from "./pop/pop-root.component";
 import {NpcPopComponent} from "./pop/npcPop/npc-pop.component";
-import {TempModule} from '../temp/temp.module';
-import {AddPlayerComponent} from '../temp/add-player.component';
 import {BoardTransformService} from './services/board-transform.service';
 import {BoardVisibilityService} from './services/board-visibility.service';
 import {BoardLightService} from './services/board-light.service';
@@ -44,6 +42,7 @@ import {NotationRendererComponent} from './renderer/notation-renderer/notation-r
 import {NotationIconSelectorComponent} from "./board-control/notation-icon-selector/notation-icon-selector.component";
 import {NotationColorSelectorComponent} from "./board-control/notation-color-selector/notation-color-selector.component";
 import {NotationSettingsDialogComponent} from "./board-control/notation-settings-dialog/notation-settings-dialog.component";
+import { AddPlayerDialogComponent } from './board-control/add-player-dialog/add-player-dialog.component';
 
 
 @NgModule({
@@ -66,7 +65,8 @@ import {NotationSettingsDialogComponent} from "./board-control/notation-settings
         NpcPopComponent,
         NotationIconSelectorComponent,
         NotationColorSelectorComponent,
-        NotationSettingsDialogComponent
+        NotationSettingsDialogComponent,
+		    AddPlayerDialogComponent,
     ],
     imports: [
         BrowserModule,
@@ -77,12 +77,14 @@ import {NotationSettingsDialogComponent} from "./board-control/notation-settings
         MatButtonModule,
         MatSelectModule,
         MatIconModule,
-        TempModule,
         MatButtonToggleModule,
         MatFormFieldModule,
         MatInputModule,
         MatTooltipModule,
-        MatDialogModule
+        MatDialogModule,
+		    MatTabsModule,
+		    MatTableModule,
+		    MatSortModule,
     ],
     providers: [
         PopService,
@@ -101,7 +103,8 @@ import {NotationSettingsDialogComponent} from "./board-control/notation-settings
         NpcPopComponent,
         NotationIconSelectorComponent,
         NotationColorSelectorComponent,
-        NotationSettingsDialogComponent
+        NotationSettingsDialogComponent,
+		    AddPlayerDialogComponent,
     ],
     bootstrap: [],
     exports: [

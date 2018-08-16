@@ -28,4 +28,12 @@ export class EncounterRepository {
 			return;
 		}));
 	}
+
+	public addCharacters(encounterId: string, characters: CharacterData[]): Observable<void> {
+		let data = {
+			encounterId: encounterId,
+			characters: characters
+		};
+		return this.http.post('/api/encounter/addcharacters', data, {responseType: 'text'}).pipe(map(() => {return;}));
+	}
 }

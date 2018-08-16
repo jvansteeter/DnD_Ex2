@@ -59,6 +59,10 @@ export class EncounterService extends IsReadyService {
             );
     }
 
+    public addCharacters(characters: CharacterData[]): Observable<void> {
+    	return this.encounterRepo.addCharacters(this.encounterId, characters);
+    }
+
     public getPlayerById(id: string): Player {
         for (const player of this.players) {
             if (player.id === id){

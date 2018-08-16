@@ -36,6 +36,10 @@ export class CharacterMakerComponent implements OnInit, AfterViewInit {
 		{
 			label: 'Health',
 			checked: false
+		},
+		{
+			label: 'Speed',
+			checked: false
 		}
 	];
 
@@ -119,6 +123,11 @@ export class CharacterMakerComponent implements OnInit, AfterViewInit {
 			case ('Health'): {
 				aspectType = AspectType.NUMBER;
 				icon = 'favorite';
+				break;
+			}
+			case ('Speed'): {
+				aspectType = AspectType.NUMBER;
+				icon = 'arrow_right_alt';
 				break;
 			}
 			default: {

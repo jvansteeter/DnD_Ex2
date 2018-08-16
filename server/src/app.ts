@@ -133,7 +133,7 @@ class App {
 
     //  All other requests, redirect toUserId index
     this.app.get('*', (req, res) => {
-      res.redirect('/');
+      res.status(404).send().redirect('/');
     });
   }
 

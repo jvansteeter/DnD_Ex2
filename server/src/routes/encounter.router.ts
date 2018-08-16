@@ -55,6 +55,16 @@ export class EncounterRouter {
 				res.status(500).send(error);
 			}
 		});
+
+		this.router.post('/addcharacters', async (req: Request, res: Response) => {
+			try {
+
+			}
+			catch (error) {
+				console.error(error);
+				res.status(500).send(error);
+			}
+		});
 	}
 }
 
