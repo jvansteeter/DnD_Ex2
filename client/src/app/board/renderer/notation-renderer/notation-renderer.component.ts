@@ -38,6 +38,10 @@ export class NotationRendererComponent implements OnInit {
             for (let cell of notation.cellElements) {
                 this.boardCanvasService.draw_center(this.ctx, cell, notation.getRgbaCode(), 0);
             }
+
+            for (let text of notation.textElements) {
+                this.boardCanvasService.draw_text(this.ctx, text.anchor, text.text);
+            }
         }
 
         requestAnimationFrame(this.render);

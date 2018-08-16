@@ -49,6 +49,11 @@ export class BoardCanvasService {
         ctx.fill();
     }
 
+    draw_text(ctx: CanvasRenderingContext2D, anchor: XyPair, text: string, fontSize = 30) {
+        ctx.font = fontSize + 'px Arial';
+        ctx.fillText(text, anchor.x, anchor.y);
+    }
+
     draw_health_outside(ctx: CanvasRenderingContext2D, cell: XyPair, percent: number) {
         const strokeWidth = 6;
         const health_opacity = 0.5;

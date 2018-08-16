@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {BoardStateService} from './board-state.service';
 import {XyPair} from '../geometry/xy-pair';
-import {BoardNotation} from "../shared/board-notation";
+import {BoardNotationGroup} from "../shared/notation/board-notation-group";
 import {ViewMode} from "../shared/enum/view-mode";
 import {NotationMode} from "../shared/enum/notation-mode";
 import {switchMapTo} from "rxjs/operators";
@@ -10,13 +10,12 @@ import {BoardVisibilityService} from "./board-visibility.service";
 
 @Injectable()
 export class BoardNotationService {
-    public notations: Array<BoardNotation>;
+    public notations: Array<BoardNotationGroup>;
 
     public activeNotationId: string;
     public activeNotationMode = NotationMode.CELL;
 
     public startNewFreeform = true;
-    public freeformNotationPolyline: Array<XyPair>;
 
     private sourceCell: XyPair;
 
@@ -25,8 +24,6 @@ export class BoardNotationService {
         private boardVisibilityService: BoardVisibilityService
     ) {
         this.notations = [];
-
-        this.freeformNotationPolyline = [];
     }
 
     public handleMouseMove() {
@@ -81,7 +78,7 @@ export class BoardNotationService {
     }
 
     public addNotation() {
-        const newNotation = new BoardNotation();
+        const newNotation = new BoardNotationGroup();
         this.activeNotationId = newNotation.id;
         this.notations.push(newNotation);
     }
@@ -96,15 +93,11 @@ export class BoardNotationService {
         }
     }
 
-    public getActiveNotation(): BoardNotation {
+    public getActiveNotation(): BoardNotationGroup {
         for (const notation of this.notations) {
             if (notation.id === this.activeNotationId){
                 return notation;
             }
         }
-    }
-
-    public appendToPolyLine(pair: XyPair) {
-        this.freeformNotationPolyline.push(pair);
     }
 }

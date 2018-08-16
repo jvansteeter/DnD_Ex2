@@ -15,6 +15,7 @@ import {NotationVisibility} from "../shared/enum/notation-visibility";
 import {NotationIconSelectorComponent} from "./notation-icon-selector/notation-icon-selector.component";
 import {NotationColorSelectorComponent} from "./notation-color-selector/notation-color-selector.component";
 import {NotationSettingsDialogComponent} from "./notation-settings-dialog/notation-settings-dialog.component";
+import {NotationTextEditDialogComponent} from "./notation-text-dialog/notation-text-edit-dialog.component";
 
 @Component({
     selector: 'board-controller',
@@ -328,5 +329,9 @@ export class BoardControllerComponent implements OnInit {
 
     openSettingDialog() {
         this.dialog.open(NotationSettingsDialogComponent);
+    }
+
+    openTextNotationDialog() {
+        this.dialog.open(NotationTextEditDialogComponent);
     }
 }

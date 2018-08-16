@@ -1,0 +1,27 @@
+<input placeholder="Notation text" matInput [(ngModel)]="textField">
+<button matTooltip="done"
+        class="strokeButtonOverride"
+        (click)="doAThing()"
+        mat-stroked-button>
+    <mat-icon>done</mat-icon>
+</button>
+
+<div>
+    <button matTooltip="decrease brush size"
+            (click)="decreaseFontSize()"
+            class="strokeButtonOverride"
+            mat-stroked-button>
+        <mat-icon>remove</mat-icon>
+    </button>
+
+    <span style="font-size: large">
+            {{fontSize}}
+        </span>
+
+    <button matTooltip="decrease brush size"
+            (click)="increaseFontSize()"
+            class="strokeButtonOverride"
+            mat-stroked-button>
+        <mat-icon>add</mat-icon>
+    </button>
+</div>

@@ -44,6 +44,7 @@ import {NotationRendererComponent} from './renderer/notation-renderer/notation-r
 import {NotationIconSelectorComponent} from "./board-control/notation-icon-selector/notation-icon-selector.component";
 import {NotationColorSelectorComponent} from "./board-control/notation-color-selector/notation-color-selector.component";
 import {NotationSettingsDialogComponent} from "./board-control/notation-settings-dialog/notation-settings-dialog.component";
+import {NotationTextEditDialogComponent} from "./board-control/notation-text-dialog/notation-text-edit-dialog.component";
 
 
 @NgModule({
@@ -66,7 +67,8 @@ import {NotationSettingsDialogComponent} from "./board-control/notation-settings
         NpcPopComponent,
         NotationIconSelectorComponent,
         NotationColorSelectorComponent,
-        NotationSettingsDialogComponent
+        NotationSettingsDialogComponent,
+        NotationTextEditDialogComponent
     ],
     imports: [
         BrowserModule,
@@ -101,7 +103,8 @@ import {NotationSettingsDialogComponent} from "./board-control/notation-settings
         NpcPopComponent,
         NotationIconSelectorComponent,
         NotationColorSelectorComponent,
-        NotationSettingsDialogComponent
+        NotationSettingsDialogComponent,
+        NotationTextEditDialogComponent
     ],
     bootstrap: [],
     exports: [

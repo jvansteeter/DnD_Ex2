@@ -1,14 +1,16 @@
-import {XyPair} from "../geometry/xy-pair";
-import {NotationVisibility} from "./enum/notation-visibility";
-import {ColorStatics} from "../statics/color-statics";
+import {XyPair} from "../../geometry/xy-pair";
+import {NotationVisibility} from "../enum/notation-visibility";
+import {ColorStatics} from "../../statics/color-statics";
+import {TextNotation} from "./text-notation";
 
-export class BoardNotation {
+export class BoardNotationGroup {
     public id: string;
     public name = 'Notation';
     public iconTag = 'edit';
 
     public freeformElements: Array<Array<XyPair>>;
     public cellElements: Array<XyPair>;
+    public textElements: Array<TextNotation>;
 
     public isVisible = false;
     public isLocked = false;
@@ -24,6 +26,7 @@ export class BoardNotation {
         this.id = window.crypto.getRandomValues(new Uint32Array(1))[0];
         this.freeformElements = [];
         this.cellElements = [];
+        this.textElements = [];
     }
 
     public toggleVisible() {
@@ -111,5 +114,12 @@ export class BoardNotation {
             i++;
         }
         return -1;
+    }
+
+    public addTextNotation(text: string) {
+        const textEl = new TextNotation();
+        textEl.text = text;
+        textEl.anchor = new XyPair(50, 150);
+        this.textElements.push(textEl);
     }
 }

@@ -55,7 +55,6 @@
     </div>
 </div>
 
-
 <div id="Notation Controls" class="section" style="width: 258px">
     <div class="sectionHeader"><span>Notations</span></div>
     <div class="sectionContents webkitHideScrollbar" style="padding: 3px; display: flex">
@@ -118,6 +117,7 @@
 
                 <button matTooltip="text"
                         class="specialAnnotationOverride"
+                        (click)="openTextNotationDialog()"
                         [ngClass]="{'selectedNotationMode': boardNotationService.activeNotationMode === NotationMode.FREEFORM}"
                         mat-stroked-button>
                     <!--<mat-icon>font_download</mat-icon>-->
@@ -221,7 +221,6 @@
         </div>
     </div>
 </div>
-
 
 <div id="lightControls" class="section" *ngIf="showLightControls()">
     <div class="sectionHeader"><span>Light and Visibility</span></div>
