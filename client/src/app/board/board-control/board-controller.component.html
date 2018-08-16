@@ -56,9 +56,9 @@
 </div>
 
 
-<div id="Notation Controls" class="section" style="width: 220px">
+<div id="Notation Controls" class="section" style="width: 258px">
     <div class="sectionHeader"><span>Notations</span></div>
-    <div class="sectionContents webkitHideScrollbar" style="padding: 3px;">
+    <div class="sectionContents webkitHideScrollbar" style="padding: 3px; display: flex">
 
         <!--DEFAULT NOTATIONS DIV-->
         <div *ngIf="!boardStateService.isEditingNotation" class="notationGrid">
@@ -71,9 +71,6 @@
                 </button>
             </ng-container>
 
-
-
-
             <button mat-icon-button (click)="handleAddNotation()">
                 <mat-icon>add_circle_outline</mat-icon>
             </button>
@@ -81,19 +78,19 @@
 
 
         <!--EDIT NOTATIONS DIV-->
-        <div *ngIf="boardStateService.isEditingNotation" style="display: flex; flex-direction: column">
+        <div *ngIf="boardStateService.isEditingNotation" style="display: flex; flex-direction: column; flex: 1">
 
-            <div style="display: flex;">
+            <div style="display: flex; margin-top: 8px;">
                 <button (click)="openIconDialog()"
                         class="strokeButtonOverride"
                         [ngStyle]="{'color': boardNotationService.getActiveNotation().getRgbCode()}"
                         mat-stroked-button>
                     <mat-icon>{{boardNotationService.getActiveNotation().iconTag}}</mat-icon>
                 </button>
-                <input matInput placeholder="Notation Id" class="inputOverride" [(ngModel)]="boardNotationService.getActiveNotation().name">
+                <input matInput placeholder="Notation Id" class="inputOverride" [(ngModel)]="boardNotationService.getActiveNotation().name" style="margin-left: 5px">
             </div>
 
-            <div style="display: block">
+            <div style="display: block; margin: auto;">
 
                 <button matTooltip="cells"
                         class="strokeButtonOverride"
@@ -117,6 +114,22 @@
                         [ngClass]="{'selectedNotationMode': boardNotationService.activeNotationMode === NotationMode.FREEFORM}"
                         mat-stroked-button>
                     <mat-icon>gesture</mat-icon>
+                </button>
+
+                <button matTooltip="text"
+                        class="specialAnnotationOverride"
+                        [ngClass]="{'selectedNotationMode': boardNotationService.activeNotationMode === NotationMode.FREEFORM}"
+                        mat-stroked-button>
+                    <!--<mat-icon>font_download</mat-icon>-->
+                    <span style="font-size: 25px; font-weight: bold;">T</span>
+                </button>
+
+                <button matTooltip="cone"
+                        class="specialAnnotationOverride"
+                        (click)="handleSetNotationModeToFreeform()"
+                        [ngClass]="{'selectedNotationMode': boardNotationService.activeNotationMode === NotationMode.FREEFORM}"
+                        mat-stroked-button>
+                    <mat-icon>near_me</mat-icon>
                 </button>
 
                 <button matTooltip="color"
