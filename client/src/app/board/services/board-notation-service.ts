@@ -7,6 +7,8 @@ import {NotationMode} from "../shared/enum/notation-mode";
 import {switchMapTo} from "rxjs/operators";
 import {ColorStatics} from "../statics/color-statics";
 import {BoardVisibilityService} from "./board-visibility.service";
+import {TextNotation} from "../shared/notation/text-notation";
+import {MatDialog} from "@angular/material";
 
 @Injectable()
 export class BoardNotationService {
@@ -14,6 +16,7 @@ export class BoardNotationService {
 
     public activeNotationId: string;
     public activeNotationMode = NotationMode.CELL;
+    public returnToMeNotationMode: NotationMode;
 
     public startNewFreeform = true;
 
@@ -21,15 +24,19 @@ export class BoardNotationService {
     public anchor_img: HTMLImageElement;
     public anchor_active_image: HTMLImageElement;
 
+    public isAddingTextNotation = false;
+    public currentTextNotationId: string;
+
     constructor(
         private boardStateService: BoardStateService,
-        private boardVisibilityService: BoardVisibilityService
+        private boardVisibilityService: BoardVisibilityService,
+        private dialog: MatDialog,
     ) {
         this.notations = [];
         this.anchor_img = new Image();
         this.anchor_img.src = '../../../resources/icons/anchor.png';
         this.anchor_active_image = new Image();
-        this.anchor_active_image.src = '../../../resources/icon/anchor_active.png';
+        this.anchor_active_image.src = '../../../resources/icons/anchor_active.png';
     }
 
     public handleMouseMove() {
@@ -60,6 +67,13 @@ export class BoardNotationService {
                 break;
             case NotationMode.POINT_TO_POINT:
                 break;
+            case NotationMode.TEXT:
+                if (this.isAddingTextNotation) {
+                    if (!!this.boardStateService.mouse_loc_map) {
+                        this.getActiveNotation().getTextNotation(this.currentTextNotationId).anchor = this.boardStateService.mouse_loc_map;
+                    }
+                }
+                break;
         }
     }
 
@@ -80,7 +94,18 @@ export class BoardNotationService {
                 break;
             case NotationMode.POINT_TO_POINT:
                 break;
+            case NotationMode.TEXT:
+                if (this.isAddingTextNotation) {
+                    this.isAddingTextNotation = false;
+                    this.activeNotationMode = this.returnToMeNotationMode;
+                    this.returnToMeNotationMode = null;
+                }
+                break;
         }
+    }
+
+    public handleMouseRightDown(event: any) {
+
     }
 
     public addNotation() {
