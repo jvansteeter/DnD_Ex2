@@ -75,6 +75,10 @@ export class CharacterMakerService implements CharacterInterfaceService {
 		return this.subComponents.get(aspectLabel.toLowerCase()) ? this.subComponents.get(aspectLabel.toLowerCase()).getValue() : undefined;
 	}
 
+	public getAspect(aspectLabel: string): Aspect {
+		return this.subComponents.get(aspectLabel).aspect;
+	}
+
 	public updateFunctionAspects(): void {
 		this.subComponents.forEach(subComponent => {
 		    if (subComponent.aspect.aspectType === AspectType.FUNCTION) {

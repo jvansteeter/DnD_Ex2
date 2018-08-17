@@ -2,10 +2,15 @@
 	<div *ngFor="let aspect of tooltipConfig.aspects; let i = index" class="character-tooltip-aspect" (mouseenter)="startHover(i)"
 	     (mouseleave)="endHover()">
 		<mat-icon>{{aspect.icon}}</mat-icon>
-		<span>{{aspect.label}}:</span>
+		<span>{{aspect.aspect.label}}:</span>
 		<button mat-icon-button *ngIf="hoveredIndex === i" color="primary" (click)="moveUp(i)"><mat-icon>keyboard_arrow_up</mat-icon></button>
 		<button mat-icon-button *ngIf="hoveredIndex === i" color="primary" (click)="moveDown(i)"><mat-icon>keyboard_arrow_down</mat-icon></button>
 		<button mat-icon-button *ngIf="hoveredIndex === i" color="primary" (click)="removeAspect(aspect.label)"><mat-icon>close</mat-icon></button>
-		<span class="aspect-value">{{aspectValue(aspect.label)}}</span>
+		<ng-container [ngSwitch]="aspect.aspect.aspectType">
+			<span class="aspect-value" *ngSwitchCase="aspectType.CURRENT_MAX">
+				<ng-container *ngIf="aspectValue(aspect.aspect.label)">{{aspectValue(aspect.aspect.label).current}} / {{aspectValue(aspect.aspect.label).max}}</ng-container>
+			</span>
+			<span class="aspect-value" *ngSwitchDefault>{{aspectValue(aspect.aspect.label)}}</span>
+		</ng-container>
 	</div>
 </ng-container>

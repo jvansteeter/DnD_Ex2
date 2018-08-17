@@ -120,7 +120,7 @@ export class CharacterMakerComponent implements OnInit, AfterViewInit {
 				break;
 			}
 			case ('Health'): {
-				aspectType = AspectType.NUMBER;
+				aspectType = AspectType.CURRENT_MAX;
 				icon = 'favorite';
 				break;
 			}
@@ -137,7 +137,7 @@ export class CharacterMakerComponent implements OnInit, AfterViewInit {
 		let aspect = new Aspect(aspectLabel, aspectType, true, true);
 		if (checked) {
 			this.characterService.addComponent(aspect);
-			this.characterToolTipComponent.addAspect(aspect.label, icon);
+			this.characterToolTipComponent.addAspect(aspect, icon);
 		}
 		else {
 			this.characterService.removeComponent(aspect);
@@ -149,7 +149,7 @@ export class CharacterMakerComponent implements OnInit, AfterViewInit {
 		let tooltipAspects = this.characterService.getTooltipAspects();
 		for (let tooltipAspect of this.characterToolTipComponent.tooltipConfig.aspects) {
 			for (let i = 0; i < tooltipAspects.length; i++) {
-				if (tooltipAspects[i].label.toLowerCase() === tooltipAspect.label.toLowerCase()) {
+				if (tooltipAspects[i].label.toLowerCase() === tooltipAspect.aspect.label.toLowerCase()) {
 					tooltipAspects.splice(i, 1);
 					break;
 				}
@@ -161,7 +161,7 @@ export class CharacterMakerComponent implements OnInit, AfterViewInit {
 			}
 		}).afterClosed().subscribe((tooltipAspect) => {
 			if (tooltipAspect) {
-				this.characterToolTipComponent.addAspect(tooltipAspect.label, tooltipAspect.icon);
+				this.characterToolTipComponent.addAspect(this.characterService.getAspect(tooltipAspect.label), tooltipAspect.icon);
 			}
 		});
 	};
