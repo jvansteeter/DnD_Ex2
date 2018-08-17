@@ -16,6 +16,7 @@ import {NotationColorSelectorComponent} from "./notation-color-selector/notation
 import {NotationSettingsDialogComponent} from "./notation-settings-dialog/notation-settings-dialog.component";
 import { AddPlayerDialogComponent } from './add-player-dialog/add-player-dialog.component';
 import { EncounterService } from '../../encounter/encounter.service';
+import {NotationTextEditDialogComponent} from "./notation-text-dialog/notation-text-edit-dialog.component";
 
 @Component({
     selector: 'board-controller',
@@ -332,5 +333,9 @@ export class BoardControllerComponent implements OnInit {
 
     openSettingDialog() {
         this.dialog.open(NotationSettingsDialogComponent);
+    }
+
+    openTextNotationDialog() {
+        this.dialog.open(NotationTextEditDialogComponent);
     }
 }

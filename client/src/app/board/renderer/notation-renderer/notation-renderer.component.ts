@@ -4,6 +4,7 @@ import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {BoardNotationService} from '../../services/board-notation-service';
 import {isUndefined} from "util";
 import {ColorStatics} from "../../statics/color-statics";
+import {XyPair} from "../../geometry/xy-pair";
 
 @Component({
     selector: 'notation-renderer',
@@ -37,6 +38,13 @@ export class NotationRendererComponent implements OnInit {
 
             for (let cell of notation.cellElements) {
                 this.boardCanvasService.draw_center(this.ctx, cell, notation.getRgbaCode(), 0);
+            }
+
+            for (let text of notation.textElements) {
+                this.boardCanvasService.draw_text(this.ctx, text.anchor, text.text, text.fontSize);
+                if (notation === this.boardNotationService.getActiveNotation()) {
+                    this.boardCanvasService.draw_img(this.ctx, new XyPair(text.anchor.x - 17, text.anchor.y - 17), this.boardNotationService.anchor_img);
+                }
             }
         }
 
