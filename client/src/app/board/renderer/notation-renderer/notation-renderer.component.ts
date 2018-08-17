@@ -40,7 +40,7 @@ export class NotationRendererComponent implements OnInit {
             }
 
             for (let text of notation.textElements) {
-                this.boardCanvasService.draw_text(this.ctx, text.anchor, text.text);
+                this.boardCanvasService.draw_text(this.ctx, text.anchor, text.text, text.fontSize);
             }
         }
 

@@ -116,10 +116,7 @@ export class BoardNotationGroup {
         return -1;
     }
 
-    public addTextNotation(text: string) {
-        const textEl = new TextNotation();
-        textEl.text = text;
-        textEl.anchor = new XyPair(50, 150);
-        this.textElements.push(textEl);
+    public addTextNotation(textNotation: TextNotation) {
+        this.textElements.push(textNotation);
     }
 }
