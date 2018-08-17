@@ -6,11 +6,11 @@ export enum AspectType {
 	TEXT = 'TEXT',
 	TEXT_AREA = 'TEXT_AREA',
 	NUMBER = 'NUMBER',
+	CURRENT_MAX = 'CURRENT_MAX',
 	BOOLEAN = 'BOOLEAN',
 	BOOLEAN_LIST = 'BOOLEAN_LIST',
 	TEXT_LIST = 'TEXT_LIST',
 	CATEGORICAL = 'CATEGORICAL',
-	TOKEN = 'TOKEN',
 	FUNCTION = 'FUNCTION'
 }
 
@@ -38,14 +38,14 @@ export class Aspect implements AspectData {
 
 		this.config = this.defaultConfig();
 		switch (aspectType) {
-			case (AspectType.TOKEN): {
-				this.config.resizeY = true;
-				this.config.minWidth = 50;
-				this.config.minHeight = 50;
-				this.config.width = 50;
-				this.config.height = 50;
-				break;
-			}
+			// case (AspectType.TOKEN): {
+			// 	this.config.resizeY = true;
+			// 	this.config.minWidth = 50;
+			// 	this.config.minHeight = 50;
+			// 	this.config.width = 50;
+			// 	this.config.height = 50;
+			// 	break;
+			// }
 			case (AspectType.FUNCTION): {
 				this.config.minWidth = 50;
 				this.config.minHeight = 50;

@@ -5,6 +5,7 @@
 		<span>{{aspect.label}}:</span>
 		<button mat-icon-button *ngIf="hoveredIndex === i" color="primary" (click)="moveUp(i)"><mat-icon>keyboard_arrow_up</mat-icon></button>
 		<button mat-icon-button *ngIf="hoveredIndex === i" color="primary" (click)="moveDown(i)"><mat-icon>keyboard_arrow_down</mat-icon></button>
+		<button mat-icon-button *ngIf="hoveredIndex === i" color="primary" (click)="removeAspect(aspect.label)"><mat-icon>close</mat-icon></button>
 		<span class="aspect-value">{{aspectValue(aspect.label)}}</span>
 	</div>
 </ng-container>

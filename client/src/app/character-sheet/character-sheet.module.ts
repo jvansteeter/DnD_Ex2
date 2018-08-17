@@ -16,7 +16,7 @@ import {
 	MatInputModule,
 	MatListModule,
 	MatMenuModule,
-	MatSelectModule, MatSidenavModule, MatSlideToggleModule,
+	MatSelectModule, MatSidenavModule, MatSlideToggleModule, MatTabsModule,
 	MatToolbarModule,
 	MatTooltipModule
 } from '@angular/material';
@@ -44,6 +44,7 @@ import { AlertModule } from '../alert/alert.module';
 import { CharacterTooltipComponent } from './character-tooltip/character-tooltip.component';
 import { AddTooltipAspectComponent } from "./maker/dialog/add-tooltip-aspect.component";
 import { CharacterRepository } from '../repositories/character.repository';
+import { CurrentMaxComponent } from './shared/subcomponents/currentMax/current-max.component';
 
 @NgModule({
     imports: [
@@ -70,6 +71,7 @@ import { CharacterRepository } from '../repositories/character.repository';
 		    MatSidenavModule,
 		    MatSlideToggleModule,
 		    AlertModule,
+		    MatTabsModule,
     ],
     declarations: [
         CharacterSheetComponent,
@@ -90,6 +92,7 @@ import { CharacterRepository } from '../repositories/character.repository';
 		    TextAreaComponent,
 		    CharacterTooltipComponent,
 		    AddTooltipAspectComponent,
+		    CurrentMaxComponent,
     ],
     providers: [
         CharacterSheetRepository,

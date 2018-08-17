@@ -46,10 +46,10 @@ export class AddComponentComponent {
 				type: AspectType.CATEGORICAL,
 				label: 'Category'
 			},
-			// {
-			// 	type: AspectType.TOKEN,
-			// 	label: 'Map Token'
-			// },
+			{
+				type: AspectType.CURRENT_MAX,
+				label: 'Current / Max'
+			},
 			{
 				type: AspectType.FUNCTION,
 				label: 'Function'

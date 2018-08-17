@@ -1,0 +1,17 @@
+<span class="current-max-label" [style.fontSize.px]="aspect.fontSize">{{aspect.label}}</span>
+<div class="current-max">
+	<mat-form-field [style.fontSize.px]="aspect.fontSize" class="current-max-input">
+		<input matInput type="number" placeholder="Current" [required]="aspect.required" class="align-center" [(ngModel)]="value.current" (change)="valueChanged()">
+	</mat-form-field>
+	<span [style.fontSize.px]="aspect.fontSize + 5">/</span>
+	<mat-form-field [style.fontSize.px]="aspect.fontSize" class="current-max-input">
+		<input matInput type="number" placeholder="Max" [required]="aspect.required" class="align-center" [(ngModel)]="value.max" (change)="valueChanged()">
+	</mat-form-field>
+</div>
+<mat-menu #options="matMenu">
+	<div class="changeFontSize" (click)="stopClickPropagate($event)" (keyup.enter)="closeMenu()">
+		<mat-form-field>
+			<input matInput type="number" placeholder="Font Size" [(ngModel)]="aspect.fontSize" #fontSizeInput>
+		</mat-form-field>
+	</div>
+</mat-menu>

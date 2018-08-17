@@ -24,6 +24,19 @@
 			<mat-grid-tile [colspan]="1" [rowspan]="1">
 				<mat-accordion>
 					<mat-expansion-panel>
+						<mat-expansion-panel-header>Required Aspects</mat-expansion-panel-header>
+						<mat-tab-group class="map-aspects">
+							<mat-tab label="Map Token">
+								<characterMaker-tokenComponent></characterMaker-tokenComponent>
+							</mat-tab>
+							<mat-tab label="Map Aspects">
+								<div class="required-aspects">
+									<mat-checkbox *ngFor="let aspect of requiredAspects" color="primary" [checked]="true" [disabled]="true">{{aspect.label}}</mat-checkbox>
+								</div>
+							</mat-tab>
+						</mat-tab-group>
+					</mat-expansion-panel>
+					<mat-expansion-panel>
 						<mat-expansion-panel-header>Pre-defined Aspects</mat-expansion-panel-header>
 						<div class="predefined-aspects">
 							<mat-checkbox *ngFor="let aspect of preDefinedAspects" color="primary"
