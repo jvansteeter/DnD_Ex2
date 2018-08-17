@@ -18,12 +18,18 @@ export class BoardNotationService {
     public startNewFreeform = true;
 
     private sourceCell: XyPair;
+    public anchor_img: HTMLImageElement;
+    public anchor_active_image: HTMLImageElement;
 
     constructor(
         private boardStateService: BoardStateService,
         private boardVisibilityService: BoardVisibilityService
     ) {
         this.notations = [];
+        this.anchor_img = new Image();
+        this.anchor_img.src = '../../../resources/icons/anchor.png';
+        this.anchor_active_image = new Image();
+        this.anchor_active_image.src = '../../../resources/icon/anchor_active.png';
     }
 
     public handleMouseMove() {
