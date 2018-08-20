@@ -79,7 +79,7 @@ export class EncounterDevService extends EncounterService {
 				        y: 0,
 		        }
         });
-        player._id = window.crypto.getRandomValues(new Uint32Array(1))[0];
+        player._id = String(window.crypto.getRandomValues(new Uint32Array(1))[0]);
         player.addAction('Longsword:', '+4 Attack, 1d10 + 5');
         player.addAction('Crossbow:', ' +2 Attack,  1d6 + 1');
         this.players.push(player);
@@ -106,7 +106,7 @@ export class EncounterDevService extends EncounterService {
 						    characterSheetId: 'charcterSheet',
 						    values: {
 						    	  Name: 'Sue',
-								    Speed: 29,
+								    Speed: 6,
 								    Health: {
 										    current: 753,
 										    max: 1235
@@ -119,7 +119,7 @@ export class EncounterDevService extends EncounterService {
 						    y: 3,
 				    }
 		    });
-        player._id = window.crypto.getRandomValues(new Uint32Array(1))[0];
+        player._id = String(window.crypto.getRandomValues(new Uint32Array(1))[0]);
         player.addAction('Divine Judgement:', 'Rewrite the DM\'s will');
         player.addAction('Gaze of the Deep One:', 'Kill all living creatures, no saves, no escape');
         player.addAction('Disco Fever:', 'They can tell by the way you use your walk ...');

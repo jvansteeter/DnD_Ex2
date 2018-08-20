@@ -105,10 +105,12 @@ import { CurrentMaxComponent } from './shared/subcomponents/currentMax/current-m
         AddComponentComponent,
 		    FunctionTextComponent,
 		    AddTooltipAspectComponent,
+		    CharacterTooltipComponent,
     ],
     exports: [
         CharacterSheetComponent,
-        CharacterMakerComponent
+        CharacterMakerComponent,
+		    CharacterTooltipComponent,
     ]
 })
 export class CharacterSheetModule {

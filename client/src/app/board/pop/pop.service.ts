@@ -1,11 +1,12 @@
 import {ComponentFactoryResolver, ComponentRef, Injectable, ViewContainerRef} from "@angular/core";
 import {NpcPopComponent} from "./npcPop/npc-pop.component";
 import {Player} from "../../encounter/player";
+import { CharacterPopComponent } from './character-pop/character-pop.component';
 
 @Injectable()
 export class PopService {
     popRoot: ViewContainerRef;
-    playerPops: {id: string, ref: ComponentRef<NpcPopComponent>}[] = [];
+    playerPops: {id: string, ref: ComponentRef<CharacterPopComponent>}[] = [];
 
     constructor(
         private componentFactoryResolver: ComponentFactoryResolver
@@ -16,6 +17,7 @@ export class PopService {
     }
 
     addPlayerPop(x: number, y: number, player: Player) {
+    	  console.log('addPlayerPop')
         let popFound = false;
         for (const pop of this.playerPops) {
             if (pop.id === player._id) {
@@ -24,10 +26,10 @@ export class PopService {
         }
 
         if (!popFound) {
-            const componentFactory = this.componentFactoryResolver.resolveComponentFactory(NpcPopComponent);
+            const componentFactory = this.componentFactoryResolver.resolveComponentFactory(CharacterPopComponent);
             const componentRef = this.popRoot.createComponent(componentFactory);
 
-            const componentInst = (<NpcPopComponent>componentRef.instance);
+            const componentInst = (<CharacterPopComponent>componentRef.instance);
             componentInst.initVars(this, false, x, y, player);
             this.playerPops.push({id: player._id, ref: componentRef});
         }

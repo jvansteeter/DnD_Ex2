@@ -45,6 +45,8 @@ import {NotationSettingsDialogComponent} from "./board-control/notation-settings
 import { AddPlayerDialogComponent } from './board-control/add-player-dialog/add-player-dialog.component';
 import {NotationTextEditDialogComponent} from "./board-control/notation-text-dialog/notation-text-edit-dialog.component";
 import {NotationTextCreateDialogComponent} from "./board-control/notation-text-dialog/notation-text-create-dialog.component";
+import { CharacterSheetModule } from '../character-sheet/character-sheet.module';
+import { CharacterPopComponent } from './pop/character-pop/character-pop.component';
 
 
 @NgModule({
@@ -70,7 +72,8 @@ import {NotationTextCreateDialogComponent} from "./board-control/notation-text-d
 		    AddPlayerDialogComponent,
         NotationSettingsDialogComponent,
         NotationTextEditDialogComponent,
-        NotationTextCreateDialogComponent
+        NotationTextCreateDialogComponent,
+		    CharacterPopComponent,
     ],
     imports: [
         BrowserModule,
@@ -89,7 +92,8 @@ import {NotationTextCreateDialogComponent} from "./board-control/notation-text-d
 		    MatTabsModule,
 		    MatTableModule,
 		    MatSortModule,
-        MatBadgeModule
+        MatBadgeModule,
+		    CharacterSheetModule,
     ],
     providers: [
         PopService,
@@ -112,6 +116,7 @@ import {NotationTextCreateDialogComponent} from "./board-control/notation-text-d
 		    AddPlayerDialogComponent,
         NotationTextEditDialogComponent,
         NotationTextCreateDialogComponent,
+		    CharacterPopComponent,
     ],
     bootstrap: [],
     exports: [

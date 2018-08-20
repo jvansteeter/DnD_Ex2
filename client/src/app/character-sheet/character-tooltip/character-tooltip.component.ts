@@ -12,9 +12,10 @@ import { Aspect, AspectType } from '../shared/aspect';
 export class CharacterTooltipComponent {
 	@Input()
 	characterSheetId: string;
-	aspectType = AspectType;
-
+	@Input()
 	public tooltipConfig: CharacterSheetTooltipData;
+
+	aspectType = AspectType;
 	public hoveredIndex: number;
 
 	constructor(private characterSheetRepo: CharacterSheetRepository,
