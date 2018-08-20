@@ -119,4 +119,12 @@ export class BoardNotationGroup {
     public addTextNotation(textNotation: TextNotation) {
         this.textElements.push(textNotation);
     }
+
+    public getTextNotation(id: string): TextNotation {
+        for (let textEl of this.textElements) {
+            if (textEl.id === id) {
+                return textEl;
+            }
+        }
+    }
 }

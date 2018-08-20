@@ -25,8 +25,11 @@ export class NotationTextEditDialogComponent {
     public doAThing() {
         const textEl = new TextNotation();
         textEl.text = this.textField;
-        textEl.anchor = new XyPair(50, 150);
+        textEl.anchor = new XyPair(0,0);
         textEl.fontSize = this.fontSize;
+
+        this.boardNotationService.isAddingTextNotation = true;
+        this.boardNotationService.currentTextNotationId = textEl.id;
 
         this.boardNotationService.getActiveNotation().addTextNotation(textEl);
         this.dialogRef.close();

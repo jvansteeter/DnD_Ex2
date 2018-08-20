@@ -5,6 +5,7 @@ import {BoardNotationService} from '../../services/board-notation-service';
 import {isUndefined} from "util";
 import {ColorStatics} from "../../statics/color-statics";
 import {XyPair} from "../../geometry/xy-pair";
+import {GeometryStatics} from "../../statics/geometry-statics";
 
 @Component({
     selector: 'notation-renderer',
@@ -41,9 +42,17 @@ export class NotationRendererComponent implements OnInit {
             }
 
             for (let text of notation.textElements) {
-                this.boardCanvasService.draw_text(this.ctx, text.anchor, text.text, text.fontSize);
+                this.boardCanvasService.draw_text(this.ctx, text.anchor, text.text, text.fontSize, notation.getRgbaCode());
                 if (notation === this.boardNotationService.getActiveNotation()) {
-                    this.boardCanvasService.draw_img(this.ctx, new XyPair(text.anchor.x - 17, text.anchor.y - 17), this.boardNotationService.anchor_img);
+                    if (!!this.boardStateService.mouse_loc_map) {
+                        if (GeometryStatics.distanceBetweenXyPairs(text.anchor, this.boardStateService.mouse_loc_map) < 18) {
+                            this.boardCanvasService.draw_img(this.ctx, new XyPair(text.anchor.x - 17, text.anchor.y - 17), this.boardNotationService.anchor_active_image);
+                        } else {
+                            this.boardCanvasService.draw_img(this.ctx, new XyPair(text.anchor.x - 17, text.anchor.y - 17), this.boardNotationService.anchor_img);
+                        }
+                    } else {
+                        this.boardCanvasService.draw_img(this.ctx, new XyPair(text.anchor.x - 17, text.anchor.y - 17), this.boardNotationService.anchor_img);
+                    }
                 }
             }
         }

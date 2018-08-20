@@ -32,8 +32,6 @@ export class BoardCanvasService {
     }
 
     draw_img(ctx: CanvasRenderingContext2D, origin: XyPair, img: HTMLImageElement) {
-        // const img = new Image();
-        // img.src = img_url;
         ctx.drawImage(img, origin.x, origin.y);
     }
 
@@ -49,8 +47,9 @@ export class BoardCanvasService {
         ctx.fill();
     }
 
-    draw_text(ctx: CanvasRenderingContext2D, anchor: XyPair, text: string, fontSize = 30) {
+    draw_text(ctx: CanvasRenderingContext2D, anchor: XyPair, text: string, fontSize = 30, rgbaCode: string) {
         ctx.font = fontSize + 'px Arial';
+        ctx.fillStyle = rgbaCode;
         ctx.fillText(text, anchor.x, anchor.y);
     }
 

@@ -336,6 +336,8 @@ export class BoardControllerComponent implements OnInit {
     }
 
     openTextNotationDialog() {
+        this.boardNotationService.returnToMeNotationMode = this.boardNotationService.activeNotationMode;
+        this.boardNotationService.activeNotationMode = NotationMode.TEXT;
         this.dialog.open(NotationTextEditDialogComponent);
     }
 }
