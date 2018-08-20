@@ -1,0 +1,19 @@
+.current-max {
+	display: flex;
+	align-items: center;
+}
+
+.current-max-input {
+	flex: 1;
+	width: 25px;
+
+	input {
+		text-align: center;
+	}
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}

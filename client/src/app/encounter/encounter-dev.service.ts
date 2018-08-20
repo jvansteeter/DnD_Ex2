@@ -42,34 +42,83 @@ export class EncounterDevService extends EncounterService {
             lightSourceData: {},
             lightEnabled: false,
             ambientLight: {} as LightValue,
+	          playerIds: [],
         });
         this.encounterState.players = [];
     }
 
     public init_players() {
+        // let player = new Player({
+	      //   name:'Joe',
+	      //   hp: 10,
+	      //   maxHp: 15,
+	      //   speed: 6,
+	      //   tokenUrl: 'resources/images/player-tokens/human fighter 1.png'
+        // } as PlayerData);
         let player = new Player({
-	        name:'Joe',
-	        hp: 10,
-	        maxHp: 15,
-	        speed: 6,
-	        tokenUrl: 'resources/images/player-tokens/human fighter 1.png'
-        } as PlayerData);
+		        _id: 'player1',
+		        encounterId: 'test encounter',
+		        characterData: {
+			          _id: 'test character',
+				        label: 'Joe',
+				        creatorUserId: 'developer',
+				        tokenUrl: 'resources/images/player-tokens/human fighter 1.png',
+				        characterSheetId: 'charcterSheet',
+				        values: {
+			          	  Name : 'Joe',
+				            Speed: 6,
+						        Health: {
+					              current: 10,
+								        max: 15
+						        }
+				        }
+		        },
+	          initiative: 1,
+		        location: {
+			          x: 0,
+				        y: 0,
+		        }
+        });
         player._id = window.crypto.getRandomValues(new Uint32Array(1))[0];
         player.addAction('Longsword:', '+4 Attack, 1d10 + 5');
         player.addAction('Crossbow:', ' +2 Attack,  1d6 + 1');
         this.players.push(player);
 
-        player = new Player({
-	        name: 'Sue',
-	        hp: 753,
-	        maxHp: 1235,
-	        speed: 29,
-	        location: {
-	        	x: 2,
-		        y: 3
-	        },
-	        tokenUrl: 'resources/images/player-tokens/human handmaid 2.png'
-        } as PlayerData);
+        // player = new Player({
+	      //   name: 'Sue',
+	      //   hp: 753,
+	      //   maxHp: 1235,
+	      //   speed: 29,
+	      //   location: {
+	      //   	x: 2,
+		    //     y: 3
+	      //   },
+	      //   tokenUrl: 'resources/images/player-tokens/human handmaid 2.png'
+        // } as PlayerData);
+		    player = new Player({
+				    _id: 'player2',
+				    encounterId: 'test encounter',
+				    characterData: {
+						    _id: 'test character2',
+						    label: 'Sue',
+						    creatorUserId: 'developer',
+						    tokenUrl: 'resources/images/player-tokens/human handmaid 2.png',
+						    characterSheetId: 'charcterSheet',
+						    values: {
+						    	  Name: 'Sue',
+								    Speed: 29,
+								    Health: {
+										    current: 753,
+										    max: 1235
+								    }
+						    }
+				    },
+			      initiative: 20,
+				    location: {
+						    x: 2,
+						    y: 3,
+				    }
+		    });
         player._id = window.crypto.getRandomValues(new Uint32Array(1))[0];
         player.addAction('Divine Judgement:', 'Rewrite the DM\'s will');
         player.addAction('Gaze of the Deep One:', 'Kill all living creatures, no saves, no escape');

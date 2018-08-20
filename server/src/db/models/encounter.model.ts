@@ -73,8 +73,10 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 
 	public setEncounterState(encounterState: EncounterData): Promise<EncounterModel> {
 		let playerIds: string[] = [];
-		for (let player of encounterState.players) {
-			playerIds.push(player._id);
+		if (!!encounterState.players) {
+			for (let player of encounterState.players) {
+				playerIds.push(player._id);
+			}
 		}
 		for (let item in encounterState) {
 			this[item] = encounterState[item];

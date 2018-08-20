@@ -8,6 +8,7 @@ export class CharacterModel extends MongooseModel implements CharacterData {
 	public _id: string;
 	public label: string;
 	public creatorUserId: string;
+	public tokenUrl: string;
 	public characterSheetId: string;
 	public characterSheet?: CharacterSheetData;
 	public ruleSetId?: string;
@@ -19,6 +20,7 @@ export class CharacterModel extends MongooseModel implements CharacterData {
 		super({
 			label: {type: String, required: true},
 			creatorUserId: {type: String, required: true},
+			tokenUrl: {type: String, default: ''},
 			characterSheetId: String,
 			ruleSetId: String,
 			campaignId: String,
@@ -29,6 +31,7 @@ export class CharacterModel extends MongooseModel implements CharacterData {
 		this._id = this.methods._id;
 		this.label = this.methods.label;
 		this.creatorUserId = this.methods.creatorUserId;
+		this.tokenUrl = this.methods.tokenUrl;
 		this.characterSheetId = this.methods.characterSheetId;
 		this.ruleSetId = this.methods.ruleSetId;
 		this.campaignId = this.methods.campaignId;
@@ -38,6 +41,7 @@ export class CharacterModel extends MongooseModel implements CharacterData {
 		this.methods.setRuleSetId = this.setRuleSetId;
 		this.methods.setValues = this.setValues;
 		this.methods.setCampaignId = this.setCampaignId;
+		this.methods.setTokenUrl = this.setTokenUrl;
 	}
 
 	public setRuleSetId(id: string): Promise<void> {
@@ -52,6 +56,11 @@ export class CharacterModel extends MongooseModel implements CharacterData {
 
 	public setValues(values): Promise<void> {
 		this.values = values;
+		return this.save();
+	}
+
+	public setTokenUrl(url): Promise<void> {
+		this.tokenUrl = url;
 		return this.save();
 	}
 }

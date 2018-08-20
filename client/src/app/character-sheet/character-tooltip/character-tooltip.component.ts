@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { CharacterSheetRepository } from '../../repositories/character-sheet.repository';
 import { CharacterSheetTooltipData } from '../../../../../shared/types/rule-set/character-sheet-tooltip.data';
 import { CharacterMakerService } from '../maker/character-maker.service';
+import { Aspect, AspectType } from '../shared/aspect';
 
 @Component({
 	selector: 'character-tooltip',
@@ -11,6 +12,7 @@ import { CharacterMakerService } from '../maker/character-maker.service';
 export class CharacterTooltipComponent {
 	@Input()
 	characterSheetId: string;
+	aspectType = AspectType;
 
 	public tooltipConfig: CharacterSheetTooltipData;
 	public hoveredIndex: number;
@@ -19,10 +21,10 @@ export class CharacterTooltipComponent {
 	            private characterSheetService: CharacterMakerService) {
 	}
 
-	public addAspect(aspectLabel: string, icon: string): void {
+	public addAspect(aspect: Aspect, icon: string): void {
 		let unique = true;
-		for (let aspect of this.tooltipConfig.aspects) {
-			if (aspect.label.toLowerCase() === aspectLabel.toLowerCase()) {
+		for (let tooltipAspect of this.tooltipConfig.aspects) {
+			if (tooltipAspect.aspect.label.toLowerCase() === aspect.label.toLowerCase()) {
 				unique = false;
 				break;
 			}
@@ -30,14 +32,14 @@ export class CharacterTooltipComponent {
 		if (unique) {
 			this.tooltipConfig.aspects.push({
 				icon: icon,
-				label: aspectLabel
+				aspect: aspect
 			});
 		}
 	}
 
 	public removeAspect(aspectLabel: string): void {
 		for (let i = 0; i < this.tooltipConfig.aspects.length; i++) {
-			if (this.tooltipConfig.aspects[i].label === aspectLabel) {
+			if (this.tooltipConfig.aspects[i].aspect.label === aspectLabel) {
 				this.tooltipConfig.aspects.splice(i, 1);
 				return;
 			}

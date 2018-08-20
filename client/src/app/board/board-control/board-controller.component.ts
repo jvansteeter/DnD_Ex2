@@ -3,7 +3,6 @@ import {BoardTileService} from '../services/board-tile.service';
 import {ViewMode} from '../shared/enum/view-mode';
 import {BoardMode} from '../shared/enum/board-mode';
 import {LightValue} from '../shared/enum/light-value';
-import {AddPlayerComponent} from '../../temp/add-player.component';
 import {BoardLightService} from '../services/board-light.service';
 import {PlayerVisibilityMode} from "../shared/enum/player-visibility-mode";
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
@@ -15,6 +14,8 @@ import {NotationVisibility} from "../shared/enum/notation-visibility";
 import {NotationIconSelectorComponent} from "./notation-icon-selector/notation-icon-selector.component";
 import {NotationColorSelectorComponent} from "./notation-color-selector/notation-color-selector.component";
 import {NotationSettingsDialogComponent} from "./notation-settings-dialog/notation-settings-dialog.component";
+import { AddPlayerDialogComponent } from './add-player-dialog/add-player-dialog.component';
+import { EncounterService } from '../../encounter/encounter.service';
 import {NotationTextEditDialogComponent} from "./notation-text-dialog/notation-text-edit-dialog.component";
 import {NotationTextCreateDialogComponent} from "./notation-text-dialog/notation-text-create-dialog.component";
 
@@ -109,6 +110,7 @@ export class BoardControllerComponent implements OnInit {
     constructor(public boardStateService: BoardStateService,
                 public boardLightService: BoardLightService,
                 public boardNotationService: BoardNotationService,
+                private encounterService: EncounterService,
                 public ts: BoardTileService,
                 private dialog: MatDialog,
     ) {}
@@ -282,7 +284,9 @@ export class BoardControllerComponent implements OnInit {
     }
 
     addPlayer(): void {
-        this.dialog.open(AddPlayerComponent);
+        this.dialog.open(AddPlayerDialogComponent, {data: {
+        	  campaignId: this.encounterService.encounterState.campaignId
+        }});
     }
 
     handleAddNotation() {

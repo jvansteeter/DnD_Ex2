@@ -1,9 +1,9 @@
+import { CharacterData } from '../character.data';
+
 export interface PlayerData {
 	_id: string;
-	name: string;
-	tokenUrl: string;
-	maxHp: number;
-	hp: number;
-	speed: number;
+	encounterId: string;
+	characterData: CharacterData;
+	initiative: number;
 	location: {x: number, y: number};
 }

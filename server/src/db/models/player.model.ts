@@ -1,45 +1,27 @@
 import * as mongoose from 'mongoose';
 import { PlayerData } from '../../../../shared/types/encounter/player.data';
+import { MongooseModel } from './mongoose.model';
+import { CharacterData } from '../../../../shared/types/character.data';
 
-export class PlayerModel extends mongoose.Schema implements PlayerData {
+export class PlayerModel extends MongooseModel implements PlayerData {
 	public _id;
-	name: string;
-	tokenUrl: string;
-	maxHp: number;
-	hp: number;
-	speed: number;
+	encounterId: string;
+	characterData: CharacterData;
+	initiative: number;
 	location: {x: number, y: number};
 
 	constructor() {
 		super({
-			name: {type: String, required: true, default: '' },
-			tokenUrl: {type: String, required: true},
-			maxHp: {type: Number, required: true, default: 1},
-			hp: {type: Number, required: true, default: 1},
-			speed: {type: Number, required: true, default: 1},
-			location: Object
+			encounterId: {type: String, required: true},
+			characterData: {type: Object, required: true},
+			initiative: Number,
+			location: {type: Object, default: {x: 0, y: 0}}
 		});
 
 		this._id = this.methods._id;
-		this.name = this.methods.name;
-		this.tokenUrl = this.methods.tokenUrl;
-		this.maxHp = this.methods.maxHp;
-		this.hp = this.methods.hp;
-		this.speed = this.methods.speed;
+		this.characterData = this.methods.characterData;
+		this.initiative = this.methods.initiative;
 		this.location = this.methods.location;
-	}
-
-	public save(): Promise<PlayerModel> {
-		return new Promise((resolve, reject) => {
-			this.methods.save((error, encounter: PlayerModel) => {
-				if (error) {
-					reject(error);
-					return;
-				}
-
-				resolve(encounter);
-			})
-		});
 	}
 }
 

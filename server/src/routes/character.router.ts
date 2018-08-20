@@ -4,6 +4,7 @@ import { CharacterModel } from '../db/models/character.model';
 import { CharacterSheetRepository } from '../db/repositories/characterSheet.repository';
 import { CharacterSheetData } from '../../../shared/types/rule-set/character-sheet.data';
 import { CharacterData } from '../../../shared/types/character.data';
+import { CharacterService } from '../services/character.service';
 
 
 /**********************************************************************************************************
@@ -16,11 +17,13 @@ export class CharacterRouter {
 
 	private characterRepo: CharacterRepository;
 	private sheetRepo: CharacterSheetRepository;
+	private characterService: CharacterService;
 
 	constructor() {
 		this.router = Router();
 		this.characterRepo = new CharacterRepository();
 		this.sheetRepo = new CharacterSheetRepository();
+		this.characterService = new CharacterService();
 		this.init();
 	}
 
@@ -62,9 +65,10 @@ export class CharacterRouter {
 
 		this.router.post('/save', async (req: Request, res: Response) => {
 			try {
-				let characterData = req.body;
+				let characterData: CharacterData = req.body;
 				let character = await this.characterRepo.findById(characterData._id);
 				await character.setValues(characterData.values);
+				await character.setTokenUrl(characterData.tokenUrl);
 				res.status(200).send();
 			}
 			catch (error) {
@@ -73,11 +77,23 @@ export class CharacterRouter {
 			}
 		});
 
-		this.router.get('/all/campaign/:campaignId', async (req: Request, res: Response) => {
+		this.router.get('/campaign/characters/:campaignId', async (req: Request, res: Response) => {
 			try {
 				let campaignId = req.params.campaignId;
-				let characters: CharacterModel[] = await this.characterRepo.findByCampaignId(campaignId);
+				let characters: CharacterModel[] = await this.characterRepo.findByCampaignId(campaignId, false);
 				res.json(characters);
+			}
+			catch (error) {
+				console.error(error);
+				res.status(500).send(error);
+			}
+		});
+
+		this.router.get('/campaign/all/:campaignId', async (req: Request, res: Response) => {
+			try {
+				let campaignId = req.params.campaignId;
+				let data = await this.characterService.getAllByCampaignId(campaignId);
+				res.json(data);
 			}
 			catch (error) {
 				console.error(error);

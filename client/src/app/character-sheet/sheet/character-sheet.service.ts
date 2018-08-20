@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, ViewChild } from '@angular/core';
 import { CharacterInterfaceService } from '../shared/character-interface.service';
 import { Aspect, AspectType } from '../shared/aspect';
 import { SubComponent } from '../shared/subcomponents/sub-component';
@@ -8,6 +8,7 @@ import { CharacterData } from '../../../../../shared/types/character.data';
 import { AspectData } from '../../../../../shared/types/rule-set/aspect.data';
 import { isUndefined } from 'util';
 import { CharacterRepository } from '../../repositories/character.repository';
+import { TokenComponent } from '../shared/subcomponents/token/token.component';
 
 @Injectable()
 export class CharacterSheetService implements CharacterInterfaceService {
@@ -82,7 +83,7 @@ export class CharacterSheetService implements CharacterInterfaceService {
 			});
 		}
 		if (isUndefined(this.characterData.values)) {
-			this.characterData.values = new Map<string, any>();
+			this.characterData.values = {};
 		}
 	}
 
@@ -92,6 +93,10 @@ export class CharacterSheetService implements CharacterInterfaceService {
 
 	removeComponent(aspect: Aspect): void {
 
+	}
+
+	public setTokenUrl(url: string): void {
+		this.characterData.tokenUrl = url;
 	}
 
 	public save(): void {

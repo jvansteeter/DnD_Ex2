@@ -1,14 +1,14 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {
-    MatButtonModule,
-    MatButtonToggleModule,
-    MatCheckboxModule,
-    MatIconModule,
-    MatRadioModule,
-    MatSelectModule,
-    MatSliderModule,
-    MatFormFieldModule,
-    MatInputModule, MatTooltipModule, MatDialogModule, MatBadgeModule
+	MatButtonModule,
+	MatButtonToggleModule,
+	MatCheckboxModule,
+	MatIconModule,
+	MatRadioModule,
+	MatSelectModule,
+	MatSliderModule,
+	MatFormFieldModule,
+	MatInputModule, MatTooltipModule, MatDialogModule, MatTabsModule, MatTableModule, MatSortModule, MatBadgeModule
 } from '@angular/material';
 import {NgModule} from '@angular/core';
 import {MapRendererComponent} from "./renderer/map-renderer/map-renderer.component";
@@ -31,8 +31,6 @@ import {TokenRendererComponent} from './renderer/token-renderer/token-renderer.c
 import {PopService} from "./pop/pop.service";
 import {PopRootComponent} from "./pop/pop-root.component";
 import {NpcPopComponent} from "./pop/npcPop/npc-pop.component";
-import {TempModule} from '../temp/temp.module';
-import {AddPlayerComponent} from '../temp/add-player.component';
 import {BoardTransformService} from './services/board-transform.service';
 import {BoardVisibilityService} from './services/board-visibility.service';
 import {BoardLightService} from './services/board-light.service';
@@ -44,6 +42,7 @@ import {NotationRendererComponent} from './renderer/notation-renderer/notation-r
 import {NotationIconSelectorComponent} from "./board-control/notation-icon-selector/notation-icon-selector.component";
 import {NotationColorSelectorComponent} from "./board-control/notation-color-selector/notation-color-selector.component";
 import {NotationSettingsDialogComponent} from "./board-control/notation-settings-dialog/notation-settings-dialog.component";
+import { AddPlayerDialogComponent } from './board-control/add-player-dialog/add-player-dialog.component';
 import {NotationTextEditDialogComponent} from "./board-control/notation-text-dialog/notation-text-edit-dialog.component";
 import {NotationTextCreateDialogComponent} from "./board-control/notation-text-dialog/notation-text-create-dialog.component";
 
@@ -68,6 +67,7 @@ import {NotationTextCreateDialogComponent} from "./board-control/notation-text-d
         NpcPopComponent,
         NotationIconSelectorComponent,
         NotationColorSelectorComponent,
+		    AddPlayerDialogComponent,
         NotationSettingsDialogComponent,
         NotationTextEditDialogComponent,
         NotationTextCreateDialogComponent
@@ -81,12 +81,14 @@ import {NotationTextCreateDialogComponent} from "./board-control/notation-text-d
         MatButtonModule,
         MatSelectModule,
         MatIconModule,
-        TempModule,
         MatButtonToggleModule,
         MatFormFieldModule,
         MatInputModule,
         MatTooltipModule,
         MatDialogModule,
+		    MatTabsModule,
+		    MatTableModule,
+		    MatSortModule,
         MatBadgeModule
     ],
     providers: [
@@ -107,8 +109,9 @@ import {NotationTextCreateDialogComponent} from "./board-control/notation-text-d
         NotationIconSelectorComponent,
         NotationColorSelectorComponent,
         NotationSettingsDialogComponent,
+		    AddPlayerDialogComponent,
         NotationTextEditDialogComponent,
-        NotationTextCreateDialogComponent
+        NotationTextCreateDialogComponent,
     ],
     bootstrap: [],
     exports: [

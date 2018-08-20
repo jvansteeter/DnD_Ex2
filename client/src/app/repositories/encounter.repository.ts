@@ -4,6 +4,7 @@ import {Observable} from "rxjs";
 import { map } from 'rxjs/operators';
 import { EncounterData } from '../../../../shared/types/encounter/encounter.data';
 import { PlayerData } from '../../../../shared/types/encounter/player.data';
+import { CharacterData } from '../../../../shared/types/character.data';
 
 @Injectable()
 export class EncounterRepository {
@@ -27,5 +28,13 @@ export class EncounterRepository {
 		return this.http.post('api/encounter/addplayer', data, {responseType: 'text'}).pipe(map(() => {
 			return;
 		}));
+	}
+
+	public addCharacters(encounterId: string, characters: CharacterData[]): Observable<void> {
+		let data = {
+			encounterId: encounterId,
+			characters: characters
+		};
+		return this.http.post('/api/encounter/addcharacters', data, {responseType: 'text'}).pipe(map(() => {return;}));
 	}
 }

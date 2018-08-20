@@ -8,6 +8,7 @@ import {BoardStateService} from '../board/services/board-state.service';
 import {map, mergeMap, tap} from 'rxjs/operators';
 import { EncounterData } from '../../../../shared/types/encounter/encounter.data';
 import { PlayerData } from '../../../../shared/types/encounter/player.data';
+import { CharacterData } from '../../../../shared/types/character.data';
 
 @Injectable()
 export class EncounterService extends IsReadyService {
@@ -57,6 +58,11 @@ export class EncounterService extends IsReadyService {
                     return getEncounterObservable;
                 })
             );
+    }
+
+    public addCharacters(characters: CharacterData[]): Observable<void> {
+    	console.log(characters)
+    	return this.encounterRepo.addCharacters(this.encounterId, characters);
     }
 
     public getPlayerById(id: string): Player {

@@ -8,7 +8,8 @@ export interface EncounterData {
     date: Date;
     campaignId: string;
     gameMasters: string[];
-    players: PlayerData[];
+    playerIds: string[];
+    players?: PlayerData[];
 
     /**************************************
      * GENERAL BOARD VARIABLES

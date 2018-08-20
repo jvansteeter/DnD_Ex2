@@ -63,6 +63,24 @@ mat-drawer {
 	background-color: #fafafa;
 }
 
+.required-aspects {
+	display: flex;
+	flex-direction: column;
+	min-height: 90px;
+}
+
+/deep/ .map-aspects {
+	.mat-tab-label {
+		width: 50px;
+		min-width: 50px;
+		flex: 1;
+	}
+}
+
+/deep/ .mat-tab-body-content {
+	overflow: hidden !important;
+}
+
 ::-webkit-scrollbar {
 	width: 0;  /* remove scrollbar space */
 	background: transparent;  /* optional: just make scrollbar invisible */

@@ -31,7 +31,12 @@ export class CharacterRepository {
 		return this.http.post('/api/character/save', characterData, {responseType: 'text'});
 	}
 
-	public getByCampaignId(campaignId: string): Observable<CharacterData[]> {
-		return this.http.get<CharacterData[]>('/api/character/all/campaign/' + campaignId, {responseType: 'json'});
+	public getCharactersByCampaignId(campaignId: string): Observable<CharacterData[]> {
+		return this.http.get<CharacterData[]>('/api/character/campaign/characters/' + campaignId, {responseType: 'json'});
+	}
+
+	public getAllByCampaignId(campaignId: string): Observable<{campaignCharacters: CharacterData[], ruleSetNPCs: CharacterData[]}> {
+		return this.http.get<{campaignCharacters: CharacterData[], ruleSetNPCs: CharacterData[]}>('/api/character/campaign/all/'
+			+ campaignId, {responseType: 'json'});
 	}
 }

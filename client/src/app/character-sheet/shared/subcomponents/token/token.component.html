@@ -1,8 +1,4 @@
-<div class="token-component">
-	<a class="image-thumbnail" (click)="upload()">
-		<img class="token-component-image" [src]="value"/>
-	</a>
-	<input type="file" accept="image/*" #fileInput (change)="loadImage()"/>
-</div>
-<mat-menu #options="matMenu">
-</mat-menu>
+<a class="image-thumbnail" (click)="upload()">
+	<img class="token-component-image" [src]="tokenUrl"/>
+</a>
+<input type="file" accept="image/*" #fileInput (change)="loadImage()"/>

@@ -119,7 +119,7 @@ export class CampaignPageService extends IsReadyService {
 							this._encounterSubject.next(this.campaignState.encounters);
 						}),
 						mergeMap(() => {
-							return this.characterRepo.getByCampaignId(this.campaignId);
+							return this.characterRepo.getCharactersByCampaignId(this.campaignId);
 						}),
 						tap((characters: CharacterData[]) => {
 							this.campaignState.characters = characters;

@@ -57,9 +57,9 @@ export class CharacterRepository {
 		});
 	}
 
-	public findByCampaignId(campaignId: string): Promise<CharacterModel[]> {
+	public findByCampaignId(campaignId: string, npc: boolean): Promise<CharacterModel[]> {
 		return new Promise((resolve, reject) => {
-			this.Character.find({campaignId: campaignId}, (error, characters: CharacterModel[]) => {
+			this.Character.find({campaignId: campaignId, npc: npc}, (error, characters: CharacterModel[]) => {
 				if (error) {
 					reject(error);
 					return;
