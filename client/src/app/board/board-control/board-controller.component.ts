@@ -16,6 +16,7 @@ import {NotationIconSelectorComponent} from "./notation-icon-selector/notation-i
 import {NotationColorSelectorComponent} from "./notation-color-selector/notation-color-selector.component";
 import {NotationSettingsDialogComponent} from "./notation-settings-dialog/notation-settings-dialog.component";
 import {NotationTextEditDialogComponent} from "./notation-text-dialog/notation-text-edit-dialog.component";
+import {NotationTextCreateDialogComponent} from "./notation-text-dialog/notation-text-create-dialog.component";
 
 @Component({
     selector: 'board-controller',
@@ -334,6 +335,6 @@ export class BoardControllerComponent implements OnInit {
     openTextNotationDialog() {
         this.boardNotationService.returnToMeNotationMode = this.boardNotationService.activeNotationMode;
         this.boardNotationService.activeNotationMode = NotationMode.TEXT;
-        this.dialog.open(NotationTextEditDialogComponent);
+        this.dialog.open(NotationTextCreateDialogComponent);
     }
 }

@@ -8,7 +8,7 @@ import {
     MatSelectModule,
     MatSliderModule,
     MatFormFieldModule,
-    MatInputModule, MatTooltipModule, MatDialogModule
+    MatInputModule, MatTooltipModule, MatDialogModule, MatBadgeModule
 } from '@angular/material';
 import {NgModule} from '@angular/core';
 import {MapRendererComponent} from "./renderer/map-renderer/map-renderer.component";
@@ -45,6 +45,7 @@ import {NotationIconSelectorComponent} from "./board-control/notation-icon-selec
 import {NotationColorSelectorComponent} from "./board-control/notation-color-selector/notation-color-selector.component";
 import {NotationSettingsDialogComponent} from "./board-control/notation-settings-dialog/notation-settings-dialog.component";
 import {NotationTextEditDialogComponent} from "./board-control/notation-text-dialog/notation-text-edit-dialog.component";
+import {NotationTextCreateDialogComponent} from "./board-control/notation-text-dialog/notation-text-create-dialog.component";
 
 
 @NgModule({
@@ -68,7 +69,8 @@ import {NotationTextEditDialogComponent} from "./board-control/notation-text-dia
         NotationIconSelectorComponent,
         NotationColorSelectorComponent,
         NotationSettingsDialogComponent,
-        NotationTextEditDialogComponent
+        NotationTextEditDialogComponent,
+        NotationTextCreateDialogComponent
     ],
     imports: [
         BrowserModule,
@@ -84,7 +86,8 @@ import {NotationTextEditDialogComponent} from "./board-control/notation-text-dia
         MatFormFieldModule,
         MatInputModule,
         MatTooltipModule,
-        MatDialogModule
+        MatDialogModule,
+        MatBadgeModule
     ],
     providers: [
         PopService,
@@ -104,7 +107,8 @@ import {NotationTextEditDialogComponent} from "./board-control/notation-text-dia
         NotationIconSelectorComponent,
         NotationColorSelectorComponent,
         NotationSettingsDialogComponent,
-        NotationTextEditDialogComponent
+        NotationTextEditDialogComponent,
+        NotationTextCreateDialogComponent
     ],
     bootstrap: [],
     exports: [

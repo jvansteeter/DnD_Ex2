@@ -26,6 +26,7 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
     @ViewChild('mapContainer') mapContainer: ElementRef;
 
     private ctx: CanvasRenderingContext2D;
+    public badgeValue = "8";
 
     ngOnInit(): void {
         this.ctx = this.inputCanvas.nativeElement.getContext('2d');
