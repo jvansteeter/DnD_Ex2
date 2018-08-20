@@ -1,4 +1,35 @@
-<div style="height: 100%; width: 100%" #mapContainer>
+<div style="position: absolute; z-index: 5;">
+    <div
+            style="height: 40px; width: 40px; border: 3px solid green; background: #00b3ff; border-radius: 25px; margin-top: 13px; margin-left: 8px"
+            matBadge={{badgeValue}}
+            matTooltip="Character 1"
+            matTooltipPosition="after"
+    ></div>
+
+    <div
+            style="height: 40px; width: 40px; border: 3px solid green; background: #00b3ff; border-radius: 25px; margin-top: 13px; margin-left: 8px"
+            matBadge="6"
+            matTooltip="Character 2"
+            matTooltipPosition="after"
+    ></div>
+
+    <div
+            style="height: 40px; width: 40px; border: 3px solid green; background: #00b3ff; border-radius: 25px; margin-top: 13px; margin-left: 8px"
+            matBadge="4"
+            matTooltip="Character 3"
+            matTooltipPosition="after"
+    ></div>
+
+    <div
+            style="height: 40px; width: 40px; border: 3px solid green; background: #00b3ff; border-radius: 25px; margin-top: 13px; margin-left: 8px"
+            matTooltip="Character 4"
+            matTooltipPosition="after"
+    ></div>
+</div>
+
+
+
+<div style="height: 100%; width: 100%;" #mapContainer>
     <map-renderer></map-renderer>
     <tile-renderer></tile-renderer>
     <grid-renderer></grid-renderer>

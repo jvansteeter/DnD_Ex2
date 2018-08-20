@@ -8,7 +8,7 @@ import {
 	MatSelectModule,
 	MatSliderModule,
 	MatFormFieldModule,
-	MatInputModule, MatTooltipModule, MatDialogModule, MatTabsModule, MatTableModule, MatSortModule
+	MatInputModule, MatTooltipModule, MatDialogModule, MatTabsModule, MatTableModule, MatSortModule, MatBadgeModule
 } from '@angular/material';
 import {NgModule} from '@angular/core';
 import {MapRendererComponent} from "./renderer/map-renderer/map-renderer.component";
@@ -44,6 +44,7 @@ import {NotationColorSelectorComponent} from "./board-control/notation-color-sel
 import {NotationSettingsDialogComponent} from "./board-control/notation-settings-dialog/notation-settings-dialog.component";
 import { AddPlayerDialogComponent } from './board-control/add-player-dialog/add-player-dialog.component';
 import {NotationTextEditDialogComponent} from "./board-control/notation-text-dialog/notation-text-edit-dialog.component";
+import {NotationTextCreateDialogComponent} from "./board-control/notation-text-dialog/notation-text-create-dialog.component";
 
 
 @NgModule({
@@ -68,7 +69,8 @@ import {NotationTextEditDialogComponent} from "./board-control/notation-text-dia
         NotationColorSelectorComponent,
 		    AddPlayerDialogComponent,
         NotationSettingsDialogComponent,
-        NotationTextEditDialogComponent
+        NotationTextEditDialogComponent,
+        NotationTextCreateDialogComponent
     ],
     imports: [
         BrowserModule,
@@ -87,6 +89,7 @@ import {NotationTextEditDialogComponent} from "./board-control/notation-text-dia
 		    MatTabsModule,
 		    MatTableModule,
 		    MatSortModule,
+        MatBadgeModule
     ],
     providers: [
         PopService,
@@ -107,7 +110,8 @@ import {NotationTextEditDialogComponent} from "./board-control/notation-text-dia
         NotationColorSelectorComponent,
         NotationSettingsDialogComponent,
 		    AddPlayerDialogComponent,
-        NotationTextEditDialogComponent
+        NotationTextEditDialogComponent,
+        NotationTextCreateDialogComponent,
     ],
     bootstrap: [],
     exports: [
