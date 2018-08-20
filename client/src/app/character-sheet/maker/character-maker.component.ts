@@ -11,6 +11,7 @@ import { CharacterTooltipComponent } from '../character-tooltip/character-toolti
 import { DashboardCard } from '../../cdk/dashboard-card/dashboard-card';
 import { AddTooltipAspectComponent } from "./dialog/add-tooltip-aspect.component";
 import { AspectData } from '../../../../../shared/types/rule-set/aspect.data';
+import { PredefinedAspects, RequiredAspects } from '../../../../../shared/required-aspects.enum';
 
 @Component({
 	selector: 'character-maker',
@@ -27,26 +28,26 @@ export class CharacterMakerComponent implements OnInit, AfterViewInit {
 
 	private readonly requiredAspects = [
 		{
-			label: 'Vision',
+			label: RequiredAspects.VISION,
 			type: AspectType.NUMBER
 		},
 		{
-			label: 'Dark Vision',
+			label: RequiredAspects.DARK_VISION,
 			type: AspectType.BOOLEAN
 		},
 		{
-			label: 'Speed',
+			label: RequiredAspects.SPEED,
 			type: AspectType.NUMBER
 		}
 	];
 
 	public readonly preDefinedAspects = [
 		{
-			label: 'Name',
+			label: PredefinedAspects.NAME,
 			checked: false
 		},
 		{
-			label: 'Health',
+			label: PredefinedAspects.HEALTH,
 			checked: false
 		},
 	];

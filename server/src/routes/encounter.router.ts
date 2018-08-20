@@ -44,21 +44,24 @@ export class EncounterRouter {
 			}
 		});
 
-		this.router.post('/addplayer', async (req: Request, res: Response) => {
-			try {
-				const player: PlayerData = req.body.player;
-				await this.encounterService.addPlayer(req.body.encounterId, player);
-				res.status(200).send('OK');
-			}
-			catch (error) {
-				console.error(error);
-				res.status(500).send(error);
-			}
-		});
+		// this.router.post('/addplayer', async (req: Request, res: Response) => {
+		// 	try {
+		// 		const player: PlayerData = req.body.player;
+		// 		await this.encounterService.addPlayer(req.body.encounterId, player);
+		// 		res.status(200).send('OK');
+		// 	}
+		// 	catch (error) {
+		// 		console.error(error);
+		// 		res.status(500).send(error);
+		// 	}
+		// });
 
 		this.router.post('/addcharacters', async (req: Request, res: Response) => {
 			try {
-
+				let encounterId = req.body.encounterId;
+				let characters = req.body.characters;
+				await this.encounterService.addCharacters(encounterId, characters);
+				res.status(200).send();
 			}
 			catch (error) {
 				console.error(error);

@@ -76,7 +76,7 @@ export class CharacterMakerService implements CharacterInterfaceService {
 	}
 
 	public getAspect(aspectLabel: string): Aspect {
-		return this.subComponents.get(aspectLabel).aspect;
+		return this.subComponents.get(aspectLabel.toLowerCase()).aspect;
 	}
 
 	public updateFunctionAspects(): void {
@@ -160,6 +160,7 @@ export class CharacterMakerService implements CharacterInterfaceService {
 					aspect.aspectType === AspectType.NUMBER ||
 					aspect.aspectType === AspectType.BOOLEAN ||
 					aspect.aspectType === AspectType.CATEGORICAL ||
+					aspect.aspectType === AspectType.CURRENT_MAX ||
 					aspect.aspectType === AspectType.FUNCTION) {
 				result.push(aspect);
 			}

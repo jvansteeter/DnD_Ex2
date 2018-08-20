@@ -41,6 +41,7 @@ export class CharacterModel extends MongooseModel implements CharacterData {
 		this.methods.setRuleSetId = this.setRuleSetId;
 		this.methods.setValues = this.setValues;
 		this.methods.setCampaignId = this.setCampaignId;
+		this.methods.setTokenUrl = this.setTokenUrl;
 	}
 
 	public setRuleSetId(id: string): Promise<void> {

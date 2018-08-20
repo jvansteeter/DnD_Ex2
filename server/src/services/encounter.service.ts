@@ -7,6 +7,7 @@ import { PlayerData } from '../../../shared/types/encounter/player.data';
 import { EncounterData } from '../../../shared/types/encounter/encounter.data';
 import { CharacterData } from '../../../shared/types/character.data';
 import { CharacterService } from './character.service';
+import { MqServiceSingleton } from '../mq/mq.service';
 
 export class EncounterService {
 	private encounterRepo: EncounterRepository;
@@ -58,25 +59,28 @@ export class EncounterService {
 		});
 	}
 
-	public async addPlayer(encounterId: string, player: PlayerData): Promise<PlayerModel> {
-		try {
-			const playerModel: PlayerModel = await this.playerRepo.create(player.name, player.tokenUrl, player.maxHp, player.speed);
-			const encounterModel: EncounterModel = await this.encounterRepo.findById(encounterId);
-			await encounterModel.addPlayer(playerModel);
-			return playerModel;
-		}
-		catch (error) {
-			throw error;
-		}
-	}
+	// public async addPlayer(encounterId: string, player: PlayerData): Promise<PlayerModel> {
+	// 	try {
+	// 		const playerModel: PlayerModel = await this.playerRepo.create(player.name, player.tokenUrl, player.maxHp, player.speed);
+	// 		const encounterModel: EncounterModel = await this.encounterRepo.findById(encounterId);
+	// 		await encounterModel.addPlayer(playerModel);
+	// 		return playerModel;
+	// 	}
+	// 	catch (error) {
+	// 		throw error;
+	// 	}
+	// }
 
 	public async addCharacters(encounterId: string, characters: CharacterData[]): Promise<void> {
 		try {
 			let encounter: EncounterModel = await this.encounterRepo.findById(encounterId);
 			for (let character of characters) {
-				// let player: PlayerData = await this.characterService.createPlayerDataFromCharacter(character._id);
-
+				let player = await this.playerRepo.create(encounterId, character);
+				await encounter.addPlayer(player);
+				// TODO: send an MQ message to the encounter of an added player
 			}
+
+			return;
 		}
 		catch (error) {
 			throw error;

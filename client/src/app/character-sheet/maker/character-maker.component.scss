@@ -77,6 +77,10 @@ mat-drawer {
 	}
 }
 
+/deep/ .mat-tab-body-content {
+	overflow: hidden !important;
+}
+
 ::-webkit-scrollbar {
 	width: 0;  /* remove scrollbar space */
 	background: transparent;  /* optional: just make scrollbar invisible */

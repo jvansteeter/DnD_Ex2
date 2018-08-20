@@ -2,6 +2,7 @@ import * as mongoose from 'mongoose';
 import { Promise } from 'bluebird';
 import { PlayerModel } from '../models/player.model';
 import { PlayerData } from '../../../../shared/types/encounter/player.data';
+import { CharacterData } from '../../../../shared/types/character.data';
 
 export class PlayerRepository {
 	private Player: mongoose.Model<mongoose.Document>;
@@ -10,16 +11,12 @@ export class PlayerRepository {
 		this.Player = mongoose.model('Player');
 	}
 
-	public create(name: string, tokenUrl: string, hp: number, speed: number): Promise<PlayerModel> {
+	public create(encounterId: string, character: CharacterData): Promise<PlayerModel> {
 		return new Promise(async (resolve, reject) => {
 			try {
 				const playerModel = await this.Player.create({
-					name: name,
-					tokenUrl: tokenUrl,
-					maxHp: hp,
-					hp: hp,
-					speed: speed,
-					location: {x: 0, y: 0}
+					encounterId: encounterId,
+					characterData: character,
 				});
 
 				resolve(playerModel);

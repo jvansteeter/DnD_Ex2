@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { CharacterRepository } from '../../../repositories/character.repository';
-import { MAT_DIALOG_DATA, MatSort, MatTableDataSource } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef, MatSort, MatTableDataSource } from '@angular/material';
 import { CharacterData } from '../../../../../../shared/types/character.data';
 import { SelectionModel } from '@angular/cdk/collections';
 import { EncounterService } from '../../../encounter/encounter.service';
@@ -27,7 +27,8 @@ export class AddPlayerDialogComponent implements OnInit {
 
 	constructor(@Inject(MAT_DIALOG_DATA) data: any,
 	            private characterRepo: CharacterRepository,
-	            private encounterService: EncounterService) {
+	            private encounterService: EncounterService,
+	            private dialogRef: MatDialogRef<AddPlayerDialogComponent>) {
 		this.campaignId = data.campaignId;
 		this.counts = new Map<CharacterData, number>();
 	}
@@ -74,6 +75,21 @@ export class AddPlayerDialogComponent implements OnInit {
 	}
 
 	public submit(): void {
+		let characters: CharacterData[] = [];
+		if (!this.selection.isEmpty()) {
+			for (let selectedCharacter of this.selection.selected) {
+				let count = this.counts.get(selectedCharacter);
+				for (let i = 0; i < count; i++) {
+					characters.push(JSON.parse(JSON.stringify(selectedCharacter)));
+				}
+			}
 
+			this.encounterService.addCharacters(characters).subscribe(() => {
+				this.dialogRef.close();
+			});
+		}
+		else {
+			this.dialogRef.close();
+		}
 	}
 }

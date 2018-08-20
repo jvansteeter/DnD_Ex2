@@ -15,12 +15,12 @@ export class TokenComponent {
 
 	}
 
-	// stopClickPropagate(event): void {
-	// 	event.stopPropagation();
-	// }
-
 	getTokenUrl() {
 		return this.tokenUrl;
+	}
+
+	setTokenUrl(tokenUrl: string): void {
+		this.tokenUrl = tokenUrl;
 	}
 
 	upload(): void {
