@@ -6,6 +6,8 @@ import { EncounterData } from '../../../shared/types/encounter/encounter.data';
 import { CharacterData } from '../../../shared/types/character.data';
 import { CharacterService } from './character.service';
 import { CharacterSheetRepository } from '../db/repositories/characterSheet.repository';
+import { MqServiceSingleton } from '../mq/mq.service';
+import { EncounterCommand } from '../../../shared/types/encounter/encounter-command.enum';
 
 export class EncounterService {
 	private encounterRepo: EncounterRepository;
@@ -71,13 +73,14 @@ export class EncounterService {
 	// 	}
 	// }
 
-	public async addCharacters(encounterId: string, characters: CharacterData[]): Promise<void> {
+	public async addCharacters(encounterId: string, userId: string, characters: CharacterData[]): Promise<void> {
 		try {
 			let encounter: EncounterModel = await this.encounterRepo.findById(encounterId);
 			for (let character of characters) {
 				let player = await this.playerRepo.create(encounterId, character);
 				await encounter.addPlayer(player);
 				// TODO: send an MQ message to the encounter of an added player
+				await MqServiceSingleton.sendEncounterCommand(encounterId, userId, EncounterCommand.ADD_PLAYER, player);
 			}
 
 			return;

@@ -56,9 +56,10 @@ export class EncounterRouter {
 
 		this.router.post('/addcharacters', async (req: Request, res: Response) => {
 			try {
-				let encounterId = req.body.encounterId;
-				let characters = req.body.characters;
-				await this.encounterService.addCharacters(encounterId, characters);
+				const encounterId = req.body.encounterId;
+				const userId = req.user._id;
+				const characters = req.body.characters;
+				await this.encounterService.addCharacters(encounterId, userId, characters);
 				res.status(200).send();
 			}
 			catch (error) {

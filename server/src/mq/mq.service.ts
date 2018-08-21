@@ -12,6 +12,7 @@ import { FriendRepository } from "../db/repositories/friend.repository";
 import { EncounterCommand } from '../../../shared/types/encounter/encounter-command.enum';
 import { PlayerRepository } from '../db/repositories/player.repository';
 import { PlayerData } from '../../../shared/types/encounter/player.data';
+import { MqMessageType } from '../../../shared/types/mq/message-type.enum';
 
 export class MqService {
 	private friendRepo: FriendRepository;
@@ -42,6 +43,26 @@ export class MqService {
 
 	public userHasMqAccount(user: UserModel): Promise<boolean> {
 		return this.mqProxy.userHasMqAccount(user);
+	}
+
+	public async sendEncounterCommand(encounterId: string, userId: string, commandType: EncounterCommand, data: any): Promise<void> {
+		try {
+			await this.mqProxy.sendEncounterCommand(encounterId, {
+				headers: {
+					type: MqMessageType.ENCOUNTER,
+					encounterId: encounterId
+				},
+				body: {
+					userId: userId,
+					version: 0,
+					dataType: commandType,
+					data: data
+				}
+			});
+		}
+		catch (error) {
+			throw error;
+		}
 	}
 
 	private async handleEncounterUpdates(encounterUpdate: EncounterUpdateMessage): Promise<void> {

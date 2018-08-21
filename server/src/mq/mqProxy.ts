@@ -11,6 +11,8 @@ import { FriendRequestMessage } from './messages/friend-request.message';
 import { MqFactory } from './mq.factory';
 import { CampaignInvite } from '../../../shared/types/mq/campaign-invite';
 import { CampaignInviteMessage } from './messages/campaign-invite.message';
+import { EncounterUpdate } from '../../../shared/types/mq/EncounterUpdate';
+import { MqError } from '../../../shared/errors/MqError';
 
 export class MqProxy {
 
@@ -108,6 +110,25 @@ export class MqProxy {
 		});
 
 		return campaignInviteSubject.asObservable();
+	}
+
+	public async sendEncounterCommand(encounterId: string, encounterUpdate: EncounterUpdate): Promise<void> {
+		try {
+			if (!this.connection) {
+				throw new Error(MqError.NOT_CONNECTED);
+			}
+			this.connection.createChannel((error, channel) => {
+				if (error) {
+					throw new Error(MqError.CHANNEL);
+				}
+
+				channel.publish(MqConfig.encounterExchange, 'encounter.' + encounterId, new Buffer(JSON.stringify(encounterUpdate)));
+				return;
+			});
+		}
+		catch (error) {
+			throw error;
+		}
 	}
 
 	public createMqAccount(user: UserModel): Promise<void> {

@@ -27,6 +27,8 @@ export class EncounterConcurrencyService extends IsReadyService {
 
 	private observeEncounterMqMessages(): void {
 		this.mqService.getEncounterMessages(this.encounterService.encounterState._id).subscribe((message: EncounterUpdateMessage) => {
+			console.log('got an encounter command')
+			console.log(message)
 			if (message.body.userId === this.userProfileService.userId) {
 				return;
 			}
