@@ -1,18 +1,37 @@
 <ng-container *ngIf="tooltipConfig">
-	<div *ngFor="let aspect of tooltipConfig.aspects; let i = index" class="character-tooltip-aspect" (mouseenter)="startHover(i)"
+	<div *ngFor="let aspect of tooltipConfig.aspects; let i = index" class="character-tooltip-aspect"
+	     (mouseenter)="startHover(i)"
 	     (mouseleave)="endHover()">
 		<mat-icon>{{aspect.icon}}</mat-icon>
 		<span class="aspect-label">{{aspect.aspect.label}}:</span>
 		<ng-container *ngIf="editable">
-			<button mat-icon-button *ngIf="hoveredIndex === i" color="primary" (click)="moveUp(i)"><mat-icon>keyboard_arrow_up</mat-icon></button>
-			<button mat-icon-button *ngIf="hoveredIndex === i" color="primary" (click)="moveDown(i)"><mat-icon>keyboard_arrow_down</mat-icon></button>
-			<button mat-icon-button *ngIf="hoveredIndex === i" color="primary" (click)="removeAspect(aspect.label)"><mat-icon>close</mat-icon></button>
+			<button mat-icon-button *ngIf="hoveredIndex === i" color="primary" (click)="moveUp(i)">
+				<mat-icon>keyboard_arrow_up</mat-icon>
+			</button>
+			<button mat-icon-button *ngIf="hoveredIndex === i" color="primary" (click)="moveDown(i)">
+				<mat-icon>keyboard_arrow_down</mat-icon>
+			</button>
+			<button mat-icon-button *ngIf="hoveredIndex === i" color="primary" (click)="removeAspect(aspect.aspect.label)">
+				<mat-icon>close</mat-icon>
+			</button>
 		</ng-container>
 		<ng-container [ngSwitch]="aspect.aspect.aspectType">
-			<span class="aspect-value" *ngSwitchCase="aspectType.CURRENT_MAX">
-				<ng-container *ngIf="aspectValue(aspect.aspect.label)">{{aspectValue(aspect.aspect.label).current}} / {{aspectValue(aspect.aspect.label).max}}</ng-container>
+			<span class="current-max-aspect-value" *ngSwitchCase="aspectType.CURRENT_MAX">
+				<ng-container *ngIf="aspectValue(aspect.aspect.label)">
+					<input class="current-max-input" style="margin-left: auto" type="number"
+					       [value]="aspectValue(aspect.aspect.label).current"
+					       (change)="changeCurrentAspectValue(aspect.aspect.label, $event.target.value)"/>
+					<span>/</span>
+					<input class="current-max-input" type="number" [value]="aspectValue(aspect.aspect.label).max"
+					       (change)="changeMaxAspectValue(aspect.aspect.label, $event.target.value)"/>
+				</ng-container>
 			</span>
-			<span class="aspect-value" *ngSwitchDefault>{{aspectValue(aspect.aspect.label)}}</span>
+			<input *ngSwitchCase="aspectType.NUMBER" class="aspect-input" type="number"
+			       [value]="aspectValue(aspect.aspect.label) ? aspectValue(aspect.aspect.label) : ''"
+			       (change)="changeAspectValue(aspect.aspect.label, $event.target.value)"/>
+			<input class="aspect-input" *ngSwitchDefault
+			       [value]="aspectValue(aspect.aspect.label) ? aspectValue(aspect.aspect.label) : ''"
+			       (change)="changeAspectValue(aspect.aspect.label, $event.target.value)"/>
 		</ng-container>
 	</div>
 </ng-container>

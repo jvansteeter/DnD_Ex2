@@ -10,8 +10,17 @@
 	align-items: center;
 }
 
-.aspect-value {
-	margin-left: auto;
+.current-max-aspect-value {
+	width: 100%;
+	display: flex;
+}
+
+
+.current-max-input {
+	text-align: center;
+	background-color: inherit;
+	border: none;
+	width: 50px;
 }
 
 button {
@@ -24,4 +33,17 @@ button {
 
 .aspect-label {
 	padding-right: 5px;
+}
+
+.aspect-input {
+	background-color: inherit;
+	border: none;
+	text-align: right;
+	width: 100%;
+}
+
+input.current-max-input::-webkit-outer-spin-button,
+input.current-max-input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
 }

@@ -33,7 +33,7 @@ export class CharacterSheetService implements CharacterInterfaceService {
 		subComponent.child.setValue(this.characterData.values[subComponent.aspect.label]);
 	}
 
-	valueOfAspect(aspectLabel: string): any {
+	getAspectValue(aspectLabel: string): any {
 		return this.subComponents.get(aspectLabel.toLowerCase()) ? this.subComponents.get(aspectLabel.toLowerCase()).getValue() : undefined;
 	}
 
@@ -102,7 +102,7 @@ export class CharacterSheetService implements CharacterInterfaceService {
 	public save(): void {
 		this.characterData.values = {};
 		for (let aspect of this.aspects) {
-			this.characterData.values[aspect.label] = this.valueOfAspect(aspect.label);
+			this.characterData.values[aspect.label] = this.getAspectValue(aspect.label);
 		}
 
 		this.characterRepo.saveCharacter(this.characterData).subscribe();

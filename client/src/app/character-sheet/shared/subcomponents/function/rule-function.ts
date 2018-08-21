@@ -19,7 +19,7 @@ export class RuleFunction {
 			// replace aspects with their values
 			if (executable.indexOf('${') > -1) {
 				executable = executable.replace(/\${([\w\s]+)}/g, (match, offset: string): string => {
-					return JSON.stringify(this.characterService.valueOfAspect(offset));
+					return JSON.stringify(this.characterService.getAspectValue(offset));
 				});
 			}
 

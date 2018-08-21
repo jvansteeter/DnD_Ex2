@@ -71,8 +71,12 @@ export class CharacterMakerService implements CharacterInterfaceService {
 		return this.registerSubComponentSubject.asObservable();
 	}
 
-	public valueOfAspect(aspectLabel: string): any {
+	public getAspectValue(aspectLabel: string): any {
 		return this.subComponents.get(aspectLabel.toLowerCase()) ? this.subComponents.get(aspectLabel.toLowerCase()).getValue() : undefined;
+	}
+
+	public setAspectValue(aspectLabel: string, value: any): void {
+		this.subComponents.get(aspectLabel.toLowerCase()).child.setValue(value);
 	}
 
 	public getAspect(aspectLabel: string): Aspect {

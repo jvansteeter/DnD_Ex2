@@ -54,10 +54,42 @@ export class CharacterTooltipComponent {
 
 	public aspectValue(aspectLabel: string): string {
 		if (this.editable) {
-			return this.characterService.valueOfAspect(aspectLabel);
+			return this.characterService.getAspectValue(aspectLabel);
 		}
 		else {
 			return this.encounterService.getAspectValue(this._playerId, aspectLabel);
+		}
+	}
+
+	public changeAspectValue(aspectLabel: string, value: any): void {
+		if (this.editable) {
+			this.characterService.setAspectValue(aspectLabel, value);
+		}
+		else {
+			const player = this.encounterService.getPlayerById(this._playerId);
+			player.characterData.values[aspectLabel] = value;
+		}
+	}
+
+	public changeCurrentAspectValue(aspectLabel: string, value: number): void {
+		if (this.editable) {
+			const currentMaxValue = this.characterService.getAspectValue(aspectLabel);
+			currentMaxValue.current = value;
+		}
+		else {
+			const player = this.encounterService.getPlayerById(this._playerId);
+			player.characterData.values[aspectLabel].current = value;
+		}
+	}
+
+	public changeMaxAspectValue(aspectLabel: string, value: number): void {
+		if (this.editable) {
+			const currentMaxValue = this.characterService.getAspectValue(aspectLabel);
+			currentMaxValue.max = value;
+		}
+		else {
+			const player = this.encounterService.getPlayerById(this._playerId);
+			player.characterData.values[aspectLabel].max = value;
 		}
 	}
 

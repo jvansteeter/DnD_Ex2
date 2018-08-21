@@ -18,7 +18,7 @@ export interface CharacterInterfaceService {
 
 	removeComponent(aspect: Aspect): void;
 
-	valueOfAspect(aspectLabel: string): any;
+	getAspectValue(aspectLabel: string): any;
 
 	updateFunctionAspects(): void;
 
