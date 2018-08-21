@@ -3,6 +3,7 @@ import { CharacterSheetRepository } from '../../repositories/character-sheet.rep
 import { CharacterSheetTooltipData } from '../../../../../shared/types/rule-set/character-sheet-tooltip.data';
 import { CharacterMakerService } from '../maker/character-maker.service';
 import { Aspect, AspectType } from '../shared/aspect';
+import { EncounterService } from '../../encounter/encounter.service';
 
 @Component({
 	selector: 'character-tooltip',
@@ -13,13 +14,17 @@ export class CharacterTooltipComponent {
 	@Input()
 	characterSheetId: string;
 	@Input()
-	public tooltipConfig: CharacterSheetTooltipData;
+	public editable: boolean = false;
 
-	aspectType = AspectType;
+	public tooltipConfig: CharacterSheetTooltipData;
+	public aspectType = AspectType;
 	public hoveredIndex: number;
 
+	private _playerId: string;
+
 	constructor(private characterSheetRepo: CharacterSheetRepository,
-	            private characterSheetService: CharacterMakerService) {
+	            private characterService: CharacterMakerService,
+	            private encounterService: EncounterService) {
 	}
 
 	public addAspect(aspect: Aspect, icon: string): void {
@@ -48,7 +53,12 @@ export class CharacterTooltipComponent {
 	}
 
 	public aspectValue(aspectLabel: string): string {
-		return this.characterSheetService.valueOfAspect(aspectLabel);
+		if (this.editable) {
+			return this.characterService.valueOfAspect(aspectLabel);
+		}
+		else {
+			return this.encounterService.getAspectValue(this._playerId, aspectLabel);
+		}
 	}
 
 	public startHover(index: number): void {
@@ -69,5 +79,9 @@ export class CharacterTooltipComponent {
 		let aspect = this.tooltipConfig.aspects[index];
 		this.tooltipConfig.aspects.splice(index, 1);
 		this.tooltipConfig.aspects.splice(index + 1, 0, aspect);
+	}
+
+	set playerId(value) {
+		this._playerId = value;
 	}
 }

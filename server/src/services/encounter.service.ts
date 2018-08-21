@@ -1,22 +1,22 @@
 import { CampaignModel } from '../db/models/campaign.model';
 import { EncounterRepository } from "../db/repositories/encounter.repository";
 import { EncounterModel } from "../db/models/encounter.model";
-import { PlayerModel } from '../db/models/player.model';
 import { PlayerRepository } from "../db/repositories/player.repository";
-import { PlayerData } from '../../../shared/types/encounter/player.data';
 import { EncounterData } from '../../../shared/types/encounter/encounter.data';
 import { CharacterData } from '../../../shared/types/character.data';
 import { CharacterService } from './character.service';
-import { MqServiceSingleton } from '../mq/mq.service';
+import { CharacterSheetRepository } from '../db/repositories/characterSheet.repository';
 
 export class EncounterService {
 	private encounterRepo: EncounterRepository;
 	private playerRepo: PlayerRepository;
+	private characterSheetRepo: CharacterSheetRepository;
 	private characterService: CharacterService;
 
 	constructor() {
 		this.encounterRepo = new EncounterRepository();
 		this.playerRepo = new PlayerRepository();
+		this.characterSheetRepo = new CharacterSheetRepository();
 		this.characterService = new CharacterService();
 	}
 
@@ -92,6 +92,7 @@ export class EncounterService {
 		encounterState.players = [];
 		for (let playerId of encounterModel.playerIds) {
 			const playerData = await this.playerRepo.findById(playerId);
+			playerData.characterData.characterSheet = await this.characterSheetRepo.findById(playerData.characterData.characterSheetId);
 			encounterState.players.push(playerData);
 		}
 		delete encounterState['playerIds'];

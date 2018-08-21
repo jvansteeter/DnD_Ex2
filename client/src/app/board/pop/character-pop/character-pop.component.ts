@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, HostListener, ViewChild } from '@angular/core';
 import { PopService } from '../pop.service';
 import { Player } from '../../../encounter/player';
 import { BoardStateService } from '../../services/board-state.service';
+import { CharacterTooltipComponent } from '../../../character-sheet/character-tooltip/character-tooltip.component';
 
 @Component({
 	templateUrl: 'character-pop.component.html',
@@ -15,9 +16,14 @@ export class CharacterPopComponent {
 	player: Player;
 
 	window = false;
-	constructor(
-			private boardStateService: BoardStateService
-	){}
+
+	@ViewChild(CharacterTooltipComponent)
+	tooltipComponent: CharacterTooltipComponent;
+	hovered = false;
+
+	constructor(private boardStateService: BoardStateService){
+
+	}
 
 	public initVars(parentRef: PopService, window: boolean, pos_x: number, pos_y: number, player: Player) {
 		this.parentRef = parentRef;
@@ -25,9 +31,20 @@ export class CharacterPopComponent {
 		this.pos_x = pos_x;
 		this.pos_y = pos_y;
 		this.player = player;
-		console.log(player)
+		this.tooltipComponent.playerId = player.id;
+		this.tooltipComponent.tooltipConfig = player.characterData.characterSheet.tooltipConfig
 
 		this.window = window;
+	}
+
+	@HostListener('mouseenter')
+	hoverStart(): void {
+		this.hovered = true;
+	}
+
+	@HostListener('mouseleave')
+	hoverEnd(): void {
+		this.hovered = false;
 	}
 
 	close() {

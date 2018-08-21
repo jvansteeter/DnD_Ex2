@@ -48,7 +48,7 @@
 			<mat-grid-tile [rowspan]="1" [colspan]="1">
 				<dashboard-card [dashboardCard]="characterToolTipCard">
 					<div class="character-tooltip-builder">
-						<character-tooltip #characterTooltip></character-tooltip>
+						<character-tooltip [editable]="true" #characterTooltip></character-tooltip>
 					</div>
 				</dashboard-card>
 			</mat-grid-tile>

@@ -17,7 +17,6 @@ export class PopService {
     }
 
     addPlayerPop(x: number, y: number, player: Player) {
-    	  console.log('addPlayerPop')
         let popFound = false;
         for (const pop of this.playerPops) {
             if (pop.id === player._id) {

@@ -1,6 +1,18 @@
-:host {
+.character-pop {
 	position: fixed;
 	background-color: white;
 	border-radius: 5px;
 	border: 2px solid darkgrey;
+}
+
+.tooltip-container {
+	margin: 7px 9px;
+	display: flex;
+	flex-direction: column;
+}
+
+.close-button {
+	position: absolute;
+	top: -34px;
+	right: -12px;
 }

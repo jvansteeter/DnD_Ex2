@@ -1,8 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { EncounterService } from "../services/encounter.service";
 import { EncounterData } from '../../../shared/types/encounter/encounter.data';
-import { PlayerData } from '../../../shared/types/encounter/player.data';
-
 
 /**********************************************************************************************************
  * Campaign ROUTER
