@@ -44,7 +44,6 @@ export class EncounterDevService extends EncounterService {
             ambientLight: {} as LightValue,
 	          playerIds: [],
         });
-        this.encounterState.players = [];
     }
 
     public init_players() {

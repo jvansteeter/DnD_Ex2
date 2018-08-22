@@ -19,26 +19,39 @@ export class EncounterState implements EncounterData {
 	map_enabled: boolean;
 	playerWallsEnabled: boolean;
 	playerIds: string[];
-	players: PlayerData[];
+	_players: PlayerData[];
 	wallData: Object;
 
-	private playerMap = new Map<string, number>();
+	private playerMap: Map<string, number>;
 
 	constructor(encounterStateData: EncounterData) {
 		for (let items in encounterStateData) {
 			this[items] = encounterStateData[items];
 		}
-
-		this.players = [];
-		for (let i = 0; i < encounterStateData.players.length; i++) {
-			let player = encounterStateData.players[i];
-			this.players[i] = new Player(player);
-			this.playerMap.set(player._id, i);
-		}
 	}
 
 	public getAspectValue(playerId: string, aspectLabel: string): any {
-		const player: PlayerData = this.players[this.playerMap.get(playerId)];
+		const player: PlayerData = this._players[this.playerMap.get(playerId)];
 		return player.characterData.values[aspectLabel];
+	}
+
+	public addPlayer(player: Player): void {
+		const index = this._players.length;
+		this._players[index] = player;
+		this.playerMap.set(player._id, index);
+	}
+
+	get players(): PlayerData[] {
+		return this._players;
+	}
+
+	set players(players: PlayerData[]) {
+		this._players = [];
+		this.playerMap = new Map<string, number>();
+		for (let i = 0; i < players.length; i++) {
+			let player = players[i];
+			this._players[i] = new Player(player);
+			this.playerMap.set(player._id, i);
+		}
 	}
 }

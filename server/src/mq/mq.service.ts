@@ -71,6 +71,9 @@ export class MqService {
 				await this.playerRepository.updatePlayer(encounterUpdate.body.data as PlayerData);
 				return;
 			}
+			case (EncounterCommandType.ADD_PLAYER): {
+				return;
+			}
 			default: {
 				console.error('Unrecognized Command Type')
 			}

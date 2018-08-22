@@ -30,7 +30,6 @@ export class EncounterConcurrencyService extends IsReadyService {
 
 	private observeEncounterMqMessages(): void {
 		this.mqService.getEncounterMessages(this.encounterService.encounterState._id).subscribe((message: EncounterCommandMessage) => {
-			console.log('got an encounter command')
 			console.log(message)
 			switch (message.body.dataType) {
 				case (EncounterCommandType.PLAYER_UPDATE): {

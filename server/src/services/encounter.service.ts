@@ -67,6 +67,7 @@ export class EncounterService {
 			for (let character of characters) {
 				let player = await this.playerRepo.create(encounterId, character);
 				await encounter.addPlayer(player);
+				player.characterData.characterSheet = await this.characterSheetRepo.findById(player.characterData.characterSheetId);
 				await MqServiceSingleton.sendEncounterCommand(encounterId, userId, EncounterCommandType.ADD_PLAYER, player);
 			}
 

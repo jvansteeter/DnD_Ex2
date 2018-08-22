@@ -41,7 +41,7 @@ export class EncounterService extends IsReadyService {
 	};
 
 	public addPlayer(player: Player): void {
-		this.encounterState.players.push(player);
+		this.encounterState.addPlayer(player);
 	}
 
 	public addCharacters(characters: CharacterData[]): Observable<void> {
@@ -58,7 +58,7 @@ export class EncounterService extends IsReadyService {
 
 	get players(): Player[] {
 		if (this.encounterState) {
-			return this.encounterState.players as Player[];
+			return this.encounterState._players as Player[];
 		}
 		return [];
 	}
