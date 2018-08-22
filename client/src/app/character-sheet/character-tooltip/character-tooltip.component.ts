@@ -68,6 +68,7 @@ export class CharacterTooltipComponent {
 		else {
 			const player = this.encounterService.getPlayerById(this._playerId);
 			player.characterData.values[aspectLabel] = value;
+			player.emitChange();
 		}
 	}
 
@@ -79,6 +80,7 @@ export class CharacterTooltipComponent {
 		else {
 			const player = this.encounterService.getPlayerById(this._playerId);
 			player.characterData.values[aspectLabel].current = value;
+			player.emitChange();
 		}
 	}
 
@@ -90,6 +92,7 @@ export class CharacterTooltipComponent {
 		else {
 			const player = this.encounterService.getPlayerById(this._playerId);
 			player.characterData.values[aspectLabel].max = value;
+			player.emitChange();
 		}
 	}
 

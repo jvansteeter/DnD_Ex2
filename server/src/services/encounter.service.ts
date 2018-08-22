@@ -61,18 +61,6 @@ export class EncounterService {
 		});
 	}
 
-	// public async addPlayer(encounterId: string, player: PlayerData): Promise<PlayerModel> {
-	// 	try {
-	// 		const playerModel: PlayerModel = await this.playerRepo.create(player.name, player.tokenUrl, player.maxHp, player.speed);
-	// 		const encounterModel: EncounterModel = await this.encounterRepo.findById(encounterId);
-	// 		await encounterModel.addPlayer(playerModel);
-	// 		return playerModel;
-	// 	}
-	// 	catch (error) {
-	// 		throw error;
-	// 	}
-	// }
-
 	public async addCharacters(encounterId: string, userId: string, characters: CharacterData[]): Promise<void> {
 		try {
 			let encounter: EncounterModel = await this.encounterRepo.findById(encounterId);

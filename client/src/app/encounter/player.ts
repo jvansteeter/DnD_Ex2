@@ -84,6 +84,10 @@ export class Player implements PlayerData {
 		this._actions.push({action, detail});
 	}
 
+	public emitChange(): void {
+		this.changeEvent.emit();
+	}
+
 	get changeObservable(): Observable<void> {
 		return this.changeEvent.asObservable();
 	}
