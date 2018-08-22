@@ -43,7 +43,7 @@ export class EncounterConcurrencyService extends IsReadyService {
 					break;
 				}
 				default: {
-					console.error('Encounter Data Type not recognized');
+					console.error('Encounter Command Type not recognized');
 				}
 			}
 		});

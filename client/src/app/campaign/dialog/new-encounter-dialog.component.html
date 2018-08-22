@@ -1,4 +1,9 @@
 <mat-form-field>
-    <input matInput placeholder="Encounter Label" [(ngModel)]="encounterLabel">
+	<input matInput placeholder="Encounter Label" [(ngModel)]="encounterLabel" required>
 </mat-form-field>
+<span>Background Map</span>
+<a class="image-thumbnail" (click)="upload()">
+	<img *ngIf="mapUrl" class="token-component-image" [src]="mapUrl"/>
+</a>
+<input type="file" accept="image/*" #fileInput (change)="loadImage()" />
 <button mat-raised-button color="primary" (click)="createEncounter()">Create</button>

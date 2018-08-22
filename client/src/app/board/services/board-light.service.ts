@@ -4,7 +4,7 @@ import {LightSource} from '../map-objects/light-source';
 import {BoardStateService} from './board-state.service';
 import {XyPair} from '../geometry/xy-pair';
 import {BoardVisibilityService} from './board-visibility.service';
-import {MapRendererComponent} from '../renderer/map-renderer/map-renderer.component';
+import { EncounterService } from '../../encounter/encounter.service';
 
 @Injectable()
 export class BoardLightService {
@@ -14,7 +14,8 @@ export class BoardLightService {
 
     constructor(
         private boardStateService: BoardStateService,
-        private boardVisibilityService: BoardVisibilityService
+        private boardVisibilityService: BoardVisibilityService,
+        private encounterService: EncounterService
     ) {
         this.cellLightData = new Array(this.boardStateService.mapDimX);
         for (let x = 0; x < this.boardStateService.mapDimX; x++) {
@@ -26,7 +27,7 @@ export class BoardLightService {
     }
 
     public dev_mode_init() {
-        if (MapRendererComponent.DEV_MAP_URL_STRING === 'resources/images/maps/shack.jpg') {
+        if (this.encounterService.mapUrl === 'resources/images/maps/shack.jpg') {
             this.addLightSource(new LightSource(new XyPair(7, 3), 5));
         }
     }

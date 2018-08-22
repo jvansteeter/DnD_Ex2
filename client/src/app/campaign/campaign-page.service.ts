@@ -65,8 +65,8 @@ export class CampaignPageService extends IsReadyService {
 		});
 	}
 
-	public createEncounter(label: string): void {
-		this.campaignRepo.createNewEncounter(label, this.campaignId)
+	public createEncounter(label: string, mapUrl?: string): void {
+		this.campaignRepo.createNewEncounter(label, this.campaignId, mapUrl)
 		 .pipe(
 			mergeMap(() => {
 				return this.campaignRepo.getAllEncounters(this.campaignState._id)

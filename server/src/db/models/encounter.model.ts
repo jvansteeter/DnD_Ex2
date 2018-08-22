@@ -23,7 +23,7 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 	 * MAP VARIABLES
 	 **************************************/
 	map_enabled: boolean;
-	// some sort of map_url
+	mapUrl: string;
 
 	/**************************************
 	 * WALL RELATED VARIABLES
@@ -40,12 +40,13 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 
 	constructor() {
 		super({
-			label: String,
+			label: {type: String, required: true},
       version: {type: Number, default: 0},
-			date: Date,
-			campaignId: String,
+			date: {type: Date, required: true},
+			campaignId: {type: String, required: true},
 			gameMasters: [String],
-			playerIds: [Schema.Types.ObjectId]
+			playerIds: [Schema.Types.ObjectId],
+			mapUrl: String,
 		});
 
 		this._id = this.methods._id;
@@ -56,9 +57,11 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 		this.gameMasters = this.methods.gameMasters;
 		this.players = [];
 		this.playerIds = this.methods.playerIds;
+		this.mapUrl = this.methods.mapUrl;
 
 		this.methods.addGameMaster = this.addGameMaster;
 		this.methods.addPlayer = this.addPlayer;
+		this.methods.setMapUrl = this.setMapUrl;
 	}
 
 	public addGameMaster(userId: string): Promise<EncounterModel> {
@@ -82,6 +85,11 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 			this[item] = encounterState[item];
 		}
 		this.playerIds = playerIds;
+		return this.save();
+	}
+
+	public setMapUrl(url: string): Promise<EncounterModel> {
+		this.mapUrl = url;
 		return this.save();
 	}
 }

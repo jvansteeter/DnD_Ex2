@@ -9,7 +9,7 @@ export class EncounterRepository {
     this.Encounter = mongoose.model('Encounter');
   }
 
-  public create(label: string, campaignId: string): Promise<EncounterModel> {
+  public async create(label: string, campaignId: string): Promise<EncounterModel> {
     return new Promise((resolve, reject) => {
       this.Encounter.create({
         label: label,

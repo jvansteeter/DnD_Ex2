@@ -1,0 +1,25 @@
+:host {
+	display: flex;
+	flex-direction: column;
+}
+
+input[type="file"] {
+	position: absolute;
+	display: none;
+	top: 0;
+	left: 0;
+}
+
+button {
+	margin-left: auto;
+	margin-top: 10px;
+}
+
+img {
+	width: 35vh;
+	height: 100%;
+}
+
+a {
+	min-height: 100px;
+}

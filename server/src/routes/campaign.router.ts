@@ -39,15 +39,6 @@ export class CampaignRouter {
 		});
 
 		this.router.post('/join', async (req: Request, res: Response) => {
-			// this.campaignService.join(req.user._id, req.body.campaignId).then(() => {
-			// 	res.status(200).send("OK");
-			// }).catch((error: Error) => {
-			// 	if (error.message === ServerError.NOT_INVITED) {
-			// 		res.status(403).send(error);
-			// 		return;
-			// 	}
-			// 	res.status(500).send(error)
-			// });
 			try {
 				await this.campaignService.join(req.user._id, req.body.campaignId);
 				res.status(200).send('OK');
@@ -70,10 +61,19 @@ export class CampaignRouter {
 			}).catch(error => res.status(500).send(error));
 		});
 
-		this.router.post('/newEncounter/:campaignId', (req: Request, res: Response) => {
-			this.encounterService.create(req.user._id, req.body.label, req.params.campaignId).then(() => {
-				res.status(200).send("OK");
-			}).catch(error => res.status(500).send(error));
+		this.router.post('/newEncounter/:campaignId', async (req: Request, res: Response) => {
+			try {
+				const userId = req.user._id;
+				const label = req.body.label;
+				const campaignId = req.params.campaignId;
+				const mapUrl = req.body.mapUrl;
+				await this.encounterService.create(userId, label, campaignId, mapUrl);
+				res.status(200).send();
+			}
+			catch (error) {
+				console.error(error);
+				res.status(500).send(error);
+			}
 		});
 
 		this.router.get('/encounters/:campaignId', (req: Request, res: Response) => {

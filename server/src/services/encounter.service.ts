@@ -1,4 +1,3 @@
-import { CampaignModel } from '../db/models/campaign.model';
 import { EncounterRepository } from "../db/repositories/encounter.repository";
 import { EncounterModel } from "../db/models/encounter.model";
 import { PlayerRepository } from "../db/repositories/player.repository";
@@ -22,14 +21,19 @@ export class EncounterService {
 		this.characterService = new CharacterService();
 	}
 
-	public create(hostId: string, label: string, campaignId: string): Promise<CampaignModel> {
-		return new Promise((resolve, reject) => {
-			this.encounterRepo.create(label, campaignId).then((encounterModel: EncounterModel) => {
-				encounterModel.addGameMaster(hostId).then(() => {
-					resolve();
-				}).catch(error => reject(error));
-			}).catch(error => reject(error));
-		});
+	public async create(hostId: string, label: string, campaignId: string, mapUrl?: string): Promise<EncounterModel> {
+		try {
+			let encounterModel: EncounterModel = await this.encounterRepo.create(label, campaignId);
+			await encounterModel.addGameMaster(hostId);
+			if (mapUrl) {
+				encounterModel = await encounterModel.setMapUrl(mapUrl);
+			}
+
+			return encounterModel;
+		}
+		catch (error) {
+			throw error;
+		}
 	}
 
 	public async getEncounter(encounterId: string): Promise<EncounterData> {

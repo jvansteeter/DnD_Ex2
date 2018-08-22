@@ -22,7 +22,7 @@ export interface EncounterData {
      * MAP VARIABLES
      **************************************/
     map_enabled: boolean;
-    // some sort of map_url
+    mapUrl: string;
 
     /**************************************
      * WALL RELATED VARIABLES

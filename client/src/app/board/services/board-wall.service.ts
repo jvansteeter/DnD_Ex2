@@ -6,8 +6,8 @@ import {BoardStateService} from './board-state.service';
 import {BoardVisibilityService} from './board-visibility.service';
 import {BoardTraverseService} from './board-traverse.service';
 import {BoardLightService} from './board-light.service';
-import {MapRendererComponent} from '../renderer/map-renderer/map-renderer.component';
 import {BoardDoor} from '../map-objects/board-door';
+import { EncounterService } from '../../encounter/encounter.service';
 
 @Injectable()
 export class BoardWallService {
@@ -19,12 +19,13 @@ export class BoardWallService {
         private boardStateService: BoardStateService,
         private boardVisibilityService: BoardVisibilityService,
         private boardTraverseService: BoardTraverseService,
-        private boardLightService: BoardLightService
+        private boardLightService: BoardLightService,
+        private encounterService: EncounterService
     ) {
     }
 
     public dev_mode_init() {
-        if (MapRendererComponent.DEV_MAP_URL_STRING === 'resources/images/maps/shack.jpg') {
+        if (this.encounterService.mapUrl === 'resources/images/maps/shack.jpg') {
             // top wall
             this.addWall(new CellTarget(new XyPair(5, 2), CellRegion.TOP_EDGE));
             this.addWall(new CellTarget(new XyPair(6, 2), CellRegion.TOP_EDGE));

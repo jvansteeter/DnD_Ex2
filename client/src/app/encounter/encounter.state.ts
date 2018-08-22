@@ -21,6 +21,7 @@ export class EncounterState implements EncounterData {
 	playerIds: string[];
 	_players: PlayerData[];
 	wallData: Object;
+	mapUrl: string;
 
 	private playerMap: Map<string, number>;
 

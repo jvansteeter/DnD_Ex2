@@ -29,7 +29,7 @@ export class TokenComponent {
 
 	loadImage(): void {
 		this.reader.addEventListener('load', () => {
-			this.tokenUrl = this.reader.result;
+			this.tokenUrl = String(this.reader.result);
 		});
 		if (this.fileInput.nativeElement.files[0]) {
 			this.reader.readAsDataURL(this.fileInput.nativeElement.files[0]);

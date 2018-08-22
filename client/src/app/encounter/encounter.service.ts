@@ -66,4 +66,12 @@ export class EncounterService extends IsReadyService {
 	public getAspectValue(playerId: string, aspectLabel: string): any {
 		return this.encounterState.getAspectValue(playerId, aspectLabel);
 	}
+
+	get mapUrl(): string {
+		if (this.encounterState) {
+			return this.encounterState.mapUrl;
+		}
+
+		return '';
+	}
 }
