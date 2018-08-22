@@ -2,14 +2,17 @@ import { Injectable } from '@angular/core';
 import { EncounterService } from './encounter.service';
 import { IsReadyService } from '../utilities/services/isReady.service';
 import { MqService } from '../mq/mq.service';
-import { EncounterUpdateMessage } from '../mq/messages/encounter-update.message';
 import { UserProfileService } from '../data-services/userProfile.service';
-import { EncounterCommand } from '../../../../shared/types/encounter/encounter-command.enum';
+import { EncounterCommandType } from '../../../../shared/types/encounter/encounter-command.enum';
 import { PlayerData } from '../../../../shared/types/encounter/player.data';
+import { BoardPlayerService } from '../board/services/board-player.service';
+import { EncounterCommandMessage } from '../mq/messages/encounter-command.message';
+import { Player } from './player';
 
 @Injectable()
 export class EncounterConcurrencyService extends IsReadyService {
 	constructor(private encounterService: EncounterService,
+	            private playerService: BoardPlayerService,
 	            private userProfileService: UserProfileService,
 	            private mqService: MqService) {
 		super(encounterService, mqService);
@@ -19,22 +22,25 @@ export class EncounterConcurrencyService extends IsReadyService {
 		this.dependenciesReady().subscribe((isReady: boolean) => {
 			if (isReady) {
 				this.observeEncounterMqMessages();
-				this.observePlayerChanges();
+				this.observeAllPlayerChanges();
 				this.setReady(true);
 			}
 		});
 	}
 
 	private observeEncounterMqMessages(): void {
-		this.mqService.getEncounterMessages(this.encounterService.encounterState._id).subscribe((message: EncounterUpdateMessage) => {
+		this.mqService.getEncounterMessages(this.encounterService.encounterState._id).subscribe((message: EncounterCommandMessage) => {
 			console.log('got an encounter command')
 			console.log(message)
-			if (message.body.userId === this.userProfileService.userId) {
-				return;
-			}
 			switch (message.body.dataType) {
-				case (EncounterCommand.PLAYER_UPDATE): {
+				case (EncounterCommandType.PLAYER_UPDATE): {
 					this.updatePlayer(message.body.data as PlayerData);
+					break;
+				}
+				case (EncounterCommandType.ADD_PLAYER): {
+					const player = new Player(message.body.data as PlayerData);
+					this.playerService.addPlayer(player);
+					this.observePlayerChanges(player);
 					break;
 				}
 				default: {
@@ -44,13 +50,17 @@ export class EncounterConcurrencyService extends IsReadyService {
 		});
 	}
 
-	private observePlayerChanges(): void {
+	private observeAllPlayerChanges(): void {
 		for (let player of this.encounterService.players) {
-			player.changeObservable.subscribe(() => {
-				this.mqService.publishEncounterUpdate(this.encounterService.encounterState._id, this.encounterService.encounterState.version,
-						EncounterCommand.PLAYER_UPDATE, player.serialize());
-			});
+			this.observePlayerChanges(player);
 		}
+	}
+
+	public observePlayerChanges(player: Player): void {
+		player.changeObservable.subscribe(() => {
+			this.mqService.publishEncounterUpdate(this.encounterService.encounterState._id, this.encounterService.encounterState.version,
+					EncounterCommandType.PLAYER_UPDATE, player.serialize());
+		});
 	}
 
 	private updatePlayer(playerData: PlayerData): void {

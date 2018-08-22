@@ -7,6 +7,7 @@ import {BoardTraverseService} from './board-traverse.service';
 import {BoardStateService} from './board-state.service';
 import {PopService} from '../pop/pop.service';
 import { IsReadyService } from '../../utilities/services/isReady.service';
+import { Player } from '../../encounter/player';
 
 @Injectable()
 export class BoardPlayerService extends IsReadyService {
@@ -45,7 +46,10 @@ export class BoardPlayerService extends IsReadyService {
         this.updateAllPlayerTraverse();
     }
 
-    public addPlayer() {
+    public addPlayer(player: Player) {
+    	this.encounterService.addPlayer(player);
+    	this.updateAllPlayerTraverse();
+    	this.updateAllPlayerVisibility();
     }
 
     public removePlayer() {

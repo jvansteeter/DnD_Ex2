@@ -5,9 +5,7 @@ import { Player } from './player';
 import { Observable } from "rxjs";
 import { EncounterState } from './encounter.state';
 import { BoardStateService } from '../board/services/board-state.service';
-import { map, mergeMap, tap } from 'rxjs/operators';
 import { EncounterData } from '../../../../shared/types/encounter/encounter.data';
-import { PlayerData } from '../../../../shared/types/encounter/player.data';
 import { CharacterData } from '../../../../shared/types/character.data';
 
 @Injectable()
@@ -42,22 +40,8 @@ export class EncounterService extends IsReadyService {
 
 	};
 
-	public addPlayer(playerData: PlayerData): Observable<void> {
-		let getEncounterObservable = this.encounterRepo.getEncounter(this.encounterId)
-				.pipe(
-						tap((encounterState: EncounterData) => {
-							this.encounterState = new EncounterState(encounterState);
-						}),
-						map(() => {
-							return;
-						})
-				);
-		return this.encounterRepo.addPlayer(this.encounterState._id, playerData)
-				.pipe(
-						mergeMap(() => {
-							return getEncounterObservable;
-						})
-				);
+	public addPlayer(player: Player): void {
+		this.encounterState.players.push(player);
 	}
 
 	public addCharacters(characters: CharacterData[]): Observable<void> {
@@ -77,12 +61,6 @@ export class EncounterService extends IsReadyService {
 			return this.encounterState.players as Player[];
 		}
 		return [];
-	}
-
-	set players(value) {
-		if (this.encounterState) {
-			this.encounterState.players = value;
-		}
 	}
 
 	public getAspectValue(playerId: string, aspectLabel: string): any {

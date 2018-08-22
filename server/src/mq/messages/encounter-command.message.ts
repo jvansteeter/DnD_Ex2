@@ -1,10 +1,10 @@
 import { AmqpMessage } from './AmqpMessage';
 import { MqConfig } from '../../config/mqConfig';
 import { MqMessageType } from '../../../../shared/types/mq/message-type.enum';
-import { EncounterUpdate } from '../../../../shared/types/mq/EncounterUpdate';
-import { EncounterCommand } from '../../../../shared/types/encounter/encounter-command.enum';
+import { EncounterCommandType } from '../../../../shared/types/encounter/encounter-command.enum';
+import { EncounterCommand } from '../../../../shared/types/mq/encounter-command';
 
-export class EncounterUpdateMessage extends AmqpMessage implements EncounterUpdate {
+export class EncounterCommandMessage extends AmqpMessage implements EncounterCommand {
 	headers: {
 		type: MqMessageType.ENCOUNTER,
 		encounterId: string,
@@ -12,7 +12,7 @@ export class EncounterUpdateMessage extends AmqpMessage implements EncounterUpda
 	body: {
 		userId: string;
 		version: number;
-		dataType: EncounterCommand;
+		dataType: EncounterCommandType;
 		data: {}
 	};
 

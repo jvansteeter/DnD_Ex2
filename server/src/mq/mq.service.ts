@@ -1,6 +1,5 @@
 import { MqProxy, MqProxySingleton } from './mqProxy';
 import { UserModel } from '../db/models/user.model';
-import { EncounterUpdateMessage } from './messages/encounter-update.message';
 import { FriendRequest } from '../../../shared/types/mq/FriendRequest';
 import { NotificationRepository } from '../db/repositories/notification.repository';
 import { NotificationType } from '../../../shared/types/notifications/notification-type.enum';
@@ -9,10 +8,11 @@ import { CampaignInvite } from '../../../shared/types/mq/campaign-invite';
 import { CampaignInviteNotification } from '../../../shared/types/notifications/campaign-invite-notification';
 import { FriendRequestNotification } from "../../../shared/types/notifications/friend-request-notification";
 import { FriendRepository } from "../db/repositories/friend.repository";
-import { EncounterCommand } from '../../../shared/types/encounter/encounter-command.enum';
+import { EncounterCommandType } from '../../../shared/types/encounter/encounter-command.enum';
 import { PlayerRepository } from '../db/repositories/player.repository';
 import { PlayerData } from '../../../shared/types/encounter/player.data';
 import { MqMessageType } from '../../../shared/types/mq/message-type.enum';
+import { EncounterCommandMessage } from './messages/encounter-command.message';
 
 export class MqService {
 	private friendRepo: FriendRepository;
@@ -26,7 +26,7 @@ export class MqService {
 	}
 
 	public handleMessages(): void {
-		this.mqProxy.observeAllEncounters().subscribe((message: EncounterUpdateMessage) => {
+		this.mqProxy.observeAllEncounters().subscribe((message: EncounterCommandMessage) => {
 			this.handleEncounterUpdates(message);
 		});
 		this.mqProxy.observeAllFriendRequests().subscribe( (friendRequest: FriendRequest) => {
@@ -45,7 +45,7 @@ export class MqService {
 		return this.mqProxy.userHasMqAccount(user);
 	}
 
-	public async sendEncounterCommand(encounterId: string, userId: string, commandType: EncounterCommand, data: any): Promise<void> {
+	public async sendEncounterCommand(encounterId: string, userId: string, commandType: EncounterCommandType, data: any): Promise<void> {
 		try {
 			await this.mqProxy.sendEncounterCommand(encounterId, {
 				headers: {
@@ -65,9 +65,9 @@ export class MqService {
 		}
 	}
 
-	private async handleEncounterUpdates(encounterUpdate: EncounterUpdateMessage): Promise<void> {
+	private async handleEncounterUpdates(encounterUpdate: EncounterCommandMessage): Promise<void> {
 		switch (encounterUpdate.body.dataType) {
-			case (EncounterCommand.PLAYER_UPDATE): {
+			case (EncounterCommandType.PLAYER_UPDATE): {
 				await this.playerRepository.updatePlayer(encounterUpdate.body.data as PlayerData);
 				return;
 			}

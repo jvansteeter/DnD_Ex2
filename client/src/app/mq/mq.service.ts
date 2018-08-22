@@ -5,7 +5,6 @@ import { UserProfileService } from '../data-services/userProfile.service';
 import { StompConfiguration } from './StompConfig';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { EncounterUpdateMessage } from './messages/encounter-update.message';
 import { MqMessageFactory } from './mq-message.factory';
 import { IsReadyService } from "../utilities/services/isReady.service";
 import { MqMessageType } from '../../../../shared/types/mq/message-type.enum';
@@ -14,7 +13,8 @@ import { AcceptFriendRequest } from './messages/friend-request-accepted.message'
 import { MqMessageUrlFactory } from './mq-message-url.factory';
 import { StompMessage } from './messages/stomp-message';
 import { CampaignInviteMessage } from './messages/campaign-invite.message';
-import { EncounterCommand } from '../../../../shared/types/encounter/encounter-command.enum';
+import { EncounterCommandType } from '../../../../shared/types/encounter/encounter-command.enum';
+import { EncounterCommandMessage } from './messages/encounter-command.message';
 
 @Injectable()
 export class MqService extends IsReadyService {
@@ -51,14 +51,14 @@ export class MqService extends IsReadyService {
 		});
 	}
 
-	public getEncounterMessages(encounterId: string): Observable<EncounterUpdateMessage> {
+	public getEncounterMessages(encounterId: string): Observable<EncounterCommandMessage> {
 		return this.stompService.subscribe(MqMessageUrlFactory.createEncounterMessagesUrl(encounterId))
 				.pipe(
-						map((message: Message) => {return new EncounterUpdateMessage(message)})
+						map((message: Message) => {return new EncounterCommandMessage(message)})
 				);
 	}
 
-	public publishEncounterUpdate(encounterId: string, encounterVersion: number, dataType: EncounterCommand, data: any): void {
+	public publishEncounterUpdate(encounterId: string, encounterVersion: number, dataType: EncounterCommandType, data: any): void {
 		let message = MqMessageFactory.createEncounterUpdate(encounterVersion, this.userProfileService.userId, encounterId, dataType, data);
 		let url = MqMessageUrlFactory.createEncounterMessagesUrl(encounterId);
 		this.stompService.publish(url, message.serializeBody(), {type: MqMessageType.ENCOUNTER})

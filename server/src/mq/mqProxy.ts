@@ -5,14 +5,14 @@ import { Promise } from 'bluebird';
 import * as http from 'http';
 import { MqConfig } from '../config/mqConfig';
 import { merge } from 'rxjs/internal/observable/merge';
-import { EncounterUpdateMessage } from './messages/encounter-update.message';
 import { FriendRequest } from '../../../shared/types/mq/FriendRequest';
 import { FriendRequestMessage } from './messages/friend-request.message';
 import { MqFactory } from './mq.factory';
 import { CampaignInvite } from '../../../shared/types/mq/campaign-invite';
 import { CampaignInviteMessage } from './messages/campaign-invite.message';
-import { EncounterUpdate } from '../../../shared/types/mq/EncounterUpdate';
 import { MqError } from '../../../shared/errors/MqError';
+import { EncounterCommandMessage } from './messages/encounter-command.message';
+import { EncounterCommand } from '../../../shared/types/mq/encounter-command';
 
 export class MqProxy {
 
@@ -56,11 +56,11 @@ export class MqProxy {
 		}
 	}
 
-	public observeAllEncounters(): Observable<EncounterUpdateMessage> {
+	public observeAllEncounters(): Observable<EncounterCommandMessage> {
 		if (!this.connection) {
 			return throwError('Not connected toUserId MQ Server');
 		}
-		let exchangeSubject = new Subject<EncounterUpdateMessage>();
+		let exchangeSubject = new Subject<EncounterCommandMessage>();
 		this.connection.createChannel((error, channel) => {
 			if (error) {
 				merge(exchangeSubject, throwError(new Error(error)));
@@ -68,7 +68,7 @@ export class MqProxy {
 
 			channel.bindQueue(MqConfig.encounterQueueName, MqConfig.encounterExchange, MqConfig.encounterTopic);
 			channel.consume(MqConfig.encounterQueueName, (message) => {
-				exchangeSubject.next(new EncounterUpdateMessage(message));
+				exchangeSubject.next(new EncounterCommandMessage(message));
 			}, {noAck: true});
 		});
 		return exchangeSubject.asObservable();
@@ -112,7 +112,7 @@ export class MqProxy {
 		return campaignInviteSubject.asObservable();
 	}
 
-	public async sendEncounterCommand(encounterId: string, encounterUpdate: EncounterUpdate): Promise<void> {
+	public async sendEncounterCommand(encounterId: string, encounterUpdate: EncounterCommand): Promise<void> {
 		try {
 			if (!this.connection) {
 				throw new Error(MqError.NOT_CONNECTED);
@@ -122,7 +122,8 @@ export class MqProxy {
 					throw new Error(MqError.CHANNEL);
 				}
 
-				channel.publish(MqConfig.encounterExchange, 'encounter.' + encounterId, new Buffer(JSON.stringify(encounterUpdate)));
+				const options = { headers: encounterUpdate.headers };
+				channel.publish(MqConfig.encounterExchange, 'encounter.' + encounterId, new Buffer(JSON.stringify(encounterUpdate.body)), options);
 				return;
 			});
 		}

@@ -2,8 +2,8 @@ import { MqMessageType } from '../../../../shared/types/mq/message-type.enum';
 import { FriendRequestMessage } from './messages/friend-request.message';
 import { AcceptFriendRequest } from './messages/friend-request-accepted.message';
 import { CampaignInviteMessage } from './messages/campaign-invite.message';
-import { EncounterUpdateMessage } from './messages/encounter-update.message';
-import { EncounterCommand } from '../../../../shared/types/encounter/encounter-command.enum';
+import { EncounterCommandType } from '../../../../shared/types/encounter/encounter-command.enum';
+import { EncounterCommandMessage } from './messages/encounter-command.message';
 
 export class MqMessageFactory {
 	public static createFriendRequest(toUserId: string, fromUserId: string): FriendRequestMessage {
@@ -35,8 +35,8 @@ export class MqMessageFactory {
 		});
 	}
 
-	public static createEncounterUpdate(version: number, userId: string, encounterId: string, dataType: EncounterCommand, data: {}): EncounterUpdateMessage {
-		return new EncounterUpdateMessage({
+	public static createEncounterUpdate(version: number, userId: string, encounterId: string, dataType: EncounterCommandType, data: {}): EncounterCommandMessage {
+		return new EncounterCommandMessage({
 			headers: {
 				type: MqMessageType.ENCOUNTER,
 				encounterId: encounterId

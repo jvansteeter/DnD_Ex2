@@ -1,8 +1,8 @@
 import { MqMessage } from './MqMessage';
 import { MqMessageType } from './message-type.enum';
-import { EncounterCommand } from '../encounter/encounter-command.enum';
+import { EncounterCommandType } from '../encounter/encounter-command.enum';
 
-export interface EncounterUpdate extends MqMessage {
+export interface EncounterCommand extends MqMessage {
 	headers: {
 		type: MqMessageType.ENCOUNTER,
 		encounterId: string,
@@ -10,7 +10,7 @@ export interface EncounterUpdate extends MqMessage {
 	body: {
 		userId: string,
 		version: number,
-		dataType: EncounterCommand
+		dataType: EncounterCommandType
 		data: {}
 	}
 }
