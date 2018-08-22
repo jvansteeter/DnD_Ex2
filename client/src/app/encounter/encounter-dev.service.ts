@@ -40,6 +40,7 @@ export class EncounterDevService extends EncounterService {
 	          playerIds: [],
 	          mapUrl: 'resources/images/maps/shack.jpg'
         });
+        this.setReady(true);
     }
 
     public init_players() {
