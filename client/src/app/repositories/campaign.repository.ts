@@ -5,6 +5,7 @@ import { UserProfile } from '../types/userProfile';
 import { map } from 'rxjs/operators';
 import { CampaignData } from '../../../../shared/types/campaign.data';
 import { EncounterData } from '../../../../shared/types/encounter/encounter.data';
+import { isUndefined } from 'util';
 
 @Injectable()
 export class CampaignRepository {
@@ -38,11 +39,26 @@ export class CampaignRepository {
 		return this.http.get<UserProfile[]>('/api/campaign/members/' + campaignId, {responseType: 'json'});
 	}
 
-	public createNewEncounter(label: string, campaignId: string, mapUrl?: string): Observable<void> {
-    const body = {
-    	label: label,
-	    mapUrl: mapUrl,
-    };
+	public createNewEncounter(label: string, campaignId: string, mapDimX?: number, mapDimY?: number, mapUrl?: string): Observable<void> {
+		const image = new Image();
+		image.src = mapUrl;
+    let body;
+    if (!isUndefined(mapUrl)) {
+	    body = {
+		    label: label,
+		    mapUrl: mapUrl,
+		    mapDimX: image.naturalWidth / 50,
+		    mapDimY: image.naturalHeight / 50,
+	    };
+    }
+    else {
+    	body = {
+    		label: label,
+		    mapDimX: mapDimX,
+		    mapDimY: mapDimY,
+	    }
+    }
+
 		return this.http.post('/api/campaign/newEncounter/' + campaignId, body, {responseType: 'text'}).pipe(map(() => {
 			return;
 		}));

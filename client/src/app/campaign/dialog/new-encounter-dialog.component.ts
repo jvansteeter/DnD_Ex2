@@ -1,6 +1,7 @@
 import { Component, ElementRef, ViewChild } from "@angular/core";
 import { MatDialogRef } from "@angular/material";
 import { CampaignPageService } from '../campaign-page.service';
+import { isUndefined } from 'util';
 
 
 @Component({
@@ -10,6 +11,8 @@ import { CampaignPageService } from '../campaign-page.service';
 export class NewEncounterDialogComponent {
 	public encounterLabel: string;
 	private mapUrl: string;
+	public mapWidth: number;
+	public mapHeight: number;
 
 	@ViewChild('fileInput')
 	fileInput: ElementRef;
@@ -22,8 +25,8 @@ export class NewEncounterDialogComponent {
 	}
 
 	public createEncounter(): void {
-		if (this.encounterLabel) {
-			this.campaignService.createEncounter(this.encounterLabel, this.mapUrl);
+		if (this.encounterLabel && (!isUndefined(this.mapUrl) || (this.mapWidth > 0 && this.mapHeight > 0))) {
+			this.campaignService.createEncounter(this.encounterLabel, this.mapWidth, this.mapHeight, this.mapUrl);
 			this.dialogRef.close();
 		}
 	}

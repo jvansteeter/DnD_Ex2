@@ -47,6 +47,8 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 			gameMasters: [String],
 			playerIds: [Schema.Types.ObjectId],
 			mapUrl: String,
+			mapDimX: Number,
+			mapDimY: Number,
 		});
 
 		this._id = this.methods._id;
@@ -58,6 +60,8 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 		this.players = [];
 		this.playerIds = this.methods.playerIds;
 		this.mapUrl = this.methods.mapUrl;
+		this.mapDimX = this.methods.mapDimX;
+		this.mapDimY = this.methods.mapDimY;
 
 		this.methods.addGameMaster = this.addGameMaster;
 		this.methods.addPlayer = this.addPlayer;

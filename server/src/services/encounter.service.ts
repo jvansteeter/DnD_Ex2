@@ -21,9 +21,9 @@ export class EncounterService {
 		this.characterService = new CharacterService();
 	}
 
-	public async create(hostId: string, label: string, campaignId: string, mapUrl?: string): Promise<EncounterModel> {
+	public async create(hostId: string, label: string, campaignId: string, mapDimX: number, mapDimY: number, mapUrl?: string): Promise<EncounterModel> {
 		try {
-			let encounterModel: EncounterModel = await this.encounterRepo.create(label, campaignId);
+			let encounterModel: EncounterModel = await this.encounterRepo.create(label, campaignId, mapDimX, mapDimY);
 			await encounterModel.addGameMaster(hostId);
 			if (mapUrl) {
 				encounterModel = await encounterModel.setMapUrl(mapUrl);

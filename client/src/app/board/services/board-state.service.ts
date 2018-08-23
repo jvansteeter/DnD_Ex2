@@ -5,7 +5,7 @@ import {LightValue} from '../shared/enum/light-value';
 import {CellTarget} from "../shared/cell-target";
 import {XyPair} from "../geometry/xy-pair";
 import {PlayerVisibilityMode} from '../shared/enum/player-visibility-mode';
-import {NotationMode} from '../shared/enum/notation-mode';
+import { EncounterService } from '../../encounter/encounter.service';
 
 /*************************************************************************************************************************************
  * BoardStateService
@@ -21,8 +21,6 @@ export class BoardStateService {
      * To be moved into encounter state
      ***********************************************************************************/
     static cell_res = 50;
-    public mapDimX = 10;
-    public mapDimY = 8;
 
     // board-map controls
     public map_enabled = false;
@@ -95,7 +93,7 @@ export class BoardStateService {
         return (2 * double_step) + reg_step + delta_delta;
     }
 
-    constructor() {}
+    constructor(private encounterService: EncounterService) {}
 
     coorInBounds(x: number, y: number): boolean {
         return !((x >= this.mapDimX) || (y >= this.mapDimY) || (x < 0) || (y < 0));
@@ -132,4 +130,11 @@ export class BoardStateService {
         return returnMe;
     }
 
+		get mapDimX(): number {
+				return this.encounterService.mapDimX;
+		}
+
+		get mapDimY(): number {
+				return this.encounterService.mapDimY;
+		}
 }

@@ -4,7 +4,6 @@ import { EncounterRepository } from '../repositories/encounter.repository';
 import { Player } from './player';
 import { Observable } from "rxjs";
 import { EncounterState } from './encounter.state';
-import { BoardStateService } from '../board/services/board-state.service';
 import { EncounterData } from '../../../../shared/types/encounter/encounter.data';
 import { CharacterData } from '../../../../shared/types/character.data';
 
@@ -17,7 +16,6 @@ export class EncounterService extends IsReadyService {
 	public encounterState: EncounterState;
 
 	constructor(
-			protected boardStateService: BoardStateService,
 			protected encounterRepo: EncounterRepository,
 	) {
 		super();
@@ -73,5 +71,21 @@ export class EncounterService extends IsReadyService {
 		}
 
 		return '';
+	}
+
+	get mapDimX(): number {
+		if (this.encounterState) {
+			return this.encounterState.mapDimX;
+		}
+
+		return 1;
+	}
+
+	get mapDimY(): number {
+		if (this.encounterState) {
+			return this.encounterState.mapDimY;
+		}
+
+		return 1;
 	}
 }

@@ -1,9 +1,20 @@
 <mat-form-field>
 	<input matInput placeholder="Encounter Label" [(ngModel)]="encounterLabel" required>
 </mat-form-field>
-<span>Background Map</span>
-<a class="image-thumbnail" (click)="upload()">
-	<img *ngIf="mapUrl" class="token-component-image" [src]="mapUrl"/>
-</a>
+<mat-tab-group>
+	<mat-tab label="Blank Map">
+		<mat-form-field class="map-width">
+			<input matInput type="number" placeholder="Width" [(ngModel)]="mapWidth" required/>
+		</mat-form-field>
+		<mat-form-field class="map-height">
+			<input matInput type="number" placeholder="Height" [(ngModel)]="mapHeight" required/>
+		</mat-form-field>
+	</mat-tab>
+	<mat-tab label="Background Image">
+		<a class="image-thumbnail" (click)="upload()">
+			<img *ngIf="mapUrl" class="token-component-image" [src]="mapUrl"/>
+		</a>
+	</mat-tab>
+</mat-tab-group>
 <input type="file" accept="image/*" #fileInput (change)="loadImage()" />
 <button mat-raised-button color="primary" (click)="createEncounter()">Create</button>

@@ -1,5 +1,4 @@
 import {Injectable} from '@angular/core';
-import {BoardStateService} from '../board/services/board-state.service';
 import {Player} from './player';
 import {EncounterService} from './encounter.service';
 import {EncounterRepository} from '../repositories/encounter.repository';
@@ -11,11 +10,9 @@ export class EncounterDevService extends EncounterService {
     // players: Player[] = [];
 
     constructor(
-        boardStateService: BoardStateService,
         encounterRepo: EncounterRepository,
     ) {
         super(
-            boardStateService,
             encounterRepo
         );
 

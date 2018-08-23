@@ -9,12 +9,14 @@ export class EncounterRepository {
     this.Encounter = mongoose.model('Encounter');
   }
 
-  public async create(label: string, campaignId: string): Promise<EncounterModel> {
+  public async create(label: string, campaignId: string, mapDimX: number, mapDimY: number): Promise<EncounterModel> {
     return new Promise((resolve, reject) => {
       this.Encounter.create({
         label: label,
         date: new Date(),
-        campaignId: campaignId
+        campaignId: campaignId,
+	      mapDimX: mapDimX,
+	      mapDimY: mapDimY
       }, (error, encounterModel: EncounterModel) => {
         if (error) {
           reject(error);

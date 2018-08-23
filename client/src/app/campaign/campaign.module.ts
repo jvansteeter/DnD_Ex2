@@ -11,7 +11,7 @@ import {
 	MatGridListModule, MatIconModule,
 	MatInputModule,
 	MatListModule, MatMenuModule, MatPaginatorModule,
-	MatTableModule
+	MatTableModule, MatTabsModule
 } from '@angular/material';
 import { SocialModule } from '../social/social.module';
 import { CampaignRepository } from '../repositories/campaign.repository';
@@ -40,6 +40,7 @@ import { CampaignPageService } from './campaign-page.service';
 		MatMenuModule,
 		MatIconModule,
 		AppCDKModule,
+		MatTabsModule,
 	],
 	declarations: [
 		CampaignComponent,

@@ -67,7 +67,9 @@ export class CampaignRouter {
 				const label = req.body.label;
 				const campaignId = req.params.campaignId;
 				const mapUrl = req.body.mapUrl;
-				await this.encounterService.create(userId, label, campaignId, mapUrl);
+				const mapDimX = req.body.mapDimX;
+				const mapDimY = req.body.mapDimY;
+				await this.encounterService.create(userId, label, campaignId, mapDimX, mapDimY, mapUrl);
 				res.status(200).send();
 			}
 			catch (error) {
