@@ -4,10 +4,10 @@ import {LightSource} from '../map-objects/light-source';
 import {BoardStateService} from './board-state.service';
 import {XyPair} from '../geometry/xy-pair';
 import {BoardVisibilityService} from './board-visibility.service';
-import { EncounterService } from '../../encounter/encounter.service';
+import {IsReadyService} from "../../utilities/services/isReady.service";
 
 @Injectable()
-export class BoardLightService {
+export class BoardLightService extends IsReadyService {
     public cellLightData: Array<Array<CellLightConfig>>;
 
     public lightSourceData: Map<string, LightSource> = new Map();           // maps XyPair location hashes (should just be unique toString) toUserId LightSourceObjects
@@ -15,15 +15,24 @@ export class BoardLightService {
     constructor(
         private boardStateService: BoardStateService,
         private boardVisibilityService: BoardVisibilityService,
-        private encounterService: EncounterService
     ) {
-        this.cellLightData = new Array(this.boardStateService.mapDimX);
-        for (let x = 0; x < this.boardStateService.mapDimX; x++) {
-            this.cellLightData[x] = new Array(this.boardStateService.mapDimY);
-            for (let y = 0; y < this.boardStateService.mapDimY; y++) {
-                this.cellLightData[x][y] = new CellLightConfig(x, y);
+        super(boardStateService);
+        this.init();
+    }
+
+    public init(): void {
+        this.dependenciesReady().subscribe((isReady: boolean) => {
+            if (isReady) {
+                this.cellLightData = new Array(this.boardStateService.mapDimX);
+                for (let x = 0; x < this.boardStateService.mapDimX; x++) {
+                    this.cellLightData[x] = new Array(this.boardStateService.mapDimY);
+                    for (let y = 0; y < this.boardStateService.mapDimY; y++) {
+                        this.cellLightData[x][y] = new CellLightConfig(x, y);
+                    }
+                }
+                this.setReady(true);
             }
-        }
+        })
     }
 
     addLightSource(source: LightSource) {

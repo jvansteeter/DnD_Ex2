@@ -6,26 +6,40 @@ import {CellRegion} from '../shared/enum/cell-region';
 import {CellPolygonGroup} from '../shared/cell-polygon-group';
 import {CellTargetStatics} from './cell-target-statics';
 import {isNullOrUndefined} from "util";
+import {IsReadyService} from "../../utilities/services/isReady.service";
 
 @Injectable()
-export class BoardVisibilityService {
+export class BoardVisibilityService extends IsReadyService {
     public blockingSegments: Set<string>;       // Set<CellTarget.hash()>
     private blockingBitmap = [];
 
-    constructor (
+    constructor(
         public boardStateService: BoardStateService
     ) {
-        this.blockingSegments = new Set();
-        this.blockingBitmap = [];
-        for (let x = 0; x < this.boardStateService.mapDimX * BoardStateService.cell_res; x++) {
-            this.blockingBitmap[x] = [];
-            for (let y = 0; y < this.boardStateService.mapDimY * BoardStateService.cell_res; y++) {
-                this.blockingBitmap[x][y] = 0;
-            }
-        }
+        super(boardStateService);
+        this.init();
     }
 
-    public cellsVisibleFromCell(source: XyPair, range?:number) {
+    public init(): void {
+        this.dependenciesReady().subscribe((isReady: boolean) => {
+            if (isReady) {
+                this.blockingSegments = new Set();
+                this.blockingBitmap = [];
+
+                console.log(this.boardStateService.mapDimX + ', ' + this.boardStateService.mapDimY + ' : ' + BoardStateService.cell_res);
+
+                for (let x = 0; x < this.boardStateService.mapDimX * BoardStateService.cell_res; x++) {
+                    this.blockingBitmap[x] = [];
+                    for (let y = 0; y < this.boardStateService.mapDimY * BoardStateService.cell_res; y++) {
+                        this.blockingBitmap[x][y] = 0;
+                    }
+                }
+                this.setReady(true);
+            }
+        })
+    }
+
+    public cellsVisibleFromCell(source: XyPair, range?: number) {
         const returnMe = new Array<XyPair>();
         let cellsToCheck = [];
         if (isNullOrUndefined(range)) {
@@ -88,32 +102,32 @@ export class BoardVisibilityService {
         queryArray.push(new CellTarget(source, CellRegion.TOP_QUAD));
         while (queryArray.length !== 0) {
             const target = queryArray.shift();
-            if (touchedSet.has(target.hash()) || !this.boardStateService.coorInBounds(target.location.x, target.location.y)){
+            if (touchedSet.has(target.hash()) || !this.boardStateService.coorInBounds(target.location.x, target.location.y)) {
                 continue;
             }
 
             touchedSet.add(target.hash());
             switch (target.region) {
                 case CellRegion.TOP_QUAD:
-                    if ( this.cellHasLOSTo_TopQuad(source, target.location)) {
+                    if (this.cellHasLOSTo_TopQuad(source, target.location)) {
                         fillArray.push(target);
                         queryArray.push(...CellTargetStatics.getQuadsAdjacentToQuad(target));
                     }
                     break;
                 case CellRegion.RIGHT_QUAD:
-                    if ( this.cellHasLOSTo_RightQuad(source, target.location)) {
+                    if (this.cellHasLOSTo_RightQuad(source, target.location)) {
                         fillArray.push(target);
                         queryArray.push(...CellTargetStatics.getQuadsAdjacentToQuad(target));
                     }
                     break;
                 case CellRegion.BOTTOM_QUAD:
-                    if ( this.cellHasLOSTo_BottomQuad(source, target.location)) {
+                    if (this.cellHasLOSTo_BottomQuad(source, target.location)) {
                         fillArray.push(target);
                         queryArray.push(...CellTargetStatics.getQuadsAdjacentToQuad(target));
                     }
                     break;
                 case CellRegion.LEFT_QUAD:
-                    if ( this.cellHasLOSTo_LeftQuad(source, target.location)) {
+                    if (this.cellHasLOSTo_LeftQuad(source, target.location)) {
                         fillArray.push(target);
                         queryArray.push(...CellTargetStatics.getQuadsAdjacentToQuad(target));
                     }

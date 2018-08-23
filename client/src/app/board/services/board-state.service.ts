@@ -6,6 +6,7 @@ import {CellTarget} from "../shared/cell-target";
 import {XyPair} from "../geometry/xy-pair";
 import {PlayerVisibilityMode} from '../shared/enum/player-visibility-mode';
 import { EncounterService } from '../../encounter/encounter.service';
+import {IsReadyService} from "../../utilities/services/isReady.service";
 
 /*************************************************************************************************************************************
  * BoardStateService
@@ -15,7 +16,7 @@ import { EncounterService } from '../../encounter/encounter.service';
  */
 
 @Injectable()
-export class BoardStateService {
+export class BoardStateService extends IsReadyService {
 
     /***********************************************************************************
      * To be moved into encounter state
@@ -95,7 +96,18 @@ export class BoardStateService {
 
     constructor(
         private encounterService: EncounterService
-    ) {}
+    ) {
+        super(encounterService);
+        this.init();
+    }
+
+    public init(): void {
+        this.dependenciesReady().subscribe((isReady: boolean) => {
+            if (isReady) {
+                this.setReady(true);
+            }
+        });
+    }
 
     coorInBounds(x: number, y: number): boolean {
         return !((x >= this.mapDimX) || (y >= this.mapDimY) || (x < 0) || (y < 0));
