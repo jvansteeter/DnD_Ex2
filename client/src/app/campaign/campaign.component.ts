@@ -21,7 +21,7 @@ import { MqService } from '../mq/mq.service';
 @Component({
 	selector: 'campaign-page',
 	templateUrl: 'campaign.component.html',
-	styleUrls: ['campaign.component.css']
+	styleUrls: ['campaign.component.scss']
 })
 export class CampaignComponent implements OnInit, OnDestroy {
 	private campaignId;
@@ -32,7 +32,7 @@ export class CampaignComponent implements OnInit, OnDestroy {
 
 	public encountersCard: DashboardCard;
 	public encounterDataSource: SubjectDataSource<EncounterData>;
-	public encounterTableCols = ['label', 'date'];
+	public encounterTableCols = ['label', 'date', 'options'];
 
 	public charactersCard: DashboardCard;
 	public characterDataSource: SubjectDataSource<CharacterData>;
@@ -114,6 +114,18 @@ export class CampaignComponent implements OnInit, OnDestroy {
 
 	public enterEncounter(encounter: EncounterData): void {
 		this.router.navigate(['encounter', encounter._id])
+	}
+
+	public deleteEncounter(encounter: EncounterData): void {
+		this.campaignPageService.deleteEncounter(encounter._id);
+	}
+
+	public openEncounter(encounter: EncounterData): void {
+		this.campaignPageService.openEncounter(encounter._id);
+	}
+
+	public closeEncounter(encounter: EncounterData): void {
+		this.campaignPageService.closeEncounter(encounter._id);
 	}
 
 	public editCharacter(characterId: string): void {

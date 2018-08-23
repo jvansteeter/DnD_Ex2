@@ -24,16 +24,27 @@
 				<mat-table [dataSource]="encounterDataSource">
 					<ng-container matColumnDef="label">
 						<mat-header-cell *matHeaderCellDef>Encounters</mat-header-cell>
-						<mat-cell *matCellDef="let encounter">{{ encounter.label }}</mat-cell>
+						<mat-cell *matCellDef="let encounter" (click)="enterEncounter(encounter)">{{ encounter.label }}</mat-cell>
 					</ng-container>
 					<ng-container matColumnDef="date">
 						<mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
-						<mat-cell *matCellDef="let encounter">{{ encounter.date | dateFormat }}</mat-cell>
+						<mat-cell *matCellDef="let encounter" (click)="enterEncounter(encounter)">{{ encounter.date | dateFormat }}</mat-cell>
+					</ng-container>
+					<ng-container matColumnDef="options">
+						<mat-header-cell *matHeaderCellDef></mat-header-cell>
+						<mat-cell *matCellDef="let encounter">
+							<span *ngIf="!encounter.isOpen" class="closed-text">CLOSED</span>
+							<button mat-icon-button matTooltip="Options" class="options-button" [matMenuTriggerFor]="optionsMenu"><mat-icon>settings</mat-icon></button>
+							<mat-menu #optionsMenu="matMenu">
+								<button mat-menu-item *ngIf="!encounter.isOpen" (click)="openEncounter(encounter)">Open</button>
+								<button mat-menu-item *ngIf="encounter.isOpen" (click)="closeEncounter(encounter)">Close</button>
+								<button mat-menu-item (click)="deleteEncounter(encounter)">Delete Encounter</button>
+							</mat-menu>
+						</mat-cell>
 					</ng-container>
 					<mat-header-row *matHeaderRowDef="encounterTableCols"></mat-header-row>
 					<mat-row class="clickable-row"
 									 *matRowDef="let encounter; columns: encounterTableCols"
-									 (click)="enterEncounter(encounter)"
 					></mat-row>
 				</mat-table>
 			</dashboard-card>

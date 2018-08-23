@@ -18,6 +18,16 @@ export class CampaignState implements CampaignData {
     this.ruleSetId = campaign.ruleSetId;
   }
 
+  public getEncounter(encounterId: string): EncounterData {
+  	for (let encounter of this._encounters) {
+  		if (encounterId === encounter._id) {
+  			return encounter;
+		  }
+	  }
+
+	  return undefined;
+  }
+
   get members(): UserProfile[] {
     return this._members;
   }

@@ -82,6 +82,26 @@ export class EncounterService {
 		}
 	}
 
+	public async deleteEncounter(encounterId: string): Promise<void> {
+		try {
+			await this.encounterRepo.deleteById(encounterId);
+			return;
+		}
+		catch (error) {
+			throw error;
+		}
+	}
+
+	public async updateEncounterOpenStatus(encounterId: string, isOpen: boolean): Promise<EncounterModel> {
+		try {
+			const encounter = await this.encounterRepo.findById(encounterId);
+			return await encounter.setIsOpen(isOpen);
+		}
+		catch (error) {
+			throw error;
+		}
+	}
+
 	private async buildEncounterState(encounterModel: EncounterModel): Promise<EncounterData> {
 		let encounterState: EncounterData = JSON.parse(JSON.stringify(encounterModel));
 		encounterState.players = [];

@@ -11,6 +11,7 @@ import { EncounterData } from '../../../../shared/types/encounter/encounter.data
 import { CampaignData } from '../../../../shared/types/campaign.data';
 import { CharacterRepository } from '../repositories/character.repository';
 import { CharacterData } from '../../../../shared/types/character.data';
+import { EncounterRepository } from '../repositories/encounter.repository';
 
 @Injectable()
 export class CampaignPageService extends IsReadyService {
@@ -24,6 +25,7 @@ export class CampaignPageService extends IsReadyService {
 
 	constructor(private campaignRepo: CampaignRepository,
 	            private characterRepo: CharacterRepository,
+	            private encounterRepo: EncounterRepository,
 	            private mqService: MqService) {
 		super(mqService);
 		this._encounterSubject = new BehaviorSubject<EncounterData[]>([]);
@@ -66,14 +68,31 @@ export class CampaignPageService extends IsReadyService {
 	}
 
 	public createEncounter(label: string, mapDimX?: number, mapDimY?: number, mapUrl?: string): void {
-		this.campaignRepo.createNewEncounter(label, this.campaignId, mapDimX, mapDimY, mapUrl)
-		 .pipe(
-			mergeMap(() => {
-				return this.campaignRepo.getAllEncounters(this.campaignState._id)
-			})
-		 ).subscribe((encounters: EncounterData[]) => {
-			this.campaignState.encounters = encounters;
-			this._encounterSubject.next(this.campaignState.encounters);
+		this.encounterRepo.createNewEncounter(label, this.campaignId, mapDimX, mapDimY, mapUrl)
+				.pipe(
+						mergeMap(() => {
+							return this.updateEncountersList();
+						})
+				).subscribe();
+	}
+
+	public deleteEncounter(encounterId: string): void {
+		this.encounterRepo.deleteEncounter(encounterId)
+				.pipe(mergeMap(() => {
+					return this.updateEncountersList()
+				})).subscribe();
+	}
+
+	public openEncounter(encounterId: string): void {
+		this.campaignState.getEncounter(encounterId).isOpen = true;
+		this.encounterRepo.openEncounter(encounterId).subscribe(() => {
+			this.mqService.sendCampaignUpdate(this.campaignId);
+		});
+	}
+
+	public closeEncounter(encounterId: string): void {
+		this.campaignState.getEncounter(encounterId).isOpen = false;
+		this.encounterRepo.closeEncounter(encounterId).subscribe(() => {
 			this.mqService.sendCampaignUpdate(this.campaignId);
 		});
 	}
@@ -112,11 +131,7 @@ export class CampaignPageService extends IsReadyService {
 							this._membersSubject.next(this.campaignState.members);
 						}),
 						mergeMap(() => {
-							return this.campaignRepo.getAllEncounters(this.campaignState._id);
-						}),
-						tap((encounters: EncounterData[]) => {
-							this.campaignState.encounters = encounters;
-							this._encounterSubject.next(this.campaignState.encounters);
+							return this.updateEncountersList();
 						}),
 						mergeMap(() => {
 							return this.characterRepo.getCharactersByCampaignId(this.campaignId);
@@ -136,5 +151,13 @@ export class CampaignPageService extends IsReadyService {
 		this.campaignMessageSubscription = this.mqService.getIncomingCampaignMessages(this.campaignId).subscribe(() => {
 			this.getCampaignState().subscribe();
 		});
+	}
+
+	private updateEncountersList(): Observable<void> {
+		return this.campaignRepo.getAllEncounters(this.campaignState._id).pipe(map((encounters: EncounterData[]) => {
+			this.campaignState.encounters = encounters;
+			this._encounterSubject.next(this.campaignState.encounters);
+			return;
+		}));
 	}
 }

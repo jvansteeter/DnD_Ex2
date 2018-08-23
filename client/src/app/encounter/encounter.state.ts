@@ -19,6 +19,7 @@ export class EncounterState implements EncounterData {
 	map_enabled: boolean;
 	playerWallsEnabled: boolean;
 	playerIds: string[];
+	isOpen: boolean;
 	_players: PlayerData[];
 	wallData: Object;
 	mapUrl: string;

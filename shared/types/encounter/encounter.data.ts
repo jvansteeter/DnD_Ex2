@@ -10,6 +10,7 @@ export interface EncounterData {
     gameMasters: string[];
     playerIds: string[];
     players?: PlayerData[];
+    isOpen: boolean;
 
     /**************************************
      * GENERAL BOARD VARIABLES

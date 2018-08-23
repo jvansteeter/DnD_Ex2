@@ -53,4 +53,17 @@ export class EncounterRepository {
       })
     });
   }
+
+  public deleteById(id: string): Promise<void> {
+  	return new Promise((resolve, reject) => {
+  		this.Encounter.remove({_id: id}, (error) => {
+  			if (error) {
+  				reject(error);
+  				return;
+			  }
+
+			  resolve();
+		  });
+	  });
+  }
 }

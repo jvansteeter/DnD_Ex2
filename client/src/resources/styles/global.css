@@ -322,21 +322,6 @@
 	}
 }
 
-/*.global-dashboard-card {*/
-	/*position: absolute !important;*/
-	/*top: 15px;*/
-	/*left: 15px;*/
-	/*right: 15px;*/
-	/*bottom: 15px;*/
-	/*overflow-y: auto;*/
-/*}*/
-
-/*.global-dash-more-button {*/
-	/*position: absolute !important;*/
-	/*top: 5px;*/
-	/*right: 10px;*/
-/*}*/
-
 html {
 	height: 100%;
 	display: flex;
@@ -350,6 +335,10 @@ body {
 }
 
 web-app {
+	flex: 1;
+}
+
+login-page {
 	flex: 1;
 }
 

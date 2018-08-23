@@ -14,6 +14,7 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 	public gameMasters: string[];
 	public players: PlayerData[];
 	public playerIds: string[];
+	public isOpen: boolean;
 
 	cell_res: number;
 	mapDimX: number;
@@ -46,6 +47,7 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 			campaignId: {type: String, required: true},
 			gameMasters: [String],
 			playerIds: [Schema.Types.ObjectId],
+			isOpen: {type: Boolean, default: false},
 			mapUrl: String,
 			mapDimX: Number,
 			mapDimY: Number,
@@ -59,6 +61,7 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 		this.gameMasters = this.methods.gameMasters;
 		this.players = [];
 		this.playerIds = this.methods.playerIds;
+		this.isOpen = this.methods.isOpen;
 		this.mapUrl = this.methods.mapUrl;
 		this.mapDimX = this.methods.mapDimX;
 		this.mapDimY = this.methods.mapDimY;
@@ -66,6 +69,7 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 		this.methods.addGameMaster = this.addGameMaster;
 		this.methods.addPlayer = this.addPlayer;
 		this.methods.setMapUrl = this.setMapUrl;
+		this.methods.setIsOpen = this.setIsOpen;
 	}
 
 	public addGameMaster(userId: string): Promise<EncounterModel> {
@@ -94,6 +98,11 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 
 	public setMapUrl(url: string): Promise<EncounterModel> {
 		this.mapUrl = url;
+		return this.save();
+	}
+
+	public setIsOpen(isOpen: boolean): Promise<EncounterModel> {
+		this.isOpen = isOpen;
 		return this.save();
 	}
 }

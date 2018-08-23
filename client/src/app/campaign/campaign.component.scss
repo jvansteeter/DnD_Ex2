@@ -2,10 +2,6 @@
 	flex: 1;
 }
 
-button {
-	width: 100%;
-}
-
 .campaign-content {
 	display: flex;
 }
@@ -16,4 +12,12 @@ button {
 
 .campaign-rightContent {
 	flex: 6;
+}
+
+button.options-button {
+	margin-left: auto;
+}
+
+.closed-text {
+	color: red;
 }

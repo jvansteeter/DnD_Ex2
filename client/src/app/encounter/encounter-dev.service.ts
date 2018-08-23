@@ -33,6 +33,7 @@ export class EncounterDevService extends EncounterService {
             lightEnabled: false,
             ambientLight: {} as LightValue,
 	          playerIds: [],
+	          isOpen: true,
 	          mapUrl: 'resources/images/maps/shack.jpg'
         });
         this.setReady(true);
