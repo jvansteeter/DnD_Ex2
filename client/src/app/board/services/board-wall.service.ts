@@ -24,32 +24,6 @@ export class BoardWallService {
     ) {
     }
 
-    public dev_mode_init() {
-        if (this.encounterService.mapUrl === 'resources/images/maps/shack.jpg') {
-            // top wall
-            this.addWall(new CellTarget(new XyPair(5, 2), CellRegion.TOP_EDGE));
-            this.addWall(new CellTarget(new XyPair(6, 2), CellRegion.TOP_EDGE));
-            this.addWall(new CellTarget(new XyPair(7, 2), CellRegion.TOP_EDGE));
-
-            // right wall
-            this.addWall(new CellTarget(new XyPair(8, 2), CellRegion.LEFT_EDGE));
-            this.addWall(new CellTarget(new XyPair(8, 3), CellRegion.LEFT_EDGE));
-            this.addWall(new CellTarget(new XyPair(8, 4), CellRegion.LEFT_EDGE));
-            this.addWall(new CellTarget(new XyPair(8, 5), CellRegion.LEFT_EDGE));
-
-            // bottom wall
-            this.addWall(new CellTarget(new XyPair(7, 6), CellRegion.TOP_EDGE));
-            this.addWall(new CellTarget(new XyPair(6, 6), CellRegion.TOP_EDGE));
-            this.addWall(new CellTarget(new XyPair(5, 6), CellRegion.TOP_EDGE));
-
-            // left wall
-            this.addWall(new CellTarget(new XyPair(5, 5), CellRegion.LEFT_EDGE));
-            this.addWall(new CellTarget(new XyPair(5, 4), CellRegion.LEFT_EDGE));
-            this.addDoor(new CellTarget(new XyPair(5, 3), CellRegion.LEFT_EDGE));              // DOOR
-            this.addWall(new CellTarget(new XyPair(5, 2), CellRegion.LEFT_EDGE));
-        }
-    }
-
     public addDoor(target: CellTarget) {
         if (!this.hasObstruction(target)) {
             this.doorData.set(target.hash(), new BoardDoor(target));

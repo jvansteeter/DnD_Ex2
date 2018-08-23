@@ -40,12 +40,6 @@ export class BoardPlayerService extends IsReadyService {
 	    })
     }
 
-    public dev_mode_init() {
-        this.encounterService.init_players();
-        this.updateAllPlayerVisibility();
-        this.updateAllPlayerTraverse();
-    }
-
     public addPlayer(player: Player) {
     	this.encounterService.addPlayer(player);
     	this.updateAllPlayerTraverse();

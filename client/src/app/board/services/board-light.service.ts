@@ -26,12 +26,6 @@ export class BoardLightService {
         }
     }
 
-    public dev_mode_init() {
-        if (this.encounterService.mapUrl === 'resources/images/maps/shack.jpg') {
-            this.addLightSource(new LightSource(new XyPair(7, 3), 5));
-        }
-    }
-
     addLightSource(source: LightSource) {
         this.lightSourceData.set(source.location.hash(), source);
         this.updateLightValues();

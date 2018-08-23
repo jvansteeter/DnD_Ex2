@@ -1,4 +1,11 @@
-import {Component, ViewChild, ElementRef, OnInit, HostListener, AfterViewChecked} from '@angular/core';
+import {
+    Component,
+    ViewChild,
+    ElementRef,
+    OnInit,
+    HostListener,
+    AfterViewInit,
+} from '@angular/core';
 import {BoardCanvasService} from "../services/board-canvas.service";
 import {BoardStateService} from "../services/board-state.service";
 import {BoardWallService} from "../services/board-wall.service";
@@ -21,24 +28,8 @@ import {BoardNotationService} from '../services/board-notation-service';
 })
 
 
-export class BoardMapComponent implements OnInit, AfterViewChecked {
-    @ViewChild('inputCanvas') inputCanvas: ElementRef;
+export class BoardMapComponent implements OnInit, AfterViewInit {
     @ViewChild('mapContainer') mapContainer: ElementRef;
-
-    private ctx: CanvasRenderingContext2D;
-    public badgeValue = "8";
-
-    ngOnInit(): void {
-        this.ctx = this.inputCanvas.nativeElement.getContext('2d');
-        this.boardCanvasService.cvs_height = this.mapContainer.nativeElement.clientHeight;
-        this.boardCanvasService.cvs_width = this.mapContainer.nativeElement.clientWidth;
-        this.boardStateService.mapOffsetTop = this.mapContainer.nativeElement.offsetTop;
-        this.boardStateService.mapOffsetLeft = this.mapContainer.nativeElement.offsetLeft;
-
-        this.boardWallService.dev_mode_init();
-        this.boardLightService.dev_mode_init();
-        this.boardPlayerService.dev_mode_init();
-    }
 
     constructor(
         private boardCanvasService: BoardCanvasService,
@@ -52,7 +43,16 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
     ) {
     }
 
-    ngAfterViewChecked(): void {
+    render = () => {
+        this.syncMapContainerDims();
+        requestAnimationFrame(this.render);
+    };
+
+    ngOnInit(): void {
+        this.render();
+    }
+
+    ngAfterViewInit(): void {
         this.boardCanvasService.canvasNativeElement = this.mapContainer.nativeElement;
     }
 
@@ -68,14 +68,6 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
         if (this.boardStateService.mouseMiddleDown) {
             return 'cursorGrabbing'
         }
-    }
-
-    getCanvasHeight(): number {
-        return this.boardCanvasService.cvs_height;
-    }
-
-    getCanvasWidth(): number {
-        return this.boardCanvasService.cvs_width;
     }
 
     clickResponse(): void {
@@ -141,7 +133,6 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
     }
 
     handleMouseWheel(event) {
-        // this.boardService.handleMouseScroll(event.deltaY);
         const scroll_scale_delta = 0.10;
         const max_scale = 2.50;
         const min_scale = 0.35;
@@ -170,7 +161,6 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
     }
 
     handleMouseLeave(event) {
-        // this.boardService.handleMouseLeave();
         this.clearMouseLocation();
         this.boardStateService.mouseLeftDown = false;
     }
@@ -182,11 +172,10 @@ export class BoardMapComponent implements OnInit, AfterViewChecked {
         return false;
     }
 
-    @HostListener('window:resize', ['$event'])
-    onResize(event) {
-        this.boardCanvasService.canvasNativeElement = this.mapContainer.nativeElement;
+    private syncMapContainerDims(): void {
         this.boardCanvasService.cvs_height = this.mapContainer.nativeElement.clientHeight;
         this.boardCanvasService.cvs_width = this.mapContainer.nativeElement.clientWidth;
+
         this.boardStateService.mapOffsetTop = this.mapContainer.nativeElement.offsetTop;
         this.boardStateService.mapOffsetLeft = this.mapContainer.nativeElement.offsetLeft;
     }

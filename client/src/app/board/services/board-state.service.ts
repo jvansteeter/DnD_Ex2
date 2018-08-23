@@ -93,7 +93,9 @@ export class BoardStateService {
         return (2 * double_step) + reg_step + delta_delta;
     }
 
-    constructor(private encounterService: EncounterService) {}
+    constructor(
+        private encounterService: EncounterService
+    ) {}
 
     coorInBounds(x: number, y: number): boolean {
         return !((x >= this.mapDimX) || (y >= this.mapDimY) || (x < 0) || (y < 0));

@@ -7,8 +7,6 @@ import {LightValue} from '../board/shared/enum/light-value';
 
 @Injectable()
 export class EncounterDevService extends EncounterService {
-    // players: Player[] = [];
-
     constructor(
         encounterRepo: EncounterRepository,
     ) {
@@ -26,8 +24,8 @@ export class EncounterDevService extends EncounterService {
             gameMasters: [],
             players: [],
             cell_res: 50,
-            mapDimX: 50,
-            mapDimY: 50,
+            mapDimX: 10,
+            mapDimY: 8,
             map_enabled: false,
             wallData: {},
             playerWallsEnabled: true,
