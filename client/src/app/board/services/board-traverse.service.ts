@@ -2,18 +2,103 @@ import {Injectable} from '@angular/core';
 import {CellTarget} from '../shared/cell-target';
 import {XyPair} from '../geometry/xy-pair';
 import {CellRegion} from '../shared/enum/cell-region';
+import {BoardStateService} from "./board-state.service";
+import {GeometryStatics} from "../statics/geometry-statics";
+import {IsReadyService} from "../../utilities/services/isReady.service";
 
 @Injectable()
-export class BoardTraverseService {
+export class BoardTraverseService extends IsReadyService {
     public blockingSegments: Set<string>;
 
-    constructor() {
-        this.blockingSegments = new Set();
+    public numNodes: number;
+
+    public dist = [];
+    public canTraverse = [];            // canTraverse[fromIndex][toIndex] = 1|0 , true|false
+
+
+    constructor(
+        private boardStateService: BoardStateService
+    ) {
+        super(boardStateService);
+        this.init();
+    }
+
+    public init(): void {
+        this.dependenciesReady().subscribe((isReady: boolean) => {
+            if (isReady) {
+                this.blockingSegments = new Set();
+                this.numNodes = this.boardStateService.mapDimX * this.boardStateService.mapDimY;
+
+                this.initTraverseArray();
+                this.initDistArray();
+                this.setReady(true);
+            }
+        })
+    }
+
+    private initTraverseArray(): void {
+        this.canTraverse = new Array(this.numNodes);
+        for (let i = 0; i < this.numNodes; i++) {
+            this.canTraverse[i] = new Array(this.numNodes);
+            const adjIndexes = this.getAdjIndices(i);
+            for (let index of adjIndexes) {
+                if (this.canMoveIndexToIndex(i, index)) {
+                    this.canTraverse[i][index] = 1;
+                } else {
+                    this.canTraverse[i][index] = 0;
+                }
+            }
+        }
+    }
+
+    private initDistArray() {
+        this.dist = new Array(this.numNodes);
+
+        for (let i = 0; i < this.numNodes; i++) {
+            this.dist[i] = new Array(this.numNodes);
+            for (let j = 0; j < this.numNodes; j++) {
+                if (i === j) {
+                    this.dist[i][j] = 0;
+                } else {
+                    this.dist[i][j] = Infinity;
+                }
+            }
+            const adjIndex = this.getAdjIndices(i);
+            for (let index of adjIndex) {
+                if (this.canMoveIndexToIndex(i, index)) {
+                    this.dist[i][index] = 1;
+                }
+            }
+        }
+    }
+
+    private getAdjIndices(index: number): Array<number> {
+        const returnMe = [];
+        const dimX = this.boardStateService.mapDimX;
+
+        const onTop = index - dimX < 0;
+        const onRight = (index % dimX) === (dimX - 1);
+        const onBottom = index + dimX >= dimX * this.boardStateService.mapDimY;
+        const onLeft = (index % dimX) === 0;
+
+        if (!onTop) { returnMe.push(index - dimX); }
+        if (!onRight) { returnMe.push(index + 1); }
+        if (!onBottom) { returnMe.push(index + dimX); }
+        if (!onLeft) { returnMe.push(index - 1); }
+
+        if (!onLeft && !onTop) { returnMe.push(index - dimX - 1); }
+        if (!onLeft && !onBottom) { returnMe.push(index + dimX - 1); }
+        if (!onRight && !onTop) { returnMe.push(index - dimX + 1); }
+        if (!onRight && !onBottom) { returnMe.push(index + dimX + 1); }
+
+        return returnMe;
     }
 
     public blockNorth(cell: XyPair) {
         this.blockingSegments.add(new CellTarget(cell, CellRegion.TOP_EDGE).hash());
+        this.initTraverseArray();
     }
+
     public unblockNorth(cell: XyPair) {
         this.blockingSegments.delete(new CellTarget(cell, CellRegion.TOP_EDGE).hash());
     }
@@ -21,6 +106,7 @@ export class BoardTraverseService {
     public blockWest(cell: XyPair) {
         this.blockingSegments.add(new CellTarget(cell, CellRegion.LEFT_EDGE).hash());
     }
+
     public unblockWest(cell: XyPair) {
         this.blockingSegments.delete(new CellTarget(cell, CellRegion.LEFT_EDGE).hash());
     }
@@ -28,6 +114,7 @@ export class BoardTraverseService {
     public blockFwd(cell: XyPair) {
         this.blockingSegments.add(new CellTarget(cell, CellRegion.FWRD_EDGE).hash());
     }
+
     public unblockFwd(cell: XyPair) {
         this.blockingSegments.delete(new CellTarget(cell, CellRegion.FWRD_EDGE).hash());
     }
@@ -35,6 +122,7 @@ export class BoardTraverseService {
     public blockBkw(cell: XyPair) {
         this.blockingSegments.add(new CellTarget(cell, CellRegion.BKWD_EDGE).hash());
     }
+
     public unblockBkw(cell: XyPair) {
         this.blockingSegments.delete(new CellTarget(cell, CellRegion.BKWD_EDGE).hash());
     }
@@ -93,7 +181,11 @@ export class BoardTraverseService {
                         } else {
                             rangeDelta = -1;
                         }
-                        queue.push({cell: northEastCell, range: curCell.range + rangeDelta, diagAsDouble: !curCell.diagAsDouble});
+                        queue.push({
+                            cell: northEastCell,
+                            range: curCell.range + rangeDelta,
+                            diagAsDouble: !curCell.diagAsDouble
+                        });
                         touched.push(northEastCell.hash());
                     }
                 }
@@ -107,7 +199,11 @@ export class BoardTraverseService {
                         } else {
                             rangeDelta = -1;
                         }
-                        queue.push({cell: northWestCell, range: curCell.range + rangeDelta, diagAsDouble: !curCell.diagAsDouble});
+                        queue.push({
+                            cell: northWestCell,
+                            range: curCell.range + rangeDelta,
+                            diagAsDouble: !curCell.diagAsDouble
+                        });
                         touched.push(northWestCell.hash());
                     }
                 }
@@ -121,7 +217,11 @@ export class BoardTraverseService {
                         } else {
                             rangeDelta = -1;
                         }
-                        queue.push({cell: southEastCell, range: curCell.range + rangeDelta, diagAsDouble: !curCell.diagAsDouble});
+                        queue.push({
+                            cell: southEastCell,
+                            range: curCell.range + rangeDelta,
+                            diagAsDouble: !curCell.diagAsDouble
+                        });
                         touched.push(southEastCell.hash());
                     }
                 }
@@ -135,7 +235,11 @@ export class BoardTraverseService {
                         } else {
                             rangeDelta = -1;
                         }
-                        queue.push({cell: southWestCell, range: curCell.range + rangeDelta, diagAsDouble: !curCell.diagAsDouble});
+                        queue.push({
+                            cell: southWestCell,
+                            range: curCell.range + rangeDelta,
+                            diagAsDouble: !curCell.diagAsDouble
+                        });
                         touched.push(southWestCell.hash());
                     }
                 }
@@ -149,6 +253,18 @@ export class BoardTraverseService {
         return this.blockingSegments.has(target.hash());
     }
 
+    private canMoveIndexToIndex(index1: number, index2: number): boolean {
+        const dimX = this.boardStateService.mapDimX;
+        if (index1 + 1 === index2) { return this.canMoveE(GeometryStatics.indexToXY(index1, dimX)); }
+        if (index1 - 1 === index2) { return this.canMoveW(GeometryStatics.indexToXY(index1, dimX)); }
+        if (index1 - dimX === index2) { return this.canMoveN(GeometryStatics.indexToXY(index1, dimX)); }
+        if (index1 + dimX === index2) { return this.canMoveS(GeometryStatics.indexToXY(index1, dimX)); }
+        if (index1 + 1 - dimX === index2) { return this.canMoveNE(GeometryStatics.indexToXY(index1, dimX)); }
+        if (index1 + 1 + dimX === index2) { return this.canMoveSE(GeometryStatics.indexToXY(index1, dimX)); }
+        if (index1 - 1 - dimX === index2) { return this.canMoveNW(GeometryStatics.indexToXY(index1, dimX)); }
+        if (index1 -1 + dimX === index2) { return this.canMoveSW(GeometryStatics.indexToXY(index1, dimX)); }
+        return false;
+    }
 
     public canMoveN(loc: XyPair): boolean {
         if (this.targetIsBlocked(new CellTarget(new XyPair(loc.x, loc.y), CellRegion.TOP_EDGE)) ||

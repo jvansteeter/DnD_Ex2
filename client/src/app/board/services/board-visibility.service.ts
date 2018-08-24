@@ -26,8 +26,6 @@ export class BoardVisibilityService extends IsReadyService {
                 this.blockingSegments = new Set();
                 this.blockingBitmap = [];
 
-                console.log(this.boardStateService.mapDimX + ', ' + this.boardStateService.mapDimY + ' : ' + BoardStateService.cell_res);
-
                 for (let x = 0; x < this.boardStateService.mapDimX * BoardStateService.cell_res; x++) {
                     this.blockingBitmap[x] = [];
                     for (let y = 0; y < this.boardStateService.mapDimY * BoardStateService.cell_res; y++) {
