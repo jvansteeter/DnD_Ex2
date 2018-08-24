@@ -46,7 +46,10 @@ export class BoardPlayerService extends IsReadyService {
     	this.updateAllPlayerVisibility();
     }
 
-    public removePlayer() {
+    public removePlayer(player: Player) {
+    	this.encounterService.removePlayer(player);
+	    this.updateAllPlayerTraverse();
+	    this.updateAllPlayerVisibility();
     }
 
     public movePlayer(id: string, location: XyPair) {

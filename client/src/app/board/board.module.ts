@@ -8,7 +8,14 @@ import {
 	MatSelectModule,
 	MatSliderModule,
 	MatFormFieldModule,
-	MatInputModule, MatTooltipModule, MatDialogModule, MatTabsModule, MatTableModule, MatSortModule, MatBadgeModule
+	MatInputModule,
+	MatTooltipModule,
+	MatDialogModule,
+	MatTabsModule,
+	MatTableModule,
+	MatSortModule,
+	MatBadgeModule,
+	MatMenuModule
 } from '@angular/material';
 import {NgModule} from '@angular/core';
 import {MapRendererComponent} from "./renderer/map-renderer/map-renderer.component";
@@ -94,6 +101,7 @@ import { CharacterPopComponent } from './pop/character-pop/character-pop.compone
 		    MatSortModule,
         MatBadgeModule,
 		    CharacterSheetModule,
+		    MatMenuModule,
     ],
     providers: [
         PopService,

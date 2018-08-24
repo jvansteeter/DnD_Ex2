@@ -21,8 +21,7 @@ export class CharacterPopComponent {
 	tooltipComponent: CharacterTooltipComponent;
 	hovered = false;
 
-	constructor(private boardStateService: BoardStateService){
-
+	constructor(private boardStateService: BoardStateService) {
 	}
 
 	public initVars(parentRef: PopService, window: boolean, pos_x: number, pos_y: number, player: Player) {
@@ -49,6 +48,10 @@ export class CharacterPopComponent {
 
 	close() {
 		this.parentRef.clearPlayerPop(this.player._id);
+	}
+
+	deletePlayer(): void {
+		// this.playerService.removePlayer(this.player);
 	}
 
 	mouseDown(event) {

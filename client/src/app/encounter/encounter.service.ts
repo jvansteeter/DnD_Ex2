@@ -42,6 +42,10 @@ export class EncounterService extends IsReadyService {
 		this.encounterState.addPlayer(player);
 	}
 
+	public removePlayer(player: Player): void {
+		this.encounterState.removePlayer(player);
+	}
+
 	public addCharacters(characters: CharacterData[]): Observable<void> {
 		return this.encounterRepo.addCharacters(this.encounterId, characters);
 	}
