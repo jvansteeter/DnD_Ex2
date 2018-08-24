@@ -13,7 +13,7 @@ export class BoardTraverseService extends IsReadyService {
     public numNodes: number;
 
     public dist = [];
-    public canTraverse = [];            // canTraverse[fromIndex][toIndex] = 1|0 , true|false
+    public traverseWeights = [];            // traverseWeights[fromIndex][toIndex] = 1|1.5|Infinity, adj|diag|not
 
 
     constructor(
@@ -29,23 +29,32 @@ export class BoardTraverseService extends IsReadyService {
                 this.blockingSegments = new Set();
                 this.numNodes = this.boardStateService.mapDimX * this.boardStateService.mapDimY;
 
-                this.initTraverseArray();
-                this.initDistArray();
+                this.initTraverseWeights();
+                // this.initDistArray();
                 this.setReady(true);
             }
         })
     }
 
-    private initTraverseArray(): void {
-        this.canTraverse = new Array(this.numNodes);
+    private initTraverseWeights(): void {
+        this.traverseWeights = new Array(this.numNodes);
+
         for (let i = 0; i < this.numNodes; i++) {
-            this.canTraverse[i] = new Array(this.numNodes);
+            this.traverseWeights[i] = new Array(this.numNodes);
+
             const adjIndexes = this.getAdjIndices(i);
-            for (let index of adjIndexes) {
+            for (let index of adjIndexes.adj) {
                 if (this.canMoveIndexToIndex(i, index)) {
-                    this.canTraverse[i][index] = 1;
+                    this.traverseWeights[i][index] = 1;
                 } else {
-                    this.canTraverse[i][index] = 0;
+                    this.traverseWeights[i][index] = Infinity;
+                }
+            }
+            for (let index of adjIndexes.diag) {
+                if (this.canMoveIndexToIndex(i, index)) {
+                    this.traverseWeights[i][index] = 1.5;
+                } else {
+                    this.traverseWeights[i][index] = Infinity;
                 }
             }
         }
@@ -53,27 +62,38 @@ export class BoardTraverseService extends IsReadyService {
 
     private initDistArray() {
         this.dist = new Array(this.numNodes);
-
+        // initialize the distance array in prep for floyd-warshall
         for (let i = 0; i < this.numNodes; i++) {
             this.dist[i] = new Array(this.numNodes);
             for (let j = 0; j < this.numNodes; j++) {
                 if (i === j) {
                     this.dist[i][j] = 0;
-                } else {
+                } else if (!isFinite(this.traverseWeights[i][j])) {
                     this.dist[i][j] = Infinity;
-                }
-            }
-            const adjIndex = this.getAdjIndices(i);
-            for (let index of adjIndex) {
-                if (this.canMoveIndexToIndex(i, index)) {
-                    this.dist[i][index] = 1;
+                } else {
+                    this.dist[i][j] = this.traverseWeights[i][j];
                 }
             }
         }
+
+        // floyd-warshall
+        for (let k = 0; k < this.numNodes; k++) {
+            let t_k = window.performance.now();
+
+            for (let i = 0; i < this.numNodes; i++) {
+                for (let j = 0; j < this.numNodes; j++) {
+                    if (this.dist[i][j] > this.dist[i][k] + this.dist[k][j]) {
+                        this.dist[i][j] = this.dist[i][k] + this.dist[k][j];
+                    }
+                }
+            }
+            console.log('time for k' + k + ': ' + (window.performance.now() - t_k));
+        }
     }
 
-    private getAdjIndices(index: number): Array<number> {
-        const returnMe = [];
+    private getAdjIndices(index: number): { adj: Array<number>, diag: Array<number> } {
+        const adj = [];
+        const diag = [];
         const dimX = this.boardStateService.mapDimX;
 
         const onTop = index - dimX < 0;
@@ -81,22 +101,39 @@ export class BoardTraverseService extends IsReadyService {
         const onBottom = index + dimX >= dimX * this.boardStateService.mapDimY;
         const onLeft = (index % dimX) === 0;
 
-        if (!onTop) { returnMe.push(index - dimX); }
-        if (!onRight) { returnMe.push(index + 1); }
-        if (!onBottom) { returnMe.push(index + dimX); }
-        if (!onLeft) { returnMe.push(index - 1); }
+        if (!onTop) {
+            adj.push(index - dimX);
+        }
+        if (!onRight) {
+            adj.push(index + 1);
+        }
+        if (!onBottom) {
+            adj.push(index + dimX);
+        }
+        if (!onLeft) {
+            adj.push(index - 1);
+        }
 
-        if (!onLeft && !onTop) { returnMe.push(index - dimX - 1); }
-        if (!onLeft && !onBottom) { returnMe.push(index + dimX - 1); }
-        if (!onRight && !onTop) { returnMe.push(index - dimX + 1); }
-        if (!onRight && !onBottom) { returnMe.push(index + dimX + 1); }
+        if (!onLeft && !onTop) {
+            diag.push(index - dimX - 1);
+        }
+        if (!onLeft && !onBottom) {
+            diag.push(index + dimX - 1);
+        }
+        if (!onRight && !onTop) {
+            diag.push(index - dimX + 1);
+        }
+        if (!onRight && !onBottom) {
+            diag.push(index + dimX + 1);
+        }
 
-        return returnMe;
+        return {adj: adj, diag: diag};
     }
 
     public blockNorth(cell: XyPair) {
         this.blockingSegments.add(new CellTarget(cell, CellRegion.TOP_EDGE).hash());
-        this.initTraverseArray();
+        this.initTraverseWeights();
+        this.initDistArray();
     }
 
     public unblockNorth(cell: XyPair) {
@@ -125,6 +162,83 @@ export class BoardTraverseService extends IsReadyService {
 
     public unblockBkw(cell: XyPair) {
         this.blockingSegments.delete(new CellTarget(cell, CellRegion.BKWD_EDGE).hash());
+    }
+
+    public calcTraverseCells3(sourceCell: XyPair, range: number): Array<number> {
+        const startIndex = GeometryStatics.xyToIndex(sourceCell.x, sourceCell.y, this.boardStateService.mapDimX);
+        const distTo = new Array(this.numNodes);
+
+        const cellQueue = [];
+        const rangeQueue = [];
+        const touched: Array<number> = [];
+
+        cellQueue.push(startIndex);
+        rangeQueue.push(range);
+        touched.push(startIndex);
+
+        while (cellQueue.length > 0) {
+            const remainingRange = rangeQueue.shift();
+            const curCellIndex = cellQueue.shift();
+
+            if (remainingRange >= 0) {
+                const adjIndexes = this.getAdjIndices(curCellIndex);
+                for (const index of [...adjIndexes.diag, ...adjIndexes.adj]) {
+                    if (touched.indexOf(index) === -1) {
+                        const traverseWeight = this.traverseWeights[curCellIndex][index];
+
+                        if (isFinite(traverseWeight)) {
+                            cellQueue.push(index);
+                            rangeQueue.push(remainingRange - traverseWeight);
+                            touched.push(index);
+                        }
+                    }
+                }
+            }
+
+
+
+
+
+        }
+        return distTo;
+    }
+
+    public calcTraverseCells2(sourceCell: XyPair, range: number): Array<Array<XyPair>> {
+        const distances = new Array(range);
+        for (let i = 0; i <= range; i++) {
+            distances[i] = [];
+        }
+
+        const touched: Array<number> = [];
+
+        const cellQueue = [];
+        const rangeQueue = [];
+
+        const startIndex = GeometryStatics.xyToIndex(sourceCell.x, sourceCell.y, this.boardStateService.mapDimX);
+        cellQueue.push(startIndex);
+        rangeQueue.push(range);
+        touched.push(startIndex);
+
+        while (cellQueue.length > 0) {
+            const curRangePotential = rangeQueue.shift();
+            const curCellIndex = cellQueue.shift();
+
+            if (curRangePotential >= 0) {
+                const adjIndexes = this.getAdjIndices(curCellIndex);
+                for (const index of [...adjIndexes.diag, ...adjIndexes.adj]) {
+                    if (touched.indexOf(index) === -1) {
+                        const traverseWeight = this.traverseWeights[curCellIndex][index];
+                        if (isFinite(traverseWeight)) {
+                            cellQueue.push(index);
+                            rangeQueue.push(curRangePotential - traverseWeight);
+                            touched.push(index);
+                        }
+                    }
+                }
+                distances[range - Math.ceil(curRangePotential)].push(GeometryStatics.indexToXY(curCellIndex, this.boardStateService.mapDimX));
+            }
+        }
+        return distances;
     }
 
     public calcTraversableCells(sourceCell: XyPair, range: number): Array<XyPair> {
@@ -255,14 +369,30 @@ export class BoardTraverseService extends IsReadyService {
 
     private canMoveIndexToIndex(index1: number, index2: number): boolean {
         const dimX = this.boardStateService.mapDimX;
-        if (index1 + 1 === index2) { return this.canMoveE(GeometryStatics.indexToXY(index1, dimX)); }
-        if (index1 - 1 === index2) { return this.canMoveW(GeometryStatics.indexToXY(index1, dimX)); }
-        if (index1 - dimX === index2) { return this.canMoveN(GeometryStatics.indexToXY(index1, dimX)); }
-        if (index1 + dimX === index2) { return this.canMoveS(GeometryStatics.indexToXY(index1, dimX)); }
-        if (index1 + 1 - dimX === index2) { return this.canMoveNE(GeometryStatics.indexToXY(index1, dimX)); }
-        if (index1 + 1 + dimX === index2) { return this.canMoveSE(GeometryStatics.indexToXY(index1, dimX)); }
-        if (index1 - 1 - dimX === index2) { return this.canMoveNW(GeometryStatics.indexToXY(index1, dimX)); }
-        if (index1 -1 + dimX === index2) { return this.canMoveSW(GeometryStatics.indexToXY(index1, dimX)); }
+        if (index1 + 1 === index2) {
+            return this.canMoveE(GeometryStatics.indexToXY(index1, dimX));
+        }
+        if (index1 - 1 === index2) {
+            return this.canMoveW(GeometryStatics.indexToXY(index1, dimX));
+        }
+        if (index1 - dimX === index2) {
+            return this.canMoveN(GeometryStatics.indexToXY(index1, dimX));
+        }
+        if (index1 + dimX === index2) {
+            return this.canMoveS(GeometryStatics.indexToXY(index1, dimX));
+        }
+        if (index1 + 1 - dimX === index2) {
+            return this.canMoveNE(GeometryStatics.indexToXY(index1, dimX));
+        }
+        if (index1 + 1 + dimX === index2) {
+            return this.canMoveSE(GeometryStatics.indexToXY(index1, dimX));
+        }
+        if (index1 - 1 - dimX === index2) {
+            return this.canMoveNW(GeometryStatics.indexToXY(index1, dimX));
+        }
+        if (index1 - 1 + dimX === index2) {
+            return this.canMoveSW(GeometryStatics.indexToXY(index1, dimX));
+        }
         return false;
     }
 

@@ -4,6 +4,7 @@ import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {XyPair} from '../../geometry/xy-pair';
 import { EncounterService } from '../../../encounter/encounter.service';
 import {BoardPlayerService} from "../../services/board-player.service";
+import {BoardTraverseService} from "../../services/board-traverse.service";
 
 @Component({
     selector: 'token-renderer',
@@ -18,12 +19,18 @@ export class TokenRendererComponent implements OnInit {
         private boardStateService: BoardStateService,
         private boardCanvasService: BoardCanvasService,
         private encounterService: EncounterService,
-        private boardPlayerService: BoardPlayerService
+        private boardPlayerService: BoardPlayerService,
+        private boardTraverseService: BoardTraverseService
     ) {}
 
     ngOnInit(): void {
         this.ctx = this.tokenRenderCanvas.nativeElement.getContext('2d');
-        this.render();
+        this.boardTraverseService.isReady().subscribe((isReady: boolean) => {
+            if (isReady) {
+                this.render();
+            }
+        });
+        // this.render();
     }
 
     render = () => {
@@ -50,6 +57,14 @@ export class TokenRendererComponent implements OnInit {
             this.boardCanvasService.draw_img(this.ctx, new XyPair(player.location.x * BoardStateService.cell_res, player.location.y * BoardStateService.cell_res), player.token_img);
             if (this.boardStateService.show_health) {
                 this.boardCanvasService.draw_health_basic(this.ctx, player.location, player.hp/player.maxHp);
+            }
+        }
+
+        const distances = this.boardTraverseService.calcTraverseCells2(new XyPair(5,5), 3);
+        for (let range in distances) {
+            const cells = distances[range];
+            for (const cell of cells) {
+                this.boardCanvasService.draw_text(this.ctx, new XyPair(cell.x * BoardStateService.cell_res, cell.y * BoardStateService.cell_res), range, 30, 'rgba(0, 0, 0, 1)');
             }
         }
 

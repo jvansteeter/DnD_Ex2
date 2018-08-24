@@ -6,7 +6,7 @@ export class GeometryStatics {
     }
 
     static indexToXY (index: number, dimX: number): XyPair {
-        return new XyPair(index % dimX, index / dimX);
+        return new XyPair(Math.trunc(index % dimX), Math.trunc(index / dimX));
     }
 
     static xyToIndex (x: number, y: number, dimX: number): number {
