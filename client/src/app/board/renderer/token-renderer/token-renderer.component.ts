@@ -60,7 +60,14 @@ export class TokenRendererComponent implements OnInit {
             }
         }
 
+        const t_one = window.performance.now();
         const distances = this.boardTraverseService.calcTraverseCells2(new XyPair(5,5), 3);
+        console.log('time CT2: ' + (window.performance.now() - t_one));
+
+        const t_two = window.performance.now();
+        this.boardTraverseService.calcTraversableCells(new XyPair(5,5), 3);
+        console.log('time CT1: ' + (window.performance.now() - t_two));
+
         for (let range in distances) {
             const cells = distances[range];
             for (const cell of cells) {
