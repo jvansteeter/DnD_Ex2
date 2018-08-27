@@ -4,7 +4,7 @@ import {BoardStateService} from './board-state.service';
 import {CellTarget} from '../shared/cell-target';
 import {CellRegion} from '../shared/enum/cell-region';
 import {CellPolygonGroup} from '../shared/cell-polygon-group';
-import {CellTargetStatics} from './cell-target-statics';
+import {CellTargetStatics} from '../statics/cell-target-statics';
 import {isNullOrUndefined} from "util";
 import {IsReadyService} from "../../utilities/services/isReady.service";
 

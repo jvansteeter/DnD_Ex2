@@ -4,7 +4,7 @@ import {EdgeMoveAction} from '../shared/edge-move-action';
 import {CellRegion} from '../shared/enum/cell-region';
 import {XyPair} from '../geometry/xy-pair';
 import {Injectable} from '@angular/core';
-import {BoardStateService} from './board-state.service';
+import {BoardStateService} from '../services/board-state.service';
 
 @Injectable()
 export class CellTargetStatics {

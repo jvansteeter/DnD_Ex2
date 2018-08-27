@@ -5,6 +5,8 @@ import {CellRegion} from '../shared/enum/cell-region';
 import {BoardStateService} from "./board-state.service";
 import {GeometryStatics} from "../statics/geometry-statics";
 import {IsReadyService} from "../../utilities/services/isReady.service";
+import {range} from "rxjs/index";
+import {ArrayStatics} from "../statics/array-statics";
 
 @Injectable()
 export class BoardTraverseService extends IsReadyService {
@@ -164,43 +166,128 @@ export class BoardTraverseService extends IsReadyService {
         this.blockingSegments.delete(new CellTarget(cell, CellRegion.BKWD_EDGE).hash());
     }
 
-    public calcTraverseCells3(sourceCell: XyPair, range: number): Array<number> {
+    private indexesInRangeOfSource(index: number, range: number): Array<number> {
+        // IMPROVE THIS METHOD NOT TO USE THE CONVERSION METHOD SO MUCH
+        const cells = this.boardStateService.calcCellsWithinRangeOfCell(GeometryStatics.indexToXY(index, this.boardStateService.mapDimX), range);
+        const returnMe = [];
+        for (let cell of cells) {
+            returnMe.push(GeometryStatics.xyToIndex(cell.x, cell.y, this.boardStateService.mapDimX));
+        }
+        return returnMe;
+    }
+
+    private dijkstraMinIndex(vertexIndexes: Array<number>, distArray: Array<number>): number {
+        let minValue = Infinity;
+        let minIndex = -1;
+
+        let index;
+        for (index = 0; index < vertexIndexes.length; index++) {
+            let currentDijkstraIndex = vertexIndexes[index];
+            if (distArray[currentDijkstraIndex] < minValue) {
+                minValue = distArray[currentDijkstraIndex];
+                minIndex = currentDijkstraIndex;
+            }
+        }
+
+        return minIndex;
+    }
+
+    public dijkstraTraverse(sourceCell: XyPair, range: number): Array<number> {
         const startIndex = GeometryStatics.xyToIndex(sourceCell.x, sourceCell.y, this.boardStateService.mapDimX);
+
+        const prev = new Array(this.numNodes);
         const distTo = new Array(this.numNodes);
 
-        const cellQueue = [];
-        const rangeQueue = [];
-        const touched: Array<number> = [];
+        const indexesOfImport = this.indexesInRangeOfSource(startIndex, range);
 
-        cellQueue.push(startIndex);
-        rangeQueue.push(range);
-        touched.push(startIndex);
+        const Q = [];
 
-        while (cellQueue.length > 0) {
-            const remainingRange = rangeQueue.shift();
-            const curCellIndex = cellQueue.shift();
+        for (let index of indexesOfImport) {
+            distTo[index] = Infinity;
+            Q.push(index);
+        }
 
-            if (remainingRange >= 0) {
-                const adjIndexes = this.getAdjIndices(curCellIndex);
-                for (const index of [...adjIndexes.diag, ...adjIndexes.adj]) {
-                    if (touched.indexOf(index) === -1) {
-                        const traverseWeight = this.traverseWeights[curCellIndex][index];
+        distTo[startIndex] = 0;
 
-                        if (isFinite(traverseWeight)) {
-                            cellQueue.push(index);
-                            rangeQueue.push(remainingRange - traverseWeight);
-                            touched.push(index);
-                        }
-                    }
+        while (Q.length > 0) {
+            let u = this.dijkstraMinIndex(Q, distTo);
+            Q.splice(Q.indexOf(u), 1);
+
+            const adjIndexes = this.getAdjIndices(u);
+            for (const v of [...adjIndexes.diag, ...adjIndexes.adj]) {
+                const alt = distTo[u] + this.traverseWeights[u][v];
+                if (alt < distTo[v]) {
+                    distTo[v] = alt;
                 }
             }
-
-
-
-
-
         }
+
         return distTo;
+
+
+        /*
+         1  function Dijkstra(Graph, source):
+         2
+         3      create vertex set Q
+         4
+         5      for each vertex v in Graph:             // Initialization
+         6          dist[v] ← INFINITY                  // Unknown distance from source to v
+         7          prev[v] ← UNDEFINED                 // Previous node in optimal path from source
+         8          add v to Q                          // All nodes initially in Q (unvisited nodes)
+         9
+         10      dist[source] ← 0                        // Distance from source to source
+         11
+         12      while Q is not empty:
+         13          u ← vertex in Q with min dist[u]    // Node with the least distance
+         14                                              // will be selected first
+         15          remove u from Q
+         16
+         17          for each neighbor v of u:           // where v is still in Q.
+         18              alt ← dist[u] + length(u, v)
+         19              if alt < dist[v]:               // A shorter path to v has been found
+         20                  dist[v] ← alt
+         21                  prev[v] ← u
+         22
+         23      return dist[], prev[]
+         */
+
+
+
+
+
+        // const cellQueue = [];
+        // const rangeQueue = [];
+        // const touched: Array<number> = [];
+        //
+        // cellQueue.push(startIndex);
+        // rangeQueue.push(range);
+        // touched.push(startIndex);
+        //
+        // while (cellQueue.length > 0) {
+        //     const remainingRange = rangeQueue.shift();
+        //     const curCellIndex = cellQueue.shift();
+        //
+        //     if (remainingRange >= 0) {
+        //         const adjIndexes = this.getAdjIndices(curCellIndex);
+        //         for (const index of [...adjIndexes.diag, ...adjIndexes.adj]) {
+        //             if (touched.indexOf(index) === -1) {
+        //                 const traverseWeight = this.traverseWeights[curCellIndex][index];
+        //
+        //                 if (isFinite(traverseWeight)) {
+        //                     cellQueue.push(index);
+        //                     rangeQueue.push(remainingRange - traverseWeight);
+        //                     touched.push(index);
+        //                 }
+        //             }
+        //         }
+        //     }
+        //
+        //
+        //
+        //
+        //
+        // }
+        // return distTo;
     }
 
     public calcTraverseCells2(sourceCell: XyPair, range: number): Array<Array<XyPair>> {

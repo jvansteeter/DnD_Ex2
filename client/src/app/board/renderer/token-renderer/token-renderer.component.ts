@@ -5,6 +5,7 @@ import {XyPair} from '../../geometry/xy-pair';
 import { EncounterService } from '../../../encounter/encounter.service';
 import {BoardPlayerService} from "../../services/board-player.service";
 import {BoardTraverseService} from "../../services/board-traverse.service";
+import {GeometryStatics} from "../../statics/geometry-statics";
 
 @Component({
     selector: 'token-renderer',
@@ -60,19 +61,18 @@ export class TokenRendererComponent implements OnInit {
             }
         }
 
-        const t_one = window.performance.now();
-        const distances = this.boardTraverseService.calcTraverseCells2(new XyPair(5,5), 3);
-        console.log('time CT2: ' + (window.performance.now() - t_one));
-
         const t_two = window.performance.now();
-        this.boardTraverseService.calcTraversableCells(new XyPair(5,5), 3);
-        console.log('time CT1: ' + (window.performance.now() - t_two));
+        this.boardTraverseService.calcTraversableCells(new XyPair(25, 25), 15);
+        console.log('standard: ' + (window.performance.now() - t_two));
 
-        for (let range in distances) {
-            const cells = distances[range];
-            for (const cell of cells) {
-                this.boardCanvasService.draw_text(this.ctx, new XyPair(cell.x * BoardStateService.cell_res, cell.y * BoardStateService.cell_res), range, 30, 'rgba(0, 0, 0, 1)');
-            }
+        const t_three = window.performance.now();
+        const dijkstra = this.boardTraverseService.dijkstraTraverse(new XyPair(25, 25), 15);
+        console.log('dijkstra: \t\t\t\t\t' + (window.performance.now() - t_three));
+
+        let index;
+        for (index = 0; index < dijkstra.length; index++) {
+            const cell = GeometryStatics.indexToXY(index, this.boardStateService.mapDimX);
+            this.boardCanvasService.draw_text(this.ctx, new XyPair(cell.x * BoardStateService.cell_res, cell.y * BoardStateService.cell_res), dijkstra[index].toString(), 30, 'rgba(255, 0, 0, 1)');
         }
 
         requestAnimationFrame(this.render);

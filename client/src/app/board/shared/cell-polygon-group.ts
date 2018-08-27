@@ -1,5 +1,5 @@
 import {CellTarget} from './cell-target';
-import {CellTargetStatics} from '../services/cell-target-statics';
+import {CellTargetStatics} from '../statics/cell-target-statics';
 import {EdgeMoveDirection} from './enum/edge-move-direction';
 import {CellRegion} from './enum/cell-region';
 
