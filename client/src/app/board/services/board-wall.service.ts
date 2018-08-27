@@ -8,6 +8,7 @@ import {BoardTraverseService} from './board-traverse.service';
 import {BoardLightService} from './board-light.service';
 import {BoardDoor} from '../map-objects/board-door';
 import { EncounterService } from '../../encounter/encounter.service';
+import {BoardPlayerService} from "./board-player.service";
 
 @Injectable()
 export class BoardWallService {
@@ -20,6 +21,7 @@ export class BoardWallService {
         private boardVisibilityService: BoardVisibilityService,
         private boardTraverseService: BoardTraverseService,
         private boardLightService: BoardLightService,
+        private boardPlayerService: BoardPlayerService,
         private encounterService: EncounterService
     ) {
     }
@@ -46,6 +48,8 @@ export class BoardWallService {
                     break;
             }
             this.boardLightService.updateLightValues();
+            this.boardTraverseService.initTraverseWeights();
+            this.boardPlayerService.updateAllPlayerTraverse();
         }
     }
 
@@ -72,6 +76,8 @@ export class BoardWallService {
             }
         }
         this.boardLightService.updateLightValues();
+        this.boardTraverseService.initTraverseWeights();
+        this.boardPlayerService.updateAllPlayerTraverse();
     }
 
     public toggleDoor(target: CellTarget) {
@@ -128,6 +134,8 @@ export class BoardWallService {
         }
 
         this.boardLightService.updateLightValues();
+        this.boardTraverseService.initTraverseWeights();
+        this.boardPlayerService.updateAllPlayerTraverse();
     }
 
     public addWall(target: CellTarget, singleInstance = true) {
@@ -154,6 +162,8 @@ export class BoardWallService {
         }
         if (singleInstance) {
             this.boardLightService.updateLightValues();
+            this.boardTraverseService.initTraverseWeights();
+            this.boardPlayerService.updateAllPlayerTraverse();
         }
     }
 
@@ -181,6 +191,8 @@ export class BoardWallService {
         }
         if (singleInstance) {
             this.boardLightService.updateLightValues();
+            this.boardTraverseService.initTraverseWeights();
+            this.boardPlayerService.updateAllPlayerTraverse();
         }
     }
 
@@ -258,6 +270,8 @@ export class BoardWallService {
             }
         }
         this.boardLightService.updateLightValues();
+        this.boardTraverseService.initTraverseWeights();
+        this.boardPlayerService.updateAllPlayerTraverse();
     }
 
     public hasObstruction(target: CellTarget): boolean {

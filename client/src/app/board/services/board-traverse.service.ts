@@ -34,7 +34,7 @@ export class BoardTraverseService extends IsReadyService {
         })
     }
 
-    private initTraverseWeights(): void {
+    public initTraverseWeights(): void {
         this.traverseWeights = new Array(this.numNodes);
 
         for (let i = 0; i < this.numNodes; i++) {
