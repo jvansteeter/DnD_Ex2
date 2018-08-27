@@ -3,7 +3,9 @@
 	<mat-grid-list [cols]="5" rowHeight="20em">
 		<mat-grid-tile [colspan]="1" [rowspan]="2">
 			<dashboard-card [dashboardCard]="configCard" class="ruleSet-config">
+				<mat-slide-toggle color="primary">Light & Vision</mat-slide-toggle>
 				<mat-slide-toggle color="primary" [(ngModel)]="ruleSet.config.damageTypes">Damage Types</mat-slide-toggle>
+				<mat-slide-toggle color="primary">Resistance</mat-slide-toggle>
 			</dashboard-card>
 		</mat-grid-tile>
 		<mat-grid-tile [colspan]="2" [rowspan]="1">

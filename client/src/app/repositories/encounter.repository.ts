@@ -6,6 +6,7 @@ import { EncounterData } from '../../../../shared/types/encounter/encounter.data
 import { PlayerData } from '../../../../shared/types/encounter/player.data';
 import { CharacterData } from '../../../../shared/types/character.data';
 import { isUndefined } from "util";
+import { BoardStateService } from '../board/services/board-state.service';
 
 @Injectable()
 export class EncounterRepository {
@@ -21,8 +22,8 @@ export class EncounterRepository {
 			body = {
 				label: label,
 				mapUrl: mapUrl,
-				mapDimX: image.naturalWidth / 50,
-				mapDimY: image.naturalHeight / 50,
+				mapDimX: Math.ceil(image.naturalWidth / BoardStateService.cell_res),
+				mapDimY: Math.ceil(image.naturalHeight / BoardStateService.cell_res),
 			};
 		}
 		else {
