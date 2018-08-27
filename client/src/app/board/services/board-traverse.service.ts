@@ -14,7 +14,7 @@ export class BoardTraverseService extends IsReadyService {
 
     public numNodes: number;
 
-    public dist = [];
+    // public dist = [];
     public traverseWeights = [];            // traverseWeights[fromIndex][toIndex] = 1|1.5|Infinity, adj|diag|not
 
 
@@ -32,7 +32,6 @@ export class BoardTraverseService extends IsReadyService {
                 this.numNodes = this.boardStateService.mapDimX * this.boardStateService.mapDimY;
 
                 this.initTraverseWeights();
-                // this.initDistArray();
                 this.setReady(true);
             }
         })
@@ -59,37 +58,6 @@ export class BoardTraverseService extends IsReadyService {
                     this.traverseWeights[i][index] = Infinity;
                 }
             }
-        }
-    }
-
-    private initDistArray() {
-        this.dist = new Array(this.numNodes);
-        // initialize the distance array in prep for floyd-warshall
-        for (let i = 0; i < this.numNodes; i++) {
-            this.dist[i] = new Array(this.numNodes);
-            for (let j = 0; j < this.numNodes; j++) {
-                if (i === j) {
-                    this.dist[i][j] = 0;
-                } else if (!isFinite(this.traverseWeights[i][j])) {
-                    this.dist[i][j] = Infinity;
-                } else {
-                    this.dist[i][j] = this.traverseWeights[i][j];
-                }
-            }
-        }
-
-        // floyd-warshall
-        for (let k = 0; k < this.numNodes; k++) {
-            let t_k = window.performance.now();
-
-            for (let i = 0; i < this.numNodes; i++) {
-                for (let j = 0; j < this.numNodes; j++) {
-                    if (this.dist[i][j] > this.dist[i][k] + this.dist[k][j]) {
-                        this.dist[i][j] = this.dist[i][k] + this.dist[k][j];
-                    }
-                }
-            }
-            console.log('time for k' + k + ': ' + (window.performance.now() - t_k));
         }
     }
 
@@ -135,7 +103,6 @@ export class BoardTraverseService extends IsReadyService {
     public blockNorth(cell: XyPair) {
         this.blockingSegments.add(new CellTarget(cell, CellRegion.TOP_EDGE).hash());
         this.initTraverseWeights();
-        this.initDistArray();
     }
 
     public unblockNorth(cell: XyPair) {
@@ -195,8 +162,8 @@ export class BoardTraverseService extends IsReadyService {
     public dijkstraTraverse(sourceCell: XyPair, range: number): Array<number> {
         const startIndex = GeometryStatics.xyToIndex(sourceCell.x, sourceCell.y, this.boardStateService.mapDimX);
 
-        const prev = new Array(this.numNodes);
         const distTo = new Array(this.numNodes);
+        distTo.fill(-1, 0, distTo.length);
 
         const indexesOfImport = this.indexesInRangeOfSource(startIndex, range);
 

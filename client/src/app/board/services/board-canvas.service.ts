@@ -6,9 +6,10 @@ import {CellRegion} from '../shared/enum/cell-region';
 import {BoardStateService} from './board-state.service';
 import {CellTargetStatics} from '../statics/cell-target-statics';
 import {start} from 'repl';
+import {IsReadyService} from "../../utilities/services/isReady.service";
 
 @Injectable()
-export class BoardCanvasService {
+export class BoardCanvasService extends IsReadyService {
 
     public canvasNativeElement;
     public cvs_width: number;
@@ -17,6 +18,16 @@ export class BoardCanvasService {
     constructor(
         private boardStateService: BoardStateService
     ) {
+        super(boardStateService);
+        this.init();
+    }
+
+    public init(): void {
+        this.dependenciesReady().subscribe((isReady: boolean) => {
+            if (this.isReady()) {
+                this.setReady(true);
+            }
+        })
     }
 
     public updateTransform(ctx: CanvasRenderingContext2D) {
@@ -28,7 +39,7 @@ export class BoardCanvasService {
     }
 
     clear_canvas(ctx: CanvasRenderingContext2D) {
-        ctx.clearRect(-this.cvs_width, -this.cvs_height, this.cvs_width * 3, this.cvs_height * 3);
+        ctx.clearRect(-50, -50, this.boardStateService.mapDimX * BoardStateService.cell_res + 100, this.boardStateService.mapDimY * BoardStateService.cell_res + 100);
     }
 
     draw_img(ctx: CanvasRenderingContext2D, origin: XyPair, img: HTMLImageElement) {

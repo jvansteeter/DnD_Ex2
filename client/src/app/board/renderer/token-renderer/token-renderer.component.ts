@@ -61,19 +61,12 @@ export class TokenRendererComponent implements OnInit {
             }
         }
 
-        const t_two = window.performance.now();
-        this.boardTraverseService.calcTraversableCells(new XyPair(25, 25), 15);
-        console.log('standard: ' + (window.performance.now() - t_two));
-
-        const t_three = window.performance.now();
-        const dijkstra = this.boardTraverseService.dijkstraTraverse(new XyPair(25, 25), 15);
-        console.log('dijkstra: \t\t\t\t\t' + (window.performance.now() - t_three));
-
-        let index;
-        for (index = 0; index < dijkstra.length; index++) {
-            const cell = GeometryStatics.indexToXY(index, this.boardStateService.mapDimX);
-            this.boardCanvasService.draw_text(this.ctx, new XyPair(cell.x * BoardStateService.cell_res, cell.y * BoardStateService.cell_res), dijkstra[index].toString(), 30, 'rgba(255, 0, 0, 1)');
-        }
+        // const dijkstra = this.boardTraverseService.dijkstraTraverse(new XyPair(25, 25), 15);
+        // let index;
+        // for (index = 0; index < dijkstra.length; index++) {
+        //     const cell = GeometryStatics.indexToXY(index, this.boardStateService.mapDimX);
+        //     this.boardCanvasService.draw_text(this.ctx, new XyPair((cell.x * BoardStateService.cell_res) + (BoardStateService.cell_res * 0.45), (cell.y * BoardStateService.cell_res) + (BoardStateService.cell_res * 0.45)), dijkstra[index].toString(), 15, 'rgba(255, 0, 0, 1)');
+        // }
 
         requestAnimationFrame(this.render);
     }
