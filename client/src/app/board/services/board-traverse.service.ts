@@ -13,10 +13,7 @@ export class BoardTraverseService extends IsReadyService {
     public blockingSegments: Set<string>;
 
     public numNodes: number;
-
-    // public dist = [];
     public traverseWeights = [];            // traverseWeights[fromIndex][toIndex] = 1|1.5|Infinity, adj|diag|not
-
 
     constructor(
         private boardStateService: BoardStateService
@@ -102,7 +99,6 @@ export class BoardTraverseService extends IsReadyService {
 
     public blockNorth(cell: XyPair) {
         this.blockingSegments.add(new CellTarget(cell, CellRegion.TOP_EDGE).hash());
-        this.initTraverseWeights();
     }
 
     public unblockNorth(cell: XyPair) {
@@ -144,11 +140,11 @@ export class BoardTraverseService extends IsReadyService {
     }
 
     private dijkstraMinIndex(vertexIndexes: Array<number>, distArray: Array<number>): number {
-        let minValue = Infinity;
-        let minIndex = -1;
+        let minValue = distArray[vertexIndexes[0]];
+        let minIndex = vertexIndexes[0];
 
         let index;
-        for (index = 0; index < vertexIndexes.length; index++) {
+        for (index = 1; index < vertexIndexes.length; index++) {
             let currentDijkstraIndex = vertexIndexes[index];
             if (distArray[currentDijkstraIndex] < minValue) {
                 minValue = distArray[currentDijkstraIndex];
@@ -163,7 +159,7 @@ export class BoardTraverseService extends IsReadyService {
         const startIndex = GeometryStatics.xyToIndex(sourceCell.x, sourceCell.y, this.boardStateService.mapDimX);
 
         const distTo = new Array(this.numNodes);
-        distTo.fill(-1, 0, distTo.length);
+        distTo.fill(Infinity, 0, distTo.length);
 
         const indexesOfImport = this.indexesInRangeOfSource(startIndex, range);
 
@@ -189,232 +185,11 @@ export class BoardTraverseService extends IsReadyService {
             }
         }
 
+        let index;
+        for (index = 0; index < distTo.length; index++) {
+            distTo[index] = Math.trunc(distTo[index]);
+        }
         return distTo;
-
-
-        /*
-         1  function Dijkstra(Graph, source):
-         2
-         3      create vertex set Q
-         4
-         5      for each vertex v in Graph:             // Initialization
-         6          dist[v] ← INFINITY                  // Unknown distance from source to v
-         7          prev[v] ← UNDEFINED                 // Previous node in optimal path from source
-         8          add v to Q                          // All nodes initially in Q (unvisited nodes)
-         9
-         10      dist[source] ← 0                        // Distance from source to source
-         11
-         12      while Q is not empty:
-         13          u ← vertex in Q with min dist[u]    // Node with the least distance
-         14                                              // will be selected first
-         15          remove u from Q
-         16
-         17          for each neighbor v of u:           // where v is still in Q.
-         18              alt ← dist[u] + length(u, v)
-         19              if alt < dist[v]:               // A shorter path to v has been found
-         20                  dist[v] ← alt
-         21                  prev[v] ← u
-         22
-         23      return dist[], prev[]
-         */
-
-
-
-
-
-        // const cellQueue = [];
-        // const rangeQueue = [];
-        // const touched: Array<number> = [];
-        //
-        // cellQueue.push(startIndex);
-        // rangeQueue.push(range);
-        // touched.push(startIndex);
-        //
-        // while (cellQueue.length > 0) {
-        //     const remainingRange = rangeQueue.shift();
-        //     const curCellIndex = cellQueue.shift();
-        //
-        //     if (remainingRange >= 0) {
-        //         const adjIndexes = this.getAdjIndices(curCellIndex);
-        //         for (const index of [...adjIndexes.diag, ...adjIndexes.adj]) {
-        //             if (touched.indexOf(index) === -1) {
-        //                 const traverseWeight = this.traverseWeights[curCellIndex][index];
-        //
-        //                 if (isFinite(traverseWeight)) {
-        //                     cellQueue.push(index);
-        //                     rangeQueue.push(remainingRange - traverseWeight);
-        //                     touched.push(index);
-        //                 }
-        //             }
-        //         }
-        //     }
-        //
-        //
-        //
-        //
-        //
-        // }
-        // return distTo;
-    }
-
-    public calcTraverseCells2(sourceCell: XyPair, range: number): Array<Array<XyPair>> {
-        const distances = new Array(range);
-        for (let i = 0; i <= range; i++) {
-            distances[i] = [];
-        }
-
-        const touched: Array<number> = [];
-
-        const cellQueue = [];
-        const rangeQueue = [];
-
-        const startIndex = GeometryStatics.xyToIndex(sourceCell.x, sourceCell.y, this.boardStateService.mapDimX);
-        cellQueue.push(startIndex);
-        rangeQueue.push(range);
-        touched.push(startIndex);
-
-        while (cellQueue.length > 0) {
-            const curRangePotential = rangeQueue.shift();
-            const curCellIndex = cellQueue.shift();
-
-            if (curRangePotential >= 0) {
-                const adjIndexes = this.getAdjIndices(curCellIndex);
-                for (const index of [...adjIndexes.diag, ...adjIndexes.adj]) {
-                    if (touched.indexOf(index) === -1) {
-                        const traverseWeight = this.traverseWeights[curCellIndex][index];
-                        if (isFinite(traverseWeight)) {
-                            cellQueue.push(index);
-                            rangeQueue.push(curRangePotential - traverseWeight);
-                            touched.push(index);
-                        }
-                    }
-                }
-                distances[range - Math.ceil(curRangePotential)].push(GeometryStatics.indexToXY(curCellIndex, this.boardStateService.mapDimX));
-            }
-        }
-        return distances;
-    }
-
-    public calcTraversableCells(sourceCell: XyPair, range: number): Array<XyPair> {
-        const returnMe = Array<XyPair>();
-
-        const queue: { cell: XyPair, range: number, diagAsDouble: boolean }[] = [];
-        const touched: Array<string> = [];
-
-        queue.push({cell: sourceCell, range: range, diagAsDouble: false});
-        touched.push(sourceCell.hash());
-
-        while (queue.length > 0) {
-            const curCell = queue.shift();
-
-            if (curCell.range >= 0) {
-                if (this.canMoveN(curCell.cell)) {
-                    const northCell = new XyPair(curCell.cell.x, curCell.cell.y - 1);
-                    if (touched.indexOf(northCell.hash()) === -1) {
-                        queue.push({cell: northCell, range: curCell.range - 1, diagAsDouble: curCell.diagAsDouble});
-                        touched.push(northCell.hash());
-                    }
-                }
-
-                if (this.canMoveE(curCell.cell)) {
-                    const eastCell = new XyPair(curCell.cell.x + 1, curCell.cell.y);
-                    if (touched.indexOf(eastCell.hash()) === -1) {
-                        queue.push({cell: eastCell, range: curCell.range - 1, diagAsDouble: curCell.diagAsDouble});
-                        touched.push(eastCell.hash());
-                    }
-                }
-
-                if (this.canMoveS(curCell.cell)) {
-                    const southCell = new XyPair(curCell.cell.x, curCell.cell.y + 1);
-                    if (touched.indexOf(southCell.hash()) === -1) {
-                        queue.push({cell: southCell, range: curCell.range - 1, diagAsDouble: curCell.diagAsDouble});
-                        touched.push(southCell.hash());
-                    }
-                }
-
-                if (this.canMoveW(curCell.cell)) {
-                    const westCell = new XyPair(curCell.cell.x - 1, curCell.cell.y);
-                    if (touched.indexOf(westCell.hash()) === -1) {
-                        queue.push({cell: westCell, range: curCell.range - 1, diagAsDouble: curCell.diagAsDouble});
-                        touched.push(westCell.hash());
-                    }
-                }
-
-                if (this.canMoveNE(curCell.cell)) {
-                    const northEastCell = new XyPair(curCell.cell.x + 1, curCell.cell.y - 1);
-                    if (touched.indexOf(northEastCell.hash()) === -1) {
-                        let rangeDelta;
-                        if (curCell.diagAsDouble) {
-                            rangeDelta = -2;
-                        } else {
-                            rangeDelta = -1;
-                        }
-                        queue.push({
-                            cell: northEastCell,
-                            range: curCell.range + rangeDelta,
-                            diagAsDouble: !curCell.diagAsDouble
-                        });
-                        touched.push(northEastCell.hash());
-                    }
-                }
-
-                if (this.canMoveNW(curCell.cell)) {
-                    const northWestCell = new XyPair(curCell.cell.x - 1, curCell.cell.y - 1);
-                    if (touched.indexOf(northWestCell.hash()) === -1) {
-                        let rangeDelta;
-                        if (curCell.diagAsDouble) {
-                            rangeDelta = -2;
-                        } else {
-                            rangeDelta = -1;
-                        }
-                        queue.push({
-                            cell: northWestCell,
-                            range: curCell.range + rangeDelta,
-                            diagAsDouble: !curCell.diagAsDouble
-                        });
-                        touched.push(northWestCell.hash());
-                    }
-                }
-
-                if (this.canMoveSE(curCell.cell)) {
-                    const southEastCell = new XyPair(curCell.cell.x + 1, curCell.cell.y + 1);
-                    if (touched.indexOf(southEastCell.hash()) === -1) {
-                        let rangeDelta;
-                        if (curCell.diagAsDouble) {
-                            rangeDelta = -2;
-                        } else {
-                            rangeDelta = -1;
-                        }
-                        queue.push({
-                            cell: southEastCell,
-                            range: curCell.range + rangeDelta,
-                            diagAsDouble: !curCell.diagAsDouble
-                        });
-                        touched.push(southEastCell.hash());
-                    }
-                }
-
-                if (this.canMoveSW(curCell.cell)) {
-                    const southWestCell = new XyPair(curCell.cell.x - 1, curCell.cell.y + 1);
-                    if (touched.indexOf(southWestCell.hash()) === -1) {
-                        let rangeDelta;
-                        if (curCell.diagAsDouble) {
-                            rangeDelta = -2;
-                        } else {
-                            rangeDelta = -1;
-                        }
-                        queue.push({
-                            cell: southWestCell,
-                            range: curCell.range + rangeDelta,
-                            diagAsDouble: !curCell.diagAsDouble
-                        });
-                        touched.push(southWestCell.hash());
-                    }
-                }
-                returnMe.push(curCell.cell);
-            }
-        }
-        return returnMe;
     }
 
     private targetIsBlocked(target: CellTarget): boolean {

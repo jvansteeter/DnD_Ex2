@@ -12,6 +12,9 @@ import { Player } from '../../encounter/player';
 @Injectable()
 export class BoardPlayerService extends IsReadyService {
     public player_visibility_map: Map<string, CellPolygonGroup>;
+
+    public player_traverse_map: Map<string, Array<number>>;
+
     public player_traverse_map_near: Map<string, Array<XyPair>>;
     public player_traverse_map_far: Map<string, Array<XyPair>>;
     public selectedPlayerIds: Set<string>;
@@ -27,6 +30,7 @@ export class BoardPlayerService extends IsReadyService {
         this.selectedPlayerIds = new Set<string>();
         this.player_traverse_map_near = new Map<string, Array<XyPair>>();
         this.player_traverse_map_far = new Map<string, Array<XyPair>>();
+        this.player_traverse_map = new Map<string, Array<number>>();
         this.init();
     }
 
@@ -63,15 +67,13 @@ export class BoardPlayerService extends IsReadyService {
     
     public updateAllPlayerTraverse (){
         for (const player of this.encounterService.players) {
-            this.player_traverse_map_near.set(player._id, this.boardTraverseService.calcTraversableCells(player.location, player.speed));
-            this.player_traverse_map_far.set(player._id, this.boardTraverseService.calcTraversableCells(player.location, player.speed * 2));
+            this.player_traverse_map.set(player._id, this.boardTraverseService.dijkstraTraverse(player.location, player.speed * 2));
         }
     }
 
     public updatePlayerTraverse (id: string) {
         const player = this.encounterService.getPlayerById(id);
-        this.player_traverse_map_near.set(player._id, this.boardTraverseService.calcTraversableCells(player.location, player.speed));
-        this.player_traverse_map_far.set(player._id, this.boardTraverseService.calcTraversableCells(player.location, player.speed * 2));
+        this.player_traverse_map.set(player._id, this.boardTraverseService.dijkstraTraverse(player.location, player.speed * 2));
     }
 
     public updatePlayerVisibility(id: string, visibilityPolygon?: CellPolygonGroup) {

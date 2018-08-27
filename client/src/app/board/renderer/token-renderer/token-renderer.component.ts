@@ -42,15 +42,16 @@ export class TokenRendererComponent implements OnInit {
             if (this.boardPlayerService.selectedPlayerIds.has(player._id)) {
                 this.boardCanvasService.draw_fill_all(this.ctx, player.location, 'rgba(0, 0, 180, 0.2)');
 
-                for (const cell of this.boardPlayerService.player_traverse_map_near.get(player._id)) {
-                    if (this.boardStateService.coorInBounds(cell.x, cell.y)) {
-                        this.boardCanvasService.draw_fill_all(this.ctx, cell, 'rgba(0, 0, 180, 0.1)');
-                    }
-                }
+                let cellIndex;
+                const traverseMap = this.boardPlayerService.player_traverse_map.get(player._id);
 
-                for (const cell of this.boardPlayerService.player_traverse_map_far.get(player._id)) {
-                    if (this.boardStateService.coorInBounds(cell.x, cell.y)) {
-                        this.boardCanvasService.draw_fill_all(this.ctx, cell, 'rgba(0, 0, 180, 0.1)');
+                for (cellIndex = 0; cellIndex < traverseMap.length; cellIndex++) {
+                    if (traverseMap[cellIndex] <= player.speed * 2) {
+                        this.boardCanvasService.draw_fill_all(this.ctx, GeometryStatics.indexToXY(cellIndex, this.boardStateService.mapDimX), 'rgba(0, 0, 180, 0.1)');
+                    }
+
+                    if (traverseMap[cellIndex] <= player.speed) {
+                        this.boardCanvasService.draw_fill_all(this.ctx, GeometryStatics.indexToXY(cellIndex, this.boardStateService.mapDimX), 'rgba(0, 0, 180, 0.1)');
                     }
                 }
             }
@@ -60,13 +61,6 @@ export class TokenRendererComponent implements OnInit {
                 this.boardCanvasService.draw_health_basic(this.ctx, player.location, player.hp/player.maxHp);
             }
         }
-
-        // const dijkstra = this.boardTraverseService.dijkstraTraverse(new XyPair(25, 25), 15);
-        // let index;
-        // for (index = 0; index < dijkstra.length; index++) {
-        //     const cell = GeometryStatics.indexToXY(index, this.boardStateService.mapDimX);
-        //     this.boardCanvasService.draw_text(this.ctx, new XyPair((cell.x * BoardStateService.cell_res) + (BoardStateService.cell_res * 0.45), (cell.y * BoardStateService.cell_res) + (BoardStateService.cell_res * 0.45)), dijkstra[index].toString(), 15, 'rgba(255, 0, 0, 1)');
-        // }
 
         requestAnimationFrame(this.render);
     }
