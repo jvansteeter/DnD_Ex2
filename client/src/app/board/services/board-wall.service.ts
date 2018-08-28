@@ -48,7 +48,6 @@ export class BoardWallService {
                     break;
             }
             this.boardLightService.updateLightValues();
-            this.boardTraverseService.initTraverseWeights();
             this.boardPlayerService.updateAllPlayerTraverse();
         }
     }
@@ -76,7 +75,6 @@ export class BoardWallService {
             }
         }
         this.boardLightService.updateLightValues();
-        this.boardTraverseService.initTraverseWeights();
         this.boardPlayerService.updateAllPlayerTraverse();
     }
 
@@ -134,7 +132,6 @@ export class BoardWallService {
         }
 
         this.boardLightService.updateLightValues();
-        this.boardTraverseService.initTraverseWeights();
         this.boardPlayerService.updateAllPlayerTraverse();
     }
 
@@ -162,7 +159,6 @@ export class BoardWallService {
         }
         if (singleInstance) {
             this.boardLightService.updateLightValues();
-            this.boardTraverseService.initTraverseWeights();
             this.boardPlayerService.updateAllPlayerTraverse();
         }
     }
@@ -191,7 +187,6 @@ export class BoardWallService {
         }
         if (singleInstance) {
             this.boardLightService.updateLightValues();
-            this.boardTraverseService.initTraverseWeights();
             this.boardPlayerService.updateAllPlayerTraverse();
         }
     }
@@ -270,7 +265,6 @@ export class BoardWallService {
             }
         }
         this.boardLightService.updateLightValues();
-        this.boardTraverseService.initTraverseWeights();
         this.boardPlayerService.updateAllPlayerTraverse();
     }
 

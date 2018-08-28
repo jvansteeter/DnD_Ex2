@@ -58,6 +58,31 @@ export class BoardTraverseService extends IsReadyService {
         }
     }
 
+    private syncTraverseWeights(cellIndex: number) {
+        const adjIndexes = this.getAdjIndices(cellIndex);
+
+        for (let adjIndex of adjIndexes.adj) {
+            if (this.canMoveIndexToIndex(cellIndex, adjIndex)) {
+                this.traverseWeights[cellIndex][adjIndex] = 1;
+                this.traverseWeights[adjIndex][cellIndex] = 1;
+            } else {
+                this.traverseWeights[cellIndex][adjIndex] = Infinity;
+                this.traverseWeights[adjIndex][cellIndex] = Infinity;
+            }
+        }
+        for (let adjIndex of adjIndexes.diag) {
+            if (this.canMoveIndexToIndex(cellIndex, adjIndex)) {
+                this.traverseWeights[cellIndex][adjIndex] = 1.5;
+                this.traverseWeights[adjIndex][cellIndex] = 1.5;
+            } else {
+                this.traverseWeights[cellIndex][adjIndex] = Infinity;
+                this.traverseWeights[adjIndex][cellIndex] = Infinity;
+            }
+        }
+
+        console.log(this.traverseWeights);
+    }
+
     private getAdjIndices(index: number): { adj: Array<number>, diag: Array<number> } {
         const adj = [];
         const diag = [];
@@ -99,34 +124,74 @@ export class BoardTraverseService extends IsReadyService {
 
     public blockNorth(cell: XyPair) {
         this.blockingSegments.add(new CellTarget(cell, CellRegion.TOP_EDGE).hash());
+        const cellIndex = GeometryStatics.xyToIndex(cell.x, cell.y, this.boardStateService.mapDimX);
+        const adjIndexes = this.getAdjIndices(cellIndex);
+        for (let index of [cellIndex, ...adjIndexes.diag, ...adjIndexes.adj]) {
+            this.syncTraverseWeights(index);
+        }
     }
 
     public unblockNorth(cell: XyPair) {
         this.blockingSegments.delete(new CellTarget(cell, CellRegion.TOP_EDGE).hash());
+        const cellIndex = GeometryStatics.xyToIndex(cell.x, cell.y, this.boardStateService.mapDimX);
+        const adjIndexes = this.getAdjIndices(cellIndex);
+        for (let index of [cellIndex, ...adjIndexes.diag, ...adjIndexes.adj]) {
+            this.syncTraverseWeights(index);
+        }
     }
 
     public blockWest(cell: XyPair) {
         this.blockingSegments.add(new CellTarget(cell, CellRegion.LEFT_EDGE).hash());
+        const cellIndex = GeometryStatics.xyToIndex(cell.x, cell.y, this.boardStateService.mapDimX);
+        const adjIndexes = this.getAdjIndices(cellIndex);
+        for (let index of [cellIndex, ...adjIndexes.diag, ...adjIndexes.adj]) {
+            this.syncTraverseWeights(index);
+        }
     }
 
     public unblockWest(cell: XyPair) {
         this.blockingSegments.delete(new CellTarget(cell, CellRegion.LEFT_EDGE).hash());
+        const cellIndex = GeometryStatics.xyToIndex(cell.x, cell.y, this.boardStateService.mapDimX);
+        const adjIndexes = this.getAdjIndices(cellIndex);
+        for (let index of [cellIndex, ...adjIndexes.diag, ...adjIndexes.adj]) {
+            this.syncTraverseWeights(index);
+        }
     }
 
     public blockFwd(cell: XyPair) {
         this.blockingSegments.add(new CellTarget(cell, CellRegion.FWRD_EDGE).hash());
+        const cellIndex = GeometryStatics.xyToIndex(cell.x, cell.y, this.boardStateService.mapDimX);
+        const adjIndexes = this.getAdjIndices(cellIndex);
+        for (let index of [cellIndex, ...adjIndexes.diag, ...adjIndexes.adj]) {
+            this.syncTraverseWeights(index);
+        }
     }
 
     public unblockFwd(cell: XyPair) {
         this.blockingSegments.delete(new CellTarget(cell, CellRegion.FWRD_EDGE).hash());
+        const cellIndex = GeometryStatics.xyToIndex(cell.x, cell.y, this.boardStateService.mapDimX);
+        const adjIndexes = this.getAdjIndices(cellIndex);
+        for (let index of [cellIndex, ...adjIndexes.diag, ...adjIndexes.adj]) {
+            this.syncTraverseWeights(index);
+        }
     }
 
     public blockBkw(cell: XyPair) {
         this.blockingSegments.add(new CellTarget(cell, CellRegion.BKWD_EDGE).hash());
+        const cellIndex = GeometryStatics.xyToIndex(cell.x, cell.y, this.boardStateService.mapDimX);
+        const adjIndexes = this.getAdjIndices(cellIndex);
+        for (let index of [cellIndex, ...adjIndexes.diag, ...adjIndexes.adj]) {
+            this.syncTraverseWeights(index);
+        }
     }
 
     public unblockBkw(cell: XyPair) {
         this.blockingSegments.delete(new CellTarget(cell, CellRegion.BKWD_EDGE).hash());
+        const cellIndex = GeometryStatics.xyToIndex(cell.x, cell.y, this.boardStateService.mapDimX);
+        const adjIndexes = this.getAdjIndices(cellIndex);
+        for (let index of [cellIndex, ...adjIndexes.diag, ...adjIndexes.adj]) {
+            this.syncTraverseWeights(index);
+        }
     }
 
     private indexesInRangeOfSource(index: number, range: number): Array<number> {
@@ -198,29 +263,31 @@ export class BoardTraverseService extends IsReadyService {
 
     private canMoveIndexToIndex(index1: number, index2: number): boolean {
         const dimX = this.boardStateService.mapDimX;
+        const cellPair = GeometryStatics.indexToXY(index1, dimX);
+
         if (index1 + 1 === index2) {
-            return this.canMoveE(GeometryStatics.indexToXY(index1, dimX));
+            return this.canMoveE(cellPair);
         }
         if (index1 - 1 === index2) {
-            return this.canMoveW(GeometryStatics.indexToXY(index1, dimX));
+            return this.canMoveW(cellPair);
         }
         if (index1 - dimX === index2) {
-            return this.canMoveN(GeometryStatics.indexToXY(index1, dimX));
+            return this.canMoveN(cellPair);
         }
         if (index1 + dimX === index2) {
-            return this.canMoveS(GeometryStatics.indexToXY(index1, dimX));
+            return this.canMoveS(cellPair);
         }
         if (index1 + 1 - dimX === index2) {
-            return this.canMoveNE(GeometryStatics.indexToXY(index1, dimX));
+            return this.canMoveNE(cellPair);
         }
         if (index1 + 1 + dimX === index2) {
-            return this.canMoveSE(GeometryStatics.indexToXY(index1, dimX));
+            return this.canMoveSE(cellPair);
         }
         if (index1 - 1 - dimX === index2) {
-            return this.canMoveNW(GeometryStatics.indexToXY(index1, dimX));
+            return this.canMoveNW(cellPair);
         }
         if (index1 - 1 + dimX === index2) {
-            return this.canMoveSW(GeometryStatics.indexToXY(index1, dimX));
+            return this.canMoveSW(cellPair);
         }
         return false;
     }
