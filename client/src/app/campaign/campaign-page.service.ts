@@ -67,8 +67,8 @@ export class CampaignPageService extends IsReadyService {
 		});
 	}
 
-	public createEncounter(label: string, mapDimX?: number, mapDimY?: number, mapUrl?: string): void {
-		this.encounterRepo.createNewEncounter(label, this.campaignId, mapDimX, mapDimY, mapUrl)
+	public createEncounter(label: string, cellRes: number, mapDimX?: number, mapDimY?: number, mapUrl?: string): void {
+		this.encounterRepo.createNewEncounter(label, this.campaignId, cellRes, mapDimX, mapDimY, mapUrl)
 				.pipe(
 						mergeMap(() => {
 							return this.updateEncountersList();

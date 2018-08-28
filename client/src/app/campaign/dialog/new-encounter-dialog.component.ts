@@ -26,7 +26,7 @@ export class NewEncounterDialogComponent {
 
 	public createEncounter(): void {
 		if (this.encounterLabel && (!isUndefined(this.mapUrl) || (this.mapWidth > 0 && this.mapHeight > 0))) {
-			this.campaignService.createEncounter(this.encounterLabel, this.mapWidth, this.mapHeight, this.mapUrl);
+			this.campaignService.createEncounter(this.encounterLabel, 50, this.mapWidth, this.mapHeight, this.mapUrl);
 			this.dialogRef.close();
 		}
 	}

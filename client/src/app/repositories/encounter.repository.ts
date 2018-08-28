@@ -6,7 +6,6 @@ import { EncounterData } from '../../../../shared/types/encounter/encounter.data
 import { PlayerData } from '../../../../shared/types/encounter/player.data';
 import { CharacterData } from '../../../../shared/types/character.data';
 import { isUndefined } from "util";
-import { BoardStateService } from '../board/services/board-state.service';
 
 @Injectable()
 export class EncounterRepository {
@@ -14,7 +13,7 @@ export class EncounterRepository {
 
 	}
 
-	public createNewEncounter(label: string, campaignId: string, mapDimX?: number, mapDimY?: number, mapUrl?: string): Observable<void> {
+	public createNewEncounter(label: string, campaignId: string, cellRes: number, mapDimX?: number, mapDimY?: number, mapUrl?: string): Observable<void> {
 		const image = new Image();
 		image.src = mapUrl;
 		let body;
@@ -22,8 +21,8 @@ export class EncounterRepository {
 			body = {
 				label: label,
 				mapUrl: mapUrl,
-				mapDimX: Math.ceil(image.naturalWidth / BoardStateService.cell_res),
-				mapDimY: Math.ceil(image.naturalHeight / BoardStateService.cell_res),
+				mapDimX: Math.ceil(image.naturalWidth / cellRes),
+				mapDimY: Math.ceil(image.naturalHeight / cellRes),
 			};
 		}
 		else {
