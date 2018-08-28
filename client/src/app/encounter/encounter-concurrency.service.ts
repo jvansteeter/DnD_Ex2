@@ -28,18 +28,33 @@ export class EncounterConcurrencyService extends IsReadyService {
 		});
 	}
 
+	public publishRemovePlayer(player: Player): void {
+		this.mqService.publishEncounterCommand(player.encounterId, 0, EncounterCommandType.REMOVE_PLAYER, player.serialize());
+	}
+
+	private observePlayerChanges(player: Player): void {
+		player.changeObservable.subscribe(() => {
+			this.mqService.publishEncounterCommand(this.encounterService.encounterState._id, this.encounterService.encounterState.version,
+					EncounterCommandType.PLAYER_UPDATE, player.serialize());
+		});
+	}
+
 	private observeEncounterMqMessages(): void {
 		this.mqService.getEncounterMessages(this.encounterService.encounterState._id).subscribe((message: EncounterCommandMessage) => {
-			console.log(message)
 			switch (message.body.dataType) {
-				case (EncounterCommandType.PLAYER_UPDATE): {
+				case EncounterCommandType.PLAYER_UPDATE: {
 					this.updatePlayer(message.body.data as PlayerData);
 					break;
 				}
-				case (EncounterCommandType.ADD_PLAYER): {
+				case EncounterCommandType.ADD_PLAYER: {
 					const player = new Player(message.body.data as PlayerData);
 					this.playerService.addPlayer(player);
 					this.observePlayerChanges(player);
+					break;
+				}
+				case EncounterCommandType.REMOVE_PLAYER: {
+					const player = new Player(message.body.data as PlayerData);
+					this.playerService.removePlayer(player);
 					break;
 				}
 				default: {
@@ -53,13 +68,6 @@ export class EncounterConcurrencyService extends IsReadyService {
 		for (let player of this.encounterService.players) {
 			this.observePlayerChanges(player);
 		}
-	}
-
-	public observePlayerChanges(player: Player): void {
-		player.changeObservable.subscribe(() => {
-			this.mqService.publishEncounterUpdate(this.encounterService.encounterState._id, this.encounterService.encounterState.version,
-					EncounterCommandType.PLAYER_UPDATE, player.serialize());
-		});
 	}
 
 	private updatePlayer(playerData: PlayerData): void {

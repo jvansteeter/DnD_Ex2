@@ -13,16 +13,19 @@ import { PlayerRepository } from '../db/repositories/player.repository';
 import { PlayerData } from '../../../shared/types/encounter/player.data';
 import { MqMessageType } from '../../../shared/types/mq/message-type.enum';
 import { EncounterCommandMessage } from './messages/encounter-command.message';
+import { EncounterService } from '../services/encounter.service';
 
 export class MqService {
 	private friendRepo: FriendRepository;
 	private notificationRepo: NotificationRepository;
 	private playerRepository: PlayerRepository;
+	private encounterService: EncounterService;
 
 	constructor(private mqProxy: MqProxy) {
 		this.friendRepo = new FriendRepository();
 		this.notificationRepo = new NotificationRepository();
 		this.playerRepository = new PlayerRepository();
+		// this.encounterService = new EncounterService();
 	}
 
 	public handleMessages(): void {
@@ -67,11 +70,16 @@ export class MqService {
 
 	private async handleEncounterUpdates(encounterUpdate: EncounterCommandMessage): Promise<void> {
 		switch (encounterUpdate.body.dataType) {
-			case (EncounterCommandType.PLAYER_UPDATE): {
+			case EncounterCommandType.PLAYER_UPDATE: {
 				await this.playerRepository.updatePlayer(encounterUpdate.body.data as PlayerData);
 				return;
 			}
-			case (EncounterCommandType.ADD_PLAYER): {
+			case EncounterCommandType.ADD_PLAYER: {
+				// do nothing, the server issues these ones
+				return;
+			}
+			case EncounterCommandType.REMOVE_PLAYER: {
+				// await this.encounterService.deletePlayer(encounterUpdate.body.data as PlayerData);
 				return;
 			}
 			default: {

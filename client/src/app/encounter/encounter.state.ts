@@ -45,7 +45,7 @@ export class EncounterState implements EncounterData {
 
 	public removePlayer(player: Player): void {
 		const index = this.playerMap.get(player.id);
-		delete this._players[index];
+		this._players.splice(index, 1);
 		this.players = this._players;
 	}
 

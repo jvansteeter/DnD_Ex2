@@ -58,7 +58,7 @@ export class MqService extends IsReadyService {
 				);
 	}
 
-	public publishEncounterUpdate(encounterId: string, encounterVersion: number, dataType: EncounterCommandType, data: any): void {
+	public publishEncounterCommand(encounterId: string, encounterVersion: number, dataType: EncounterCommandType, data: any): void {
 		let message = MqMessageFactory.createEncounterUpdate(encounterVersion, this.userProfileService.userId, encounterId, dataType, data);
 		let url = MqMessageUrlFactory.createEncounterMessagesUrl(encounterId);
 		this.stompService.publish(url, message.serializeBody(), {type: MqMessageType.ENCOUNTER})

@@ -5,7 +5,6 @@ import {EncounterService} from '../../encounter/encounter.service';
 import {BoardVisibilityService} from './board-visibility.service';
 import {BoardTraverseService} from './board-traverse.service';
 import {BoardStateService} from './board-state.service';
-import {PopService} from '../pop/pop.service';
 import { IsReadyService } from '../../utilities/services/isReady.service';
 import { Player } from '../../encounter/player';
 
@@ -20,12 +19,11 @@ export class BoardPlayerService extends IsReadyService {
     public selectedPlayerIds: Set<string>;
     public hoveredPlayerId = '';
 
-    constructor(private popService: PopService,
-                private encounterService: EncounterService,
+    constructor(private encounterService: EncounterService,
                 private boardVisibilityService: BoardVisibilityService,
                 private boardTraverseService: BoardTraverseService,
                 private boardStateService: BoardStateService) {
-    	super(encounterService);
+    	super(encounterService, boardStateService, boardTraverseService, boardVisibilityService);
         this.player_visibility_map = new Map<string, CellPolygonGroup>();
         this.selectedPlayerIds = new Set<string>();
         this.player_traverse_map_near = new Map<string, Array<XyPair>>();
@@ -91,22 +89,6 @@ export class BoardPlayerService extends IsReadyService {
             if (player.location.x === cell.x && player.location.y === cell.y) {
                 this.hoveredPlayerId = player._id;
                 return;
-            }
-        }
-    }
-
-    public checkForPops(loc_cell: XyPair, pop_origin: XyPair) {
-        if (this.boardStateService.do_pops) {
-            for (const player of this.encounterService.players) {
-                if (player.location.x === loc_cell.x && player.location.y === loc_cell.y) {
-                    if (this.popService.popIsActive(player._id)) {
-                        this.popService.clearPlayerPop(player._id);
-                    } else {
-                        const x = (loc_cell.x + 1) * BoardStateService.cell_res;
-                        const y = (loc_cell.y) * BoardStateService.cell_res;
-                        this.popService.addPlayerPop(pop_origin.x, pop_origin.y, player);
-                    }
-                }
             }
         }
     }

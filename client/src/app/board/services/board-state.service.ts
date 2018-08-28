@@ -98,7 +98,7 @@ export class BoardStateService extends IsReadyService {
         private encounterService: EncounterService
     ) {
         super(encounterService);
-        this.init();
+	      this.init();
     }
 
     public init(): void {

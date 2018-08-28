@@ -54,4 +54,17 @@ export class PlayerRepository {
 			throw error;
 		}
 	}
+
+	public deleteById(playerId: string): Promise<void> {
+		return new Promise((resolve, reject) => {
+			this.Player.remove({_id: playerId}, (error) => {
+				if (error) {
+					reject(error);
+					return;
+				}
+
+				resolve();
+			});
+		});
+	}
 }

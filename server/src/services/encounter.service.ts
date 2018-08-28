@@ -7,6 +7,7 @@ import { CharacterService } from './character.service';
 import { CharacterSheetRepository } from '../db/repositories/characterSheet.repository';
 import { MqServiceSingleton } from '../mq/mq.service';
 import { EncounterCommandType } from '../../../shared/types/encounter/encounter-command.enum';
+import { PlayerData } from '../../../shared/types/encounter/player.data';
 
 export class EncounterService {
 	private encounterRepo: EncounterRepository;
@@ -84,6 +85,12 @@ export class EncounterService {
 
 	public async deleteEncounter(encounterId: string): Promise<void> {
 		try {
+			const encounter: EncounterModel = await this.encounterRepo.findById(encounterId);
+			if (encounter.playerIds) {
+				for (let playerId of encounter.playerIds) {
+					await this.playerRepo.deleteById(playerId);
+				}
+			}
 			await this.encounterRepo.deleteById(encounterId);
 			return;
 		}
@@ -100,6 +107,10 @@ export class EncounterService {
 		catch (error) {
 			throw error;
 		}
+	}
+
+	public async deletePlayer(player: PlayerData): Promise<void> {
+		return this.playerRepo.deleteById(player._id);
 	}
 
 	private async buildEncounterState(encounterModel: EncounterModel): Promise<EncounterData> {

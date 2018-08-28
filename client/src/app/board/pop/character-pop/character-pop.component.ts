@@ -1,8 +1,9 @@
 import { Component, HostListener, ViewChild } from '@angular/core';
 import { PopService } from '../pop.service';
 import { Player } from '../../../encounter/player';
-import { BoardStateService } from '../../services/board-state.service';
 import { CharacterTooltipComponent } from '../../../character-sheet/character-tooltip/character-tooltip.component';
+import { BoardStateService } from '../../services/board-state.service';
+import { EncounterConcurrencyService } from '../../../encounter/encounter-concurrency.service';
 
 @Component({
 	templateUrl: 'character-pop.component.html',
@@ -21,7 +22,8 @@ export class CharacterPopComponent {
 	tooltipComponent: CharacterTooltipComponent;
 	hovered = false;
 
-	constructor(private boardStateService: BoardStateService) {
+	constructor(private boardStateService: BoardStateService,
+							private encounterConcurrencyService: EncounterConcurrencyService) {
 	}
 
 	public initVars(parentRef: PopService, window: boolean, pos_x: number, pos_y: number, player: Player) {
@@ -51,7 +53,8 @@ export class CharacterPopComponent {
 	}
 
 	deletePlayer(): void {
-		// this.playerService.removePlayer(this.player);
+		this.close();
+		this.encounterConcurrencyService.publishRemovePlayer(this.player);
 	}
 
 	mouseDown(event) {
