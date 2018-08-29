@@ -79,8 +79,6 @@ export class BoardTraverseService extends IsReadyService {
                 this.traverseWeights[adjIndex][cellIndex] = Infinity;
             }
         }
-
-        console.log(this.traverseWeights);
     }
 
     private getAdjIndices(index: number): { adj: Array<number>, diag: Array<number> } {

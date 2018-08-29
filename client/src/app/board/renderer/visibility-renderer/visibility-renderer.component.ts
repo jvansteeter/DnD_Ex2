@@ -33,6 +33,8 @@ export class VisibilityRendererComponent implements OnInit {
         this.boardCanvasService.clear_canvas(this.ctx);
         this.boardCanvasService.updateTransform(this.ctx);
 
+        this.boardCanvasService.stroke_point_array(this.ctx, this.boardVisibilityService.dummy_vis_array);
+
         switch (this.boardStateService.board_view_mode) {
             case ViewMode.BOARD_MAKER:
                 switch (this.boardStateService.playerVisibilityMode) {

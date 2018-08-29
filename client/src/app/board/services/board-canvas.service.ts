@@ -326,6 +326,28 @@ export class BoardCanvasService extends IsReadyService {
         ctx.stroke();
     }
 
+    stroke_point_array(ctx: CanvasRenderingContext2D, points: Array<XyPair>) {
+        if (points.length === 0) {
+            return;
+        }
+
+        ctx.strokeStyle = 'rgba(255, 0, 0, 1.0)';
+        ctx.lineWidth = 5;
+        ctx.lineJoin = 'round';
+        ctx.lineCap = 'round';
+
+        ctx.beginPath();
+        let process_point;
+        let index;
+
+        for (let point of points) {
+            ctx.lineTo(point.x, point.y);
+        }
+
+        ctx.lineTo(points[0].x, points[0].y);
+        ctx.stroke();
+    }
+
     /*****************************************************************************************************
      *  Cell CLEAR region functions
      *****************************************************************************************************/

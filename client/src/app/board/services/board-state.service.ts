@@ -5,8 +5,9 @@ import {LightValue} from '../shared/enum/light-value';
 import {CellTarget} from "../shared/cell-target";
 import {XyPair} from "../geometry/xy-pair";
 import {PlayerVisibilityMode} from '../shared/enum/player-visibility-mode';
-import { EncounterService } from '../../encounter/encounter.service';
+import {EncounterService} from '../../encounter/encounter.service';
 import {IsReadyService} from "../../utilities/services/isReady.service";
+import {Line} from "../geometry/line";
 
 /*************************************************************************************************************************************
  * BoardStateService
@@ -98,7 +99,7 @@ export class BoardStateService extends IsReadyService {
         private encounterService: EncounterService
     ) {
         super(encounterService);
-	      this.init();
+        this.init();
     }
 
     public init(): void {
@@ -144,11 +145,21 @@ export class BoardStateService extends IsReadyService {
         return returnMe;
     }
 
-		get mapDimX(): number {
-				return this.encounterService.mapDimX;
-		}
+    get mapDimX(): number {
+        return this.encounterService.mapDimX;
+    }
 
-		get mapDimY(): number {
-				return this.encounterService.mapDimY;
-		}
+    get mapDimY(): number {
+        return this.encounterService.mapDimY;
+    }
+
+    get xBoundLine(): Line {
+        const xRes = this.mapDimX * BoardStateService.cell_res - 1;
+        return new Line(new XyPair(xRes,0), new XyPair(xRes,1));
+    }
+
+    get yBoundLine(): Line {
+        const yRes = this.mapDimY * BoardStateService.cell_res - 1;
+        return new Line(new XyPair(0,yRes), new XyPair(1,yRes));
+    }
 }

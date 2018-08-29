@@ -7,11 +7,16 @@ import {CellPolygonGroup} from '../shared/cell-polygon-group';
 import {CellTargetStatics} from '../statics/cell-target-statics';
 import {isNullOrUndefined} from "util";
 import {IsReadyService} from "../../utilities/services/isReady.service";
+import {Polygon} from "../shared/polygon";
+import {Line} from "../geometry/line";
+import {Ray} from "../geometry/ray";
 
 @Injectable()
 export class BoardVisibilityService extends IsReadyService {
     public blockingSegments: Set<string>;       // Set<CellTarget.hash()>
     private blockingBitmap = [];
+
+    public dummy_vis_array = [];
 
     constructor(
         public boardStateService: BoardStateService
@@ -134,6 +139,25 @@ export class BoardVisibilityService extends IsReadyService {
         }
 
         return new CellPolygonGroup(fillArray);
+    }
+
+    public raytraceVisibilityFromCell(source: XyPair, rayCount = 1000): Polygon {
+
+        const degreeInc = 360 / rayCount;
+        console.log('degreeInc: ' + degreeInc);
+
+        this.dummy_vis_array = [];
+
+        let degree;
+        for (degree = 0; degree < 360; degree = degree + degreeInc) {
+            const rayToCast = new Ray(source, degree);
+            const boundPoint = this.getBoundIntercept(rayToCast);
+            const boundPointFloor = new XyPair(Math.floor(boundPoint.x), Math.floor(boundPoint.y));
+            const endPoint = this.rayCastToPoint(source, boundPointFloor);
+            this.dummy_vis_array.push(endPoint);
+        }
+
+        return;
     }
 
     /*******************************************************************************************************************
@@ -374,6 +398,50 @@ export class BoardVisibilityService extends IsReadyService {
             }
         }
         return true;
+    }
+
+    public rayCastToPoint(origin: XyPair, target: XyPair): XyPair {
+        const points = BoardVisibilityService.BresenhamLine(origin.x, origin.y, target.x, target.y);
+        for (const point of points) {
+            if (this.blockingBitmap[point.x][point.y] === 1) {
+                return point;
+            }
+        }
+        return target;
+    }
+
+    public getBoundIntercept(ray: Ray): XyPair {
+        if (ray.direction_degrees >= 0 && ray.direction_degrees < 90) {
+            const x_max_bound_intercept = ray.lineData.findIntersectWithLine(this.boardStateService.xBoundLine);
+
+            if (x_max_bound_intercept === null) {return ray.lineData.findIntersectWithLine(this.boardStateService.yBoundLine);}
+            if (x_max_bound_intercept.y < BoardStateService.cell_res * this.boardStateService.mapDimY) {return x_max_bound_intercept;}
+            else {return ray.lineData.findIntersectWithLine(this.boardStateService.yBoundLine);}
+        }
+
+        if (ray.direction_degrees >= 90 && ray.direction_degrees < 180) {
+            const x_zero_bound_intercept = ray.lineData.findIntersectWithLine(new Line(new XyPair(0,0), new XyPair(0,1)));
+
+            if (x_zero_bound_intercept === null) {return ray.lineData.findIntersectWithLine(this.boardStateService.yBoundLine);}
+            if (x_zero_bound_intercept.y < BoardStateService.cell_res * this.boardStateService.mapDimY  && !isNullOrUndefined(x_zero_bound_intercept)) {return x_zero_bound_intercept;}
+            else {return ray.lineData.findIntersectWithLine(this.boardStateService.yBoundLine);}
+        }
+
+        if (ray.direction_degrees >= 180 && ray.direction_degrees < 270) {
+            const x_zero_bound_intercept = ray.lineData.findIntersectWithLine(new Line(new XyPair(0,0), new XyPair(0,1)));
+
+            if (x_zero_bound_intercept === null) {return ray.lineData.findIntersectWithLine(new Line(new XyPair(0,0), new XyPair(1,0)));}
+            if (x_zero_bound_intercept.y > 0  && !isNullOrUndefined(x_zero_bound_intercept)) {return x_zero_bound_intercept;}
+            else {return ray.lineData.findIntersectWithLine(new Line(new XyPair(0,0), new XyPair(1,0)));}
+        }
+
+        if (ray.direction_degrees >= 270 && ray.direction_degrees < 360) {
+            const x_max_bound_intercept = ray.lineData.findIntersectWithLine(this.boardStateService.xBoundLine);
+
+            if (x_max_bound_intercept === null) {return ray.lineData.findIntersectWithLine(new Line(new XyPair(0,0), new XyPair(1,0)));}
+            if (x_max_bound_intercept.y > 0  && !isNullOrUndefined(x_max_bound_intercept)) {return x_max_bound_intercept;}
+            else {return ray.lineData.findIntersectWithLine(new Line(new XyPair(0,0), new XyPair(1,0)));}
+        }
     }
 
     genLOSNorthPoints(x_cell: number, y_cell: number): Array<XyPair> {

@@ -33,10 +33,12 @@ export class BoardPlayerService extends IsReadyService {
     }
 
     public init(): void {
-    	this.dependenciesReady().subscribe((isReady: boolean) => {
+    	const sub = this.dependenciesReady().subscribe((isReady: boolean) => {
     		if (isReady) {
+    		    console.log('playerService init isReady');
 			    this.updateAllPlayerVisibility();
 			    this.updateAllPlayerTraverse();
+			    sub.unsubscribe();
 			    this.setReady(true);
 		    }
 	    })
@@ -59,7 +61,7 @@ export class BoardPlayerService extends IsReadyService {
 
     public updateAllPlayerVisibility() {
         for (let player of this.encounterService.players) {
-            this.updatePlayerVisibility(player._id, new CellPolygonGroup(this.boardVisibilityService.cellQuadsVisibleFromCell(player.location)));
+            // this.updatePlayerVisibility(player._id, new CellPolygonGroup(this.boardVisibilityService.cellQuadsVisibleFromCell(player.location)));
         }
     }
     
@@ -76,10 +78,10 @@ export class BoardPlayerService extends IsReadyService {
 
     public updatePlayerVisibility(id: string, visibilityPolygon?: CellPolygonGroup) {
         if (!!visibilityPolygon) {
-            this.player_visibility_map.set(id, visibilityPolygon);
+            // this.player_visibility_map.set(id, visibilityPolygon);
         } else {
             const player = this.encounterService.getPlayerById(id);
-            this.player_visibility_map.set(id, new CellPolygonGroup(this.boardVisibilityService.cellQuadsVisibleFromCell(player.location)));
+            // this.player_visibility_map.set(id, new CellPolygonGroup(this.boardVisibilityService.cellQuadsVisibleFromCell(player.location)));
         }
     }
 
@@ -104,7 +106,11 @@ export class BoardPlayerService extends IsReadyService {
             for (const player of this.encounterService.players) {
                 if (this.selectedPlayerIds.has(player._id)) {
                     player.location = loc_cell;
-                    this.updatePlayerVisibility(player._id, this.boardVisibilityService.cellPolygonVisibleFromCell(player.location));
+
+                    const playerResLocation = new XyPair(player.location.x * BoardStateService.cell_res + (BoardStateService.cell_res / 2), player.location.y * BoardStateService.cell_res + (BoardStateService.cell_res / 2));
+                    this.boardVisibilityService.raytraceVisibilityFromCell(playerResLocation, 1000);
+
+                    // this.updatePlayerVisibility(player._id, this.boardVisibilityService.cellPolygonVisibleFromCell(player.location));
                     this.updatePlayerTraverse(player._id);
                     this.selectedPlayerIds = new Set<string>();
                 }
