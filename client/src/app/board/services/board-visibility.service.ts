@@ -142,9 +142,7 @@ export class BoardVisibilityService extends IsReadyService {
     }
 
     public raytraceVisibilityFromCell(source: XyPair, rayCount = 1000): Polygon {
-
         const degreeInc = 360 / rayCount;
-        console.log('degreeInc: ' + degreeInc);
 
         this.dummy_vis_array = [];
 

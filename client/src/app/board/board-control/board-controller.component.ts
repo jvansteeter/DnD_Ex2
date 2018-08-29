@@ -18,6 +18,8 @@ import { AddPlayerDialogComponent } from './add-player-dialog/add-player-dialog.
 import { EncounterService } from '../../encounter/encounter.service';
 import {NotationTextEditDialogComponent} from "./notation-text-dialog/notation-text-edit-dialog.component";
 import {NotationTextCreateDialogComponent} from "./notation-text-dialog/notation-text-create-dialog.component";
+import {BoardVisibilityService} from "../services/board-visibility.service";
+import {XyPair} from "../geometry/xy-pair";
 
 @Component({
     selector: 'board-controller',
@@ -109,6 +111,7 @@ export class BoardControllerComponent implements OnInit {
 
     constructor(public boardStateService: BoardStateService,
                 public boardLightService: BoardLightService,
+                public boardVisibilityService: BoardVisibilityService,
                 public boardNotationService: BoardNotationService,
                 private encounterService: EncounterService,
                 public ts: BoardTileService,
@@ -244,6 +247,15 @@ export class BoardControllerComponent implements OnInit {
                 break;
         }
         this.sync()
+    }
+
+    diag_raytraceSliderInput(event) {
+        if (this.encounterService.players.length > 0){
+            const playerLoc = this.encounterService.players[0].location;
+            const cell_res = BoardStateService.cell_res;
+            const playerRes = new XyPair(playerLoc.x * cell_res + cell_res / 2, playerLoc.y * cell_res + cell_res / 2);
+            this.boardVisibilityService.raytraceVisibilityFromCell(playerRes, this.boardStateService.diag_visibility_ray_count);
+        }
     }
 
     mapOpacitySliderInput(event) {

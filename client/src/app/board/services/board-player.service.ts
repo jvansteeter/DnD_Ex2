@@ -108,7 +108,7 @@ export class BoardPlayerService extends IsReadyService {
                     player.location = loc_cell;
 
                     const playerResLocation = new XyPair(player.location.x * BoardStateService.cell_res + (BoardStateService.cell_res / 2), player.location.y * BoardStateService.cell_res + (BoardStateService.cell_res / 2));
-                    this.boardVisibilityService.raytraceVisibilityFromCell(playerResLocation, 1000);
+                    this.boardVisibilityService.raytraceVisibilityFromCell(playerResLocation, this.boardStateService.diag_visibility_ray_count);
 
                     // this.updatePlayerVisibility(player._id, this.boardVisibilityService.cellPolygonVisibleFromCell(player.location));
                     this.updatePlayerTraverse(player._id);

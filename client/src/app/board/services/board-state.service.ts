@@ -24,6 +24,9 @@ export class BoardStateService extends IsReadyService {
      ***********************************************************************************/
     static cell_res = 50;
 
+    // diagnostic variables, not intended for production code
+    public diag_visibility_ray_count = 500;
+
     // board-map controls
     public map_enabled = false;
     public playerWallsEnabled = false;

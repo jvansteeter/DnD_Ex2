@@ -18,15 +18,27 @@
     </div>
 </div>
 
+<div id="Diagnostic Controls" class="section">
+    <div class="sectionHeader"><span>Diagnostic</span></div>
+    <div class="sectionContents">
+        <!--<mat-checkbox style="display: block" [(ngModel)]="boardStateService.gridEnabled">Grid Enabled</mat-checkbox>-->
+        <!--<mat-checkbox style="display: block" [(ngModel)]="boardStateService.show_health">Health Bars Enabled</mat-checkbox>-->
+        <!--<mat-checkbox style="display: block" [(ngModel)]="boardStateService.playerWallsEnabled">Show Walls to Player</mat-checkbox>-->
+        <!--<mat-checkbox style="display: block" [(ngModel)]="boardStateService.map_enabled">Map Enabled</mat-checkbox>-->
+        <div>
+            <span class="font">Raytrace Vectors</span>
+            <mat-slider min="0" max="1500" step="1" thumbLabel [(value)]="boardStateService.diag_visibility_ray_count"
+                        (change)="diag_raytraceSliderInput($event)"></mat-slider>
+        </div>
+    </div>
+</div>
 
 <div id="Board Maker Controls" class="section" *ngIf="boardStateService.board_view_mode === ViewMode.BOARD_MAKER">
     <div class="sectionHeader"><span>Board Maker Controls</span></div>
     <div class="sectionContents">
         <mat-checkbox style="display: block" [(ngModel)]="boardStateService.gridEnabled">Grid Enabled</mat-checkbox>
-        <mat-checkbox style="display: block" [(ngModel)]="boardStateService.show_health">Health Bars Enabled
-        </mat-checkbox>
-        <mat-checkbox style="display: block" [(ngModel)]="boardStateService.playerWallsEnabled">Show Walls to Player
-        </mat-checkbox>
+        <mat-checkbox style="display: block" [(ngModel)]="boardStateService.show_health">Health Bars Enabled</mat-checkbox>
+        <mat-checkbox style="display: block" [(ngModel)]="boardStateService.playerWallsEnabled">Show Walls to Player</mat-checkbox>
         <mat-checkbox style="display: block" [(ngModel)]="boardStateService.map_enabled">Map Enabled</mat-checkbox>
         <div *ngIf="boardStateService.map_enabled">
             <span class="font">Map Opacity </span>
