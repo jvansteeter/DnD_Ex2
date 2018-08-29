@@ -26,6 +26,7 @@ export class BoardStateService extends IsReadyService {
 
     // diagnostic variables, not intended for production code
     public diag_visibility_ray_count = 500;
+    public diag_show_visibility_blocking_bitmap = false;
 
     // board-map controls
     public map_enabled = false;

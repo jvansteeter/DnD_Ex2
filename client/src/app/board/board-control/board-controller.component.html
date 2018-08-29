@@ -21,10 +21,7 @@
 <div id="Diagnostic Controls" class="section">
     <div class="sectionHeader"><span>Diagnostic</span></div>
     <div class="sectionContents">
-        <!--<mat-checkbox style="display: block" [(ngModel)]="boardStateService.gridEnabled">Grid Enabled</mat-checkbox>-->
-        <!--<mat-checkbox style="display: block" [(ngModel)]="boardStateService.show_health">Health Bars Enabled</mat-checkbox>-->
-        <!--<mat-checkbox style="display: block" [(ngModel)]="boardStateService.playerWallsEnabled">Show Walls to Player</mat-checkbox>-->
-        <!--<mat-checkbox style="display: block" [(ngModel)]="boardStateService.map_enabled">Map Enabled</mat-checkbox>-->
+        <mat-checkbox style="display: block" [(ngModel)]="boardStateService.diag_show_visibility_blocking_bitmap">Visibility Bitmap</mat-checkbox>
         <div>
             <span class="font">Raytrace Vectors</span>
             <mat-slider min="0" max="1500" step="1" thumbLabel [(value)]="boardStateService.diag_visibility_ray_count"
