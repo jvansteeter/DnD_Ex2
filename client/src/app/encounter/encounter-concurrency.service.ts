@@ -28,10 +28,6 @@ export class EncounterConcurrencyService extends IsReadyService {
 		});
 	}
 
-	public publishRemovePlayer(player: Player): void {
-		this.mqService.publishEncounterCommand(player.encounterId, 0, EncounterCommandType.REMOVE_PLAYER, player.serialize());
-	}
-
 	private observePlayerChanges(player: Player): void {
 		player.changeObservable.subscribe(() => {
 			this.mqService.publishEncounterCommand(this.encounterService.encounterState._id, this.encounterService.encounterState.version,
@@ -41,6 +37,7 @@ export class EncounterConcurrencyService extends IsReadyService {
 
 	private observeEncounterMqMessages(): void {
 		this.mqService.getEncounterMessages(this.encounterService.encounterState._id).subscribe((message: EncounterCommandMessage) => {
+			console.log(message)
 			switch (message.body.dataType) {
 				case EncounterCommandType.PLAYER_UPDATE: {
 					this.updatePlayer(message.body.data as PlayerData);

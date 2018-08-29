@@ -97,7 +97,7 @@ export class RuleSetRouter {
 
 		this.router.get('/admins/:ruleSetId', (req: Request, res: Response) => {
 			this.ruleSetRepository.getAdmins(req.params.ruleSetId).then((admins: any) => {
-				res.json(admins);
+				res.json([]);
 			}).catch(error => res.status(500).send(error));
 		});
 

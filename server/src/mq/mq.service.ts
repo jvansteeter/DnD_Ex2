@@ -25,12 +25,12 @@ export class MqService {
 		this.friendRepo = new FriendRepository();
 		this.notificationRepo = new NotificationRepository();
 		this.playerRepository = new PlayerRepository();
-		// this.encounterService = new EncounterService();
+		this.encounterService = new EncounterService();
 	}
 
 	public handleMessages(): void {
 		this.mqProxy.observeAllEncounters().subscribe((message: EncounterCommandMessage) => {
-			this.handleEncounterUpdates(message);
+			this.handleEncounterCommand(message);
 		});
 		this.mqProxy.observeAllFriendRequests().subscribe( (friendRequest: FriendRequest) => {
 			this.handleFriendRequest(friendRequest);
@@ -68,23 +68,28 @@ export class MqService {
 		}
 	}
 
-	private async handleEncounterUpdates(encounterUpdate: EncounterCommandMessage): Promise<void> {
-		switch (encounterUpdate.body.dataType) {
-			case EncounterCommandType.PLAYER_UPDATE: {
-				await this.playerRepository.updatePlayer(encounterUpdate.body.data as PlayerData);
-				return;
+	private async handleEncounterCommand(encounterUpdate: EncounterCommandMessage): Promise<void> {
+		try {
+			switch (encounterUpdate.body.dataType) {
+				case EncounterCommandType.PLAYER_UPDATE: {
+					await this.playerRepository.updatePlayer(encounterUpdate.body.data as PlayerData);
+					return;
+				}
+				case EncounterCommandType.ADD_PLAYER: {
+					// do nothing, the server issues these ones
+					return;
+				}
+				case EncounterCommandType.REMOVE_PLAYER: {
+					// do nothing, the server issues these commands
+					return;
+				}
+				default: {
+					console.error('Unrecognized Command Type')
+				}
 			}
-			case EncounterCommandType.ADD_PLAYER: {
-				// do nothing, the server issues these ones
-				return;
-			}
-			case EncounterCommandType.REMOVE_PLAYER: {
-				// await this.encounterService.deletePlayer(encounterUpdate.body.data as PlayerData);
-				return;
-			}
-			default: {
-				console.error('Unrecognized Command Type')
-			}
+		}
+		catch (error) {
+			console.error(error);
 		}
 	}
 

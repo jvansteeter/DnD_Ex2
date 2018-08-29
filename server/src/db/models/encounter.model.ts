@@ -68,6 +68,7 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 
 		this.methods.addGameMaster = this.addGameMaster;
 		this.methods.addPlayer = this.addPlayer;
+		this.methods.removePlayer = this.removePlayer;
 		this.methods.setMapUrl = this.setMapUrl;
 		this.methods.setIsOpen = this.setIsOpen;
 	}
@@ -79,6 +80,17 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 
 	public addPlayer(player: PlayerData): Promise<EncounterModel> {
 		this.playerIds.push(player._id);
+		return this.save();
+	}
+
+	public removePlayer(player: PlayerData): Promise<EncounterModel> {
+		for (let i = 0; i < this.playerIds.length; i++) {
+			if (this.playerIds[i] == player._id) {
+				this.playerIds.splice(i, 1);
+				break;
+			}
+		}
+
 		return this.save();
 	}
 

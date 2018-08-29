@@ -42,18 +42,19 @@ export class EncounterRepository {
 		return this.http.get<EncounterData>('api/encounter/encounter/' + encounterId, {responseType: 'json'});
 	}
 
-	public setEncounter(encounterState: EncounterData): Observable<void> {
-		return this.http.post('api/encounter/encounter/', encounterState).pipe(map(() => {return;}));
-	}
-
 	public addPlayer(encounterId: string, player: PlayerData): Observable<void> {
 		const data = {
 			encounterId: encounterId,
 			player: player
 		};
-		return this.http.post('api/encounter/addplayer', data, {responseType: 'text'}).pipe(map(() => {
-			return;
-		}));
+		return this.http.post<void>('api/encounter/addplayer', data);
+	}
+
+	public removePlayer(player: PlayerData): Observable<void> {
+		const data = {
+			player: player
+		};
+		return this.http.post<void>('api/encounter/removeplayer', data);
 	}
 
 	public addCharacters(encounterId: string, characters: CharacterData[]): Observable<void> {
@@ -61,14 +62,14 @@ export class EncounterRepository {
 			encounterId: encounterId,
 			characters: characters
 		};
-		return this.http.post('/api/encounter/addcharacters', data, {responseType: 'text'}).pipe(map(() => {return;}));
+		return this.http.post<void>('/api/encounter/addcharacters', data);
 	}
 
 	public deleteEncounter(encounterId: string): Observable<void> {
 		let data = {
 			encounterId: encounterId
 		};
-		return this.http.post('/api/encounter/delete', data, {responseType: 'text'}).pipe(map(() => {return;}));
+		return this.http.post<void>('/api/encounter/delete', data);
 	}
 
 	public openEncounter(encounterId: string): Observable<EncounterData> {

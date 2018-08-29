@@ -109,8 +109,17 @@ export class EncounterService {
 		}
 	}
 
-	public async deletePlayer(player: PlayerData): Promise<void> {
-		return this.playerRepo.deleteById(player._id);
+	public async deletePlayer(player: PlayerData, userId: string): Promise<void> {
+		try {
+			const encounter: EncounterModel = await this.encounterRepo.findById(player.encounterId);
+			await encounter.removePlayer(player);
+			await this.playerRepo.deleteById(player._id);
+			await MqServiceSingleton.sendEncounterCommand(player.encounterId, userId, EncounterCommandType.REMOVE_PLAYER, player);
+			return;
+		}
+		catch (error) {
+			throw error;
+		}
 	}
 
 	private async buildEncounterState(encounterModel: EncounterModel): Promise<EncounterData> {

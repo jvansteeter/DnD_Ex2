@@ -56,6 +56,18 @@ export class EncounterRouter {
 			}
 		});
 
+		this.router.post('/removeplayer', async (req: Request, res: Response) => {
+			try {
+				const player = req.body.player;
+				const userId = req.user._id;
+				await this.encounterService.deletePlayer(player, userId);
+			}
+			catch (error) {
+				console.error(error);
+				res.status(500).send(error);
+			}
+		});
+
 		this.router.post('/delete/', async (req: Request, res: Response) => {
 			try {
 				const encounterId = req.body.encounterId;

@@ -3,7 +3,7 @@ import { PopService } from '../pop.service';
 import { Player } from '../../../encounter/player';
 import { CharacterTooltipComponent } from '../../../character-sheet/character-tooltip/character-tooltip.component';
 import { BoardStateService } from '../../services/board-state.service';
-import { EncounterConcurrencyService } from '../../../encounter/encounter-concurrency.service';
+import { EncounterRepository } from '../../../repositories/encounter.repository';
 
 @Component({
 	templateUrl: 'character-pop.component.html',
@@ -23,7 +23,7 @@ export class CharacterPopComponent {
 	hovered = false;
 
 	constructor(private boardStateService: BoardStateService,
-							private encounterConcurrencyService: EncounterConcurrencyService) {
+	            private encounterRepo: EncounterRepository) {
 	}
 
 	public initVars(parentRef: PopService, window: boolean, pos_x: number, pos_y: number, player: Player) {
@@ -54,7 +54,7 @@ export class CharacterPopComponent {
 
 	deletePlayer(): void {
 		this.close();
-		this.encounterConcurrencyService.publishRemovePlayer(this.player);
+		this.encounterRepo.removePlayer(this.player.serialize()).subscribe();
 	}
 
 	mouseDown(event) {

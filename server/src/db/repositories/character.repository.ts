@@ -1,16 +1,12 @@
 import * as mongoose from 'mongoose';
 import { Promise } from 'bluebird';
-import { UserRepository } from './user.repository';
 import { CharacterModel } from '../models/character.model';
 
 export class CharacterRepository {
 	private Character: mongoose.Model<mongoose.Document>;
 
-	private userRepository: UserRepository;
-
 	constructor() {
 		this.Character = mongoose.model('Character');
-		this.userRepository = new UserRepository();
 	}
 
 	public create(label: string, creatorUserId: string, characterSheetId: string, npc: boolean = true): Promise<Error | CharacterModel> {
