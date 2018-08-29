@@ -48,7 +48,7 @@ export class MqService {
 		return this.mqProxy.userHasMqAccount(user);
 	}
 
-	public async sendEncounterCommand(encounterId: string, userId: string, commandType: EncounterCommandType, data: any): Promise<void> {
+	public async sendEncounterCommand(encounterId: string, userId: string, commandType: EncounterCommandType, version: number, data: any): Promise<void> {
 		try {
 			await this.mqProxy.sendEncounterCommand(encounterId, {
 				headers: {
@@ -57,7 +57,7 @@ export class MqService {
 				},
 				body: {
 					userId: userId,
-					version: 0,
+					version: version,
 					dataType: commandType,
 					data: data
 				}
@@ -68,24 +68,28 @@ export class MqService {
 		}
 	}
 
-	private async handleEncounterCommand(encounterUpdate: EncounterCommandMessage): Promise<void> {
+	private async handleEncounterCommand(command: EncounterCommandMessage): Promise<void> {
 		try {
-			switch (encounterUpdate.body.dataType) {
-				case EncounterCommandType.PLAYER_UPDATE: {
-					await this.playerRepository.updatePlayer(encounterUpdate.body.data as PlayerData);
-					return;
+			const version = await this.encounterService.getVersion(command.headers.encounterId);
+			if (command.body.version === version + 1) {
+				switch (command.body.dataType) {
+					case EncounterCommandType.PLAYER_UPDATE: {
+						await this.playerRepository.updatePlayer(command.body.data as PlayerData);
+						break;
+					}
+					case EncounterCommandType.ADD_PLAYER: {
+						// do nothing, the server issues these ones
+						break;
+					}
+					case EncounterCommandType.REMOVE_PLAYER: {
+						// do nothing, the server issues these commands
+						break;
+					}
+					default: {
+						console.error('Unrecognized Command Type')
+					}
 				}
-				case EncounterCommandType.ADD_PLAYER: {
-					// do nothing, the server issues these ones
-					return;
-				}
-				case EncounterCommandType.REMOVE_PLAYER: {
-					// do nothing, the server issues these commands
-					return;
-				}
-				default: {
-					console.error('Unrecognized Command Type')
-				}
+				await this.encounterService.incrementVersion(command.headers.encounterId);
 			}
 		}
 		catch (error) {

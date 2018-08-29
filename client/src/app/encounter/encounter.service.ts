@@ -92,4 +92,18 @@ export class EncounterService extends IsReadyService {
 
 		return 1;
 	}
+
+	get version(): number {
+		if (this.encounterState) {
+			return this.encounterState.version;
+		}
+
+		return undefined;
+	}
+
+	set version(value: number) {
+		if (this.encounterState) {
+			this.encounterState.version = value;
+		}
+	}
 }

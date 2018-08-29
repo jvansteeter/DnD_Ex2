@@ -30,7 +30,7 @@ export class EncounterConcurrencyService extends IsReadyService {
 
 	private observePlayerChanges(player: Player): void {
 		player.changeObservable.subscribe(() => {
-			this.mqService.publishEncounterCommand(this.encounterService.encounterState._id, this.encounterService.encounterState.version,
+			this.mqService.publishEncounterCommand(this.encounterService.encounterState._id, this.encounterService.encounterState.version + 1,
 					EncounterCommandType.PLAYER_UPDATE, player.serialize());
 		});
 	}
@@ -38,27 +38,34 @@ export class EncounterConcurrencyService extends IsReadyService {
 	private observeEncounterMqMessages(): void {
 		this.mqService.getEncounterMessages(this.encounterService.encounterState._id).subscribe((message: EncounterCommandMessage) => {
 			console.log(message)
-			switch (message.body.dataType) {
-				case EncounterCommandType.PLAYER_UPDATE: {
-					this.updatePlayer(message.body.data as PlayerData);
-					break;
-				}
-				case EncounterCommandType.ADD_PLAYER: {
-					const player = new Player(message.body.data as PlayerData);
-					this.playerService.addPlayer(player);
-					this.observePlayerChanges(player);
-					break;
-				}
-				case EncounterCommandType.REMOVE_PLAYER: {
-					const player = new Player(message.body.data as PlayerData);
-					this.playerService.removePlayer(player);
-					break;
-				}
-				default: {
-					console.error('Encounter Command Type not recognized');
-				}
+			if (message.body.version === this.encounterService.version + 1) {
+				this.doEncounterCommand(message);
+				this.encounterService.version++;
 			}
 		});
+	}
+
+	private doEncounterCommand(message: EncounterCommandMessage): void {
+		switch (message.body.dataType) {
+			case EncounterCommandType.PLAYER_UPDATE: {
+				this.updatePlayer(message.body.data as PlayerData);
+				break;
+			}
+			case EncounterCommandType.ADD_PLAYER: {
+				const player = new Player(message.body.data as PlayerData);
+				this.playerService.addPlayer(player);
+				this.observePlayerChanges(player);
+				break;
+			}
+			case EncounterCommandType.REMOVE_PLAYER: {
+				const player = new Player(message.body.data as PlayerData);
+				this.playerService.removePlayer(player);
+				break;
+			}
+			default: {
+				console.error('Encounter Command Type not recognized');
+			}
+		}
 	}
 
 	private observeAllPlayerChanges(): void {

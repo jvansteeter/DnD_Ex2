@@ -71,6 +71,7 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 		this.methods.removePlayer = this.removePlayer;
 		this.methods.setMapUrl = this.setMapUrl;
 		this.methods.setIsOpen = this.setIsOpen;
+		this.methods.incrementVersion = this.incrementVersion;
 	}
 
 	public addGameMaster(userId: string): Promise<EncounterModel> {
@@ -115,6 +116,11 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 
 	public setIsOpen(isOpen: boolean): Promise<EncounterModel> {
 		this.isOpen = isOpen;
+		return this.save();
+	}
+
+	public incrementVersion(): Promise<EncounterModel> {
+		this.version++;
 		return this.save();
 	}
 }

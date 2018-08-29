@@ -73,7 +73,7 @@ export class EncounterService {
 				let player = await this.playerRepo.create(encounterId, character);
 				await encounter.addPlayer(player);
 				player.characterData.characterSheet = await this.characterSheetRepo.findById(player.characterData.characterSheetId);
-				await MqServiceSingleton.sendEncounterCommand(encounterId, userId, EncounterCommandType.ADD_PLAYER, player);
+				await MqServiceSingleton.sendEncounterCommand(encounterId, userId, EncounterCommandType.ADD_PLAYER, encounter.version + 1, player);
 			}
 
 			return;
@@ -114,7 +114,28 @@ export class EncounterService {
 			const encounter: EncounterModel = await this.encounterRepo.findById(player.encounterId);
 			await encounter.removePlayer(player);
 			await this.playerRepo.deleteById(player._id);
-			await MqServiceSingleton.sendEncounterCommand(player.encounterId, userId, EncounterCommandType.REMOVE_PLAYER, player);
+			await MqServiceSingleton.sendEncounterCommand(player.encounterId, userId, EncounterCommandType.REMOVE_PLAYER, encounter.version + 1, player);
+			return;
+		}
+		catch (error) {
+			throw error;
+		}
+	}
+
+	public async getVersion(encounterId: string): Promise<number> {
+		try {
+			const encounter: EncounterModel = await this.encounterRepo.findById(encounterId);
+			return encounter.version;
+		}
+		catch (error) {
+			throw error;
+		}
+	}
+
+	public async incrementVersion(encounterId: string): Promise<void> {
+		try {
+			const encounter: EncounterModel = await this.encounterRepo.findById(encounterId);
+			await encounter.incrementVersion();
 			return;
 		}
 		catch (error) {

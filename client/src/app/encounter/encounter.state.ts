@@ -2,6 +2,7 @@ import { LightValue } from '../board/shared/enum/light-value';
 import { Player } from './player';
 import { EncounterData } from '../../../../shared/types/encounter/encounter.data';
 import { PlayerData } from '../../../../shared/types/encounter/player.data';
+import { isUndefined } from 'util';
 
 export class EncounterState implements EncounterData {
 	_id: string;
@@ -38,6 +39,9 @@ export class EncounterState implements EncounterData {
 	}
 
 	public addPlayer(player: Player): void {
+		if (!isUndefined(this.playerMap.get(player.id))) {
+			return;
+		}
 		const index = this._players.length;
 		this._players[index] = player;
 		this.playerMap.set(player._id, index);
