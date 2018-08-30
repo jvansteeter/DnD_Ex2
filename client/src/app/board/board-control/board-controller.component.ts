@@ -36,14 +36,6 @@ export class BoardControllerComponent implements OnInit {
 
     public notationIdValue: string;
 
-    currentNotation: string;
-    notationModes: string[] = [
-        'Polygon',
-        'Radius',
-        'Select',
-        'Freeform'
-    ];
-
     currentVisibility: string;
     visibilityModes: string[] = [
         'Global',
@@ -189,41 +181,6 @@ export class BoardControllerComponent implements OnInit {
         this.sync()
     }
 
-    onInputChange() {
-        switch (this.currentInput) {
-            case 'Player' :
-                this.boardStateService.source_click_location = null;
-                this.boardStateService.board_edit_mode = BoardMode.PLAYER;
-                this.boardStateService.doDiagonals = false;
-                this.boardStateService.inputOffset = 0;
-                break;
-            case 'Walls' :
-                this.boardStateService.board_edit_mode = BoardMode.WALLS;
-                this.boardStateService.inputOffset = 0.2;
-                this.boardStateService.doDiagonals = true;
-                break;
-            case 'Doors' :
-                this.boardStateService.source_click_location = null;
-                this.boardStateService.board_edit_mode = BoardMode.DOORS;
-                this.boardStateService.inputOffset = 0.10;
-                this.boardStateService.doDiagonals = true;
-                break;
-            case 'Lights' :
-                this.boardStateService.source_click_location = null;
-                this.boardStateService.board_edit_mode = BoardMode.LIGHTS;
-                this.boardStateService.inputOffset = 0;
-                this.boardStateService.doDiagonals = false;
-                break;
-            case 'Tiles' :
-                this.boardStateService.source_click_location = null;
-                this.boardStateService.board_edit_mode = BoardMode.TILES;
-                this.boardStateService.inputOffset = 0;
-                this.boardStateService.doDiagonals = false;
-                break;
-        }
-        this.sync()
-    }
-
     onViewChange() {
         switch (this.currentView) {
             case 'Board Maker':
@@ -352,5 +309,44 @@ export class BoardControllerComponent implements OnInit {
         this.boardNotationService.returnToMeNotationMode = this.boardNotationService.activeNotationMode;
         this.boardNotationService.activeNotationMode = NotationMode.TEXT;
         this.dialog.open(NotationTextCreateDialogComponent);
+    }
+
+    handleSetInputModePlayer() {
+        this.boardStateService.source_click_location = null;
+        this.boardStateService.board_edit_mode = BoardMode.PLAYER;
+        this.boardStateService.doDiagonals = false;
+        this.boardStateService.inputOffset = 0;
+        this.sync();
+    }
+
+    handleSetInputModeDoor() {
+        this.boardStateService.source_click_location = null;
+        this.boardStateService.board_edit_mode = BoardMode.DOORS;
+        this.boardStateService.inputOffset = 0.10;
+        this.boardStateService.doDiagonals = true;
+        this.sync();
+    }
+
+    handleSetInputModeWall() {
+        this.boardStateService.board_edit_mode = BoardMode.WALLS;
+        this.boardStateService.inputOffset = 0.2;
+        this.boardStateService.doDiagonals = true;
+        this.sync();
+    }
+
+    handleSetInputModeLight() {
+        this.boardStateService.source_click_location = null;
+        this.boardStateService.board_edit_mode = BoardMode.LIGHTS;
+        this.boardStateService.inputOffset = 0;
+        this.boardStateService.doDiagonals = false;
+        this.sync();
+    }
+
+    handleSetInputModeTiles() {
+        this.boardStateService.source_click_location = null;
+        this.boardStateService.board_edit_mode = BoardMode.TILES;
+        this.boardStateService.inputOffset = 0;
+        this.boardStateService.doDiagonals = false;
+        this.sync();
     }
 }

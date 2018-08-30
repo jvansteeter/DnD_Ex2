@@ -7,14 +7,48 @@
                 <mat-option *ngFor="let mode of viewModes" value="{{mode}}">{{mode}}</mat-option>
             </mat-select>
         </mat-form-field>
+        Edit Mode
+        <div style="display: block">
+            <button class="strokeButtonOverride"
+                    matTooltip="Player Mode"
+                    (click)="handleSetInputModePlayer()"
+                    [ngClass]="{'selectedNotationMode': boardStateService.board_edit_mode === BoardMode.PLAYER}"
+                    mat-stroked-button>
+                <mat-icon>person</mat-icon>
+            </button>
 
-        <mat-form-field *ngIf="showModeControls()">
-            <mat-select [(value)]="currentInput" (selectionChange)="onInputChange()" placeholder="Edit Mode">
-                <mat-option *ngFor="let mode of inputModes" value="{{mode}}">{{mode}}</mat-option>
-            </mat-select>
-        </mat-form-field>
+            <button class="strokeButtonOverride"
+                    matTooltip="Door Mode"
+                    (click)="handleSetInputModeDoor()"
+                    [ngClass]="{'selectedNotationMode': boardStateService.board_edit_mode === BoardMode.DOORS}"
+                    mat-stroked-button>
+                <mat-icon>kitchen</mat-icon>
+            </button>
 
+            <button class="strokeButtonOverride"
+                    matTooltip="Wall Mode"
+                    (click)="handleSetInputModeWall()"
+                    [ngClass]="{'selectedNotationMode': boardStateService.board_edit_mode === BoardMode.WALLS}"
+                    mat-stroked-button>
+                <mat-icon>border_all</mat-icon>
+            </button>
 
+            <button class="strokeButtonOverride"
+                    matTooltip="Light Mode"
+                    (click)="handleSetInputModeLight()"
+                    [ngClass]="{'selectedNotationMode': boardStateService.board_edit_mode === BoardMode.LIGHTS}"
+                    mat-stroked-button>
+                <mat-icon>flare</mat-icon>
+            </button>
+
+            <!--<button class="strokeButtonOverride"-->
+                    <!--matTooltip="Tile Mode"-->
+                    <!--(click)="handleSetInputModeTiles()"-->
+                    <!--[ngClass]="{'selectedNotationMode': boardStateService.board_edit_mode === BoardMode.TILES}"-->
+                    <!--mat-stroked-button>-->
+                <!--<mat-icon>view_comfy</mat-icon>-->
+            <!--</button>-->
+        </div>
     </div>
 </div>
 
