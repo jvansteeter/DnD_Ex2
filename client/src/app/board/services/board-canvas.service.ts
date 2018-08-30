@@ -7,6 +7,7 @@ import {BoardStateService} from './board-state.service';
 import {CellTargetStatics} from '../statics/cell-target-statics';
 import {start} from 'repl';
 import {IsReadyService} from "../../utilities/services/isReady.service";
+import {Polygon} from "../shared/polygon";
 
 @Injectable()
 export class BoardCanvasService extends IsReadyService {
@@ -337,13 +338,13 @@ export class BoardCanvasService extends IsReadyService {
         ctx.stroke();
     }
 
-    stroke_point_array(ctx: CanvasRenderingContext2D, points: Array<XyPair>) {
+    stroke_point_array(ctx: CanvasRenderingContext2D, points: Array<XyPair>, rgbaCode: string, lineWidth = 1) {
         if (points.length === 0) {
             return;
         }
 
-        ctx.strokeStyle = 'rgba(255, 0, 0, 1.0)';
-        ctx.lineWidth = 1;
+        ctx.strokeStyle = rgbaCode;
+        ctx.lineWidth = lineWidth;
         ctx.lineJoin = 'round';
         ctx.lineCap = 'round';
 
@@ -454,18 +455,24 @@ export class BoardCanvasService extends IsReadyService {
         ctx.restore();
     }
 
-    clear_polygon(ctx: CanvasRenderingContext2D, points: Array<CellTarget>) {
+    clear_polygon(ctx: CanvasRenderingContext2D, polygon: Polygon) {
         ctx.save();
 
         ctx.beginPath();
-        let process_point;
-        let index;
-        for (index = 0; index < points.length; index++) {
-            process_point = CellTargetStatics.getPointCanvasCoor(points[index]);
-            ctx.lineTo(process_point.x, process_point.y);
+        for (let point of polygon.border) {
+            ctx.lineTo(point.x, point.y);
         }
-        process_point = CellTargetStatics.getPointCanvasCoor(points[0]);
-        ctx.lineTo(process_point.x, process_point.y);
+        ctx.lineTo(polygon.border[0].x, polygon.border[0].y);
+
+        // let process_point;
+        // let index;
+        // for (index = 0; index < polygon.border.length; index++) {
+        //     process_point = CellTargetStatics.getPointCanvasCoor(polygon[index]);
+        //     ctx.lineTo(process_point.x, process_point.y);
+        // }
+        // process_point = CellTargetStatics.getPointCanvasCoor(polygon[0]);
+        // ctx.lineTo(process_point.x, process_point.y);
+
         ctx.clip();
         this.clear_canvas(ctx);
         ctx.restore();

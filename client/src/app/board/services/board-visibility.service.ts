@@ -17,8 +17,6 @@ export class BoardVisibilityService extends IsReadyService {
     public blockingSegments: Set<string>;       // Set<CellTarget.hash()>
     private blockingBitmap = [];
 
-    public dummy_vis_array = [];
-
     constructor(
         public boardStateService: BoardStateService,
         public boardCanvasService: BoardCanvasService,
@@ -174,8 +172,7 @@ export class BoardVisibilityService extends IsReadyService {
 
     public raytraceVisibilityFromCell(source: XyPair, rayCount = 1000): Polygon {
         const degreeInc = 360 / rayCount;
-
-        this.dummy_vis_array = [];
+        const poly = new Polygon();
 
         let degree;
         for (degree = 0; degree < 360; degree = degree + degreeInc) {
@@ -183,10 +180,10 @@ export class BoardVisibilityService extends IsReadyService {
             const boundPoint = this.getBoundIntercept(rayToCast);
             const boundPointFloor = new XyPair(Math.floor(boundPoint.x), Math.floor(boundPoint.y));
             const endPoint = this.rayCastToPoint(source, boundPointFloor);
-            this.dummy_vis_array.push(endPoint);
+            poly.border.push(endPoint);
         }
 
-        return;
+        return poly;
     }
 
     /*******************************************************************************************************************

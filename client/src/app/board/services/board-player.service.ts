@@ -5,12 +5,13 @@ import {EncounterService} from '../../encounter/encounter.service';
 import {BoardVisibilityService} from './board-visibility.service';
 import {BoardTraverseService} from './board-traverse.service';
 import {BoardStateService} from './board-state.service';
-import { IsReadyService } from '../../utilities/services/isReady.service';
-import { Player } from '../../encounter/player';
+import {IsReadyService} from '../../utilities/services/isReady.service';
+import {Player} from '../../encounter/player';
+import {Polygon} from "../shared/polygon";
 
 @Injectable()
 export class BoardPlayerService extends IsReadyService {
-    public player_visibility_map: Map<string, CellPolygonGroup>;
+    public player_visibility_map: Map<string, Polygon>;
 
     public player_traverse_map: Map<string, Array<number>>;
 
@@ -23,8 +24,8 @@ export class BoardPlayerService extends IsReadyService {
                 private boardVisibilityService: BoardVisibilityService,
                 private boardTraverseService: BoardTraverseService,
                 private boardStateService: BoardStateService) {
-    	super(encounterService, boardStateService, boardTraverseService, boardVisibilityService);
-        this.player_visibility_map = new Map<string, CellPolygonGroup>();
+        super(encounterService, boardStateService, boardTraverseService, boardVisibilityService);
+        this.player_visibility_map = new Map<string, Polygon>();
         this.selectedPlayerIds = new Set<string>();
         this.player_traverse_map_near = new Map<string, Array<XyPair>>();
         this.player_traverse_map_far = new Map<string, Array<XyPair>>();
@@ -33,27 +34,26 @@ export class BoardPlayerService extends IsReadyService {
     }
 
     public init(): void {
-    	const sub = this.dependenciesReady().subscribe((isReady: boolean) => {
-    		if (isReady) {
-    		    console.log('playerService init isReady');
-			    this.updateAllPlayerVisibility();
-			    this.updateAllPlayerTraverse();
-			    sub.unsubscribe();
-			    this.setReady(true);
-		    }
-	    })
+        const sub = this.dependenciesReady().subscribe((isReady: boolean) => {
+            if (isReady) {
+                this.updateAllPlayerVisibility();
+                this.updateAllPlayerTraverse();
+                sub.unsubscribe();
+                this.setReady(true);
+            }
+        })
     }
 
     public addPlayer(player: Player) {
-    	this.encounterService.addPlayer(player);
-    	this.updateAllPlayerTraverse();
-    	this.updateAllPlayerVisibility();
+        this.encounterService.addPlayer(player);
+        this.updateAllPlayerTraverse();
+        this.updateAllPlayerVisibility();
     }
 
     public removePlayer(player: Player) {
-    	this.encounterService.removePlayer(player);
-	    this.updateAllPlayerTraverse();
-	    this.updateAllPlayerVisibility();
+        this.encounterService.removePlayer(player);
+        this.updateAllPlayerTraverse();
+        this.updateAllPlayerVisibility();
     }
 
     public movePlayer(id: string, location: XyPair) {
@@ -61,28 +61,26 @@ export class BoardPlayerService extends IsReadyService {
 
     public updateAllPlayerVisibility() {
         for (let player of this.encounterService.players) {
-            // this.updatePlayerVisibility(player._id, new CellPolygonGroup(this.boardVisibilityService.cellQuadsVisibleFromCell(player.location)));
+            const playerResLocation = new XyPair(player.location.x * BoardStateService.cell_res + (BoardStateService.cell_res / 2), player.location.y * BoardStateService.cell_res + (BoardStateService.cell_res / 2));
+            const visibilityPolygon = this.boardVisibilityService.raytraceVisibilityFromCell(playerResLocation, this.boardStateService.diag_visibility_ray_count);
+            this.updatePlayerVisibility(player._id, visibilityPolygon);
         }
     }
-    
-    public updateAllPlayerTraverse (){
+
+    public updateAllPlayerTraverse() {
         for (const player of this.encounterService.players) {
             this.player_traverse_map.set(player._id, this.boardTraverseService.dijkstraTraverse(player.location, player.speed * 2));
         }
     }
 
-    public updatePlayerTraverse (id: string) {
+    public updatePlayerTraverse(id: string) {
         const player = this.encounterService.getPlayerById(id);
         this.player_traverse_map.set(player._id, this.boardTraverseService.dijkstraTraverse(player.location, player.speed * 2));
     }
 
-    public updatePlayerVisibility(id: string, visibilityPolygon?: CellPolygonGroup) {
-        if (!!visibilityPolygon) {
-            // this.player_visibility_map.set(id, visibilityPolygon);
-        } else {
-            const player = this.encounterService.getPlayerById(id);
-            // this.player_visibility_map.set(id, new CellPolygonGroup(this.boardVisibilityService.cellQuadsVisibleFromCell(player.location)));
-        }
+    public updatePlayerVisibility(id: string, visibilityPolygon: Polygon) {
+        const player = this.encounterService.getPlayerById(id);
+        this.player_visibility_map.set(id, visibilityPolygon);
     }
 
     public syncPlayerHover(cell: XyPair) {
@@ -108,10 +106,11 @@ export class BoardPlayerService extends IsReadyService {
                     player.location = loc_cell;
 
                     const playerResLocation = new XyPair(player.location.x * BoardStateService.cell_res + (BoardStateService.cell_res / 2), player.location.y * BoardStateService.cell_res + (BoardStateService.cell_res / 2));
-                    this.boardVisibilityService.raytraceVisibilityFromCell(playerResLocation, this.boardStateService.diag_visibility_ray_count);
+                    const visibilityPolygon = this.boardVisibilityService.raytraceVisibilityFromCell(playerResLocation, this.boardStateService.diag_visibility_ray_count);
 
-                    // this.updatePlayerVisibility(player._id, this.boardVisibilityService.cellPolygonVisibleFromCell(player.location));
+                    this.updatePlayerVisibility(player._id, visibilityPolygon);
                     this.updatePlayerTraverse(player._id);
+
                     this.selectedPlayerIds = new Set<string>();
                 }
             }
@@ -125,4 +124,7 @@ export class BoardPlayerService extends IsReadyService {
         }
     }
 
+    get players(): Player[] {
+        return this.encounterService.players;
+    }
 }

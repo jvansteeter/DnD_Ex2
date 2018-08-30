@@ -6,6 +6,7 @@ import {CellPolygonGroup} from '../../shared/cell-polygon-group';
 import {ViewMode} from '../../shared/enum/view-mode';
 import {BoardPlayerService} from '../../services/board-player.service';
 import {PlayerVisibilityMode} from "../../shared/enum/player-visibility-mode";
+import {isDefined} from "@angular/compiler/src/util";
 
 @Component({
     selector: 'visibility-renderer',
@@ -33,9 +34,18 @@ export class VisibilityRendererComponent implements OnInit {
         this.boardCanvasService.clear_canvas(this.ctx);
         this.boardCanvasService.updateTransform(this.ctx);
 
-        this.boardCanvasService.stroke_point_array(this.ctx, this.boardVisibilityService.dummy_vis_array);
+        // this.boardCanvasService.stroke_point_array(this.ctx, this.boardVisibilityService.dummy_vis_array);
+        for (let player of this.boardPlayerService.players) {
+            const visPoly = this.boardPlayerService.player_visibility_map.get(player._id);
+            if (isDefined(visPoly)) {
+                this.boardCanvasService.stroke_point_array(this.ctx, visPoly.border, 'rgba(255, 0 , 0, 1.0), 3)');
+            }
+        }
 
         switch (this.boardStateService.board_view_mode) {
+            /***************************************************************************************************************************************************************************************
+             * View mode - BOARD_MAKER
+             ***************************************************************************************************************************************************************************************/
             case ViewMode.BOARD_MAKER:
                 switch (this.boardStateService.playerVisibilityMode) {
                     case PlayerVisibilityMode.PLAYER:
@@ -47,29 +57,37 @@ export class VisibilityRendererComponent implements OnInit {
                 }
 
                 break;
+
+            /***************************************************************************************************************************************************************************************
+             * View mode - MASTER
+             ***************************************************************************************************************************************************************************************/
             case ViewMode.MASTER:
                 switch (this.boardStateService.playerVisibilityMode) {
                     case PlayerVisibilityMode.PLAYER:
                         if (this.boardStateService.visibilityHighlightEnabled) {
-                            const hoverPlayerId = this.boardPlayerService.hoveredPlayerId;
-                            if (hoverPlayerId !== '') {
-                                const fillCode = 'rgba(255,0,0,0.08)';
-                                this.boardCanvasService.draw_fill_polygon(this.ctx, this.boardPlayerService.player_visibility_map.get(hoverPlayerId).border, fillCode);
-                            }
+                            // const hoverPlayerId = this.boardPlayerService.hoveredPlayerId;
+                            // if (hoverPlayerId !== '') {
+                            //     const fillCode = 'rgba(255,0,0,0.08)';
+                            //     this.boardCanvasService.draw_fill_polygon(this.ctx, this.boardPlayerService.player_visibility_map.get(hoverPlayerId).border, fillCode);
+                            // }
                         }
                         break;
                     case PlayerVisibilityMode.TEAM:
                         if (this.boardStateService.visibilityHighlightEnabled) {
-                            this.boardPlayerService.player_visibility_map.forEach((value: CellPolygonGroup) => {
-                                const fillCode = 'rgba(255,0,0,0.08)';
-                                this.boardCanvasService.draw_fill_polygon(this.ctx, value.border, fillCode);
-                            });
+                            // this.boardPlayerService.player_visibility_map.forEach((value: CellPolygonGroup) => {
+                            //     const fillCode = 'rgba(255,0,0,0.08)';
+                            //     this.boardCanvasService.draw_fill_polygon(this.ctx, value.border, fillCode);
+                            // });
                         }
                         break;
                     case PlayerVisibilityMode.GLOBAL:
                         break;
                 }
                 break;
+
+            /***************************************************************************************************************************************************************************************
+             * View mode - PLAYER
+             ***************************************************************************************************************************************************************************************/
             case ViewMode.PLAYER:
                 switch (this.boardStateService.playerVisibilityMode) {
                     case PlayerVisibilityMode.PLAYER:
@@ -80,9 +98,16 @@ export class VisibilityRendererComponent implements OnInit {
                         const map_height = this.boardStateService.mapDimY * BoardStateService.cell_res;
                         this.ctx.fillRect(0, 0, map_width, map_height);
 
-                        this.boardPlayerService.player_visibility_map.forEach((value: CellPolygonGroup) => {
-                            this.boardCanvasService.clear_polygon(this.ctx, value.border);
-                        });
+                        for (let player of this.boardPlayerService.players) {
+                            const visPoly = this.boardPlayerService.player_visibility_map.get(player._id);
+                            this.boardCanvasService.clear_polygon(this.ctx, visPoly);
+                        }
+
+                        // this.boardPlayerService.player_visibility_map.forEach((value: CellPolygonGroup) => {
+                        //     this.boardCanvasService.clear_polygon(this.ctx, value.border);
+                        // });
+
+
                         break;
                     case PlayerVisibilityMode.GLOBAL:
                         break;
