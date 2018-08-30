@@ -10,6 +10,7 @@ import {IsReadyService} from "../../utilities/services/isReady.service";
 import {Polygon} from "../shared/polygon";
 import {Line} from "../geometry/line";
 import {Ray} from "../geometry/ray";
+import {BoardCanvasService} from "./board-canvas.service";
 
 @Injectable()
 export class BoardVisibilityService extends IsReadyService {
@@ -19,7 +20,8 @@ export class BoardVisibilityService extends IsReadyService {
     public dummy_vis_array = [];
 
     constructor(
-        public boardStateService: BoardStateService
+        public boardStateService: BoardStateService,
+        public boardCanvasService: BoardCanvasService,
     ) {
         super(boardStateService);
         this.init();
@@ -41,6 +43,35 @@ export class BoardVisibilityService extends IsReadyService {
             }
         })
     }
+
+    public iKnowWhatImDoingGetTheBlockingBitMap(): any[] {
+        return this.blockingBitmap;
+    }
+
+    // public getBitmapImageDataObject(): ImageData {
+    //     const imageData = this.boardCanvasService.diagnosticCanvasContext.createImageData(this.boardCanvasService.cvs_width, this.boardCanvasService.cvs_height);
+    //
+    //     let index = 0;
+    //     for (let x = 0; x < this.boardStateService.mapDimX * BoardStateService.cell_res; x++) {
+    //         for (let y = 0; y < this.boardStateService.mapDimY * BoardStateService.cell_res; y++) {
+    //
+    //             if (this.blockingBitmap[x][y] === 1) {
+    //                 imageData.data[index] = 255;
+    //                 imageData.data[index + 1] = 255;
+    //                 imageData.data[index + 2] = 255;
+    //                 imageData.data[index + 3] = 255;
+    //             } else {
+    //                 imageData.data[index] = 0;
+    //                 imageData.data[index + 1] = 0;
+    //                 imageData.data[index + 2] = 0;
+    //                 imageData.data[index + 3] = 255;
+    //             }
+    //         }
+    //         index = index + 4;
+    //     }
+    //
+    //     return imageData;
+    // }
 
     public cellsVisibleFromCell(source: XyPair, range?: number) {
         const returnMe = new Array<XyPair>();
@@ -69,77 +100,77 @@ export class BoardVisibilityService extends IsReadyService {
         return returnMe;
     }
 
-    public cellQuadsVisibleFromCell(source: XyPair): Array<CellTarget> {
-        const returnMe = new Array<CellTarget>();
+    // public cellQuadsVisibleFromCell(source: XyPair): Array<CellTarget> {
+    //     const returnMe = new Array<CellTarget>();
+    //
+    //     for (let x = 0; x < this.boardStateService.mapDimX; x += 1) {
+    //         for (let y = 0; y < this.boardStateService.mapDimY; y += 1) {
+    //             const curCell = new XyPair(x, y);
+    //
+    //             if (this.cellHasLOSTo_TopQuad(source, curCell)) {
+    //                 returnMe.push(new CellTarget(curCell, CellRegion.TOP_QUAD));
+    //             }
+    //
+    //             if (this.cellHasLOSTo_RightQuad(source, curCell)) {
+    //                 returnMe.push(new CellTarget(curCell, CellRegion.RIGHT_QUAD));
+    //             }
+    //
+    //             if (this.cellHasLOSTo_BottomQuad(source, curCell)) {
+    //                 returnMe.push(new CellTarget(curCell, CellRegion.BOTTOM_QUAD));
+    //             }
+    //
+    //             if (this.cellHasLOSTo_LeftQuad(source, curCell)) {
+    //                 returnMe.push(new CellTarget(curCell, CellRegion.LEFT_QUAD));
+    //             }
+    //         }
+    //     }
+    //
+    //     return returnMe;
+    // }
 
-        for (let x = 0; x < this.boardStateService.mapDimX; x += 1) {
-            for (let y = 0; y < this.boardStateService.mapDimY; y += 1) {
-                const curCell = new XyPair(x, y);
-
-                if (this.cellHasLOSTo_TopQuad(source, curCell)) {
-                    returnMe.push(new CellTarget(curCell, CellRegion.TOP_QUAD));
-                }
-
-                if (this.cellHasLOSTo_RightQuad(source, curCell)) {
-                    returnMe.push(new CellTarget(curCell, CellRegion.RIGHT_QUAD));
-                }
-
-                if (this.cellHasLOSTo_BottomQuad(source, curCell)) {
-                    returnMe.push(new CellTarget(curCell, CellRegion.BOTTOM_QUAD));
-                }
-
-                if (this.cellHasLOSTo_LeftQuad(source, curCell)) {
-                    returnMe.push(new CellTarget(curCell, CellRegion.LEFT_QUAD));
-                }
-            }
-        }
-
-        return returnMe;
-    }
-
-    public cellPolygonVisibleFromCell(source: XyPair): CellPolygonGroup {
-        const touchedSet = new Set<string>();
-        const queryArray = Array<CellTarget>();
-        const fillArray = Array<CellTarget>();
-
-        queryArray.push(new CellTarget(source, CellRegion.TOP_QUAD));
-        while (queryArray.length !== 0) {
-            const target = queryArray.shift();
-            if (touchedSet.has(target.hash()) || !this.boardStateService.coorInBounds(target.location.x, target.location.y)) {
-                continue;
-            }
-
-            touchedSet.add(target.hash());
-            switch (target.region) {
-                case CellRegion.TOP_QUAD:
-                    if (this.cellHasLOSTo_TopQuad(source, target.location)) {
-                        fillArray.push(target);
-                        queryArray.push(...CellTargetStatics.getQuadsAdjacentToQuad(target));
-                    }
-                    break;
-                case CellRegion.RIGHT_QUAD:
-                    if (this.cellHasLOSTo_RightQuad(source, target.location)) {
-                        fillArray.push(target);
-                        queryArray.push(...CellTargetStatics.getQuadsAdjacentToQuad(target));
-                    }
-                    break;
-                case CellRegion.BOTTOM_QUAD:
-                    if (this.cellHasLOSTo_BottomQuad(source, target.location)) {
-                        fillArray.push(target);
-                        queryArray.push(...CellTargetStatics.getQuadsAdjacentToQuad(target));
-                    }
-                    break;
-                case CellRegion.LEFT_QUAD:
-                    if (this.cellHasLOSTo_LeftQuad(source, target.location)) {
-                        fillArray.push(target);
-                        queryArray.push(...CellTargetStatics.getQuadsAdjacentToQuad(target));
-                    }
-                    break;
-            }
-        }
-
-        return new CellPolygonGroup(fillArray);
-    }
+    // public cellPolygonVisibleFromCell(source: XyPair): CellPolygonGroup {
+    //     const touchedSet = new Set<string>();
+    //     const queryArray = Array<CellTarget>();
+    //     const fillArray = Array<CellTarget>();
+    //
+    //     queryArray.push(new CellTarget(source, CellRegion.TOP_QUAD));
+    //     while (queryArray.length !== 0) {
+    //         const target = queryArray.shift();
+    //         if (touchedSet.has(target.hash()) || !this.boardStateService.coorInBounds(target.location.x, target.location.y)) {
+    //             continue;
+    //         }
+    //
+    //         touchedSet.add(target.hash());
+    //         switch (target.region) {
+    //             case CellRegion.TOP_QUAD:
+    //                 if (this.cellHasLOSTo_TopQuad(source, target.location)) {
+    //                     fillArray.push(target);
+    //                     queryArray.push(...CellTargetStatics.getQuadsAdjacentToQuad(target));
+    //                 }
+    //                 break;
+    //             case CellRegion.RIGHT_QUAD:
+    //                 if (this.cellHasLOSTo_RightQuad(source, target.location)) {
+    //                     fillArray.push(target);
+    //                     queryArray.push(...CellTargetStatics.getQuadsAdjacentToQuad(target));
+    //                 }
+    //                 break;
+    //             case CellRegion.BOTTOM_QUAD:
+    //                 if (this.cellHasLOSTo_BottomQuad(source, target.location)) {
+    //                     fillArray.push(target);
+    //                     queryArray.push(...CellTargetStatics.getQuadsAdjacentToQuad(target));
+    //                 }
+    //                 break;
+    //             case CellRegion.LEFT_QUAD:
+    //                 if (this.cellHasLOSTo_LeftQuad(source, target.location)) {
+    //                     fillArray.push(target);
+    //                     queryArray.push(...CellTargetStatics.getQuadsAdjacentToQuad(target));
+    //                 }
+    //                 break;
+    //         }
+    //     }
+    //
+    //     return new CellPolygonGroup(fillArray);
+    // }
 
     public raytraceVisibilityFromCell(source: XyPair, rayCount = 1000): Polygon {
         const degreeInc = 360 / rayCount;

@@ -21,11 +21,22 @@
 <div id="Diagnostic Controls" class="section">
     <div class="sectionHeader"><span>Diagnostic</span></div>
     <div class="sectionContents">
-        <mat-checkbox style="display: block" [(ngModel)]="boardStateService.diag_show_visibility_blocking_bitmap">Visibility Bitmap</mat-checkbox>
+        <mat-checkbox style="display: block; margin-bottom: 5px;" [(ngModel)]="boardStateService.diag_show_visibility_blocking_bitmap">
+            Visibility Bitmap
+        </mat-checkbox>
         <div>
-            <span class="font">Raytrace Vectors</span>
-            <mat-slider min="0" max="1500" step="1" thumbLabel [(value)]="boardStateService.diag_visibility_ray_count"
-                        (change)="diag_raytraceSliderInput($event)"></mat-slider>
+            <mat-form-field>
+                <input matInput [(ngModel)]="boardStateService.diag_visibility_ray_count" type="number" placeholder="Raytrace Vectors" (change)="diag_raytraceInputChange($event)">
+            </mat-form-field>
+
+        </div>
+        <div>
+            <mat-form-field>
+                <input matInput [(ngModel)]="boardStateService.minZoom" type="number" placeholder="MinZoom Override">
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput [(ngModel)]="boardStateService.maxZoom" type="number" placeholder="MaxZoom Override">
+            </mat-form-field>
         </div>
     </div>
 </div>
@@ -34,8 +45,10 @@
     <div class="sectionHeader"><span>Board Maker Controls</span></div>
     <div class="sectionContents">
         <mat-checkbox style="display: block" [(ngModel)]="boardStateService.gridEnabled">Grid Enabled</mat-checkbox>
-        <mat-checkbox style="display: block" [(ngModel)]="boardStateService.show_health">Health Bars Enabled</mat-checkbox>
-        <mat-checkbox style="display: block" [(ngModel)]="boardStateService.playerWallsEnabled">Show Walls to Player</mat-checkbox>
+        <mat-checkbox style="display: block" [(ngModel)]="boardStateService.show_health">Health Bars Enabled
+        </mat-checkbox>
+        <mat-checkbox style="display: block" [(ngModel)]="boardStateService.playerWallsEnabled">Show Walls to Player
+        </mat-checkbox>
         <mat-checkbox style="display: block" [(ngModel)]="boardStateService.map_enabled">Map Enabled</mat-checkbox>
         <div *ngIf="boardStateService.map_enabled">
             <span class="font">Map Opacity </span>
@@ -95,7 +108,8 @@
                         mat-stroked-button>
                     <mat-icon>{{boardNotationService.getActiveNotation().iconTag}}</mat-icon>
                 </button>
-                <input matInput placeholder="Notation Id" class="inputOverride" [(ngModel)]="boardNotationService.getActiveNotation().name" style="margin-left: 5px">
+                <input matInput placeholder="Notation Id" class="inputOverride"
+                       [(ngModel)]="boardNotationService.getActiveNotation().name" style="margin-left: 5px">
             </div>
 
             <div style="display: block; margin: auto;">

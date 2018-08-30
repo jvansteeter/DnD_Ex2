@@ -1,21 +1,21 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {
-	MatButtonModule,
-	MatButtonToggleModule,
-	MatCheckboxModule,
-	MatIconModule,
-	MatRadioModule,
-	MatSelectModule,
-	MatSliderModule,
-	MatFormFieldModule,
-	MatInputModule,
-	MatTooltipModule,
-	MatDialogModule,
-	MatTabsModule,
-	MatTableModule,
-	MatSortModule,
-	MatBadgeModule,
-	MatMenuModule
+    MatButtonModule,
+    MatButtonToggleModule,
+    MatCheckboxModule,
+    MatIconModule,
+    MatRadioModule,
+    MatSelectModule,
+    MatSliderModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatTooltipModule,
+    MatDialogModule,
+    MatTabsModule,
+    MatTableModule,
+    MatSortModule,
+    MatBadgeModule,
+    MatMenuModule
 } from '@angular/material';
 import {NgModule} from '@angular/core';
 import {MapRendererComponent} from "./renderer/map-renderer/map-renderer.component";
@@ -49,11 +49,12 @@ import {NotationRendererComponent} from './renderer/notation-renderer/notation-r
 import {NotationIconSelectorComponent} from "./board-control/notation-icon-selector/notation-icon-selector.component";
 import {NotationColorSelectorComponent} from "./board-control/notation-color-selector/notation-color-selector.component";
 import {NotationSettingsDialogComponent} from "./board-control/notation-settings-dialog/notation-settings-dialog.component";
-import { AddPlayerDialogComponent } from './board-control/add-player-dialog/add-player-dialog.component';
+import {AddPlayerDialogComponent} from './board-control/add-player-dialog/add-player-dialog.component';
 import {NotationTextEditDialogComponent} from "./board-control/notation-text-dialog/notation-text-edit-dialog.component";
 import {NotationTextCreateDialogComponent} from "./board-control/notation-text-dialog/notation-text-create-dialog.component";
-import { CharacterSheetModule } from '../character-sheet/character-sheet.module';
-import { CharacterPopComponent } from './pop/character-pop/character-pop.component';
+import {CharacterSheetModule} from '../character-sheet/character-sheet.module';
+import {CharacterPopComponent} from './pop/character-pop/character-pop.component';
+import {DiagnosticRendererComponent} from "./renderer/diagnostic-renderer/diagnostic-renderer.component";
 
 
 @NgModule({
@@ -76,11 +77,12 @@ import { CharacterPopComponent } from './pop/character-pop/character-pop.compone
         NpcPopComponent,
         NotationIconSelectorComponent,
         NotationColorSelectorComponent,
-		    AddPlayerDialogComponent,
+        AddPlayerDialogComponent,
         NotationSettingsDialogComponent,
         NotationTextEditDialogComponent,
         NotationTextCreateDialogComponent,
-		    CharacterPopComponent,
+        CharacterPopComponent,
+        DiagnosticRendererComponent
     ],
     imports: [
         BrowserModule,
@@ -96,12 +98,12 @@ import { CharacterPopComponent } from './pop/character-pop/character-pop.compone
         MatInputModule,
         MatTooltipModule,
         MatDialogModule,
-		    MatTabsModule,
-		    MatTableModule,
-		    MatSortModule,
+        MatTabsModule,
+        MatTableModule,
+        MatSortModule,
         MatBadgeModule,
-		    CharacterSheetModule,
-		    MatMenuModule,
+        CharacterSheetModule,
+        MatMenuModule,
     ],
     providers: [
         PopService,
@@ -121,10 +123,10 @@ import { CharacterPopComponent } from './pop/character-pop/character-pop.compone
         NotationIconSelectorComponent,
         NotationColorSelectorComponent,
         NotationSettingsDialogComponent,
-		    AddPlayerDialogComponent,
+        AddPlayerDialogComponent,
         NotationTextEditDialogComponent,
         NotationTextCreateDialogComponent,
-		    CharacterPopComponent,
+        CharacterPopComponent,
     ],
     bootstrap: [],
     exports: [

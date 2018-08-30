@@ -11,7 +11,8 @@ import {IsReadyService} from "../../utilities/services/isReady.service";
 @Injectable()
 export class BoardCanvasService extends IsReadyService {
 
-    public canvasNativeElement;
+    public mapContainerNativeElement;
+
     public cvs_width: number;
     public cvs_height: number;
 
@@ -129,6 +130,16 @@ export class BoardCanvasService extends IsReadyService {
         ctx.lineTo(topLeftCorner.x + BoardStateService.cell_res * percent, topLeftCorner.y + BoardStateService.cell_res *  distanceFromTop);
         ctx.lineWidth = strokeWidth;
         ctx.stroke();
+    }
+
+    public draw_pixel(ctx: CanvasRenderingContext2D, point: XyPair, rgbaCode) {
+        ctx.fillStyle = rgbaCode;
+        ctx.fillRect(point.x, point.y, 1, 1);
+    }
+
+    public fill_canvas(ctx: CanvasRenderingContext2D, rgbaCode) {
+        ctx.fillStyle = rgbaCode;
+        ctx.fillRect(0, 0, this.boardStateService.mapDimX * BoardStateService.cell_res, this.boardStateService.mapDimY * BoardStateService.cell_res);
     }
 
     draw_polyline(ctx:CanvasRenderingContext2D, points: Array<XyPair>, strokeStyle: string, width = 2) {
@@ -332,7 +343,7 @@ export class BoardCanvasService extends IsReadyService {
         }
 
         ctx.strokeStyle = 'rgba(255, 0, 0, 1.0)';
-        ctx.lineWidth = 5;
+        ctx.lineWidth = 1;
         ctx.lineJoin = 'round';
         ctx.lineCap = 'round';
 

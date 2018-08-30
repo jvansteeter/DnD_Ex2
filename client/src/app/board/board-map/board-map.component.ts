@@ -57,7 +57,8 @@ export class BoardMapComponent implements OnInit, AfterViewInit {
 	}
 
 	ngAfterViewInit(): void {
-		this.boardCanvasService.canvasNativeElement = this.mapContainer.nativeElement;
+		this.boardCanvasService.mapContainerNativeElement = this.mapContainer.nativeElement;
+
 	}
 
 	getCursorClass(): string {
@@ -138,8 +139,8 @@ export class BoardMapComponent implements OnInit, AfterViewInit {
 
 	handleMouseWheel(event) {
 		const scroll_scale_delta = 0.10;
-		const max_scale = 2.50;
-		const min_scale = 0.35;
+		const max_scale = this.boardStateService.maxZoom;
+		const min_scale = this.boardStateService.minZoom;
 
 		const start_scale = this.boardStateService.scale;
 

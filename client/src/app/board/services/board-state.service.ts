@@ -19,9 +19,6 @@ import {Line} from "../geometry/line";
 @Injectable()
 export class BoardStateService extends IsReadyService {
 
-    /***********************************************************************************
-     * To be moved into encounter state
-     ***********************************************************************************/
     static cell_res = 50;
 
     // diagnostic variables, not intended for production code
@@ -47,6 +44,8 @@ export class BoardStateService extends IsReadyService {
     public x_offset = 0;
     public y_offset = 0;
     public scale = 1.0;
+    public maxZoom = 2.50;
+    public minZoom = 0.35;
 
     // board-map controls
     public board_edit_mode: BoardMode = BoardMode.PLAYER;

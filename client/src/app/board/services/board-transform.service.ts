@@ -62,7 +62,7 @@ export class BoardTransformService {
      *  Coordinate space transforms
      ********************************************************************************************************************/
     screen_to_canvas(screenRes: XyPair): XyPair {
-        const rect = this.boardCanvasService.canvasNativeElement.getBoundingClientRect();
+        const rect = this.boardCanvasService.mapContainerNativeElement.getBoundingClientRect();
         return new XyPair(screenRes.x - rect.left, screenRes.y - rect.top);
     }
 
@@ -90,7 +90,7 @@ export class BoardTransformService {
 
     map_to_screen(mapRes: XyPair): XyPair {
         const canvas = this.map_to_canvas(mapRes);
-        const bound = this.boardCanvasService.canvasNativeElement.getBoundingClientRect();
+        const bound = this.boardCanvasService.mapContainerNativeElement.getBoundingClientRect();
 
         const screenX = canvas.x + bound.left;
         const screenY = canvas.y + bound.top;

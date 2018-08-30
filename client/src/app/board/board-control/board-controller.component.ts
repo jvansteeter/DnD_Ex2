@@ -249,7 +249,7 @@ export class BoardControllerComponent implements OnInit {
         this.sync()
     }
 
-    diag_raytraceSliderInput(event) {
+    diag_raytraceInputChange(event) {
         if (this.encounterService.players.length > 0){
             const playerLoc = this.encounterService.players[0].location;
             const cell_res = BoardStateService.cell_res;
