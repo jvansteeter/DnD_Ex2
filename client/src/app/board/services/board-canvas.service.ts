@@ -464,15 +464,6 @@ export class BoardCanvasService extends IsReadyService {
         }
         ctx.lineTo(polygon.border[0].x, polygon.border[0].y);
 
-        // let process_point;
-        // let index;
-        // for (index = 0; index < polygon.border.length; index++) {
-        //     process_point = CellTargetStatics.getPointCanvasCoor(polygon[index]);
-        //     ctx.lineTo(process_point.x, process_point.y);
-        // }
-        // process_point = CellTargetStatics.getPointCanvasCoor(polygon[0]);
-        // ctx.lineTo(process_point.x, process_point.y);
-
         ctx.clip();
         this.clear_canvas(ctx);
         ctx.restore();
@@ -498,6 +489,20 @@ export class BoardCanvasService extends IsReadyService {
         ctx.lineTo(process_point.x, process_point.y);
         ctx.fill();
         ctx.restore();
+    }
+
+    fill_point_array(ctx: CanvasRenderingContext2D, points: Array<XyPair>, rgbaCode: string) {
+        ctx.save();
+
+        ctx.fillStyle = rgbaCode;
+
+        ctx.beginPath();
+        for (let point of points) {
+            ctx.lineTo(point.x, point.y);
+        }
+        ctx.lineTo(points[0].x, points[0].y);
+        ctx.fill();
+        ctx.restore()
     }
 
     draw_fill_quad(ctx: CanvasRenderingContext2D, target: CellTarget, fill_code: string | CanvasGradient | CanvasPattern) {

@@ -34,11 +34,11 @@ export class VisibilityRendererComponent implements OnInit {
         this.boardCanvasService.clear_canvas(this.ctx);
         this.boardCanvasService.updateTransform(this.ctx);
 
-        // this.boardCanvasService.stroke_point_array(this.ctx, this.boardVisibilityService.dummy_vis_array);
         for (let player of this.boardPlayerService.players) {
             const visPoly = this.boardPlayerService.player_visibility_map.get(player._id);
             if (isDefined(visPoly)) {
                 this.boardCanvasService.stroke_point_array(this.ctx, visPoly.border, 'rgba(255, 0 , 0, 1.0), 3)');
+                this.boardCanvasService.fill_point_array(this.ctx, visPoly.border, 'rgba(255, 0 , 0, 0.3)');
             }
         }
 

@@ -396,6 +396,7 @@ export class BoardVisibilityService extends IsReadyService {
     }
 
     private static BresenhamLine(x0: number, y0: number, x1: number, y1: number): XyPair[] {
+        const origin = new XyPair(x0, y0);
         const result = Array<XyPair>();
         const steep = Math.abs(y1 - y0) > Math.abs(x1 - x0);
 
@@ -439,6 +440,10 @@ export class BoardVisibilityService extends IsReadyService {
                 error -= deltaX;
             }
         }
+        if (result[0].x !== origin.x || result[0].y !== origin.y) {
+            result.reverse();
+        }
+
         return result;
     }
 
