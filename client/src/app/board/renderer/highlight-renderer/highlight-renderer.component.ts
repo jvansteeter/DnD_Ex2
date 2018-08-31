@@ -34,14 +34,14 @@ export class HighlightRendererComponent implements OnInit {
         switch (this.boardStateService.board_view_mode) {
             case ViewMode.BOARD_MAKER:
                 // render the source boxes for the light sources
-                for (const lightSource of Array.from(this.boardLightService.lightSourceData.values())) {
+                for (const lightSource of this.boardLightService.lightSources) {
                     this.boardCanvasService.draw_center(this.ctx, lightSource.location, 'rgba(255, 255, 0, 1)', 0.35);
                     this.boardCanvasService.stroke_center(this.ctx, lightSource.location, 'rgba(0, 0, 0, 1)', 0.35);
                 }
                 break;
             case ViewMode.MASTER:
                 // render the source boxes for the light sources
-                for (const lightSource of Array.from(this.boardLightService.lightSourceData.values())) {
+                for (const lightSource of this.boardLightService.lightSources) {
                     this.boardCanvasService.draw_center(this.ctx, lightSource.location, 'rgba(255, 255, 0, .6)', 0.35);
                     this.boardCanvasService.stroke_center(this.ctx, lightSource.location, 'rgba(0, 0, 0, .3)', 0.33);
                 }

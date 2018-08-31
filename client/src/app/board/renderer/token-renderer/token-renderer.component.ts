@@ -6,6 +6,7 @@ import { EncounterService } from '../../../encounter/encounter.service';
 import {BoardPlayerService} from "../../services/board-player.service";
 import {BoardTraverseService} from "../../services/board-traverse.service";
 import {GeometryStatics} from "../../statics/geometry-statics";
+import {BoardVisibilityService} from "../../services/board-visibility.service";
 
 @Component({
     selector: 'token-renderer',
@@ -37,6 +38,17 @@ export class TokenRendererComponent implements OnInit {
     render = () => {
         this.boardCanvasService.clear_canvas(this.ctx);
         this.boardCanvasService.updateTransform(this.ctx);
+
+        let radii = 50;
+        let circlePoints = new Array<XyPair>();
+        let index;
+        for (index = 0; index < 2; index = index + 0.1){
+            circlePoints = circlePoints.concat(BoardVisibilityService.BresenhamCircle(100, 100, radii + index));
+        }
+        for (let point of circlePoints) {
+            this.boardCanvasService.draw_pixel(this.ctx, point, 'rgba(0, 0, 255, 1.0)');
+        }
+
 
         for (const player of this.encounterService.players) {
             if (this.boardPlayerService.selectedPlayerIds.has(player._id)) {

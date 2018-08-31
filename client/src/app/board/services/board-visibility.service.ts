@@ -73,16 +73,30 @@ export class BoardVisibilityService extends IsReadyService {
         return returnMe;
     }
 
-    public raytraceVisibilityFromCell(source: XyPair, rayCount = 1000): Polygon {
+    public raytraceVisibilityFromCell(source: XyPair, rayCount = 1000, ...additionalBlockingPoints: Array<XyPair>): Polygon {
         const degreeInc = 360 / rayCount;
         const poly = new Polygon();
+        let additionalBlockingPointsArray;
+
+        if (!isNullOrUndefined(additionalBlockingPoints)) {
+            additionalBlockingPointsArray = [];
+            for (let x = 0; x < this.boardStateService.mapDimX * BoardStateService.cell_res; x++) {
+                additionalBlockingPointsArray[x] = [];
+                for (let y = 0; y < this.boardStateService.mapDimY * BoardStateService.cell_res; y++) {
+                    additionalBlockingPointsArray[x][y] = 0;
+                }
+            }
+            for (let point of additionalBlockingPoints) {
+                additionalBlockingPointsArray[point.x][point.y] = 1;
+            }
+        }
 
         let degree;
         for (degree = 0; degree < 360; degree = degree + degreeInc) {
             const rayToCast = new Ray(source, degree);
             const boundPoint = this.getBoundIntercept(rayToCast);
             const boundPointFloor = new XyPair(Math.floor(boundPoint.x), Math.floor(boundPoint.y));
-            const endPoint = this.rayCastToPoint(source, boundPointFloor);
+            const endPoint = this.rayCastToPoint(source, boundPointFloor, additionalBlockingPointsArray);
             poly.border.push(endPoint);
         }
 
@@ -395,7 +409,42 @@ export class BoardVisibilityService extends IsReadyService {
         return returnMe;
     }
 
-    private static BresenhamLine(x0: number, y0: number, x1: number, y1: number): XyPair[] {
+    static BresenhamCircle(xc: number, yc: number, r: number): Array<XyPair> {
+        const circlePoints = new Array<XyPair>();
+
+        let x = 0;
+        let y = r;
+        let d = 3 - 2 * r;
+
+        while (y >= x) {
+            this.BresenhamDrawCircle(circlePoints, xc, yc, x, y);
+            x++;
+
+            if (d > 0) {
+                y--;
+                d = d + 4 * (x - y) + 10;
+            } else {
+                d = d + 4 * x + 6;
+            }
+            this.BresenhamDrawCircle(circlePoints, xc, yc, x, y);
+        }
+
+        return circlePoints;
+    }
+
+    static BresenhamDrawCircle(array: Array<XyPair>, xc: number, yc: number, x: number, y: number) {
+        array.push(new XyPair(xc + x, yc + y));
+        array.push(new XyPair(xc - x, yc + y));
+        array.push(new XyPair(xc + x, yc - y));
+        array.push(new XyPair(xc - x, yc - y));
+
+        array.push(new XyPair(xc + y, yc + x));
+        array.push(new XyPair(xc - y, yc + x));
+        array.push(new XyPair(xc + y, yc - x));
+        array.push(new XyPair(xc - y, yc - x));
+    }
+
+    static BresenhamLine(x0: number, y0: number, x1: number, y1: number): XyPair[] {
         const origin = new XyPair(x0, y0);
         const result = Array<XyPair>();
         const steep = Math.abs(y1 - y0) > Math.abs(x1 - x0);
@@ -457,11 +506,17 @@ export class BoardVisibilityService extends IsReadyService {
         return true;
     }
 
-    public rayCastToPoint(origin: XyPair, target: XyPair): XyPair {
+    public rayCastToPoint(origin: XyPair, target: XyPair, additionalBlockingPoints?: Array<Array<number>>): XyPair {
         const points = BoardVisibilityService.BresenhamLine(origin.x, origin.y, target.x, target.y);
         for (const point of points) {
-            if (this.blockingBitmap[point.x][point.y] === 1) {
-                return point;
+            if (!isNullOrUndefined(additionalBlockingPoints)) {
+                if (this.blockingBitmap[point.x][point.y] === 1 || additionalBlockingPoints[point.x][point.y] === 1) {
+                    return point;
+                }
+            } else {
+                if (this.blockingBitmap[point.x][point.y] === 1) {
+                    return point;
+                }
             }
         }
         return target;
