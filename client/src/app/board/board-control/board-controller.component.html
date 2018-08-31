@@ -42,11 +42,11 @@
             </button>
 
             <!--<button class="strokeButtonOverride"-->
-                    <!--matTooltip="Tile Mode"-->
-                    <!--(click)="handleSetInputModeTiles()"-->
-                    <!--[ngClass]="{'selectedNotationMode': boardStateService.board_edit_mode === BoardMode.TILES}"-->
-                    <!--mat-stroked-button>-->
-                <!--<mat-icon>view_comfy</mat-icon>-->
+            <!--matTooltip="Tile Mode"-->
+            <!--(click)="handleSetInputModeTiles()"-->
+            <!--[ngClass]="{'selectedNotationMode': boardStateService.board_edit_mode === BoardMode.TILES}"-->
+            <!--mat-stroked-button>-->
+            <!--<mat-icon>view_comfy</mat-icon>-->
             <!--</button>-->
         </div>
     </div>
@@ -55,12 +55,24 @@
 <div id="Diagnostic Controls" class="section">
     <div class="sectionHeader"><span>Diagnostic</span></div>
     <div class="sectionContents">
-        <mat-checkbox style="display: block; margin-bottom: 5px;" [(ngModel)]="boardStateService.diag_show_visibility_blocking_bitmap">
-            Visibility Bitmap
-        </mat-checkbox>
+
+        <div style="display: flex; flex-direction: row; min-height: 30px; align-items: center">
+            <mat-checkbox style="flex: auto" [(ngModel)]="boardStateService.diag_show_visibility_blocking_bitmap">
+                Obstruction Bitmap
+            </mat-checkbox>
+            <input matInput
+                   class="font"
+                   [(ngModel)]="boardStateService.diag_layer_opacity"
+                   style="flex: 0 0 50px;"
+                   type="number"
+                   min="0"
+                   max="100">
+        </div>
+
         <div>
             <mat-form-field>
-                <input matInput [(ngModel)]="boardStateService.diag_visibility_ray_count" type="number" placeholder="Raytrace Vectors" (change)="diag_raytraceInputChange($event)">
+                <input matInput [(ngModel)]="boardStateService.diag_visibility_ray_count" type="number"
+                       placeholder="Raytrace Vectors" (change)="diag_raytraceInputChange($event)">
             </mat-form-field>
 
         </div>

@@ -32,14 +32,14 @@ export class DiagnosticRendererComponent implements OnInit {
         if (this.boardStateService.diag_show_visibility_blocking_bitmap) {
             const localBitmap = this.boardVisibilityService.iKnowWhatImDoingGetTheBlockingBitMap();
 
-            this.boardCanvasService.fill_canvas(this.ctx, 'rgba(0, 0, 0, 1.0)');
+            this.boardCanvasService.fill_canvas(this.ctx, 'rgba(0, 0, 0, ' + this.boardStateService.diag_layer_opacity / 100 + ')');
 
             let x;
             for (x = 0; x < localBitmap.length; x++) {
                 let y;
                 for (y = 0; y < localBitmap[x].length; y++) {
                     if (localBitmap[x][y] === 1) {
-                        this.boardCanvasService.draw_pixel(this.ctx, new XyPair(x, y), 'rgba(255, 255, 255, 1.0)');
+                        this.boardCanvasService.draw_pixel(this.ctx, new XyPair(x, y), 'rgba(255, 255, 255, ' + this.boardStateService.diag_layer_opacity / 100 + ')');
                     }
                 }
             }

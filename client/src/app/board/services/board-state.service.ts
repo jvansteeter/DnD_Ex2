@@ -24,6 +24,7 @@ export class BoardStateService extends IsReadyService {
     // diagnostic variables, not intended for production code
     public diag_visibility_ray_count = 500;
     public diag_show_visibility_blocking_bitmap = false;
+    public diag_layer_opacity = 75;
 
     // board-map controls
     public map_enabled = false;
@@ -44,7 +45,7 @@ export class BoardStateService extends IsReadyService {
     public x_offset = 0;
     public y_offset = 0;
     public scale = 1.0;
-    public maxZoom = 2.50;
+    public maxZoom = 10;        // default: 2.50
     public minZoom = 0.35;
 
     // board-map controls
