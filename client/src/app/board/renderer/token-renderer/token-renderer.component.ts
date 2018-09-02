@@ -40,11 +40,17 @@ export class TokenRendererComponent implements OnInit {
         this.boardCanvasService.updateTransform(this.ctx);
 
         let radii = 50;
+
         let circlePoints = new Array<XyPair>();
-        let index;
-        for (index = 0; index < 2; index = index + 0.1){
-            circlePoints = circlePoints.concat(BoardVisibilityService.BresenhamCircle(100, 100, radii + index));
+        circlePoints = circlePoints.concat(BoardVisibilityService.BresenhamCircle(100, 100, radii));
+
+        let addPoints = new Array<XyPair>();
+        for (let point of circlePoints) {
+            addPoints.push(new XyPair(point.x, point.y - 1));
         }
+
+        circlePoints = circlePoints.concat(addPoints);
+
         for (let point of circlePoints) {
             this.boardCanvasService.draw_pixel(this.ctx, point, 'rgba(0, 0, 255, 1.0)');
         }
