@@ -87,7 +87,11 @@ export class BoardVisibilityService extends IsReadyService {
                 }
             }
             for (let point of additionalBlockingPoints) {
-                additionalBlockingPointsArray[point.x][point.y] = 1;
+                if (point.x < additionalBlockingPointsArray.length) {
+                    if (point.y < additionalBlockingPointsArray[point.x].length) {
+                        additionalBlockingPointsArray[point.x][point.y] = 1;
+                    }
+                }
             }
         }
 

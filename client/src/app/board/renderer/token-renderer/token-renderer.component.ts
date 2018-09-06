@@ -39,23 +39,6 @@ export class TokenRendererComponent implements OnInit {
         this.boardCanvasService.clear_canvas(this.ctx);
         this.boardCanvasService.updateTransform(this.ctx);
 
-        let radii = 50;
-
-        let circlePoints = new Array<XyPair>();
-        circlePoints = circlePoints.concat(BoardVisibilityService.BresenhamCircle(100, 100, radii));
-
-        let addPoints = new Array<XyPair>();
-        for (let point of circlePoints) {
-            addPoints.push(new XyPair(point.x, point.y - 1));
-        }
-
-        circlePoints = circlePoints.concat(addPoints);
-
-        for (let point of circlePoints) {
-            this.boardCanvasService.draw_pixel(this.ctx, point, 'rgba(0, 0, 255, 1.0)');
-        }
-
-
         for (const player of this.encounterService.players) {
             if (this.boardPlayerService.selectedPlayerIds.has(player._id)) {
                 this.boardCanvasService.draw_fill_all(this.ctx, player.location, 'rgba(0, 0, 180, 0.2)');

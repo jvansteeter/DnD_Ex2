@@ -99,6 +99,18 @@ export class BoardStateService extends IsReadyService {
         return (2 * double_step) + reg_step + delta_delta;
     }
 
+    public pixelPointInBounds(pixPoint: XyPair): boolean {
+        const mapResX = this.mapDimX * BoardStateService.cell_res;
+        const mapResY = this.mapDimY * BoardStateService.cell_res;
+
+        if (pixPoint.x >= 0 && pixPoint.y >= 0) {
+            if (pixPoint.x < mapResX && pixPoint.y < mapResY) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     constructor(
         private encounterService: EncounterService
     ) {

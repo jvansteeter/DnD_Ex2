@@ -21,6 +21,7 @@ import { BoardPlayerService } from '../services/board-player.service';
 import { BoardNotationService } from '../services/board-notation-service';
 import { EncounterService } from '../../encounter/encounter.service';
 import { PopService } from '../pop/pop.service';
+import {LightSource} from "../map-objects/light-source";
 
 
 @Component({
@@ -392,7 +393,7 @@ export class BoardMapComponent implements OnInit, AfterViewInit {
 						case BoardMode.LIGHTS:
 							if (!isNullOrUndefined(this.boardStateService.mouse_cell_target)) {
 								if (this.boardStateService.mouse_cell_target.region === CellRegion.CENTER) {
-									this.boardLightService.toggleLightSource(this.boardStateService.mouse_loc_cell);
+									this.boardLightService.toggleLightSource(new LightSource(this.boardStateService.mouse_loc_cell, 3));
 								}
 							}
 							break;
