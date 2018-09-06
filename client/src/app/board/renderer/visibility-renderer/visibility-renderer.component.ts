@@ -34,14 +34,6 @@ export class VisibilityRendererComponent implements OnInit {
         this.boardCanvasService.clear_canvas(this.ctx);
         this.boardCanvasService.updateTransform(this.ctx);
 
-        for (let player of this.boardPlayerService.players) {
-            const visPoly = this.boardPlayerService.player_visibility_map.get(player._id);
-            if (isDefined(visPoly)) {
-                this.boardCanvasService.stroke_point_array(this.ctx, visPoly.border, 'rgba(255, 0 , 0, 1.0), 3)');
-                this.boardCanvasService.fill_point_array(this.ctx, visPoly.border, 'rgba(255, 0 , 0, 0.3)');
-            }
-        }
-
         switch (this.boardStateService.board_view_mode) {
             /***************************************************************************************************************************************************************************************
              * View mode - BOARD_MAKER
@@ -74,10 +66,13 @@ export class VisibilityRendererComponent implements OnInit {
                         break;
                     case PlayerVisibilityMode.TEAM:
                         if (this.boardStateService.visibilityHighlightEnabled) {
-                            // this.boardPlayerService.player_visibility_map.forEach((value: CellPolygonGroup) => {
-                            //     const fillCode = 'rgba(255,0,0,0.08)';
-                            //     this.boardCanvasService.draw_fill_polygon(this.ctx, value.border, fillCode);
-                            // });
+                            for (let player of this.boardPlayerService.players) {
+                                const visPoly = this.boardPlayerService.player_visibility_map.get(player._id);
+                                if (isDefined(visPoly)) {
+                                    this.boardCanvasService.stroke_point_array(this.ctx, visPoly.border, 'rgba(255, 0 , 0, 1.0), 3)');
+                                    this.boardCanvasService.fill_point_array(this.ctx, visPoly.border, 'rgba(255, 0 , 0, 0.3)');
+                                }
+                            }
                         }
                         break;
                     case PlayerVisibilityMode.GLOBAL:
@@ -93,21 +88,11 @@ export class VisibilityRendererComponent implements OnInit {
                     case PlayerVisibilityMode.PLAYER:
                         break;
                     case PlayerVisibilityMode.TEAM:
-                        this.ctx.fillStyle = 'rgba(0, 0, 0, 1.0)';
-                        const map_width = this.boardStateService.mapDimX * BoardStateService.cell_res;
-                        const map_height = this.boardStateService.mapDimY * BoardStateService.cell_res;
-                        this.ctx.fillRect(0, 0, map_width, map_height);
-
+                        this.boardCanvasService.fill_canvas(this.ctx, 'rgba(0, 0, 0, 1.0)');
                         for (let player of this.boardPlayerService.players) {
                             const visPoly = this.boardPlayerService.player_visibility_map.get(player._id);
                             this.boardCanvasService.clear_polygon(this.ctx, visPoly);
                         }
-
-                        // this.boardPlayerService.player_visibility_map.forEach((value: CellPolygonGroup) => {
-                        //     this.boardCanvasService.clear_polygon(this.ctx, value.border);
-                        // });
-
-
                         break;
                     case PlayerVisibilityMode.GLOBAL:
                         break;

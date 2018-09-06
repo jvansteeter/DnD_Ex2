@@ -8,6 +8,7 @@ import {BoardStateService} from './board-state.service';
 import {IsReadyService} from '../../utilities/services/isReady.service';
 import {Player} from '../../encounter/player';
 import {Polygon} from "../shared/polygon";
+import {BoardLightService} from "./board-light.service";
 
 @Injectable()
 export class BoardPlayerService extends IsReadyService {
@@ -22,6 +23,7 @@ export class BoardPlayerService extends IsReadyService {
 
     constructor(private encounterService: EncounterService,
                 private boardVisibilityService: BoardVisibilityService,
+                private boardLightService: BoardLightService,
                 private boardTraverseService: BoardTraverseService,
                 private boardStateService: BoardStateService) {
         super(encounterService, boardStateService, boardTraverseService, boardVisibilityService);
@@ -61,15 +63,13 @@ export class BoardPlayerService extends IsReadyService {
 
     public updateAllPlayerVisibility() {
         for (let player of this.encounterService.players) {
-            const playerResLocation = new XyPair(player.location.x * BoardStateService.cell_res + (BoardStateService.cell_res / 2), player.location.y * BoardStateService.cell_res + (BoardStateService.cell_res / 2));
-            const visibilityPolygon = this.boardVisibilityService.raytraceVisibilityFromCell(playerResLocation, this.boardStateService.diag_visibility_ray_count);
-            this.updatePlayerVisibility(player._id, visibilityPolygon);
+            this.updatePlayerVisibility(player._id);
         }
     }
 
     public updateAllPlayerTraverse() {
         for (const player of this.encounterService.players) {
-            this.player_traverse_map.set(player._id, this.boardTraverseService.dijkstraTraverse(player.location, player.speed * 2));
+            this.updatePlayerTraverse(player._id);
         }
     }
 
@@ -78,8 +78,10 @@ export class BoardPlayerService extends IsReadyService {
         this.player_traverse_map.set(player._id, this.boardTraverseService.dijkstraTraverse(player.location, player.speed * 2));
     }
 
-    public updatePlayerVisibility(id: string, visibilityPolygon: Polygon) {
+    public updatePlayerVisibility(id: string) {
         const player = this.encounterService.getPlayerById(id);
+        const playerResLocation = new XyPair(player.location.x * BoardStateService.cell_res + (BoardStateService.cell_res / 2), player.location.y * BoardStateService.cell_res + (BoardStateService.cell_res / 2));
+        const visibilityPolygon = this.boardVisibilityService.raytraceVisibilityFromCell(playerResLocation, this.boardStateService.diag_visibility_ray_count);
         this.player_visibility_map.set(id, visibilityPolygon);
     }
 
@@ -105,11 +107,9 @@ export class BoardPlayerService extends IsReadyService {
                 if (this.selectedPlayerIds.has(player._id)) {
                     player.location = loc_cell;
 
-                    const playerResLocation = new XyPair(player.location.x * BoardStateService.cell_res + (BoardStateService.cell_res / 2), player.location.y * BoardStateService.cell_res + (BoardStateService.cell_res / 2));
-                    const visibilityPolygon = this.boardVisibilityService.raytraceVisibilityFromCell(playerResLocation, this.boardStateService.diag_visibility_ray_count);
-
-                    this.updatePlayerVisibility(player._id, visibilityPolygon);
+                    this.updatePlayerVisibility(player._id);
                     this.updatePlayerTraverse(player._id);
+                    this.boardLightService.updateLightValues();
 
                     this.selectedPlayerIds = new Set<string>();
                 }
