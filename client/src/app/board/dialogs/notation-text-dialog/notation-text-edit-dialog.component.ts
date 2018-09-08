@@ -16,7 +16,7 @@ export class NotationTextEditDialogComponent {
     public fontSize: number;
 
     constructor(
-        public dialogRef: MatDialogRef<NotationIconSelectorComponent>,
+        public dialogRef: MatDialogRef<NotationTextEditDialogComponent>,
         private boardNotationService: BoardNotationService
     ) {
         this.fontSize = 10;
