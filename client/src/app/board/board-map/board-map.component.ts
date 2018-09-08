@@ -434,11 +434,26 @@ export class BoardMapComponent implements OnInit, AfterViewInit {
     }
 
     private playerCompare(player1: Player, player2: Player): number {
-        if (player1.initiative < player2.initiative) {
-            return -1;
+        let localPlayer1;
+        if (isNullOrUndefined(player1.initiative)) {
+            localPlayer1 = -10;
+        } else {
+            localPlayer1 = player1.initiative;
         }
-        if (player1.initiative < player2.initiative) {
+
+        let localPlayer2;
+        if (isNullOrUndefined(player2.initiative)) {
+            localPlayer2 = -10;
+        } else {
+            localPlayer2 = player2.initiative;
+        }
+
+
+        if (localPlayer1 < localPlayer2) {
             return 1;
+        }
+        if (localPlayer1 > localPlayer2) {
+            return -1;
         }
         return 0;
     }
