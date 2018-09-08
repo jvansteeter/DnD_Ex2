@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
 import {XyPair} from '../geometry/xy-pair';
-import {CellPolygonGroup} from '../shared/cell-polygon-group';
 import {EncounterService} from '../../encounter/encounter.service';
 import {BoardVisibilityService} from './board-visibility.service';
 import {BoardTraverseService} from './board-traverse.service';
@@ -9,11 +8,12 @@ import {IsReadyService} from '../../utilities/services/isReady.service';
 import {Player} from '../../encounter/player';
 import {Polygon} from "../shared/polygon";
 import {BoardLightService} from "./board-light.service";
+import {LightSource} from "../map-objects/light-source";
 
 @Injectable()
 export class BoardPlayerService extends IsReadyService {
 
-    public player_lightSource_map: Map<string, Polygon>;
+    public player_lightSource_map: Map<string, LightSource>;
     public player_visibility_map: Map<string, Polygon>;
     public player_traverse_map: Map<string, Array<number>>;
 
@@ -28,7 +28,7 @@ export class BoardPlayerService extends IsReadyService {
                 private boardTraverseService: BoardTraverseService,
                 private boardStateService: BoardStateService) {
         super(encounterService, boardStateService, boardTraverseService, boardVisibilityService);
-        this.player_lightSource_map = new Map<string, Polygon>();
+        this.player_lightSource_map = new Map<string, LightSource>();
         this.player_visibility_map = new Map<string, Polygon>();
         this.selectedPlayerIds = new Set<string>();
         this.player_traverse_map = new Map<string, Array<number>>();
@@ -40,6 +40,7 @@ export class BoardPlayerService extends IsReadyService {
             if (isReady) {
                 this.updateAllPlayerVisibility();
                 this.updateAllPlayerTraverse();
+                this.updateAllPlayerLightSource();
                 sub.unsubscribe();
                 this.setReady(true);
             }
@@ -48,14 +49,16 @@ export class BoardPlayerService extends IsReadyService {
 
     public addPlayer(player: Player) {
         this.encounterService.addPlayer(player);
-        this.updatePlayerTraverse(player.id);
-        this.updatePlayerVisibility(player.id);
+        this.updatePlayerTraverse(player._id);
+        this.updatePlayerVisibility(player._id);
+        this.updatePlayerLightSource(player._id);
     }
 
     public removePlayer(player: Player) {
         this.encounterService.removePlayer(player);
-        this.removePlayerVisibility(player.id);
-        this.removePlayerTraverse(player.id);
+        this.removePlayerVisibility(player._id);
+        this.removePlayerTraverse(player._id);
+        this.removePlayerLightSource(player._id);
     }
 
     public movePlayer(id: string, location: XyPair) {
@@ -65,15 +68,22 @@ export class BoardPlayerService extends IsReadyService {
      * LIGHT SOURCE
      *********************************************************************************************************************************************/
     public updateAllPlayerLightSource() {
-
+        for (const player of this.encounterService.players) {
+            this.updatePlayerLightSource(player._id);
+        }
     }
 
     public removePlayerLightSource(playerId: string) {
-
+        this.player_lightSource_map.delete(playerId);
     }
 
     public updatePlayerLightSource(playerId: string) {
-
+        const player = this.encounterService.getPlayerById(playerId);
+        const playerLightSource = new LightSource(player.location, 2, 5);
+        const light_polys = this.boardLightService.generateLightPolygons(playerLightSource);
+        playerLightSource.dim_polygon = light_polys.dim_poly;
+        playerLightSource.bright_polygon = light_polys.bright_poly;
+        this.player_lightSource_map.set(player.id, playerLightSource);
     }
 
     /*********************************************************************************************************************************************
@@ -143,7 +153,8 @@ export class BoardPlayerService extends IsReadyService {
 
                     this.updatePlayerVisibility(player._id);
                     this.updatePlayerTraverse(player._id);
-                    this.boardLightService.updateAllLightValues();
+                    this.updatePlayerLightSource(player._id);
+                    // this.boardLightService.updateAllLightValues();
 
                     this.selectedPlayerIds = new Set<string>();
                 }
