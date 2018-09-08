@@ -1,32 +1,22 @@
 <div style="position: absolute; z-index: 5;">
-    <div
-            style="height: 40px; width: 40px; border: 3px solid green; background: #00b3ff; border-radius: 25px; margin-top: 13px; margin-left: 8px"
-            matBadge="8"
-            matTooltip="Character 1"
-            matTooltipPosition="after"
-    ></div>
 
-    <div
-            style="height: 40px; width: 40px; border: 3px solid green; background: #00b3ff; border-radius: 25px; margin-top: 13px; margin-left: 8px"
-            matBadge="6"
-            matTooltip="Character 2"
-            matTooltipPosition="after"
-    ></div>
+    <ng-container *ngFor="let player of getSortedPlayers()">
+        <div style="height:40px; width: 40px; margin-top: 13px; margin-left: 8px; ">
+            <div
+                    style="height: 40px; width: 40px; border: 3px solid #383838; background: #d8d8d8; border-radius: 50%; position: absolute">
+                <img src="{{player.tokenUrl}}" style="height: 100%; border-radius: 25px;">
+            </div>
+            <div
+                    style="height:40px; width: 40px; border: 3px solid #383838; border-radius: 50%; position: absolute"
+                    matBadge="{{player.initiative}}"
+                    matTooltip="{{player.name}}"
+                    matTooltipPosition="after">
 
-    <div
-            style="height: 40px; width: 40px; border: 3px solid green; background: #00b3ff; border-radius: 25px; margin-top: 13px; margin-left: 8px"
-            matBadge="4"
-            matTooltip="Character 3"
-            matTooltipPosition="after"
-    ></div>
+            </div>
+        </div>
+    </ng-container>
 
-    <div
-            style="height: 40px; width: 40px; border: 3px solid green; background: #00b3ff; border-radius: 25px; margin-top: 13px; margin-left: 8px"
-            matTooltip="Character 4"
-            matTooltipPosition="after"
-    ></div>
 </div>
-
 
 
 <div style="height: 100%; width: 100%;" #mapContainer>
