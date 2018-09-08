@@ -55,6 +55,7 @@ import {NotationTextCreateDialogComponent} from "./dialogs/notation-text-dialog/
 import {CharacterSheetModule} from '../character-sheet/character-sheet.module';
 import {CharacterPopComponent} from './pop/character-pop/character-pop.component';
 import {DiagnosticRendererComponent} from "./renderer/diagnostic-renderer/diagnostic-renderer.component";
+import {TempPlayerInitDialogComponent} from "./dialogs/temp-player-init-dialog/temp-player-init-dialog.component";
 
 
 @NgModule({
@@ -82,7 +83,8 @@ import {DiagnosticRendererComponent} from "./renderer/diagnostic-renderer/diagno
         NotationTextEditDialogComponent,
         NotationTextCreateDialogComponent,
         CharacterPopComponent,
-        DiagnosticRendererComponent
+        DiagnosticRendererComponent,
+        TempPlayerInitDialogComponent
     ],
     imports: [
         BrowserModule,
@@ -127,6 +129,7 @@ import {DiagnosticRendererComponent} from "./renderer/diagnostic-renderer/diagno
         NotationTextEditDialogComponent,
         NotationTextCreateDialogComponent,
         CharacterPopComponent,
+        TempPlayerInitDialogComponent
     ],
     bootstrap: [],
     exports: [

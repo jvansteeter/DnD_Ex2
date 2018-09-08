@@ -23,6 +23,8 @@ import {EncounterService} from '../../encounter/encounter.service';
 import {PopService} from '../pop/pop.service';
 import {LightSource} from "../map-objects/light-source";
 import {Player} from "../../encounter/player";
+import {MatDialog} from "@angular/material";
+import {TempPlayerInitDialogComponent} from "../dialogs/temp-player-init-dialog/temp-player-init-dialog.component";
 
 
 @Component({
@@ -44,6 +46,7 @@ export class BoardMapComponent implements OnInit, AfterViewInit {
                 private boardPlayerService: BoardPlayerService,
                 private boardNotationService: BoardNotationService,
                 private encounterService: EncounterService,
+                private dialog: MatDialog,
                 private popService: PopService,) {
     }
 
@@ -438,5 +441,10 @@ export class BoardMapComponent implements OnInit, AfterViewInit {
             return 1;
         }
         return 0;
+    }
+
+    handleInitDialog(player: Player) {
+        this.boardPlayerService.playerToSyncInit = player;
+        this.dialog.open(TempPlayerInitDialogComponent);
     }
 }

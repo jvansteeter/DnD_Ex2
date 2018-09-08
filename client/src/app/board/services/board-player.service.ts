@@ -21,6 +21,8 @@ export class BoardPlayerService extends IsReadyService {
     public selectedPlayerIds: Set<string>;
     public hoveredPlayerId = '';
 
+    public playerToSyncInit: Player;
+
     constructor(private encounterService: EncounterService,
                 private boardVisibilityService: BoardVisibilityService,
                 private boardLightService: BoardLightService,

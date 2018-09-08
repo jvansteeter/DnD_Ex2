@@ -8,6 +8,7 @@
             </div>
             <div
                     style="height:40px; width: 40px; border: 3px solid #383838; border-radius: 50%; position: absolute"
+                    (click)="handleInitDialog(player)"
                     matBadge="{{player.initiative}}"
                     matTooltip="{{player.name}}"
                     matTooltipPosition="after">

@@ -7,8 +7,8 @@ import {TextNotation} from "../../shared/notation/text-notation";
 
 @Component({
     selector: 'text-edit-dialog',
-    templateUrl: 'src/app/board/dialogs/notation-text-dialog/notation-text-edit-dialog.component.html',
-    styleUrls: ['src/app/board/dialogs/notation-text-dialog/notation-text-edit-dialog.component.scss']
+    templateUrl: 'notation-text-edit-dialog.component.html',
+    styleUrls: ['notation-text-edit-dialog.component.scss']
 })
 
 export class NotationTextEditDialogComponent {
