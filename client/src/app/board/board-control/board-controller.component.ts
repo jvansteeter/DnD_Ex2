@@ -225,7 +225,7 @@ export class BoardControllerComponent implements OnInit {
         } else if (this.boardStateService.ambientLight === LightValue.DIM) {
             this.boardStateService.ambientLight = LightValue.FULL;
         }
-        this.boardLightService.updateLightValues();
+        this.boardLightService.updateAllLightValues();
     }
 
     decreaseAmbientLight(): void {
@@ -234,7 +234,7 @@ export class BoardControllerComponent implements OnInit {
         } else if (this.boardStateService.ambientLight === LightValue.DIM) {
             this.boardStateService.ambientLight = LightValue.DARK;
         }
-        this.boardLightService.updateLightValues();
+        this.boardLightService.updateAllLightValues();
     }
 
     getLightValue(): string {

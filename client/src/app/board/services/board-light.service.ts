@@ -12,6 +12,8 @@ import {EncounterService} from "../../encounter/encounter.service";
 @Injectable()
 export class BoardLightService extends IsReadyService {
 
+    public
+
     public lightSources: Array<LightSource>;
 
     public brightLightPolygons: Array<Polygon>;
@@ -38,13 +40,13 @@ export class BoardLightService extends IsReadyService {
 
     addLightSource(source: LightSource) {
         this.lightSources.push(source);
-        this.updateLightValues();
+        this.updateAllLightValues();
     }
 
     removeLightSource(source: LightSource) {
         let index = this.getLightSourceIndex(source);
         this.lightSources.splice(index, 1);
-        this.updateLightValues();
+        this.updateAllLightValues();
     }
 
     toggleLightSource(source: LightSource) {
@@ -67,42 +69,44 @@ export class BoardLightService extends IsReadyService {
         return -1;
     }
 
-    updateLightValues(): void {
-       const t_start = window.performance.now();
+    updateLightValue(): void {
+        let brightLightPolygon;
+        let dimLightPolygon;
+    }
 
+    generateLightPolygons(source: LightSource): {bright_poly: Polygon, dim_poly: Polygon} {
+        const lightSourceResLocation = new XyPair(source.location.x * BoardStateService.cell_res  + BoardStateService.cell_res/2, source.location.y * BoardStateService.cell_res  + BoardStateService.cell_res/2);
+        const bright_poly = this.raytracePolygon(lightSourceResLocation, source.bright_range);
+        const dim_poly = this.raytracePolygon(lightSourceResLocation, source.dim_range);
+        return {bright_poly: bright_poly, dim_poly: dim_poly};
+    }
+
+    private raytracePolygon(pixelPoint: XyPair, cellRange: number, raytrace = 500): Polygon {
+        let primaryCircle = BoardVisibilityService.BresenhamCircle(pixelPoint.x, pixelPoint.y, cellRange * BoardStateService.cell_res + BoardStateService.cell_res/2);
+        let croppedCircle = [];
+        for (let point of primaryCircle) {
+            if (this.boardStateService.pixelPointInBounds(point)) {
+                croppedCircle.push(point);
+                if (point.y >= this.boardStateService.mapDimY * BoardStateService.cell_res) {
+                    croppedCircle.push(new XyPair(point.x, point.y - 1));
+                } else {
+                    croppedCircle.push(new XyPair(point.x, point.y + 1));
+                }
+            }
+        }
+        return this.boardVisibilityService.raytraceVisibilityFromCell(pixelPoint, raytrace, ...croppedCircle);
+    }
+
+    updateAllLightValues(): void {
         this.brightLightPolygons = [];
         this.dimLightPolygons = [];
 
         for (let lightSource of this.lightSources) {
-            const lightSourceResLocation = new XyPair(lightSource.location.x * BoardStateService.cell_res  + BoardStateService.cell_res/2, lightSource.location.y * BoardStateService.cell_res  + BoardStateService.cell_res/2);
-
-            let primaryCircle = BoardVisibilityService.BresenhamCircle(lightSourceResLocation.x, lightSourceResLocation.y, lightSource.bright_range * BoardStateService.cell_res + BoardStateService.cell_res/2);
-            let croppedCircle = [];
-            for (let point of primaryCircle) {
-                if (this.boardStateService.pixelPointInBounds(point)) {
-                    croppedCircle.push(point);
-                    if (point.y >= this.boardStateService.mapDimY * BoardStateService.cell_res) {
-                        croppedCircle.push(new XyPair(point.x, point.y - 1));
-                    } else {
-                        croppedCircle.push(new XyPair(point.x, point.y + 1));
-                    }
-                }
-            }
-            this.brightLightPolygons.push(this.boardVisibilityService.raytraceVisibilityFromCell(lightSourceResLocation, 500, ...croppedCircle));
-
-            primaryCircle = BoardVisibilityService.BresenhamCircle(lightSourceResLocation.x, lightSourceResLocation.y, lightSource.dim_range * BoardStateService.cell_res + BoardStateService.cell_res/2);
-            croppedCircle = [];
-            for (let point of primaryCircle) {
-                if (this.boardStateService.pixelPointInBounds(point)) {
-                    croppedCircle.push(point);
-                    if (point.y >= this.boardStateService.mapDimY * BoardStateService.cell_res) {
-                        croppedCircle.push(new XyPair(point.x, point.y - 1));
-                    } else {
-                        croppedCircle.push(new XyPair(point.x, point.y + 1));
-                    }
-                }
-            }
-            this.dimLightPolygons.push(this.boardVisibilityService.raytraceVisibilityFromCell(lightSourceResLocation, 500, ...croppedCircle));
+            const polys = this.generateLightPolygons(lightSource);
+            lightSource.dim_polygon = polys.dim_poly;
+            lightSource.bright_polygon = polys.bright_poly;
+            this.brightLightPolygons.push(polys.bright_poly);
+            this.dimLightPolygons.push(polys.dim_poly);
         }
 
         const PLAYER_BRIGHT_RANGE = 2;
@@ -110,34 +114,10 @@ export class BoardLightService extends IsReadyService {
         for (let player of this.encounterService.players) {
             const lightSourceResLocation = new XyPair(player.location.x * BoardStateService.cell_res + BoardStateService.cell_res/2, player.location.y * BoardStateService.cell_res + BoardStateService.cell_res/2);
 
-            let primaryCircle = BoardVisibilityService.BresenhamCircle(lightSourceResLocation.x, lightSourceResLocation.y, PLAYER_BRIGHT_RANGE * BoardStateService.cell_res + BoardStateService.cell_res/2);
-            let croppedCircle = [];
-            for (let point of primaryCircle) {
-                if (this.boardStateService.pixelPointInBounds(point)) {
-                    croppedCircle.push(point);
-                    if (point.y >= this.boardStateService.mapDimY * BoardStateService.cell_res) {
-                        croppedCircle.push(new XyPair(point.x, point.y - 1));
-                    } else {
-                        croppedCircle.push(new XyPair(point.x, point.y + 1));
-                    }
-                }
-            }
-            this.brightLightPolygons.push(this.boardVisibilityService.raytraceVisibilityFromCell(lightSourceResLocation, 500, ...croppedCircle));
-
-            primaryCircle = BoardVisibilityService.BresenhamCircle(lightSourceResLocation.x, lightSourceResLocation.y, PLAYER_DIM_RANGE * BoardStateService.cell_res + BoardStateService.cell_res/2);
-            croppedCircle = [];
-            for (let point of primaryCircle) {
-                if (this.boardStateService.pixelPointInBounds(point)) {
-                    croppedCircle.push(point);
-                    if (point.y >= this.boardStateService.mapDimY * BoardStateService.cell_res) {
-                        croppedCircle.push(new XyPair(point.x, point.y - 1));
-                    } else {
-                        croppedCircle.push(new XyPair(point.x, point.y + 1));
-                    }
-                }
-            }
-            this.dimLightPolygons.push(this.boardVisibilityService.raytraceVisibilityFromCell(lightSourceResLocation, 500, ...croppedCircle));
+            const bright_poly = this.raytracePolygon(lightSourceResLocation, PLAYER_BRIGHT_RANGE);
+            const dim_poly = this.raytracePolygon(lightSourceResLocation, PLAYER_DIM_RANGE);
+            this.dimLightPolygons.push(dim_poly);
+            this.brightLightPolygons.push(bright_poly);
         }
-        console.log('time to updateLight: ' + (window.performance.now() - t_start));
     }
 }

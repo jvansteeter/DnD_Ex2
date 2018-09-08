@@ -47,7 +47,7 @@ export class BoardWallService {
                     this.boardTraverseService.blockBkw(target.location);
                     break;
             }
-            this.boardLightService.updateLightValues();
+            this.boardLightService.updateAllLightValues();
             this.boardPlayerService.updateAllPlayerTraverse();
         }
     }
@@ -74,7 +74,7 @@ export class BoardWallService {
                     break;
             }
         }
-        this.boardLightService.updateLightValues();
+        this.boardLightService.updateAllLightValues();
         this.boardPlayerService.updateAllPlayerTraverse();
     }
 
@@ -131,7 +131,7 @@ export class BoardWallService {
             }
         }
 
-        this.boardLightService.updateLightValues();
+        this.boardLightService.updateAllLightValues();
         this.boardPlayerService.updateAllPlayerTraverse();
     }
 
@@ -158,7 +158,7 @@ export class BoardWallService {
             }
         }
         if (singleInstance) {
-            this.boardLightService.updateLightValues();
+            this.boardLightService.updateAllLightValues();
             this.boardPlayerService.updateAllPlayerTraverse();
         }
     }
@@ -186,7 +186,7 @@ export class BoardWallService {
             }
         }
         if (singleInstance) {
-            this.boardLightService.updateLightValues();
+            this.boardLightService.updateAllLightValues();
             this.boardPlayerService.updateAllPlayerTraverse();
         }
     }
@@ -264,7 +264,7 @@ export class BoardWallService {
                 this.addWall(new CellTarget(new XyPair(currentCell.x, currentCell.y), CellRegion.BKWD_EDGE), false);
             }
         }
-        this.boardLightService.updateLightValues();
+        this.boardLightService.updateAllLightValues();
         this.boardPlayerService.updateAllPlayerTraverse();
     }
 

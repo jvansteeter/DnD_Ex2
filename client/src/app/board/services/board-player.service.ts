@@ -12,12 +12,11 @@ import {BoardLightService} from "./board-light.service";
 
 @Injectable()
 export class BoardPlayerService extends IsReadyService {
-    public player_visibility_map: Map<string, Polygon>;
 
+    public player_lightSource_map: Map<string, Polygon>;
+    public player_visibility_map: Map<string, Polygon>;
     public player_traverse_map: Map<string, Array<number>>;
 
-    public player_traverse_map_near: Map<string, Array<XyPair>>;
-    public player_traverse_map_far: Map<string, Array<XyPair>>;
     public selectedPlayerIds: Set<string>;
     public hoveredPlayerId = '';
 
@@ -29,10 +28,9 @@ export class BoardPlayerService extends IsReadyService {
                 private boardTraverseService: BoardTraverseService,
                 private boardStateService: BoardStateService) {
         super(encounterService, boardStateService, boardTraverseService, boardVisibilityService);
+        this.player_lightSource_map = new Map<string, Polygon>();
         this.player_visibility_map = new Map<string, Polygon>();
         this.selectedPlayerIds = new Set<string>();
-        this.player_traverse_map_near = new Map<string, Array<XyPair>>();
-        this.player_traverse_map_far = new Map<string, Array<XyPair>>();
         this.player_traverse_map = new Map<string, Array<number>>();
         this.init();
     }
@@ -50,34 +48,64 @@ export class BoardPlayerService extends IsReadyService {
 
     public addPlayer(player: Player) {
         this.encounterService.addPlayer(player);
-        this.updateAllPlayerTraverse();
-        this.updateAllPlayerVisibility();
+        this.updatePlayerTraverse(player.id);
+        this.updatePlayerVisibility(player.id);
     }
 
     public removePlayer(player: Player) {
         this.encounterService.removePlayer(player);
-        this.updateAllPlayerTraverse();
-        this.updateAllPlayerVisibility();
+        this.removePlayerVisibility(player.id);
+        this.removePlayerTraverse(player.id);
     }
 
     public movePlayer(id: string, location: XyPair) {
     }
 
-    public updateAllPlayerVisibility() {
-        for (let player of this.encounterService.players) {
-            this.updatePlayerVisibility(player._id);
-        }
+    /*********************************************************************************************************************************************
+     * LIGHT SOURCE
+     *********************************************************************************************************************************************/
+    public updateAllPlayerLightSource() {
+
     }
 
+    public removePlayerLightSource(playerId: string) {
+
+    }
+
+    public updatePlayerLightSource(playerId: string) {
+
+    }
+
+    /*********************************************************************************************************************************************
+     * VISIBILITY
+     *********************************************************************************************************************************************/
     public updateAllPlayerTraverse() {
         for (const player of this.encounterService.players) {
             this.updatePlayerTraverse(player._id);
         }
     }
 
+    public removePlayerTraverse(id: string) {
+        this.player_traverse_map.delete(id);
+    }
+
     public updatePlayerTraverse(id: string) {
         const player = this.encounterService.getPlayerById(id);
         this.player_traverse_map.set(player._id, this.boardTraverseService.dijkstraTraverse(player.location, player.speed * 2));
+    }
+
+
+    /*********************************************************************************************************************************************
+     * VISIBILITY
+     *********************************************************************************************************************************************/
+    public updateAllPlayerVisibility() {
+        for (let player of this.encounterService.players) {
+            this.updatePlayerVisibility(player._id);
+        }
+    }
+
+    public removePlayerVisibility(id: string) {
+        this.player_visibility_map.delete(id);
     }
 
     public updatePlayerVisibility(id: string) {
@@ -86,6 +114,10 @@ export class BoardPlayerService extends IsReadyService {
         const visibilityPolygon = this.boardVisibilityService.raytraceVisibilityFromCell(playerResLocation, this.boardStateService.diag_visibility_ray_count);
         this.player_visibility_map.set(id, visibilityPolygon);
     }
+
+    /*********************************************************************************************************************************************
+     * INPUT CONTROL
+     *********************************************************************************************************************************************/
 
     public syncPlayerHover(cell: XyPair) {
         this.hoveredPlayerId = '';
@@ -111,7 +143,7 @@ export class BoardPlayerService extends IsReadyService {
 
                     this.updatePlayerVisibility(player._id);
                     this.updatePlayerTraverse(player._id);
-                    this.boardLightService.updateLightValues();
+                    this.boardLightService.updateAllLightValues();
 
                     this.selectedPlayerIds = new Set<string>();
                 }
@@ -125,6 +157,10 @@ export class BoardPlayerService extends IsReadyService {
             }
         }
     }
+
+    /*********************************************************************************************************************************************
+     * GET/SET
+     *********************************************************************************************************************************************/
 
     get players(): Player[] {
         return this.encounterService.players;
