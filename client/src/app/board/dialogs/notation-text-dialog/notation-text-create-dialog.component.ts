@@ -7,8 +7,8 @@ import {TextNotation} from "../../shared/notation/text-notation";
 
 @Component({
     selector: 'text-create-dialog',
-    templateUrl: 'notation-text-create-dialog.component.html',
-    styleUrls: ['notation-text-create-dialog.component.scss']
+    templateUrl: 'src/app/board/dialogs/notation-text-dialog/notation-text-create-dialog.component.html',
+    styleUrls: ['src/app/board/dialogs/notation-text-dialog/notation-text-create-dialog.component.scss']
 })
 
 export class NotationTextCreateDialogComponent {

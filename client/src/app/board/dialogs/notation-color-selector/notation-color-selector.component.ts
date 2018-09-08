@@ -4,8 +4,8 @@ import {ColorStatics} from "../../statics/color-statics";
 
 @Component({
     selector: 'notation-color-selector',
-    templateUrl: 'notation-color-selector.component.html',
-    styleUrls: ['notation-color-selector.component.scss']
+    templateUrl: 'src/app/board/dialogs/notation-color-selector/notation-color-selector.component.html',
+    styleUrls: ['src/app/board/dialogs/notation-color-selector/notation-color-selector.component.scss']
 })
 
 export class NotationColorSelectorComponent {

@@ -4,8 +4,8 @@ import {BoardNotationService} from "../../services/board-notation-service";
 
 @Component({
     selector: 'notation-icon-selector',
-    templateUrl: 'notation-icon-selector.component.html',
-    styleUrls: ['notation-icon-selector.component.scss']
+    templateUrl: 'src/app/board/dialogs/notation-icon-selector/notation-icon-selector.component.html',
+    styleUrls: ['src/app/board/dialogs/notation-icon-selector/notation-icon-selector.component.scss']
 })
 
 export class NotationIconSelectorComponent {

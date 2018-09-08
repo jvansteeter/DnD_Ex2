@@ -88,7 +88,7 @@ export class BoardLightService extends IsReadyService {
                     }
                 }
             }
-            this.brightLightPolygons.push(this.boardVisibilityService.raytraceVisibilityFromCell(lightSourceResLocation, 200, ...croppedCircle));
+            this.brightLightPolygons.push(this.boardVisibilityService.raytraceVisibilityFromCell(lightSourceResLocation, 500, ...croppedCircle));
 
             primaryCircle = BoardVisibilityService.BresenhamCircle(lightSourceResLocation.x, lightSourceResLocation.y, lightSource.dim_range * BoardStateService.cell_res + BoardStateService.cell_res/2);
             croppedCircle = [];
@@ -102,7 +102,7 @@ export class BoardLightService extends IsReadyService {
                     }
                 }
             }
-            this.dimLightPolygons.push(this.boardVisibilityService.raytraceVisibilityFromCell(lightSourceResLocation, 200, ...croppedCircle));
+            this.dimLightPolygons.push(this.boardVisibilityService.raytraceVisibilityFromCell(lightSourceResLocation, 500, ...croppedCircle));
         }
 
         const PLAYER_BRIGHT_RANGE = 2;
@@ -122,7 +122,7 @@ export class BoardLightService extends IsReadyService {
                     }
                 }
             }
-            this.brightLightPolygons.push(this.boardVisibilityService.raytraceVisibilityFromCell(lightSourceResLocation, 200, ...croppedCircle));
+            this.brightLightPolygons.push(this.boardVisibilityService.raytraceVisibilityFromCell(lightSourceResLocation, 500, ...croppedCircle));
 
             primaryCircle = BoardVisibilityService.BresenhamCircle(lightSourceResLocation.x, lightSourceResLocation.y, PLAYER_DIM_RANGE * BoardStateService.cell_res + BoardStateService.cell_res/2);
             croppedCircle = [];
@@ -136,7 +136,7 @@ export class BoardLightService extends IsReadyService {
                     }
                 }
             }
-            this.dimLightPolygons.push(this.boardVisibilityService.raytraceVisibilityFromCell(lightSourceResLocation, 200, ...croppedCircle));
+            this.dimLightPolygons.push(this.boardVisibilityService.raytraceVisibilityFromCell(lightSourceResLocation, 500, ...croppedCircle));
         }
         console.log('time to updateLight: ' + (window.performance.now() - t_start));
     }
