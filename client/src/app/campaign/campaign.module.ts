@@ -19,7 +19,7 @@ import { NewEncounterDialogComponent } from './dialog/new-encounter-dialog.compo
 import { UtilityModule } from '../utilities/utility.module';
 import { AppCDKModule } from '../cdk/cdk.module';
 import { CampaignPageService } from './campaign-page.service';
-
+import { RightsService } from '../data-services/rights.service';
 
 @NgModule({
 	imports: [
@@ -56,6 +56,7 @@ import { CampaignPageService } from './campaign-page.service';
 	providers: [
 		CampaignRepository,
 		CampaignPageService,
+		RightsService,
 	]
 })
 export class CampaignModule {

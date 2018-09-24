@@ -84,6 +84,7 @@ export class EncounterRouter {
 			try {
 				const encounterId = req.body.encounterId;
 				await this.encounterService.updateEncounterOpenStatus(encounterId, true);
+				res.status(200).send();
 			}
 			catch (error) {
 				console.error(error);
@@ -95,6 +96,7 @@ export class EncounterRouter {
 			try {
 				const encounterId = req.body.encounterId;
 				await this.encounterService.updateEncounterOpenStatus(encounterId, false);
+				res.status(200).send();
 			}
 			catch (error) {
 				console.error(error);

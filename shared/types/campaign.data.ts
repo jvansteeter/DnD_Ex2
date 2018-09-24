@@ -7,6 +7,7 @@ export interface CampaignData {
     label: string;
     ruleSetId: string;
     members?: UserProfile[];
+    gameMasters?: string[];
     encounters?: EncounterData[];
     characters?: CharacterData[];
 }

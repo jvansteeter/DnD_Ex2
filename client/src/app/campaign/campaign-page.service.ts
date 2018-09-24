@@ -12,6 +12,7 @@ import { CampaignData } from '../../../../shared/types/campaign.data';
 import { CharacterRepository } from '../repositories/character.repository';
 import { CharacterData } from '../../../../shared/types/character.data';
 import { EncounterRepository } from '../repositories/encounter.repository';
+import { RightsService } from '../data-services/rights.service';
 
 @Injectable()
 export class CampaignPageService extends IsReadyService {
@@ -22,11 +23,13 @@ export class CampaignPageService extends IsReadyService {
 	private readonly _membersSubject: BehaviorSubject<UserProfile[]>;
 	private readonly _charactersSubject: BehaviorSubject<CharacterData[]>;
 	private campaignMessageSubscription: Subscription;
+	private _gameMasters: string[];
 
 	constructor(private campaignRepo: CampaignRepository,
 	            private characterRepo: CharacterRepository,
 	            private encounterRepo: EncounterRepository,
-	            private mqService: MqService) {
+	            private mqService: MqService,
+	            private rightsService: RightsService) {
 		super(mqService);
 		this._encounterSubject = new BehaviorSubject<EncounterData[]>([]);
 		this._membersSubject = new BehaviorSubject<UserProfile[]>([]);
@@ -36,10 +39,16 @@ export class CampaignPageService extends IsReadyService {
 	public init(): void {
 		this.dependenciesReady().subscribe((isReady: boolean) => {
 			if (isReady) {
-				this.getCampaignState().subscribe(() => {
-
-					this.observeCampaignUpdates();
-					this.setReady(true);
+				this.getCampaignState().pipe(
+						tap(() => {
+							this.rightsService.setCampaignService(this);
+							this.observeCampaignUpdates();
+							// this.setReady(true);
+						}),
+						mergeMap(() => {
+							return this.updateEncountersList()
+						})).subscribe(() => {
+							this.setReady(true);
 				});
 			}
 			else {
@@ -97,6 +106,16 @@ export class CampaignPageService extends IsReadyService {
 		});
 	}
 
+	// public isGameMaster(userId: string): boolean {
+	// 	for (let id of this._gameMasters) {
+	// 		if (id === userId) {
+	// 			return true;
+	// 		}
+	// 	}
+	//
+	// 	return false;
+	// }
+
 	get members(): UserProfile[] {
 		return this.campaignState.members;
 	}
@@ -128,11 +147,17 @@ export class CampaignPageService extends IsReadyService {
 						}),
 						tap((members: UserProfile[]) => {
 							this.campaignState.members = members;
+							this._gameMasters = [];
+							for (let member of members) {
+								if (member['gameMaster'] === true) {
+									this._gameMasters.push(member._id);
+								}
+							}
 							this._membersSubject.next(this.campaignState.members);
 						}),
-						mergeMap(() => {
-							return this.updateEncountersList();
-						}),
+						// mergeMap(() => {
+						// 	return this.updateEncountersList();
+						// }),
 						mergeMap(() => {
 							return this.characterRepo.getCharactersByCampaignId(this.campaignId);
 						}),
@@ -149,13 +174,25 @@ export class CampaignPageService extends IsReadyService {
 
 	private observeCampaignUpdates(): void {
 		this.campaignMessageSubscription = this.mqService.getIncomingCampaignMessages(this.campaignId).subscribe(() => {
-			this.getCampaignState().subscribe();
+			this.getCampaignState().pipe(mergeMap(() => {
+				return this.updateEncountersList();
+			})).subscribe();
 		});
 	}
 
 	private updateEncountersList(): Observable<void> {
 		return this.campaignRepo.getAllEncounters(this.campaignState._id).pipe(map((encounters: EncounterData[]) => {
-			this.campaignState.encounters = encounters;
+			if (this.rightsService.isCampaignGM()) {
+				this.campaignState.encounters = encounters;
+			}
+			else {
+				this.campaignState.encounters = [];
+				for (let encounter of encounters) {
+					if (encounter.isOpen) {
+						this.campaignState.encounters.push(encounter);
+					}
+				}
+			}
 			this._encounterSubject.next(this.campaignState.encounters);
 			return;
 		}));

@@ -55,10 +55,16 @@ export class CampaignRouter {
 			}).catch(error => res.status(500).send(error));
 		});
 
-		this.router.get('/members/:campaignId', (req: Request, res: Response) => {
-			this.campaignService.findAllForCampaign(req.params.campaignId).then(members => {
+		this.router.get('/members/:campaignId', async (req: Request, res: Response) => {
+			try {
+				const campaignId = req.params.campaignId;
+				const members = await this.campaignService.findAllForCampaign(campaignId);
 				res.json(members);
-			}).catch(error => res.status(500).send(error));
+			}
+			catch (error) {
+				console.error(error);
+				res.status(500).send(error);
+			}
 		});
 
 		this.router.post('/newEncounter/:campaignId', async (req: Request, res: Response) => {

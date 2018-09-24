@@ -16,6 +16,7 @@ import { RuleSetRepository } from '../repositories/rule-set.repository';
 import { CharacterData } from '../../../../shared/types/character.data';
 import { EncounterData } from '../../../../shared/types/encounter/encounter.data';
 import { MqService } from '../mq/mq.service';
+import { RightsService } from '../data-services/rights.service';
 
 
 @Component({
@@ -45,6 +46,7 @@ export class CampaignComponent implements OnInit, OnDestroy {
 	            private dialog: MatDialog,
 	            private ruleSetRepo: RuleSetRepository,
 	            private mqService: MqService,
+	            public rightsService: RightsService,
 	            private router: Router) {
 	}
 
@@ -63,6 +65,7 @@ export class CampaignComponent implements OnInit, OnDestroy {
 				this.memberDataSource = new SubjectDataSource(this.campaignPageService.membersSubject);
 				this.encounterDataSource = new SubjectDataSource(this.campaignPageService.encounterSubject);
 				this.characterDataSource = new SubjectDataSource(this.campaignPageService.characterSubject);
+				this.rightsService.setCampaignService(this.campaignPageService);
 			}
 		});
 

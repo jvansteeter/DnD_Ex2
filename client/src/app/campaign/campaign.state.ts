@@ -2,6 +2,7 @@ import { UserProfile } from '../types/userProfile';
 import { CampaignData } from '../../../../shared/types/campaign.data';
 import { EncounterData } from '../../../../shared/types/encounter/encounter.data';
 import { CharacterData } from '../../../../shared/types/character.data';
+import { isUndefined } from 'util';
 
 export class CampaignState implements CampaignData {
   _id: string;
@@ -19,6 +20,9 @@ export class CampaignState implements CampaignData {
   }
 
   public getEncounter(encounterId: string): EncounterData {
+  	if (isUndefined(this._encounters)) {
+  		return undefined;
+	  }
   	for (let encounter of this._encounters) {
   		if (encounterId === encounter._id) {
   			return encounter;
@@ -29,6 +33,9 @@ export class CampaignState implements CampaignData {
   }
 
   get members(): UserProfile[] {
+  	if (isUndefined(this._members)) {
+  		return [];
+	  }
     return this._members;
   }
 

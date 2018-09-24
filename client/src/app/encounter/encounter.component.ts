@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { EncounterService } from './encounter.service';
 import { ActivatedRoute } from '@angular/router';
 import { EncounterConcurrencyService } from './encounter-concurrency.service';
+import { RightsService } from '../data-services/rights.service';
 
 @Component({
 	selector: 'encounter',
@@ -9,11 +10,10 @@ import { EncounterConcurrencyService } from './encounter-concurrency.service';
   styleUrls: ['encounter.component.css']
 })
 export class EncounterComponent implements OnInit {
-	public ready: boolean = false;
-
 	constructor(private encounterService: EncounterService,
 							private activatedRoute: ActivatedRoute,
-	            private encounterConcurrencyService: EncounterConcurrencyService) {
+	            private encounterConcurrencyService: EncounterConcurrencyService,
+	            private rightsService: RightsService) {
 		this.encounterConcurrencyService.init();
 	}
 
@@ -22,7 +22,9 @@ export class EncounterComponent implements OnInit {
 			let encounterId = params['encounterId'];
 			this.encounterService.setEncounterId(encounterId);
 			this.encounterService.isReady().subscribe((isReady: boolean) => {
-				this.ready = isReady;
+				if (isReady) {
+					this.rightsService.setEncounterService(this.encounterService);
+				}
 			});
 		});
 	}

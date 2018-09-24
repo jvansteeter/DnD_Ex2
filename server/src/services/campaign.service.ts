@@ -90,7 +90,7 @@ export class CampaignService {
 				let members: any[] = [];
 				userCampaigns.forEach((userCampaign: UserCampaignModel) => {
 					this.userRepository.findById(userCampaign.userId).then((user: UserModel) => {
-						var userData = JSON.parse(JSON.stringify(user));
+						let userData = JSON.parse(JSON.stringify(user));
 						delete userData.passwordHash;
 						userData['gameMaster'] = userCampaign.gameMaster;
 						members.push(userData);

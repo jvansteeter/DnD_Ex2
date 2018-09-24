@@ -25,6 +25,8 @@ import { MainTableComponent } from './main-table/main-table.component';
 import { MainNavModule } from './main-nav/main-nav.module';
 import { StompRService } from "@stomp/ng2-stompjs";
 import { MqService } from './mq/mq.service';
+import { UserProfileService } from './data-services/userProfile.service';
+import { UserRepository } from './repositories/user.repository';
 
 @NgModule({
 	imports: [
