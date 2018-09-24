@@ -32,12 +32,12 @@ export class RightsService extends IsReadyService {
 		return false;
 	}
 
-	public isCampaignGM(): boolean {
+	public isCampaignGM(userId: string = this.userProfileService.userId): boolean {
 		if (isUndefined(this.campaignService) || isUndefined(this.campaignService.campaignState)) {
 			return false;
 		}
 		for (let member of this.campaignService.campaignState.members) {
-			if (member._id === this.userProfileService.userId) {
+			if (member._id === userId) {
 				return member['gameMaster'];
 			}
 		}

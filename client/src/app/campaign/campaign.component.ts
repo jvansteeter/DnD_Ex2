@@ -17,6 +17,7 @@ import { CharacterData } from '../../../../shared/types/character.data';
 import { EncounterData } from '../../../../shared/types/encounter/encounter.data';
 import { MqService } from '../mq/mq.service';
 import { RightsService } from '../data-services/rights.service';
+import { timer } from 'rxjs';
 
 
 @Component({
@@ -101,19 +102,23 @@ export class CampaignComponent implements OnInit, OnDestroy {
 		this.campaignPageService.unInit();
 	}
 
-	// public changeGameMaster(member: any): void {
-	//   // make sure there is at least one game master left
-	//   let remainingMaster = false;
-	//   for (let i = 0; i < this.members.length; i++) {
-	//     remainingMaster = remainingMaster || this.members[ i ].gameMaster;
-	//   }
-	//   if (!remainingMaster) {
-	//     Observable.timer(100).subscribe(() => {
-	//       member.gameMaster = true;
-	//     });
-	//     this.alertService.showAlert('There must be at least one game master');
-	//   }
-	// }
+	public changeGameMaster(member: any): void {
+	  // make sure there is at least one game master left
+	  let remainingMaster = false;
+	  member.gameMaster = !member.gameMaster;
+	  for (let i = 0; i < this.campaignPageService.members.length; i++) {
+	    remainingMaster = remainingMaster || this.rightsService.isCampaignGM(this.campaignPageService.members[i]._id);
+	  }
+	  if (!remainingMaster) {
+	    timer(100).subscribe(() => {
+	      member.gameMaster = true;
+	    });
+	    this.alertService.showAlert('There must be at least one game master');
+	  }
+	  else {
+	  	this.campaignPageService.setIsGameMaster(member._id, member.gameMaster);
+	  }
+	}
 
 	public enterEncounter(encounter: EncounterData): void {
 		this.router.navigate(['encounter', encounter._id])

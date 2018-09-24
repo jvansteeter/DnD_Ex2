@@ -78,29 +78,61 @@ export class CampaignService {
 		});
 	}
 
-	public findAllForCampaign(campaignId: string): Promise<any> {
-		return new Promise((resolve, reject) => {
-			this.userCampaignRepository.findAllForCampaign(campaignId).then((userCampaigns: UserCampaignModel[]) => {
-				let userCampaignCount = userCampaigns.length;
-				if (userCampaignCount === 0) {
-					resolve([]);
-					return;
+	public async findAllForCampaign(campaignId: string): Promise<any> {
+		try {
+			const userCampaigns: UserCampaignModel[] = await this.userCampaignRepository.findAllForCampaign(campaignId);
+			let members: any[] = [];
+			for (let userCampaign of userCampaigns) {
+				const user: UserModel = await this.userRepository.findById(userCampaign.userId);
+				const userData = JSON.parse(JSON.stringify(user));
+				delete userData.passwordHash;
+				userData['gameMaster'] = userCampaign.gameMaster;
+				members.push(userData);
+			}
+
+			return members;
+		}
+		catch (error) {
+			throw error;
+		}
+		// return new Promise((resolve, reject) => {
+		// 	this.userCampaignRepository.findAllForCampaign(campaignId).then((userCampaigns: UserCampaignModel[]) => {
+		// 		let userCampaignCount = userCampaigns.length;
+		// 		if (userCampaignCount === 0) {
+		// 			resolve([]);
+		// 			return;
+		// 		}
+		//
+		// 		let members: any[] = [];
+		// 		userCampaigns.forEach((userCampaign: UserCampaignModel) => {
+		// 			this.userRepository.findById(userCampaign.userId).then((user: UserModel) => {
+		// 				let userData = JSON.parse(JSON.stringify(user));
+		// 				delete userData.passwordHash;
+		// 				userData['gameMaster'] = userCampaign.gameMaster;
+		// 				members.push(userData);
+		//
+		// 				if (--userCampaignCount === 0) {
+		// 					resolve(members);
+		// 				}
+		// 			}).catch(error => reject(error));
+		// 		});
+		// 	}, error => reject(error));
+		// });
+	}
+
+	public async setIsGameMaster(campaignId: string, userId: string, isGameMaster: boolean): Promise<void> {
+		try {
+			const userCampaigns: UserCampaignModel[] = await this.userCampaignRepository.findAllForCampaign(campaignId);
+			for (let userCampaign of userCampaigns) {
+				if (userCampaign.userId === userId) {
+					await userCampaign.setIsGameMaster(isGameMaster);
+					break;
 				}
-
-				let members: any[] = [];
-				userCampaigns.forEach((userCampaign: UserCampaignModel) => {
-					this.userRepository.findById(userCampaign.userId).then((user: UserModel) => {
-						let userData = JSON.parse(JSON.stringify(user));
-						delete userData.passwordHash;
-						userData['gameMaster'] = userCampaign.gameMaster;
-						members.push(userData);
-
-						if (--userCampaignCount === 0) {
-							resolve(members);
-						}
-					}).catch(error => reject(error));
-				});
-			}, error => reject(error));
-		});
+			}
+			return;
+		}
+		catch (error) {
+			throw error;
+		}
 	}
 }

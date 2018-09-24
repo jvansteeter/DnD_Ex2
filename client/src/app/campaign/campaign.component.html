@@ -11,7 +11,7 @@
 					<ng-container matColumnDef="gm">
 						<mat-header-cell *matHeaderCellDef><span style="float: right">GM</span></mat-header-cell>
 						<mat-cell *matCellDef="let member">
-							<mat-checkbox color="primary" [(ngModel)]="member.gameMaster" style="float: right" [disabled]="true"></mat-checkbox>
+							<mat-checkbox color="primary" [checked]="member.gameMaster" (change)="changeGameMaster(member)" [disabled]="!rightsService.isCampaignGM()"></mat-checkbox>
 						</mat-cell>
 					</ng-container>
 					<mat-header-row *matHeaderRowDef="memberTableCols"></mat-header-row>

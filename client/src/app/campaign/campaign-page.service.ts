@@ -106,15 +106,11 @@ export class CampaignPageService extends IsReadyService {
 		});
 	}
 
-	// public isGameMaster(userId: string): boolean {
-	// 	for (let id of this._gameMasters) {
-	// 		if (id === userId) {
-	// 			return true;
-	// 		}
-	// 	}
-	//
-	// 	return false;
-	// }
+	public setIsGameMaster(userId: string, isGameMaster: boolean): void {
+		this.campaignRepo.setIsGameMaster(this.campaignId, userId, isGameMaster).subscribe(() => {
+			this.mqService.sendCampaignUpdate(this.campaignId);
+		});
+	}
 
 	get members(): UserProfile[] {
 		return this.campaignState.members;

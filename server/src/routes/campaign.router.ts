@@ -89,6 +89,20 @@ export class CampaignRouter {
 				res.json(encounters);
 			}).catch(error => res.status(500).send(error));
 		});
+
+		this.router.post('/setGameMaster', async (req: Request, res: Response) => {
+			try {
+				const campaignId = req.body.campaignId;
+				const userId = req.body.userId;
+				const isGameMaster: boolean = req.body.isGameMaster === 'true';
+				await this.campaignService.setIsGameMaster(campaignId, userId, isGameMaster);
+				res.status(200).send();
+			}
+			catch (error) {
+				console.error(error);
+				res.status(500).send(error);
+			}
+		});
 	}
 }
 

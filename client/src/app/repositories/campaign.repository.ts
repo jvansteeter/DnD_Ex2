@@ -42,4 +42,14 @@ export class CampaignRepository {
 	public getAllEncounters(campaignId: string): Observable<EncounterData[]> {
 		return this.http.get<EncounterData[]>('api/campaign/encounters/' + campaignId, {responseType: 'json'});
 	}
+
+	public setIsGameMaster(campaignId: string, userId: string, isGameMaster: boolean): Observable<void> {
+		const body = {
+			campaignId: campaignId,
+			userId: userId,
+			isGameMaster: isGameMaster ? 'true' : 'false'
+		};
+
+		return this.http.post<void>('/api/campaign/setGameMaster', body);
+	}
 }
