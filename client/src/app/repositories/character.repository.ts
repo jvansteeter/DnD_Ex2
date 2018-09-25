@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CharacterData } from '../../../../shared/types/character.data';
 import { isUndefined } from "util";
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class CharacterRepository {
@@ -38,5 +39,15 @@ export class CharacterRepository {
 	public getAllByCampaignId(campaignId: string): Observable<{campaignCharacters: CharacterData[], ruleSetNPCs: CharacterData[]}> {
 		return this.http.get<{campaignCharacters: CharacterData[], ruleSetNPCs: CharacterData[]}>('/api/character/campaign/all/'
 			+ campaignId, {responseType: 'json'});
+	}
+
+	public deleteCharacter(characterId: string): Observable<void> {
+		const body = {
+			characterId: characterId
+		};
+
+		return this.http.post('/api/character/delete', body, {responseType: 'text'}).pipe(map(() => {
+			return;
+		}));
 	}
 }

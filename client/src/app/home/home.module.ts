@@ -5,8 +5,15 @@ import { RuleSetRepository } from '../repositories/rule-set.repository';
 import { NewCampaignDialogComponent } from './dialog/new-campaign-dialog.component';
 import { RuleSetModule } from '../rule-set/rule-set.module';
 import {
-  MatButtonModule, MatCardModule, MatExpansionModule, MatGridListModule, MatIconModule, MatInputModule, MatListModule,
-  MatMenuModule, MatTableModule
+	MatButtonModule,
+	MatCardModule,
+	MatExpansionModule,
+	MatGridListModule,
+	MatIconModule,
+	MatInputModule,
+	MatListModule,
+	MatMenuModule, MatSelectModule,
+	MatTableModule
 } from '@angular/material';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
@@ -32,6 +39,7 @@ import { CampaignService } from '../data-services/campaign.service';
     MatGridListModule,
     MatCardModule,
     AppCDKModule,
+	  MatSelectModule,
   ],
   declarations: [
     HomeComponent,

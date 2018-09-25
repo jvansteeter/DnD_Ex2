@@ -43,6 +43,17 @@
 						<mat-header-cell *matHeaderCellDef>NPCs</mat-header-cell>
 						<mat-cell *matCellDef="let npc">{{npc.label}}</mat-cell>
 					</ng-container>
+					<!--<ng-container matColumnDef="options">-->
+						<!--<mat-header-cell *matHeaderCellDef></mat-header-cell>-->
+						<!--<mat-cell *matCellDef="let npc">-->
+							<!--<button mat-icon-button matTooltip="Options" class="options-button" [matMenuTriggerFor]="npcOptionsMenu">-->
+								<!--<mat-icon>settings</mat-icon>-->
+							<!--</button>-->
+							<!--<mat-menu #npcOptionsMenu="matMenu">-->
+								<!--<button mat-menu-item (click)="deleteCharacter(npc)">Delete Character</button>-->
+							<!--</mat-menu>-->
+						<!--</mat-cell>-->
+					<!--</ng-container>-->
 					<mat-header-row *matHeaderRowDef="npcColumns"></mat-header-row>
 					<mat-row class="clickable-row" *matRowDef="let npc; columns: characterSheetColumns" (click)="editNpc(npc._id)"></mat-row>
 				</mat-table>

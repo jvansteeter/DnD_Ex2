@@ -112,6 +112,12 @@ export class CampaignPageService extends IsReadyService {
 		});
 	}
 
+	public deleteCharacter(characterId: string): void {
+		this.characterRepo.deleteCharacter(characterId).subscribe(() => {
+			this.mqService.sendCampaignUpdate(this.campaignId);
+		});
+	}
+
 	get members(): UserProfile[] {
 		return this.campaignState.members;
 	}

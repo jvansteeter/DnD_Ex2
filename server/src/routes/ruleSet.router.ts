@@ -72,10 +72,16 @@ export class RuleSetRouter {
 			}).catch(error => res.status(500).send(error))
 		});
 
-		this.router.get('/userrulesets', (req: Request, res: Response) => {
-			this.userRuleSetRepository.getAllRuleSets(req.user._id).then((ruleSetIds: string[]) => {
-				res.json(ruleSetIds);
-			}).catch(error => res.status(500).send(error));
+		this.router.get('/userrulesets', async (req: Request, res: Response) => {
+			try {
+				const userId = req.user._id;
+				const ruleSets = await this.userRuleSetRepository.getAllRuleSets(userId);
+				res.json(ruleSets);
+			}
+			catch (error) {
+				console.error(error);
+				res.status(500).send(error);
+			}
 		});
 
 		this.router.get('/charactersheets/:ruleSetId', (req: Request, res: Response) => {

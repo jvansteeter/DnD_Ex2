@@ -10,8 +10,8 @@ export class RuleSetRepository {
 
     }
 
-    public getRuleSets(): Observable<any> {
-        return this.http.get('/api/ruleset/userrulesets', {responseType: 'json'});
+    public getRuleSets(): Observable<RuleSetData[]> {
+        return this.http.get<RuleSetData[]>('/api/ruleset/userrulesets', {responseType: 'json'});
     }
 
     public getRuleSet(ruleSetId: string): Observable<RuleSetData> {

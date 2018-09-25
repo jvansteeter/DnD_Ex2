@@ -38,12 +38,12 @@ export class CampaignComponent implements OnInit, OnDestroy {
 
 	public charactersCard: DashboardCard;
 	public characterDataSource: SubjectDataSource<CharacterData>;
-	public characterTableCols = ['label'];
+	public characterTableCols = ['label', 'options'];
 
 	constructor(private activatedRoute: ActivatedRoute,
 	            public campaignPageService: CampaignPageService,
 	            private alertService: AlertService,
-	            private userProfileService: UserProfileService,
+	            public userProfileService: UserProfileService,
 	            private dialog: MatDialog,
 	            private ruleSetRepo: RuleSetRepository,
 	            private mqService: MqService,
@@ -138,6 +138,10 @@ export class CampaignComponent implements OnInit, OnDestroy {
 
 	public editCharacter(characterId: string): void {
 		this.router.navigate(['character', characterId]);
+	}
+
+	public deleteCharacter(character: CharacterData): void {
+		this.campaignPageService.deleteCharacter(character._id);
 	}
 
 	private inviteFriends = () => {

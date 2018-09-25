@@ -31,6 +31,16 @@ export class CharacterService {
 		}
 	}
 
+	public async deleteCharacter(characterId: string): Promise<void> {
+		try {
+			await this.characterRepo.deleteById(characterId);
+			return;
+		}
+		catch (error) {
+			throw error;
+		}
+	}
+
 	// public async createPlayerDataFromCharacter(characterId: string): Promise<PlayerData> {
 	// 	try {
 	// 		let character: CharacterData = await this.characterRepo.findById(characterId);

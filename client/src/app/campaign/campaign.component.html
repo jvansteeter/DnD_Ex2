@@ -54,12 +54,22 @@
 				<mat-table [dataSource]="characterDataSource">
 					<ng-container matColumnDef="label">
 						<mat-header-cell *matHeaderCellDef>Characters</mat-header-cell>
-						<mat-cell *matCellDef="let character">{{ character.label }}</mat-cell>
+						<mat-cell *matCellDef="let character" (click)="editCharacter(character._id)">{{ character.label }}</mat-cell>
+					</ng-container>
+					<ng-container matColumnDef="options">
+						<mat-header-cell *matHeaderCellDef></mat-header-cell>
+						<mat-cell *matCellDef="let character">
+							<button mat-icon-button matTooltip="Options" class="options-button" [matMenuTriggerFor]="characterOptionsMenu" *ngIf="rightsService.isCampaignGM() || character.creatorUserId === userProfileService.userId">
+								<mat-icon>settings</mat-icon>
+							</button>
+							<mat-menu #characterOptionsMenu="matMenu">
+								<button mat-menu-item (click)="deleteCharacter(character)">Delete Character</button>
+							</mat-menu>
+						</mat-cell>
 					</ng-container>
 					<mat-header-row *matHeaderRowDef="characterTableCols"></mat-header-row>
 					<mat-row class="clickable-row"
 					         *matRowDef="let character; columns: characterTableCols"
-					         (click)="editCharacter(character._id)"
 					></mat-row>
 				</mat-table>
 			</dashboard-card>

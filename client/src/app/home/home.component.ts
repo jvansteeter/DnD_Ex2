@@ -12,6 +12,7 @@ import {AddFriendComponent} from '../social/add-friend/add-friend.component';
 import {UserProfile} from '../types/userProfile';
 import {FriendService} from '../data-services/friend.service';
 import { CampaignService } from '../data-services/campaign.service';
+import { RuleSetData } from '../../../../shared/types/rule-set/rule-set.data';
 
 @Component({
 	selector: 'home-page',
@@ -23,7 +24,7 @@ export class HomeComponent implements OnInit {
 	private reader: FileReader = new FileReader();
 	private profilePhotoUrl: string = '';
 
-	public ruleSets: any[];
+	public ruleSets: RuleSetData[];
 	public ruleSetTableColumns = ['label'];
 	private readonly ruleSetSubject: Subject<any>;
 	private ruleSetDataSource: SubjectDataSource<any>;
@@ -106,7 +107,7 @@ export class HomeComponent implements OnInit {
 	}
 
 	private getRuleSets(): void {
-		this.ruleSetRepository.getRuleSets().subscribe((ruleSets: any) => {
+		this.ruleSetRepository.getRuleSets().subscribe((ruleSets: RuleSetData[]) => {
 			this.ruleSets = ruleSets;
 			this.ruleSetSubject.next(ruleSets);
 		});
@@ -121,7 +122,11 @@ export class HomeComponent implements OnInit {
 	};
 
 	private newCampaign = () => {
-		this.dialog.open(NewCampaignDialogComponent).componentInstance.getNewCampaignObservable().subscribe(() => {
+		this.dialog.open(NewCampaignDialogComponent, {
+			data: {
+				ruleSets: this.ruleSets
+			}
+		}).componentInstance.getNewCampaignObservable().subscribe(() => {
 			this.getCampaigns();
 		});
 	};

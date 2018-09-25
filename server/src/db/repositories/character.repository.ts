@@ -65,4 +65,17 @@ export class CharacterRepository {
 			});
 		});
 	}
+
+	public deleteById(characterId: string): Promise<void> {
+		return new Promise((resolve, reject) => {
+			this.Character.remove({_id: characterId}, (error) => {
+				if (error) {
+					reject(error);
+					return;
+				}
+
+				resolve();
+			})
+		});
+	}
 }

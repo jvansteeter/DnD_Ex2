@@ -100,6 +100,18 @@ export class CharacterRouter {
 				res.status(500).send(error);
 			}
 		});
+
+		this.router.post('/delete', async (req: Request, res: Response) => {
+			try {
+				const characterId = req.body.characterId;
+				await this.characterService.deleteCharacter(characterId);
+				res.send("OK");
+			}
+			catch (error) {
+				console.error(error);
+				res.status(500).send(error);
+			}
+		});
 	}
 }
 

@@ -10,6 +10,8 @@ import { DashboardCard } from '../../cdk/dashboard-card/dashboard-card';
 import { RuleSetData } from '../../../../../shared/types/rule-set/rule-set.data';
 import { ConfigService } from '../../data-services/config.service';
 import { NewCharacterDialogComponent } from './dialog/new-character-dialog.component';
+import { CharacterRepository } from '../../repositories/character.repository';
+import { CharacterData } from '../../../../../shared/types/character.data';
 
 @Component({
 	selector: 'rule-set-home',
@@ -44,6 +46,7 @@ export class RuleSetHomeComponent implements OnInit {
 	            private dialog: MatDialog,
 	            private router: Router,
 	            private ruleSetRepository: RuleSetRepository,
+	            private characterRepo: CharacterRepository,
 	            private configService: ConfigService) {
 		this.adminSubject = new Subject<AdminData[]>();
 		this.adminDataSource = new SubjectDataSource(this.adminSubject);
@@ -112,6 +115,12 @@ export class RuleSetHomeComponent implements OnInit {
 
 	public editNpc(npcId: string): void {
 		this.router.navigate(['character', npcId]);
+	}
+
+	public deleteCharacter(npc: CharacterData): void {
+		this.characterRepo.deleteCharacter(npc._id).subscribe(() => {
+			this.ngOnInit();
+		});
 	}
 
 	private createNPC = () => {

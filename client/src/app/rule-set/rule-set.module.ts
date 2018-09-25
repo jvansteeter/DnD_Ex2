@@ -4,8 +4,16 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import {
-	MatButtonModule, MatDialogModule, MatExpansionModule, MatGridListModule, MatInputModule, MatListModule,
-	MatSelectModule, MatSlideToggleModule,
+	MatButtonModule,
+	MatDialogModule,
+	MatExpansionModule,
+	MatGridListModule,
+	MatIconModule,
+	MatInputModule,
+	MatListModule,
+	MatMenuModule,
+	MatSelectModule,
+	MatSlideToggleModule,
 	MatTableModule
 } from '@angular/material';
 import { NewCharacterSheetDialogComponent } from './home/dialog/new-character-sheet-dialog.component';
@@ -30,6 +38,8 @@ import { NewCharacterDialogComponent } from './home/dialog/new-character-dialog.
 		MatGridListModule,
 		AppCDKModule,
 		MatSlideToggleModule,
+		MatMenuModule,
+		MatIconModule,
 	],
 	declarations: [
 		RuleSetHomeComponent,
