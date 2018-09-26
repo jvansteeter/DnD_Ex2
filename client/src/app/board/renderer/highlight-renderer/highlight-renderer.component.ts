@@ -1,4 +1,4 @@
-import {XyPair} from '../../geometry/xy-pair';
+import {XyPair} from '../../../../../../shared/types/encounter/board/geometry/xy-pair';
 import {isNullOrUndefined} from 'util';
 import {BoardStateService} from '../../services/board-state.service';
 import {BoardCanvasService} from '../../services/board-canvas.service';

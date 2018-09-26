@@ -6,9 +6,7 @@
   "types": "lib/index",
   "scripts": {
     "start": "npm run build && npm run server",
-    "start:dev": "npm run build && npm run server:dev",
     "server": "concurrently \"gulp watch\" \"nodemon server/dist/server/src/index.js secretArg\" \"webpack --progress --colors --watch\"",
-    "server:dev": "concurrently \"gulp watch\" \"nodemon server/dist/server/src/index.js secretArg -dev\" \"webpack --progress --colors --watch\"",
     "build": "npm run clean && gulp && webpack",
     "test": "mocha --reporter spec --compilers ts:ts-node/register test/helloWorld.test.ts",
     "clean": "rimraf client/dist client/typings server/dist",

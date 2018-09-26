@@ -1,13 +1,12 @@
-import {ElementRef, Injectable} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {isNullOrUndefined} from 'util';
-import {XyPair} from '../geometry/xy-pair';
+import {XyPair} from '../../../../../shared/types/encounter/board/geometry/xy-pair';
 import {CellTarget} from '../shared/cell-target';
 import {CellRegion} from '../shared/enum/cell-region';
 import {BoardStateService} from './board-state.service';
 import {CellTargetStatics} from '../statics/cell-target-statics';
-import {start} from 'repl';
 import {IsReadyService} from "../../utilities/services/isReady.service";
-import {Polygon} from "../shared/polygon";
+import {Polygon} from "../../../../../shared/types/encounter/board/polygon";
 
 @Injectable()
 export class BoardCanvasService extends IsReadyService {

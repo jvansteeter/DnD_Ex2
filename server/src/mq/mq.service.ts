@@ -85,6 +85,10 @@ export class MqService {
 						// do nothing, the server issues these commands
 						break;
 					}
+					case EncounterCommandType.LIGHT_SOURCE: {
+						await this.encounterService.setLightSources(command.headers.encounterId, command.body.data);
+						break;
+					}
 					default: {
 						console.error('Unrecognized Command Type')
 					}

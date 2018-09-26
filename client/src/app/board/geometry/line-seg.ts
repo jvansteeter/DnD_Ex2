@@ -1,5 +1,5 @@
 import {Line} from './line';
-import {XyPair} from './xy-pair';
+import {XyPair} from '../../../../../shared/types/encounter/board/geometry/xy-pair';
 import {isNullOrUndefined} from 'util';
 
 export class LineSeg {

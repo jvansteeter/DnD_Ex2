@@ -5,7 +5,6 @@ module.exports = {
   entry: {
     polyfills: './client/src/polyfills.ts',
     app: './client/src/main.ts',
-    dev: './client/src/dev.ts',
     login: './client/src/login.ts'
   },
 
@@ -72,11 +71,6 @@ module.exports = {
       filename: 'index.html',
       template: 'client/index.html',
       chunks: ['app', 'vendor', 'polyfills']
-    }),
-    new HtmlWebpackPlugin({
-      filename: 'dev.html',
-      template: 'client/dev.html',
-      chunks: ['dev', 'vendor', 'polyfills']
     }),
     new HtmlWebpackPlugin({
       filename: 'login.html',

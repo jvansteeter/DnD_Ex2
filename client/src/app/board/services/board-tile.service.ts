@@ -1,8 +1,7 @@
 import {Injectable} from '@angular/core';
 import {CellTileState} from '../shared/cell-tile-state';
 import {BoardStateService} from './board-state.service';
-import {XyPair} from '../geometry/xy-pair';
-import {expressionChangedAfterItHasBeenCheckedError} from '@angular/core/src/view/errors';
+import {XyPair} from '../../../../../shared/types/encounter/board/geometry/xy-pair';
 
 @Injectable()
 export class BoardTileService {

@@ -1,12 +1,10 @@
 import {Injectable} from '@angular/core';
 import {CellTarget} from '../shared/cell-target';
-import {XyPair} from '../geometry/xy-pair';
+import {XyPair} from '../../../../../shared/types/encounter/board/geometry/xy-pair';
 import {CellRegion} from '../shared/enum/cell-region';
 import {BoardStateService} from "./board-state.service";
 import {GeometryStatics} from "../statics/geometry-statics";
 import {IsReadyService} from "../../utilities/services/isReady.service";
-import {range} from "rxjs/index";
-import {ArrayStatics} from "../statics/array-statics";
 
 @Injectable()
 export class BoardTraverseService extends IsReadyService {

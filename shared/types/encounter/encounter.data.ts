@@ -1,5 +1,6 @@
 import {LightValue} from '../../../client/src/app/board/shared/enum/light-value';
 import { PlayerData } from './player.data';
+import { LightSourceData } from './board/light-source.data';
 
 export interface EncounterData {
     _id: string;
@@ -34,7 +35,7 @@ export interface EncounterData {
     /**************************************
      * LIGHT RELATED VARIABLES
      **************************************/
-    lightSourceData: Object;
+    lightSources: LightSourceData[];
     lightEnabled: boolean;
     ambientLight: LightValue;
 }

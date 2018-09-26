@@ -1,12 +1,12 @@
 import {Injectable} from '@angular/core';
-import {XyPair} from '../geometry/xy-pair';
+import {XyPair} from '../../../../../shared/types/encounter/board/geometry/xy-pair';
 import {EncounterService} from '../../encounter/encounter.service';
 import {BoardVisibilityService} from './board-visibility.service';
 import {BoardTraverseService} from './board-traverse.service';
 import {BoardStateService} from './board-state.service';
 import {IsReadyService} from '../../utilities/services/isReady.service';
 import {Player} from '../../encounter/player';
-import {Polygon} from "../shared/polygon";
+import {Polygon} from "../../../../../shared/types/encounter/board/polygon";
 import {BoardLightService} from "./board-light.service";
 import {LightSource} from "../map-objects/light-source";
 

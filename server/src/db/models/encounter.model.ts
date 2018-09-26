@@ -4,6 +4,7 @@ import { MongooseModel } from './mongoose.model';
 import { Schema } from 'mongoose';
 import { EncounterData } from '../../../../shared/types/encounter/encounter.data';
 import { PlayerData } from '../../../../shared/types/encounter/player.data';
+import { LightSourceData } from '../../../../shared/types/encounter/board/light-source.data';
 
 export class EncounterModel extends MongooseModel implements EncounterData {
 	public _id;
@@ -35,7 +36,7 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 	/**************************************
 	 * LIGHT RELATED VARIABLES
 	 **************************************/
-	lightSourceData: Object;
+	lightSources: LightSourceData[];
 	lightEnabled: boolean;
 	ambientLight: LightValue;
 
@@ -51,6 +52,14 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 			mapUrl: String,
 			mapDimX: Number,
 			mapDimY: Number,
+			lightSources: [{
+				location: {
+					x: Number,
+					y: Number
+				},
+				bright_range: Number,
+				dim_range: Number
+			}],
 		});
 
 		this._id = this.methods._id;
@@ -65,6 +74,7 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 		this.mapUrl = this.methods.mapUrl;
 		this.mapDimX = this.methods.mapDimX;
 		this.mapDimY = this.methods.mapDimY;
+		this.lightSources = this.methods.lightSources;
 
 		this.methods.addGameMaster = this.addGameMaster;
 		this.methods.addPlayer = this.addPlayer;
@@ -72,6 +82,7 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 		this.methods.setMapUrl = this.setMapUrl;
 		this.methods.setIsOpen = this.setIsOpen;
 		this.methods.incrementVersion = this.incrementVersion;
+		this.methods.setLightSources = this.setLightSources;
 	}
 
 	public addGameMaster(userId: string): Promise<EncounterModel> {
@@ -121,6 +132,14 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 
 	public incrementVersion(): Promise<EncounterModel> {
 		this.version++;
+		return this.save();
+	}
+
+	public setLightSources(lights: LightSourceData[]): Promise<EncounterModel> {
+		this.lightSources.splice(0, this.lightSources.length);
+		for (let light of lights) {
+			this.lightSources.push(light);
+		}
 		return this.save();
 	}
 }

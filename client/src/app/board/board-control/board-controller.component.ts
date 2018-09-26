@@ -5,10 +5,9 @@ import {BoardMode} from '../shared/enum/board-mode';
 import {LightValue} from '../shared/enum/light-value';
 import {BoardLightService} from '../services/board-light.service';
 import {PlayerVisibilityMode} from "../shared/enum/player-visibility-mode";
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {MatDialog, MatIconRegistry} from '@angular/material';
+import {Component, OnInit} from '@angular/core';
+import {MatDialog} from '@angular/material';
 import {NotationMode} from '../shared/enum/notation-mode';
-import {DomSanitizer} from '@angular/platform-browser';
 import {BoardNotationService} from '../services/board-notation-service';
 import {NotationVisibility} from "../shared/enum/notation-visibility";
 import {NotationIconSelectorComponent} from "../dialogs/notation-icon-selector/notation-icon-selector.component";
@@ -16,10 +15,9 @@ import {NotationColorSelectorComponent} from "../dialogs/notation-color-selector
 import {NotationSettingsDialogComponent} from "../dialogs/notation-settings-dialog/notation-settings-dialog.component";
 import { AddPlayerDialogComponent } from '../dialogs/add-player-dialog/add-player-dialog.component';
 import { EncounterService } from '../../encounter/encounter.service';
-import {NotationTextEditDialogComponent} from "../dialogs/notation-text-dialog/notation-text-edit-dialog.component";
 import {NotationTextCreateDialogComponent} from "../dialogs/notation-text-dialog/notation-text-create-dialog.component";
 import {BoardVisibilityService} from "../services/board-visibility.service";
-import {XyPair} from "../geometry/xy-pair";
+import {XyPair} from "../../../../../shared/types/encounter/board/geometry/xy-pair";
 
 @Component({
     selector: 'board-controller',

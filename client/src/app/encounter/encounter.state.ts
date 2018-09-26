@@ -3,6 +3,7 @@ import { Player } from './player';
 import { EncounterData } from '../../../../shared/types/encounter/encounter.data';
 import { PlayerData } from '../../../../shared/types/encounter/player.data';
 import { isUndefined } from 'util';
+import { LightSourceData } from '../../../../shared/types/encounter/board/light-source.data';
 
 export class EncounterState implements EncounterData {
 	_id: string;
@@ -14,7 +15,7 @@ export class EncounterState implements EncounterData {
 	gameMasters: string[];
 	label: string;
 	lightEnabled: boolean;
-	lightSourceData: Object;
+	lightSources: LightSourceData[];
 	mapDimX: number;
 	mapDimY: number;
 	map_enabled: boolean;

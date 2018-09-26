@@ -1,9 +1,8 @@
-import {XyPair} from '../geometry/xy-pair';
-import {isNullOrUndefined} from 'util';
-import {LightValue} from '../shared/enum/light-value';
-import {Polygon} from "../shared/polygon";
+import {XyPair} from '../../../../../shared/types/encounter/board/geometry/xy-pair';
+import {Polygon} from "../../../../../shared/types/encounter/board/polygon";
+import { LightSourceData } from '../../../../../shared/types/encounter/board/light-source.data';
 
-export class LightSource {
+export class LightSource implements LightSourceData {
     public location: XyPair;
 
     public bright_range: number;

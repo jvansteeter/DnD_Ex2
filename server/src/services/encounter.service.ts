@@ -8,6 +8,7 @@ import { CharacterSheetRepository } from '../db/repositories/characterSheet.repo
 import { MqServiceSingleton } from '../mq/mq.service';
 import { EncounterCommandType } from '../../../shared/types/encounter/encounter-command.enum';
 import { PlayerData } from '../../../shared/types/encounter/player.data';
+import { LightSourceData } from '../../../shared/types/encounter/board/light-source.data';
 
 export class EncounterService {
 	private encounterRepo: EncounterRepository;
@@ -136,6 +137,22 @@ export class EncounterService {
 		try {
 			const encounter: EncounterModel = await this.encounterRepo.findById(encounterId);
 			await encounter.incrementVersion();
+			return;
+		}
+		catch (error) {
+			throw error;
+		}
+	}
+
+	public async setLightSources(encounterId: string, lightSources: string): Promise<void> {
+		try {
+			const encounter: EncounterModel = await this.encounterRepo.findById(encounterId);
+			const lights: LightSourceData[] = JSON.parse(lightSources);
+			for (let light of lights) {
+				delete light.dim_polygon;
+				delete light.bright_polygon;
+			}
+			await encounter.setLightSources(lights);
 			return;
 		}
 		catch (error) {

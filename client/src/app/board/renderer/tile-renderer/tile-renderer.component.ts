@@ -1,10 +1,6 @@
-import {ViewMode} from '../../shared/enum/view-mode';
-import {XyPair} from '../../geometry/xy-pair';
 import {BoardStateService} from '../../services/board-state.service';
 import {BoardCanvasService} from '../../services/board-canvas.service';
 import {BoardTileService} from '../../services/board-tile.service';
-import {BoardMode} from '../../shared/enum/board-mode';
-import {CellRegion} from '../../shared/enum/cell-region';
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 
 @Component({

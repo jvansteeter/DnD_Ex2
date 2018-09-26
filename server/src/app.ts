@@ -69,10 +69,8 @@ class App {
       promiseLibrary: bluebird
     });
 
-    if (!this.isDevMode()) {
-	    this.mqProxy = MqProxySingleton;
-	    await this.mqProxy.connect();
-    }
+    this.mqProxy = MqProxySingleton;
+    await this.mqProxy.connect();
 
     this.app.use(passport.initialize());
     this.app.use(passport.session());
@@ -92,12 +90,7 @@ class App {
     let authenticationRouter = Express.Router();
     authenticationRouter.get('/', (req: Request, res: Response) => {
       if (!req.isAuthenticated()) {
-        if (this.isDevMode()) {
-          res.sendFile(path.resolve('./client/dist/dev.html'))
-        }
-        else {
-          res.redirect('login');
-        }
+      	res.redirect('login');
       }
       else {
         res.sendFile(path.resolve('./client/dist/index.html'))
@@ -138,9 +131,7 @@ class App {
   }
 
   private handleMqMessages(): void {
-  	if (!this.isDevMode()) {
-		  MqServiceSingleton.handleMessages();
-	  }
+  	MqServiceSingleton.handleMessages();
   }
 
   private isAuthenticated(req: Request, res: Response, next: NextFunction): void {
@@ -150,15 +141,6 @@ class App {
     else {
       res.sendStatus(401);
     }
-  }
-
-  private isDevMode(): boolean {
-    for (let i = 0; i < process.argv.length; i++) {
-      if (process.argv[i] === '-dev') {
-        return true;
-      }
-    }
-    return false;
   }
 }
 

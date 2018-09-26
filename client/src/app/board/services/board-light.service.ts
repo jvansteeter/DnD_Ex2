@@ -1,64 +1,39 @@
 import {Injectable} from '@angular/core';
-import {CellLightConfig} from '../shared/cell-light-state';
 import {LightSource} from '../map-objects/light-source';
 import {BoardStateService} from './board-state.service';
-import {XyPair} from '../geometry/xy-pair';
+import {XyPair} from '../../../../../shared/types/encounter/board/geometry/xy-pair';
 import {BoardVisibilityService} from './board-visibility.service';
 import {IsReadyService} from "../../utilities/services/isReady.service";
-import {Polygon} from "../shared/polygon";
-import {BoardPlayerService} from "./board-player.service";
+import {Polygon} from "../../../../../shared/types/encounter/board/polygon";
 import {EncounterService} from "../../encounter/encounter.service";
+import { LightSourcesState } from '../map-objects/light-sources.state';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class BoardLightService extends IsReadyService {
-
-    public lightSources: Array<LightSource>;
+    private lightSourceState: LightSourcesState;
 
     constructor(private boardStateService: BoardStateService,
                 private encounterService: EncounterService,
                 private boardVisibilityService: BoardVisibilityService,) {
         super(boardStateService, encounterService);
-        this.lightSources = new Array<LightSource>();
+        this.lightSourceState = new LightSourcesState();
         this.init();
     }
 
     public init(): void {
         this.dependenciesReady().subscribe((isReady: boolean) => {
             if (isReady) {
+            	  this.lightSourceState = new LightSourcesState(this.encounterService.encounterState.lightSources);
+            	  this.updateAllLightValues();
                 this.setReady(true);
             }
         })
     }
 
-    addLightSource(source: LightSource) {
-        this.lightSources.push(source);
-        this.updateAllLightValues();
-    }
-
-    removeLightSource(source: LightSource) {
-        let index = this.getLightSourceIndex(source);
-        this.lightSources.splice(index, 1);
-        this.updateAllLightValues();
-    }
-
     toggleLightSource(source: LightSource) {
-        let index = this.getLightSourceIndex(source);
-        if (index === -1) {
-            this.addLightSource(source);
-        } else {
-            this.removeLightSource(source);
-        }
-    }
-
-    getLightSourceIndex(light: LightSource): number {
-        let index = 0;
-        for (let source of this.lightSources) {
-            if (source.location.x == light.location.x && source.location.y == light.location.y) {
-                return index;
-            }
-            index++;
-        }
-        return -1;
+        this.lightSourceState.toggle(source);
+        this.updateAllLightValues();
     }
 
     updateLightValue(): void {
@@ -88,10 +63,26 @@ export class BoardLightService extends IsReadyService {
     }
 
     updateAllLightValues(): void {
-        for (let lightSource of this.lightSources) {
-            const polys = this.generateLightPolygons(lightSource);
+        for (let lightSource of this.lightSourceState.lightSources) {
+            const polys = this.generateLightPolygons(lightSource as LightSource);
             lightSource.dim_polygon = polys.dim_poly;
             lightSource.bright_polygon = polys.bright_poly;
         }
+    }
+
+    public getSerializedState(): string {
+    	return JSON.stringify(this.lightSourceState.lightSources);
+    }
+
+    get lightSources(): Array<LightSource> {
+    	return this.lightSourceState.lightSources as LightSource[];
+    }
+
+    set lightSources(value: Array<LightSource>) {
+    	this.lightSourceState.lightSources = value;
+    }
+
+    get lightSourcesChangeObservable(): Observable<void> {
+    	return this.lightSourceState.changeObservable;
     }
 }

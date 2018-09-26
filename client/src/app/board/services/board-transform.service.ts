@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {XyPair} from '../geometry/xy-pair';
+import {XyPair} from '../../../../../shared/types/encounter/board/geometry/xy-pair';
 import {BoardStateService} from './board-state.service';
 import {BoardCanvasService} from './board-canvas.service';
 import {CellTarget} from '../shared/cell-target';

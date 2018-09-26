@@ -13,7 +13,7 @@ export class EncounterCommandMessage extends AmqpMessage implements EncounterCom
 		userId: string;
 		version: number;
 		dataType: EncounterCommandType;
-		data: {}
+		data: any
 	};
 
 	constructor(data) {

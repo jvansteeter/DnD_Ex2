@@ -1,13 +1,9 @@
 import {Injectable} from '@angular/core';
 import {BoardStateService} from './board-state.service';
-import {XyPair} from '../geometry/xy-pair';
+import {XyPair} from '../../../../../shared/types/encounter/board/geometry/xy-pair';
 import {BoardNotationGroup} from "../shared/notation/board-notation-group";
-import {ViewMode} from "../shared/enum/view-mode";
 import {NotationMode} from "../shared/enum/notation-mode";
-import {switchMapTo} from "rxjs/operators";
-import {ColorStatics} from "../statics/color-statics";
 import {BoardVisibilityService} from "./board-visibility.service";
-import {TextNotation} from "../shared/notation/text-notation";
 import {MatDialog} from "@angular/material";
 
 @Injectable()

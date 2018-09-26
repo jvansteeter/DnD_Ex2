@@ -2,7 +2,7 @@ import {Component} from "@angular/core";
 import {NotationIconSelectorComponent} from "../notation-icon-selector/notation-icon-selector.component";
 import {MatDialogRef} from "@angular/material";
 import {BoardNotationService} from "../../services/board-notation-service";
-import {XyPair} from "../../geometry/xy-pair";
+import {XyPair} from "../../../../../../shared/types/encounter/board/geometry/xy-pair";
 import {TextNotation} from "../../shared/notation/text-notation";
 
 @Component({

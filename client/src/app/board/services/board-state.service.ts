@@ -3,7 +3,7 @@ import {ViewMode} from '../shared/enum/view-mode';
 import {BoardMode} from '../shared/enum/board-mode';
 import {LightValue} from '../shared/enum/light-value';
 import {CellTarget} from "../shared/cell-target";
-import {XyPair} from "../geometry/xy-pair";
+import {XyPair} from "../../../../../shared/types/encounter/board/geometry/xy-pair";
 import {PlayerVisibilityMode} from '../shared/enum/player-visibility-mode';
 import {EncounterService} from '../../encounter/encounter.service';
 import {IsReadyService} from "../../utilities/services/isReady.service";

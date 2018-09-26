@@ -1,5 +1,5 @@
 import {LightValue} from './enum/light-value';
-import {XyPair} from '../geometry/xy-pair';
+import {XyPair} from '../../../../../shared/types/encounter/board/geometry/xy-pair';
 
 export class CellLightConfig {
   // The cell coordinate in board-map-grid notation

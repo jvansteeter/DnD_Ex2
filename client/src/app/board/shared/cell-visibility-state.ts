@@ -1,4 +1,4 @@
-import {XyPair} from '../geometry/xy-pair';
+import {XyPair} from '../../../../../shared/types/encounter/board/geometry/xy-pair';
 
 export class CellVisibilityState {
     location: XyPair;
