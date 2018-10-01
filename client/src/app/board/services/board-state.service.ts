@@ -8,6 +8,7 @@ import {PlayerVisibilityMode} from '../shared/enum/player-visibility-mode';
 import {EncounterService} from '../../encounter/encounter.service';
 import {IsReadyService} from "../../utilities/services/isReady.service";
 import {Line} from "../geometry/line";
+import {BoardControllerMode} from "../shared/enum/board-controller-mode";
 
 /*************************************************************************************************************************************
  * BoardStateService
@@ -49,6 +50,7 @@ export class BoardStateService extends IsReadyService {
     public minZoom = 0.35;
 
     // board-map controls
+    public board_controller_mode: BoardControllerMode = BoardControllerMode.DEFAULT;
     public board_edit_mode: BoardMode = BoardMode.PLAYER;
     public board_view_mode: ViewMode = ViewMode.BOARD_MAKER;
     public board_maker_map_opacity = 1.0;

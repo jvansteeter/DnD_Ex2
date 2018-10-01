@@ -25,6 +25,7 @@ import {LightSource} from "../map-objects/light-source";
 import {Player} from "../../encounter/player";
 import {MatDialog} from "@angular/material";
 import {TempPlayerInitDialogComponent} from "../dialogs/temp-player-init-dialog/temp-player-init-dialog.component";
+import {BoardControllerMode} from "../shared/enum/board-controller-mode";
 
 
 @Component({
@@ -194,6 +195,7 @@ export class BoardMapComponent implements OnInit, AfterViewInit {
         switch (key_code) {
             case 'ShiftLeft' :
                 this.boardStateService.shiftDown = true;
+                this.boardStateService.board_controller_mode = BoardControllerMode.EPHEM_NOTATION;
                 this.refreshMouseLocation();
                 break;
             case 'ShiftRight' :
@@ -212,6 +214,7 @@ export class BoardMapComponent implements OnInit, AfterViewInit {
         switch (key_code) {
             case 'ShiftLeft' :
                 this.boardStateService.shiftDown = false;
+                this.boardStateService.board_controller_mode = BoardControllerMode.DEFAULT;
                 this.refreshMouseLocation();
                 break;
             case 'ShiftRight' :

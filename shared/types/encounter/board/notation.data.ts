@@ -1,4 +1,4 @@
-import { XyPair } from './geometry/xy-pair';
+import { XyPair } from './xy-pair';
 import { NotationVisibility } from './notation-visibility';
 import { TextNotationData } from './text-notation.data';
 

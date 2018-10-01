@@ -1,4 +1,4 @@
-import { XyPair } from './geometry/xy-pair';
+import { XyPair } from './xy-pair';
 
 export interface TextNotationData {
 	_id: string;

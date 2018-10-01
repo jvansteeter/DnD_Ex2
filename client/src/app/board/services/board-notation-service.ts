@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BoardStateService } from './board-state.service';
-import { XyPair } from '../../../../../shared/types/encounter/board/geometry/xy-pair';
+import { XyPair } from '../../../../../shared/types/encounter/board/xy-pair';
 import { BoardNotationGroup } from "../shared/notation/board-notation-group";
 import { NotationMode } from "../shared/enum/notation-mode";
 import { BoardVisibilityService } from "./board-visibility.service";
