@@ -1,4 +1,4 @@
-import { XyPair } from "../../../../shared/types/encounter/board/geometry/xy-pair";
+import { XyPair } from "../../../../shared/types/encounter/board/xy-pair";
 import { isUndefined } from 'util';
 import { PlayerData } from '../../../../shared/types/encounter/player.data';
 import { CharacterData } from '../../../../shared/types/character.data';

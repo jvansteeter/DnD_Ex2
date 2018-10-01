@@ -1,4 +1,4 @@
-import {XyPair} from '../../../../../shared/types/encounter/board/geometry/xy-pair';
+import {XyPair} from '../../../../../shared/types/encounter/board/xy-pair';
 import {CellRegion} from './enum/cell-region';
 
 export class CellTarget {

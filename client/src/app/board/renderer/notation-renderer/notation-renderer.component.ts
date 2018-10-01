@@ -2,7 +2,7 @@ import {BoardStateService} from '../../services/board-state.service';
 import {BoardCanvasService} from '../../services/board-canvas.service';
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {BoardNotationService} from '../../services/board-notation-service';
-import {XyPair} from "../../../../../../shared/types/encounter/board/geometry/xy-pair";
+import {XyPair} from "../../../../../../shared/types/encounter/board/xy-pair";
 import {GeometryStatics} from "../../statics/geometry-statics";
 
 @Component({

@@ -1,4 +1,4 @@
-import {XyPair} from "../../../../../shared/types/encounter/board/geometry/xy-pair";
+import {XyPair} from "../../../../../shared/types/encounter/board/xy-pair";
 import {Line} from "./line";
 
 export class Ray {

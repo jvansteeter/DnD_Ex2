@@ -17,7 +17,7 @@ import { AddPlayerDialogComponent } from '../dialogs/add-player-dialog/add-playe
 import { EncounterService } from '../../encounter/encounter.service';
 import {NotationTextCreateDialogComponent} from "../dialogs/notation-text-dialog/notation-text-create-dialog.component";
 import {BoardVisibilityService} from "../services/board-visibility.service";
-import {XyPair} from "../../../../../shared/types/encounter/board/geometry/xy-pair";
+import {XyPair} from "../../../../../shared/types/encounter/board/xy-pair";
 
 @Component({
     selector: 'board-controller',

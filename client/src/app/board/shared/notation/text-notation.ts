@@ -1,4 +1,4 @@
-import {XyPair} from "../../../../../../shared/types/encounter/board/geometry/xy-pair";
+import {XyPair} from "../../../../../../shared/types/encounter/board/xy-pair";
 import { TextNotationData } from '../../../../../../shared/types/encounter/board/text-notation.data';
 
 export class TextNotation implements TextNotationData {

@@ -10,7 +10,7 @@ import {BoardCanvasService} from "../services/board-canvas.service";
 import {BoardStateService} from "../services/board-state.service";
 import {BoardWallService} from "../services/board-wall.service";
 import {BoardTileService} from "../services/board-tile.service";
-import {XyPair} from '../../../../../shared/types/encounter/board/geometry/xy-pair';
+import {XyPair} from '../../../../../shared/types/encounter/board/xy-pair';
 import {BoardTransformService} from '../services/board-transform.service';
 import {isNullOrUndefined} from "util";
 import {BoardMode} from '../shared/enum/board-mode';

@@ -1,4 +1,4 @@
-import {XyPair} from "./geometry/xy-pair";
+import {XyPair} from "./xy-pair";
 
 export class Polygon {
     public border: Array<XyPair>;

@@ -1,4 +1,4 @@
-import {XyPair} from '../../../../../shared/types/encounter/board/geometry/xy-pair';
+import {XyPair} from '../../../../../shared/types/encounter/board/xy-pair';
 import {Polygon} from "../../../../../shared/types/encounter/board/polygon";
 import { LightSourceData } from '../../../../../shared/types/encounter/board/light-source.data';
 

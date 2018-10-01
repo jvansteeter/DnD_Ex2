@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {isNullOrUndefined} from 'util';
-import {XyPair} from '../../../../../shared/types/encounter/board/geometry/xy-pair';
+import {XyPair} from '../../../../../shared/types/encounter/board/xy-pair';
 import {CellTarget} from '../shared/cell-target';
 import {CellRegion} from '../shared/enum/cell-region';
 import {BoardStateService} from './board-state.service';

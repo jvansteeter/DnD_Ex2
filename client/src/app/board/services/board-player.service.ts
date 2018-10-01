@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {XyPair} from '../../../../../shared/types/encounter/board/geometry/xy-pair';
+import {XyPair} from '../../../../../shared/types/encounter/board/xy-pair';
 import {EncounterService} from '../../encounter/encounter.service';
 import {BoardVisibilityService} from './board-visibility.service';
 import {BoardTraverseService} from './board-traverse.service';

@@ -1,4 +1,4 @@
-import { XyPair } from './geometry/xy-pair';
+import { XyPair } from './xy-pair';
 import { Polygon } from './polygon';
 
 export interface LightSourceData {

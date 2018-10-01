@@ -2,7 +2,7 @@ import {CellTarget} from '../shared/cell-target';
 import {EdgeMoveDirection} from '../shared/enum/edge-move-direction';
 import {EdgeMoveAction} from '../shared/edge-move-action';
 import {CellRegion} from '../shared/enum/cell-region';
-import {XyPair} from '../../../../../shared/types/encounter/board/geometry/xy-pair';
+import {XyPair} from '../../../../../shared/types/encounter/board/xy-pair';
 import {Injectable} from '@angular/core';
 import {BoardStateService} from '../services/board-state.service';
 

@@ -2,7 +2,7 @@ import {BoardStateService} from '../../services/board-state.service';
 import {BoardCanvasService} from '../../services/board-canvas.service';
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {BoardVisibilityService} from "../../services/board-visibility.service";
-import {XyPair} from "../../../../../../shared/types/encounter/board/geometry/xy-pair";
+import {XyPair} from "../../../../../../shared/types/encounter/board/xy-pair";
 
 @Component({
     selector: 'diagnostic-renderer',

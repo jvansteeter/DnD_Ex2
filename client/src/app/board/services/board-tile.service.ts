@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {CellTileState} from '../shared/cell-tile-state';
 import {BoardStateService} from './board-state.service';
-import {XyPair} from '../../../../../shared/types/encounter/board/geometry/xy-pair';
+import {XyPair} from '../../../../../shared/types/encounter/board/xy-pair';
 
 @Injectable()
 export class BoardTileService {

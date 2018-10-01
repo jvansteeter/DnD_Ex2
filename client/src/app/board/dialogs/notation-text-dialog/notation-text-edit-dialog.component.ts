@@ -1,7 +1,7 @@
 import {Component} from "@angular/core";
 import {MatDialogRef} from "@angular/material";
 import {BoardNotationService} from "../../services/board-notation-service";
-import {XyPair} from "../../../../../../shared/types/encounter/board/geometry/xy-pair";
+import {XyPair} from "../../../../../../shared/types/encounter/board/xy-pair";
 import {TextNotation} from "../../shared/notation/text-notation";
 
 @Component({

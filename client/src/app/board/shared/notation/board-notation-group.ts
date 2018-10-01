@@ -1,4 +1,4 @@
-import { XyPair } from "../../../../../../shared/types/encounter/board/geometry/xy-pair";
+import {XyPair} from "../../../../../../shared/types/encounter/board/xy-pair";
 import { NotationVisibility } from "../../../../../../shared/types/encounter/board/notation-visibility";
 import { ColorStatics } from "../../statics/color-statics";
 import { TextNotation } from "./text-notation";
