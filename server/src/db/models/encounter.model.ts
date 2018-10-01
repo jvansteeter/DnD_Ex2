@@ -1,10 +1,11 @@
 import * as mongoose from 'mongoose';
+import { Schema } from 'mongoose';
 import { LightValue } from "../../../../client/src/app/board/shared/enum/light-value";
 import { MongooseModel } from './mongoose.model';
-import { Schema } from 'mongoose';
 import { EncounterData } from '../../../../shared/types/encounter/encounter.data';
 import { PlayerData } from '../../../../shared/types/encounter/player.data';
 import { LightSourceData } from '../../../../shared/types/encounter/board/light-source.data';
+import { NotationData } from '../../../../shared/types/encounter/board/notation.data';
 
 export class EncounterModel extends MongooseModel implements EncounterData {
 	public _id;
@@ -40,6 +41,11 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 	lightEnabled: boolean;
 	ambientLight: LightValue;
 
+	/**************************************
+	 * NOTATIONS
+	 **************************************/
+	notationIds: string[];
+
 	constructor() {
 		super({
 			label: {type: String, required: true},
@@ -60,6 +66,7 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 				bright_range: Number,
 				dim_range: Number
 			}],
+			notationIds: [Schema.Types.ObjectId]
 		});
 
 		this._id = this.methods._id;
@@ -75,6 +82,7 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 		this.mapDimX = this.methods.mapDimX;
 		this.mapDimY = this.methods.mapDimY;
 		this.lightSources = this.methods.lightSources;
+		this.notationIds = this.methods.notationIds;
 
 		this.methods.addGameMaster = this.addGameMaster;
 		this.methods.addPlayer = this.addPlayer;
@@ -83,6 +91,7 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 		this.methods.setIsOpen = this.setIsOpen;
 		this.methods.incrementVersion = this.incrementVersion;
 		this.methods.setLightSources = this.setLightSources;
+		this.methods.addNotation = this.addNotation;
 	}
 
 	public addGameMaster(userId: string): Promise<EncounterModel> {
@@ -103,6 +112,11 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 			}
 		}
 
+		return this.save();
+	}
+
+	public addNotation(notation: NotationData): Promise<EncounterModel> {
+		this.notationIds.push(notation._id);
 		return this.save();
 	}
 

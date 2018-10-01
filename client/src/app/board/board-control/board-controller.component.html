@@ -133,7 +133,7 @@
                 <button class="strokeButtonOverride"
                         matTooltip="{{notation.name}}"
                         mat-stroked-button
-                        (click)="handleEditNotation(notation.id)">
+                        (click)="handleEditNotation(notation._id)">
                     <mat-icon [ngStyle]="{'color': notation.getRgbCode()}">{{notation.iconTag}}</mat-icon>
                 </button>
             </ng-container>

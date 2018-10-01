@@ -9,7 +9,7 @@ import {Component, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material';
 import {NotationMode} from '../shared/enum/notation-mode';
 import {BoardNotationService} from '../services/board-notation-service';
-import {NotationVisibility} from "../shared/enum/notation-visibility";
+import {NotationVisibility} from "../../../../../shared/types/encounter/board/notation-visibility";
 import {NotationIconSelectorComponent} from "../dialogs/notation-icon-selector/notation-icon-selector.component";
 import {NotationColorSelectorComponent} from "../dialogs/notation-color-selector/notation-color-selector.component";
 import {NotationSettingsDialogComponent} from "../dialogs/notation-settings-dialog/notation-settings-dialog.component";

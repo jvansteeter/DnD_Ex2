@@ -1,41 +1,48 @@
-import {LightValue} from '../../../client/src/app/board/shared/enum/light-value';
+import { LightValue } from '../../../client/src/app/board/shared/enum/light-value';
 import { PlayerData } from './player.data';
 import { LightSourceData } from './board/light-source.data';
+import { NotationData } from './board/notation.data';
 
 export interface EncounterData {
-    _id: string;
-    version: number;
-    label: string;
-    date: Date;
-    campaignId: string;
-    gameMasters: string[];
-    playerIds: string[];
-    players?: PlayerData[];
-    isOpen: boolean;
+	_id: string;
+	version: number;
+	label: string;
+	date: Date;
+	campaignId: string;
+	gameMasters: string[];
+	playerIds?: string[];
+	players?: PlayerData[];
+	isOpen: boolean;
 
-    /**************************************
-     * GENERAL BOARD VARIABLES
-     **************************************/
-    cell_res: number;
-    mapDimX: number;
-    mapDimY: number;
+	/**************************************
+	 * GENERAL BOARD VARIABLES
+	 **************************************/
+	cell_res: number;
+	mapDimX: number;
+	mapDimY: number;
 
-    /**************************************
-     * MAP VARIABLES
-     **************************************/
-    map_enabled: boolean;
-    mapUrl: string;
+	/**************************************
+	 * MAP VARIABLES
+	 **************************************/
+	map_enabled: boolean;
+	mapUrl: string;
 
-    /**************************************
-     * WALL RELATED VARIABLES
-     **************************************/
-    wallData: Object;
-    playerWallsEnabled: boolean;
+	/**************************************
+	 * WALL RELATED VARIABLES
+	 **************************************/
+	wallData: Object;
+	playerWallsEnabled: boolean;
 
-    /**************************************
-     * LIGHT RELATED VARIABLES
-     **************************************/
-    lightSources: LightSourceData[];
-    lightEnabled: boolean;
-    ambientLight: LightValue;
+	/**************************************
+	 * LIGHT RELATED VARIABLES
+	 **************************************/
+	lightSources: LightSourceData[];
+	lightEnabled: boolean;
+	ambientLight: LightValue;
+
+	/**************************************
+	 * NOTATIONS
+	 **************************************/
+	notationIds?: string[];
+	notations?: NotationData[];
 }

@@ -4,6 +4,7 @@ import { EncounterData } from '../../../../shared/types/encounter/encounter.data
 import { PlayerData } from '../../../../shared/types/encounter/player.data';
 import { isUndefined } from 'util';
 import { LightSourceData } from '../../../../shared/types/encounter/board/light-source.data';
+import { NotationData } from '../../../../shared/types/encounter/board/notation.data';
 
 export class EncounterState implements EncounterData {
 	_id: string;
@@ -25,6 +26,7 @@ export class EncounterState implements EncounterData {
 	_players: PlayerData[];
 	wallData: Object;
 	mapUrl: string;
+	notations: NotationData[];
 
 	private playerMap: Map<string, number>;
 

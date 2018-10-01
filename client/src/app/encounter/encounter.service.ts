@@ -6,6 +6,7 @@ import { Observable } from "rxjs";
 import { EncounterState } from './encounter.state';
 import { EncounterData } from '../../../../shared/types/encounter/encounter.data';
 import { CharacterData } from '../../../../shared/types/character.data';
+import { NotationData } from '../../../../shared/types/encounter/board/notation.data';
 
 @Injectable()
 export class EncounterService extends IsReadyService {
@@ -105,5 +106,13 @@ export class EncounterService extends IsReadyService {
 		if (this.encounterState) {
 			this.encounterState.version = value;
 		}
+	}
+
+	get notations(): NotationData[] {
+		if (this.encounterState) {
+			return this.encounterState.notations;
+		}
+
+		return undefined;
 	}
 }

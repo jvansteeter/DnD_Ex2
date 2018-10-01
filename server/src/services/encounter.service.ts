@@ -9,18 +9,23 @@ import { MqServiceSingleton } from '../mq/mq.service';
 import { EncounterCommandType } from '../../../shared/types/encounter/encounter-command.enum';
 import { PlayerData } from '../../../shared/types/encounter/player.data';
 import { LightSourceData } from '../../../shared/types/encounter/board/light-source.data';
+import { NotationData } from '../../../shared/types/encounter/board/notation.data';
+import { NotationRepository } from '../db/repositories/notation.repository';
+import { NotationModel } from '../db/models/notation.model';
 
 export class EncounterService {
 	private encounterRepo: EncounterRepository;
 	private playerRepo: PlayerRepository;
 	private characterSheetRepo: CharacterSheetRepository;
 	private characterService: CharacterService;
+	private notationRepo: NotationRepository;
 
 	constructor() {
 		this.encounterRepo = new EncounterRepository();
 		this.playerRepo = new PlayerRepository();
 		this.characterSheetRepo = new CharacterSheetRepository();
 		this.characterService = new CharacterService();
+		this.notationRepo = new NotationRepository();
 	}
 
 	public async create(hostId: string, label: string, campaignId: string, mapDimX: number, mapDimY: number, mapUrl?: string): Promise<EncounterModel> {
@@ -160,15 +165,35 @@ export class EncounterService {
 		}
 	}
 
+	public async addNotation(encounterId: string, userId: string): Promise<NotationData> {
+		try {
+			const encounter: EncounterModel = await this.encounterRepo.findById(encounterId);
+			const notation: NotationModel = await this.notationRepo.create(encounterId, userId);
+			await encounter.addNotation(notation);
+
+			return notation;
+		}
+		catch (error) {
+			throw error;
+		}
+	}
+
 	private async buildEncounterState(encounterModel: EncounterModel): Promise<EncounterData> {
 		let encounterState: EncounterData = JSON.parse(JSON.stringify(encounterModel));
 		encounterState.players = [];
+		encounterState.notations = [];
 		for (let playerId of encounterModel.playerIds) {
 			const playerData = await this.playerRepo.findById(playerId);
 			playerData.characterData.characterSheet = await this.characterSheetRepo.findById(playerData.characterData.characterSheetId);
 			encounterState.players.push(playerData);
 		}
+		for (let notationId of encounterModel.notationIds) {
+			const notation = await this.notationRepo.findById(notationId);
+			encounterState.notations.push(notation);
+		}
 		delete encounterState['playerIds'];
+		delete encounterState['notationIds'];
+
 		return encounterState;
 	}
 }

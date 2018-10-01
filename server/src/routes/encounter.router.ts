@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { EncounterService } from "../services/encounter.service";
 import { EncounterData } from '../../../shared/types/encounter/encounter.data';
+import { NotationData } from '../../../shared/types/encounter/board/notation.data';
 
 /**********************************************************************************************************
  * Campaign ROUTER
@@ -97,6 +98,19 @@ export class EncounterRouter {
 				const encounterId = req.body.encounterId;
 				await this.encounterService.updateEncounterOpenStatus(encounterId, false);
 				res.status(200).send();
+			}
+			catch (error) {
+				console.error(error);
+				res.status(500).send(error);
+			}
+		});
+
+		this.router.post('/addnotation', async (req: Request, res: Response) => {
+			try {
+				const encounterId = req.body.encounterId;
+				const userId = req.user._id;
+				const notation: NotationData = await this.encounterService.addNotation(encounterId, userId);
+				res.json(notation);
 			}
 			catch (error) {
 				console.error(error);

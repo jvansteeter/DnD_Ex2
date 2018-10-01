@@ -22,6 +22,7 @@ import './db/models/campaign.model';
 import './db/models/encounter.model';
 import './db/models/user-campaign.model';
 import './db/models/player.model';
+import './db/models/notation.model';
 import './config/passport.config';
 
 import LoginRouter from './routes/login.router';

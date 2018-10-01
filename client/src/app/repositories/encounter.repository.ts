@@ -6,6 +6,8 @@ import { EncounterData } from '../../../../shared/types/encounter/encounter.data
 import { PlayerData } from '../../../../shared/types/encounter/player.data';
 import { CharacterData } from '../../../../shared/types/character.data';
 import { isUndefined } from "util";
+import { NotationData } from '../../../../shared/types/encounter/board/notation.data';
+import { BoardNotationGroup } from '../board/shared/notation/board-notation-group';
 
 @Injectable()
 export class EncounterRepository {
@@ -84,5 +86,15 @@ export class EncounterRepository {
 			encounterId: encounterId
 		};
 		return this.http.post<EncounterData>('/api/encounter/close', data, {responseType: 'json'});
+	}
+
+	public addNotation(encounterId: string): Observable<BoardNotationGroup> {
+		const data = {
+			encounterId: encounterId
+		};
+		return this.http.post<NotationData>('/api/encounter/addnotation', data, {responseType: 'json'})
+				.pipe(map((notation: NotationData) => {
+					return new BoardNotationGroup(notation);
+				}));
 	}
 }

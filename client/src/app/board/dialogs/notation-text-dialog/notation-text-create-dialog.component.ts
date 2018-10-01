@@ -29,7 +29,7 @@ export class NotationTextCreateDialogComponent {
         textEl.fontSize = this.fontSize;
 
         this.boardNotationService.isAddingTextNotation = true;
-        this.boardNotationService.currentTextNotationId = textEl.id;
+        this.boardNotationService.currentTextNotationId = textEl._id;
 
         this.boardNotationService.getActiveNotation().addTextNotation(textEl);
         this.dialogRef.close();
