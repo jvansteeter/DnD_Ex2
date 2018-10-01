@@ -88,13 +88,20 @@ export class EncounterRepository {
 		return this.http.post<EncounterData>('/api/encounter/close', data, {responseType: 'json'});
 	}
 
-	public addNotation(encounterId: string): Observable<BoardNotationGroup> {
+	public addNewNotation(encounterId: string): Observable<BoardNotationGroup> {
 		const data = {
 			encounterId: encounterId
 		};
-		return this.http.post<NotationData>('/api/encounter/addnotation', data, {responseType: 'json'})
+		return this.http.post<NotationData>('/api/encounter/addNotation', data, {responseType: 'json'})
 				.pipe(map((notation: NotationData) => {
 					return new BoardNotationGroup(notation);
 				}));
+	}
+
+	public removeNotation(notationId: string): Observable<void> {
+		const data = {
+			notationId: notationId
+		};
+		return this.http.post<void>('/api/encounter/removeNotation', data);
 	}
 }

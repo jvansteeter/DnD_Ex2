@@ -105,12 +105,26 @@ export class EncounterRouter {
 			}
 		});
 
-		this.router.post('/addnotation', async (req: Request, res: Response) => {
+		this.router.post('/addNotation', async (req: Request, res: Response) => {
 			try {
 				const encounterId = req.body.encounterId;
 				const userId = req.user._id;
 				const notation: NotationData = await this.encounterService.addNotation(encounterId, userId);
 				res.json(notation);
+			}
+			catch (error) {
+				console.error(error);
+				res.status(500).send(error);
+			}
+		});
+
+		this.router.post('/removeNotation', async (req: Request, res: Response) => {
+			try {
+				const notationId = req.body.notationId;
+				const userId = req.user._id;
+				await this.encounterService.removeNotation(notationId, userId);
+
+				res.status(200).send();
 			}
 			catch (error) {
 				console.error(error);

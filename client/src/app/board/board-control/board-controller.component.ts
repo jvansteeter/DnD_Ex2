@@ -259,15 +259,14 @@ export class BoardControllerComponent implements OnInit {
     }
 
     handleAddNotation() {
-        this.boardNotationService.addNotation();
-        this.boardStateService.isEditingNotation = true;
-        this.boardNotationService.activeNotationMode = NotationMode.CELL;
+        this.boardNotationService.addNewNotation().subscribe(() => {
+		        this.boardStateService.isEditingNotation = true;
+		        this.boardNotationService.activeNotationMode = NotationMode.CELL;
+        });
     }
 
     handleDeleteNotation() {
         this.boardNotationService.deleteActiveNotation();
-        this.boardStateService.isEditingNotation = false;
-        this.boardNotationService.activeNotationId = null;
     }
 
     handleEditNotation(notationId: string) {

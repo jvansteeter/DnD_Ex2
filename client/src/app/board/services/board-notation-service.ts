@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { BoardStateService } from './board-state.service';
-import { XyPair } from '../../../../../shared/types/encounter/board/xy-pair';
 import { BoardNotationGroup } from "../shared/notation/board-notation-group";
 import { NotationMode } from "../shared/enum/notation-mode";
 import { BoardVisibilityService } from "./board-visibility.service";
@@ -10,6 +9,10 @@ import { NotationState } from '../shared/notation/notation.state';
 import { EncounterRepository } from '../../repositories/encounter.repository';
 import {BoardControllerMode} from "../shared/enum/board-controller-mode";
 import {TimestampXyPair} from "../../../../../shared/types/encounter/board/timestamp-xy-pair";
+import { XyPair } from '../../../../../shared/types/encounter/board/xy-pair';
+import { NotationData } from '../../../../../shared/types/encounter/board/notation.data';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class BoardNotationService extends IsReadyService {
@@ -157,15 +160,33 @@ export class BoardNotationService extends IsReadyService {
 
 	}
 
-	public addNotation() {
-		this.encounterRepo.addNotation(this.encounterService.encounterState._id).subscribe((notation: BoardNotationGroup) => {
+	public addNewNotation(): Observable<void> {
+		return this.encounterRepo.addNewNotation(this.encounterService.encounterState._id).pipe(map((notation: BoardNotationGroup) => {
 			this.activeNotationId = notation._id;
-			this.notations.push(notation);
-		});
+			this.notationState.add(notation);
+			return;
+		}));
 	}
 
-	public deleteActiveNotation() {
-		this.notationState.remove(this.activeNotationId);
+	public addNotation(notation: NotationData): void {
+		this.notationState.add(new BoardNotationGroup(notation));
+	}
+
+	public setNotation(notationData: NotationData): void {
+		const notation = this.notationState.get(notationData._id);
+		notation.setNotationData(notationData);
+	}
+
+	public deleteActiveNotation(): void {
+		this.encounterRepo.removeNotation(this.activeNotationId).subscribe();
+	}
+
+	public deleteNotation(notationId: string): void {
+		this.notationState.remove(notationId);
+		if (notationId === this.activeNotationId) {
+			this.activeNotationId = null;
+			this.boardStateService.isEditingNotation = false;
+		}
 	}
 
 	public getActiveNotation(): BoardNotationGroup {
@@ -178,5 +199,9 @@ export class BoardNotationService extends IsReadyService {
 		}
 
 		return [];
+	}
+
+	get notationsChangeObservable(): Observable<void> {
+		return this.notationState.changeObservable;
 	}
 }

@@ -8,6 +8,5 @@ export class TextNotation implements TextNotationData {
     public fontSize: number;
 
     constructor() {
-        this._id = window.crypto.getRandomValues(new Uint32Array(1))[0];
     }
 }

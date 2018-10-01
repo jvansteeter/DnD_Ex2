@@ -14,18 +14,22 @@ import { PlayerData } from '../../../shared/types/encounter/player.data';
 import { MqMessageType } from '../../../shared/types/mq/message-type.enum';
 import { EncounterCommandMessage } from './messages/encounter-command.message';
 import { EncounterService } from '../services/encounter.service';
+import { NotationRepository } from '../db/repositories/notation.repository';
+import { NotationData } from '../../../shared/types/encounter/board/notation.data';
 
 export class MqService {
 	private friendRepo: FriendRepository;
 	private notificationRepo: NotificationRepository;
 	private playerRepository: PlayerRepository;
 	private encounterService: EncounterService;
+	private notationRepo: NotationRepository;
 
 	constructor(private mqProxy: MqProxy) {
 		this.friendRepo = new FriendRepository();
 		this.notificationRepo = new NotificationRepository();
 		this.playerRepository = new PlayerRepository();
 		this.encounterService = new EncounterService();
+		this.notationRepo = new NotationRepository();
 	}
 
 	public handleMessages(): void {
@@ -74,7 +78,7 @@ export class MqService {
 			if (command.body.version === version + 1) {
 				switch (command.body.dataType) {
 					case EncounterCommandType.PLAYER_UPDATE: {
-						await this.playerRepository.updatePlayer(command.body.data as PlayerData);
+						this.playerRepository.updatePlayer(command.body.data as PlayerData);
 						break;
 					}
 					case EncounterCommandType.ADD_PLAYER: {
@@ -86,14 +90,26 @@ export class MqService {
 						break;
 					}
 					case EncounterCommandType.LIGHT_SOURCE: {
-						await this.encounterService.setLightSources(command.headers.encounterId, command.body.data);
+						this.encounterService.setLightSources(command.headers.encounterId, command.body.data);
+						break;
+					}
+					case EncounterCommandType.ADD_NOTATION: {
+						// do nothing, the server issues these commands
+						break;
+					}
+					case EncounterCommandType.NOTATION_UPDATE: {
+						this.notationRepo.updateNotation(JSON.parse(command.body.data) as NotationData);
+						break;
+					}
+					case EncounterCommandType.REMOVE_NOTATION: {
+						// do nothing, ther server issues these commands
 						break;
 					}
 					default: {
 						console.error('Unrecognized Command Type')
 					}
 				}
-				await this.encounterService.incrementVersion(command.headers.encounterId);
+				this.encounterService.incrementVersion(command.headers.encounterId);
 			}
 		}
 		catch (error) {

@@ -4,8 +4,8 @@ import { Observable } from 'rxjs';
 export class ConcurrentBoardObject {
 	private changeEvent: EventEmitter<void> = new EventEmitter<void>(true);
 
-	public emitChange(): void {
-		this.changeEvent.emit();
+	public emitChange(data?: any): void {
+		this.changeEvent.emit(data);
 	}
 
 	get changeObservable(): Observable<void> {

@@ -1,9 +1,9 @@
 import { MongooseModel } from './mongoose.model';
 import { NotationData } from '../../../../shared/types/encounter/board/notation.data';
-import { XyPair } from '../../../../shared/types/encounter/board/geometry/xy-pair';
 import { TextNotationData } from '../../../../shared/types/encounter/board/text-notation.data';
 import { NotationVisibility } from '../../../../shared/types/encounter/board/notation-visibility';
 import * as mongoose from 'mongoose';
+import { XyPair } from '../../../../shared/types/encounter/board/xy-pair';
 
 export class NotationModel extends MongooseModel implements NotationData {
 	public _id: string;
@@ -28,6 +28,7 @@ export class NotationModel extends MongooseModel implements NotationData {
 	constructor() {
 		super({
 			userId: {type: String, required: true},
+			encounterId: {type: String, required: true},
 			name: {type: String, default: 'New Notation'},
 			iconTag: {type: String, default: 'edit'},
 			freeformElements: [],
@@ -56,6 +57,16 @@ export class NotationModel extends MongooseModel implements NotationData {
 		this.green = this.methods.green;
 		this.blue = this.methods.blue;
 		this.alpha = this.methods.alpha;
+
+		this.methods.setNotationData = this.setNotationData;
+	}
+
+	public setNotationData(data: NotationData): Promise<NotationModel> {
+		for (let item in data) {
+			this[item] = data[item];
+		}
+
+		return this.save();
 	}
 }
 

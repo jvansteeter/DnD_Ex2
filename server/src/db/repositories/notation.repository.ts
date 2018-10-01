@@ -2,6 +2,7 @@ import * as mongoose from 'mongoose';
 import { Promise } from 'bluebird';
 import { EncounterModel } from '../models/encounter.model';
 import { NotationModel } from '../models/notation.model';
+import { NotationData } from '../../../../shared/types/encounter/board/notation.data';
 
 export class NotationRepository {
 	private Notation: mongoose.Model<mongoose.Document>;
@@ -63,5 +64,17 @@ export class NotationRepository {
 				resolve();
 			});
 		});
+	}
+
+	public async updateNotation(notationData: NotationData): Promise<void> {
+		try {
+			const notation: NotationModel = await this.findById(notationData._id);
+			await notation.setNotationData(notationData);
+
+			return;
+		}
+		catch (error) {
+			throw error;
+		}
 	}
 }

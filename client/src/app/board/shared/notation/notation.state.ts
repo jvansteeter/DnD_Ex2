@@ -1,23 +1,25 @@
 import { ConcurrentBoardObject } from '../../../encounter/concurrent-board-object';
 import { NotationData } from '../../../../../../shared/types/encounter/board/notation.data';
 import { BoardNotationGroup } from './board-notation-group';
+import { Subscription } from 'rxjs';
 
 export class NotationState extends ConcurrentBoardObject {
 	private readonly _notations: BoardNotationGroup[];
+	private readonly changeSubscriptions: Subscription[];
 
 	constructor(notations: NotationData[] = []) {
 		super();
 		this._notations = [];
+		this.changeSubscriptions = [];
 		for (let notation of notations) {
-			this._notations.push(new BoardNotationGroup(notation));
+			const boardNotation = new BoardNotationGroup(notation);
+			this.add(boardNotation);
 		}
 	}
 
 	public add(note: BoardNotationGroup): void {
+		this.changeSubscriptions.push(note.changeObservable.subscribe((data) => this.emitChange(data)));
 		this._notations.push(note);
-		if (note.isVisible) {
-			this.emitChange();
-		}
 	}
 
 	public remove(notationId: string): void {
@@ -27,6 +29,7 @@ export class NotationState extends ConcurrentBoardObject {
 				if (notation.isVisible) {
 					this.emitChange();
 				}
+				this.changeSubscriptions.splice(i, 1);
 				this._notations.splice(i, 1);
 				return;
 			}

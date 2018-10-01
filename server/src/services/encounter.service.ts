@@ -170,8 +170,24 @@ export class EncounterService {
 			const encounter: EncounterModel = await this.encounterRepo.findById(encounterId);
 			const notation: NotationModel = await this.notationRepo.create(encounterId, userId);
 			await encounter.addNotation(notation);
+			await MqServiceSingleton.sendEncounterCommand(encounterId, userId, EncounterCommandType.ADD_NOTATION, encounter.version + 1, notation);
 
 			return notation;
+		}
+		catch (error) {
+			throw error;
+		}
+	}
+
+	public async removeNotation(notationId: string, userId: string): Promise<void> {
+		try {
+			const notation: NotationModel = await this.notationRepo.findById(notationId);
+			const encounter: EncounterModel = await this.encounterRepo.findById(notation.encounterId);
+			await encounter.removeNotation(notationId);
+			await this.notationRepo.deleteById(notationId);
+			await MqServiceSingleton.sendEncounterCommand(notation.encounterId, userId, EncounterCommandType.REMOVE_NOTATION, encounter.version + 1, notationId);
+
+			return;
 		}
 		catch (error) {
 			throw error;

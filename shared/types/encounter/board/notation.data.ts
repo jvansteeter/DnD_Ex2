@@ -1,6 +1,6 @@
-import { XyPair } from './xy-pair';
 import { NotationVisibility } from './notation-visibility';
 import { TextNotationData } from './text-notation.data';
+import { XyPair } from './xy-pair';
 
 export interface NotationData {
 	_id: string;

@@ -10,6 +10,8 @@ import { EncounterCommandMessage } from '../mq/messages/encounter-command.messag
 import { Player } from './player';
 import { BoardLightService } from '../board/services/board-light.service';
 import { LightSource } from '../board/map-objects/light-source';
+import { BoardNotationService } from '../board/services/board-notation-service';
+import { NotationData } from '../../../../shared/types/encounter/board/notation.data';
 
 @Injectable()
 export class EncounterConcurrencyService extends IsReadyService {
@@ -17,6 +19,7 @@ export class EncounterConcurrencyService extends IsReadyService {
 	            private playerService: BoardPlayerService,
 	            private userProfileService: UserProfileService,
 	            private lightService: BoardLightService,
+	            private notationService: BoardNotationService,
 	            private mqService: MqService) {
 		super(encounterService, mqService);
 	}
@@ -27,6 +30,7 @@ export class EncounterConcurrencyService extends IsReadyService {
 				this.observeEncounterMqMessages();
 				this.observeAllPlayerChanges();
 				this.observeLightSourceChanges();
+				this.observeNotationChanges();
 				this.setReady(true);
 			}
 		});
@@ -62,6 +66,13 @@ export class EncounterConcurrencyService extends IsReadyService {
 		});
 	}
 
+	private observeNotationChanges(): void {
+		this.notationService.notationsChangeObservable.subscribe((notation) => {
+			this.mqService.publishEncounterCommand(this.encounterService.encounterState._id, this.encounterService.encounterState.version + 1,
+					EncounterCommandType.NOTATION_UPDATE, notation);
+		});
+	}
+
 	private doEncounterCommand(message: EncounterCommandMessage): void {
 		switch (message.body.dataType) {
 			case EncounterCommandType.PLAYER_UPDATE: {
@@ -81,6 +92,21 @@ export class EncounterConcurrencyService extends IsReadyService {
 			}
 			case EncounterCommandType.LIGHT_SOURCE: {
 				this.lightService.lightSources = JSON.parse(String(message.body.data)) as Array<LightSource>;
+				break;
+			}
+			case EncounterCommandType.ADD_NOTATION: {
+				if (message.body.userId === this.userProfileService.userId) {
+					return;
+				}
+				this.notationService.addNotation(message.body.data as NotationData);
+				break;
+			}
+			case EncounterCommandType.NOTATION_UPDATE: {
+				this.notationService.setNotation(JSON.parse(String(message.body.data)) as NotationData);
+				break;
+			}
+			case EncounterCommandType.REMOVE_NOTATION: {
+				this.notationService.deleteNotation(String(message.body.data));
 				break;
 			}
 			default: {

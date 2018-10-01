@@ -3,8 +3,9 @@ import { NotationVisibility } from "../../../../../../shared/types/encounter/boa
 import { ColorStatics } from "../../statics/color-statics";
 import { TextNotation } from "./text-notation";
 import { NotationData } from '../../../../../../shared/types/encounter/board/notation.data';
+import { ConcurrentBoardObject } from '../../../encounter/concurrent-board-object';
 
-export class BoardNotationGroup implements NotationData {
+export class BoardNotationGroup extends ConcurrentBoardObject implements NotationData {
 	public _id: string;
 	public encounterId: string;
 	public userId: string;
@@ -25,17 +26,44 @@ export class BoardNotationGroup implements NotationData {
 	alpha = 1.0;
 
 	constructor(data: NotationData) {
-		for (let item in data) {
-			this[item] = data[item];
+		super();
+		this.setNotationData(data);
+	}
+
+	public setNotationData(notationData: NotationData): void {
+		for (let item in notationData) {
+			if (item === 'freeformElements') {
+				this.freeformElements = [];
+				const freeformElements = notationData[item];
+				for (let array of freeformElements) {
+					const newArray = [];
+					for (let pair of array) {
+						let newPair = new XyPair(pair.x, pair.y);
+						newArray.push(newPair);
+					}
+					this.freeformElements.push(newArray);
+				}
+			}
+			else if (item === 'cellElements') {
+				this.cellElements = [];
+				for (let pair of notationData[item]) {
+					this.cellElements.push(new XyPair(pair.x, pair.y));
+				}
+			}
+			else {
+				this[item] = notationData[item];
+			}
 		}
 	}
 
 	public toggleVisible() {
 		this.isVisible = !this.isVisible;
+		this.emitChange();
 	}
 
 	public toggleLocked() {
 		this.isLocked = !this.isLocked;
+		this.emitChange();
 	}
 
 	public toggleVisibility() {
@@ -50,6 +78,7 @@ export class BoardNotationGroup implements NotationData {
 				this.visibilityState = NotationVisibility.FULL;
 				break;
 		}
+		this.emitChange();
 	}
 
 	public getRgbCode(): string {
@@ -65,6 +94,7 @@ export class BoardNotationGroup implements NotationData {
 		this.green = g;
 		this.blue = b;
 		this.alpha = a;
+		this.emitChange();
 	}
 
 	public setRgbaWithString(rgbaString: string) {
@@ -73,14 +103,17 @@ export class BoardNotationGroup implements NotationData {
 		this.green = useThese[1];
 		this.blue = useThese[2];
 		this.alpha = useThese[3];
+		this.emitChange();
 	}
 
 	public startNewFreeform() {
 		this.freeformElements.push(new Array<XyPair>());
+		this.emitChange();
 	}
 
 	public appendToFreeform(point: XyPair) {
 		this.freeformElements[this.freeformElements.length - 1].push(point);
+		this.emitChange();
 	}
 
 	public toggleCell(cell: XyPair) {
@@ -97,6 +130,7 @@ export class BoardNotationGroup implements NotationData {
 		if (i === -1) {
 			this.cellElements.push(cell);
 		}
+		this.emitChange();
 	}
 
 	public removeCell(cell: XyPair) {
@@ -119,6 +153,7 @@ export class BoardNotationGroup implements NotationData {
 
 	public addTextNotation(textNotation: TextNotation) {
 		this.textElements.push(textNotation);
+		this.emitChange();
 	}
 
 	public getTextNotation(id: string): TextNotation {
@@ -127,5 +162,25 @@ export class BoardNotationGroup implements NotationData {
 				return textEl;
 			}
 		}
+	}
+
+	public emitChange(): void {
+		super.emitChange(JSON.stringify({
+			_id: this._id,
+			encounterId: this.encounterId,
+			userId: this.userId,
+			name: this.name,
+			iconTag: this.iconTag,
+			freeformElements: this.freeformElements,
+			cellElements: this.cellElements,
+			textElements: this.textElements,
+			isVisible: this.isVisible,
+			isLocked: this.isLocked,
+			visibilityState: this.visibilityState,
+			red: this.red,
+			green: this.green,
+			blue: this.blue,
+			alpha: this.alpha,
+		} as NotationData));
 	}
 }

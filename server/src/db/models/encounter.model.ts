@@ -92,6 +92,7 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 		this.methods.incrementVersion = this.incrementVersion;
 		this.methods.setLightSources = this.setLightSources;
 		this.methods.addNotation = this.addNotation;
+		this.methods.removeNotation = this.removeNotation;
 	}
 
 	public addGameMaster(userId: string): Promise<EncounterModel> {
@@ -117,6 +118,17 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 
 	public addNotation(notation: NotationData): Promise<EncounterModel> {
 		this.notationIds.push(notation._id);
+		return this.save();
+	}
+
+	public removeNotation(notationId: string): Promise<EncounterModel> {
+		for (let i = 0; i < this.notationIds.length; i++) {
+			if (this.notationIds[i] == notationId) {
+				this.notationIds.splice(i, 1);
+				break;
+			}
+		}
+
 		return this.save();
 	}
 
