@@ -8,10 +8,15 @@ import { IsReadyService } from '../../utilities/services/isReady.service';
 import { EncounterService } from '../../encounter/encounter.service';
 import { NotationState } from '../shared/notation/notation.state';
 import { EncounterRepository } from '../../repositories/encounter.repository';
+import {BoardControllerMode} from "../shared/enum/board-controller-mode";
+import {TimestampXyPair} from "../../../../../shared/types/encounter/board/timestamp-xy-pair";
 
 @Injectable()
 export class BoardNotationService extends IsReadyService {
 	private notationState: NotationState;
+
+	public testEphemNotation: Array<Array<TimestampXyPair>>;
+	private startNewEphemNotation: boolean = true;
 
 	public activeNotationId: string;
 	public activeNotationMode = NotationMode.CELL;
@@ -33,6 +38,7 @@ export class BoardNotationService extends IsReadyService {
 			private encounterRepo: EncounterRepository,
 	) {
 		super(boardStateService, boardVisibilityService, encounterService);
+		this.testEphemNotation = new Array();
 		this.anchor_img = new Image();
 		this.anchor_img.src = '../../../resources/icons/anchor.png';
 		this.anchor_active_image = new Image();
@@ -49,7 +55,40 @@ export class BoardNotationService extends IsReadyService {
 		});
 	}
 
+	public purgeEphemNotations() {
+		let index;
+		for (index = this.testEphemNotation.length - 1; index >= 0; index--) {
+			let note = this.testEphemNotation[index];
+
+            let newPoints = [];
+            for (let point of note) {
+                if (Date.now() - point.timestamp <= 3000) {
+                    newPoints.push(point);
+                }
+            }
+
+            if (newPoints.length === 0) {
+            	this.testEphemNotation.splice(index, 1);
+            } else {
+            	this.testEphemNotation[index] = newPoints;
+            }
+		}
+	}
+
 	public handleMouseMove() {
+		if (this.boardStateService.board_controller_mode === BoardControllerMode.EPHEM_NOTATION) {
+            if (this.boardStateService.mouseLeftDown) {
+                if (this.startNewEphemNotation) {
+                    this.testEphemNotation.push(new Array<TimestampXyPair>());
+                    this.startNewEphemNotation = false;
+                }
+                this.testEphemNotation[this.testEphemNotation.length - 1].push(new TimestampXyPair(this.boardStateService.mouse_loc_map.x, this.boardStateService.mouse_loc_map.y));
+            } else {
+                this.startNewEphemNotation = true;
+            }
+			return;
+		}
+
 		switch (this.activeNotationMode) {
 			case NotationMode.CELL:
 				if (this.boardStateService.mouseLeftDown) {

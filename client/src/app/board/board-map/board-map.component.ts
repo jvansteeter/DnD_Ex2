@@ -85,7 +85,7 @@ export class BoardMapComponent implements OnInit, AfterViewInit {
     mouseMove(event): void {
         const mouse_screen = new XyPair(event.clientX, event.clientY);
 
-        if (this.boardStateService.isEditingNotation) {
+        if (this.boardStateService.isEditingNotation || this.boardStateService.board_controller_mode === BoardControllerMode.EPHEM_NOTATION) {
             this.boardNotationService.handleMouseMove();
         }
 

@@ -30,7 +30,13 @@ export class NotationRendererComponent implements OnInit {
         this.boardCanvasService.clear_canvas(this.ctx);
         this.boardCanvasService.updateTransform(this.ctx);
 
+        this.boardNotationService.purgeEphemNotations();
+        for (let ephemFreeformPolyline of this.boardNotationService.testEphemNotation) {
+            this.boardCanvasService.draw_polyline(this.ctx, ephemFreeformPolyline, 'rgba(0, 0, 255, 1.0)', 5);
+        }
+
         for (let notation of this.boardNotationService.notations) {
+
             for (let freeformPolyline of notation.freeformElements) {
                 this.boardCanvasService.draw_polyline(this.ctx, freeformPolyline, notation.getRgbaCode(), 5);
             }
