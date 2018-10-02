@@ -7,12 +7,14 @@ import { IsReadyService } from '../../utilities/services/isReady.service';
 import { EncounterService } from '../../encounter/encounter.service';
 import { NotationState } from '../shared/notation/notation.state';
 import { EncounterRepository } from '../../repositories/encounter.repository';
-import {BoardControllerMode} from "../shared/enum/board-controller-mode";
-import {TimestampXyPair} from "../../../../../shared/types/encounter/board/timestamp-xy-pair";
+import { BoardControllerMode } from "../shared/enum/board-controller-mode";
+import { TimestampXyPair } from "../../../../../shared/types/encounter/board/timestamp-xy-pair";
 import { XyPair } from '../../../../../shared/types/encounter/board/xy-pair';
 import { NotationData } from '../../../../../shared/types/encounter/board/notation.data';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { RightsService } from '../../data-services/rights.service';
+import { UserProfileService } from '../../data-services/userProfile.service';
 
 @Injectable()
 export class BoardNotationService extends IsReadyService {
@@ -39,10 +41,13 @@ export class BoardNotationService extends IsReadyService {
 			private boardVisibilityService: BoardVisibilityService,
 			private encounterService: EncounterService,
 			private encounterRepo: EncounterRepository,
+			private rightsService: RightsService,
+			private userProfileService: UserProfileService,
 	) {
-		super(boardStateService, boardVisibilityService, encounterService);
+		super(boardStateService, boardVisibilityService, encounterService, rightsService, userProfileService);
 		this.testEphemNotation = new Array();
 		this.anchor_img = new Image();
+		this.notationState = new NotationState();
 		this.anchor_img.src = '../../../resources/icons/anchor.png';
 		this.anchor_active_image = new Image();
 		this.anchor_active_image.src = '../../../resources/icons/anchor_active.png';
@@ -52,7 +57,7 @@ export class BoardNotationService extends IsReadyService {
 	public init(): void {
 		this.dependenciesReady().subscribe(isReady => {
 			if (isReady) {
-				this.notationState = new NotationState(this.encounterService.notations);
+				this.notationState.setNotations(this.encounterService.notations);
 				this.setReady(true);
 			}
 		});
@@ -63,32 +68,32 @@ export class BoardNotationService extends IsReadyService {
 		for (index = this.testEphemNotation.length - 1; index >= 0; index--) {
 			let note = this.testEphemNotation[index];
 
-            let newPoints = [];
-            for (let point of note) {
-                if (Date.now() - point.timestamp <= 3000) {
-                    newPoints.push(point);
-                }
-            }
+			let newPoints = [];
+			for (let point of note) {
+				if (Date.now() - point.timestamp <= 3000) {
+					newPoints.push(point);
+				}
+			}
 
-            if (newPoints.length === 0) {
-            	this.testEphemNotation.splice(index, 1);
-            } else {
-            	this.testEphemNotation[index] = newPoints;
-            }
+			if (newPoints.length === 0) {
+				this.testEphemNotation.splice(index, 1);
+			} else {
+				this.testEphemNotation[index] = newPoints;
+			}
 		}
 	}
 
 	public handleMouseMove() {
 		if (this.boardStateService.board_controller_mode === BoardControllerMode.EPHEM_NOTATION) {
-            if (this.boardStateService.mouseLeftDown) {
-                if (this.startNewEphemNotation) {
-                    this.testEphemNotation.push(new Array<TimestampXyPair>());
-                    this.startNewEphemNotation = false;
-                }
-                this.testEphemNotation[this.testEphemNotation.length - 1].push(new TimestampXyPair(this.boardStateService.mouse_loc_map.x, this.boardStateService.mouse_loc_map.y));
-            } else {
-                this.startNewEphemNotation = true;
-            }
+			if (this.boardStateService.mouseLeftDown) {
+				if (this.startNewEphemNotation) {
+					this.testEphemNotation.push(new Array<TimestampXyPair>());
+					this.startNewEphemNotation = false;
+				}
+				this.testEphemNotation[this.testEphemNotation.length - 1].push(new TimestampXyPair(this.boardStateService.mouse_loc_map.x, this.boardStateService.mouse_loc_map.y));
+			} else {
+				this.startNewEphemNotation = true;
+			}
 			return;
 		}
 
@@ -193,9 +198,19 @@ export class BoardNotationService extends IsReadyService {
 		return this.notationState.get(this.activeNotationId);
 	}
 
+	public isMyNotation(notation: NotationData): boolean {
+		return notation.userId === this.userProfileService.userId;
+	}
+
 	get notations(): BoardNotationGroup[] {
 		if (this.notationState) {
-			return this.notationState.notations;
+			const notations = [];
+			for (let notation of this.notationState.notations) {
+				if (this.rightsService.isEncounterGM() || notation.isVisible || this.isMyNotation(notation)) {
+					notations.push(notation);
+				}
+			}
+			return notations;
 		}
 
 		return [];

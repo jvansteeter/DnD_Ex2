@@ -12,21 +12,30 @@ import { BoardLightService } from '../board/services/board-light.service';
 import { LightSource } from '../board/map-objects/light-source';
 import { BoardNotationService } from '../board/services/board-notation-service';
 import { NotationData } from '../../../../shared/types/encounter/board/notation.data';
+import { Subscription } from 'rxjs';
 
 @Injectable()
 export class EncounterConcurrencyService extends IsReadyService {
+	private encounterSubscription: Subscription;
+	private lightSourceSubscription: Subscription;
+	private notationSubscription: Subscription;
+	private playerSubscriptions: Subscription[] = [];
+
 	constructor(private encounterService: EncounterService,
 	            private playerService: BoardPlayerService,
 	            private userProfileService: UserProfileService,
 	            private lightService: BoardLightService,
 	            private notationService: BoardNotationService,
 	            private mqService: MqService) {
-		super(encounterService, mqService);
+		super(encounterService, mqService, notationService, userProfileService, playerService, lightService);
 	}
 
 	init(): void {
 		this.dependenciesReady().subscribe((isReady: boolean) => {
 			if (isReady) {
+				if (this.isReady().getValue()) {
+					return;
+				}
 				this.observeEncounterMqMessages();
 				this.observeAllPlayerChanges();
 				this.observeLightSourceChanges();
@@ -37,7 +46,10 @@ export class EncounterConcurrencyService extends IsReadyService {
 	}
 
 	private observeEncounterMqMessages(): void {
-		this.mqService.getEncounterMessages(this.encounterService.encounterState._id).subscribe((message: EncounterCommandMessage) => {
+		if (this.encounterSubscription) {
+			this.encounterSubscription.unsubscribe();
+		}
+		this.encounterSubscription = this.mqService.getEncounterMessages(this.encounterService.encounterState._id).subscribe((message: EncounterCommandMessage) => {
 			console.log(message)
 			if (message.body.version === this.encounterService.version + 1) {
 				this.doEncounterCommand(message);
@@ -47,27 +59,39 @@ export class EncounterConcurrencyService extends IsReadyService {
 	}
 
 	private observeAllPlayerChanges(): void {
+		if (this.playerSubscriptions.length > 0) {
+			for (let sub of this.playerSubscriptions) {
+				sub.unsubscribe();
+			}
+			this.playerSubscriptions = [];
+		}
 		for (let player of this.encounterService.players) {
 			this.observePlayerChanges(player);
 		}
 	}
 
 	private observePlayerChanges(player: Player): void {
-		player.changeObservable.subscribe(() => {
+		this.playerSubscriptions.push(player.changeObservable.subscribe(() => {
 			this.mqService.publishEncounterCommand(this.encounterService.encounterState._id, this.encounterService.encounterState.version + 1,
 					EncounterCommandType.PLAYER_UPDATE, player.serialize());
-		});
+		}));
 	}
 
 	private observeLightSourceChanges(): void {
-		this.lightService.lightSourcesChangeObservable.subscribe(() => {
+		if (this.lightSourceSubscription) {
+			this.lightSourceSubscription.unsubscribe();
+		}
+		this.lightSourceSubscription = this.lightService.lightSourcesChangeObservable.subscribe(() => {
 			this.mqService.publishEncounterCommand(this.encounterService.encounterState._id, this.encounterService.encounterState.version + 1,
 					EncounterCommandType.LIGHT_SOURCE, this.lightService.getSerializedState());
 		});
 	}
 
 	private observeNotationChanges(): void {
-		this.notationService.notationsChangeObservable.subscribe((notation) => {
+		if (this.notationSubscription) {
+			this.notationSubscription.unsubscribe();
+		}
+		this.notationSubscription = this.notationService.notationsChangeObservable.subscribe((notation) => {
 			this.mqService.publishEncounterCommand(this.encounterService.encounterState._id, this.encounterService.encounterState.version + 1,
 					EncounterCommandType.NOTATION_UPDATE, notation);
 		});

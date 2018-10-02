@@ -1,14 +1,13 @@
-import { EventEmitter } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 export class ConcurrentBoardObject {
-	private changeEvent: EventEmitter<void> = new EventEmitter<void>(true);
+	private changeEvent: Subject<any> = new Subject<any>();
 
 	public emitChange(data?: any): void {
-		this.changeEvent.emit(data);
+		this.changeEvent.next(data);
 	}
 
-	get changeObservable(): Observable<void> {
+	get changeObservable(): Observable<any> {
 		return this.changeEvent.asObservable();
 	}
 }

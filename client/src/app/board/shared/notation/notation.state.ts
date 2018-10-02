@@ -4,17 +4,11 @@ import { BoardNotationGroup } from './board-notation-group';
 import { Subscription } from 'rxjs';
 
 export class NotationState extends ConcurrentBoardObject {
-	private readonly _notations: BoardNotationGroup[];
-	private readonly changeSubscriptions: Subscription[];
+	private _notations: BoardNotationGroup[] = [];
+	private changeSubscriptions: Subscription[] = [];
 
-	constructor(notations: NotationData[] = []) {
+	constructor() {
 		super();
-		this._notations = [];
-		this.changeSubscriptions = [];
-		for (let notation of notations) {
-			const boardNotation = new BoardNotationGroup(notation);
-			this.add(boardNotation);
-		}
 	}
 
 	public add(note: BoardNotationGroup): void {
@@ -44,6 +38,18 @@ export class NotationState extends ConcurrentBoardObject {
 		}
 
 		return undefined;
+	}
+
+	public setNotations(notations: NotationData[]): void {
+		for (let sub of this.changeSubscriptions) {
+			sub.unsubscribe();
+		}
+		this.changeSubscriptions = [];
+		this._notations = [];
+		for (let notation of notations) {
+			const boardNotation = new BoardNotationGroup(notation);
+			this.add(boardNotation);
+		}
 	}
 
 	get notations(): BoardNotationGroup[] {
