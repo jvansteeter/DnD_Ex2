@@ -19,6 +19,7 @@ import { EncounterService } from '../../encounter/encounter.service';
 import {NotationTextCreateDialogComponent} from "../dialogs/notation-text-dialog/notation-text-create-dialog.component";
 import {BoardVisibilityService} from "../services/board-visibility.service";
 import {XyPair} from "../../../../../shared/types/encounter/board/xy-pair";
+import { RightsService } from '../../data-services/rights.service';
 
 @Component({
     selector: 'board-controller',
@@ -104,10 +105,11 @@ export class BoardControllerComponent implements OnInit {
     constructor(public boardStateService: BoardStateService,
                 public boardLightService: BoardLightService,
                 public boardVisibilityService: BoardVisibilityService,
-                public boardNotationService: BoardNotationService,
+                public notationService: BoardNotationService,
                 private encounterService: EncounterService,
                 public ts: BoardTileService,
                 private dialog: MatDialog,
+                public rightsService: RightsService,
     ) {}
 
     ngOnInit(): void {
@@ -259,37 +261,37 @@ export class BoardControllerComponent implements OnInit {
     }
 
     handleAddNotation() {
-        this.boardNotationService.addNewNotation().subscribe(() => {
+        this.notationService.addNewNotation().subscribe(() => {
 		        this.boardStateService.isEditingNotation = true;
-		        this.boardNotationService.activeNotationMode = NotationMode.CELL;
+		        this.notationService.activeNotationMode = NotationMode.CELL;
         });
     }
 
     handleDeleteNotation() {
-        this.boardNotationService.deleteActiveNotation();
+        this.notationService.deleteActiveNotation();
     }
 
     handleEditNotation(notationId: string) {
         this.boardStateService.isEditingNotation = true;
-        this.boardNotationService.activeNotationId = notationId;
-        this.boardNotationService.activeNotationMode = NotationMode.CELL;
+        this.notationService.activeNotationId = notationId;
+        this.notationService.activeNotationMode = NotationMode.CELL;
     }
 
     handleFinishNotation() {
         this.boardStateService.isEditingNotation = false;
-        this.boardNotationService.activeNotationId = null;
+        this.notationService.activeNotationId = null;
     }
 
     handleSetNotationModeToCell() {
-        this.boardNotationService.activeNotationMode = NotationMode.CELL;
+        this.notationService.activeNotationMode = NotationMode.CELL;
     }
 
     handleSetNotationModeToPointToPoint() {
-        this.boardNotationService.activeNotationMode = NotationMode.POINT_TO_POINT;
+        this.notationService.activeNotationMode = NotationMode.POINT_TO_POINT;
     }
 
     handleSetNotationModeToFreeform() {
-        this.boardNotationService.activeNotationMode = NotationMode.FREEFORM;
+        this.notationService.activeNotationMode = NotationMode.FREEFORM;
     }
 
     openIconDialog() {
@@ -305,8 +307,8 @@ export class BoardControllerComponent implements OnInit {
     }
 
     openTextNotationDialog() {
-        this.boardNotationService.returnToMeNotationMode = this.boardNotationService.activeNotationMode;
-        this.boardNotationService.activeNotationMode = NotationMode.TEXT;
+        this.notationService.returnToMeNotationMode = this.notationService.activeNotationMode;
+        this.notationService.activeNotationMode = NotationMode.TEXT;
         this.dialog.open(NotationTextCreateDialogComponent);
     }
 

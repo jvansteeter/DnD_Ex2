@@ -131,7 +131,7 @@
 
                 <!--DEFAULT NOTATIONS DIV-->
                 <div *ngIf="!boardStateService.isEditingNotation" class="notationGrid">
-                    <ng-container *ngFor="let notation of boardNotationService.notations">
+                    <ng-container *ngFor="let notation of notationService.notations">
                         <button class="strokeButtonOverride"
                                 matTooltip="{{notation.name}}"
                                 mat-stroked-button
@@ -152,12 +152,12 @@
                     <div style="display: flex; margin-top: 8px;">
                         <button (click)="openIconDialog()"
                                 class="strokeButtonOverride"
-                                [ngStyle]="{'color': boardNotationService.getActiveNotation().getRgbCode()}"
+                                [ngStyle]="{'color': notationService.getActiveNotation().getRgbCode()}"
                                 mat-stroked-button>
-                            <mat-icon>{{boardNotationService.getActiveNotation().iconTag}}</mat-icon>
+                            <mat-icon>{{notationService.getActiveNotation().iconTag}}</mat-icon>
                         </button>
                         <input matInput placeholder="Notation Id" class="inputOverride"
-                               [(ngModel)]="boardNotationService.getActiveNotation().name" style="margin-left: 5px">
+                               [(ngModel)]="notationService.getActiveNotation().name" style="margin-left: 5px">
                     </div>
 
                     <div style="display: block; margin: auto;">
@@ -165,32 +165,36 @@
                         <button matTooltip="cells"
                                 class="strokeButtonOverride"
                                 (click)="handleSetNotationModeToCell()"
-                                [ngClass]="{'selectedNotationMode': boardNotationService.activeNotationMode === NotationMode.CELL}"
-                                mat-stroked-button>
+                                [ngClass]="{'selectedNotationMode': notationService.activeNotationMode === NotationMode.CELL}"
+                                mat-stroked-button
+                                *ngIf="rightsService.isEncounterGM() || notationService.activeNotationIsMine()">
                             <mat-icon>apps</mat-icon>
                         </button>
 
                         <button matTooltip="point to point"
                                 class="strokeButtonOverride"
                                 (click)="handleSetNotationModeToPointToPoint()"
-                                [ngClass]="{'selectedNotationMode': boardNotationService.activeNotationMode === NotationMode.POINT_TO_POINT}"
-                                mat-stroked-button>
+                                [ngClass]="{'selectedNotationMode': notationService.activeNotationMode === NotationMode.POINT_TO_POINT}"
+                                mat-stroked-button
+                                *ngIf="rightsService.isEncounterGM() || notationService.activeNotationIsMine()">
                             <mat-icon>timeline</mat-icon>
                         </button>
 
                         <button matTooltip="freeform"
                                 class="strokeButtonOverride"
                                 (click)="handleSetNotationModeToFreeform()"
-                                [ngClass]="{'selectedNotationMode': boardNotationService.activeNotationMode === NotationMode.FREEFORM}"
-                                mat-stroked-button>
+                                [ngClass]="{'selectedNotationMode': notationService.activeNotationMode === NotationMode.FREEFORM}"
+                                mat-stroked-button
+                                *ngIf="rightsService.isEncounterGM() || notationService.activeNotationIsMine()">
                             <mat-icon>gesture</mat-icon>
                         </button>
 
                         <button matTooltip="text"
                                 class="specialAnnotationOverride"
                                 (click)="openTextNotationDialog()"
-                                [ngClass]="{'selectedNotationMode': boardNotationService.activeNotationMode === NotationMode.FREEFORM}"
-                                mat-stroked-button>
+                                [ngClass]="{'selectedNotationMode': notationService.activeNotationMode === NotationMode.FREEFORM}"
+                                mat-stroked-button
+                                *ngIf="rightsService.isEncounterGM() || notationService.activeNotationIsMine()">
                             <!--<mat-icon>font_download</mat-icon>-->
                             <span style="font-size: 25px; font-weight: bold;">T</span>
                         </button>
@@ -198,87 +202,97 @@
                         <button matTooltip="cone"
                                 class="specialAnnotationOverride"
                                 (click)="handleSetNotationModeToFreeform()"
-                                [ngClass]="{'selectedNotationMode': boardNotationService.activeNotationMode === NotationMode.FREEFORM}"
-                                mat-stroked-button>
+                                [ngClass]="{'selectedNotationMode': notationService.activeNotationMode === NotationMode.FREEFORM}"
+                                mat-stroked-button
+                                *ngIf="rightsService.isEncounterGM() || notationService.activeNotationIsMine()">
                             <mat-icon>near_me</mat-icon>
                         </button>
 
                         <button matTooltip="color"
                                 (click)="openColorDialog()"
                                 class="strokeButtonOverride"
-                                mat-stroked-button>
+                                mat-stroked-button
+                                *ngIf="rightsService.isEncounterGM() || notationService.activeNotationIsMine()">
                             <mat-icon>palette</mat-icon>
                         </button>
 
                         <button matTooltip="advanced"
                                 (click)="openSettingDialog()"
                                 class="strokeButtonOverride"
-                                mat-stroked-button>
+                                mat-stroked-button
+                                *ngIf="rightsService.isEncounterGM() || notationService.activeNotationIsMine()">
                             <mat-icon>settings</mat-icon>
                         </button>
 
-                        <ng-container ngSwitch="{{boardNotationService.getActiveNotation().visibilityState}}">
-                            <button matTooltip="full visibility"
-                                    (click)="boardNotationService.getActiveNotation().toggleVisibility()"
-                                    *ngSwitchCase="NotationVisibility.FULL"
-                                    class="strokeButtonOverride"
-                                    mat-stroked-button>
-                                <mat-icon>brightness_1</mat-icon>
-                            </button>
+	                      <ng-container *ngIf="rightsService.isEncounterGM() || notationService.activeNotationIsMine() || !notationService.getActiveNotation().isLocked">
+			                      <ng-container ngSwitch="{{notationService.getActiveNotation().visibilityState}}">
+				                      <button matTooltip="full visibility"
+				                              (click)="notationService.getActiveNotation().toggleVisibility()"
+				                              *ngSwitchCase="NotationVisibility.FULL"
+				                              class="strokeButtonOverride"
+				                              mat-stroked-button>
+					                        <mat-icon>brightness_1</mat-icon>
+				                      </button>
 
-                            <button matTooltip="partial visibility"
-                                    (click)="boardNotationService.getActiveNotation().toggleVisibility()"
-                                    *ngSwitchCase="NotationVisibility.PARTIAL"
-                                    class="strokeButtonOverride"
-                                    mat-stroked-button>
-                                <mat-icon>adjust</mat-icon>
-                            </button>
+				                      <button matTooltip="partial visibility"
+				                              (click)="notationService.getActiveNotation().toggleVisibility()"
+				                              *ngSwitchCase="NotationVisibility.PARTIAL"
+				                              class="strokeButtonOverride"
+				                              mat-stroked-button>
+					                        <mat-icon>adjust</mat-icon>
+				                      </button>
 
-                            <button matTooltip="visibility off"
-                                    (click)="boardNotationService.getActiveNotation().toggleVisibility()"
-                                    *ngSwitchCase="NotationVisibility.OFF"
-                                    class="strokeButtonOverride"
-                                    mat-stroked-button>
-                                <mat-icon>panorama_fish_eye</mat-icon>
-                            </button>
-                        </ng-container>
+				                      <button matTooltip="visibility off"
+				                              (click)="notationService.getActiveNotation().toggleVisibility()"
+				                              *ngSwitchCase="NotationVisibility.OFF"
+				                              class="strokeButtonOverride"
+				                              mat-stroked-button>
+					                        <mat-icon>panorama_fish_eye</mat-icon>
+				                      </button>
+			                      </ng-container>
+	                      </ng-container>
 
                         <!--Notation Visibility-->
-                        <button (click)="boardNotationService.getActiveNotation().toggleVisible()"
-                                *ngIf="boardNotationService.getActiveNotation().isVisible"
-                                matTooltip="visible"
-                                class="strokeButtonOverride"
-                                mat-stroked-button>
-                            <mat-icon>visibility</mat-icon>
-                        </button>
-                        <button (click)="boardNotationService.getActiveNotation().toggleVisible()"
-                                *ngIf="!boardNotationService.getActiveNotation().isVisible"
-                                matTooltip="hidden"
-                                class="strokeButtonOverride"
-                                mat-stroked-button>
-                            <mat-icon>visibility_off</mat-icon>
-                        </button>
+	                      <ng-container *ngIf="rightsService.isEncounterGM() || notationService.activeNotationIsMine()">
+			                      <button (click)="notationService.getActiveNotation().toggleVisible()"
+			                              *ngIf="notationService.getActiveNotation().isVisible"
+			                              matTooltip="visible"
+			                              class="strokeButtonOverride"
+			                              mat-stroked-button>
+				                        <mat-icon>visibility</mat-icon>
+			                      </button>
+			                      <button (click)="notationService.getActiveNotation().toggleVisible()"
+			                              *ngIf="!notationService.getActiveNotation().isVisible"
+			                              matTooltip="hidden"
+			                              class="strokeButtonOverride"
+			                              mat-stroked-button>
+				                        <mat-icon>visibility_off</mat-icon>
+			                      </button>
+	                      </ng-container>
 
                         <!--Notation Player Lock-->
-                        <button (click)="boardNotationService.getActiveNotation().toggleLocked()"
-                                *ngIf="boardNotationService.getActiveNotation().isLocked"
-                                matTooltip="player locked"
-                                class="strokeButtonOverride"
-                                mat-stroked-button>
-                            <mat-icon>lock</mat-icon>
-                        </button>
-                        <button (click)="boardNotationService.getActiveNotation().toggleLocked()"
-                                *ngIf="!boardNotationService.getActiveNotation().isLocked"
-                                matTooltip="player unlocked"
-                                class="strokeButtonOverride"
-                                mat-stroked-button>
-                            <mat-icon>lock_open</mat-icon>
-                        </button>
+	                      <ng-container *ngIf="rightsService.isEncounterGM() || notationService.activeNotationIsMine()">
+			                      <button (click)="notationService.getActiveNotation().toggleLocked()"
+			                              *ngIf="notationService.getActiveNotation().isLocked"
+			                              matTooltip="player locked"
+			                              class="strokeButtonOverride"
+			                              mat-stroked-button>
+				                        <mat-icon>lock</mat-icon>
+			                      </button>
+			                      <button (click)="notationService.getActiveNotation().toggleLocked()"
+			                              *ngIf="!notationService.getActiveNotation().isLocked"
+			                              matTooltip="player unlocked"
+			                              class="strokeButtonOverride"
+			                              mat-stroked-button>
+				                        <mat-icon>lock_open</mat-icon>
+			                      </button>
+	                      </ng-container>
 
                         <button matTooltip="delete"
                                 class="strokeButtonOverride"
                                 mat-stroked-button
-                                (click)="handleDeleteNotation()">
+                                (click)="handleDeleteNotation()"
+                                *ngIf="rightsService.isEncounterGM() || notationService.activeNotationIsMine()">
                             <mat-icon>delete</mat-icon>
                         </button>
 

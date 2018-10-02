@@ -15,6 +15,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { RightsService } from '../../data-services/rights.service';
 import { UserProfileService } from '../../data-services/userProfile.service';
+import { isUndefined } from 'util';
 
 @Injectable()
 export class BoardNotationService extends IsReadyService {
@@ -198,7 +199,14 @@ export class BoardNotationService extends IsReadyService {
 		return this.notationState.get(this.activeNotationId);
 	}
 
+	public activeNotationIsMine(): boolean {
+		return this.isMyNotation(this.getActiveNotation());
+	}
+
 	public isMyNotation(notation: NotationData): boolean {
+		if (isUndefined(notation)) {
+			return false;
+		}
 		return notation.userId === this.userProfileService.userId;
 	}
 
