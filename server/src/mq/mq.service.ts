@@ -105,6 +105,10 @@ export class MqService {
 						// do nothing, ther server issues these commands
 						break;
 					}
+					case EncounterCommandType.EPHEMERAL_NOTATION: {
+						// do nothing, these are only peer to peer
+						break;
+					}
 					default: {
 						console.error('Unrecognized Command Type')
 					}

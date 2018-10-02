@@ -11,7 +11,7 @@ import { BoardControllerMode } from "../shared/enum/board-controller-mode";
 import { TimestampXyPair } from "../../../../../shared/types/encounter/board/timestamp-xy-pair";
 import { XyPair } from '../../../../../shared/types/encounter/board/xy-pair';
 import { NotationData } from '../../../../../shared/types/encounter/board/notation.data';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { RightsService } from '../../data-services/rights.service';
 import { UserProfileService } from '../../data-services/userProfile.service';
@@ -21,8 +21,9 @@ import { isUndefined } from 'util';
 export class BoardNotationService extends IsReadyService {
 	private notationState: NotationState;
 
-	public testEphemNotation: Array<Array<TimestampXyPair>>;
+	public ephemeralNotationMap: Map<string, Array<Array<TimestampXyPair>>>;
 	private startNewEphemNotation: boolean = true;
+	private ephemeralNotationChangeEvent: Subject<void> = new Subject();
 
 	public activeNotationId: string;
 	public activeNotationMode = NotationMode.CELL;
@@ -46,7 +47,8 @@ export class BoardNotationService extends IsReadyService {
 			private userProfileService: UserProfileService,
 	) {
 		super(boardStateService, boardVisibilityService, encounterService, rightsService, userProfileService);
-		this.testEphemNotation = new Array();
+		this.ephemeralNotationMap = new Map();
+		this.ephemeralNotationMap.set(this.userProfileService.userId, []);
 		this.anchor_img = new Image();
 		this.notationState = new NotationState();
 		this.anchor_img.src = '../../../resources/icons/anchor.png';
@@ -66,20 +68,22 @@ export class BoardNotationService extends IsReadyService {
 
 	public purgeEphemNotations() {
 		let index;
-		for (index = this.testEphemNotation.length - 1; index >= 0; index--) {
-			let note = this.testEphemNotation[index];
+		for (let notation of this.ephemeralNotationMap) {
+			for (index = notation[1].length - 1; index >= 0; index--) {
+				let note = notation[1][index];
 
-			let newPoints = [];
-			for (let point of note) {
-				if (Date.now() - point.timestamp <= 3000) {
-					newPoints.push(point);
+				let newPoints = [];
+				for (let point of note) {
+					if (Date.now() - point.timestamp <= 3000) {
+						newPoints.push(point);
+					}
 				}
-			}
 
-			if (newPoints.length === 0) {
-				this.testEphemNotation.splice(index, 1);
-			} else {
-				this.testEphemNotation[index] = newPoints;
+				if (newPoints.length === 0) {
+					notation[1].splice(index, 1);
+				} else {
+					notation[1][index] = newPoints;
+				}
 			}
 		}
 	}
@@ -88,10 +92,11 @@ export class BoardNotationService extends IsReadyService {
 		if (this.boardStateService.board_controller_mode === BoardControllerMode.EPHEM_NOTATION) {
 			if (this.boardStateService.mouseLeftDown) {
 				if (this.startNewEphemNotation) {
-					this.testEphemNotation.push(new Array<TimestampXyPair>());
+					this.ephemeralNotationMap.get(this.userProfileService.userId).push(new Array<TimestampXyPair>());
 					this.startNewEphemNotation = false;
 				}
-				this.testEphemNotation[this.testEphemNotation.length - 1].push(new TimestampXyPair(this.boardStateService.mouse_loc_map.x, this.boardStateService.mouse_loc_map.y));
+				this.ephemeralNotationMap.get(this.userProfileService.userId)[this.ephemeralNotationMap.get(this.userProfileService.userId).length - 1].push(new TimestampXyPair(this.boardStateService.mouse_loc_map.x, this.boardStateService.mouse_loc_map.y));
+				this.emitEphemeralChange();
 			} else {
 				this.startNewEphemNotation = true;
 			}
@@ -210,6 +215,14 @@ export class BoardNotationService extends IsReadyService {
 		return notation.userId === this.userProfileService.userId;
 	}
 
+	public addEphemeralNotation(notation: any, userId: string): void {
+		this.ephemeralNotationMap.set(userId, notation);
+	}
+
+	private emitEphemeralChange(): void {
+		this.ephemeralNotationChangeEvent.next();
+	}
+
 	get notations(): BoardNotationGroup[] {
 		if (this.notationState) {
 			const notations = [];
@@ -226,5 +239,9 @@ export class BoardNotationService extends IsReadyService {
 
 	get notationsChangeObservable(): Observable<void> {
 		return this.notationState.changeObservable;
+	}
+
+	get ephemerailNotationChangeObservable(): Observable<void> {
+		return this.ephemeralNotationChangeEvent.asObservable();
 	}
 }

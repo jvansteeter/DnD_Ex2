@@ -19,6 +19,7 @@ export class EncounterConcurrencyService extends IsReadyService {
 	private encounterSubscription: Subscription;
 	private lightSourceSubscription: Subscription;
 	private notationSubscription: Subscription;
+	private ephemeralNotationSubscription: Subscription;
 	private playerSubscriptions: Subscription[] = [];
 
 	constructor(private encounterService: EncounterService,
@@ -95,6 +96,15 @@ export class EncounterConcurrencyService extends IsReadyService {
 			this.mqService.publishEncounterCommand(this.encounterService.encounterState._id, this.encounterService.encounterState.version + 1,
 					EncounterCommandType.NOTATION_UPDATE, notation);
 		});
+
+		if (this.ephemeralNotationSubscription) {
+			this.ephemeralNotationSubscription.unsubscribe();
+		}
+		this.ephemeralNotationSubscription = this.notationService.ephemerailNotationChangeObservable.subscribe(() => {
+			const ephemeralNotation = this.notationService.ephemeralNotationMap.get(this.userProfileService.userId);
+			this.mqService.publishEncounterCommand(this.encounterService.encounterState._id, this.encounterService.encounterState.version + 1,
+					EncounterCommandType.EPHEMERAL_NOTATION, ephemeralNotation);
+		});
 	}
 
 	private doEncounterCommand(message: EncounterCommandMessage): void {
@@ -131,6 +141,12 @@ export class EncounterConcurrencyService extends IsReadyService {
 			}
 			case EncounterCommandType.REMOVE_NOTATION: {
 				this.notationService.deleteNotation(String(message.body.data));
+				break;
+			}
+			case EncounterCommandType.EPHEMERAL_NOTATION: {
+				if (message.body.userId !== this.userProfileService.userId) {
+					this.notationService.addEphemeralNotation(message.body.data, message.body.userId);
+				}
 				break;
 			}
 			default: {

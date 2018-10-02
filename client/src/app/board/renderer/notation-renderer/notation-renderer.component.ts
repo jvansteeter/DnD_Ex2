@@ -9,7 +9,6 @@ import {GeometryStatics} from "../../statics/geometry-statics";
     selector: 'notation-renderer',
     templateUrl: 'notation-renderer.component.html'
 })
-
 export class NotationRendererComponent implements OnInit {
     @ViewChild('notationRenderCanvas') gridRenderCanvas: ElementRef;
     private ctx: CanvasRenderingContext2D;
@@ -31,8 +30,10 @@ export class NotationRendererComponent implements OnInit {
         this.boardCanvasService.updateTransform(this.ctx);
 
         this.boardNotationService.purgeEphemNotations();
-        for (let ephemFreeformPolyline of this.boardNotationService.testEphemNotation) {
-            this.boardCanvasService.draw_polyline(this.ctx, ephemFreeformPolyline, 'rgba(0, 0, 255, 1.0)', 5);
+        for (let playerNotation of this.boardNotationService.ephemeralNotationMap) {
+	        for (let ephemFreeformPolyline of playerNotation[1]) {
+		        this.boardCanvasService.draw_polyline(this.ctx, ephemFreeformPolyline, 'rgba(0, 0, 255, 1.0)', 5);
+	        }
         }
 
         for (let notation of this.boardNotationService.notations) {
