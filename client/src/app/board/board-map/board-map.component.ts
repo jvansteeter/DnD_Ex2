@@ -481,7 +481,6 @@ export class BoardMapComponent implements OnInit, AfterViewInit {
     }
 
     mouseOverInitIcon(player: Player): void {
-        console.log('mouseOver');
         this.boardPlayerService.hoveredPlayerId = player._id;
     }
 }
