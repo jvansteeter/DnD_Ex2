@@ -1,14 +1,15 @@
 <div style="position: absolute; z-index: 5;">
 
     <ng-container *ngFor="let player of getSortedPlayers()">
-        <div style="height:40px; width: 40px; margin-top: 13px; margin-left: 8px; ">
+        <div style="height:40px; width: 40px; margin-top: 13px; margin-left: 8px;" (contextmenu)="handleContextMenu($event)">
             <div
                     style="height: 40px; width: 40px; border: 3px solid #383838; background: #d8d8d8; border-radius: 50%; position: absolute">
                 <img src="{{player.tokenUrl}}" style="height: 100%; border-radius: 25px;">
             </div>
             <div
                     style="height:40px; width: 40px; border: 3px solid #383838; border-radius: 50%; position: absolute"
-                    (click)="handleInitDialog(player)"
+                    (mouseup)="handleInitIconMouseUp($event, player)"
+                    (mouseover)="mouseOverInitIcon(player)"
                     matBadge="{{player.initiative}}"
                     matTooltip="{{player.name}}"
                     matTooltipPosition="after">

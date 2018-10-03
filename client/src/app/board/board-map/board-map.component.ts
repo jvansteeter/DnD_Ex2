@@ -461,8 +461,27 @@ export class BoardMapComponent implements OnInit, AfterViewInit {
         return 0;
     }
 
+    handleInitIconMouseUp(event: MouseEvent, player: Player) {
+        console.log(event);
+        switch(event.which) {
+            case 1:
+                this.handleInitDialog(player);
+                break;
+            case 2:
+                break;
+            case 3:
+                this.boardPlayerService.selectPlayer(player);
+                break;
+        }
+    }
+
     handleInitDialog(player: Player) {
         this.boardPlayerService.playerToSyncInit = player;
         this.dialog.open(TempPlayerInitDialogComponent);
+    }
+
+    mouseOverInitIcon(player: Player): void {
+        console.log('mouseOver');
+        this.boardPlayerService.hoveredPlayerId = player._id;
     }
 }

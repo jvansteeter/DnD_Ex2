@@ -39,7 +39,12 @@ export class TokenRendererComponent implements OnInit {
         this.boardCanvasService.updateTransform(this.ctx);
 
         for (const player of this.encounterService.players) {
-            if (this.boardPlayerService.selectedPlayerIds.has(player._id)) {
+
+            if (this.boardPlayerService.hoveredPlayerId === player._id) {
+                this.boardCanvasService.draw_fill_all(this.ctx, player.location, 'rgba(255, 0, 0, 0.35)');
+            }
+
+            if (this.boardPlayerService.selectedPlayerId === player._id) {
                 this.boardCanvasService.draw_fill_all(this.ctx, player.location, 'rgba(0, 0, 180, 0.2)');
 
                 let cellIndex;

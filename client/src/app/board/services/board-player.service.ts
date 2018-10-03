@@ -17,8 +17,8 @@ export class BoardPlayerService extends IsReadyService {
     public player_visibility_map: Map<string, Polygon>;
     public player_traverse_map: Map<string, Array<number>>;
 
-    public selectedPlayerIds: Set<string>;
-    public hoveredPlayerId = '';
+    public selectedPlayerId: string;
+    public hoveredPlayerId: string;
 
     public playerToSyncInit: Player;
 
@@ -30,7 +30,6 @@ export class BoardPlayerService extends IsReadyService {
         super(encounterService, boardStateService, boardTraverseService, boardVisibilityService);
         this.player_lightSource_map = new Map<string, LightSource>();
         this.player_visibility_map = new Map<string, Polygon>();
-        this.selectedPlayerIds = new Set<string>();
         this.player_traverse_map = new Map<string, Array<number>>();
         this.init();
     }
@@ -139,31 +138,38 @@ export class BoardPlayerService extends IsReadyService {
         }
     }
 
+    public selectPlayer(player: Player) {
+        this.selectedPlayerId = player._id;
+    }
+
     public handleClick(loc_cell: XyPair) {
-        if (this.selectedPlayerIds.size === 1) {
+
+        if (this.selectedPlayerId !== null) {
+            // a player is currently selected ...
             for (const player of this.encounterService.players) {
+                // ... and there is a player on the click location ...
                 if (player.location.x === loc_cell.x && player.location.y === loc_cell.y) {
-                    this.selectedPlayerIds = new Set<string>();
+                    // ... unselect the player and return
+                    this.selectedPlayerId = null;
                     return;
                 }
             }
-            for (const player of this.encounterService.players) {
-                if (this.selectedPlayerIds.has(player._id)) {
-                    player.location = loc_cell;
 
-                    this.updatePlayerVisibility(player._id);
-                    this.updatePlayerTraverse(player._id);
-                    this.updatePlayerLightSource(player._id);
-                    // this.boardLightService.updateAllLightValues();
-
-                    this.selectedPlayerIds = new Set<string>();
-                }
-            }
+            const selectedPlayer = this.encounterService.getPlayerById(this.selectedPlayerId);
+            selectedPlayer.location = loc_cell;
+            this.updatePlayerVisibility(selectedPlayer._id);
+            this.updatePlayerTraverse(selectedPlayer._id);
+            this.updatePlayerLightSource(selectedPlayer._id);
+            this.selectedPlayerId = null;
 
         } else {
+            // there is no player selected ...
             for (const player of this.encounterService.players) {
+                // ... search through the players to see if a player was selected ...
                 if (player.location.x === loc_cell.x && player.location.y === loc_cell.y) {
-                    this.selectedPlayerIds.add(player._id);
+                    // ... select the player and return
+                    this.selectPlayer(player);
+                    return;
                 }
             }
         }
