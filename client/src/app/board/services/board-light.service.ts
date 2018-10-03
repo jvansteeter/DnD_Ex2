@@ -24,19 +24,22 @@ export class BoardLightService extends IsReadyService {
     public init(): void {
         this.dependenciesReady().subscribe((isReady: boolean) => {
             if (isReady) {
-            	  this.lightSourceState = new LightSourcesState(this.encounterService.encounterState.lightSources);
+            	  this.lightSourceState.lightSources = this.encounterService.encounterState.lightSources;
             	  this.updateAllLightValues();
                 this.setReady(true);
             }
-        })
+        });
     }
 
     toggleLightSource(source: LightSource) {
         this.lightSourceState.toggle(source);
-        this.updateAllLightValues();
+        this.updateLightValue(source);
     }
 
-    updateLightValue(): void {
+    updateLightValue(lightSource: LightSource): void {
+	    const polys = this.generateLightPolygons(lightSource);
+	    lightSource.dim_polygon = polys.dim_poly;
+	    lightSource.bright_polygon = polys.bright_poly;
     }
 
     generateLightPolygons(source: LightSource): {bright_poly: Polygon, dim_poly: Polygon} {
@@ -64,9 +67,7 @@ export class BoardLightService extends IsReadyService {
 
     updateAllLightValues(): void {
         for (let lightSource of this.lightSourceState.lightSources) {
-            const polys = this.generateLightPolygons(lightSource as LightSource);
-            lightSource.dim_polygon = polys.dim_poly;
-            lightSource.bright_polygon = polys.bright_poly;
+            this.updateLightValue(lightSource as LightSource);
         }
     }
 
@@ -80,6 +81,7 @@ export class BoardLightService extends IsReadyService {
 
     set lightSources(value: Array<LightSource>) {
     	this.lightSourceState.lightSources = value;
+    	this.updateAllLightValues();
     }
 
     get lightSourcesChangeObservable(): Observable<void> {

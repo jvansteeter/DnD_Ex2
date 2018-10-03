@@ -318,10 +318,7 @@ export class BoardWallService extends IsReadyService {
     	this._wallData = new Map();
     	for (let key in data) {
     		let newTarget = new CellTarget(new XyPair(data[key].location.x, data[key].location.y), data[key].region);
-    		// this._wallData.set(key, );
 		    this._addWall(newTarget);
 	    }
-	    // this.boardLightService.updateAllLightValues();
-	    // this.boardPlayerService.updateAllPlayerTraverse();
     }
 }
