@@ -31,7 +31,7 @@ export class WallRendererComponent implements OnInit {
 
         switch (this.boardStateService.board_view_mode) {
             case ViewMode.BOARD_MAKER:
-                for (const wall of Array.from(this.wallService.wallData.values())) {
+                for (const wall of Array.from(this.wallService.walls)) {
                     this.boardCanvasService.draw_wall(this.ctx, wall, 6, 'rgba(0, 255, 0, 0.75)');
                 }
 
@@ -42,7 +42,7 @@ export class WallRendererComponent implements OnInit {
                 break;
             case ViewMode.PLAYER:
                 if (this.boardStateService.playerWallsEnabled) {
-                    for (const wall of Array.from(this.wallService.wallData.values())) {
+                    for (const wall of Array.from(this.wallService.walls)) {
                         this.boardCanvasService.draw_wall(this.ctx, wall, 10, 'rgba(25, 25, 25, 1)');
                     }
 
@@ -52,7 +52,7 @@ export class WallRendererComponent implements OnInit {
                 }
                 break;
             case ViewMode.MASTER:
-                for (const wall of Array.from(this.wallService.wallData.values())) {
+                for (const wall of Array.from(this.wallService.walls)) {
                     this.boardCanvasService.draw_wall(this.ctx, wall, 6, 'rgba(0, 255, 0, 0.75)');
                 }
 

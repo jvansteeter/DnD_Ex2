@@ -194,6 +194,16 @@ export class EncounterService {
 		}
 	}
 
+	public async setWallData(encounterId: string, wallData: any): Promise<EncounterModel> {
+		try {
+			const encounter: EncounterModel = await this.encounterRepo.findById(encounterId);
+			return await encounter.setWallData(wallData);
+		}
+		catch (error) {
+			throw error;
+		}
+	}
+
 	private async buildEncounterState(encounterModel: EncounterModel): Promise<EncounterData> {
 		let encounterState: EncounterData = JSON.parse(JSON.stringify(encounterModel));
 		encounterState.players = [];

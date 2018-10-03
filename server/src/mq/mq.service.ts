@@ -109,6 +109,12 @@ export class MqService {
 						// do nothing, these are only peer to peer
 						break;
 					}
+					case EncounterCommandType.WALL_CHANGE: {
+						const encounterId = command.headers.encounterId;
+						const data = command.body.data;
+						this.encounterService.setWallData(encounterId, data);
+						break;
+					}
 					default: {
 						console.error('Unrecognized Command Type')
 					}

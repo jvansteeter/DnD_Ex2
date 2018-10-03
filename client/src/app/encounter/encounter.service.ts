@@ -115,4 +115,12 @@ export class EncounterService extends IsReadyService {
 
 		return undefined;
 	}
+
+	get wallData(): {} {
+		if (this.encounterState) {
+			return this.encounterState.wallData;
+		}
+
+		return undefined;
+	}
 }

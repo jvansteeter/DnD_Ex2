@@ -68,9 +68,9 @@ export class BoardNotationService extends IsReadyService {
 
 	public purgeEphemNotations() {
 		let index;
-		for (let notation of this.ephemeralNotationMap) {
-			for (index = notation[1].length - 1; index >= 0; index--) {
-				let note = notation[1][index];
+		for (let notation of this.ephemeralNotationMap.values()) {
+			for (index = notation.length - 1; index >= 0; index--) {
+				let note = notation[index];
 
 				let newPoints = [];
 				for (let point of note) {
@@ -80,9 +80,9 @@ export class BoardNotationService extends IsReadyService {
 				}
 
 				if (newPoints.length === 0) {
-					notation[1].splice(index, 1);
+					notation.splice(index, 1);
 				} else {
-					notation[1][index] = newPoints;
+					notation[index] = newPoints;
 				}
 			}
 		}

@@ -13,6 +13,8 @@ import { LightSource } from '../board/map-objects/light-source';
 import { BoardNotationService } from '../board/services/board-notation-service';
 import { NotationData } from '../../../../shared/types/encounter/board/notation.data';
 import { Subscription } from 'rxjs';
+import { BoardWallService } from '../board/services/board-wall.service';
+import { CellTarget } from '../board/shared/cell-target';
 
 @Injectable()
 export class EncounterConcurrencyService extends IsReadyService {
@@ -21,14 +23,16 @@ export class EncounterConcurrencyService extends IsReadyService {
 	private notationSubscription: Subscription;
 	private ephemeralNotationSubscription: Subscription;
 	private playerSubscriptions: Subscription[] = [];
+	private wallSubscription: Subscription;
 
 	constructor(private encounterService: EncounterService,
 	            private playerService: BoardPlayerService,
 	            private userProfileService: UserProfileService,
 	            private lightService: BoardLightService,
 	            private notationService: BoardNotationService,
+	            private wallService: BoardWallService,
 	            private mqService: MqService) {
-		super(encounterService, mqService, notationService, userProfileService, playerService, lightService);
+		super(encounterService, mqService, notationService, userProfileService, playerService, lightService, wallService);
 	}
 
 	init(): void {
@@ -41,6 +45,7 @@ export class EncounterConcurrencyService extends IsReadyService {
 				this.observeAllPlayerChanges();
 				this.observeLightSourceChanges();
 				this.observeNotationChanges();
+				this.observerWallChanges();
 				this.setReady(true);
 			}
 		});
@@ -107,6 +112,16 @@ export class EncounterConcurrencyService extends IsReadyService {
 		});
 	}
 
+	private observerWallChanges(): void {
+		if (this.wallSubscription) {
+			this.wallSubscription.unsubscribe();
+		}
+		this.wallSubscription = this.wallService.wallChangeEvent.subscribe(() => {
+			this.mqService.publishEncounterCommand(this.encounterService.encounterState._id, this.encounterService.encounterState.version + 1,
+					EncounterCommandType.WALL_CHANGE, this.wallService.wallData);
+		});
+	}
+
 	private doEncounterCommand(message: EncounterCommandMessage): void {
 		switch (message.body.dataType) {
 			case EncounterCommandType.PLAYER_UPDATE: {
@@ -147,6 +162,10 @@ export class EncounterConcurrencyService extends IsReadyService {
 				if (message.body.userId !== this.userProfileService.userId) {
 					this.notationService.addEphemeralNotation(message.body.data, message.body.userId);
 				}
+				break;
+			}
+			case EncounterCommandType.WALL_CHANGE: {
+				this.wallService.wallData = message.body.data as Map<string, CellTarget>;
 				break;
 			}
 			default: {

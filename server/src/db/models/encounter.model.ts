@@ -58,6 +58,7 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 			mapUrl: String,
 			mapDimX: Number,
 			mapDimY: Number,
+			wallData: Object,
 			lightSources: [{
 				location: {
 					x: Number,
@@ -81,6 +82,7 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 		this.mapUrl = this.methods.mapUrl;
 		this.mapDimX = this.methods.mapDimX;
 		this.mapDimY = this.methods.mapDimY;
+		this.wallData = this.methods.wallData;
 		this.lightSources = this.methods.lightSources;
 		this.notationIds = this.methods.notationIds;
 
@@ -93,6 +95,7 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 		this.methods.setLightSources = this.setLightSources;
 		this.methods.addNotation = this.addNotation;
 		this.methods.removeNotation = this.removeNotation;
+		this.methods.setWallData = this.setWallData;
 	}
 
 	public addGameMaster(userId: string): Promise<EncounterModel> {
@@ -166,6 +169,11 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 		for (let light of lights) {
 			this.lightSources.push(light);
 		}
+		return this.save();
+	}
+
+	public setWallData(data: any): Promise<EncounterModel> {
+		this.wallData = data;
 		return this.save();
 	}
 }

@@ -17,4 +17,14 @@ export class CellTarget {
     hash(): string | null {
         return this.toString();
     }
+
+    serialize() {
+    	return {
+		    location: {
+			    x: this.location.x,
+			    y: this.location.y
+		    },
+		    region: this.region,
+	    }
+    }
 }

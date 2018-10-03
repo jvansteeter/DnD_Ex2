@@ -9,12 +9,17 @@ import {BoardLightService} from './board-light.service';
 import {BoardDoor} from '../map-objects/board-door';
 import { EncounterService } from '../../encounter/encounter.service';
 import {BoardPlayerService} from "./board-player.service";
+import { Observable, Subject } from 'rxjs';
+import { IsReadyService } from '../../utilities/services/isReady.service';
+import { isUndefined } from 'util';
 
 @Injectable()
-export class BoardWallService {
-    public wallData: Map<string, CellTarget> = new Map<string, CellTarget>();
+export class BoardWallService extends IsReadyService {
+    private _wallData: Map<string, CellTarget> = new Map<string, CellTarget>();
     public doorData: Map<string, BoardDoor> = new Map<string, BoardDoor>();
     public windowData: Map<string, CellTarget> = new Map<string, CellTarget>();
+
+    private wallChangeSubject: Subject<void> = new Subject();
 
     constructor(
         private boardStateService: BoardStateService,
@@ -22,8 +27,19 @@ export class BoardWallService {
         private boardTraverseService: BoardTraverseService,
         private boardLightService: BoardLightService,
         private boardPlayerService: BoardPlayerService,
-        private encounterService: EncounterService
+        private encounterService: EncounterService,
     ) {
+    	super(boardStateService, boardVisibilityService, boardTraverseService, boardLightService, boardPlayerService);
+    	this.init();
+    }
+
+    public init(): void {
+    	this.dependenciesReady().subscribe((isReady) => {
+    		if (isReady) {
+    			this.wallData = this.encounterService.wallData;
+		    }
+		    this.setReady(isReady);
+	    });
     }
 
     public addDoor(target: CellTarget) {
@@ -136,36 +152,41 @@ export class BoardWallService {
     }
 
     public addWall(target: CellTarget, singleInstance = true) {
-        if (!this.hasObstruction(target)) {
-            this.wallData.set(target.hash(), target);
-            switch (target.region) {
-                case CellRegion.TOP_EDGE:
-                    this.boardVisibilityService.blockNorth(target.location);
-                    this.boardTraverseService.blockNorth(target.location);
-                    break;
-                case CellRegion.LEFT_EDGE:
-                    this.boardVisibilityService.blockWest(target.location);
-                    this.boardTraverseService.blockWest(target.location);
-                    break;
-                case CellRegion.FWRD_EDGE:
-                    this.boardVisibilityService.blockFwd(target.location);
-                    this.boardTraverseService.blockFwd(target.location);
-                    break;
-                case CellRegion.BKWD_EDGE:
-                    this.boardVisibilityService.blockBkw(target.location);
-                    this.boardTraverseService.blockBkw(target.location);
-                    break;
-            }
-        }
-        if (singleInstance) {
-            this.boardLightService.updateAllLightValues();
-            this.boardPlayerService.updateAllPlayerTraverse();
-        }
+        this._addWall(target, singleInstance);
+        this.wallChangeSubject.next();
+    }
+
+    private _addWall(target: CellTarget, singleInstance = true) {
+	    if (!this.hasObstruction(target)) {
+		    this._wallData.set(target.hash(), target);
+		    switch (target.region) {
+			    case CellRegion.TOP_EDGE:
+				    this.boardVisibilityService.blockNorth(target.location);
+				    this.boardTraverseService.blockNorth(target.location);
+				    break;
+			    case CellRegion.LEFT_EDGE:
+				    this.boardVisibilityService.blockWest(target.location);
+				    this.boardTraverseService.blockWest(target.location);
+				    break;
+			    case CellRegion.FWRD_EDGE:
+				    this.boardVisibilityService.blockFwd(target.location);
+				    this.boardTraverseService.blockFwd(target.location);
+				    break;
+			    case CellRegion.BKWD_EDGE:
+				    this.boardVisibilityService.blockBkw(target.location);
+				    this.boardTraverseService.blockBkw(target.location);
+				    break;
+		    }
+	    }
+	    if (singleInstance) {
+		    this.boardLightService.updateAllLightValues();
+		    this.boardPlayerService.updateAllPlayerTraverse();
+	    }
     }
 
     public removeWall(target: CellTarget, singleInstance = true): void {
-        if (this.hasObstruction(target) && this.wallData.has(target.hash())) {
-            this.wallData.delete(target.hash());
+        if (this.hasObstruction(target) && this._wallData.has(target.hash())) {
+            this._wallData.delete(target.hash());
             switch (target.region) {
                 case CellRegion.TOP_EDGE:
                     this.boardVisibilityService.unblockNorth(target.location);
@@ -189,10 +210,11 @@ export class BoardWallService {
             this.boardLightService.updateAllLightValues();
             this.boardPlayerService.updateAllPlayerTraverse();
         }
+        this.wallChangeSubject.next();
     }
 
     public toggleWall(target: CellTarget): void {
-        if (this.hasObstruction(target) && this.wallData.has(target.hash())) {
+        if (this.hasObstruction(target) && this._wallData.has(target.hash())) {
             this.removeWall(target);
         } else {
             this.addWall(target);
@@ -269,6 +291,37 @@ export class BoardWallService {
     }
 
     public hasObstruction(target: CellTarget): boolean {
-        return this.wallData.has(target.hash()) || this.doorData.has(target.hash()) || this.windowData.has(target.hash());
+        return this._wallData.has(target.hash()) || this.doorData.has(target.hash()) || this.windowData.has(target.hash());
+    }
+
+    get wallChangeEvent(): Observable<void> {
+    	return this.wallChangeSubject.asObservable();
+    }
+
+    get wallData(): {} {
+    	const data = {};
+    	for (let key of this._wallData.keys()) {
+    		data[key] = this._wallData.get(key).serialize();
+	    }
+
+	    return data;
+    }
+
+    get walls(): IterableIterator<CellTarget> {
+    	if (isUndefined(this._wallData)) {
+    		return new Map<string, CellTarget>().values();
+	    }
+    	return this._wallData.values();
+    }
+
+    set wallData(data: {}) {
+    	this._wallData = new Map();
+    	for (let key in data) {
+    		let newTarget = new CellTarget(new XyPair(data[key].location.x, data[key].location.y), data[key].region);
+    		// this._wallData.set(key, );
+		    this._addWall(newTarget);
+	    }
+	    // this.boardLightService.updateAllLightValues();
+	    // this.boardPlayerService.updateAllPlayerTraverse();
     }
 }
