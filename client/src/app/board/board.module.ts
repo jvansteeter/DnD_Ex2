@@ -22,7 +22,6 @@ import {MapRendererComponent} from "./renderer/map-renderer/map-renderer.compone
 import {GridRendererComponent} from "./renderer/grid-renderer/grid-renderer.component";
 import {BoardZoneComponent} from "./board-zone.component";
 import {HoverRendererComponent} from "./renderer/hover-renderer/hover-renderer.component";
-import {TileRendererComponent} from "./renderer/tile-renderer/tile-renderer.component";
 import {LightRendererComponent} from "./renderer/light-renderer/light-renderer.component";
 import {WallRendererComponent} from "./renderer/wall-renderer/wall-renderer.component";
 import {HighlightRendererComponent} from "./renderer/highlight-renderer/highlight-renderer.component";
@@ -32,7 +31,6 @@ import {FormsModule} from "@angular/forms";
 import {BoardStateService} from "./services/board-state.service";
 import {BoardCanvasService} from "./services/board-canvas.service";
 import {BoardWallService} from "./services/board-wall.service";
-import {BoardTileService} from "./services/board-tile.service";
 import {BoardMapComponent} from './board-map/board-map.component';
 import {TokenRendererComponent} from './renderer/token-renderer/token-renderer.component';
 import {PopService} from "./pop/pop.service";
@@ -73,7 +71,6 @@ import {LightVisibilityControlModuleComponent} from "./board-control/controller-
         MapRendererComponent,
         GridRendererComponent,
         HoverRendererComponent,
-        TileRendererComponent,
         LightRendererComponent,
         WallRendererComponent,
         NotationRendererComponent,
@@ -122,7 +119,6 @@ import {LightVisibilityControlModuleComponent} from "./board-control/controller-
         BoardStateService,
         BoardCanvasService,
         BoardWallService,
-        BoardTileService,
         BoardTransformService,
         BoardVisibilityService,
         BoardTraverseService,

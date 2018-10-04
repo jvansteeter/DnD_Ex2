@@ -42,9 +42,6 @@ export class ViewEditControlModuleComponent {
             case BoardMode.LIGHTS:
                 this.currentInput = 'Lights';
                 break;
-            case BoardMode.TILES:
-                this.currentInput = 'Tiles';
-                break;
         }
 
         switch (this.boardStateService.board_view_mode) {

@@ -119,8 +119,6 @@ export class HoverRendererComponent implements OnInit, OnDestroy {
                                 break;
                         }
                         break;
-                    case BoardMode.TILES:
-                        break;
                     case BoardMode.PLAYER:
                         break;
                 }

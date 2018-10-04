@@ -1,9 +1,7 @@
 import { BoardStateService } from '../services/board-state.service';
-import { BoardTileService } from '../services/board-tile.service';
 import { ViewMode } from '../shared/enum/view-mode';
 import { BoardMode } from '../shared/enum/board-mode';
 import { BoardControllerMode } from '../shared/enum/board-controller-mode'
-import { LightValue } from '../shared/enum/light-value';
 import { BoardLightService } from '../services/board-light.service';
 import { PlayerVisibilityMode } from "../shared/enum/player-visibility-mode";
 import { Component, OnDestroy, OnInit } from '@angular/core';

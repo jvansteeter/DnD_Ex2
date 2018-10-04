@@ -106,28 +106,28 @@ export class BoardTransformService {
         // CENTER
         if ((loc.x > shift) && (loc.x < (BoardStateService.cell_res - shift) && (loc.y > shift) && (loc.y < (BoardStateService.cell_res - shift)))) {
 
-            if (this.boardStateService.shiftDown && (this.boardStateService.board_edit_mode === BoardMode.TILES)) {
-                // Handles the isolation of the four triangles
-                if (loc.x >= loc.y) {
-                    // top of cell
-                    if ((loc.x + loc.y) <= BoardStateService.cell_res) {
-                        // top-left
-                        return new CellTarget(this.boardStateService.mouse_loc_cell, CellRegion.TOP_QUAD);
-                    } else {
-                        // top-right
-                        return new CellTarget(this.boardStateService.mouse_loc_cell, CellRegion.RIGHT_QUAD);
-                    }
-                } else {
-                    // bottom of cell
-                    if ((loc.x + loc.y) <= BoardStateService.cell_res) {
-                        // bottom-left
-                        return new CellTarget(this.boardStateService.mouse_loc_cell, CellRegion.LEFT_QUAD);
-                    } else {
-                        // bottom-right
-                        return new CellTarget(this.boardStateService.mouse_loc_cell, CellRegion.BOTTOM_QUAD);
-                    }
-                }
-            }
+            // if (this.boardStateService.shiftDown && (this.boardStateService.board_edit_mode === BoardMode.TILES)) {
+            //     // Handles the isolation of the four triangles
+            //     if (loc.x >= loc.y) {
+            //         // top of cell
+            //         if ((loc.x + loc.y) <= BoardStateService.cell_res) {
+            //             // top-left
+            //             return new CellTarget(this.boardStateService.mouse_loc_cell, CellRegion.TOP_QUAD);
+            //         } else {
+            //             // top-right
+            //             return new CellTarget(this.boardStateService.mouse_loc_cell, CellRegion.RIGHT_QUAD);
+            //         }
+            //     } else {
+            //         // bottom of cell
+            //         if ((loc.x + loc.y) <= BoardStateService.cell_res) {
+            //             // bottom-left
+            //             return new CellTarget(this.boardStateService.mouse_loc_cell, CellRegion.LEFT_QUAD);
+            //         } else {
+            //             // bottom-right
+            //             return new CellTarget(this.boardStateService.mouse_loc_cell, CellRegion.BOTTOM_QUAD);
+            //         }
+            //     }
+            // }
 
             if (doDiagonals) {
                 if (loc.x > (BoardStateService.cell_res / 2)) {

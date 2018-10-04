@@ -3,5 +3,4 @@ export enum BoardMode {
     WALLS,
     DOORS,
     LIGHTS,
-    TILES
 }

@@ -22,7 +22,8 @@ export class LightVisibilityControlModuleComponent {
     constructor(
         private boardStateService: BoardStateService,
         private boardLightService: BoardLightService,
-    ) {}
+    ) {
+    }
 
     onVisibilityChange() {
         switch (this.currentVisibility) {

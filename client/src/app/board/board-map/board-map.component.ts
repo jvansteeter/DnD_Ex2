@@ -9,7 +9,6 @@ import {
 import {BoardCanvasService} from "../services/board-canvas.service";
 import {BoardStateService} from "../services/board-state.service";
 import {BoardWallService} from "../services/board-wall.service";
-import {BoardTileService} from "../services/board-tile.service";
 import {XyPair} from '../../../../../shared/types/encounter/board/xy-pair';
 import {BoardTransformService} from '../services/board-transform.service';
 import {isNullOrUndefined} from "util";
@@ -42,7 +41,6 @@ export class BoardMapComponent implements OnInit, AfterViewInit {
                 private boardStateService: BoardStateService,
                 private boardTransformService: BoardTransformService,
                 private boardWallService: BoardWallService,
-                private boardTileService: BoardTileService,
                 private boardLightService: BoardLightService,
                 private boardPlayerService: BoardPlayerService,
                 private boardNotationService: BoardNotationService,
@@ -399,27 +397,6 @@ export class BoardMapComponent implements OnInit, AfterViewInit {
                             if (!isNullOrUndefined(this.boardStateService.mouse_cell_target)) {
                                 if (this.boardStateService.mouse_cell_target.region === CellRegion.CENTER) {
                                     this.boardLightService.toggleLightSource(new LightSource(this.boardStateService.mouse_loc_cell, 3));
-                                }
-                            }
-                            break;
-                        case BoardMode.TILES:
-                            if (!isNullOrUndefined(this.boardStateService.mouse_cell_target)) {
-                                switch (this.boardStateService.mouse_cell_target.region) {
-                                    case CellRegion.CENTER:
-                                        this.boardTileService.setTileData_All(this.boardStateService.mouse_loc_cell);
-                                        break;
-                                    case CellRegion.TOP_QUAD:
-                                        this.boardTileService.setTileData_Top(this.boardStateService.mouse_loc_cell);
-                                        break;
-                                    case CellRegion.LEFT_QUAD:
-                                        this.boardTileService.setTileData_Left(this.boardStateService.mouse_loc_cell);
-                                        break;
-                                    case CellRegion.BOTTOM_QUAD:
-                                        this.boardTileService.setTileData_Bottom(this.boardStateService.mouse_loc_cell);
-                                        break;
-                                    case CellRegion.RIGHT_QUAD:
-                                        this.boardTileService.setTileData_Right(this.boardStateService.mouse_loc_cell);
-                                        break;
                                 }
                             }
                             break;
