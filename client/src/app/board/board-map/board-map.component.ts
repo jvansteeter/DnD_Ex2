@@ -461,8 +461,7 @@ export class BoardMapComponent implements OnInit, AfterViewInit {
         return 0;
     }
 
-    handleInitIconMouseUp(event: MouseEvent, player: Player) {
-        console.log(event);
+    handleInitBadgeMouseUp(event: MouseEvent, player: Player) {
         switch(event.which) {
             case 1:
                 this.handleInitDialog(player);
@@ -470,7 +469,19 @@ export class BoardMapComponent implements OnInit, AfterViewInit {
             case 2:
                 break;
             case 3:
+                break;
+        }
+    }
+
+
+    handleInitIconMouseUp(event: MouseEvent, player: Player) {
+        switch(event.which) {
+            case 1:
                 this.boardPlayerService.selectPlayer(player);
+                break;
+            case 2:
+                break;
+            case 3:
                 break;
         }
     }

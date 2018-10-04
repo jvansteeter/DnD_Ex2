@@ -2,18 +2,18 @@
 
     <ng-container *ngFor="let player of getSortedPlayers()">
         <div style="height:40px; width: 40px; margin-top: 13px; margin-left: 8px;" (contextmenu)="handleContextMenu($event)">
-            <div
-                    style="height: 40px; width: 40px; border: 3px solid #383838; background: #d8d8d8; border-radius: 50%; position: absolute">
+            <div style="height: 40px; width: 40px; border: 3px solid #383838; background: #d8d8d8; border-radius: 50%; position: absolute">
                 <img src="{{player.tokenUrl}}" style="height: 100%; border-radius: 25px;">
             </div>
             <div
-                    style="height:40px; width: 40px; border: 3px solid #383838; border-radius: 50%; position: absolute"
+                    style="height:40px; width: 40px; border: 3px solid #383838; border-radius: 50%; position: absolute; cursor: pointer"
                     (mouseup)="handleInitIconMouseUp($event, player)"
                     (mouseover)="mouseOverInitIcon(player)"
                     matTooltip="{{player.name}}"
                     matTooltipPosition="after">
             </div>
-            <div class="font initiativeBadge">
+            <div (mouseup)="handleInitBadgeMouseUp($event, player)"
+                 class="font initiativeBadge">
                 {{player.initiative}}
             </div>
         </div>
