@@ -111,9 +111,9 @@ export class BoardControllerComponent implements OnInit, OnDestroy {
         }
     }
 
-    mapOpacitySliderInput(event) {
-        this.boardStateService.board_maker_map_opacity = event.value;
-    }
+    // mapOpacitySliderInput(event) {
+    //     this.boardStateService.board_maker_map_opacity = event.value;
+    // }
 
     increaseAmbientLight(): void {
         if (this.boardStateService.ambientLight === LightValue.DARK) {
@@ -142,10 +142,6 @@ export class BoardControllerComponent implements OnInit, OnDestroy {
             case LightValue.FULL:
                 return 'Full';
         }
-    }
-
-    updateTile(id: string) {
-        this.ts.activeTileUrl = id;
     }
 
     addPlayer(): void {

@@ -57,6 +57,7 @@ import {CharacterPopComponent} from './pop/character-pop/character-pop.component
 import {DiagnosticRendererComponent} from "./renderer/diagnostic-renderer/diagnostic-renderer.component";
 import {TempPlayerInitDialogComponent} from "./dialogs/temp-player-init-dialog/temp-player-init-dialog.component";
 import {ViewEditControlModuleComponent} from "./board-control/controller-modules/view-edit-control-module/view-edit-control-module.component";
+import {EncounterConfigControlModuleComponent} from "./board-control/controller-modules/encounter-config-control-module/encounter-config-control-module.component";
 
 
 @NgModule({
@@ -86,7 +87,8 @@ import {ViewEditControlModuleComponent} from "./board-control/controller-modules
         CharacterPopComponent,
         DiagnosticRendererComponent,
         TempPlayerInitDialogComponent,
-        ViewEditControlModuleComponent
+        ViewEditControlModuleComponent,
+        EncounterConfigControlModuleComponent,
     ],
     imports: [
         BrowserModule,
