@@ -1,16 +1,17 @@
 import {BoardStateService} from '../../services/board-state.service';
 import {BoardCanvasService} from '../../services/board-canvas.service';
 import {BoardTileService} from '../../services/board-tile.service';
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'tile-renderer',
   templateUrl: 'tile-renderer.component.html'
 })
 
-export class TileRendererComponent implements OnInit {
+export class TileRendererComponent implements OnInit, OnDestroy {
   @ViewChild('tileRenderCanvas') tileRenderCanvas: ElementRef;
   private ctx: CanvasRenderingContext2D;
+  private frameId;
 
   constructor(
     private boardStateService: BoardStateService,
@@ -21,6 +22,10 @@ export class TileRendererComponent implements OnInit {
   ngOnInit() {
     this.ctx = this.tileRenderCanvas.nativeElement.getContext('2d');
     this.render();
+  }
+
+  ngOnDestroy(): void {
+  	cancelAnimationFrame(this.frameId);
   }
 
   render = () => {
@@ -98,6 +103,6 @@ export class TileRendererComponent implements OnInit {
     //     break;
     // }
 
-    requestAnimationFrame(this.render);
+    this.frameId = requestAnimationFrame(this.render);
   }
 }

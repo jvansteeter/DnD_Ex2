@@ -1,6 +1,6 @@
 import {BoardStateService} from '../../services/board-state.service';
 import {BoardCanvasService} from '../../services/board-canvas.service';
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import {BoardNotationService} from '../../services/board-notation-service';
 import {XyPair} from "../../../../../../shared/types/encounter/board/xy-pair";
 import {GeometryStatics} from "../../statics/geometry-statics";
@@ -9,9 +9,10 @@ import {GeometryStatics} from "../../statics/geometry-statics";
     selector: 'notation-renderer',
     templateUrl: 'notation-renderer.component.html'
 })
-export class NotationRendererComponent implements OnInit {
+export class NotationRendererComponent implements OnInit, OnDestroy {
     @ViewChild('notationRenderCanvas') gridRenderCanvas: ElementRef;
     private ctx: CanvasRenderingContext2D;
+    private frameId;
 
     constructor(
         private boardStateService: BoardStateService,
@@ -23,6 +24,10 @@ export class NotationRendererComponent implements OnInit {
     ngOnInit(): void {
         this.ctx = this.gridRenderCanvas.nativeElement.getContext('2d');
         this.render();
+    }
+
+    ngOnDestroy(): void {
+    	cancelAnimationFrame(this.frameId);
     }
 
     render = () => {
@@ -62,6 +67,6 @@ export class NotationRendererComponent implements OnInit {
             }
         }
 
-        requestAnimationFrame(this.render);
+        this.frameId = requestAnimationFrame(this.render);
     }
 }

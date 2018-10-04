@@ -58,7 +58,7 @@ export class BoardStateService extends IsReadyService {
     public board_view_mode: ViewMode = ViewMode.PLAYER;
     public board_maker_map_opacity = 1.0;
     public doDiagonals = true;
-    public do_pops = false;
+    public do_pops = true;
     public isEditingNotation = false;
 
     public inputOffset = 0.2;    // offset used for input boundaries

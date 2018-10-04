@@ -2,7 +2,7 @@ import {XyPair} from '../../../../../../shared/types/encounter/board/xy-pair';
 import {isNullOrUndefined} from 'util';
 import {BoardStateService} from '../../services/board-state.service';
 import {BoardCanvasService} from '../../services/board-canvas.service';
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import {ViewMode} from '../../shared/enum/view-mode';
 import {BoardLightService} from '../../services/board-light.service';
 
@@ -11,9 +11,10 @@ import {BoardLightService} from '../../services/board-light.service';
     templateUrl: 'highlight-renderer.component.html'
 })
 
-export class HighlightRendererComponent implements OnInit {
+export class HighlightRendererComponent implements OnInit, OnDestroy {
     @ViewChild('highlightRenderCanvas') highlightRenderCanvas: ElementRef;
     private ctx: CanvasRenderingContext2D;
+		private frameId;
 
     constructor(
         private boardStateService: BoardStateService,
@@ -25,6 +26,10 @@ export class HighlightRendererComponent implements OnInit {
     ngOnInit() {
         this.ctx = this.highlightRenderCanvas.nativeElement.getContext('2d');
         this.render();
+    }
+
+    ngOnDestroy(): void {
+    	cancelAnimationFrame(this.frameId);
     }
 
     render = () => {
@@ -56,8 +61,8 @@ export class HighlightRendererComponent implements OnInit {
             this.render_corner_to_corner(sc_loc);
         }
 
-        requestAnimationFrame(this.render);
-    }
+        this.frameId = requestAnimationFrame(this.render);
+    };
 
     render_corner_to_corner(sc_loc: XyPair): void {
         this.boardCanvasService.draw_corner(this.ctx, sc_loc, 'rgba(0, 0, 220, 0.3)', this.boardStateService.inputOffset);

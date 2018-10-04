@@ -1,8 +1,7 @@
 import {BoardStateService} from '../../services/board-state.service';
 import {BoardCanvasService} from '../../services/board-canvas.service';
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import {BoardVisibilityService} from '../../services/board-visibility.service';
-import {CellPolygonGroup} from '../../shared/cell-polygon-group';
 import {ViewMode} from '../../shared/enum/view-mode';
 import {BoardPlayerService} from '../../services/board-player.service';
 import {PlayerVisibilityMode} from "../../shared/enum/player-visibility-mode";
@@ -13,9 +12,10 @@ import {isDefined} from "@angular/compiler/src/util";
     templateUrl: 'visibility-renderer.component.html'
 })
 
-export class VisibilityRendererComponent implements OnInit {
+export class VisibilityRendererComponent implements OnInit, OnDestroy {
     @ViewChild('visibilityRenderCanvas') visibilityRenderCanvas: ElementRef;
     private ctx: CanvasRenderingContext2D;
+    private frameId;
 
     constructor(
         private boardStateService: BoardStateService,
@@ -28,6 +28,10 @@ export class VisibilityRendererComponent implements OnInit {
     ngOnInit(): void {
         this.ctx = this.visibilityRenderCanvas.nativeElement.getContext('2d');
         this.render();
+    }
+
+    ngOnDestroy(): void {
+    	cancelAnimationFrame(this.frameId);
     }
 
     render = () => {
@@ -100,8 +104,6 @@ export class VisibilityRendererComponent implements OnInit {
                 break;
         }
 
-
-        requestAnimationFrame(this.render);
+        this.frameId = requestAnimationFrame(this.render);
     }
-
 }

@@ -1,6 +1,6 @@
 import {BoardStateService} from '../../services/board-state.service';
 import {BoardCanvasService} from '../../services/board-canvas.service';
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import {XyPair} from '../../../../../../shared/types/encounter/board/xy-pair';
 import { EncounterService } from '../../../encounter/encounter.service';
 import {BoardPlayerService} from "../../services/board-player.service";
@@ -12,9 +12,10 @@ import {GeometryStatics} from "../../statics/geometry-statics";
     templateUrl: 'token-renderer.component.html'
 })
 
-export class TokenRendererComponent implements OnInit {
+export class TokenRendererComponent implements OnInit, OnDestroy {
     @ViewChild('tokenRenderCanvas') tokenRenderCanvas: ElementRef;
     private ctx: CanvasRenderingContext2D;
+    private frameId;
 
     constructor(
         private boardStateService: BoardStateService,
@@ -32,6 +33,10 @@ export class TokenRendererComponent implements OnInit {
             }
         });
         // this.render();
+    }
+
+    ngOnDestroy(): void {
+    	cancelAnimationFrame(this.frameId);
     }
 
     render = () => {
@@ -67,6 +72,6 @@ export class TokenRendererComponent implements OnInit {
             }
         }
 
-        requestAnimationFrame(this.render);
+        this.frameId = requestAnimationFrame(this.render);
     }
 }

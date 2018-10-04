@@ -1,7 +1,7 @@
 import { ViewMode } from '../../shared/enum/view-mode';
 import { BoardStateService } from '../../services/board-state.service';
 import { BoardCanvasService } from '../../services/board-canvas.service';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { BoardWallService } from '../../services/board-wall.service';
 import { BoardLightService } from '../../services/board-light.service';
 import { EncounterService } from '../../../encounter/encounter.service';
@@ -11,11 +11,12 @@ import { IsReadyService } from '../../../utilities/services/isReady.service';
 	selector: 'map-renderer',
 	templateUrl: 'map-renderer.component.html'
 })
-export class MapRendererComponent extends IsReadyService implements OnInit {
+export class MapRendererComponent extends IsReadyService implements OnInit, OnDestroy {
 	// public static DEV_MAP_URL_STRING = 'resources/images/maps/shack.jpg';
 
 	@ViewChild('mapRenderCanvas') mapRenderCanvas: ElementRef;
 	private ctx: CanvasRenderingContext2D;
+	private frameId;
 
 	private bgImage = new Image();
 
@@ -47,6 +48,10 @@ export class MapRendererComponent extends IsReadyService implements OnInit {
 		this.render();
 	}
 
+	ngOnDestroy(): void {
+		cancelAnimationFrame(this.frameId);
+	}
+
 	render = () => {
 		this.boardCanvasService.clear_canvas(this.ctx);
 		this.boardCanvasService.updateTransform(this.ctx);
@@ -66,8 +71,6 @@ export class MapRendererComponent extends IsReadyService implements OnInit {
 					break;
 			}
 		}
-		requestAnimationFrame(this.render);
+		this.frameId = requestAnimationFrame(this.render);
 	}
-
-
 }

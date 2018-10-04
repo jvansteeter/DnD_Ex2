@@ -35,10 +35,6 @@ export class EncounterService extends IsReadyService {
 		this.init();
 	}
 
-	public init_players() {
-
-	};
-
 	public addPlayer(player: Player): void {
 		this.encounterState.addPlayer(player);
 	}

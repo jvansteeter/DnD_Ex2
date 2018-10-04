@@ -2,16 +2,17 @@ import {ViewMode} from '../../shared/enum/view-mode';
 import {BoardStateService} from '../../services/board-state.service';
 import {BoardCanvasService} from '../../services/board-canvas.service';
 import {BoardWallService} from '../../services/board-wall.service';
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 
 @Component({
     selector: 'wall-renderer',
     templateUrl: 'wall-renderer.component.html'
 })
 
-export class WallRendererComponent implements OnInit {
+export class WallRendererComponent implements OnInit, OnDestroy {
     @ViewChild('wallRenderCanvas') wallRenderCanvas: ElementRef;
     private ctx: CanvasRenderingContext2D;
+    private frameId;
 
     constructor(
         private wallService: BoardWallService,
@@ -23,6 +24,10 @@ export class WallRendererComponent implements OnInit {
     ngOnInit() {
         this.ctx = this.wallRenderCanvas.nativeElement.getContext('2d');
         this.render();
+    }
+
+    ngOnDestroy(): void {
+    	cancelAnimationFrame(this.frameId);
     }
 
     render = () => {
@@ -62,6 +67,6 @@ export class WallRendererComponent implements OnInit {
                 break;
         }
 
-        requestAnimationFrame(this.render);
+        this.frameId = requestAnimationFrame(this.render);
     }
 }

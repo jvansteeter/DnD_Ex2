@@ -1,7 +1,7 @@
 import {ViewMode} from '../../shared/enum/view-mode';
 import {BoardStateService} from '../../services/board-state.service';
 import {BoardCanvasService} from '../../services/board-canvas.service';
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import {BoardLightService} from '../../services/board-light.service';
 import {BoardPlayerService} from "../../services/board-player.service";
 
@@ -10,12 +10,13 @@ import {BoardPlayerService} from "../../services/board-player.service";
     templateUrl: 'light-renderer.component.html'
 })
 
-export class LightRendererComponent implements OnInit {
+export class LightRendererComponent implements OnInit, OnDestroy {
     @ViewChild('lightRenderCanvasDark') lightRenderCanvasDark: ElementRef;
     @ViewChild('lightRenderCanvasDim') lightRenderCanvasDim: ElementRef;
 
     private ctx_dark: CanvasRenderingContext2D;
     private ctx_dim: CanvasRenderingContext2D;
+    private frameId;
 
     constructor(
         private boardStateService: BoardStateService,
@@ -28,6 +29,10 @@ export class LightRendererComponent implements OnInit {
         this.ctx_dark = this.lightRenderCanvasDark.nativeElement.getContext('2d');
         this.ctx_dim = this.lightRenderCanvasDim.nativeElement.getContext('2d');
         this.render();
+    }
+
+    ngOnDestroy(): void {
+    	cancelAnimationFrame(this.frameId);
     }
 
     render = () => {
@@ -73,6 +78,6 @@ export class LightRendererComponent implements OnInit {
             }
         }
 
-        requestAnimationFrame(this.render);
+        this.frameId = requestAnimationFrame(this.render);
     };
 }
