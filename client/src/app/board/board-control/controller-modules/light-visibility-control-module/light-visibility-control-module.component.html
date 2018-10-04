@@ -1,0 +1,24 @@
+<div id="lightControls" class="section" *ngIf="showLightControls()">
+    <div class="sectionHeader"><span>Light and Visibility</span></div>
+    <div class="sectionContents">
+
+        <mat-checkbox [(ngModel)]="boardStateService.visibilityHighlightEnabled">Visibility Highlight Enabled
+        </mat-checkbox>
+        <mat-form-field>
+            <mat-select [(value)]="currentVisibility" (selectionChange)="onVisibilityChange()"
+                        placeholder="Visibility Mode">
+                <mat-option *ngFor="let mode of visibilityModes" value="{{mode}}">{{mode}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+
+        <mat-checkbox [(ngModel)]="boardStateService.lightEnabled">Light Enabled</mat-checkbox>
+        <div style="display: flex; width: 100px; margin-left:auto; margin-right: auto">
+            <i style="margin-top: auto; margin-bottom: auto; cursor:pointer;" (click)="decreaseAmbientLight()"
+               class="material-icons">remove</i>
+            <span class="font" style="margin: auto">{{getLightValue()}}</span>
+            <i style="margin-top: auto; margin-bottom: auto; cursor:pointer;" (click)="increaseAmbientLight()"
+               class="material-icons">add</i>
+        </div>
+    </div>
+</div>

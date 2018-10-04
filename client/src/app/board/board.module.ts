@@ -60,6 +60,7 @@ import {ViewEditControlModuleComponent} from "./board-control/controller-modules
 import {EncounterConfigControlModuleComponent} from "./board-control/controller-modules/encounter-config-control-module/encounter-config-control-module.component";
 import {DiagnosticControlModuleComponent} from "./board-control/controller-modules/diagnostic-control-module/diagnostic-control-module.component";
 import {NotationControlModuleComponent} from "./board-control/controller-modules/notation-control-module/notation-control-module.component";
+import {LightVisibilityControlModuleComponent} from "./board-control/controller-modules/light-visibility-control-module/light-visibility-control-module.component";
 
 
 @NgModule({
@@ -92,7 +93,8 @@ import {NotationControlModuleComponent} from "./board-control/controller-modules
         ViewEditControlModuleComponent,
         EncounterConfigControlModuleComponent,
         DiagnosticControlModuleComponent,
-        NotationControlModuleComponent
+        NotationControlModuleComponent,
+        LightVisibilityControlModuleComponent
     ],
     imports: [
         BrowserModule,

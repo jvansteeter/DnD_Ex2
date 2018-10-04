@@ -9,12 +9,10 @@ import { PlayerVisibilityMode } from "../shared/enum/player-visibility-mode";
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { NotationMode } from '../shared/enum/notation-mode';
-import { BoardNotationService } from '../services/board-notation-service';
 import { NotationVisibility } from "../../../../../shared/types/encounter/board/notation-visibility";
 import { AddPlayerDialogComponent } from '../dialogs/add-player-dialog/add-player-dialog.component';
 import { EncounterService } from '../../encounter/encounter.service';
 import { BoardVisibilityService } from "../services/board-visibility.service";
-import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'board-controller',
@@ -30,92 +28,17 @@ export class BoardControllerComponent implements OnInit, OnDestroy {
     public BoardControllerMode = BoardControllerMode;
     public PlayerVisibilityMode = PlayerVisibilityMode;
 
-    private rightsSubscription: Subscription;
-
-    currentVisibility: string;
-    visibilityModes: string[] = [
-        'Global',
-        'Team',
-        'Player'
-    ];
-
     constructor(public boardStateService: BoardStateService,
                 public boardLightService: BoardLightService,
                 public boardVisibilityService: BoardVisibilityService,
-                public notationService: BoardNotationService,
                 private encounterService: EncounterService,
-                public ts: BoardTileService,
                 private dialog: MatDialog,
     ) {}
 
     ngOnInit(): void {
-        this.sync();
     }
 
     ngOnDestroy(): void {
-    	this.rightsSubscription.unsubscribe();
-    }
-
-    showLightControls(): boolean {
-        return this.boardStateService.board_view_mode === ViewMode.BOARD_MAKER || this.boardStateService.board_view_mode === ViewMode.MASTER;
-    }
-
-    sync() {
-        switch (this.boardStateService.playerVisibilityMode) {
-            case PlayerVisibilityMode.GLOBAL:
-                this.currentVisibility = 'Global';
-                break;
-            case PlayerVisibilityMode.TEAM:
-                this.currentVisibility = 'Team';
-                break;
-            case PlayerVisibilityMode.PLAYER:
-                this.currentVisibility = 'Player';
-                break;
-        }
-    }
-
-    onVisibilityChange() {
-        switch (this.currentVisibility) {
-            case 'Global':
-                this.boardStateService.playerVisibilityMode = PlayerVisibilityMode.GLOBAL;
-                break;
-            case 'Team':
-                this.boardStateService.playerVisibilityMode = PlayerVisibilityMode.TEAM;
-                break;
-            case 'Player':
-                this.boardStateService.playerVisibilityMode = PlayerVisibilityMode.PLAYER;
-                break;
-        }
-        this.sync()
-    }
-
-    increaseAmbientLight(): void {
-        if (this.boardStateService.ambientLight === LightValue.DARK) {
-            this.boardStateService.ambientLight = LightValue.DIM;
-        } else if (this.boardStateService.ambientLight === LightValue.DIM) {
-            this.boardStateService.ambientLight = LightValue.FULL;
-        }
-        this.boardLightService.updateAllLightValues();
-    }
-
-    decreaseAmbientLight(): void {
-        if (this.boardStateService.ambientLight === LightValue.FULL) {
-            this.boardStateService.ambientLight = LightValue.DIM;
-        } else if (this.boardStateService.ambientLight === LightValue.DIM) {
-            this.boardStateService.ambientLight = LightValue.DARK;
-        }
-        this.boardLightService.updateAllLightValues();
-    }
-
-    getLightValue(): string {
-        switch (this.boardStateService.ambientLight) {
-            case LightValue.DARK:
-                return 'Dark';
-            case LightValue.DIM:
-                return 'Dim';
-            case LightValue.FULL:
-                return 'Full';
-        }
     }
 
     addPlayer(): void {
