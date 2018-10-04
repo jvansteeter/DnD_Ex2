@@ -477,7 +477,7 @@ export class BoardMapComponent implements OnInit, AfterViewInit {
     handleInitIconMouseUp(event: MouseEvent, player: Player) {
         switch(event.which) {
             case 1:
-                this.boardPlayerService.selectPlayer(player);
+                this.boardPlayerService.toggleSelectPlayer(player);
                 break;
             case 2:
                 break;

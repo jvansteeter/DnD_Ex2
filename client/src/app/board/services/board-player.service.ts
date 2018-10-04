@@ -138,7 +138,17 @@ export class BoardPlayerService extends IsReadyService {
         }
     }
 
-    public selectPlayer(player: Player) {
+    public toggleSelectPlayer(player: Player) {
+        if (this.selectedPlayerId === null) {
+            this.selectedPlayerId = player._id;
+            return;
+        }
+
+        if (this.selectedPlayerId === player._id) {
+            this.selectedPlayerId = null;
+            return;
+        }
+
         this.selectedPlayerId = player._id;
     }
 
@@ -168,7 +178,7 @@ export class BoardPlayerService extends IsReadyService {
                 // ... search through the players to see if a player was selected ...
                 if (player.location.x === loc_cell.x && player.location.y === loc_cell.y) {
                     // ... select the player and return
-                    this.selectPlayer(player);
+                    this.toggleSelectPlayer(player);
                     return;
                 }
             }
