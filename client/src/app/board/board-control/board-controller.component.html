@@ -3,41 +3,42 @@
 
         <view-edit-module></view-edit-module>
 
-        <div id="Diagnostic Controls" class="section" *ngIf="boardStateService.diag_mode">
-            <div class="sectionHeader"><span>Diagnostic</span></div>
-            <div class="sectionContents">
+        <!--<div id="Diagnostic Controls" class="section" *ngIf="boardStateService.diag_mode">-->
+            <!--<div class="sectionHeader"><span>Diagnostic</span></div>-->
+            <!--<div class="sectionContents">-->
 
-                <div style="display: flex; flex-direction: row; min-height: 30px; align-items: center">
-                    <mat-checkbox style="flex: auto" [(ngModel)]="boardStateService.diag_show_visibility_blocking_bitmap">
-                        Obstruction Bitmap
-                    </mat-checkbox>
-                    <input matInput
-                           class="font"
-                           [(ngModel)]="boardStateService.diag_layer_opacity"
-                           style="flex: 0 0 50px;"
-                           type="number"
-                           min="0"
-                           max="100">
-                </div>
+                <!--<div style="display: flex; flex-direction: row; min-height: 30px; align-items: center">-->
+                    <!--<mat-checkbox style="flex: auto" [(ngModel)]="boardStateService.diag_show_visibility_blocking_bitmap">-->
+                        <!--Obstruction Bitmap-->
+                    <!--</mat-checkbox>-->
+                    <!--<input matInput-->
+                           <!--class="font"-->
+                           <!--[(ngModel)]="boardStateService.diag_layer_opacity"-->
+                           <!--style="flex: 0 0 50px;"-->
+                           <!--type="number"-->
+                           <!--min="0"-->
+                           <!--max="100">-->
+                <!--</div>-->
 
-                <div>
-                    <mat-form-field>
-                        <input matInput [(ngModel)]="boardStateService.diag_visibility_ray_count" type="number"
-                               placeholder="Raytrace Vectors" (change)="diag_raytraceInputChange($event)">
-                    </mat-form-field>
+                <!--<div>-->
+                    <!--<mat-form-field>-->
+                        <!--<input matInput [(ngModel)]="boardStateService.diag_visibility_ray_count" type="number"-->
+                               <!--placeholder="Raytrace Vectors" (change)="diag_raytraceInputChange($event)">-->
+                    <!--</mat-form-field>-->
 
-                </div>
-                <div>
-                    <mat-form-field>
-                        <input matInput [(ngModel)]="boardStateService.minZoom" type="number" placeholder="MinZoom Override">
-                    </mat-form-field>
-                    <mat-form-field>
-                        <input matInput [(ngModel)]="boardStateService.maxZoom" type="number" placeholder="MaxZoom Override">
-                    </mat-form-field>
-                </div>
-            </div>
-        </div>
+                <!--</div>-->
+                <!--<div>-->
+                    <!--<mat-form-field>-->
+                        <!--<input matInput [(ngModel)]="boardStateService.minZoom" type="number" placeholder="MinZoom Override">-->
+                    <!--</mat-form-field>-->
+                    <!--<mat-form-field>-->
+                        <!--<input matInput [(ngModel)]="boardStateService.maxZoom" type="number" placeholder="MaxZoom Override">-->
+                    <!--</mat-form-field>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
 
+        <diagnostic-module></diagnostic-module>
         <encounter-config-module></encounter-config-module>
 
         <div id="Notation Controls" class="section" style="width: 258px">
