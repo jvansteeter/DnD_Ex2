@@ -59,6 +59,7 @@ import {TempPlayerInitDialogComponent} from "./dialogs/temp-player-init-dialog/t
 import {ViewEditControlModuleComponent} from "./board-control/controller-modules/view-edit-control-module/view-edit-control-module.component";
 import {EncounterConfigControlModuleComponent} from "./board-control/controller-modules/encounter-config-control-module/encounter-config-control-module.component";
 import {DiagnosticControlModuleComponent} from "./board-control/controller-modules/diagnostic-control-module/diagnostic-control-module.component";
+import {NotationControlModuleComponent} from "./board-control/controller-modules/notation-control-module/notation-control-module.component";
 
 
 @NgModule({
@@ -91,6 +92,7 @@ import {DiagnosticControlModuleComponent} from "./board-control/controller-modul
         ViewEditControlModuleComponent,
         EncounterConfigControlModuleComponent,
         DiagnosticControlModuleComponent,
+        NotationControlModuleComponent
     ],
     imports: [
         BrowserModule,

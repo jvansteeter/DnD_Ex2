@@ -11,15 +11,9 @@ import { MatDialog } from '@angular/material';
 import { NotationMode } from '../shared/enum/notation-mode';
 import { BoardNotationService } from '../services/board-notation-service';
 import { NotationVisibility } from "../../../../../shared/types/encounter/board/notation-visibility";
-import { NotationIconSelectorComponent } from "../dialogs/notation-icon-selector/notation-icon-selector.component";
-import { NotationColorSelectorComponent } from "../dialogs/notation-color-selector/notation-color-selector.component";
-import { NotationSettingsDialogComponent } from "../dialogs/notation-settings-dialog/notation-settings-dialog.component";
 import { AddPlayerDialogComponent } from '../dialogs/add-player-dialog/add-player-dialog.component';
 import { EncounterService } from '../../encounter/encounter.service';
-import { NotationTextCreateDialogComponent } from "../dialogs/notation-text-dialog/notation-text-create-dialog.component";
 import { BoardVisibilityService } from "../services/board-visibility.service";
-import { XyPair } from "../../../../../shared/types/encounter/board/xy-pair";
-import { RightsService } from '../../data-services/rights.service';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -95,15 +89,6 @@ export class BoardControllerComponent implements OnInit, OnDestroy {
         this.sync()
     }
 
-    diag_raytraceInputChange(event) {
-        if (this.encounterService.players.length > 0){
-            const playerLoc = this.encounterService.players[0].location;
-            const cell_res = BoardStateService.cell_res;
-            const playerRes = new XyPair(playerLoc.x * cell_res + cell_res / 2, playerLoc.y * cell_res + cell_res / 2);
-            this.boardVisibilityService.raytraceVisibilityFromCell(playerRes, this.boardStateService.diag_visibility_ray_count);
-        }
-    }
-
     increaseAmbientLight(): void {
         if (this.boardStateService.ambientLight === LightValue.DARK) {
             this.boardStateService.ambientLight = LightValue.DIM;
@@ -137,57 +122,5 @@ export class BoardControllerComponent implements OnInit, OnDestroy {
         this.dialog.open(AddPlayerDialogComponent, {data: {
         	  campaignId: this.encounterService.encounterState.campaignId
         }});
-    }
-
-    handleAddNotation() {
-        this.notationService.addNewNotation().subscribe(() => {
-		        this.boardStateService.isEditingNotation = true;
-		        this.notationService.activeNotationMode = NotationMode.CELL;
-        });
-    }
-
-    handleDeleteNotation() {
-        this.notationService.deleteActiveNotation();
-    }
-
-    handleEditNotation(notationId: string) {
-        this.boardStateService.isEditingNotation = true;
-        this.notationService.activeNotationId = notationId;
-        this.notationService.activeNotationMode = NotationMode.CELL;
-    }
-
-    handleFinishNotation() {
-        this.boardStateService.isEditingNotation = false;
-        this.notationService.activeNotationId = null;
-    }
-
-    handleSetNotationModeToCell() {
-        this.notationService.activeNotationMode = NotationMode.CELL;
-    }
-
-    handleSetNotationModeToPointToPoint() {
-        this.notationService.activeNotationMode = NotationMode.POINT_TO_POINT;
-    }
-
-    handleSetNotationModeToFreeform() {
-        this.notationService.activeNotationMode = NotationMode.FREEFORM;
-    }
-
-    openIconDialog() {
-        this.dialog.open(NotationIconSelectorComponent,{});
-    }
-
-    openColorDialog() {
-        this.dialog.open(NotationColorSelectorComponent);
-    }
-
-    openSettingDialog() {
-        this.dialog.open(NotationSettingsDialogComponent);
-    }
-
-    openTextNotationDialog() {
-        this.notationService.returnToMeNotationMode = this.notationService.activeNotationMode;
-        this.notationService.activeNotationMode = NotationMode.TEXT;
-        this.dialog.open(NotationTextCreateDialogComponent);
     }
 }
