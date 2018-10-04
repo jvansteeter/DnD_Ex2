@@ -22,6 +22,16 @@ export class PlayerModel extends MongooseModel implements PlayerData {
 		this.characterData = this.methods.characterData;
 		this.initiative = this.methods.initiative;
 		this.location = this.methods.location;
+
+		this.methods.setLocation = this.setLocation;
+	}
+
+	public setLocation(x: number, y: number): Promise<PlayerModel> {
+		this.location = {
+			x: x,
+			y: y
+		};
+		return this.save();
 	}
 }
 

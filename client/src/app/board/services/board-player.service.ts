@@ -9,6 +9,7 @@ import {Player} from '../../encounter/player';
 import {Polygon} from "../../../../../shared/types/encounter/board/polygon";
 import {BoardLightService} from "./board-light.service";
 import {LightSource} from "../map-objects/light-source";
+import { isUndefined } from 'util';
 
 @Injectable()
 export class BoardPlayerService extends IsReadyService {
@@ -154,7 +155,7 @@ export class BoardPlayerService extends IsReadyService {
 
     public handleClick(loc_cell: XyPair) {
 
-        if (this.selectedPlayerId !== null) {
+        if (this.selectedPlayerId !== null && !isUndefined(this.selectedPlayerId)) {
             // a player is currently selected ...
             for (const player of this.encounterService.players) {
                 // ... and there is a player on the click location ...
