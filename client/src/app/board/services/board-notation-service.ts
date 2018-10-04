@@ -149,9 +149,7 @@ export class BoardNotationService extends IsReadyService {
 				} else {
 					cells = this.boardStateService.calcCellsWithinRangeOfCell(this.boardStateService.mouse_cell_target.location, this.boardStateService.brush_size);
 				}
-				for (let cell of cells) {
-					this.getActiveNotation().addCell(cell);
-				}
+				this.getActiveNotation().addBatchCells(cells);
 				break;
 			case NotationMode.FREEFORM:
 				break;
