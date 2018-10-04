@@ -204,6 +204,25 @@ export class EncounterService {
 		}
 	}
 
+	private async getPlayerPlacementMap(encounterModel: EncounterModel): Promise<boolean[][]> {
+		const encounterState = await this.buildEncounterState(encounterModel);
+		const placementMap: boolean[][] = [];
+		for (let i = 0; i < encounterState.mapDimX; i++) {
+			let nestedArray: boolean[] = [];
+			for (let j = 0; j < encounterState.mapDimY; j++) {
+				nestedArray.push(false);
+			}
+			placementMap.push(nestedArray);
+		}
+		if (encounterState.players) {
+			for (let player of encounterState.players) {
+				placementMap[player.location.x][player.location.y] = true;
+			}
+		}
+
+		return placementMap;
+	}
+
 	private async buildEncounterState(encounterModel: EncounterModel): Promise<EncounterData> {
 		let encounterState: EncounterData = JSON.parse(JSON.stringify(encounterModel));
 		encounterState.players = [];

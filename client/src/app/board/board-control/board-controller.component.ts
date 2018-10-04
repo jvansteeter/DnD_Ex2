@@ -1,25 +1,26 @@
-import {BoardStateService} from '../services/board-state.service';
-import {BoardTileService} from '../services/board-tile.service';
-import {ViewMode} from '../shared/enum/view-mode';
-import {BoardMode} from '../shared/enum/board-mode';
-import {BoardControllerMode} from '../shared/enum/board-controller-mode'
-import {LightValue} from '../shared/enum/light-value';
-import {BoardLightService} from '../services/board-light.service';
-import {PlayerVisibilityMode} from "../shared/enum/player-visibility-mode";
-import {Component, OnInit} from '@angular/core';
-import {MatDialog} from '@angular/material';
-import {NotationMode} from '../shared/enum/notation-mode';
-import {BoardNotationService} from '../services/board-notation-service';
-import {NotationVisibility} from "../../../../../shared/types/encounter/board/notation-visibility";
-import {NotationIconSelectorComponent} from "../dialogs/notation-icon-selector/notation-icon-selector.component";
-import {NotationColorSelectorComponent} from "../dialogs/notation-color-selector/notation-color-selector.component";
-import {NotationSettingsDialogComponent} from "../dialogs/notation-settings-dialog/notation-settings-dialog.component";
+import { BoardStateService } from '../services/board-state.service';
+import { BoardTileService } from '../services/board-tile.service';
+import { ViewMode } from '../shared/enum/view-mode';
+import { BoardMode } from '../shared/enum/board-mode';
+import { BoardControllerMode } from '../shared/enum/board-controller-mode'
+import { LightValue } from '../shared/enum/light-value';
+import { BoardLightService } from '../services/board-light.service';
+import { PlayerVisibilityMode } from "../shared/enum/player-visibility-mode";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material';
+import { NotationMode } from '../shared/enum/notation-mode';
+import { BoardNotationService } from '../services/board-notation-service';
+import { NotationVisibility } from "../../../../../shared/types/encounter/board/notation-visibility";
+import { NotationIconSelectorComponent } from "../dialogs/notation-icon-selector/notation-icon-selector.component";
+import { NotationColorSelectorComponent } from "../dialogs/notation-color-selector/notation-color-selector.component";
+import { NotationSettingsDialogComponent } from "../dialogs/notation-settings-dialog/notation-settings-dialog.component";
 import { AddPlayerDialogComponent } from '../dialogs/add-player-dialog/add-player-dialog.component';
 import { EncounterService } from '../../encounter/encounter.service';
-import {NotationTextCreateDialogComponent} from "../dialogs/notation-text-dialog/notation-text-create-dialog.component";
-import {BoardVisibilityService} from "../services/board-visibility.service";
-import {XyPair} from "../../../../../shared/types/encounter/board/xy-pair";
+import { NotationTextCreateDialogComponent } from "../dialogs/notation-text-dialog/notation-text-create-dialog.component";
+import { BoardVisibilityService } from "../services/board-visibility.service";
+import { XyPair } from "../../../../../shared/types/encounter/board/xy-pair";
 import { RightsService } from '../../data-services/rights.service';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'board-controller',
@@ -27,7 +28,7 @@ import { RightsService } from '../../data-services/rights.service';
     styleUrls: ['board-controller.component.scss']
 })
 
-export class BoardControllerComponent implements OnInit {
+export class BoardControllerComponent implements OnInit, OnDestroy {
     public NotationVisibility = NotationVisibility;
     public NotationMode = NotationMode;
     public ViewMode = ViewMode;
@@ -36,6 +37,9 @@ export class BoardControllerComponent implements OnInit {
     public PlayerVisibilityMode = PlayerVisibilityMode;
 
     public notationIdValue: string;
+    public isGM: boolean = false;
+
+    private rightsSubscription: Subscription;
 
     currentVisibility: string;
     visibilityModes: string[] = [
@@ -109,11 +113,24 @@ export class BoardControllerComponent implements OnInit {
                 private encounterService: EncounterService,
                 public ts: BoardTileService,
                 private dialog: MatDialog,
-                public rightsService: RightsService,
+                private rightsService: RightsService,
     ) {}
 
     ngOnInit(): void {
+    	  this.rightsSubscription = this.rightsService.isReady().subscribe((isReady: boolean) => {
+    	  	if (isReady) {
+    	  		this.isGM = this.rightsService.isEncounterGM();
+		      }
+	      });
+    	  if (!this.isGM) {
+		      this.currentView = 'Player View';
+		      this.onViewChange();
+	      }
         this.sync();
+    }
+
+    ngOnDestroy(): void {
+    	this.rightsSubscription.unsubscribe();
     }
 
     showModeControls(): boolean {

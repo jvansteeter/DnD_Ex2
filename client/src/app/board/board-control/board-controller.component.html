@@ -1,6 +1,6 @@
 <ng-container ngSwitch="{{boardStateService.board_controller_mode}}">
     <ng-container *ngSwitchCase="BoardControllerMode.DEFAULT">
-        <div id="viewControls" class="section">
+        <div id="viewControls" class="section" *ngIf="isGM">
             <div class="sectionHeader"><span>Controls</span></div>
             <div class="sectionContents">
 
@@ -167,7 +167,7 @@
                                 (click)="handleSetNotationModeToCell()"
                                 [ngClass]="{'selectedNotationMode': notationService.activeNotationMode === NotationMode.CELL}"
                                 mat-stroked-button
-                                *ngIf="rightsService.isEncounterGM() || notationService.activeNotationIsMine()">
+                                *ngIf="isGM || notationService.activeNotationIsMine()">
                             <mat-icon>apps</mat-icon>
                         </button>
 
@@ -176,7 +176,7 @@
                                 (click)="handleSetNotationModeToPointToPoint()"
                                 [ngClass]="{'selectedNotationMode': notationService.activeNotationMode === NotationMode.POINT_TO_POINT}"
                                 mat-stroked-button
-                                *ngIf="rightsService.isEncounterGM() || notationService.activeNotationIsMine()">
+                                *ngIf="isGM || notationService.activeNotationIsMine()">
                             <mat-icon>timeline</mat-icon>
                         </button>
 
@@ -185,7 +185,7 @@
                                 (click)="handleSetNotationModeToFreeform()"
                                 [ngClass]="{'selectedNotationMode': notationService.activeNotationMode === NotationMode.FREEFORM}"
                                 mat-stroked-button
-                                *ngIf="rightsService.isEncounterGM() || notationService.activeNotationIsMine()">
+                                *ngIf="isGM || notationService.activeNotationIsMine()">
                             <mat-icon>gesture</mat-icon>
                         </button>
 
@@ -194,7 +194,7 @@
                                 (click)="openTextNotationDialog()"
                                 [ngClass]="{'selectedNotationMode': notationService.activeNotationMode === NotationMode.FREEFORM}"
                                 mat-stroked-button
-                                *ngIf="rightsService.isEncounterGM() || notationService.activeNotationIsMine()">
+                                *ngIf="isGM || notationService.activeNotationIsMine()">
                             <!--<mat-icon>font_download</mat-icon>-->
                             <span style="font-size: 25px; font-weight: bold;">T</span>
                         </button>
@@ -204,7 +204,7 @@
                                 (click)="handleSetNotationModeToFreeform()"
                                 [ngClass]="{'selectedNotationMode': notationService.activeNotationMode === NotationMode.FREEFORM}"
                                 mat-stroked-button
-                                *ngIf="rightsService.isEncounterGM() || notationService.activeNotationIsMine()">
+                                *ngIf="isGM || notationService.activeNotationIsMine()">
                             <mat-icon>near_me</mat-icon>
                         </button>
 
@@ -212,7 +212,7 @@
                                 (click)="openColorDialog()"
                                 class="strokeButtonOverride"
                                 mat-stroked-button
-                                *ngIf="rightsService.isEncounterGM() || notationService.activeNotationIsMine()">
+                                *ngIf="isGM || notationService.activeNotationIsMine()">
                             <mat-icon>palette</mat-icon>
                         </button>
 
@@ -220,11 +220,11 @@
                                 (click)="openSettingDialog()"
                                 class="strokeButtonOverride"
                                 mat-stroked-button
-                                *ngIf="rightsService.isEncounterGM() || notationService.activeNotationIsMine()">
+                                *ngIf="isGM || notationService.activeNotationIsMine()">
                             <mat-icon>settings</mat-icon>
                         </button>
 
-	                      <ng-container *ngIf="rightsService.isEncounterGM() || notationService.activeNotationIsMine() || !notationService.getActiveNotation().isLocked">
+	                      <ng-container *ngIf="isGM || notationService.activeNotationIsMine() || !notationService.getActiveNotation().isLocked">
 			                      <ng-container ngSwitch="{{notationService.getActiveNotation().visibilityState}}">
 				                      <button matTooltip="full visibility"
 				                              (click)="notationService.getActiveNotation().toggleVisibility()"
@@ -253,7 +253,7 @@
 	                      </ng-container>
 
                         <!--Notation Visibility-->
-	                      <ng-container *ngIf="rightsService.isEncounterGM() || notationService.activeNotationIsMine()">
+	                      <ng-container *ngIf="isGM || notationService.activeNotationIsMine()">
 			                      <button (click)="notationService.getActiveNotation().toggleVisible()"
 			                              *ngIf="notationService.getActiveNotation().isVisible"
 			                              matTooltip="visible"
@@ -271,7 +271,7 @@
 	                      </ng-container>
 
                         <!--Notation Player Lock-->
-	                      <ng-container *ngIf="rightsService.isEncounterGM() || notationService.activeNotationIsMine()">
+	                      <ng-container *ngIf="isGM || notationService.activeNotationIsMine()">
 			                      <button (click)="notationService.getActiveNotation().toggleLocked()"
 			                              *ngIf="notationService.getActiveNotation().isLocked"
 			                              matTooltip="player locked"
@@ -292,7 +292,7 @@
                                 class="strokeButtonOverride"
                                 mat-stroked-button
                                 (click)="handleDeleteNotation()"
-                                *ngIf="rightsService.isEncounterGM() || notationService.activeNotationIsMine()">
+                                *ngIf="isGM || notationService.activeNotationIsMine()">
                             <mat-icon>delete</mat-icon>
                         </button>
 

@@ -43,7 +43,7 @@ export class EncounterRouter {
 			}
 		});
 
-		this.router.post('/addcharacters', async (req: Request, res: Response) => {
+		this.router.post('/addCharacters', async (req: Request, res: Response) => {
 			try {
 				const encounterId = req.body.encounterId;
 				const userId = req.user._id;

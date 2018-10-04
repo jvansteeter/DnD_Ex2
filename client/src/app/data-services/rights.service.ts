@@ -23,6 +23,9 @@ export class RightsService extends IsReadyService {
 	}
 
 	public isEncounterGM(): boolean {
+		if (isUndefined(this.encounterService)) {
+			return false;
+		}
 		for (let gm of this.encounterService.encounterState.gameMasters) {
 			if (gm === this.userProfileService.userId) {
 				return true;
