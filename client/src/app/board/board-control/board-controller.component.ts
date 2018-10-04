@@ -37,7 +37,6 @@ export class BoardControllerComponent implements OnInit, OnDestroy {
     public PlayerVisibilityMode = PlayerVisibilityMode;
 
     public notationIdValue: string;
-    public isGM: boolean = false;
 
     private rightsSubscription: Subscription;
 
@@ -48,64 +47,6 @@ export class BoardControllerComponent implements OnInit, OnDestroy {
         'Player'
     ];
 
-    currentInput: string;
-    inputModes: string[] = [
-        'Player',
-        'Walls',
-        'Doors',
-        'Lights',
-        'Tiles'
-    ];
-
-    currentView: string;
-    viewModes: string[] = [
-        'Board Maker',
-        'Player View',
-        'Game Master'
-    ];
-
-    tileUrls: string[] = [
-        'resources/images/map-tiles/coal_ore.jpg',
-        'resources/images/map-tiles/cobolt_ore.jpg',
-        'resources/images/map-tiles/diamond_ore.jpg',
-        'resources/images/map-tiles/emerald_ore.jpg',
-        'resources/images/map-tiles/iron_ore.jpg',
-        'resources/images/map-tiles/gold.jpg',
-
-        'resources/images/map-tiles/cobolt_floor.jpg',
-        'resources/images/map-tiles/diamond_floor.jpg',
-        'resources/images/map-tiles/emerald_floor.jpg',
-        'resources/images/map-tiles/gold_floor.jpg',
-        'resources/images/map-tiles/iron_floor.jpg',
-
-        'resources/images/map-tiles/brick.jpg',
-        'resources/images/map-tiles/cobblestone.jpg',
-        'resources/images/map-tiles/old_stone.jpg',
-        'resources/images/map-tiles/old_stone_moss.jpg',
-        'resources/images/map-tiles/old_stone_moss_decor.jpg',
-        'resources/images/map-tiles/gravel.jpg',
-        'resources/images/map-tiles/stone.jpg',
-        'resources/images/map-tiles/stone_decor1.jpg',
-        'resources/images/map-tiles/stone_tile.jpg',
-        'resources/images/map-tiles/stone_tile_old.jpg',
-
-        'resources/images/map-tiles/dirt.jpg',
-        'resources/images/map-tiles/mud.jpg',
-        'resources/images/map-tiles/grass.jpg',
-        'resources/images/map-tiles/lilly_pad.jpg',
-        'resources/images/map-tiles/lilly_pad2.jpg',
-
-        'resources/images/map-tiles/sand.jpg',
-        'resources/images/map-tiles/sandstone.jpg',
-        'resources/images/map-tiles/sandstone_decor1.jpg',
-        'resources/images/map-tiles/sandstone_decor2.jpg',
-        'resources/images/map-tiles/sandstone_tile.jpg',
-
-        'resources/images/map-tiles/wood1.jpg',
-        'resources/images/map-tiles/wood2.jpg',
-        'resources/images/map-tiles/crate.jpg',
-    ];
-
     constructor(public boardStateService: BoardStateService,
                 public boardLightService: BoardLightService,
                 public boardVisibilityService: BoardVisibilityService,
@@ -113,15 +54,9 @@ export class BoardControllerComponent implements OnInit, OnDestroy {
                 private encounterService: EncounterService,
                 public ts: BoardTileService,
                 private dialog: MatDialog,
-                private rightsService: RightsService,
     ) {}
 
     ngOnInit(): void {
-    	  this.rightsSubscription = this.rightsService.isReady().subscribe((isReady: boolean) => {
-    	  	if (isReady) {
-    	  		this.isGM = this.rightsService.isEncounterGM();
-		      }
-	      });
         this.sync();
     }
 
@@ -138,36 +73,6 @@ export class BoardControllerComponent implements OnInit, OnDestroy {
     }
 
     sync() {
-        switch (this.boardStateService.board_edit_mode) {
-            case BoardMode.PLAYER:
-                this.currentInput = 'Player';
-                break;
-            case BoardMode.WALLS:
-                this.currentInput = 'Walls';
-                break;
-            case BoardMode.DOORS:
-                this.currentInput = 'Doors';
-                break;
-            case BoardMode.LIGHTS:
-                this.currentInput = 'Lights';
-                break;
-            case BoardMode.TILES:
-                this.currentInput = 'Tiles';
-                break;
-        }
-
-        switch (this.boardStateService.board_view_mode) {
-            case ViewMode.BOARD_MAKER:
-                this.currentView = 'Board Maker';
-                break;
-            case ViewMode.PLAYER:
-                this.currentView = 'Player View';
-                break;
-            case ViewMode.MASTER:
-                this.currentView = 'Game Master';
-                break;
-        }
-
         switch (this.boardStateService.playerVisibilityMode) {
             case PlayerVisibilityMode.GLOBAL:
                 this.currentVisibility = 'Global';
@@ -196,30 +101,6 @@ export class BoardControllerComponent implements OnInit, OnDestroy {
         this.sync()
     }
 
-    onViewChange() {
-        switch (this.currentView) {
-            case 'Board Maker':
-                this.boardStateService.source_click_location = null;
-                this.boardStateService.board_view_mode = ViewMode.BOARD_MAKER;
-                this.boardStateService.board_edit_mode = BoardMode.WALLS;
-                this.boardStateService.do_pops = false;
-                break;
-            case 'Player View':
-                this.boardStateService.source_click_location = null;
-                this.boardStateService.board_view_mode = ViewMode.PLAYER;
-                this.boardStateService.board_edit_mode = BoardMode.PLAYER;
-                this.boardStateService.do_pops = true;
-                this.boardStateService.show_health = false;
-                break;
-            case 'Game Master':
-                this.boardStateService.source_click_location = null;
-                this.boardStateService.board_view_mode = ViewMode.MASTER;
-                this.boardStateService.board_edit_mode = BoardMode.PLAYER;
-                this.boardStateService.do_pops = true;
-                break;
-        }
-        this.sync()
-    }
 
     diag_raytraceInputChange(event) {
         if (this.encounterService.players.length > 0){
@@ -325,42 +206,34 @@ export class BoardControllerComponent implements OnInit, OnDestroy {
         this.dialog.open(NotationTextCreateDialogComponent);
     }
 
-    handleSetInputModePlayer() {
-        this.boardStateService.source_click_location = null;
-        this.boardStateService.board_edit_mode = BoardMode.PLAYER;
-        this.boardStateService.doDiagonals = false;
-        this.boardStateService.inputOffset = 0;
-        this.sync();
-    }
-
-    handleSetInputModeDoor() {
-        this.boardStateService.source_click_location = null;
-        this.boardStateService.board_edit_mode = BoardMode.DOORS;
-        this.boardStateService.inputOffset = 0.10;
-        this.boardStateService.doDiagonals = true;
-        this.sync();
-    }
-
-    handleSetInputModeWall() {
-        this.boardStateService.board_edit_mode = BoardMode.WALLS;
-        this.boardStateService.inputOffset = 0.2;
-        this.boardStateService.doDiagonals = true;
-        this.sync();
-    }
-
-    handleSetInputModeLight() {
-        this.boardStateService.source_click_location = null;
-        this.boardStateService.board_edit_mode = BoardMode.LIGHTS;
-        this.boardStateService.inputOffset = 0;
-        this.boardStateService.doDiagonals = false;
-        this.sync();
-    }
-
-    handleSetInputModeTiles() {
-        this.boardStateService.source_click_location = null;
-        this.boardStateService.board_edit_mode = BoardMode.TILES;
-        this.boardStateService.inputOffset = 0;
-        this.boardStateService.doDiagonals = false;
-        this.sync();
-    }
+    // handleSetInputModePlayer() {
+    //     this.boardStateService.source_click_location = null;
+    //     this.boardStateService.board_edit_mode = BoardMode.PLAYER;
+    //     this.boardStateService.doDiagonals = false;
+    //     this.boardStateService.inputOffset = 0;
+    //     this.sync();
+    // }
+    //
+    // handleSetInputModeDoor() {
+    //     this.boardStateService.source_click_location = null;
+    //     this.boardStateService.board_edit_mode = BoardMode.DOORS;
+    //     this.boardStateService.inputOffset = 0.10;
+    //     this.boardStateService.doDiagonals = true;
+    //     this.sync();
+    // }
+    //
+    // handleSetInputModeWall() {
+    //     this.boardStateService.board_edit_mode = BoardMode.WALLS;
+    //     this.boardStateService.inputOffset = 0.2;
+    //     this.boardStateService.doDiagonals = true;
+    //     this.sync();
+    // }
+    //
+    // handleSetInputModeLight() {
+    //     this.boardStateService.source_click_location = null;
+    //     this.boardStateService.board_edit_mode = BoardMode.LIGHTS;
+    //     this.boardStateService.inputOffset = 0;
+    //     this.boardStateService.doDiagonals = false;
+    //     this.sync();
+    // }
 }

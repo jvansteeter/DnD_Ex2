@@ -52,6 +52,7 @@ export class BoardStateService extends IsReadyService {
     public minZoom = 0.35;
 
     // board-map controls
+    public isGM = false;
     public board_controller_mode: BoardControllerMode = BoardControllerMode.DEFAULT;
     public board_edit_mode: BoardMode = BoardMode.PLAYER;
     public board_view_mode: ViewMode = ViewMode.PLAYER;
@@ -127,6 +128,7 @@ export class BoardStateService extends IsReadyService {
         this.dependenciesReady().subscribe((isReady: boolean) => {
             if (isReady) {
                 if (this.rightsService.isEncounterGM()) {
+                    this.isGM = true;
                     this.board_view_mode = ViewMode.MASTER;
                 }
                 this.setReady(true);

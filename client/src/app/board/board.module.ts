@@ -56,6 +56,7 @@ import {CharacterSheetModule} from '../character-sheet/character-sheet.module';
 import {CharacterPopComponent} from './pop/character-pop/character-pop.component';
 import {DiagnosticRendererComponent} from "./renderer/diagnostic-renderer/diagnostic-renderer.component";
 import {TempPlayerInitDialogComponent} from "./dialogs/temp-player-init-dialog/temp-player-init-dialog.component";
+import {ViewEditControlModuleComponent} from "./board-control/controller-modules/view-edit-control-module/view-edit-control-module.component";
 
 
 @NgModule({
@@ -84,7 +85,8 @@ import {TempPlayerInitDialogComponent} from "./dialogs/temp-player-init-dialog/t
         NotationTextCreateDialogComponent,
         CharacterPopComponent,
         DiagnosticRendererComponent,
-        TempPlayerInitDialogComponent
+        TempPlayerInitDialogComponent,
+        ViewEditControlModuleComponent
     ],
     imports: [
         BrowserModule,
