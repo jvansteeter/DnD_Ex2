@@ -9,6 +9,7 @@ import {EncounterService} from '../../encounter/encounter.service';
 import {IsReadyService} from "../../utilities/services/isReady.service";
 import {Line} from "../geometry/line";
 import {BoardControllerMode} from "../shared/enum/board-controller-mode";
+import {RightsService} from "../../data-services/rights.service";
 
 /*************************************************************************************************************************************
  * BoardStateService
@@ -23,6 +24,7 @@ export class BoardStateService extends IsReadyService {
     static cell_res = 50;
 
     // diagnostic variables, not intended for production code
+    public diag_mode = false;
     public diag_visibility_ray_count = 500;
     public diag_show_visibility_blocking_bitmap = false;
     public diag_layer_opacity = 75;
@@ -52,7 +54,7 @@ export class BoardStateService extends IsReadyService {
     // board-map controls
     public board_controller_mode: BoardControllerMode = BoardControllerMode.DEFAULT;
     public board_edit_mode: BoardMode = BoardMode.PLAYER;
-    public board_view_mode: ViewMode = ViewMode.BOARD_MAKER;
+    public board_view_mode: ViewMode = ViewMode.PLAYER;
     public board_maker_map_opacity = 1.0;
     public doDiagonals = true;
     public do_pops = false;
@@ -114,15 +116,19 @@ export class BoardStateService extends IsReadyService {
     }
 
     constructor(
-        private encounterService: EncounterService
+        private encounterService: EncounterService,
+        private rightsService: RightsService,
     ) {
-        super(encounterService);
+        super(encounterService, rightsService);
         this.init();
     }
 
     public init(): void {
         this.dependenciesReady().subscribe((isReady: boolean) => {
             if (isReady) {
+                if (this.rightsService.isEncounterGM()) {
+                    this.board_view_mode = ViewMode.MASTER;
+                }
                 this.setReady(true);
             }
         });

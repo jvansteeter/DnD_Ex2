@@ -122,10 +122,6 @@ export class BoardControllerComponent implements OnInit, OnDestroy {
     	  		this.isGM = this.rightsService.isEncounterGM();
 		      }
 	      });
-    	  if (!this.isGM) {
-		      this.currentView = 'Player View';
-		      this.onViewChange();
-	      }
         this.sync();
     }
 
