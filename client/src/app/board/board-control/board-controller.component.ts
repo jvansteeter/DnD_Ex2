@@ -36,8 +36,6 @@ export class BoardControllerComponent implements OnInit, OnDestroy {
     public BoardControllerMode = BoardControllerMode;
     public PlayerVisibilityMode = PlayerVisibilityMode;
 
-    public notationIdValue: string;
-
     private rightsSubscription: Subscription;
 
     currentVisibility: string;
@@ -62,10 +60,6 @@ export class BoardControllerComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
     	this.rightsSubscription.unsubscribe();
-    }
-
-    showModeControls(): boolean {
-        return this.boardStateService.board_view_mode === ViewMode.BOARD_MAKER;
     }
 
     showLightControls(): boolean {
@@ -101,7 +95,6 @@ export class BoardControllerComponent implements OnInit, OnDestroy {
         this.sync()
     }
 
-
     diag_raytraceInputChange(event) {
         if (this.encounterService.players.length > 0){
             const playerLoc = this.encounterService.players[0].location;
@@ -110,10 +103,6 @@ export class BoardControllerComponent implements OnInit, OnDestroy {
             this.boardVisibilityService.raytraceVisibilityFromCell(playerRes, this.boardStateService.diag_visibility_ray_count);
         }
     }
-
-    // mapOpacitySliderInput(event) {
-    //     this.boardStateService.board_maker_map_opacity = event.value;
-    // }
 
     increaseAmbientLight(): void {
         if (this.boardStateService.ambientLight === LightValue.DARK) {
@@ -201,35 +190,4 @@ export class BoardControllerComponent implements OnInit, OnDestroy {
         this.notationService.activeNotationMode = NotationMode.TEXT;
         this.dialog.open(NotationTextCreateDialogComponent);
     }
-
-    // handleSetInputModePlayer() {
-    //     this.boardStateService.source_click_location = null;
-    //     this.boardStateService.board_edit_mode = BoardMode.PLAYER;
-    //     this.boardStateService.doDiagonals = false;
-    //     this.boardStateService.inputOffset = 0;
-    //     this.sync();
-    // }
-    //
-    // handleSetInputModeDoor() {
-    //     this.boardStateService.source_click_location = null;
-    //     this.boardStateService.board_edit_mode = BoardMode.DOORS;
-    //     this.boardStateService.inputOffset = 0.10;
-    //     this.boardStateService.doDiagonals = true;
-    //     this.sync();
-    // }
-    //
-    // handleSetInputModeWall() {
-    //     this.boardStateService.board_edit_mode = BoardMode.WALLS;
-    //     this.boardStateService.inputOffset = 0.2;
-    //     this.boardStateService.doDiagonals = true;
-    //     this.sync();
-    // }
-    //
-    // handleSetInputModeLight() {
-    //     this.boardStateService.source_click_location = null;
-    //     this.boardStateService.board_edit_mode = BoardMode.LIGHTS;
-    //     this.boardStateService.inputOffset = 0;
-    //     this.boardStateService.doDiagonals = false;
-    //     this.sync();
-    // }
 }

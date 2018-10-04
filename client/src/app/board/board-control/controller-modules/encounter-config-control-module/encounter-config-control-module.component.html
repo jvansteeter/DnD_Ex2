@@ -1,4 +1,4 @@
-<div id="Board Maker Controls" class="section" *ngIf="boardStateService.board_view_mode === ViewMode.BOARD_MAKER">
+<div class="section" *ngIf="boardStateService.board_view_mode === ViewMode.BOARD_MAKER">
     <div class="sectionHeader"><span>Board Maker Controls</span></div>
     <div class="sectionContents">
         <mat-checkbox style="display: block" [(ngModel)]="boardStateService.gridEnabled">Grid Enabled</mat-checkbox>
@@ -14,14 +14,14 @@
     </div>
 </div>
 
-<div id="Player Controls" class="section" *ngIf="boardStateService.board_view_mode === ViewMode.PLAYER">
+<div class="section" *ngIf="boardStateService.board_view_mode === ViewMode.PLAYER">
     <div class="sectionHeader"><span>Player Controls</span></div>
     <div class="sectionContents">
         <mat-checkbox style="display: block" [(ngModel)]="boardStateService.gridEnabled">Grid Enabled</mat-checkbox>
     </div>
 </div>
 
-<div id="Game Master Controls" class="section" *ngIf="boardStateService.board_view_mode === ViewMode.MASTER">
+<div class="section" *ngIf="boardStateService.board_view_mode === ViewMode.MASTER">
     <div class="sectionHeader"><span>Game Master Controls</span></div>
     <div class="sectionContents">
         <mat-checkbox style="display: block" [(ngModel)]="boardStateService.gridEnabled">Grid Enabled</mat-checkbox>
