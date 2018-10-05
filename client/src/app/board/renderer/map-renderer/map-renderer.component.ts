@@ -64,10 +64,14 @@ export class MapRendererComponent extends IsReadyService implements OnInit, OnDe
 					this.ctx.globalAlpha = 1.0;
 					break;
 				case ViewMode.MASTER:
+					this.ctx.globalAlpha = this.boardStateService.board_maker_map_opacity;
 					this.ctx.drawImage(this.bgImage, 0, 0);
+					this.ctx.globalAlpha = 1.0;
 					break;
 				case ViewMode.PLAYER:
+					this.ctx.globalAlpha = this.boardStateService.board_maker_map_opacity;
 					this.ctx.drawImage(this.bgImage, 0, 0);
+					this.ctx.globalAlpha = 1.0;
 					break;
 			}
 		}

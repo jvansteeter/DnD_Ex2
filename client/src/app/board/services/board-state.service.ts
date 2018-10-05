@@ -23,33 +23,47 @@ export class BoardStateService extends IsReadyService {
 
     static cell_res = 50;
 
-    // diagnostic variables, not intended for production code
-    public diag_mode = false;
-    public diag_visibility_ray_count = 500;
-    public diag_show_visibility_blocking_bitmap = false;
-    public diag_layer_opacity = 75;
 
-    // board-map controls
+    /*************************************************************************************************************************************
+     * SHARED - Config Variables
+     *************************************************************************************************************************************/
     public map_enabled = false;
     public playerWallsEnabled = false;
     public lightEnabled = false;
     public ambientLight = LightValue.DARK;
     public playerVisibilityMode = PlayerVisibilityMode.GLOBAL;
 
-    /***********************************************************************************
-     * To keep in the local board state
-     ***********************************************************************************/
+    /*************************************************************************************************************************************
+     * LOCAL - Controller Config Variables
+     *************************************************************************************************************************************/
+    public showGridControls: boolean;
+    public showHealthBarControls: boolean;
+    public showShowWallsToPlayerControls: boolean;
+    public showMapEnabledControls: boolean;
+
+    /*************************************************************************************************************************************
+     * LOCAL - Misc.
+     *************************************************************************************************************************************/
     public visibilityHighlightEnabled = true;
 
-    public mapOffsetTop: number;
-    public mapOffsetLeft: number;
+    /*************************************************************************************************************************************
+     * LOCAL - diagnostic variables, not intended for production code
+     *************************************************************************************************************************************/
+    public diag_mode = false;
+    public diag_visibility_ray_count = 500;
+    public diag_show_visibility_blocking_bitmap = false;
+    public diag_layer_opacity = 75;
 
-    // transform state
+    /*************************************************************************************************************************************
+     * LOCAL - Transform
+     *************************************************************************************************************************************/
     public x_offset = 0;
     public y_offset = 0;
     public scale = 1.0;
-    public maxZoom = 10;        // default: 2.50
+    public maxZoom = 2.5;        // default: 2.50
     public minZoom = 0.35;
+    public mapOffsetTop: number;
+    public mapOffsetLeft: number;
 
     // board-map controls
     public isGM = false;
@@ -65,7 +79,9 @@ export class BoardStateService extends IsReadyService {
     public gridEnabled = true;
     public show_health = true;
 
-    // mouse location variables
+    /*************************************************************************************************************************************
+     * LOCAL - Mouse Location
+     *************************************************************************************************************************************/
     public mouse_loc_screen: XyPair;       // the pixel location of the mouse relative to the screen
     public mouse_loc_canvas: XyPair;       // the pixel location of the mouse relative to the window
     public mouse_loc_map: XyPair;
@@ -74,24 +90,25 @@ export class BoardStateService extends IsReadyService {
 
     public mouse_cell_target: CellTarget;  // to current cell target under the pointer
     public mouse_right_cell_target: CellTarget;
+    public mouseOnMap = false;
+    public source_click_location: CellTarget;
 
-    // notation variables
+    /*************************************************************************************************************************************
+     * LOCAL - Notation
+     *************************************************************************************************************************************/
     public brush_size = 0;
     public do_visibility_brush = false;
 
-    // key states
-    public mouseOnMap = false;
-
+    /*************************************************************************************************************************************
+     * LOCAL - Key States
+     *************************************************************************************************************************************/
     public shiftDown = false;
     public spaceDown = false;
-
     public mouseLeftDown = false;
     public mouseMiddleDown = false;
     public ctrlDown = false;
     public altDown = false;
-
     public mouseDrag = false;
-    source_click_location: CellTarget;
 
 
     static distanceCellToCell(cell1: XyPair, cell2: XyPair): number {
@@ -131,6 +148,28 @@ export class BoardStateService extends IsReadyService {
                     this.isGM = true;
                     this.board_view_mode = ViewMode.MASTER;
                 }
+
+                switch (this.board_view_mode) {
+                    case ViewMode.PLAYER:
+                        this.showGridControls = true;
+                        this.showHealthBarControls = false;
+                        this.showShowWallsToPlayerControls = false;
+                        this.showMapEnabledControls = false;
+                        break;
+                    case ViewMode.MASTER:
+                        this.showGridControls = true;
+                        this.showHealthBarControls = true;
+                        this.showShowWallsToPlayerControls = true;
+                        this.showMapEnabledControls = true;
+                        break;
+                    case ViewMode.BOARD_MAKER:
+                        this.showGridControls = true;
+                        this.showHealthBarControls = true;
+                        this.showShowWallsToPlayerControls = true;
+                        this.showMapEnabledControls = true;
+                        break;
+                }
+
                 this.setReady(true);
             }
         });
@@ -181,11 +220,11 @@ export class BoardStateService extends IsReadyService {
 
     get xBoundLine(): Line {
         const xRes = this.mapDimX * BoardStateService.cell_res - 1;
-        return new Line(new XyPair(xRes,0), new XyPair(xRes,1));
+        return new Line(new XyPair(xRes, 0), new XyPair(xRes, 1));
     }
 
     get yBoundLine(): Line {
         const yRes = this.mapDimY * BoardStateService.cell_res - 1;
-        return new Line(new XyPair(0,yRes), new XyPair(1,yRes));
+        return new Line(new XyPair(0, yRes), new XyPair(1, yRes));
     }
 }

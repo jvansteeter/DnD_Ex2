@@ -64,6 +64,11 @@ export class ViewEditControlModuleComponent {
                 this.boardStateService.board_view_mode = ViewMode.BOARD_MAKER;
                 this.boardStateService.board_edit_mode = BoardMode.WALLS;
                 this.boardStateService.do_pops = false;
+
+                this.boardStateService.showGridControls = true;
+                this.boardStateService.showHealthBarControls = true;
+                this.boardStateService.showShowWallsToPlayerControls = true;
+                this.boardStateService.showMapEnabledControls = true;
                 break;
             case 'Player View':
                 this.boardStateService.source_click_location = null;
@@ -71,12 +76,22 @@ export class ViewEditControlModuleComponent {
                 this.boardStateService.board_edit_mode = BoardMode.PLAYER;
                 this.boardStateService.do_pops = true;
                 this.boardStateService.show_health = false;
+
+                this.boardStateService.showGridControls = true;
+                this.boardStateService.showHealthBarControls = false;
+                this.boardStateService.showShowWallsToPlayerControls = false;
+                this.boardStateService.showMapEnabledControls = false;
                 break;
             case 'Game Master':
                 this.boardStateService.source_click_location = null;
                 this.boardStateService.board_view_mode = ViewMode.MASTER;
                 this.boardStateService.board_edit_mode = BoardMode.PLAYER;
                 this.boardStateService.do_pops = true;
+
+                this.boardStateService.showGridControls = true;
+                this.boardStateService.showHealthBarControls = true;
+                this.boardStateService.showShowWallsToPlayerControls = true;
+                this.boardStateService.showMapEnabledControls = true;
                 break;
         }
         this.sync()
