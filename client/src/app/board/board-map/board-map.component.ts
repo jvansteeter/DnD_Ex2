@@ -203,6 +203,7 @@ export class BoardMapComponent implements OnInit, AfterViewInit {
                 this.boardStateService.spaceDown = true;
                 break;
             case 'ControlLeft':
+                this.boardStateService.ctrlDown = true;
                 break;
         }
     }
@@ -223,6 +224,9 @@ export class BoardMapComponent implements OnInit, AfterViewInit {
                 break;
             case 'Escape':
                 this.boardStateService.source_click_location = null;
+                break;
+            case 'ControlLeft':
+                this.boardStateService.ctrlDown = false;
                 break;
         }
     }
@@ -455,7 +459,11 @@ export class BoardMapComponent implements OnInit, AfterViewInit {
     handleInitIconMouseUp(event: MouseEvent, player: Player) {
         switch(event.which) {
             case 1:
-                this.boardPlayerService.toggleSelectPlayer(player);
+                if (this.boardStateService.ctrlDown) {
+                    this.boardPlayerService.tryTogglePlayerVisibility(player);
+                } else {
+                    this.boardPlayerService.toggleSelectPlayer(player);
+                }
                 break;
             case 2:
                 break;

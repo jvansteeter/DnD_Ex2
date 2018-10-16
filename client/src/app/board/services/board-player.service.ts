@@ -89,7 +89,7 @@ export class BoardPlayerService extends IsReadyService {
     }
 
     /*********************************************************************************************************************************************
-     * VISIBILITY
+     * TRAVERSE
      *********************************************************************************************************************************************/
     public updateAllPlayerTraverse() {
         for (const player of this.encounterService.players) {
@@ -128,6 +128,16 @@ export class BoardPlayerService extends IsReadyService {
     }
 
     /*********************************************************************************************************************************************
+     * TOKEN VISIBILITY
+     *********************************************************************************************************************************************/
+    public tryTogglePlayerVisibility(player: Player) {
+        if (this.rightsService.isMyPlayer(player) || this.rightsService.isEncounterGM()){
+            player.isVisible = !player.isVisible;
+        }
+    }
+
+
+    /*********************************************************************************************************************************************
      * INPUT CONTROL
      *********************************************************************************************************************************************/
 
@@ -161,9 +171,7 @@ export class BoardPlayerService extends IsReadyService {
             for (const player of this.encounterService.players) {
                 // ... search through the players to see if a player was clicked on ...
                 if (player.location.x === loc_cell.x && player.location.y === loc_cell.y) {
-                    if (this.rightsService.isEncounterGM() || true) {
-                        player.isVisible = !player.isVisible;
-                    }
+                    this.tryTogglePlayerVisibility(player);
                 }
             }
         } else {
@@ -196,7 +204,7 @@ export class BoardPlayerService extends IsReadyService {
                             this.toggleSelectPlayer(player);
                             return;
                         } else {
-                            if (this.rightsService.isEncounterGM()) {
+                            if (this.rightsService.isEncounterGM() || this.rightsService.isMyPlayer(player)) {
                                 this.toggleSelectPlayer(player);
                             }
                         }
@@ -210,7 +218,6 @@ export class BoardPlayerService extends IsReadyService {
     /*********************************************************************************************************************************************
      * GET/SET
      *********************************************************************************************************************************************/
-
     get players(): Player[] {
         return this.encounterService.players;
     }
