@@ -7,6 +7,7 @@ import { ConcurrentBoardObject } from './concurrent-board-object';
 
 export class Player extends ConcurrentBoardObject implements PlayerData {
 	_id: string;
+	private _userId: string;
 	private _name: string;
 	private _hp: number;
 	private _maxHp: number;
@@ -34,6 +35,7 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 		return {
 			_id: this._id,
 			encounterId: this.encounterId,
+			userId: this._userId,
 			characterData: this.characterData,
 			initiative: this.initiative,
 			location: this._location,
@@ -177,5 +179,13 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 	set isVisible(value) {
 		this._isVisible = value;
 		this.emitChange();
+	}
+
+	get userId(): string {
+		return this._userId;
+	}
+
+	set userId(value) {
+		this._userId = value;
 	}
 }

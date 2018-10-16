@@ -6,6 +6,7 @@ import { CharacterData } from '../../../../shared/types/character.data';
 export class PlayerModel extends MongooseModel implements PlayerData {
 	public _id;
 	encounterId: string;
+	userId: string;
 	characterData: CharacterData;
 	initiative: number;
 	location: {x: number, y: number};
@@ -14,6 +15,7 @@ export class PlayerModel extends MongooseModel implements PlayerData {
 	constructor() {
 		super({
 			encounterId: {type: String, required: true},
+			userId: {type: String, required: true},
 			characterData: {type: Object, required: true},
 			initiative: Number,
 			location: {type: Object, default: {x: 0, y: 0}},
@@ -22,6 +24,7 @@ export class PlayerModel extends MongooseModel implements PlayerData {
 
 		this._id = this.methods._id;
 		this.characterData = this.methods.characterData;
+		this.userId = this.methods.userId;
 		this.initiative = this.methods.initiative;
 		this.location = this.methods.location;
 		this.isVisible = this.methods.isVisible;

@@ -78,7 +78,7 @@ export class EncounterService {
 			const placementMap: boolean[][] = await this.getPlayerPlacementMap(encounter);
 			let playerCount = 0;
 			for (let character of characters) {
-				let player = await this.playerRepo.create(encounterId, character);
+				let player = await this.playerRepo.create(encounterId, userId, character);
 				let placed: boolean = false;
 				let x;
 				let y = 0;

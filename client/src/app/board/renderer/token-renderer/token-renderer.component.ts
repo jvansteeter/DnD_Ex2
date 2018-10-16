@@ -72,7 +72,7 @@ export class TokenRendererComponent implements OnInit, OnDestroy {
             if (player.isVisible) {
                 this.boardCanvasService.draw_img(this.ctx, new XyPair(player.location.x * BoardStateService.cell_res, player.location.y * BoardStateService.cell_res), player.token_img, 1.0);
             } else {
-                if (this.rightsService.isEncounterGM()) {
+                if (this.rightsService.isEncounterGM() || this.rightsService.isMyPlayer(player)) {
                     this.boardCanvasService.draw_img(this.ctx, new XyPair(player.location.x * BoardStateService.cell_res, player.location.y * BoardStateService.cell_res), player.token_img, 0.35);
                 }
             }

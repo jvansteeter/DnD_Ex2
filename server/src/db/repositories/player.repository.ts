@@ -11,11 +11,12 @@ export class PlayerRepository {
 		this.Player = mongoose.model('Player');
 	}
 
-	public create(encounterId: string, character: CharacterData): Promise<PlayerModel> {
+	public create(encounterId: string, userId: string, character: CharacterData): Promise<PlayerModel> {
 		return new Promise(async (resolve, reject) => {
 			try {
 				const playerModel = await this.Player.create({
 					encounterId: encounterId,
+					userId: userId,
 					characterData: character,
 				});
 

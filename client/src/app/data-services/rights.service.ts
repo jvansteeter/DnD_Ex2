@@ -4,6 +4,7 @@ import { CampaignPageService } from '../campaign/campaign-page.service';
 import { Injectable } from '@angular/core';
 import { EncounterService } from '../encounter/encounter.service';
 import { isUndefined } from 'util';
+import { Player } from '../encounter/player';
 
 @Injectable()
 export class RightsService extends IsReadyService {
@@ -56,5 +57,9 @@ export class RightsService extends IsReadyService {
 	public setEncounterService(encounterService: EncounterService): void {
 		this.encounterService = encounterService;
 		this.init();
+	}
+
+	public isMyPlayer(player: Player): boolean {
+		return player.userId === this.userProfileService.userId;
 	}
 }

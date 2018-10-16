@@ -25,6 +25,7 @@ import {Player} from "../../encounter/player";
 import {MatDialog} from "@angular/material";
 import {TempPlayerInitDialogComponent} from "../dialogs/temp-player-init-dialog/temp-player-init-dialog.component";
 import {BoardControllerMode} from "../shared/enum/board-controller-mode";
+import { RightsService } from '../../data-services/rights.service';
 
 
 @Component({
@@ -32,8 +33,6 @@ import {BoardControllerMode} from "../shared/enum/board-controller-mode";
     templateUrl: 'board-map.component.html',
     styleUrls: ['board-map.component.scss']
 })
-
-
 export class BoardMapComponent implements OnInit, AfterViewInit {
     @ViewChild('mapContainer') mapContainer: ElementRef;
 
@@ -46,7 +45,9 @@ export class BoardMapComponent implements OnInit, AfterViewInit {
                 private boardNotationService: BoardNotationService,
                 private encounterService: EncounterService,
                 private dialog: MatDialog,
-                private popService: PopService,) {
+                private popService: PopService,
+                public rightsService: RightsService,
+                ) {
     }
 
     render = () => {

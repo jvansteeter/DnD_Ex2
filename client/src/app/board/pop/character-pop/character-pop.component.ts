@@ -27,8 +27,7 @@ export class CharacterPopComponent {
 
 	constructor(private boardStateService: BoardStateService,
 	            private encounterRepo: EncounterRepository,
-	            private rightsService: RightsService,
-	            private userProfileService: UserProfileService) {
+	            private rightsService: RightsService) {
 	}
 
 	public initVars(parentRef: PopService, window: boolean, pos_x: number, pos_y: number, player: Player) {
@@ -40,7 +39,7 @@ export class CharacterPopComponent {
 		this.tooltipComponent.playerId = player.id;
 		this.tooltipComponent.tooltipConfig = player.characterData.characterSheet.tooltipConfig;
 
-		if (this.rightsService.isEncounterGM() || this.userProfileService.userId === player.characterData.creatorUserId) {
+		if (this.rightsService.isEncounterGM() || this.rightsService.isMyPlayer(player)) {
 			this.hasRights = true;
 		}
 
