@@ -4,6 +4,7 @@ import { CharacterSheetTooltipData } from '../../../../../shared/types/rule-set/
 import { CharacterMakerService } from '../maker/character-maker.service';
 import { Aspect, AspectType } from '../shared/aspect';
 import { EncounterService } from '../../encounter/encounter.service';
+import { RightsService } from '../../data-services/rights.service';
 
 @Component({
 	selector: 'character-tooltip',
@@ -15,6 +16,8 @@ export class CharacterTooltipComponent {
 	characterSheetId: string;
 	@Input()
 	public editable: boolean = false;
+	@Input()
+	public hasRights: boolean = false;
 
 	public tooltipConfig: CharacterSheetTooltipData;
 	public aspectType = AspectType;
@@ -24,7 +27,8 @@ export class CharacterTooltipComponent {
 
 	constructor(private characterSheetRepo: CharacterSheetRepository,
 	            private characterService: CharacterMakerService,
-	            private encounterService: EncounterService) {
+	            private encounterService: EncounterService,
+	            ) {
 	}
 
 	public addAspect(aspect: Aspect, icon: string): void {

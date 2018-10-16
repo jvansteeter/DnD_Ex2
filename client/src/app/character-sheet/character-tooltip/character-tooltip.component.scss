@@ -35,6 +35,19 @@ button {
 	padding-right: 5px;
 }
 
+.aspect-unknown {
+	width: 100%;
+	text-align: right;
+}
+
+.negative-difference {
+	color: red;
+}
+
+.positive-difference {
+	color: green;
+}
+
 .aspect-input {
 	background-color: inherit;
 	border: none;

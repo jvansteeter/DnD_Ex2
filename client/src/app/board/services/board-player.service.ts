@@ -9,7 +9,7 @@ import {Player} from '../../encounter/player';
 import {Polygon} from "../../../../../shared/types/encounter/board/polygon";
 import {BoardLightService} from "./board-light.service";
 import {LightSource} from "../map-objects/light-source";
-import { isUndefined } from 'util';
+import { isNullOrUndefined, isUndefined } from 'util';
 import {RightsService} from "../../data-services/rights.service";
 
 @Injectable()
@@ -170,6 +170,9 @@ export class BoardPlayerService extends IsReadyService {
             // player visibility toggle mode
             for (const player of this.encounterService.players) {
                 // ... search through the players to see if a player was clicked on ...
+	              if (isNullOrUndefined(player.location) || isNullOrUndefined(loc_cell)) {
+	              	  return;
+	              }
                 if (player.location.x === loc_cell.x && player.location.y === loc_cell.y) {
                     this.tryTogglePlayerVisibility(player);
                 }
@@ -180,6 +183,9 @@ export class BoardPlayerService extends IsReadyService {
                 // a player is currently selected ...
                 for (const player of this.encounterService.players) {
                     // ... and there is a player on the click location ...
+		                if (isNullOrUndefined(player.location) || isNullOrUndefined(loc_cell)) {
+			                  return;
+		                }
                     if (player.location.x === loc_cell.x && player.location.y === loc_cell.y) {
                         // ... unselect the player and return
                         this.selectedPlayerId = null;

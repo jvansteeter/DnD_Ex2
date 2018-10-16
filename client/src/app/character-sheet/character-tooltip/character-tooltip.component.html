@@ -16,22 +16,40 @@
 			</button>
 		</ng-container>
 		<ng-container [ngSwitch]="aspect.aspect.aspectType">
-			<span class="current-max-aspect-value" *ngSwitchCase="aspectType.CURRENT_MAX">
-				<ng-container *ngIf="aspectValue(aspect.aspect.label)">
-					<input class="current-max-input" style="margin-left: auto" type="number"
-					       [value]="aspectValue(aspect.aspect.label).current"
-					       (change)="changeCurrentAspectValue(aspect.aspect.label, $event.target.value)"/>
-					<span>/</span>
-					<input class="current-max-input" type="number" [value]="aspectValue(aspect.aspect.label).max"
-					       (change)="changeMaxAspectValue(aspect.aspect.label, $event.target.value)"/>
-				</ng-container>
-			</span>
-			<input *ngSwitchCase="aspectType.NUMBER" class="aspect-input" type="number"
-			       [value]="aspectValue(aspect.aspect.label) ? aspectValue(aspect.aspect.label) : ''"
-			       (change)="changeAspectValue(aspect.aspect.label, $event.target.value)"/>
-			<input class="aspect-input" *ngSwitchDefault
-			       [value]="aspectValue(aspect.aspect.label) ? aspectValue(aspect.aspect.label) : ''"
-			       (change)="changeAspectValue(aspect.aspect.label, $event.target.value)"/>
+			<ng-container *ngSwitchCase="aspectType.CURRENT_MAX">
+				<span class="current-max-aspect-value" *ngIf="editable || hasRights">
+					<ng-container *ngIf="aspectValue(aspect.aspect.label)">
+						<input class="current-max-input" style="margin-left: auto" type="number"
+						       [value]="aspectValue(aspect.aspect.label).current"
+						       (change)="changeCurrentAspectValue(aspect.aspect.label, $event.target.value)"/>
+						<span>/</span>
+						<input class="current-max-input" type="number" [value]="aspectValue(aspect.aspect.label).max"
+						       (change)="changeMaxAspectValue(aspect.aspect.label, $event.target.value)"/>
+					</ng-container>
+				</span>
+				<span class="aspect-unknown" *ngIf="!editable && !hasRights">
+					<span class="negative-difference" *ngIf="(aspectValue(aspect.aspect.label).current - aspectValue(aspect.aspect.label).max) < 0">
+						{{aspectValue(aspect.aspect.label).current - aspectValue(aspect.aspect.label).max}}
+					</span>
+					<span class="positive-difference" *ngIf="(aspectValue(aspect.aspect.label).current - aspectValue(aspect.aspect.label).max) > 0">
+						+{{aspectValue(aspect.aspect.label).current - aspectValue(aspect.aspect.label).max}}
+					</span>
+					<span> ???</span>
+				</span>
+			</ng-container>
+			<ng-container *ngSwitchCase="aspectType.NUMBER">
+				<input class="aspect-input" type="number" *ngIf="editable || hasRights"
+				       [value]="aspectValue(aspect.aspect.label) ? aspectValue(aspect.aspect.label) : ''"
+				       (change)="changeAspectValue(aspect.aspect.label, $event.target.value)"/>
+				<span *ngIf="!editable && !hasRights" class="aspect-unknown">???</span>
+			</ng-container>
+			<ng-container *ngSwitchDefault>
+				<input class="aspect-input" *ngIf="editable || hasRights"
+				       [value]="aspectValue(aspect.aspect.label) ? aspectValue(aspect.aspect.label) : ''"
+				       (change)="changeAspectValue(aspect.aspect.label, $event.target.value)"/>
+				<span *ngIf="!editable && !hasRights && aspect.aspect.label === 'Name'" class="aspect-unknown">{{aspectValue(aspect.aspect.label)}}</span>
+				<span *ngIf="!editable && !hasRights && aspect.aspect.label !== 'Name'" class="aspect-unknown">???</span>
+			</ng-container>
 		</ng-container>
 	</div>
 </ng-container>

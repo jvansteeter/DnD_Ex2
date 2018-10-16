@@ -15,7 +15,7 @@
 			<button mat-menu-item (click)="deletePlayer()">Delete Player</button>
 		</mat-menu>
 		<button mat-icon-button class="close-button" (click)="close()" *ngIf="hovered"><mat-icon>close</mat-icon></button>
-		<character-tooltip></character-tooltip>
+		<character-tooltip [hasRights]="hasRights"></character-tooltip>
 	</div>
 </div>
 
