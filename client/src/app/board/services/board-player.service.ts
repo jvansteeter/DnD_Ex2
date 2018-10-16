@@ -10,6 +10,7 @@ import {Polygon} from "../../../../../shared/types/encounter/board/polygon";
 import {BoardLightService} from "./board-light.service";
 import {LightSource} from "../map-objects/light-source";
 import { isUndefined } from 'util';
+import {RightsService} from "../../data-services/rights.service";
 
 @Injectable()
 export class BoardPlayerService extends IsReadyService {
@@ -27,6 +28,7 @@ export class BoardPlayerService extends IsReadyService {
                 private boardVisibilityService: BoardVisibilityService,
                 private boardLightService: BoardLightService,
                 private boardTraverseService: BoardTraverseService,
+                private rightsService: RightsService,
                 private boardStateService: BoardStateService) {
         super(encounterService, boardStateService, boardTraverseService, boardVisibilityService);
         this.player_lightSource_map = new Map<string, LightSource>();
@@ -154,33 +156,52 @@ export class BoardPlayerService extends IsReadyService {
     }
 
     public handleClick(loc_cell: XyPair) {
-
-        if (this.selectedPlayerId !== null && !isUndefined(this.selectedPlayerId)) {
-            // a player is currently selected ...
+        if (this.boardStateService.ctrlDown) {
+            // player visibility toggle mode
             for (const player of this.encounterService.players) {
-                // ... and there is a player on the click location ...
+                // ... search through the players to see if a player was clicked on ...
                 if (player.location.x === loc_cell.x && player.location.y === loc_cell.y) {
-                    // ... unselect the player and return
-                    this.selectedPlayerId = null;
-                    return;
+                    if (this.rightsService.isEncounterGM() || true) {
+                        player.isVisible = !player.isVisible;
+                    }
                 }
             }
-
-            const selectedPlayer = this.encounterService.getPlayerById(this.selectedPlayerId);
-            selectedPlayer.location = loc_cell;
-            this.updatePlayerVisibility(selectedPlayer._id);
-            this.updatePlayerTraverse(selectedPlayer._id);
-            this.updatePlayerLightSource(selectedPlayer._id);
-            this.selectedPlayerId = null;
-
         } else {
-            // there is no player selected ...
-            for (const player of this.encounterService.players) {
-                // ... search through the players to see if a player was selected ...
-                if (player.location.x === loc_cell.x && player.location.y === loc_cell.y) {
-                    // ... select the player and return
-                    this.toggleSelectPlayer(player);
-                    return;
+            // player move/select mode
+            if (this.selectedPlayerId !== null && !isUndefined(this.selectedPlayerId)) {
+                // a player is currently selected ...
+                for (const player of this.encounterService.players) {
+                    // ... and there is a player on the click location ...
+                    if (player.location.x === loc_cell.x && player.location.y === loc_cell.y) {
+                        // ... unselect the player and return
+                        this.selectedPlayerId = null;
+                        return;
+                    }
+                }
+
+                const selectedPlayer = this.encounterService.getPlayerById(this.selectedPlayerId);
+                selectedPlayer.location = loc_cell;
+                this.updatePlayerVisibility(selectedPlayer._id);
+                this.updatePlayerTraverse(selectedPlayer._id);
+                this.updatePlayerLightSource(selectedPlayer._id);
+                this.selectedPlayerId = null;
+
+            } else {
+                // there is no player selected ...
+                for (const player of this.encounterService.players) {
+                    // ... search through the players to see if a player was selected ...
+                    if (player.location.x === loc_cell.x && player.location.y === loc_cell.y) {
+                        // ... select the player and return
+                        if (player.isVisible) {
+                            this.toggleSelectPlayer(player);
+                            return;
+                        } else {
+                            if (this.rightsService.isEncounterGM()) {
+                                this.toggleSelectPlayer(player);
+                            }
+                        }
+
+                    }
                 }
             }
         }
