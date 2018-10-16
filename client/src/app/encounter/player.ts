@@ -81,6 +81,7 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 			this._token_img.src = this._tokenUrl;
 		}
 		this._isVisible = playerData.isVisible;
+		this._userId = playerData.userId;
 	}
 
 	addAction(action: string, detail: string) {
