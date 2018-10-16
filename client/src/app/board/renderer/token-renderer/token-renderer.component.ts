@@ -1,12 +1,12 @@
 import {BoardStateService} from '../../services/board-state.service';
 import {BoardCanvasService} from '../../services/board-canvas.service';
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {XyPair} from '../../../../../../shared/types/encounter/board/xy-pair';
-import { EncounterService } from '../../../encounter/encounter.service';
+import {EncounterService} from '../../../encounter/encounter.service';
 import {BoardPlayerService} from "../../services/board-player.service";
 import {BoardTraverseService} from "../../services/board-traverse.service";
 import {GeometryStatics} from "../../statics/geometry-statics";
-import { RightsService } from '../../../data-services/rights.service';
+import {RightsService} from '../../../data-services/rights.service';
 
 @Component({
     selector: 'token-renderer',
@@ -25,7 +25,8 @@ export class TokenRendererComponent implements OnInit, OnDestroy {
         private boardPlayerService: BoardPlayerService,
         private boardTraverseService: BoardTraverseService,
         private rightsService: RightsService,
-    ) {}
+    ) {
+    }
 
     ngOnInit(): void {
         this.ctx = this.tokenRenderCanvas.nativeElement.getContext('2d');
@@ -38,7 +39,7 @@ export class TokenRendererComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-    	cancelAnimationFrame(this.frameId);
+        cancelAnimationFrame(this.frameId);
     }
 
     render = () => {
@@ -68,18 +69,16 @@ export class TokenRendererComponent implements OnInit, OnDestroy {
                 }
             }
 
-						let opacity = 1;
-            if (!player.isVisible) {
-            	if (this.rightsService.isEncounterGM()) {
-            		opacity = 0.35;
-	            }
-	            else {
-	            	opacity = 0;
-	            }
+            if (player.isVisible) {
+                this.boardCanvasService.draw_img(this.ctx, new XyPair(player.location.x * BoardStateService.cell_res, player.location.y * BoardStateService.cell_res), player.token_img, 1.0);
+            } else {
+                if (this.rightsService.isEncounterGM()) {
+                    this.boardCanvasService.draw_img(this.ctx, new XyPair(player.location.x * BoardStateService.cell_res, player.location.y * BoardStateService.cell_res), player.token_img, 0.35);
+                }
             }
-            this.boardCanvasService.draw_img(this.ctx, new XyPair(player.location.x * BoardStateService.cell_res, player.location.y * BoardStateService.cell_res), player.token_img, opacity);
+
             if (this.boardStateService.show_health) {
-                this.boardCanvasService.draw_health_basic(this.ctx, player.location, player.hp/player.maxHp);
+                this.boardCanvasService.draw_health_basic(this.ctx, player.location, player.hp / player.maxHp);
             }
         }
 

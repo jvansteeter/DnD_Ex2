@@ -43,9 +43,10 @@ export class BoardCanvasService extends IsReadyService {
         ctx.clearRect(-50, -50, this.boardStateService.mapDimX * BoardStateService.cell_res + 100, this.boardStateService.mapDimY * BoardStateService.cell_res + 100);
     }
 
-    draw_img(ctx: CanvasRenderingContext2D, origin: XyPair, img: HTMLImageElement, opacity: number = 1) {
-    	  ctx.globalAlpha = opacity;
+    draw_img(ctx: CanvasRenderingContext2D, origin: XyPair, img: HTMLImageElement, opacity: number = 1.0) {
+        ctx.globalAlpha = opacity;
         ctx.drawImage(img, origin.x, origin.y);
+        ctx.globalAlpha = 1.0;
     }
 
     draw_dot(ctx: CanvasRenderingContext2D, origin: XyPair, rgba_code?: string): void {
@@ -70,14 +71,28 @@ export class BoardCanvasService extends IsReadyService {
         const strokeWidth = 6;
         const health_opacity = 0.5;
 
-        switch(Math.floor((percent * 100) / 15)) {
-            case 6: ctx.strokeStyle = 'rgba(0, 166, 81, ' + health_opacity + ')'; break;
-            case 5: ctx.strokeStyle = 'rgba(57, 181, 74, ' + health_opacity + ')'; break;
-            case 4: ctx.strokeStyle = 'rgba(141, 198, 63, ' + health_opacity + ')'; break;
-            case 3: ctx.strokeStyle = 'rgba(255, 242, 0, ' + health_opacity + ')'; break;
-            case 2: ctx.strokeStyle = 'rgba(247, 148, 29, ' + health_opacity + ')'; break;
-            case 1: ctx.strokeStyle = 'rgba(242, 101, 34, ' + health_opacity + ')'; break;
-            case 0: ctx.strokeStyle = 'rgba(237, 28, 36, ' + health_opacity + ')'; break;
+        switch (Math.floor((percent * 100) / 15)) {
+            case 6:
+                ctx.strokeStyle = 'rgba(0, 166, 81, ' + health_opacity + ')';
+                break;
+            case 5:
+                ctx.strokeStyle = 'rgba(57, 181, 74, ' + health_opacity + ')';
+                break;
+            case 4:
+                ctx.strokeStyle = 'rgba(141, 198, 63, ' + health_opacity + ')';
+                break;
+            case 3:
+                ctx.strokeStyle = 'rgba(255, 242, 0, ' + health_opacity + ')';
+                break;
+            case 2:
+                ctx.strokeStyle = 'rgba(247, 148, 29, ' + health_opacity + ')';
+                break;
+            case 1:
+                ctx.strokeStyle = 'rgba(242, 101, 34, ' + health_opacity + ')';
+                break;
+            case 0:
+                ctx.strokeStyle = 'rgba(237, 28, 36, ' + health_opacity + ')';
+                break;
         }
 
         ctx.beginPath();
@@ -115,20 +130,34 @@ export class BoardCanvasService extends IsReadyService {
         const health_opacity = 1.0;
         const distanceFromTop = 0.75;   // Top: 0.0 - 1.0 :Bottom
 
-        switch(Math.floor((percent * 100) / 15)) {
-            case 6: ctx.strokeStyle = 'rgba(0, 166, 81, ' + health_opacity + ')'; break;
-            case 5: ctx.strokeStyle = 'rgba(57, 181, 74, ' + health_opacity + ')'; break;
-            case 4: ctx.strokeStyle = 'rgba(141, 198, 63, ' + health_opacity + ')'; break;
-            case 3: ctx.strokeStyle = 'rgba(255, 242, 0, ' + health_opacity + ')'; break;
-            case 2: ctx.strokeStyle = 'rgba(247, 148, 29, ' + health_opacity + ')'; break;
-            case 1: ctx.strokeStyle = 'rgba(242, 101, 34, ' + health_opacity + ')'; break;
-            case 0: ctx.strokeStyle = 'rgba(237, 28, 36, ' + health_opacity + ')'; break;
+        switch (Math.floor((percent * 100) / 15)) {
+            case 6:
+                ctx.strokeStyle = 'rgba(0, 166, 81, ' + health_opacity + ')';
+                break;
+            case 5:
+                ctx.strokeStyle = 'rgba(57, 181, 74, ' + health_opacity + ')';
+                break;
+            case 4:
+                ctx.strokeStyle = 'rgba(141, 198, 63, ' + health_opacity + ')';
+                break;
+            case 3:
+                ctx.strokeStyle = 'rgba(255, 242, 0, ' + health_opacity + ')';
+                break;
+            case 2:
+                ctx.strokeStyle = 'rgba(247, 148, 29, ' + health_opacity + ')';
+                break;
+            case 1:
+                ctx.strokeStyle = 'rgba(242, 101, 34, ' + health_opacity + ')';
+                break;
+            case 0:
+                ctx.strokeStyle = 'rgba(237, 28, 36, ' + health_opacity + ')';
+                break;
         }
 
         ctx.beginPath();
-        const topLeftCorner = new XyPair(cell.x  * BoardStateService.cell_res, cell.y * BoardStateService.cell_res);
-        ctx.moveTo(topLeftCorner.x, topLeftCorner.y + BoardStateService.cell_res *  distanceFromTop);
-        ctx.lineTo(topLeftCorner.x + BoardStateService.cell_res * percent, topLeftCorner.y + BoardStateService.cell_res *  distanceFromTop);
+        const topLeftCorner = new XyPair(cell.x * BoardStateService.cell_res, cell.y * BoardStateService.cell_res);
+        ctx.moveTo(topLeftCorner.x, topLeftCorner.y + BoardStateService.cell_res * distanceFromTop);
+        ctx.lineTo(topLeftCorner.x + BoardStateService.cell_res * percent, topLeftCorner.y + BoardStateService.cell_res * distanceFromTop);
         ctx.lineWidth = strokeWidth;
         ctx.stroke();
     }
@@ -143,7 +172,7 @@ export class BoardCanvasService extends IsReadyService {
         ctx.fillRect(0, 0, this.boardStateService.mapDimX * BoardStateService.cell_res, this.boardStateService.mapDimY * BoardStateService.cell_res);
     }
 
-    draw_polyline(ctx:CanvasRenderingContext2D, points: Array<XyPair>, strokeStyle: string, width = 2) {
+    draw_polyline(ctx: CanvasRenderingContext2D, points: Array<XyPair>, strokeStyle: string, width = 2) {
         ctx.lineWidth = width;
         ctx.strokeStyle = strokeStyle;
         ctx.lineJoin = 'round';
