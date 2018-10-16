@@ -4,6 +4,8 @@ import { Player } from '../../../encounter/player';
 import { CharacterTooltipComponent } from '../../../character-sheet/character-tooltip/character-tooltip.component';
 import { BoardStateService } from '../../services/board-state.service';
 import { EncounterRepository } from '../../../repositories/encounter.repository';
+import { RightsService } from '../../../data-services/rights.service';
+import { UserProfileService } from '../../../data-services/userProfile.service';
 
 @Component({
 	templateUrl: 'character-pop.component.html',
@@ -21,9 +23,12 @@ export class CharacterPopComponent {
 	@ViewChild(CharacterTooltipComponent)
 	tooltipComponent: CharacterTooltipComponent;
 	hovered = false;
+	hasRights = false;
 
 	constructor(private boardStateService: BoardStateService,
-	            private encounterRepo: EncounterRepository) {
+	            private encounterRepo: EncounterRepository,
+	            private rightsService: RightsService,
+	            private userProfileService: UserProfileService) {
 	}
 
 	public initVars(parentRef: PopService, window: boolean, pos_x: number, pos_y: number, player: Player) {
@@ -34,6 +39,10 @@ export class CharacterPopComponent {
 		this.player = player;
 		this.tooltipComponent.playerId = player.id;
 		this.tooltipComponent.tooltipConfig = player.characterData.characterSheet.tooltipConfig;
+
+		if (this.rightsService.isEncounterGM() || this.userProfileService.userId === player.characterData.creatorUserId) {
+			this.hasRights = true;
+		}
 
 		this.window = window;
 	}
@@ -86,5 +95,9 @@ export class CharacterPopComponent {
 			this.pos_x = this.pos_x + event.movementX;
 			this.pos_y = this.pos_y + event.movementY;
 		}
+	}
+
+	toggleVisibility(): void {
+		this.player.isVisible = !this.player.isVisible;
 	}
 }

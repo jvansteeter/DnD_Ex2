@@ -17,6 +17,7 @@ export class AddTooltipAspectComponent {
 			'account_circle',
 			'account_box',
 			'all_out',
+			'visibility',
 			'bookmark',
 			'book',
 			'check_circle',

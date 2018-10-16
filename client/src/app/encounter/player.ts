@@ -13,6 +13,7 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 	private _ac: number;
 	private _speed: number;
 	private _location: XyPair;
+	private _isVisible: boolean;
 	private _tokenUrl: string;
 	private _token_img: HTMLImageElement;
 	private _actions: { action: string, detail: string }[];
@@ -35,7 +36,8 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 			encounterId: this.encounterId,
 			characterData: this.characterData,
 			initiative: this.initiative,
-			location: this._location
+			location: this._location,
+			isVisible: this._isVisible,
 		}
 	}
 
@@ -76,6 +78,7 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 			this._token_img = new Image();
 			this._token_img.src = this._tokenUrl;
 		}
+		this._isVisible = playerData.isVisible;
 	}
 
 	addAction(action: string, detail: string) {
@@ -164,6 +167,15 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 
 	set actions(value: { action: string; detail: string }[]) {
 		this._actions = value;
+		this.emitChange();
+	}
+
+	get isVisible(): boolean {
+		return this._isVisible;
+	}
+
+	set isVisible(value) {
+		this._isVisible = value;
 		this.emitChange();
 	}
 }

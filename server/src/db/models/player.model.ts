@@ -9,21 +9,25 @@ export class PlayerModel extends MongooseModel implements PlayerData {
 	characterData: CharacterData;
 	initiative: number;
 	location: {x: number, y: number};
+	isVisible: boolean;
 
 	constructor() {
 		super({
 			encounterId: {type: String, required: true},
 			characterData: {type: Object, required: true},
 			initiative: Number,
-			location: {type: Object, default: {x: 0, y: 0}}
+			location: {type: Object, default: {x: 0, y: 0}},
+			isVisible: {type: Boolean, default: false}
 		});
 
 		this._id = this.methods._id;
 		this.characterData = this.methods.characterData;
 		this.initiative = this.methods.initiative;
 		this.location = this.methods.location;
+		this.isVisible = this.methods.isVisible;
 
 		this.methods.setLocation = this.setLocation;
+		this.methods.setVisible = this.setVisible;
 	}
 
 	public setLocation(x: number, y: number): Promise<PlayerModel> {
@@ -31,6 +35,11 @@ export class PlayerModel extends MongooseModel implements PlayerData {
 			x: x,
 			y: y
 		};
+		return this.save();
+	}
+
+	public setVisible(isVisible: boolean): Promise<PlayerModel> {
+		this.isVisible = isVisible;
 		return this.save();
 	}
 }

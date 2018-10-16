@@ -43,7 +43,8 @@ export class BoardCanvasService extends IsReadyService {
         ctx.clearRect(-50, -50, this.boardStateService.mapDimX * BoardStateService.cell_res + 100, this.boardStateService.mapDimY * BoardStateService.cell_res + 100);
     }
 
-    draw_img(ctx: CanvasRenderingContext2D, origin: XyPair, img: HTMLImageElement) {
+    draw_img(ctx: CanvasRenderingContext2D, origin: XyPair, img: HTMLImageElement, opacity: number = 1) {
+    	  ctx.globalAlpha = opacity;
         ctx.drawImage(img, origin.x, origin.y);
     }
 

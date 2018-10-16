@@ -6,4 +6,5 @@ export interface PlayerData {
 	characterData: CharacterData;
 	initiative: number;
 	location: {x: number, y: number};
+	isVisible: boolean;
 }

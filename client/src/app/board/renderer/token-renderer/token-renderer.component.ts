@@ -6,6 +6,7 @@ import { EncounterService } from '../../../encounter/encounter.service';
 import {BoardPlayerService} from "../../services/board-player.service";
 import {BoardTraverseService} from "../../services/board-traverse.service";
 import {GeometryStatics} from "../../statics/geometry-statics";
+import { RightsService } from '../../../data-services/rights.service';
 
 @Component({
     selector: 'token-renderer',
@@ -22,7 +23,8 @@ export class TokenRendererComponent implements OnInit, OnDestroy {
         private boardCanvasService: BoardCanvasService,
         private encounterService: EncounterService,
         private boardPlayerService: BoardPlayerService,
-        private boardTraverseService: BoardTraverseService
+        private boardTraverseService: BoardTraverseService,
+        private rightsService: RightsService,
     ) {}
 
     ngOnInit(): void {
@@ -66,7 +68,16 @@ export class TokenRendererComponent implements OnInit, OnDestroy {
                 }
             }
 
-            this.boardCanvasService.draw_img(this.ctx, new XyPair(player.location.x * BoardStateService.cell_res, player.location.y * BoardStateService.cell_res), player.token_img);
+						let opacity = 1;
+            if (!player.isVisible) {
+            	if (this.rightsService.isEncounterGM()) {
+            		opacity = 0.35;
+	            }
+	            else {
+	            	opacity = 0;
+	            }
+            }
+            this.boardCanvasService.draw_img(this.ctx, new XyPair(player.location.x * BoardStateService.cell_res, player.location.y * BoardStateService.cell_res), player.token_img, opacity);
             if (this.boardStateService.show_health) {
                 this.boardCanvasService.draw_health_basic(this.ctx, player.location, player.hp/player.maxHp);
             }
