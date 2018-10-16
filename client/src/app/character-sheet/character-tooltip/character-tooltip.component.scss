@@ -15,11 +15,14 @@
 	display: flex;
 }
 
-
 .current-max-input {
 	text-align: center;
 	background-color: inherit;
 	border: none;
+	width: 50px;
+}
+
+.current-max-edit {
 	width: 50px;
 }
 

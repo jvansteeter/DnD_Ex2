@@ -22,6 +22,8 @@ export class CharacterTooltipComponent {
 	public tooltipConfig: CharacterSheetTooltipData;
 	public aspectType = AspectType;
 	public hoveredIndex: number;
+	public editingIndex: number = -1;
+	private currentMaxAdd: boolean;
 
 	private _playerId: string;
 
@@ -118,6 +120,25 @@ export class CharacterTooltipComponent {
 		let aspect = this.tooltipConfig.aspects[index];
 		this.tooltipConfig.aspects.splice(index, 1);
 		this.tooltipConfig.aspects.splice(index + 1, 0, aspect);
+	}
+
+	public beginEditCurrentMax(index: number, add: boolean): void {
+		this.editingIndex = index;
+		this.currentMaxAdd = add;
+	}
+
+	public editCurrentMax(aspectLabel: string, value: number): void {
+		const player = this.encounterService.getPlayerById(this._playerId);
+		let aspectValue: number = +player.characterData.values[aspectLabel].current;
+
+		if (this.currentMaxAdd) {
+			aspectValue += value;
+		}
+		else {
+			aspectValue -= value;
+		}
+		this.changeCurrentAspectValue(aspectLabel, aspectValue);
+		this.editingIndex = -1;
 	}
 
 	set playerId(value) {

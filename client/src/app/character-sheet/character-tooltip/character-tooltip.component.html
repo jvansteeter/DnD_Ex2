@@ -18,6 +18,13 @@
 		<ng-container [ngSwitch]="aspect.aspect.aspectType">
 			<ng-container *ngSwitchCase="aspectType.CURRENT_MAX">
 				<span class="current-max-aspect-value" *ngIf="editable || hasRights">
+					<ng-container *ngIf="editingIndex !== i">
+						<button mat-icon-button class="positive-difference" (click)="beginEditCurrentMax(i, true)"><mat-icon>add</mat-icon></button>
+						<button mat-icon-button class="negative-difference" (click)="beginEditCurrentMax(i, false)"><mat-icon>remove</mat-icon></button>
+					</ng-container>
+					<ng-container *ngIf="editingIndex === i">
+						<input (keyup.enter)="editCurrentMax(aspect.aspect.label, +$event.target.value)" class="current-max-edit" autofocus/>
+					</ng-container>
 					<ng-container *ngIf="aspectValue(aspect.aspect.label)">
 						<input class="current-max-input" style="margin-left: auto" type="number"
 						       [value]="aspectValue(aspect.aspect.label).current"
