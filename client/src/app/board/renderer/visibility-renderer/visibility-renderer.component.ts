@@ -4,8 +4,9 @@ import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/co
 import {BoardVisibilityService} from '../../services/board-visibility.service';
 import {ViewMode} from '../../shared/enum/view-mode';
 import {BoardPlayerService} from '../../services/board-player.service';
-import {PlayerVisibilityMode} from "../../shared/enum/player-visibility-mode";
+import {PlayerVisibilityMode} from "../../../../../../shared/types/encounter/board/player-visibility-mode";
 import {isDefined} from "@angular/compiler/src/util";
+import { EncounterService } from '../../../encounter/encounter.service';
 
 @Component({
     selector: 'visibility-renderer',
@@ -21,7 +22,8 @@ export class VisibilityRendererComponent implements OnInit, OnDestroy {
         private boardStateService: BoardStateService,
         private boardCanvasService: BoardCanvasService,
         private boardVisibilityService: BoardVisibilityService,
-        private boardPlayerService: BoardPlayerService
+        private boardPlayerService: BoardPlayerService,
+        private encounterService: EncounterService,
     ) {
     }
 
@@ -43,7 +45,7 @@ export class VisibilityRendererComponent implements OnInit, OnDestroy {
              * View mode - BOARD_MAKER
              ***************************************************************************************************************************************************************************************/
             case ViewMode.BOARD_MAKER:
-                switch (this.boardStateService.playerVisibilityMode) {
+                switch (this.encounterService.config.playerVisibilityMode) {
                     case PlayerVisibilityMode.PLAYER:
                         break;
                     case PlayerVisibilityMode.TEAM:
@@ -58,7 +60,7 @@ export class VisibilityRendererComponent implements OnInit, OnDestroy {
              * View mode - MASTER
              ***************************************************************************************************************************************************************************************/
             case ViewMode.MASTER:
-                switch (this.boardStateService.playerVisibilityMode) {
+                switch (this.encounterService.config.playerVisibilityMode) {
                     case PlayerVisibilityMode.PLAYER:
                         if (this.boardStateService.visibilityHighlightEnabled) {
                             // const hoverPlayerId = this.boardPlayerService.hoveredPlayerId;
@@ -88,7 +90,7 @@ export class VisibilityRendererComponent implements OnInit, OnDestroy {
              * View mode - PLAYER
              ***************************************************************************************************************************************************************************************/
             case ViewMode.PLAYER:
-                switch (this.boardStateService.playerVisibilityMode) {
+                switch (this.encounterService.config.playerVisibilityMode) {
                     case PlayerVisibilityMode.PLAYER:
                         break;
                     case PlayerVisibilityMode.TEAM:

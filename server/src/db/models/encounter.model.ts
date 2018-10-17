@@ -1,11 +1,12 @@
 import * as mongoose from 'mongoose';
 import { Schema } from 'mongoose';
-import { LightValue } from "../../../../client/src/app/board/shared/enum/light-value";
+import { LightValue } from "../../../../shared/types/encounter/board/light-value";
 import { MongooseModel } from './mongoose.model';
 import { EncounterData } from '../../../../shared/types/encounter/encounter.data';
 import { PlayerData } from '../../../../shared/types/encounter/player.data';
 import { LightSourceData } from '../../../../shared/types/encounter/board/light-source.data';
 import { NotationData } from '../../../../shared/types/encounter/board/notation.data';
+import { EncounterConfigData } from '../../../../shared/types/encounter/encounter-config.data';
 
 export class EncounterModel extends MongooseModel implements EncounterData {
 	public _id;
@@ -17,6 +18,7 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 	public players: PlayerData[];
 	public playerIds: string[];
 	public isOpen: boolean;
+	public config: EncounterConfigData;
 
 	cell_res: number;
 	mapDimX: number;
@@ -55,6 +57,7 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 			gameMasters: [String],
 			playerIds: [Schema.Types.ObjectId],
 			isOpen: {type: Boolean, default: false},
+			config: {type: Object, default: {}},
 			mapUrl: String,
 			mapDimX: Number,
 			mapDimY: Number,
@@ -79,6 +82,7 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 		this.players = [];
 		this.playerIds = this.methods.playerIds;
 		this.isOpen = this.methods.isOpen;
+		this.config = this.methods.config;
 		this.mapUrl = this.methods.mapUrl;
 		this.mapDimX = this.methods.mapDimX;
 		this.mapDimY = this.methods.mapDimY;
@@ -96,6 +100,7 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 		this.methods.addNotation = this.addNotation;
 		this.methods.removeNotation = this.removeNotation;
 		this.methods.setWallData = this.setWallData;
+		this.methods.setConfig = this.setConfig;
 	}
 
 	public addGameMaster(userId: string): Promise<EncounterModel> {
@@ -151,6 +156,7 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 
 	public setMapUrl(url: string): Promise<EncounterModel> {
 		this.mapUrl = url;
+		this.config.mapEnabled = true;
 		return this.save();
 	}
 
@@ -174,6 +180,11 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 
 	public setWallData(data: any): Promise<EncounterModel> {
 		this.wallData = data;
+		return this.save();
+	}
+
+	public setConfig(config: EncounterConfigData): Promise<EncounterModel> {
+		this.config = config;
 		return this.save();
 	}
 }

@@ -15,6 +15,7 @@ import { NotationData } from '../../../../shared/types/encounter/board/notation.
 import { Subscription } from 'rxjs';
 import { BoardWallService } from '../board/services/board-wall.service';
 import { CellTarget } from '../board/shared/cell-target';
+import { EncounterConfigData } from '../../../../shared/types/encounter/encounter-config.data';
 
 @Injectable()
 export class EncounterConcurrencyService extends IsReadyService {
@@ -24,6 +25,7 @@ export class EncounterConcurrencyService extends IsReadyService {
 	private ephemeralNotationSubscription: Subscription;
 	private playerSubscriptions: Subscription[] = [];
 	private wallSubscription: Subscription;
+	private configSubscription: Subscription;
 
 	constructor(private encounterService: EncounterService,
 	            private playerService: BoardPlayerService,
@@ -46,6 +48,7 @@ export class EncounterConcurrencyService extends IsReadyService {
 				this.observeLightSourceChanges();
 				this.observeNotationChanges();
 				this.observerWallChanges();
+				this.observeConfigChanges();
 				this.setReady(true);
 			}
 		});
@@ -122,6 +125,16 @@ export class EncounterConcurrencyService extends IsReadyService {
 		});
 	}
 
+	private observeConfigChanges(): void {
+		if (this.configSubscription) {
+			this.configSubscription.unsubscribe();
+		}
+		this.configSubscription = this.encounterService.configChangeObservable.subscribe(() => {
+			this.mqService.publishEncounterCommand(this.encounterService.encounterState._id, this.encounterService.encounterState.version + 1,
+					EncounterCommandType.SETTINGS_CHANGE, this.encounterService.getSerializedConfig());
+		});
+	}
+
 	private doEncounterCommand(message: EncounterCommandMessage): void {
 		switch (message.body.dataType) {
 			case EncounterCommandType.PLAYER_UPDATE: {
@@ -166,6 +179,10 @@ export class EncounterConcurrencyService extends IsReadyService {
 			}
 			case EncounterCommandType.WALL_CHANGE: {
 				this.wallService.wallData = message.body.data as Map<string, CellTarget>;
+				break;
+			}
+			case EncounterCommandType.SETTINGS_CHANGE: {
+				this.encounterService.config = message.body.data as EncounterConfigData;
 				break;
 			}
 			default: {

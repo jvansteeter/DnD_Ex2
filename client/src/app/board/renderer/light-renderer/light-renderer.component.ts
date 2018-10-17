@@ -4,12 +4,12 @@ import {BoardCanvasService} from '../../services/board-canvas.service';
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import {BoardLightService} from '../../services/board-light.service';
 import {BoardPlayerService} from "../../services/board-player.service";
+import { EncounterService } from '../../../encounter/encounter.service';
 
 @Component({
     selector: 'light-renderer',
     templateUrl: 'light-renderer.component.html'
 })
-
 export class LightRendererComponent implements OnInit, OnDestroy {
     @ViewChild('lightRenderCanvasDark') lightRenderCanvasDark: ElementRef;
     @ViewChild('lightRenderCanvasDim') lightRenderCanvasDim: ElementRef;
@@ -22,7 +22,8 @@ export class LightRendererComponent implements OnInit, OnDestroy {
         private boardStateService: BoardStateService,
         private boardPlayerService: BoardPlayerService,
         private boardCanvasService: BoardCanvasService,
-        private boardLightService: BoardLightService
+        private boardLightService: BoardLightService,
+        private encounterService: EncounterService,
     ) {}
 
     ngOnInit() {
@@ -42,7 +43,7 @@ export class LightRendererComponent implements OnInit, OnDestroy {
         this.boardCanvasService.updateTransform(this.ctx_dark);
         this.boardCanvasService.updateTransform(this.ctx_dim);
 
-        if (this.boardStateService.lightEnabled) {
+        if (this.encounterService.config.lightEnabled) {
             switch (this.boardStateService.board_view_mode) {
                 case ViewMode.BOARD_MAKER:
                     this.boardCanvasService.fill_canvas(this.ctx_dim, 'rgba(0, 0, 0, 0.25)');

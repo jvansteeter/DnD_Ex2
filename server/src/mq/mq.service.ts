@@ -76,6 +76,7 @@ export class MqService {
 		try {
 			const version = await this.encounterService.getVersion(command.headers.encounterId);
 			if (command.body.version === version + 1) {
+				const encounterId = command.headers.encounterId;
 				switch (command.body.dataType) {
 					case EncounterCommandType.PLAYER_UPDATE: {
 						this.playerRepository.updatePlayer(command.body.data as PlayerData);
@@ -90,7 +91,7 @@ export class MqService {
 						break;
 					}
 					case EncounterCommandType.LIGHT_SOURCE: {
-						this.encounterService.setLightSources(command.headers.encounterId, command.body.data);
+						this.encounterService.setLightSources(encounterId, command.body.data);
 						break;
 					}
 					case EncounterCommandType.ADD_NOTATION: {
@@ -110,9 +111,13 @@ export class MqService {
 						break;
 					}
 					case EncounterCommandType.WALL_CHANGE: {
-						const encounterId = command.headers.encounterId;
 						const data = command.body.data;
 						this.encounterService.setWallData(encounterId, data);
+						break;
+					}
+					case EncounterCommandType.SETTINGS_CHANGE: {
+						const data = command.body.data;
+						this.encounterService.setEncounterConfig(encounterId, data);
 						break;
 					}
 					default: {

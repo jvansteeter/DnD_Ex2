@@ -7,6 +7,9 @@ import { EncounterState } from './encounter.state';
 import { EncounterData } from '../../../../shared/types/encounter/encounter.data';
 import { CharacterData } from '../../../../shared/types/character.data';
 import { NotationData } from '../../../../shared/types/encounter/board/notation.data';
+import { EncounterConfigData } from '../../../../shared/types/encounter/encounter-config.data';
+import { LightValue } from '../../../../shared/types/encounter/board/light-value';
+import { PlayerVisibilityMode } from '../../../../shared/types/encounter/board/player-visibility-mode';
 
 @Injectable()
 export class EncounterService extends IsReadyService {
@@ -118,5 +121,39 @@ export class EncounterService extends IsReadyService {
 		}
 
 		return undefined;
+	}
+
+	get config(): EncounterConfigData {
+		if (this.encounterState) {
+			return this.encounterState.configState;
+		}
+
+		return {
+			lightEnabled: false,
+			ambientLight: LightValue.FULL,
+			playerVisibilityMode: PlayerVisibilityMode.PLAYER,
+			mapEnabled: false,
+			playerWallsEnabled: true,
+		};
+	}
+
+	set config(value: EncounterConfigData) {
+		if (this.encounterState) {
+			this.encounterState.configState.setEncounterConfigData(value);
+		}
+	}
+
+	get configChangeObservable(): Observable<void> {
+		return this.encounterState.configState.changeObservable;
+	}
+
+	public getSerializedConfig(): EncounterConfigData {
+		return {
+			lightEnabled: this.encounterState.configState.lightEnabled,
+			ambientLight: this.encounterState.configState.ambientLight,
+			playerVisibilityMode: this.encounterState.configState.playerVisibilityMode,
+			mapEnabled: this.encounterState.configState.mapEnabled,
+			playerWallsEnabled: this.encounterState.configState.playerWallsEnabled,
+		}
 	}
 }

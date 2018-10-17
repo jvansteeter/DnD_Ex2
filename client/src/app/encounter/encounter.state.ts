@@ -1,10 +1,12 @@
-import { LightValue } from '../board/shared/enum/light-value';
+import { LightValue } from '../../../../shared/types/encounter/board/light-value';
 import { Player } from './player';
 import { EncounterData } from '../../../../shared/types/encounter/encounter.data';
 import { PlayerData } from '../../../../shared/types/encounter/player.data';
 import { isUndefined } from 'util';
 import { LightSourceData } from '../../../../shared/types/encounter/board/light-source.data';
 import { NotationData } from '../../../../shared/types/encounter/board/notation.data';
+import { EncounterConfigData } from '../../../../shared/types/encounter/encounter-config.data';
+import { EncounterConfigState } from './encounter-config.state';
 
 export class EncounterState implements EncounterData {
 	_id: string;
@@ -23,6 +25,8 @@ export class EncounterState implements EncounterData {
 	playerWallsEnabled: boolean;
 	playerIds: string[];
 	isOpen: boolean;
+	config: EncounterConfigData;
+	configState: EncounterConfigState;
 	_players: PlayerData[];
 	wallData: Object;
 	mapUrl: string;
@@ -34,6 +38,8 @@ export class EncounterState implements EncounterData {
 		for (let items in encounterStateData) {
 			this[items] = encounterStateData[items];
 		}
+		this.configState = new EncounterConfigState();
+		this.configState.setEncounterConfigData(encounterStateData.config);
 	}
 
 	public getAspectValue(playerId: string, aspectLabel: string): any {

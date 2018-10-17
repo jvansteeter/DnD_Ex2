@@ -3,7 +3,7 @@ import { ViewMode } from '../shared/enum/view-mode';
 import { BoardMode } from '../shared/enum/board-mode';
 import { BoardControllerMode } from '../shared/enum/board-controller-mode'
 import { BoardLightService } from '../services/board-light.service';
-import { PlayerVisibilityMode } from "../shared/enum/player-visibility-mode";
+import { PlayerVisibilityMode } from "../../../../../shared/types/encounter/board/player-visibility-mode";
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { NotationMode } from '../shared/enum/notation-mode';

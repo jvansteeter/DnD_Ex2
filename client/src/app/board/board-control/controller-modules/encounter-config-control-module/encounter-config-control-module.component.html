@@ -3,8 +3,8 @@
     <div class="sectionContents">
         <mat-checkbox *ngIf="boardStateService.showGridControls" style="display: block" [(ngModel)]="boardStateService.gridEnabled">Grid Enabled</mat-checkbox>
         <mat-checkbox *ngIf="boardStateService.showHealthBarControls" style="display: block" [(ngModel)]="boardStateService.show_health">Health Bars Enabled</mat-checkbox>
-        <mat-checkbox *ngIf="boardStateService.showShowWallsToPlayerControls" style="display: block" [(ngModel)]="boardStateService.playerWallsEnabled">Show Walls to Player</mat-checkbox>
-        <mat-checkbox *ngIf="boardStateService.showMapEnabledControls" style="display: block" [(ngModel)]="boardStateService.map_enabled" [disabled]="!mapEnabledControlsIsEnabled()">Map Enabled</mat-checkbox>
+        <mat-checkbox *ngIf="boardStateService.showShowWallsToPlayerControls" style="display: block" [(ngModel)]="encounterService.config.playerWallsEnabled">Show Walls to Player</mat-checkbox>
+        <mat-checkbox *ngIf="boardStateService.showMapEnabledControls" style="display: block" [(ngModel)]="encounterService.config.mapEnabled" [disabled]="!mapEnabledControlsIsEnabled()">Map Enabled</mat-checkbox>
 
         <div *ngIf="boardStateService.map_enabled">
             <span class="font">Map Opacity </span>

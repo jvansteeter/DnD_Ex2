@@ -3,12 +3,12 @@ import {BoardStateService} from '../../services/board-state.service';
 import {BoardCanvasService} from '../../services/board-canvas.service';
 import {BoardWallService} from '../../services/board-wall.service';
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { EncounterService } from '../../../encounter/encounter.service';
 
 @Component({
     selector: 'wall-renderer',
     templateUrl: 'wall-renderer.component.html'
 })
-
 export class WallRendererComponent implements OnInit, OnDestroy {
     @ViewChild('wallRenderCanvas') wallRenderCanvas: ElementRef;
     private ctx: CanvasRenderingContext2D;
@@ -17,7 +17,8 @@ export class WallRendererComponent implements OnInit, OnDestroy {
     constructor(
         private wallService: BoardWallService,
         private boardStateService: BoardStateService,
-        private boardCanvasService: BoardCanvasService
+        private boardCanvasService: BoardCanvasService,
+        private encounterService: EncounterService,
     ) {
     }
 
@@ -46,7 +47,7 @@ export class WallRendererComponent implements OnInit, OnDestroy {
 
                 break;
             case ViewMode.PLAYER:
-                if (this.boardStateService.playerWallsEnabled) {
+                if (this.encounterService.config.playerWallsEnabled) {
                     for (const wall of Array.from(this.wallService.walls)) {
                         this.boardCanvasService.draw_wall(this.ctx, wall, 10, 'rgba(25, 25, 25, 1)');
                     }

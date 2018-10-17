@@ -1,7 +1,8 @@
-import { LightValue } from '../../../client/src/app/board/shared/enum/light-value';
+import { LightValue } from './board/light-value';
 import { PlayerData } from './player.data';
 import { LightSourceData } from './board/light-source.data';
 import { NotationData } from './board/notation.data';
+import { EncounterConfigData } from './encounter-config.data';
 
 export interface EncounterData {
 	_id: string;
@@ -13,6 +14,7 @@ export interface EncounterData {
 	playerIds?: string[];
 	players?: PlayerData[];
 	isOpen: boolean;
+	config: EncounterConfigData;
 
 	/**************************************
 	 * GENERAL BOARD VARIABLES

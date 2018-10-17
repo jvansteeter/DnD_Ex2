@@ -57,7 +57,7 @@ export class MapRendererComponent extends IsReadyService implements OnInit, OnDe
         this.boardCanvasService.clear_canvas(this.ctx);
         this.boardCanvasService.updateTransform(this.ctx);
 
-        if (this.boardStateService.map_enabled) {
+        if (this.encounterService.config.mapEnabled) {
             switch (this.boardStateService.board_view_mode) {
                 case ViewMode.BOARD_MAKER:
                     this.boardCanvasService.draw_img(this.ctx, new XyPair(0, 0), this.bgImage, this.boardStateService.board_maker_map_opacity);

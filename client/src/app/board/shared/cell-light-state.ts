@@ -1,4 +1,4 @@
-import {LightValue} from './enum/light-value';
+import {LightValue} from '../../../../../shared/types/encounter/board/light-value';
 import {XyPair} from '../../../../../shared/types/encounter/board/xy-pair';
 
 export class CellLightConfig {

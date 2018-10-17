@@ -1,9 +1,10 @@
-import {Component} from "@angular/core";
-import {BoardStateService} from "../../../services/board-state.service";
-import {PlayerVisibilityMode} from "../../../shared/enum/player-visibility-mode";
-import {LightValue} from "../../../shared/enum/light-value";
-import {BoardLightService} from "../../../services/board-light.service";
-import {ViewMode} from "../../../shared/enum/view-mode";
+import { Component, OnInit } from "@angular/core";
+import { BoardStateService } from "../../../services/board-state.service";
+import { PlayerVisibilityMode } from "../../../../../../../shared/types/encounter/board/player-visibility-mode";
+import { LightValue } from "../../../../../../../shared/types/encounter/board/light-value";
+import { BoardLightService } from "../../../services/board-light.service";
+import { ViewMode } from "../../../shared/enum/view-mode";
+import { EncounterService } from '../../../../encounter/encounter.service';
 
 @Component({
     selector: 'light-visibility-module',
@@ -11,37 +12,42 @@ import {ViewMode} from "../../../shared/enum/view-mode";
     styleUrls: ['light-visibility-control-module.component.scss']
 })
 
-export class LightVisibilityControlModuleComponent {
+export class LightVisibilityControlModuleComponent implements OnInit {
     currentVisibility: string;
-    visibilityModes: string[] = [
-        'Global',
-        'Team',
-        'Player'
+    visibilityModes: PlayerVisibilityMode[] = [
+        PlayerVisibilityMode.GLOBAL,
+		    PlayerVisibilityMode.TEAM,
+		    PlayerVisibilityMode.PLAYER,
     ];
 
     constructor(
         private boardStateService: BoardStateService,
         private boardLightService: BoardLightService,
+        public encounterService: EncounterService,
     ) {
+    }
+
+    public ngOnInit(): void {
+    	this.currentVisibility = this.encounterService.config.playerVisibilityMode;
     }
 
     onVisibilityChange() {
         switch (this.currentVisibility) {
             case 'Global':
-                this.boardStateService.playerVisibilityMode = PlayerVisibilityMode.GLOBAL;
+                this.encounterService.config.playerVisibilityMode = PlayerVisibilityMode.GLOBAL;
                 break;
             case 'Team':
-                this.boardStateService.playerVisibilityMode = PlayerVisibilityMode.TEAM;
+                this.encounterService.config.playerVisibilityMode = PlayerVisibilityMode.TEAM;
                 break;
             case 'Player':
-                this.boardStateService.playerVisibilityMode = PlayerVisibilityMode.PLAYER;
+                this.encounterService.config.playerVisibilityMode = PlayerVisibilityMode.PLAYER;
                 break;
         }
         this.sync()
     }
 
     sync() {
-        switch (this.boardStateService.playerVisibilityMode) {
+        switch (this.encounterService.config.playerVisibilityMode) {
             case PlayerVisibilityMode.GLOBAL:
                 this.currentVisibility = 'Global';
                 break;
@@ -59,25 +65,25 @@ export class LightVisibilityControlModuleComponent {
     }
 
     increaseAmbientLight(): void {
-        if (this.boardStateService.ambientLight === LightValue.DARK) {
-            this.boardStateService.ambientLight = LightValue.DIM;
-        } else if (this.boardStateService.ambientLight === LightValue.DIM) {
-            this.boardStateService.ambientLight = LightValue.FULL;
+        if (this.encounterService.config.ambientLight === LightValue.DARK) {
+            this.encounterService.config.ambientLight = LightValue.DIM;
+        } else if (this.encounterService.config.ambientLight === LightValue.DIM) {
+            this.encounterService.config.ambientLight = LightValue.FULL;
         }
         this.boardLightService.updateAllLightValues();
     }
 
     decreaseAmbientLight(): void {
-        if (this.boardStateService.ambientLight === LightValue.FULL) {
-            this.boardStateService.ambientLight = LightValue.DIM;
-        } else if (this.boardStateService.ambientLight === LightValue.DIM) {
-            this.boardStateService.ambientLight = LightValue.DARK;
+        if (this.encounterService.config.ambientLight === LightValue.FULL) {
+            this.encounterService.config.ambientLight = LightValue.DIM;
+        } else if (this.encounterService.config.ambientLight === LightValue.DIM) {
+            this.encounterService.config.ambientLight = LightValue.DARK;
         }
         this.boardLightService.updateAllLightValues();
     }
 
     getLightValue(): string {
-        switch (this.boardStateService.ambientLight) {
+        switch (this.encounterService.config.ambientLight) {
             case LightValue.DARK:
                 return 'Dark';
             case LightValue.DIM:

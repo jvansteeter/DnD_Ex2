@@ -12,6 +12,9 @@ import { LightSourceData } from '../../../shared/types/encounter/board/light-sou
 import { NotationData } from '../../../shared/types/encounter/board/notation.data';
 import { NotationRepository } from '../db/repositories/notation.repository';
 import { NotationModel } from '../db/models/notation.model';
+import { EncounterConfigData } from '../../../shared/types/encounter/encounter-config.data';
+import { LightValue } from '../../../shared/types/encounter/board/light-value';
+import { PlayerVisibilityMode } from '../../../shared/types/encounter/board/player-visibility-mode';
 
 export class EncounterService {
 	private encounterRepo: EncounterRepository;
@@ -32,6 +35,13 @@ export class EncounterService {
 		try {
 			let encounterModel: EncounterModel = await this.encounterRepo.create(label, campaignId, mapDimX, mapDimY);
 			await encounterModel.addGameMaster(hostId);
+			encounterModel = await this.setEncounterConfig(encounterModel._id, {
+				lightEnabled: false,
+				ambientLight: LightValue.FULL,
+				playerVisibilityMode: PlayerVisibilityMode.PLAYER,
+				mapEnabled: false,
+				playerWallsEnabled: true,
+			});
 			if (mapUrl) {
 				encounterModel = await encounterModel.setMapUrl(mapUrl);
 			}
@@ -223,6 +233,16 @@ export class EncounterService {
 		try {
 			const encounter: EncounterModel = await this.encounterRepo.findById(encounterId);
 			return await encounter.setWallData(wallData);
+		}
+		catch (error) {
+			throw error;
+		}
+	}
+
+	public async setEncounterConfig(encounterId: string, encounterConfig: EncounterConfigData): Promise<EncounterModel> {
+		try {
+			const encounter: EncounterModel = await this.encounterRepo.findById(encounterId);
+			return encounter.setConfig(encounterConfig);
 		}
 		catch (error) {
 			throw error;

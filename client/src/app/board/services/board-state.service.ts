@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
 import {ViewMode} from '../shared/enum/view-mode';
 import {BoardMode} from '../shared/enum/board-mode';
-import {LightValue} from '../shared/enum/light-value';
+import {LightValue} from '../../../../../shared/types/encounter/board/light-value';
 import {CellTarget} from "../shared/cell-target";
 import {XyPair} from "../../../../../shared/types/encounter/board/xy-pair";
-import {PlayerVisibilityMode} from '../shared/enum/player-visibility-mode';
+import {PlayerVisibilityMode} from '../../../../../shared/types/encounter/board/player-visibility-mode';
 import {EncounterService} from '../../encounter/encounter.service';
 import {IsReadyService} from "../../utilities/services/isReady.service";
 import {Line} from "../geometry/line";
@@ -23,15 +23,6 @@ export class BoardStateService extends IsReadyService {
 
     static cell_res = 50;
 
-
-    /*************************************************************************************************************************************
-     * SHARED - Config Variables
-     *************************************************************************************************************************************/
-    public map_enabled = false;
-    public playerWallsEnabled = false;
-    public lightEnabled = false;
-    public ambientLight = LightValue.DARK;
-    public playerVisibilityMode = PlayerVisibilityMode.GLOBAL;
 
     /*************************************************************************************************************************************
      * LOCAL - Controller Config Variables
