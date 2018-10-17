@@ -35,48 +35,111 @@ export class BoardTraverseService extends IsReadyService {
     public initTraverseWeights(): void {
         this.traverseWeights = new Array(this.numNodes);
 
+        // for each cell on the map ...
         for (let i = 0; i < this.numNodes; i++) {
-            this.traverseWeights[i] = new Array(this.numNodes);
+            // ... create an array of 8 weights to represent the weight to each adj cell ...
+            this.traverseWeights[i] = new Array(8);
 
-            const adjIndexes = this.getAdjIndices(i);
-            for (let index of adjIndexes.adj) {
-                if (this.canMoveIndexToIndex(i, index)) {
-                    this.traverseWeights[i][index] = 1;
-                } else {
-                    this.traverseWeights[i][index] = Infinity;
-                }
-            }
-            for (let index of adjIndexes.diag) {
-                if (this.canMoveIndexToIndex(i, index)) {
-                    this.traverseWeights[i][index] = 1.5;
-                } else {
-                    this.traverseWeights[i][index] = Infinity;
-                }
-            }
+            this.traverseWeights[0] = this.getTraverseWeightN(i);
+            this.traverseWeights[1] = this.getTraverseWeightE(i);
+            this.traverseWeights[2] = this.getTraverseWeightS(i);
+            this.traverseWeights[3] = this.getTraverseWeightW(i);
+            this.traverseWeights[4] = this.getTraverseWeightNW(i);
+            this.traverseWeights[5] = this.getTraverseWeightNE(i);
+            this.traverseWeights[6] = this.getTraverseWeightSE(i);
+            this.traverseWeights[7] = this.getTraverseWeightSW(i);
         }
     }
 
-    private syncTraverseWeights(cellIndex: number) {
-        const adjIndexes = this.getAdjIndices(cellIndex);
+    private getTraverseWeightN(index: number): number {
+        const onTop = index - this.boardStateService.mapDimX < 0;
+        if (!onTop && this.canMoveN(GeometryStatics.indexToXY(index, this.boardStateService.mapDimX))) {
+            return 1;
+        } else {
+            return Infinity;
+        }
+    }
 
-        for (let adjIndex of adjIndexes.adj) {
-            if (this.canMoveIndexToIndex(cellIndex, adjIndex)) {
-                this.traverseWeights[cellIndex][adjIndex] = 1;
-                this.traverseWeights[adjIndex][cellIndex] = 1;
-            } else {
-                this.traverseWeights[cellIndex][adjIndex] = Infinity;
-                this.traverseWeights[adjIndex][cellIndex] = Infinity;
-            }
+    private getTraverseWeightE(index: number): number {
+        const onRight = (index % this.boardStateService.mapDimX) === (this.boardStateService.mapDimX - 1);
+        if (!onRight && this.canMoveE(GeometryStatics.indexToXY(index, this.boardStateService.mapDimX))) {
+            return 1;
+        } else {
+            return Infinity;
         }
-        for (let adjIndex of adjIndexes.diag) {
-            if (this.canMoveIndexToIndex(cellIndex, adjIndex)) {
-                this.traverseWeights[cellIndex][adjIndex] = 1.5;
-                this.traverseWeights[adjIndex][cellIndex] = 1.5;
-            } else {
-                this.traverseWeights[cellIndex][adjIndex] = Infinity;
-                this.traverseWeights[adjIndex][cellIndex] = Infinity;
-            }
+    }
+
+    private getTraverseWeightS(index: number): number {
+        const onBottom = index + this.boardStateService.mapDimX >= this.boardStateService.mapDimX * this.boardStateService.mapDimY;
+        if (!onBottom && this.canMoveS(GeometryStatics.indexToXY(index, this.boardStateService.mapDimX))) {
+            return 1;
+        } else {
+            return Infinity;
         }
+    }
+
+    private getTraverseWeightW(index: number): number {
+        const onLeft = (index % this.boardStateService.mapDimX) === 0;
+        if (!onLeft && this.canMoveS(GeometryStatics.indexToXY(index, this.boardStateService.mapDimX))) {
+            return 1;
+        } else {
+            return Infinity;
+        }
+    }
+
+    private getTraverseWeightNW(index: number): number {
+        const onTop = index - this.boardStateService.mapDimX < 0;
+        const onLeft = (index % this.boardStateService.mapDimX) === 0;
+        if (!onTop && !onLeft && this.canMoveNW(GeometryStatics.indexToXY(index, this.boardStateService.mapDimX))) {
+            return 1.5;
+        } else {
+            return Infinity;
+        }
+    }
+
+    private getTraverseWeightNE(index: number): number {
+        const onTop = index - this.boardStateService.mapDimX < 0;
+        const onRight = (index % this.boardStateService.mapDimX) === (this.boardStateService.mapDimX - 1);
+        if (!onTop && !onRight && this.canMoveNE(GeometryStatics.indexToXY(index, this.boardStateService.mapDimX))) {
+            return 1.5;
+        } else {
+            return Infinity;
+        }
+    }
+
+    private getTraverseWeightSE(index: number): number {
+        const onBottom = index + this.boardStateService.mapDimX >= this.boardStateService.mapDimX * this.boardStateService.mapDimY;
+        const onRight = (index % this.boardStateService.mapDimX) === (this.boardStateService.mapDimX - 1);
+        if (!onBottom && !onRight && this.canMoveSE(GeometryStatics.indexToXY(index, this.boardStateService.mapDimX))) {
+            return 1.5;
+        } else {
+            return Infinity;
+        }
+    }
+
+    private getTraverseWeightSW(index: number): number {
+        const onBottom = index + this.boardStateService.mapDimX >= this.boardStateService.mapDimX * this.boardStateService.mapDimY;
+        const onLeft = (index % this.boardStateService.mapDimX) === 0;
+        if (!onBottom && !onLeft && this.canMoveSW(GeometryStatics.indexToXY(index, this.boardStateService.mapDimX))) {
+            return 1.5;
+        } else {
+            return Infinity;
+        }
+    }
+
+
+    private syncTraverseWeights(cellIndex: number) {
+        // ... create an array of 8 weights to represent the weight to each adj cell ...
+        this.traverseWeights[cellIndex] = new Array(8);
+
+        this.traverseWeights[0] = this.getTraverseWeightN(cellIndex);
+        this.traverseWeights[1] = this.getTraverseWeightE(cellIndex);
+        this.traverseWeights[2] = this.getTraverseWeightS(cellIndex);
+        this.traverseWeights[3] = this.getTraverseWeightW(cellIndex);
+        this.traverseWeights[4] = this.getTraverseWeightNW(cellIndex);
+        this.traverseWeights[5] = this.getTraverseWeightNE(cellIndex);
+        this.traverseWeights[6] = this.getTraverseWeightSE(cellIndex);
+        this.traverseWeights[7] = this.getTraverseWeightSW(cellIndex);
     }
 
     private getAdjIndices(index: number): { adj: Array<number>, diag: Array<number> } {
@@ -238,7 +301,7 @@ export class BoardTraverseService extends IsReadyService {
             Q.splice(Q.indexOf(u), 1);
 
             const adjIndexes = this.getAdjIndices(u);
-            for (const v of [...adjIndexes.diag, ...adjIndexes.adj]) {
+            for (const v of [0, 1, 2, 3, 4, 5, 6, 7]) {
                 const alt = distTo[u] + this.traverseWeights[u][v];
                 if (alt < distTo[v]) {
                     distTo[v] = alt;
