@@ -9,11 +9,13 @@ import {Polygon} from "../../../../../shared/types/encounter/board/polygon";
 import {Line} from "../geometry/line";
 import {Ray} from "../geometry/ray";
 import {BoardCanvasService} from "./board-canvas.service";
+import {BitArray} from "../shared/bit-array";
+import {GeometryStatics} from "../statics/geometry-statics";
 
 @Injectable()
 export class BoardVisibilityService extends IsReadyService {
     public blockingSegments: Set<string>;       // Set<CellTarget.hash()>
-    private blockingBitmap = [];
+    private blockingBitmap: BitArray;
 
     constructor(
         public boardStateService: BoardStateService,
@@ -27,20 +29,14 @@ export class BoardVisibilityService extends IsReadyService {
         this.dependenciesReady().subscribe((isReady: boolean) => {
             if (isReady) {
                 this.blockingSegments = new Set();
-                this.blockingBitmap = [];
+                this.blockingBitmap = new BitArray(this.boardStateService.mapDimX * this.boardStateService.mapDimY * (BoardStateService.cell_res * BoardStateService.cell_res));
 
-                for (let x = 0; x < this.boardStateService.mapDimX * BoardStateService.cell_res; x++) {
-                    this.blockingBitmap[x] = [];
-                    for (let y = 0; y < this.boardStateService.mapDimY * BoardStateService.cell_res; y++) {
-                        this.blockingBitmap[x][y] = 0;
-                    }
-                }
                 this.setReady(true);
             }
         })
     }
 
-    public iKnowWhatImDoingGetTheBlockingBitMap(): any[] {
+    public iKnowWhatImDoingGetTheBlockingBitMap(): BitArray {
         return this.blockingBitmap;
     }
 
@@ -115,7 +111,7 @@ export class BoardVisibilityService extends IsReadyService {
     public blockNorth(cell: XyPair) {
         this.blockingSegments.add((new CellTarget(cell, CellRegion.TOP_EDGE)).hash());
         for (const point of Array.from(this.northSet(cell).values())) {
-            this.blockingBitmap[point.x][point.y] = 1;
+            this.blockingBitmap.set(GeometryStatics.xyToIndex(point.x, point.y, this.boardStateService.mapDimX * BoardStateService.cell_res));
         }
     }
 
@@ -183,14 +179,14 @@ export class BoardVisibilityService extends IsReadyService {
         }
 
         for (const point of Array.from(unsetPoints.values())) {
-            this.blockingBitmap[point.x][point.y] = 0;
+            this.blockingBitmap.unset(GeometryStatics.xyToIndex(point.x, point.y, this.boardStateService.mapDimX * BoardStateService.cell_res));
         }
     }
 
     public blockWest(cell: XyPair) {
         this.blockingSegments.add((new CellTarget(cell, CellRegion.LEFT_EDGE)).hash());
         for (const point of Array.from(this.westSet(cell).values())) {
-            this.blockingBitmap[point.x][point.y] = 1;
+            this.blockingBitmap.set(GeometryStatics.xyToIndex(point.x, point.y, this.boardStateService.mapDimX * BoardStateService.cell_res));
         }
     }
 
@@ -245,14 +241,14 @@ export class BoardVisibilityService extends IsReadyService {
         }
 
         for (const point of Array.from(unsetPoints.values())) {
-            this.blockingBitmap[point.x][point.y] = 0;
+            this.blockingBitmap.unset(GeometryStatics.xyToIndex(point.x, point.y, this.boardStateService.mapDimX * BoardStateService.cell_res));
         }
     }
 
     public blockFwd(cell: XyPair) {
         this.blockingSegments.add((new CellTarget(cell, CellRegion.FWRD_EDGE)).hash());
         for (const point of Array.from(this.fwdSet(cell).values())) {
-            this.blockingBitmap[point.x][point.y] = 1;
+            this.blockingBitmap.set(GeometryStatics.xyToIndex(point.x, point.y, this.boardStateService.mapDimX * BoardStateService.cell_res));
         }
     }
 
@@ -318,7 +314,7 @@ export class BoardVisibilityService extends IsReadyService {
         }
 
         for (const point of Array.from(unsetPoints.values())) {
-            this.blockingBitmap[point.x][point.y] = 0;
+            this.blockingBitmap.unset(GeometryStatics.xyToIndex(point.x, point.y, this.boardStateService.mapDimX * BoardStateService.cell_res));
         }
 
     }
@@ -326,7 +322,7 @@ export class BoardVisibilityService extends IsReadyService {
     public blockBkw(cell: XyPair) {
         this.blockingSegments.add((new CellTarget(cell, CellRegion.BKWD_EDGE)).hash());
         for (const point of Array.from(this.bkwSet(cell).values())) {
-            this.blockingBitmap[point.x][point.y] = 1;
+            this.blockingBitmap.set(GeometryStatics.xyToIndex(point.x, point.y, this.boardStateService.mapDimX * BoardStateService.cell_res));
         }
     }
 
@@ -393,7 +389,7 @@ export class BoardVisibilityService extends IsReadyService {
         }
 
         for (const point of Array.from(unsetPoints.values())) {
-            this.blockingBitmap[point.x][point.y] = 0;
+            this.blockingBitmap.unset(GeometryStatics.xyToIndex(point.x, point.y, this.boardStateService.mapDimX * BoardStateService.cell_res));
         }
     }
 
@@ -501,7 +497,7 @@ export class BoardVisibilityService extends IsReadyService {
     public rayCast(origin: XyPair, target: XyPair): boolean {
         const points = BoardVisibilityService.BresenhamLine(origin.x, origin.y, target.x, target.y);
         for (const point of points) {
-            if (this.blockingBitmap[point.x][point.y] === 1) {
+            if (this.blockingBitmap.get(GeometryStatics.xyToIndex(point.x, point.y, this.boardStateService.mapDimX * BoardStateService.cell_res))) {
                 return false;
             }
         }
@@ -512,11 +508,11 @@ export class BoardVisibilityService extends IsReadyService {
         const points = BoardVisibilityService.BresenhamLine(origin.x, origin.y, target.x, target.y);
         for (const point of points) {
             if (!isNullOrUndefined(additionalBlockingPoints)) {
-                if (this.blockingBitmap[point.x][point.y] === 1 || additionalBlockingPoints[point.x][point.y] === 1) {
+                if (this.blockingBitmap.get(GeometryStatics.xyToIndex(point.x, point.y, this.boardStateService.mapDimX * BoardStateService.cell_res)) || additionalBlockingPoints[point.x][point.y] === 1) {
                     return point;
                 }
             } else {
-                if (this.blockingBitmap[point.x][point.y] === 1) {
+                if (this.blockingBitmap.get(GeometryStatics.xyToIndex(point.x, point.y, this.boardStateService.mapDimX * BoardStateService.cell_res))) {
                     return point;
                 }
             }

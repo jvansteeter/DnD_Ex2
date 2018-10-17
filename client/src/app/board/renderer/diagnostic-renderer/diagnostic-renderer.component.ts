@@ -3,6 +3,7 @@ import {BoardCanvasService} from '../../services/board-canvas.service';
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import {BoardVisibilityService} from "../../services/board-visibility.service";
 import {XyPair} from "../../../../../../shared/types/encounter/board/xy-pair";
+import {GeometryStatics} from "../../statics/geometry-statics";
 
 @Component({
     selector: 'diagnostic-renderer',
@@ -39,13 +40,10 @@ export class DiagnosticRendererComponent implements OnInit, OnDestroy {
 
             this.boardCanvasService.fill_canvas(this.ctx, 'rgba(0, 0, 0, ' + this.boardStateService.diag_layer_opacity / 100 + ')');
 
-            let x;
-            for (x = 0; x < localBitmap.length; x++) {
-                let y;
-                for (y = 0; y < localBitmap[x].length; y++) {
-                    if (localBitmap[x][y] === 1) {
-                        this.boardCanvasService.draw_pixel(this.ctx, new XyPair(x, y), 'rgba(255, 255, 255, ' + this.boardStateService.diag_layer_opacity / 100 + ')');
-                    }
+            for (let i = 0; i < localBitmap.numBits; i++) {
+                // for each pixel, if the pixel is set [i.e. gets equal to 1]
+                if (localBitmap.get(i)) {
+                    this.boardCanvasService.draw_pixel(this.ctx, GeometryStatics.indexToXY(i, this.boardStateService.mapDimX * BoardStateService.cell_res), 'rgba(255, 255, 255, ' + this.boardStateService.diag_layer_opacity / 100 + ')');
                 }
             }
         }
