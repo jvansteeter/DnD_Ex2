@@ -165,7 +165,7 @@ export class BoardPlayerService extends IsReadyService {
         this.selectedPlayerId = player._id;
     }
 
-    public handleClick(loc_cell: XyPair) {
+    public playerService_handleClick(loc_cell: XyPair) {
         if (this.boardStateService.ctrlDown) {
             // player visibility toggle mode
             for (const player of this.encounterService.players) {

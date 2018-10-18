@@ -1,7 +1,7 @@
 <div style="position: absolute; z-index: 5;">
 
     <ng-container *ngFor="let player of getSortedPlayers()">
-        <div style="height:40px; width: 40px; margin-top: 13px; margin-left: 8px;" (contextmenu)="handleContextMenu($event)"
+        <div style="height:40px; width: 40px; margin-top: 13px; margin-left: 8px;" (contextmenu)="boardMap_handleContextMenu($event)"
              *ngIf="rightsService.isEncounterGM() || rightsService.isMyPlayer(player) || player.isVisible">
             <div style="height: 40px; width: 40px; border: 3px solid #383838; background: #d8d8d8; border-radius: 50%; position: absolute">
                 <img src="{{player.tokenUrl}}" style="height: 100%; border-radius: 25px;">
@@ -9,12 +9,12 @@
             </div>
             <div
                     style="height:40px; width: 40px; border: 3px solid #383838; border-radius: 50%; position: absolute; cursor: pointer"
-                    (mouseup)="handleInitIconMouseUp($event, player)"
-                    (mouseover)="mouseOverInitIcon(player)"
+                    (mouseup)="boardMap_handleInitIconMouseUp($event, player)"
+                    (mouseover)="boardMap_mouseOverInitIcon(player)"
                     matTooltip="{{player.name}}"
                     matTooltipPosition="after">
             </div>
-            <div (mouseup)="handleInitBadgeMouseUp($event, player)"
+            <div (mouseup)="boardMap_handleInitBadgeMouseUp($event, player)"
                  class="font initiativeBadge">
                 {{player.initiative}}
             </div>
@@ -40,15 +40,15 @@
             class="inputCanvas"
             [ngClass]="getCursorClass()"
             height={{boardCanvasService.cvs_height}} width={{boardCanvasService.cvs_width}}
-            (mouseleave)="handleMouseLeave($event)"
-            (mouseenter)="handleMouseEnter($event)"
+            (mouseleave)="boardMap_handleMouseLeave($event)"
+            (mouseenter)="boardMap_handleMouseEnter($event)"
             mouseWheel
-            (mouseWheelUp)="handleMouseWheel($event)"
-            (mouseWheelDown)="handleMouseWheel($event)"
-            (mousemove)="mouseMove($event)"
-            (mousedown)="handleMouseDown($event)"
-            (mouseup)="handleMouseUp($event)"
-            (contextmenu)="handleContextMenu($event)"
+            (mouseWheelUp)="boardMap_handleMouseWheel($event)"
+            (mouseWheelDown)="boardMap_handleMouseWheel($event)"
+            (mousemove)="boardMap_mouseMove($event)"
+            (mousedown)="boardMap_handleMouseDown($event)"
+            (mouseup)="boardMap_handleMouseUp($event)"
+            (contextmenu)="boardMap_handleContextMenu($event)"
             (click)="clickResponse()">
     </canvas>
 </div>

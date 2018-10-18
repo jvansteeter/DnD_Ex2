@@ -81,7 +81,7 @@ export class BoardMapComponent implements OnInit, AfterViewInit {
     clickResponse(): void {
     }
 
-    mouseMove(event): void {
+    boardMap_mouseMove(event): void {
         const mouse_screen = new XyPair(event.clientX, event.clientY);
 
         if (this.boardStateService.isEditingNotation || this.boardStateService.board_controller_mode === BoardControllerMode.EPHEM_NOTATION) {
@@ -99,16 +99,16 @@ export class BoardMapComponent implements OnInit, AfterViewInit {
             this.boardStateService.y_offset -= (deltaY * this.boardStateService.scale);
         }
 
-        this.updateMouseLocation(mouse_screen);
+        this.boardMap_updateMouseLocation(mouse_screen);
 
         this.boardPlayerService.syncPlayerHover(this.boardStateService.mouse_loc_cell);
     }
 
-    handleMouseUp(event) {
+    boardMap_handleMouseUp(event) {
         switch (event.which) {
             case 1:
                 // left click
-                this.doMouseLeftUp(event);
+                this.boardMap_doMouseLeftUp(event);
                 break;
             case 2:
                 // middle click
@@ -121,7 +121,7 @@ export class BoardMapComponent implements OnInit, AfterViewInit {
         }
     }
 
-    handleMouseDown(event) {
+    boardMap_handleMouseDown(event) {
         switch (event.which) {
             case 1:
                 // left click
@@ -140,7 +140,7 @@ export class BoardMapComponent implements OnInit, AfterViewInit {
         }
     }
 
-    handleMouseWheel(event) {
+    boardMap_handleMouseWheel(event) {
         const scroll_scale_delta = 0.10;
         const max_scale = this.boardStateService.maxZoom;
         const min_scale = this.boardStateService.minZoom;
@@ -168,15 +168,15 @@ export class BoardMapComponent implements OnInit, AfterViewInit {
         this.boardStateService.y_offset += y_delta;
     }
 
-    handleMouseLeave(event) {
-        this.clearMouseLocation();
+    boardMap_handleMouseLeave(event) {
+        this.boardMap_clearMouseLocation();
         this.boardStateService.mouseLeftDown = false;
     }
 
-    handleMouseEnter(event) {
+    boardMap_handleMouseEnter(event) {
     }
 
-    handleContextMenu(event) {
+    boardMap_handleContextMenu(event) {
         return false;
     }
 
@@ -189,13 +189,13 @@ export class BoardMapComponent implements OnInit, AfterViewInit {
     }
 
     @HostListener('document:keydown', ['$event'])
-    handleKeyDownEvent(event: KeyboardEvent) {
+    boardMap_handleKeyDownEvent(event: KeyboardEvent) {
         const key_code = event.code;
         switch (key_code) {
             case 'ShiftLeft' :
                 this.boardStateService.shiftDown = true;
                 this.boardStateService.board_controller_mode = BoardControllerMode.EPHEM_NOTATION;
-                this.refreshMouseLocation();
+                this.boardMap_refreshMouseLocation();
                 break;
             case 'ShiftRight' :
                 break;
@@ -209,13 +209,13 @@ export class BoardMapComponent implements OnInit, AfterViewInit {
     }
 
     @HostListener('document:keyup', ['$event'])
-    handleKeyUpEvent(event: KeyboardEvent) {
+    boardMap_handleKeyUpEvent(event: KeyboardEvent) {
         const key_code = event.code;
         switch (key_code) {
             case 'ShiftLeft' :
                 this.boardStateService.shiftDown = false;
                 this.boardStateService.board_controller_mode = BoardControllerMode.DEFAULT;
-                this.refreshMouseLocation();
+                this.boardMap_refreshMouseLocation();
                 break;
             case 'ShiftRight' :
                 break;
@@ -231,7 +231,7 @@ export class BoardMapComponent implements OnInit, AfterViewInit {
         }
     }
 
-    updateMouseLocation(location: XyPair): void {
+    boardMap_updateMouseLocation(location: XyPair): void {
         // UPDATE GLOBAL MOUSE LOCATIONS
         this.boardStateService.mouse_loc_screen = location;
         this.boardStateService.mouse_loc_canvas = this.boardTransformService.screen_to_canvas(this.boardStateService.mouse_loc_screen);
@@ -243,7 +243,7 @@ export class BoardMapComponent implements OnInit, AfterViewInit {
         this.boardStateService.mouseOnMap = this.boardStateService.coorInBounds(this.boardStateService.mouse_loc_cell.x, this.boardStateService.mouse_loc_cell.y);
     }
 
-    refreshMouseLocation(): void {
+    boardMap_refreshMouseLocation(): void {
         this.boardStateService.mouse_loc_canvas = this.boardTransformService.screen_to_canvas(this.boardStateService.mouse_loc_screen);
         this.boardStateService.mouse_loc_map = this.boardTransformService.screen_to_map(this.boardStateService.mouse_loc_screen);
         this.boardStateService.mouse_loc_cell = this.boardTransformService.screen_to_cell(this.boardStateService.mouse_loc_screen);
@@ -253,7 +253,7 @@ export class BoardMapComponent implements OnInit, AfterViewInit {
         this.boardStateService.mouseOnMap = this.boardStateService.coorInBounds(this.boardStateService.mouse_loc_cell.x, this.boardStateService.mouse_loc_cell.y);
     }
 
-    clearMouseLocation(): void {
+    boardMap_clearMouseLocation(): void {
         this.boardStateService.mouse_loc_canvas = null;
         this.boardStateService.mouse_loc_map = null;
         this.boardStateService.mouse_loc_cell = null;
@@ -314,7 +314,7 @@ export class BoardMapComponent implements OnInit, AfterViewInit {
         }
     }
 
-    private doMouseLeftUp(event) {
+    private boardMap_doMouseLeftUp(event) {
         if (this.boardStateService.isEditingNotation) {
             this.boardStateService.mouseLeftDown = false;
             this.boardStateService.mouseDrag = false;
@@ -326,21 +326,21 @@ export class BoardMapComponent implements OnInit, AfterViewInit {
                 case ViewMode.MASTER:
                     switch (this.boardStateService.board_edit_mode) {
                         case BoardMode.PLAYER:
-                            this.boardPlayerService.handleClick(this.boardStateService.mouse_loc_cell);
+                            this.boardPlayerService.playerService_handleClick(this.boardStateService.mouse_loc_cell);
                             break;
                     }
                     break;
                 case ViewMode.PLAYER:
                     switch (this.boardStateService.board_edit_mode) {
                         case BoardMode.PLAYER:
-                            this.boardPlayerService.handleClick(this.boardStateService.mouse_loc_cell);
+                            this.boardPlayerService.playerService_handleClick(this.boardStateService.mouse_loc_cell);
                             break;
                     }
                     break;
                 case ViewMode.BOARD_MAKER:
                     switch (this.boardStateService.board_edit_mode) {
                         case BoardMode.PLAYER:
-                            this.boardPlayerService.handleClick(this.boardStateService.mouse_loc_cell);
+                            this.boardPlayerService.playerService_handleClick(this.boardStateService.mouse_loc_cell);
                             break;
                         case BoardMode.WALLS:
                             if (!isNullOrUndefined(this.boardStateService.mouse_cell_target)) {
@@ -443,10 +443,10 @@ export class BoardMapComponent implements OnInit, AfterViewInit {
         return 0;
     }
 
-    handleInitBadgeMouseUp(event: MouseEvent, player: Player) {
+    boardMap_handleInitBadgeMouseUp(event: MouseEvent, player: Player) {
         switch(event.which) {
             case 1:
-                this.handleInitDialog(player);
+                this.boardMap_handleInitDialog(player);
                 break;
             case 2:
                 break;
@@ -456,7 +456,7 @@ export class BoardMapComponent implements OnInit, AfterViewInit {
     }
 
 
-    handleInitIconMouseUp(event: MouseEvent, player: Player) {
+    boardMap_handleInitIconMouseUp(event: MouseEvent, player: Player) {
         switch(event.which) {
             case 1:
                 if (this.boardStateService.ctrlDown) {
@@ -472,12 +472,12 @@ export class BoardMapComponent implements OnInit, AfterViewInit {
         }
     }
 
-    handleInitDialog(player: Player) {
+    boardMap_handleInitDialog(player: Player) {
         this.boardPlayerService.playerToSyncInit = player;
         this.dialog.open(TempPlayerInitDialogComponent);
     }
 
-    mouseOverInitIcon(player: Player): void {
+    boardMap_mouseOverInitIcon(player: Player): void {
         this.boardPlayerService.hoveredPlayerId = player._id;
     }
 }

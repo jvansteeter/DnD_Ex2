@@ -72,7 +72,7 @@ export class BoardVisibilityService extends IsReadyService {
         const poly = new Polygon();
         let additionalBlockingPointsArray;
 
-        if (!isNullOrUndefined(additionalBlockingPoints)) {
+        if (additionalBlockingPoints.length > 0) {
             additionalBlockingPointsArray = [];
             for (let x = 0; x < this.boardStateService.mapDimX * BoardStateService.cell_res; x++) {
                 additionalBlockingPointsArray[x] = [];

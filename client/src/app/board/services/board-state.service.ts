@@ -40,7 +40,7 @@ export class BoardStateService extends IsReadyService {
     /*************************************************************************************************************************************
      * LOCAL - diagnostic variables, not intended for production code
      *************************************************************************************************************************************/
-    public diag_mode = false;
+    public diag_mode = true;
     public diag_visibility_ray_count = 500;
     public diag_show_visibility_blocking_bitmap = false;
     public diag_layer_opacity = 75;
