@@ -123,7 +123,7 @@ export class BoardPlayerService extends IsReadyService {
     public updatePlayerVisibility(id: string) {
         const player = this.encounterService.getPlayerById(id);
         const playerResLocation = new XyPair(player.location.x * BoardStateService.cell_res + (BoardStateService.cell_res / 2), player.location.y * BoardStateService.cell_res + (BoardStateService.cell_res / 2));
-        const visibilityPolygon = this.boardVisibilityService.raytraceVisibilityFromCell(playerResLocation, this.boardStateService.diag_visibility_ray_count);
+        const visibilityPolygon = this.boardVisibilityService.raytraceVisibilityFromCell(playerResLocation, this.boardStateService.diag_visibility_ray_count, ...this.boardLightService.genBoardCroppedCircle(playerResLocation, 20));
         this.player_visibility_map.set(id, visibilityPolygon);
     }
 

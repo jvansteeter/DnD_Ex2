@@ -44,14 +44,18 @@ export class BoardLightService extends IsReadyService {
 
     generateLightPolygons(source: LightSource): {bright_poly: Polygon, dim_poly: Polygon} {
         const lightSourceResLocation = new XyPair(source.location.x * BoardStateService.cell_res  + BoardStateService.cell_res/2, source.location.y * BoardStateService.cell_res  + BoardStateService.cell_res/2);
-        const bright_poly = this.raytracePolygon(lightSourceResLocation, source.bright_range);
-        const dim_poly = this.raytracePolygon(lightSourceResLocation, source.dim_range);
+        const bright_poly = this.raytracePolygon(lightSourceResLocation, this.genBoardCroppedCircle(lightSourceResLocation, source.bright_range));
+        const dim_poly = this.raytracePolygon(lightSourceResLocation, this.genBoardCroppedCircle(lightSourceResLocation, source.dim_range));
         return {bright_poly: bright_poly, dim_poly: dim_poly};
     }
 
-    private raytracePolygon(pixelPoint: XyPair, cellRange: number, raytrace = 500): Polygon {
+    private raytracePolygon(pixelPoint: XyPair, croppedCircle: Array<XyPair>, raytrace = 500): Polygon {
+        return this.boardVisibilityService.raytraceVisibilityFromCell(pixelPoint, raytrace, ...croppedCircle);
+    }
+
+    public genBoardCroppedCircle(pixelPoint: XyPair, cellRange: number): Array<XyPair> {
         let primaryCircle = BoardVisibilityService.BresenhamCircle(pixelPoint.x, pixelPoint.y, cellRange * BoardStateService.cell_res + BoardStateService.cell_res/2);
-        let croppedCircle = [];
+        let croppedCircle:Array<XyPair> = [];
         for (let point of primaryCircle) {
             if (this.boardStateService.pixelPointInBounds(point)) {
                 croppedCircle.push(point);
@@ -62,7 +66,7 @@ export class BoardLightService extends IsReadyService {
                 }
             }
         }
-        return this.boardVisibilityService.raytraceVisibilityFromCell(pixelPoint, raytrace, ...croppedCircle);
+        return croppedCircle;
     }
 
     updateAllLightValues(): void {

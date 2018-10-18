@@ -11,6 +11,7 @@ import {Ray} from "../geometry/ray";
 import {BoardCanvasService} from "./board-canvas.service";
 import {BitArray} from "../shared/bit-array";
 import {GeometryStatics} from "../statics/geometry-statics";
+import {isDefined} from "@angular/compiler/src/util";
 
 @Injectable()
 export class BoardVisibilityService extends IsReadyService {
@@ -70,21 +71,13 @@ export class BoardVisibilityService extends IsReadyService {
     public raytraceVisibilityFromCell(source: XyPair, rayCount = 1000, ...additionalBlockingPoints: Array<XyPair>): Polygon {
         const degreeInc = 360 / rayCount;
         const poly = new Polygon();
-        let additionalBlockingPointsArray;
+        let additionalBlockingPointsArray: BitArray;
 
         if (additionalBlockingPoints.length > 0) {
-            additionalBlockingPointsArray = [];
-            for (let x = 0; x < this.boardStateService.mapDimX * BoardStateService.cell_res; x++) {
-                additionalBlockingPointsArray[x] = [];
-                for (let y = 0; y < this.boardStateService.mapDimY * BoardStateService.cell_res; y++) {
-                    additionalBlockingPointsArray[x][y] = 0;
-                }
-            }
+            additionalBlockingPointsArray = new BitArray(this.boardStateService.mapDimX * this.boardStateService.mapDimY * BoardStateService.cell_res * BoardStateService.cell_res);
             for (let point of additionalBlockingPoints) {
-                if (point.x < additionalBlockingPointsArray.length) {
-                    if (point.y < additionalBlockingPointsArray[point.x].length) {
-                        additionalBlockingPointsArray[point.x][point.y] = 1;
-                    }
+                if (this.boardStateService.pixelPointInBounds(point)) {
+                    additionalBlockingPointsArray.set(GeometryStatics.xyToIndex(point.x, point.y, this.boardStateService.mapDimX));
                 }
             }
         }
@@ -504,11 +497,11 @@ export class BoardVisibilityService extends IsReadyService {
         return true;
     }
 
-    public rayCastToPoint(origin: XyPair, target: XyPair, additionalBlockingPoints?: Array<Array<number>>): XyPair {
+    public rayCastToPoint(origin: XyPair, target: XyPair, additionalBlockingPoints?: BitArray): XyPair {
         const points = BoardVisibilityService.BresenhamLine(origin.x, origin.y, target.x, target.y);
         for (const point of points) {
-            if (!isNullOrUndefined(additionalBlockingPoints)) {
-                if (this.blockingBitmap.get(GeometryStatics.xyToIndex(point.x, point.y, this.boardStateService.mapDimX * BoardStateService.cell_res)) || additionalBlockingPoints[point.x][point.y] === 1) {
+            if (isDefined(additionalBlockingPoints)) {
+                if (this.blockingBitmap.get(GeometryStatics.xyToIndex(point.x, point.y, this.boardStateService.mapDimX * BoardStateService.cell_res)) || additionalBlockingPoints.get(GeometryStatics.xyToIndex(point.x, point.y, this.boardStateService.mapDimX))) {
                     return point;
                 }
             } else {
@@ -524,33 +517,57 @@ export class BoardVisibilityService extends IsReadyService {
         if (ray.direction_degrees >= 0 && ray.direction_degrees < 90) {
             const x_max_bound_intercept = ray.lineData.findIntersectWithLine(this.boardStateService.xBoundLine);
 
-            if (x_max_bound_intercept === null) {return ray.lineData.findIntersectWithLine(this.boardStateService.yBoundLine);}
-            if (x_max_bound_intercept.y < BoardStateService.cell_res * this.boardStateService.mapDimY) {return x_max_bound_intercept;}
-            else {return ray.lineData.findIntersectWithLine(this.boardStateService.yBoundLine);}
+            if (x_max_bound_intercept === null) {
+                return ray.lineData.findIntersectWithLine(this.boardStateService.yBoundLine);
+            }
+            if (x_max_bound_intercept.y < BoardStateService.cell_res * this.boardStateService.mapDimY) {
+                return x_max_bound_intercept;
+            }
+            else {
+                return ray.lineData.findIntersectWithLine(this.boardStateService.yBoundLine);
+            }
         }
 
         if (ray.direction_degrees >= 90 && ray.direction_degrees < 180) {
-            const x_zero_bound_intercept = ray.lineData.findIntersectWithLine(new Line(new XyPair(0,0), new XyPair(0,1)));
+            const x_zero_bound_intercept = ray.lineData.findIntersectWithLine(new Line(new XyPair(0, 0), new XyPair(0, 1)));
 
-            if (x_zero_bound_intercept === null) {return ray.lineData.findIntersectWithLine(this.boardStateService.yBoundLine);}
-            if (x_zero_bound_intercept.y < BoardStateService.cell_res * this.boardStateService.mapDimY  && !isNullOrUndefined(x_zero_bound_intercept)) {return x_zero_bound_intercept;}
-            else {return ray.lineData.findIntersectWithLine(this.boardStateService.yBoundLine);}
+            if (x_zero_bound_intercept === null) {
+                return ray.lineData.findIntersectWithLine(this.boardStateService.yBoundLine);
+            }
+            if (x_zero_bound_intercept.y < BoardStateService.cell_res * this.boardStateService.mapDimY && !isNullOrUndefined(x_zero_bound_intercept)) {
+                return x_zero_bound_intercept;
+            }
+            else {
+                return ray.lineData.findIntersectWithLine(this.boardStateService.yBoundLine);
+            }
         }
 
         if (ray.direction_degrees >= 180 && ray.direction_degrees < 270) {
-            const x_zero_bound_intercept = ray.lineData.findIntersectWithLine(new Line(new XyPair(0,0), new XyPair(0,1)));
+            const x_zero_bound_intercept = ray.lineData.findIntersectWithLine(new Line(new XyPair(0, 0), new XyPair(0, 1)));
 
-            if (x_zero_bound_intercept === null) {return ray.lineData.findIntersectWithLine(new Line(new XyPair(0,0), new XyPair(1,0)));}
-            if (x_zero_bound_intercept.y > 0  && !isNullOrUndefined(x_zero_bound_intercept)) {return x_zero_bound_intercept;}
-            else {return ray.lineData.findIntersectWithLine(new Line(new XyPair(0,0), new XyPair(1,0)));}
+            if (x_zero_bound_intercept === null) {
+                return ray.lineData.findIntersectWithLine(new Line(new XyPair(0, 0), new XyPair(1, 0)));
+            }
+            if (x_zero_bound_intercept.y > 0 && !isNullOrUndefined(x_zero_bound_intercept)) {
+                return x_zero_bound_intercept;
+            }
+            else {
+                return ray.lineData.findIntersectWithLine(new Line(new XyPair(0, 0), new XyPair(1, 0)));
+            }
         }
 
         if (ray.direction_degrees >= 270 && ray.direction_degrees < 360) {
             const x_max_bound_intercept = ray.lineData.findIntersectWithLine(this.boardStateService.xBoundLine);
 
-            if (x_max_bound_intercept === null) {return ray.lineData.findIntersectWithLine(new Line(new XyPair(0,0), new XyPair(1,0)));}
-            if (x_max_bound_intercept.y > 0  && !isNullOrUndefined(x_max_bound_intercept)) {return x_max_bound_intercept;}
-            else {return ray.lineData.findIntersectWithLine(new Line(new XyPair(0,0), new XyPair(1,0)));}
+            if (x_max_bound_intercept === null) {
+                return ray.lineData.findIntersectWithLine(new Line(new XyPair(0, 0), new XyPair(1, 0)));
+            }
+            if (x_max_bound_intercept.y > 0 && !isNullOrUndefined(x_max_bound_intercept)) {
+                return x_max_bound_intercept;
+            }
+            else {
+                return ray.lineData.findIntersectWithLine(new Line(new XyPair(0, 0), new XyPair(1, 0)));
+            }
         }
     }
 
