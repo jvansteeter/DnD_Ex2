@@ -5,6 +5,7 @@ import {CellRegion} from '../shared/enum/cell-region';
 import {BoardStateService} from "./board-state.service";
 import {GeometryStatics} from "../statics/geometry-statics";
 import {IsReadyService} from "../../utilities/services/isReady.service";
+import {isDefined} from "@angular/compiler/src/util";
 
 @Injectable()
 export class BoardTraverseService extends IsReadyService {
@@ -40,14 +41,14 @@ export class BoardTraverseService extends IsReadyService {
             // ... create an array of 8 weights to represent the weight to each adj cell ...
             this.traverseWeights[i] = new Array(8);
 
-            this.traverseWeights[0] = this.getTraverseWeightN(i);
-            this.traverseWeights[1] = this.getTraverseWeightE(i);
-            this.traverseWeights[2] = this.getTraverseWeightS(i);
-            this.traverseWeights[3] = this.getTraverseWeightW(i);
-            this.traverseWeights[4] = this.getTraverseWeightNW(i);
-            this.traverseWeights[5] = this.getTraverseWeightNE(i);
-            this.traverseWeights[6] = this.getTraverseWeightSE(i);
-            this.traverseWeights[7] = this.getTraverseWeightSW(i);
+            this.traverseWeights[i][0] = this.getTraverseWeightN(i);
+            this.traverseWeights[i][1] = this.getTraverseWeightE(i);
+            this.traverseWeights[i][2] = this.getTraverseWeightS(i);
+            this.traverseWeights[i][3] = this.getTraverseWeightW(i);
+            this.traverseWeights[i][4] = this.getTraverseWeightNW(i);
+            this.traverseWeights[i][5] = this.getTraverseWeightNE(i);
+            this.traverseWeights[i][6] = this.getTraverseWeightSE(i);
+            this.traverseWeights[i][7] = this.getTraverseWeightSW(i);
         }
     }
 
@@ -142,9 +143,8 @@ export class BoardTraverseService extends IsReadyService {
         this.traverseWeights[7] = this.getTraverseWeightSW(cellIndex);
     }
 
-    private getAdjIndices(index: number): { adj: Array<number>, diag: Array<number> } {
-        const adj = [];
-        const diag = [];
+    private getAdjIndices(index: number): number[] {
+        const adj = new Array(8);
         const dimX = this.boardStateService.mapDimX;
 
         const onTop = index - dimX < 0;
@@ -153,40 +153,42 @@ export class BoardTraverseService extends IsReadyService {
         const onLeft = (index % dimX) === 0;
 
         if (!onTop) {
-            adj.push(index - dimX);
+            adj[0] = (index - dimX);
         }
         if (!onRight) {
-            adj.push(index + 1);
+            adj[1] = (index + 1);
         }
         if (!onBottom) {
-            adj.push(index + dimX);
+            adj[2] = (index + dimX);
         }
         if (!onLeft) {
-            adj.push(index - 1);
+            adj[3] = (index - 1);
         }
 
         if (!onLeft && !onTop) {
-            diag.push(index - dimX - 1);
+            adj[4] = (index - dimX - 1);
         }
         if (!onLeft && !onBottom) {
-            diag.push(index + dimX - 1);
+            adj[5] = (index + dimX - 1);
         }
         if (!onRight && !onTop) {
-            diag.push(index - dimX + 1);
+            adj[6] = (index - dimX + 1);
         }
         if (!onRight && !onBottom) {
-            diag.push(index + dimX + 1);
+            adj[7] = (index + dimX + 1);
         }
 
-        return {adj: adj, diag: diag};
+        return adj;
     }
 
     public blockNorth(cell: XyPair) {
         this.blockingSegments.add(new CellTarget(cell, CellRegion.TOP_EDGE).hash());
         const cellIndex = GeometryStatics.xyToIndex(cell.x, cell.y, this.boardStateService.mapDimX);
         const adjIndexes = this.getAdjIndices(cellIndex);
-        for (let index of [cellIndex, ...adjIndexes.diag, ...adjIndexes.adj]) {
-            this.syncTraverseWeights(index);
+        for (let index of [cellIndex, ...adjIndexes]) {
+            if (isDefined(index)) {
+                this.syncTraverseWeights(index);
+            }
         }
     }
 
@@ -194,8 +196,10 @@ export class BoardTraverseService extends IsReadyService {
         this.blockingSegments.delete(new CellTarget(cell, CellRegion.TOP_EDGE).hash());
         const cellIndex = GeometryStatics.xyToIndex(cell.x, cell.y, this.boardStateService.mapDimX);
         const adjIndexes = this.getAdjIndices(cellIndex);
-        for (let index of [cellIndex, ...adjIndexes.diag, ...adjIndexes.adj]) {
-            this.syncTraverseWeights(index);
+        for (let index of [cellIndex, ...adjIndexes]) {
+            if (isDefined(index)) {
+                this.syncTraverseWeights(index);
+            }
         }
     }
 
@@ -203,8 +207,10 @@ export class BoardTraverseService extends IsReadyService {
         this.blockingSegments.add(new CellTarget(cell, CellRegion.LEFT_EDGE).hash());
         const cellIndex = GeometryStatics.xyToIndex(cell.x, cell.y, this.boardStateService.mapDimX);
         const adjIndexes = this.getAdjIndices(cellIndex);
-        for (let index of [cellIndex, ...adjIndexes.diag, ...adjIndexes.adj]) {
-            this.syncTraverseWeights(index);
+        for (let index of [cellIndex, ...adjIndexes]) {
+            if (isDefined(index)) {
+                this.syncTraverseWeights(index);
+            }
         }
     }
 
@@ -212,8 +218,10 @@ export class BoardTraverseService extends IsReadyService {
         this.blockingSegments.delete(new CellTarget(cell, CellRegion.LEFT_EDGE).hash());
         const cellIndex = GeometryStatics.xyToIndex(cell.x, cell.y, this.boardStateService.mapDimX);
         const adjIndexes = this.getAdjIndices(cellIndex);
-        for (let index of [cellIndex, ...adjIndexes.diag, ...adjIndexes.adj]) {
-            this.syncTraverseWeights(index);
+        for (let index of [cellIndex, ...adjIndexes]) {
+            if (isDefined(index)) {
+                this.syncTraverseWeights(index);
+            }
         }
     }
 
@@ -221,8 +229,10 @@ export class BoardTraverseService extends IsReadyService {
         this.blockingSegments.add(new CellTarget(cell, CellRegion.FWRD_EDGE).hash());
         const cellIndex = GeometryStatics.xyToIndex(cell.x, cell.y, this.boardStateService.mapDimX);
         const adjIndexes = this.getAdjIndices(cellIndex);
-        for (let index of [cellIndex, ...adjIndexes.diag, ...adjIndexes.adj]) {
-            this.syncTraverseWeights(index);
+        for (let index of [cellIndex, ...adjIndexes]) {
+            if (isDefined(index)) {
+                this.syncTraverseWeights(index);
+            }
         }
     }
 
@@ -230,8 +240,10 @@ export class BoardTraverseService extends IsReadyService {
         this.blockingSegments.delete(new CellTarget(cell, CellRegion.FWRD_EDGE).hash());
         const cellIndex = GeometryStatics.xyToIndex(cell.x, cell.y, this.boardStateService.mapDimX);
         const adjIndexes = this.getAdjIndices(cellIndex);
-        for (let index of [cellIndex, ...adjIndexes.diag, ...adjIndexes.adj]) {
-            this.syncTraverseWeights(index);
+        for (let index of [cellIndex, ...adjIndexes]) {
+            if (isDefined(index)) {
+                this.syncTraverseWeights(index);
+            }
         }
     }
 
@@ -239,8 +251,10 @@ export class BoardTraverseService extends IsReadyService {
         this.blockingSegments.add(new CellTarget(cell, CellRegion.BKWD_EDGE).hash());
         const cellIndex = GeometryStatics.xyToIndex(cell.x, cell.y, this.boardStateService.mapDimX);
         const adjIndexes = this.getAdjIndices(cellIndex);
-        for (let index of [cellIndex, ...adjIndexes.diag, ...adjIndexes.adj]) {
-            this.syncTraverseWeights(index);
+        for (let index of [cellIndex, ...adjIndexes]) {
+            if (isDefined(index)) {
+                this.syncTraverseWeights(index);
+            }
         }
     }
 
@@ -248,8 +262,10 @@ export class BoardTraverseService extends IsReadyService {
         this.blockingSegments.delete(new CellTarget(cell, CellRegion.BKWD_EDGE).hash());
         const cellIndex = GeometryStatics.xyToIndex(cell.x, cell.y, this.boardStateService.mapDimX);
         const adjIndexes = this.getAdjIndices(cellIndex);
-        for (let index of [cellIndex, ...adjIndexes.diag, ...adjIndexes.adj]) {
-            this.syncTraverseWeights(index);
+        for (let index of [cellIndex, ...adjIndexes]) {
+            if (isDefined(index)) {
+                this.syncTraverseWeights(index);
+            }
         }
     }
 
@@ -302,9 +318,12 @@ export class BoardTraverseService extends IsReadyService {
 
             const adjIndexes = this.getAdjIndices(u);
             for (const v of [0, 1, 2, 3, 4, 5, 6, 7]) {
-                const alt = distTo[u] + this.traverseWeights[u][v];
-                if (alt < distTo[v]) {
-                    distTo[v] = alt;
+                const destIndex = adjIndexes[v];
+                if (isDefined(destIndex)) {
+                    const alt = distTo[u] + this.traverseWeights[u][v];
+                    if (alt < distTo[destIndex]) {
+                        distTo[destIndex] = alt;
+                    }
                 }
             }
         }
