@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {Injectable, ɵangular_packages_core_core_x} from '@angular/core';
 import {XyPair} from '../../../../../shared/types/encounter/board/xy-pair';
 import {BoardStateService} from './board-state.service';
 import {CellTarget} from '../shared/cell-target';
@@ -30,7 +30,7 @@ export class BoardVisibilityService extends IsReadyService {
         this.dependenciesReady().subscribe((isReady: boolean) => {
             if (isReady) {
                 this.blockingSegments = new Set();
-                this.blockingBitmap = new BitArray(this.boardStateService.mapDimX * this.boardStateService.mapDimY * (BoardStateService.cell_res * BoardStateService.cell_res));
+                this.blockingBitmap = new BitArray(BoardStateService.num_pixels);
 
                 this.setReady(true);
             }
@@ -68,17 +68,15 @@ export class BoardVisibilityService extends IsReadyService {
         return returnMe;
     }
 
-    public raytraceVisibilityFromCell(source: XyPair, rayCount = 1000, ...additionalBlockingPoints: Array<XyPair>): Polygon {
+    public raytraceVisibilityFromCell(source: XyPair, rayCount, ...additionalBlockingPoints: Array<XyPair>): Polygon {
         const degreeInc = 360 / rayCount;
         const poly = new Polygon();
         let additionalBlockingPointsArray: BitArray;
 
         if (additionalBlockingPoints.length > 0) {
-            additionalBlockingPointsArray = new BitArray(this.boardStateService.mapDimX * this.boardStateService.mapDimY * BoardStateService.cell_res * BoardStateService.cell_res);
+            additionalBlockingPointsArray = new BitArray(BoardStateService.num_pixels);
             for (let point of additionalBlockingPoints) {
-                if (this.boardStateService.pixelPointInBounds(point)) {
-                    additionalBlockingPointsArray.set(GeometryStatics.xyToIndex(point.x, point.y, this.boardStateService.mapDimX));
-                }
+                additionalBlockingPointsArray.set(GeometryStatics.xyToIndex(point.x, point.y, this.boardStateService.mapDimX * BoardStateService.cell_res));
             }
         }
 
@@ -400,95 +398,8 @@ export class BoardVisibilityService extends IsReadyService {
         return returnMe;
     }
 
-    static BresenhamCircle(xc: number, yc: number, r: number): Array<XyPair> {
-        const circlePoints = new Array<XyPair>();
-
-        let x = 0;
-        let y = r;
-        let d = 3 - 2 * r;
-
-        while (y >= x) {
-            this.BresenhamDrawCircle(circlePoints, xc, yc, x, y);
-            x++;
-
-            if (d > 0) {
-                y--;
-                d = d + 4 * (x - y) + 10;
-            } else {
-                d = d + 4 * x + 6;
-            }
-            this.BresenhamDrawCircle(circlePoints, xc, yc, x, y);
-        }
-
-        return circlePoints;
-    }
-
-    static BresenhamDrawCircle(array: Array<XyPair>, xc: number, yc: number, x: number, y: number) {
-        array.push(new XyPair(xc + x, yc + y));
-        array.push(new XyPair(xc - x, yc + y));
-        array.push(new XyPair(xc + x, yc - y));
-        array.push(new XyPair(xc - x, yc - y));
-
-        array.push(new XyPair(xc + y, yc + x));
-        array.push(new XyPair(xc - y, yc + x));
-        array.push(new XyPair(xc + y, yc - x));
-        array.push(new XyPair(xc - y, yc - x));
-    }
-
-    static BresenhamLine(x0: number, y0: number, x1: number, y1: number): XyPair[] {
-        const origin = new XyPair(x0, y0);
-        const result = Array<XyPair>();
-        const steep = Math.abs(y1 - y0) > Math.abs(x1 - x0);
-
-        let dummy: number;
-        if (steep) {
-            dummy = x0;
-            x0 = y0;
-            y0 = dummy;
-
-            dummy = x1;
-            x1 = y1;
-            y1 = dummy;
-        }
-        if (x0 > x1) {
-            dummy = x0;
-            x0 = x1;
-            x1 = dummy;
-            dummy = y0;
-            y0 = y1;
-            y1 = dummy;
-        }
-        const deltaX = x1 - x0;
-        const deltaY = Math.abs(y1 - y0);
-        let error = 0;
-        let y_step;
-        let y = y0;
-        if (y0 < y1) {
-            y_step = 1;
-        } else {
-            y_step = -1;
-        }
-        for (let x = x0; x <= x1; x++) {
-            if (steep) {
-                result.push(new XyPair(y, x));
-            } else {
-                result.push(new XyPair(x, y));
-            }
-            error += deltaY;
-            if (2 * error >= deltaX) {
-                y += y_step;
-                error -= deltaX;
-            }
-        }
-        if (result[0].x !== origin.x || result[0].y !== origin.y) {
-            result.reverse();
-        }
-
-        return result;
-    }
-
     public rayCast(origin: XyPair, target: XyPair): boolean {
-        const points = BoardVisibilityService.BresenhamLine(origin.x, origin.y, target.x, target.y);
+        const points = GeometryStatics.BresenhamLine(origin.x, origin.y, target.x, target.y);
         for (const point of points) {
             if (this.blockingBitmap.get(GeometryStatics.xyToIndex(point.x, point.y, this.boardStateService.mapDimX * BoardStateService.cell_res))) {
                 return false;
@@ -498,10 +409,10 @@ export class BoardVisibilityService extends IsReadyService {
     }
 
     public rayCastToPoint(origin: XyPair, target: XyPair, additionalBlockingPoints?: BitArray): XyPair {
-        const points = BoardVisibilityService.BresenhamLine(origin.x, origin.y, target.x, target.y);
+        const points = GeometryStatics.BresenhamLine(origin.x, origin.y, target.x, target.y);
         for (const point of points) {
             if (isDefined(additionalBlockingPoints)) {
-                if (this.blockingBitmap.get(GeometryStatics.xyToIndex(point.x, point.y, this.boardStateService.mapDimX * BoardStateService.cell_res)) || additionalBlockingPoints.get(GeometryStatics.xyToIndex(point.x, point.y, this.boardStateService.mapDimX))) {
+                if (this.blockingBitmap.get(GeometryStatics.xyToIndex(point.x, point.y, this.boardStateService.mapDimX * BoardStateService.cell_res)) || additionalBlockingPoints.get(GeometryStatics.xyToIndex(point.x, point.y, this.boardStateService.mapDimX * BoardStateService.cell_res))) {
                     return point;
                 }
             } else {

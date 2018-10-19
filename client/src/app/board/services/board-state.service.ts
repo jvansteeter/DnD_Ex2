@@ -22,6 +22,7 @@ import {RightsService} from "../../data-services/rights.service";
 export class BoardStateService extends IsReadyService {
 
     static cell_res = 50;
+    static num_pixels = 0;
 
 
     /*************************************************************************************************************************************
@@ -160,6 +161,8 @@ export class BoardStateService extends IsReadyService {
                         this.showMapEnabledControls = true;
                         break;
                 }
+
+                BoardStateService.num_pixels = this.mapDimX * this.mapDimY * BoardStateService.cell_res ** 2;
 
                 this.setReady(true);
             }

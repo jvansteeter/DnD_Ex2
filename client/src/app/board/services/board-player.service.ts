@@ -11,6 +11,7 @@ import {BoardLightService} from "./board-light.service";
 import {LightSource} from "../map-objects/light-source";
 import { isNullOrUndefined, isUndefined } from 'util';
 import {RightsService} from "../../data-services/rights.service";
+import {GeometryStatics} from "../statics/geometry-statics";
 
 @Injectable()
 export class BoardPlayerService extends IsReadyService {
@@ -122,8 +123,12 @@ export class BoardPlayerService extends IsReadyService {
 
     public updatePlayerVisibility(id: string) {
         const player = this.encounterService.getPlayerById(id);
-        const playerResLocation = new XyPair(player.location.x * BoardStateService.cell_res + (BoardStateService.cell_res / 2), player.location.y * BoardStateService.cell_res + (BoardStateService.cell_res / 2));
-        const visibilityPolygon = this.boardVisibilityService.raytraceVisibilityFromCell(playerResLocation, this.boardStateService.diag_visibility_ray_count, ...this.boardLightService.genBoardCroppedCircle(playerResLocation, 20));
+        const playerPixelLocation = new XyPair(player.location.x * BoardStateService.cell_res + (BoardStateService.cell_res / 2), player.location.y * BoardStateService.cell_res + (BoardStateService.cell_res / 2));
+
+        const visibility_range = 20;
+        const vis_pixel_range = visibility_range * BoardStateService.cell_res + BoardStateService.cell_res / 2;
+        const vis_range_circle = GeometryStatics.BresenhamCircle(playerPixelLocation, vis_pixel_range);
+        const visibilityPolygon = this.boardVisibilityService.raytraceVisibilityFromCell(playerPixelLocation, this.boardStateService.diag_visibility_ray_count, ...this.boardLightService.cropCircle(vis_range_circle));
         this.player_visibility_map.set(id, visibilityPolygon);
     }
 

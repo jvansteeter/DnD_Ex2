@@ -8,6 +8,7 @@ import {Polygon} from "../../../../../shared/types/encounter/board/polygon";
 import {EncounterService} from "../../encounter/encounter.service";
 import { LightSourcesState } from '../map-objects/light-sources.state';
 import { Observable } from 'rxjs';
+import {GeometryStatics} from "../statics/geometry-statics";
 
 @Injectable()
 export class BoardLightService extends IsReadyService {
@@ -43,30 +44,32 @@ export class BoardLightService extends IsReadyService {
     }
 
     generateLightPolygons(source: LightSource): {bright_poly: Polygon, dim_poly: Polygon} {
-        const lightSourceResLocation = new XyPair(source.location.x * BoardStateService.cell_res  + BoardStateService.cell_res/2, source.location.y * BoardStateService.cell_res  + BoardStateService.cell_res/2);
-        const bright_poly = this.raytracePolygon(lightSourceResLocation, this.genBoardCroppedCircle(lightSourceResLocation, source.bright_range));
-        const dim_poly = this.raytracePolygon(lightSourceResLocation, this.genBoardCroppedCircle(lightSourceResLocation, source.dim_range));
+        const lightSourcePixelLocation = new XyPair(source.location.x * BoardStateService.cell_res  + BoardStateService.cell_res/2, source.location.y * BoardStateService.cell_res  + BoardStateService.cell_res/2);
+
+        const bright_pixel_range = source.bright_range * BoardStateService.cell_res + BoardStateService.cell_res / 2;
+        const bright_range_circle = GeometryStatics.BresenhamCircle(lightSourcePixelLocation, bright_pixel_range);
+        const bright_poly = this.boardVisibilityService.raytraceVisibilityFromCell(lightSourcePixelLocation, this.boardStateService.diag_visibility_ray_count, ...this.cropCircle(bright_range_circle));
+
+        const dim_pixel_range = source.dim_range * BoardStateService.cell_res + BoardStateService.cell_res / 2;
+        const dim_range_circle = GeometryStatics.BresenhamCircle(lightSourcePixelLocation, dim_pixel_range);
+        const dim_poly = this.boardVisibilityService.raytraceVisibilityFromCell(lightSourcePixelLocation, this.boardStateService.diag_visibility_ray_count, ...this.cropCircle(dim_range_circle));
+
         return {bright_poly: bright_poly, dim_poly: dim_poly};
     }
 
-    private raytracePolygon(pixelPoint: XyPair, croppedCircle: Array<XyPair>, raytrace = 500): Polygon {
-        return this.boardVisibilityService.raytraceVisibilityFromCell(pixelPoint, raytrace, ...croppedCircle);
-    }
-
-    public genBoardCroppedCircle(pixelPoint: XyPair, cellRange: number): Array<XyPair> {
-        let primaryCircle = BoardVisibilityService.BresenhamCircle(pixelPoint.x, pixelPoint.y, cellRange * BoardStateService.cell_res + BoardStateService.cell_res/2);
-        let croppedCircle:Array<XyPair> = [];
-        for (let point of primaryCircle) {
+    public cropCircle(circle_points: Array<XyPair>): Array<XyPair> {
+        let cropped_points = new Array<XyPair>();
+        for (let point of circle_points) {
             if (this.boardStateService.pixelPointInBounds(point)) {
-                croppedCircle.push(point);
+                cropped_points.push(point);
                 if (point.y >= this.boardStateService.mapDimY * BoardStateService.cell_res) {
-                    croppedCircle.push(new XyPair(point.x, point.y - 1));
+                    cropped_points.push(new XyPair(point.x, point.y - 1));
                 } else {
-                    croppedCircle.push(new XyPair(point.x, point.y + 1));
+                    cropped_points.push(new XyPair(point.x, point.y + 1));
                 }
             }
         }
-        return croppedCircle;
+        return cropped_points;
     }
 
     updateAllLightValues(): void {
