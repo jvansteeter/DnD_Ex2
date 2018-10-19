@@ -38,7 +38,7 @@ export class WallRendererComponent implements OnInit, OnDestroy {
         switch (this.boardStateService.board_view_mode) {
             case ViewMode.BOARD_MAKER:
                 for (const wall of Array.from(this.wallService.walls)) {
-                    this.boardCanvasService.draw_wall(this.ctx, wall, 6, 'rgba(0, 255, 0, 0.75)');
+                    this.boardCanvasService.draw_wall(this.ctx, wall, 10, 'rgba(0, 180, 0, 0.75)');
                 }
 
                 for (const door of Array.from(this.wallService.doorData.values())) {
@@ -49,7 +49,7 @@ export class WallRendererComponent implements OnInit, OnDestroy {
             case ViewMode.PLAYER:
                 if (this.encounterService.config.playerWallsEnabled) {
                     for (const wall of Array.from(this.wallService.walls)) {
-                        this.boardCanvasService.draw_wall(this.ctx, wall, 10, 'rgba(25, 25, 25, 1)');
+                        this.boardCanvasService.draw_wall(this.ctx, wall, 10, 'rgba(64, 80, 107, 1)');
                     }
 
                     for (const door of Array.from(this.wallService.doorData.values())) {
@@ -59,7 +59,7 @@ export class WallRendererComponent implements OnInit, OnDestroy {
                 break;
             case ViewMode.MASTER:
                 for (const wall of Array.from(this.wallService.walls)) {
-                    this.boardCanvasService.draw_wall(this.ctx, wall, 6, 'rgba(0, 255, 0, 0.75)');
+                    this.boardCanvasService.draw_wall(this.ctx, wall, 10, 'rgba(64, 80, 107, 1)');
                 }
 
                 for (const door of Array.from(this.wallService.doorData.values())) {
