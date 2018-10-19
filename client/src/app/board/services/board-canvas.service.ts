@@ -125,6 +125,78 @@ export class BoardCanvasService extends IsReadyService {
         ctx.stroke();
     }
 
+    draw_grid(ctx: CanvasRenderingContext2D) {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.03)';
+
+        let cell_res = BoardStateService.cell_res;
+        let cur_x = 0;
+        let cur_y = cell_res;
+
+        ctx.beginPath();
+        ctx.moveTo(cur_x, cur_y);
+
+        while (cur_y <= this.boardStateService.mapDimY * BoardStateService.cell_res) {
+            let movingRight = true;
+            let movingUp = true;
+
+            while (movingRight) {
+                // horizontal action
+                ctx.lineTo(cur_x + cell_res, cur_y);
+                cur_x += cell_res;
+
+                // check for enc
+                if (cur_x === this.boardStateService.mapDimX * BoardStateService.cell_res) {
+                    movingRight = false;
+                    ctx.lineTo(cur_x, cur_y + cell_res);
+                    cur_y += cell_res;
+                    break;
+                }
+
+                // vertical action
+                if (movingUp) {
+                    ctx.lineTo(cur_x, cur_y - cell_res);
+                    cur_y -= cell_res;
+                    movingUp = !movingUp;
+
+                } else {
+                    ctx.lineTo(cur_x, cur_y + cell_res);
+                    cur_y += cell_res;
+                    movingUp = !movingUp;
+                }
+            }
+
+            while (!movingRight) {
+                // horizontal action
+                ctx.lineTo(cur_x - cell_res, cur_y);
+                cur_x -= cell_res;
+
+                // check for enc
+                if (cur_x === 0) {
+                    movingRight = true;
+                    ctx.lineTo(cur_x, cur_y - cell_res);
+                    cur_y -= cell_res;
+
+                    ctx.lineTo(cur_x, cur_y + 2 * cell_res);
+                    cur_y += 2 * cell_res;
+                    break;
+                }
+
+                // vertical action
+                if (movingUp) {
+                    ctx.lineTo(cur_x, cur_y - cell_res);
+                    cur_y -= cell_res;
+                    movingUp = !movingUp;
+
+                } else {
+                    ctx.lineTo(cur_x, cur_y + cell_res);
+                    cur_y += cell_res;
+                    movingUp = !movingUp;
+                }
+            }
+        }
+        ctx.fill();
+    }
+
     draw_health_basic(ctx: CanvasRenderingContext2D, cell: XyPair, percent: number) {
         const strokeWidth = 10;
         const health_opacity = 1.0;
