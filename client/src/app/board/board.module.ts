@@ -20,7 +20,6 @@ import {
 import {NgModule} from '@angular/core';
 import {MapRendererComponent} from "./renderer/map-renderer/map-renderer.component";
 import {GridRendererComponent} from "./renderer/grid-renderer/grid-renderer.component";
-import {BoardZoneComponent} from "./board-zone.component";
 import {HoverRendererComponent} from "./renderer/hover-renderer/hover-renderer.component";
 import {LightRendererComponent} from "./renderer/light-renderer/light-renderer.component";
 import {WallRendererComponent} from "./renderer/wall-renderer/wall-renderer.component";
@@ -63,7 +62,6 @@ import {LightVisibilityControlModuleComponent} from "./board-control/controller-
 
 @NgModule({
     declarations: [
-        BoardZoneComponent,
         PopRootComponent,
         BoardControllerComponent,
         BoardMapComponent,
@@ -139,7 +137,9 @@ import {LightVisibilityControlModuleComponent} from "./board-control/controller-
     ],
     bootstrap: [],
     exports: [
-        BoardZoneComponent
+    		BoardControllerComponent,
+		    BoardMapComponent,
+		    PopRootComponent,
     ]
 })
 export class BoardModule {

@@ -7,7 +7,7 @@ import { RightsService } from '../data-services/rights.service';
 @Component({
 	selector: 'encounter',
 	templateUrl: 'encounter.component.html',
-  styleUrls: ['encounter.component.css']
+  styleUrls: ['encounter.component.scss']
 })
 export class EncounterComponent implements OnInit {
 	constructor(private encounterService: EncounterService,

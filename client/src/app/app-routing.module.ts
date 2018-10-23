@@ -6,16 +6,11 @@ import { RuleSetHomeComponent } from './rule-set/home/rule-set-home.component';
 import { CharacterSheetComponent } from './character-sheet/sheet/character-sheet.component';
 import { CampaignComponent } from './campaign/campaign.component';
 import { EncounterComponent } from "./encounter/encounter.component";
-import { BoardZoneComponent } from "./board/board-zone.component";
 
 const routes: Routes = [
     {
         path: 'home',
         component: HomeComponent
-    },
-    {
-        path: 'map-maker',
-        component: BoardZoneComponent
     },
     {
         path: 'rule-set/:ruleSetId',
