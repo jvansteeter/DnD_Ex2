@@ -30,16 +30,22 @@ export class BoardWallService extends IsReadyService {
         private encounterService: EncounterService,
     ) {
     	super(boardStateService, boardVisibilityService, boardTraverseService, boardLightService, boardPlayerService);
-    	this.init();
     }
 
     public init(): void {
-    	this.dependenciesReady().subscribe((isReady) => {
+        console.log('boardWallService: init()');
+        this.dependenciesReady().subscribe((isReady) => {
     		if (isReady) {
     			this.wallData = this.encounterService.wallData;
-		    }
-		    this.setReady(isReady);
+                this.setReady(true);
+            }
 	    });
+    }
+
+    public unInit(): void {
+        console.log('boardWallService: unInit()');
+        // JOSH SHOULD UNINIT THIS SERVICE
+        this.setReady(false);
     }
 
     public addDoor(target: CellTarget) {
