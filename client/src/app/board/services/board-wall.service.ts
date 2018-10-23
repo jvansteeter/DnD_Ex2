@@ -151,12 +151,12 @@ export class BoardWallService extends IsReadyService {
         this.boardPlayerService.updateAllPlayerTraverse();
     }
 
-    public addWall(target: CellTarget, singleInstance = true) {
-        this._addWall(target, singleInstance);
+    public addWall(target: CellTarget) {
+        this._addWall(target);
         this.wallChangeSubject.next();
     }
 
-    private _addWall(target: CellTarget, singleInstance = true) {
+    private _addWall(target: CellTarget) {
 	    if (!this.hasObstruction(target)) {
 		    this._wallData.set(target.hash(), target);
 		    switch (target.region) {
@@ -178,13 +178,11 @@ export class BoardWallService extends IsReadyService {
 				    break;
 		    }
 	    }
-	    if (singleInstance) {
-		    this.boardLightService.updateAllLightValues();
-		    this.boardPlayerService.updateAllPlayerTraverse();
-	    }
+        this.boardLightService.updateAllLightValues();
+        this.boardPlayerService.updateAllPlayerTraverse();
     }
 
-    public removeWall(target: CellTarget, singleInstance = true): void {
+    public removeWall(target: CellTarget): void {
         if (this.hasObstruction(target) && this._wallData.has(target.hash())) {
             this._wallData.delete(target.hash());
             switch (target.region) {
@@ -206,10 +204,8 @@ export class BoardWallService extends IsReadyService {
                     break;
             }
         }
-        if (singleInstance) {
-            this.boardLightService.updateAllLightValues();
-            this.boardPlayerService.updateAllPlayerTraverse();
-        }
+        this.boardLightService.updateAllLightValues();
+        this.boardPlayerService.updateAllPlayerTraverse();
         this.wallChangeSubject.next();
     }
 
@@ -226,17 +222,19 @@ export class BoardWallService extends IsReadyService {
         const delta_y = corner2.y - corner1.y;
         const currentCell = corner1;
 
+        const wallsToAdd: Array<CellTarget> = [];
+
         // handle up
         if ((delta_x === 0) && (delta_y < 0)) {
             while (currentCell.y !== corner2.y) {
                 currentCell.y--;
-                this.addWall(new CellTarget(new XyPair(currentCell.x, currentCell.y), CellRegion.LEFT_EDGE), false);
+                wallsToAdd.push(new CellTarget(new XyPair(currentCell.x, currentCell.y), CellRegion.LEFT_EDGE));
             }
         }
         // handle down
         if ((delta_x === 0) && (delta_y > 0)) {
             while (currentCell.y !== corner2.y) {
-                this.addWall(new CellTarget(new XyPair(currentCell.x, currentCell.y), CellRegion.LEFT_EDGE), false);
+                wallsToAdd.push(new CellTarget(new XyPair(currentCell.x, currentCell.y), CellRegion.LEFT_EDGE));
                 currentCell.y++;
             }
         }
@@ -244,48 +242,55 @@ export class BoardWallService extends IsReadyService {
         if ((delta_x < 0) && (delta_y === 0)) {
             while (currentCell.x !== corner2.x) {
                 currentCell.x--;
-                this.addWall(new CellTarget(new XyPair(currentCell.x, currentCell.y), CellRegion.TOP_EDGE), false);
+                wallsToAdd.push(new CellTarget(new XyPair(currentCell.x, currentCell.y), CellRegion.TOP_EDGE));
             }
         }
         // handle right
         if ((delta_x > 0) && (delta_y === 0)) {
             while (currentCell.x !== corner2.x) {
-                this.addWall(new CellTarget(new XyPair(currentCell.x, currentCell.y), CellRegion.TOP_EDGE), false);
+                wallsToAdd.push(new CellTarget(new XyPair(currentCell.x, currentCell.y), CellRegion.TOP_EDGE));
                 currentCell.x++;
             }
         }
         // handle up/right
-        if ((delta_x > 0) && (delta_y < 0)) {
+        if ((delta_x > 0) && (delta_y < 0) && (Math.abs(delta_x) === (Math.abs(delta_y)))) {
             while (currentCell.x !== corner2.x) {
                 currentCell.y--;
-                this.addWall(new CellTarget(new XyPair(currentCell.x, currentCell.y), CellRegion.FWRD_EDGE), false);
+                wallsToAdd.push(new CellTarget(new XyPair(currentCell.x, currentCell.y), CellRegion.FWRD_EDGE));
                 currentCell.x++;
             }
         }
         // handle down/right
-        if ((delta_x > 0) && (delta_y > 0)) {
+        if ((delta_x > 0) && (delta_y > 0 && (Math.abs(delta_x) === (Math.abs(delta_y))))) {
             while (currentCell.x !== corner2.x) {
-                this.addWall(new CellTarget(new XyPair(currentCell.x, currentCell.y), CellRegion.BKWD_EDGE), false);
+                wallsToAdd.push(new CellTarget(new XyPair(currentCell.x, currentCell.y), CellRegion.BKWD_EDGE));
                 currentCell.y++;
                 currentCell.x++;
             }
         }
         // handle down/left
-        if ((delta_x < 0) && (delta_y > 0)) {
+        if ((delta_x < 0) && (delta_y > 0 && (Math.abs(delta_x) === (Math.abs(delta_y))))) {
             while (currentCell.x !== corner2.x) {
                 currentCell.x--;
-                this.addWall(new CellTarget(new XyPair(currentCell.x, currentCell.y), CellRegion.FWRD_EDGE), false);
+                wallsToAdd.push(new CellTarget(new XyPair(currentCell.x, currentCell.y), CellRegion.FWRD_EDGE));
                 currentCell.y++;
             }
         }
         // handle up/left
-        if ((delta_x < 0) && (delta_y < 0)) {
+        if ((delta_x < 0) && (delta_y < 0 && (Math.abs(delta_x) === (Math.abs(delta_y))))) {
             while (currentCell.x !== corner2.x) {
                 currentCell.x--;
                 currentCell.y--;
-                this.addWall(new CellTarget(new XyPair(currentCell.x, currentCell.y), CellRegion.BKWD_EDGE), false);
+                wallsToAdd.push(new CellTarget(new XyPair(currentCell.x, currentCell.y), CellRegion.BKWD_EDGE));
             }
         }
+
+        // add the walls to the wallService
+        for (let i = 0; i < wallsToAdd.length - 1; i++) {
+            this._addWall(wallsToAdd[i]);
+        }
+        this.addWall(wallsToAdd[wallsToAdd.length - 1]);
+
         this.boardLightService.updateAllLightValues();
         this.boardPlayerService.updateAllPlayerTraverse();
     }
