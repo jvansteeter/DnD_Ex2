@@ -14,10 +14,10 @@ export class EncounterComponent implements OnInit {
 							private activatedRoute: ActivatedRoute,
 	            private encounterConcurrencyService: EncounterConcurrencyService,
 	            private rightsService: RightsService) {
-		this.encounterConcurrencyService.init();
 	}
 
 	ngOnInit(): void {
+		this.encounterConcurrencyService.init();
 		this.activatedRoute.params.subscribe((params) => {
 			let encounterId = params['encounterId'];
 			this.encounterService.setEncounterId(encounterId);
