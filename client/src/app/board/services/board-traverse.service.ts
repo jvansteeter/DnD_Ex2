@@ -133,14 +133,14 @@ export class BoardTraverseService extends IsReadyService {
         // ... create an array of 8 weights to represent the weight to each adj cell ...
         this.traverseWeights[cellIndex] = new Array(8);
 
-        this.traverseWeights[0] = this.getTraverseWeightN(cellIndex);
-        this.traverseWeights[1] = this.getTraverseWeightE(cellIndex);
-        this.traverseWeights[2] = this.getTraverseWeightS(cellIndex);
-        this.traverseWeights[3] = this.getTraverseWeightW(cellIndex);
-        this.traverseWeights[4] = this.getTraverseWeightNW(cellIndex);
-        this.traverseWeights[5] = this.getTraverseWeightNE(cellIndex);
-        this.traverseWeights[6] = this.getTraverseWeightSE(cellIndex);
-        this.traverseWeights[7] = this.getTraverseWeightSW(cellIndex);
+        this.traverseWeights[cellIndex][0] = this.getTraverseWeightN(cellIndex);
+        this.traverseWeights[cellIndex][1] = this.getTraverseWeightE(cellIndex);
+        this.traverseWeights[cellIndex][2] = this.getTraverseWeightS(cellIndex);
+        this.traverseWeights[cellIndex][3] = this.getTraverseWeightW(cellIndex);
+        this.traverseWeights[cellIndex][4] = this.getTraverseWeightNW(cellIndex);
+        this.traverseWeights[cellIndex][5] = this.getTraverseWeightNE(cellIndex);
+        this.traverseWeights[cellIndex][6] = this.getTraverseWeightSE(cellIndex);
+        this.traverseWeights[cellIndex][7] = this.getTraverseWeightSW(cellIndex);
     }
 
     private getAdjIndices(index: number): number[] {
@@ -168,14 +168,14 @@ export class BoardTraverseService extends IsReadyService {
         if (!onLeft && !onTop) {
             adj[4] = (index - dimX - 1);
         }
-        if (!onLeft && !onBottom) {
-            adj[5] = (index + dimX - 1);
-        }
         if (!onRight && !onTop) {
-            adj[6] = (index - dimX + 1);
+            adj[5] = (index - dimX + 1);
         }
         if (!onRight && !onBottom) {
-            adj[7] = (index + dimX + 1);
+            adj[6] = (index + dimX + 1);
+        }
+        if (!onLeft && !onBottom) {
+            adj[7] = (index + dimX - 1);
         }
 
         return adj;

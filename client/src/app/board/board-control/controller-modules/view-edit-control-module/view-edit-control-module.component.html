@@ -9,7 +9,7 @@
         </mat-form-field>
 
 
-        <ng-container *ngIf="boardStateService.board_edit_mode !== BoardMode.PLAYER">
+        <ng-container *ngIf="boardStateService.board_view_mode === ViewMode.BOARD_MAKER">
             <span class="font" style="color: rgba(0, 0, 0, 0.54); font-size: 12px;">Edit Mode</span>
 
             <div style="display: block">

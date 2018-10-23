@@ -11,6 +11,7 @@ import {ViewMode} from "../../../shared/enum/view-mode";
 
 export class ViewEditControlModuleComponent {
     public BoardMode = BoardMode;
+    public ViewMode = ViewMode;
 
     currentView: string;
     viewModes: string[] = [
@@ -43,7 +44,7 @@ export class ViewEditControlModuleComponent {
     public handleViewChange() {
         switch (this.currentView) {
             case 'Board Maker':
-                this.boardStateService.set_viewMode_boardMakde();
+                this.boardStateService.set_viewMode_boardMaker();
                 break;
             case 'Player View':
                 this.boardStateService.set_viewMode_player();

@@ -216,7 +216,7 @@ export class BoardStateService extends IsReadyService {
     /*************************************************************************************************************************************
      * VIEW/EDIT MODE CONTROLLER VARIABLES/FUNCTIONS
      *************************************************************************************************************************************/
-    public set_viewMode_boardMakde()
+    public set_viewMode_boardMaker()
     {
         this.source_click_location = null;
         this.board_view_mode = ViewMode.BOARD_MAKER;
