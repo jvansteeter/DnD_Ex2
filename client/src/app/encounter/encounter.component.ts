@@ -6,6 +6,8 @@ import {RightsService} from '../data-services/rights.service';
 import {BoardTraverseService} from "../board/services/board-traverse.service";
 import {BoardVisibilityService} from "../board/services/board-visibility.service";
 import {BoardTransformService} from "../board/services/board-transform.service";
+import {BoardCanvasService} from "../board/services/board-canvas.service";
+import {BoardPlayerService} from "../board/services/board-player.service";
 
 @Component({
     selector: 'encounter',
@@ -19,6 +21,8 @@ export class EncounterComponent implements OnInit, OnDestroy {
                 private rightsService: RightsService,
                 private boardVisibilityService: BoardVisibilityService,
                 private boardTransformService: BoardTransformService,
+                private boardCanvasService: BoardCanvasService,
+                private boardPlayerService: BoardPlayerService,
                 private boardTraverseService: BoardTraverseService) {
     }
 
@@ -34,12 +38,16 @@ export class EncounterComponent implements OnInit, OnDestroy {
             });
         });
 
+        this.boardPlayerService.init();
+        this.boardCanvasService.init();
         this.boardTransformService.init();
         this.boardVisibilityService.init();
         this.boardTraverseService.init();
     }
 
     ngOnDestroy(): void {
+        this.boardPlayerService.unInit();
+        this.boardCanvasService.unInit();
         this.boardTransformService.unInit();
         this.boardTraverseService.unInit();
         this.boardVisibilityService.unInit();

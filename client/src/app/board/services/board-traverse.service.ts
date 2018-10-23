@@ -22,12 +22,12 @@ export class BoardTraverseService extends IsReadyService {
 
     public init(): void {
         console.log('boardTraverseService: init()');
-        this.dependenciesReady().subscribe((isReady: boolean) => {
+        const sub = this.dependenciesReady().subscribe((isReady: boolean) => {
             if (isReady) {
                 this.blockingSegments = new Set();
                 this.numNodes = this.boardStateService.mapDimX * this.boardStateService.mapDimY;
-
                 this.initTraverseWeights();
+                sub.unsubscribe();
                 this.setReady(true);
             }
         })

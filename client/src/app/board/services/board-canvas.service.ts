@@ -20,15 +20,21 @@ export class BoardCanvasService extends IsReadyService {
         private boardStateService: BoardStateService
     ) {
         super(boardStateService);
-        this.init();
     }
 
     public init(): void {
-        this.dependenciesReady().subscribe((isReady: boolean) => {
-            if (this.isReady()) {
+        console.log('boardCanvasService: init()');
+        const sub = this.dependenciesReady().subscribe((isReady: boolean) => {
+            if (isReady) {
+                sub.unsubscribe();
                 this.setReady(true);
             }
         })
+    }
+
+    public unInit(): void {
+        console.log('boardCanvasService: unInit()');
+        this.setReady(false);
     }
 
     public updateTransform(ctx: CanvasRenderingContext2D) {

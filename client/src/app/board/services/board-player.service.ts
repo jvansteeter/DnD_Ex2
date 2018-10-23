@@ -39,6 +39,7 @@ export class BoardPlayerService extends IsReadyService {
     }
 
     public init(): void {
+        console.log('boardPlayerService: init()');
         const sub = this.dependenciesReady().subscribe((isReady: boolean) => {
             if (isReady) {
                 this.updateAllPlayerVisibility();
@@ -48,6 +49,14 @@ export class BoardPlayerService extends IsReadyService {
                 this.setReady(true);
             }
         })
+    }
+
+    public unInit(): void {
+        console.log('boardPlayerService: unInit()');
+        this.setReady(false);
+        delete this.player_traverse_map;
+        delete this.player_visibility_map;
+        delete this.player_lightSource_map;
     }
 
     public addPlayer(player: Player) {

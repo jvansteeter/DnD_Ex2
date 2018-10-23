@@ -17,8 +17,9 @@ export class BoardTransformService extends IsReadyService{
 
     public init(): void {
         console.log('boardTransformService: init()');
-        this.dependenciesReady().subscribe((isReady: boolean) => {
+        const sub = this.dependenciesReady().subscribe((isReady: boolean) => {
             if (isReady) {
+                sub.unsubscribe();
                 this.setReady(true);
             }
         })
