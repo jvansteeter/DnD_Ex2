@@ -3,16 +3,31 @@ import {XyPair} from '../../../../../shared/types/encounter/board/xy-pair';
 import {BoardStateService} from './board-state.service';
 import {BoardCanvasService} from './board-canvas.service';
 import {CellTarget} from '../shared/cell-target';
-import {BoardMode} from '../shared/enum/board-mode';
 import {CellRegion} from '../shared/enum/cell-region';
+import {IsReadyService} from "../../utilities/services/isReady.service";
 
 @Injectable()
-export class BoardTransformService {
-
+export class BoardTransformService extends IsReadyService{
     constructor(
         private boardStateService: BoardStateService,
         private boardCanvasService: BoardCanvasService
-    ) {}
+    ) {
+        super(boardStateService, boardCanvasService);
+    }
+
+    public init(): void {
+        console.log('boardTransformService: init()');
+        this.dependenciesReady().subscribe((isReady: boolean) => {
+            if (isReady) {
+                this.setReady(true);
+            }
+        })
+    }
+
+    public unInit() {
+        console.log('boardTransformService: unInit()');
+        this.setReady(false);
+    }
 
     /*************************************************************************************************************************************
      * BoardTransformService
@@ -30,33 +45,6 @@ export class BoardTransformService {
      *                    for the cell
      *     --- 'cell_pix' : refers toUserId the pixel coordinate within the cell
      */
-
-    /********************************************************************************************************************
-     *  Cell Point Calculation
-     ********************************************************************************************************************/
-    public adjacentCellTargets(source: CellTarget): Map<string, CellTarget> {
-        const returnMe = new Map<string, CellTarget>();
-
-        if (source.region === CellRegion.CENTER) {
-            returnMe.set('NorthWest', new CellTarget(new XyPair(source.location.x, source.location.y), CellRegion.CORNER));
-            returnMe.set('NorthEast', new CellTarget(new XyPair(source.location.x + 1, source.location.y), CellRegion.CORNER));
-            returnMe.set('SouthWest', new CellTarget(new XyPair(source.location.x, source.location.y + 1), CellRegion.CORNER));
-            returnMe.set('SouthEast', new CellTarget(new XyPair(source.location.x + 1, source.location.y + 1), CellRegion.CORNER));
-        }
-
-        if (source.region === CellRegion.CORNER) {
-            returnMe.set('North', new CellTarget(new XyPair(source.location.x, source.location.y), CellRegion.CORNER));
-            returnMe.set('North', new CellTarget(new XyPair(source.location.x, source.location.y), CellRegion.CORNER));
-            returnMe.set('North', new CellTarget(new XyPair(source.location.x, source.location.y), CellRegion.CORNER));
-            returnMe.set('North', new CellTarget(new XyPair(source.location.x, source.location.y), CellRegion.CORNER));
-            returnMe.set('North', new CellTarget(new XyPair(source.location.x, source.location.y), CellRegion.CORNER));
-            returnMe.set('North', new CellTarget(new XyPair(source.location.x, source.location.y), CellRegion.CORNER));
-            returnMe.set('North', new CellTarget(new XyPair(source.location.x, source.location.y), CellRegion.CORNER));
-            returnMe.set('North', new CellTarget(new XyPair(source.location.x, source.location.y), CellRegion.CORNER));
-        }
-
-        return returnMe;
-    }
 
     /********************************************************************************************************************
      *  Coordinate space transforms
@@ -105,30 +93,6 @@ export class BoardTransformService {
 
         // CENTER
         if ((loc.x > shift) && (loc.x < (BoardStateService.cell_res - shift) && (loc.y > shift) && (loc.y < (BoardStateService.cell_res - shift)))) {
-
-            // if (this.boardStateService.shiftDown && (this.boardStateService.board_edit_mode === BoardMode.TILES)) {
-            //     // Handles the isolation of the four triangles
-            //     if (loc.x >= loc.y) {
-            //         // top of cell
-            //         if ((loc.x + loc.y) <= BoardStateService.cell_res) {
-            //             // top-left
-            //             return new CellTarget(this.boardStateService.mouse_loc_cell, CellRegion.TOP_QUAD);
-            //         } else {
-            //             // top-right
-            //             return new CellTarget(this.boardStateService.mouse_loc_cell, CellRegion.RIGHT_QUAD);
-            //         }
-            //     } else {
-            //         // bottom of cell
-            //         if ((loc.x + loc.y) <= BoardStateService.cell_res) {
-            //             // bottom-left
-            //             return new CellTarget(this.boardStateService.mouse_loc_cell, CellRegion.LEFT_QUAD);
-            //         } else {
-            //             // bottom-right
-            //             return new CellTarget(this.boardStateService.mouse_loc_cell, CellRegion.BOTTOM_QUAD);
-            //         }
-            //     }
-            // }
-
             if (doDiagonals) {
                 if (loc.x > (BoardStateService.cell_res / 2)) {
                     // right side

@@ -18,10 +18,10 @@ export class BoardTraverseService extends IsReadyService {
         private boardStateService: BoardStateService
     ) {
         super(boardStateService);
-        this.init();
     }
 
     public init(): void {
+        console.log('boardTraverseService: init()');
         this.dependenciesReady().subscribe((isReady: boolean) => {
             if (isReady) {
                 this.blockingSegments = new Set();
@@ -31,6 +31,14 @@ export class BoardTraverseService extends IsReadyService {
                 this.setReady(true);
             }
         })
+    }
+
+    public unInit(): void {
+        console.log('boardTraverseService: unInit()');
+        this.setReady(false);
+        delete this.blockingSegments;
+        delete this.numNodes;
+        delete this.traverseWeights;
     }
 
     public initTraverseWeights(): void {

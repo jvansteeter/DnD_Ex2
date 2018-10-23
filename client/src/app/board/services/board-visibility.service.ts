@@ -27,6 +27,7 @@ export class BoardVisibilityService extends IsReadyService {
     }
 
     public init(): void {
+        console.log('boardVisibilityService: init()');
         this.dependenciesReady().subscribe((isReady: boolean) => {
             if (isReady) {
                 this.blockingSegments = new Set();
@@ -35,6 +36,13 @@ export class BoardVisibilityService extends IsReadyService {
                 this.setReady(true);
             }
         })
+    }
+
+    public unInit(): void {
+        console.log('boardVisibilityService: unInit()');
+        this.setReady(false);
+        delete this.blockingBitmap;
+        delete this.blockingSegments;
     }
 
     public iKnowWhatImDoingGetTheBlockingBitMap(): BitArray {
