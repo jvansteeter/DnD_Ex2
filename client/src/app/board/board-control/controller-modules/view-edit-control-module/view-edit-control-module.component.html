@@ -9,43 +9,43 @@
         </mat-form-field>
 
 
+        <ng-container *ngIf="boardStateService.board_edit_mode !== BoardMode.PLAYER">
+            <span class="font" style="color: rgba(0, 0, 0, 0.54); font-size: 12px;">Edit Mode</span>
 
-        <span class="font" style="color: rgba(0, 0, 0, 0.54); font-size: 12px;">Edit Mode</span>
+            <div style="display: block">
+                <button class="strokeButtonOverride"
+                        matTooltip="Player Mode"
+                        (click)="boardStateService.set_inputMode_player();"
+                        [ngClass]="{'selectedNotationMode': boardStateService.board_edit_mode === BoardMode.PLAYER}"
+                        mat-stroked-button>
+                    <mat-icon>person</mat-icon>
+                </button>
 
-        <div style="display: block">
-            <button class="strokeButtonOverride"
-                    matTooltip="Player Mode"
-                    (click)="handleSetInputModePlayer()"
-                    [ngClass]="{'selectedNotationMode': boardStateService.board_edit_mode === BoardMode.PLAYER}"
-                    mat-stroked-button>
-                <mat-icon>person</mat-icon>
-            </button>
+                <button class="strokeButtonOverride"
+                        matTooltip="Door Mode"
+                        (click)="boardStateService.set_inputMode_door()"
+                        [ngClass]="{'selectedNotationMode': boardStateService.board_edit_mode === BoardMode.DOORS}"
+                        mat-stroked-button>
+                    <mat-icon>kitchen</mat-icon>
+                </button>
 
-            <button class="strokeButtonOverride"
-                    matTooltip="Door Mode"
-                    (click)="handleSetInputModeDoor()"
-                    [ngClass]="{'selectedNotationMode': boardStateService.board_edit_mode === BoardMode.DOORS}"
-                    mat-stroked-button>
-                <mat-icon>kitchen</mat-icon>
-            </button>
+                <button class="strokeButtonOverride"
+                        matTooltip="Wall Mode"
+                        (click)="boardStateService.set_inputMode_walls()"
+                        [ngClass]="{'selectedNotationMode': boardStateService.board_edit_mode === BoardMode.WALLS}"
+                        mat-stroked-button>
+                    <mat-icon>border_all</mat-icon>
+                </button>
 
-            <button class="strokeButtonOverride"
-                    matTooltip="Wall Mode"
-                    (click)="handleSetInputModeWall()"
-                    [ngClass]="{'selectedNotationMode': boardStateService.board_edit_mode === BoardMode.WALLS}"
-                    mat-stroked-button>
-                <mat-icon>border_all</mat-icon>
-            </button>
+                <button class="strokeButtonOverride"
+                        matTooltip="Light Mode"
+                        (click)="boardStateService.set_inputMode_lights()"
+                        [ngClass]="{'selectedNotationMode': boardStateService.board_edit_mode === BoardMode.LIGHTS}"
+                        mat-stroked-button>
+                    <mat-icon>flare</mat-icon>
+                </button>
+            </div>
+        </ng-container>
 
-            <button class="strokeButtonOverride"
-                    matTooltip="Light Mode"
-                    (click)="handleSetInputModeLight()"
-                    [ngClass]="{'selectedNotationMode': boardStateService.board_edit_mode === BoardMode.LIGHTS}"
-                    mat-stroked-button>
-                <mat-icon>flare</mat-icon>
-            </button>
-
-
-        </div>
     </div>
 </div>

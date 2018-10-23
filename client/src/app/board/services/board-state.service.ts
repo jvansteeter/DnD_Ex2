@@ -138,27 +138,18 @@ export class BoardStateService extends IsReadyService {
             if (isReady) {
                 if (this.rightsService.isEncounterGM()) {
                     this.isGM = true;
-                    this.board_view_mode = ViewMode.MASTER;
+                    this.set_viewMode_gameMaster();
                 }
 
                 switch (this.board_view_mode) {
                     case ViewMode.PLAYER:
                         this.showGridControls = true;
-                        this.showHealthBarControls = false;
-                        this.showShowWallsToPlayerControls = false;
-                        this.showMapEnabledControls = false;
                         break;
                     case ViewMode.MASTER:
                         this.showGridControls = true;
-                        this.showHealthBarControls = true;
-                        this.showShowWallsToPlayerControls = true;
-                        this.showMapEnabledControls = true;
                         break;
                     case ViewMode.BOARD_MAKER:
                         this.showGridControls = true;
-                        this.showHealthBarControls = true;
-                        this.showShowWallsToPlayerControls = true;
-                        this.showMapEnabledControls = true;
                         break;
                 }
 
@@ -220,5 +211,73 @@ export class BoardStateService extends IsReadyService {
     get yBoundLine(): Line {
         const yRes = this.mapDimY * BoardStateService.cell_res - 1;
         return new Line(new XyPair(0, yRes), new XyPair(1, yRes));
+    }
+
+    /*************************************************************************************************************************************
+     * VIEW/EDIT MODE CONTROLLER VARIABLES/FUNCTIONS
+     *************************************************************************************************************************************/
+    public set_viewMode_boardMakde()
+    {
+        this.source_click_location = null;
+        this.board_view_mode = ViewMode.BOARD_MAKER;
+        this.board_edit_mode = BoardMode.WALLS;
+        this.do_pops = false;
+
+        this.showGridControls = true;
+        this.showHealthBarControls = true;
+        this.showShowWallsToPlayerControls = true;
+        this.showMapEnabledControls = true;
+    }
+
+    public set_viewMode_player() {
+        this.source_click_location = null;
+        this.board_view_mode = ViewMode.PLAYER;
+        this.board_edit_mode = BoardMode.PLAYER;
+        this.do_pops = true;
+        this.show_health = false;
+
+        this.showGridControls = true;
+        this.showHealthBarControls = false;
+        this.showShowWallsToPlayerControls = false;
+        this.showMapEnabledControls = false;
+    }
+
+    public set_viewMode_gameMaster() {
+        this.source_click_location = null;
+        this.board_view_mode = ViewMode.MASTER;
+        this.board_edit_mode = BoardMode.PLAYER;
+        this.do_pops = true;
+
+        this.showGridControls = true;
+        this.showHealthBarControls = true;
+        this.showShowWallsToPlayerControls = true;
+        this.showMapEnabledControls = true;
+    }
+
+    public set_inputMode_player() {
+        this.source_click_location = null;
+        this.board_edit_mode = BoardMode.PLAYER;
+        this.doDiagonals = false;
+        this.inputOffset = 0;
+    }
+
+    public set_inputMode_door() {
+        this.source_click_location = null;
+        this.board_edit_mode = BoardMode.DOORS;
+        this.inputOffset = 0.10;
+        this.doDiagonals = true;
+    }
+
+    public set_inputMode_walls() {
+        this.board_edit_mode = BoardMode.WALLS;
+        this.inputOffset = 0.2;
+        this.doDiagonals = true;
+    }
+
+    public set_inputMode_lights() {
+        this.source_click_location = null;
+        this.board_edit_mode = BoardMode.LIGHTS;
+        this.inputOffset = 0;
+        this.doDiagonals = false;
     }
 }

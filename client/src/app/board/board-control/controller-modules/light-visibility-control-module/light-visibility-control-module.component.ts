@@ -14,6 +14,8 @@ import { EncounterService } from '../../../../encounter/encounter.service';
 
 export class LightVisibilityControlModuleComponent implements OnInit {
     currentVisibility: string;
+
+    ViewMode = PlayerVisibilityMode;
     visibilityModes: PlayerVisibilityMode[] = [
         PlayerVisibilityMode.GLOBAL,
 		    PlayerVisibilityMode.TEAM,

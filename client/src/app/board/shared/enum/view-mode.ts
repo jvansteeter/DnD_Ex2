@@ -1,5 +1,5 @@
 export enum ViewMode {
-  BOARD_MAKER,
-  PLAYER,
-  MASTER
+  BOARD_MAKER = 'Board Maker',
+  PLAYER = 'Player',
+  MASTER = 'Game Master'
 }
