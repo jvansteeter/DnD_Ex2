@@ -37,9 +37,7 @@ export class BoardPlayerService extends IsReadyService {
                 private userProfileService: UserProfileService,
                 private boardStateService: BoardStateService) {
         super(encounterService, boardStateService, boardTraverseService, boardVisibilityService);
-        this.player_lightSource_map = new Map<string, LightSource>();
-        this.player_visibility_map = new Map<string, Polygon>();
-        this.player_traverse_map = new Map<string, Array<number>>();
+
         this.init();
     }
 
@@ -47,6 +45,10 @@ export class BoardPlayerService extends IsReadyService {
         console.log('boardPlayerService: init()');
         this.dependenciesSub = this.dependenciesReady().subscribe((isReady: boolean) => {
             if (isReady) {
+                this.player_lightSource_map = new Map<string, LightSource>();
+                this.player_visibility_map = new Map<string, Polygon>();
+                this.player_traverse_map = new Map<string, Array<number>>();
+
                 this.updateAllPlayerVisibility();
                 this.updateAllPlayerTraverse();
                 this.updateAllPlayerLightSource();
