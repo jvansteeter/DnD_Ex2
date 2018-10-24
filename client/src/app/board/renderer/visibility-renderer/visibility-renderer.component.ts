@@ -63,11 +63,12 @@ export class VisibilityRendererComponent implements OnInit, OnDestroy {
                 switch (this.encounterService.config.playerVisibilityMode) {
                     case PlayerVisibilityMode.PLAYER:
                         if (this.boardStateService.visibilityHighlightEnabled) {
-                            // const hoverPlayerId = this.boardPlayerService.hoveredPlayerId;
-                            // if (hoverPlayerId !== '') {
-                            //     const fillCode = 'rgba(255,0,0,0.08)';
-                            //     this.boardCanvasService.draw_fill_polygon(this.ctx, this.boardPlayerService.player_visibility_map.get(hoverPlayerId).border, fillCode);
-                            // }
+                            const hoverPlayerId = this.boardPlayerService.hoveredPlayerId;
+                            if (hoverPlayerId !== '') {
+                                const fillCode = 'rgba(255,0,0,0.08)';
+                                // this.boardCanvasService.draw_fill_polygon(this.ctx, this.boardPlayerService.player_visibility_map.get(hoverPlayerId).border, fillCode);
+                                this.boardCanvasService.fill_point_array(this.ctx, this.boardPlayerService.player_visibility_map.get(hoverPlayerId).border, fillCode)
+                            }
                         }
                         break;
                     case PlayerVisibilityMode.TEAM:
@@ -75,7 +76,7 @@ export class VisibilityRendererComponent implements OnInit, OnDestroy {
                             for (let player of this.boardPlayerService.players) {
                                 const visPoly = this.boardPlayerService.player_visibility_map.get(player._id);
                                 if (isDefined(visPoly)) {
-                                    this.boardCanvasService.fill_point_array(this.ctx, visPoly.border, 'rgba(255, 0, 0, 0.03)');
+                                    this.boardCanvasService.fill_point_array(this.ctx, visPoly.border, 'rgba(255, 0, 0, 0.08)');
                                 }
                             }
                         }
@@ -95,8 +96,10 @@ export class VisibilityRendererComponent implements OnInit, OnDestroy {
                     case PlayerVisibilityMode.TEAM:
                         this.boardCanvasService.fill_canvas(this.ctx, 'rgba(0, 0, 0, 1.0)');
                         for (let player of this.boardPlayerService.players) {
-                            const visPoly = this.boardPlayerService.player_visibility_map.get(player._id);
-                            this.boardCanvasService.clear_polygon(this.ctx, visPoly);
+                            if (player.isVisible) {
+                                const visPoly = this.boardPlayerService.player_visibility_map.get(player._id);
+                                this.boardCanvasService.clear_polygon(this.ctx, visPoly);
+                            }
                         }
                         break;
                     case PlayerVisibilityMode.GLOBAL:

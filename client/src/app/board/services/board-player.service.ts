@@ -37,7 +37,9 @@ export class BoardPlayerService extends IsReadyService {
                 private userProfileService: UserProfileService,
                 private boardStateService: BoardStateService) {
         super(encounterService, boardStateService, boardTraverseService, boardVisibilityService);
-
+        this.player_lightSource_map = new Map<string, LightSource>();
+        this.player_visibility_map = new Map<string, Polygon>();
+        this.player_traverse_map = new Map<string, Array<number>>();
         this.init();
     }
 
@@ -98,7 +100,12 @@ export class BoardPlayerService extends IsReadyService {
 
     public updatePlayerLightSource(playerId: string) {
         const player = this.encounterService.getPlayerById(playerId);
-        const playerLightSource = new LightSource(player.location, 2, 5);
+        let playerVision = player.characterData.values['Vision'];
+        if (isUndefined(playerVision)) {
+            playerVision = 0;
+        }
+        const playerLightSource = new LightSource(player.location, playerVision / 2, playerVision);
+
         const light_polys = this.boardLightService.generateLightPolygons(playerLightSource);
         playerLightSource.dim_polygon = light_polys.dim_poly;
         playerLightSource.bright_polygon = light_polys.bright_poly;
@@ -141,8 +148,12 @@ export class BoardPlayerService extends IsReadyService {
         const player = this.encounterService.getPlayerById(id);
         const playerPixelLocation = new XyPair(player.location.x * BoardStateService.cell_res + (BoardStateService.cell_res / 2), player.location.y * BoardStateService.cell_res + (BoardStateService.cell_res / 2));
 
-        const visibility_range = 20;
-        const vis_pixel_range = visibility_range * BoardStateService.cell_res + BoardStateService.cell_res / 2;
+        let playerVision = player.characterData.values['Vision'];
+        if (isUndefined(playerVision)) {
+            playerVision = 0;
+        }
+
+        const vis_pixel_range = playerVision * BoardStateService.cell_res + BoardStateService.cell_res / 2;
         const vis_range_circle = GeometryStatics.BresenhamCircle(playerPixelLocation, vis_pixel_range);
         const visibilityPolygon = this.boardVisibilityService.raytraceVisibilityFromCell(playerPixelLocation, this.boardStateService.diag_visibility_ray_count, ...this.boardLightService.cropCircle(vis_range_circle));
         this.player_visibility_map.set(id, visibilityPolygon);

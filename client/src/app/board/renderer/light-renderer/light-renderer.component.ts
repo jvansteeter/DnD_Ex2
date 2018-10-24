@@ -5,6 +5,7 @@ import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/co
 import {BoardLightService} from '../../services/board-light.service';
 import {BoardPlayerService} from "../../services/board-player.service";
 import { EncounterService } from '../../../encounter/encounter.service';
+import {isDefined} from "@angular/compiler/src/util";
 
 @Component({
     selector: 'light-renderer',
@@ -58,9 +59,24 @@ export class LightRendererComponent implements OnInit, OnDestroy {
                     this.boardCanvasService.fill_canvas(this.ctx_dim, 'rgba(0, 0, 0, 0.75)');
                     this.boardCanvasService.fill_canvas(this.ctx_dark, 'rgba(0, 0, 0, 1.0)');
 
-                    for (let lightSource of [...this.boardLightService.lightSources, ...this.boardPlayerService.player_lightSource_map.values()]) {
+                    for (let lightSource of this.boardLightService.lightSources) {
                         this.boardCanvasService.clear_polygon(this.ctx_dark, lightSource.dim_polygon);
                         this.boardCanvasService.clear_polygon(this.ctx_dim, lightSource.bright_polygon);
+                    }
+
+                    for (let player of this.boardPlayerService.players) {
+                        if (player.isVisible) {
+                            let playerVision = player.characterData.values['Vision'];
+                            if (isDefined(playerVision)) {
+                                if (playerVision > 0) {
+                                    let lightSource = this.boardPlayerService.player_lightSource_map.get(player._id);
+                                    if (isDefined(lightSource)) {
+                                        this.boardCanvasService.clear_polygon(this.ctx_dark, lightSource.dim_polygon);
+                                        this.boardCanvasService.clear_polygon(this.ctx_dim, lightSource.bright_polygon);
+                                    }
+                                }
+                            }
+                        }
                     }
                     break;
                 case ViewMode.MASTER:
