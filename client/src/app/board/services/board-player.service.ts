@@ -13,6 +13,7 @@ import { isNullOrUndefined, isUndefined } from 'util';
 import {RightsService} from "../../data-services/rights.service";
 import {GeometryStatics} from "../statics/geometry-statics";
 import { Subscription } from 'rxjs';
+import {UserProfileService} from "../../data-services/userProfile.service";
 
 @Injectable()
 export class BoardPlayerService extends IsReadyService {
@@ -33,6 +34,7 @@ export class BoardPlayerService extends IsReadyService {
                 private boardLightService: BoardLightService,
                 private boardTraverseService: BoardTraverseService,
                 private rightsService: RightsService,
+                private userProfileService: UserProfileService,
                 private boardStateService: BoardStateService) {
         super(encounterService, boardStateService, boardTraverseService, boardVisibilityService);
         this.player_lightSource_map = new Map<string, LightSource>();
@@ -151,6 +153,26 @@ export class BoardPlayerService extends IsReadyService {
         if (this.rightsService.isMyPlayer(player) || this.rightsService.isEncounterGM()){
             player.isVisible = !player.isVisible;
         }
+    }
+
+    public tokenHasLOSToSomeUserToken(target: Player): boolean {
+        let userTokens: Array<Player> = new Array<Player>();
+        for (let player of this.players) {
+            if (player.userId === this.userProfileService.userId) {
+                userTokens.push(player);
+            }
+        }
+
+        if (userTokens.length === 0) {
+            return false;
+        }
+
+        for (let userToken of userTokens) {
+            if (this.boardVisibilityService.cellHasLOSToCell(target.location, userToken.location)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 

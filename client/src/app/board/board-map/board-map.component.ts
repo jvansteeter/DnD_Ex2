@@ -64,6 +64,13 @@ export class BoardMapComponent implements OnInit, AfterViewInit {
 
     }
 
+    public showInitCoin(player: Player): boolean {
+        if (this.rightsService.isEncounterGM() || this.rightsService.isMyPlayer(player) || (player.isVisible && this.boardPlayerService.tokenHasLOSToSomeUserToken(player))) {
+            return true;
+        }
+        return false;
+    }
+
     getCursorClass(): string {
         if (this.boardStateService.spaceDown) {
             if (this.boardStateService.mouseLeftDown) {

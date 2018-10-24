@@ -65,17 +65,16 @@ export class BoardVisibilityService extends IsReadyService {
         }
 
         for (let cell of cellsToCheck) {
-            if (
-                this.cellHasLOSTo_TopQuad(source, cell) ||
-                this.cellHasLOSTo_RightQuad(source, cell) ||
-                this.cellHasLOSTo_BottomQuad(source, cell) ||
-                this.cellHasLOSTo_LeftQuad(source, cell)
-            ) {
+            if (this.cellsVisibleFromCell(source, cell)) {
                 returnMe.push(cell);
             }
         }
 
         return returnMe;
+    }
+
+    public cellHasLOSToCell(source: XyPair, target: XyPair): boolean {
+        return this.cellHasLOSTo_TopQuad(source, target) || this.cellHasLOSTo_RightQuad(source, target) || this.cellHasLOSTo_BottomQuad(source, target) || this.cellHasLOSTo_LeftQuad(source, target);
     }
 
     public raytraceVisibilityFromCell(source: XyPair, rayCount, ...additionalBlockingPoints: Array<XyPair>): Polygon {
