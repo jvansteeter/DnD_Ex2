@@ -7,4 +7,5 @@ export interface EncounterConfigData {
 	playerVisibilityMode: PlayerVisibilityMode;
 	mapEnabled: boolean;
 	playerWallsEnabled: boolean;
+	showHealth: boolean;
 }

@@ -134,6 +134,7 @@ export class EncounterService extends IsReadyService {
 			playerVisibilityMode: PlayerVisibilityMode.PLAYER,
 			mapEnabled: false,
 			playerWallsEnabled: true,
+			showHealth: false,
 		};
 	}
 
@@ -154,6 +155,7 @@ export class EncounterService extends IsReadyService {
 			playerVisibilityMode: this.encounterState.configState.playerVisibilityMode,
 			mapEnabled: this.encounterState.configState.mapEnabled,
 			playerWallsEnabled: this.encounterState.configState.playerWallsEnabled,
+			showHealth: this.encounterState.configState.showHealth
 		}
 	}
 }

@@ -41,6 +41,7 @@ export class EncounterService {
 				playerVisibilityMode: PlayerVisibilityMode.PLAYER,
 				mapEnabled: false,
 				playerWallsEnabled: true,
+				showHealth: false,
 			});
 			if (mapUrl) {
 				encounterModel = await encounterModel.setMapUrl(mapUrl);

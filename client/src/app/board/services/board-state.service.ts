@@ -69,7 +69,6 @@ export class BoardStateService extends IsReadyService {
 
     public inputOffset = 0.2;    // offset used for input boundaries
     public gridEnabled = true;
-    public show_health = true;
 
     /*************************************************************************************************************************************
      * LOCAL - Mouse Location
@@ -234,7 +233,7 @@ export class BoardStateService extends IsReadyService {
         this.board_view_mode = ViewMode.PLAYER;
         this.board_edit_mode = BoardMode.PLAYER;
         this.do_pops = true;
-        this.show_health = false;
+        this.encounterService.config.showHealth = false;
 
         this.showGridControls = true;
         this.showHealthBarControls = false;

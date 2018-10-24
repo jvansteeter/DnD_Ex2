@@ -9,6 +9,7 @@ export class EncounterConfigState extends ConcurrentBoardObject implements Encou
 	private _mapEnabled: boolean;
 	private _playerVisibilityMode: PlayerVisibilityMode;
 	private _playerWallsEnabled: boolean;
+	private _showHealth: boolean;
 
 	public setEncounterConfigData(data: EncounterConfigData): void {
 		this._ambientLight = data.ambientLight;
@@ -16,6 +17,7 @@ export class EncounterConfigState extends ConcurrentBoardObject implements Encou
 		this._mapEnabled = data.mapEnabled;
 		this._playerVisibilityMode = data.playerVisibilityMode;
 		this._playerWallsEnabled = data.playerWallsEnabled;
+		this._showHealth = data.showHealth;
 	}
 
 	get ambientLight(): LightValue {
@@ -60,6 +62,15 @@ export class EncounterConfigState extends ConcurrentBoardObject implements Encou
 
 	set playerWallsEnabled(value: boolean) {
 		this._playerWallsEnabled = value;
+		this.emitChange();
+	}
+
+	get showHealth(): boolean {
+		return this._showHealth;
+	}
+
+	set showHealth(value: boolean) {
+		this._showHealth = value;
 		this.emitChange();
 	}
 }
