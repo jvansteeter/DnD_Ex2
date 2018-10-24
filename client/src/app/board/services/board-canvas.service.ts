@@ -7,6 +7,7 @@ import {BoardStateService} from './board-state.service';
 import {CellTargetStatics} from '../statics/cell-target-statics';
 import {IsReadyService} from "../../utilities/services/isReady.service";
 import {Polygon} from "../../../../../shared/types/encounter/board/polygon";
+import { Subscription } from 'rxjs';
 
 @Injectable()
 export class BoardCanvasService extends IsReadyService {
@@ -16,6 +17,8 @@ export class BoardCanvasService extends IsReadyService {
     public cvs_width: number;
     public cvs_height: number;
 
+    private dependenciesSub: Subscription;
+
     constructor(
         private boardStateService: BoardStateService
     ) {
@@ -24,9 +27,11 @@ export class BoardCanvasService extends IsReadyService {
 
     public init(): void {
         console.log('boardCanvasService: init()');
-        const sub = this.dependenciesReady().subscribe((isReady: boolean) => {
+        this.dependenciesSub = this.dependenciesReady().subscribe((isReady: boolean) => {
             if (isReady) {
-                sub.unsubscribe();
+            	  if (this.dependenciesSub) {
+		              this.dependenciesSub.unsubscribe();
+	              }
                 this.setReady(true);
             }
         })

@@ -6,6 +6,7 @@ import {BoardStateService} from "./board-state.service";
 import {GeometryStatics} from "../statics/geometry-statics";
 import {IsReadyService} from "../../utilities/services/isReady.service";
 import {isDefined} from "@angular/compiler/src/util";
+import { Subscription } from 'rxjs';
 
 @Injectable()
 export class BoardTraverseService extends IsReadyService {
@@ -13,6 +14,8 @@ export class BoardTraverseService extends IsReadyService {
 
     public numNodes: number;
     public traverseWeights = [];            // traverseWeights[fromIndex][toIndex] = 1|1.5|Infinity, adj|diag|not
+
+		private dependenciesSub: Subscription;
 
     constructor(
         private boardStateService: BoardStateService
@@ -22,12 +25,14 @@ export class BoardTraverseService extends IsReadyService {
 
     public init(): void {
         console.log('boardTraverseService: init()');
-        const sub = this.dependenciesReady().subscribe((isReady: boolean) => {
+        this.dependenciesSub = this.dependenciesReady().subscribe((isReady: boolean) => {
             if (isReady) {
                 this.blockingSegments = new Set();
                 this.numNodes = this.boardStateService.mapDimX * this.boardStateService.mapDimY;
                 this.initTraverseWeights();
-                sub.unsubscribe();
+                if (this.dependenciesSub) {
+	                this.dependenciesSub.unsubscribe();
+                }
                 this.setReady(true);
             }
         })
