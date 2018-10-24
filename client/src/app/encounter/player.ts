@@ -18,10 +18,10 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 	private _tokenUrl: string;
 	private _token_img: HTMLImageElement;
 	private _actions: { action: string, detail: string }[];
+	private _initiative: number;
 
 	encounterId: string;
 	characterData: CharacterData;
-	initiative: number;
 
 	constructor(playerData: PlayerData) {
 		super();
@@ -37,7 +37,7 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 			encounterId: this.encounterId,
 			userId: this._userId,
 			characterData: this.characterData,
-			initiative: this.initiative,
+			initiative: this._initiative,
 			location: this._location,
 			isVisible: this._isVisible,
 		}
@@ -68,7 +68,7 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 		this._speed = playerData.characterData.values[RequiredAspects.SPEED];
 		this.encounterId = playerData.encounterId;
 		this.characterData = playerData.characterData;
-		this.initiative = playerData.initiative;
+		this._initiative = playerData.initiative;
 		if (!isUndefined(playerData.location) && !isUndefined(playerData.location.x) && !isUndefined(playerData.location.y)) {
 			this._location = new XyPair(playerData.location.x, playerData.location.y);
 		}
@@ -188,5 +188,14 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 
 	set userId(value) {
 		this._userId = value;
+	}
+
+	get initiative(): number {
+		return this._initiative;
+	}
+
+	set initiative(value: number) {
+		this._initiative = value;
+		this.emitChange();
 	}
 }
