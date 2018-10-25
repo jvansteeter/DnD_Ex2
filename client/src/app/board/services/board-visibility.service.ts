@@ -25,15 +25,16 @@ export class BoardVisibilityService extends IsReadyService {
         public boardStateService: BoardStateService,
         public boardCanvasService: BoardCanvasService,
     ) {
-        super(boardStateService);
+        super(boardStateService, boardCanvasService);
+        this.init();
     }
 
     public init(): void {
         console.log('boardVisibilityService: init()');
+        this.blockingSegments = new Set();
+        this.blockingBitmap = new BitArray(BoardStateService.num_pixels);
         this.dependenciesSub = this.dependenciesReady().subscribe((isReady: boolean) => {
             if (isReady) {
-                this.blockingSegments = new Set();
-                this.blockingBitmap = new BitArray(BoardStateService.num_pixels);
                 this.dependenciesSub.unsubscribe();
                 this.setReady(true);
             }

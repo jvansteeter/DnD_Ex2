@@ -18,9 +18,9 @@ import {UserProfileService} from "../../data-services/userProfile.service";
 @Injectable()
 export class BoardPlayerService extends IsReadyService {
 
-    public player_lightSource_map: Map<string, LightSource>;
-    public player_visibility_map: Map<string, Polygon>;
-    public player_traverse_map: Map<string, Array<number>>;
+    public player_lightSource_map: Map<string, LightSource> = new Map<string, LightSource>();
+    public player_visibility_map: Map<string, Polygon> = new Map<string, Polygon>();
+    public player_traverse_map: Map<string, Array<number>> = new Map<string, Array<number>>();
 
     public selectedPlayerId: string;
     public hoveredPlayerId: string;
@@ -37,20 +37,16 @@ export class BoardPlayerService extends IsReadyService {
                 private userProfileService: UserProfileService,
                 private boardStateService: BoardStateService) {
         super(encounterService, boardStateService, boardTraverseService, boardVisibilityService);
-        this.player_lightSource_map = new Map<string, LightSource>();
-        this.player_visibility_map = new Map<string, Polygon>();
-        this.player_traverse_map = new Map<string, Array<number>>();
         this.init();
     }
 
     public init(): void {
         console.log('boardPlayerService: init()');
+        this.player_lightSource_map = new Map<string, LightSource>();
+        this.player_visibility_map = new Map<string, Polygon>();
+        this.player_traverse_map = new Map<string, Array<number>>();
         this.dependenciesSub = this.dependenciesReady().subscribe((isReady: boolean) => {
             if (isReady) {
-                this.player_lightSource_map = new Map<string, LightSource>();
-                this.player_visibility_map = new Map<string, Polygon>();
-                this.player_traverse_map = new Map<string, Array<number>>();
-
                 this.updateAllPlayerVisibility();
                 this.updateAllPlayerTraverse();
                 this.updateAllPlayerLightSource();
