@@ -32,8 +32,13 @@ export class BoardLightService extends IsReadyService {
     }
 
     toggleLightSource(source: LightSource) {
-        this.lightSourceState.toggle(source);
-        this.updateLightValue(source);
+        let index = this.lightSourceState.getLightSourceIndex(source);
+        if (index === -1) {
+            this.updateLightValue(source);
+            this.lightSourceState.add(source);
+        } else {
+            this.lightSourceState.remove(source);
+        }
     }
 
     updateLightValue(lightSource: LightSource): void {
@@ -87,7 +92,6 @@ export class BoardLightService extends IsReadyService {
 
     set lightSources(value: Array<LightSource>) {
     	this.lightSourceState.lightSources = value;
-    	this.updateAllLightValues();
     }
 
     get lightSourcesChangeObservable(): Observable<void> {

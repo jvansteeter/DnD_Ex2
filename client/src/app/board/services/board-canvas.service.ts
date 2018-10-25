@@ -567,6 +567,10 @@ export class BoardCanvasService extends IsReadyService {
     }
 
     clear_xy_array(ctx: CanvasRenderingContext2D, xyArray: Array<XyPair>) {
+        if (isNullOrUndefined(xyArray)){
+            return;
+        }
+
         ctx.save();
 
         ctx.beginPath();
@@ -583,35 +587,20 @@ export class BoardCanvasService extends IsReadyService {
     /*****************************************************************************************************
      *  Cell FILL region functions
      *****************************************************************************************************/
-
-    draw_fill_polygon(ctx: CanvasRenderingContext2D, points: Array<CellTarget>, fill_code: string | CanvasGradient | CanvasPattern) {
-        ctx.save();
-
-        ctx.fillStyle = fill_code;
-
-        ctx.beginPath();
-        let process_point;
-        let index;
-        for (index = 0; index < points.length; index++) {
-            process_point = CellTargetStatics.getPointCanvasCoor(points[index]);
-            ctx.lineTo(process_point.x, process_point.y);
+    fill_xy_array(ctx: CanvasRenderingContext2D, xyArray: Array<XyPair>, rgbaCode: string) {
+        if (isNullOrUndefined(xyArray)){
+            return;
         }
-        process_point = CellTargetStatics.getPointCanvasCoor(points[0]);
-        ctx.lineTo(process_point.x, process_point.y);
-        ctx.fill();
-        ctx.restore();
-    }
 
-    fill_point_array(ctx: CanvasRenderingContext2D, points: Array<XyPair>, rgbaCode: string) {
         ctx.save();
 
         ctx.fillStyle = rgbaCode;
 
         ctx.beginPath();
-        for (let point of points) {
+        for (let point of xyArray) {
             ctx.lineTo(point.x, point.y);
         }
-        ctx.lineTo(points[0].x, points[0].y);
+        ctx.lineTo(xyArray[0].x, xyArray[0].y);
         ctx.fill();
         ctx.restore()
     }

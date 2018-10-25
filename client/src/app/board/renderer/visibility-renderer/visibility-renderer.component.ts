@@ -67,7 +67,7 @@ export class VisibilityRendererComponent implements OnInit, OnDestroy {
                             if (hoverPlayerId !== '') {
                                 const fillCode = 'rgba(255,0,0,0.08)';
                                 // this.boardCanvasService.draw_fill_polygon(this.ctx, this.boardPlayerService.player_visibility_map.get(hoverPlayerId).border, fillCode);
-                                this.boardCanvasService.fill_point_array(this.ctx, this.boardPlayerService.player_visibility_map.get(hoverPlayerId), fillCode)
+                                this.boardCanvasService.fill_xy_array(this.ctx, this.boardPlayerService.player_visibility_map.get(hoverPlayerId), fillCode)
                             }
                         }
                         break;
@@ -76,7 +76,7 @@ export class VisibilityRendererComponent implements OnInit, OnDestroy {
                             for (let player of this.boardPlayerService.players) {
                                 const visPoly = this.boardPlayerService.player_visibility_map.get(player._id);
                                 if (isDefined(visPoly)) {
-                                    this.boardCanvasService.fill_point_array(this.ctx, visPoly, 'rgba(255, 0, 0, 0.08)');
+                                    this.boardCanvasService.fill_xy_array(this.ctx, visPoly, 'rgba(255, 0, 0, 0.08)');
                                 }
                             }
                         }
