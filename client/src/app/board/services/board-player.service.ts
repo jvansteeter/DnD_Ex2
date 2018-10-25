@@ -6,7 +6,6 @@ import {BoardTraverseService} from './board-traverse.service';
 import {BoardStateService} from './board-state.service';
 import {IsReadyService} from '../../utilities/services/isReady.service';
 import {Player} from '../../encounter/player';
-import {Polygon} from "../../../../../shared/types/encounter/board/polygon";
 import {BoardLightService} from "./board-light.service";
 import {LightSource} from "../map-objects/light-source";
 import { isNullOrUndefined, isUndefined } from 'util';
@@ -19,7 +18,7 @@ import {UserProfileService} from "../../data-services/userProfile.service";
 export class BoardPlayerService extends IsReadyService {
 
     public player_lightSource_map: Map<string, LightSource> = new Map<string, LightSource>();
-    public player_visibility_map: Map<string, Polygon> = new Map<string, Polygon>();
+    public player_visibility_map: Map<string, Array<XyPair>> = new Map<string, Array<XyPair>>();
     public player_traverse_map: Map<string, Array<number>> = new Map<string, Array<number>>();
 
     public selectedPlayerId: string;
@@ -43,7 +42,7 @@ export class BoardPlayerService extends IsReadyService {
     public init(): void {
         console.log('boardPlayerService: init()');
         this.player_lightSource_map = new Map<string, LightSource>();
-        this.player_visibility_map = new Map<string, Polygon>();
+        this.player_visibility_map = new Map<string, Array<XyPair>>();
         this.player_traverse_map = new Map<string, Array<number>>();
         this.dependenciesSub = this.dependenciesReady().subscribe((isReady: boolean) => {
             if (isReady) {

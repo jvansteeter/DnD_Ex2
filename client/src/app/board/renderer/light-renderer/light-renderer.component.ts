@@ -51,8 +51,8 @@ export class LightRendererComponent implements OnInit, OnDestroy {
                     this.boardCanvasService.fill_canvas(this.ctx_dark, 'rgba(0, 0, 0, 0.45)');
 
                     for (let lightSource of [...this.boardLightService.lightSources, ...this.boardPlayerService.player_lightSource_map.values()]) {
-                        this.boardCanvasService.clear_polygon(this.ctx_dark, lightSource.dim_polygon);
-                        this.boardCanvasService.clear_polygon(this.ctx_dim, lightSource.bright_polygon);
+                        this.boardCanvasService.clear_xy_array(this.ctx_dark, lightSource.dim_polygon);
+                        this.boardCanvasService.clear_xy_array(this.ctx_dim, lightSource.bright_polygon);
                     }
                     break;
                 case ViewMode.PLAYER:
@@ -60,8 +60,8 @@ export class LightRendererComponent implements OnInit, OnDestroy {
                     this.boardCanvasService.fill_canvas(this.ctx_dark, 'rgba(0, 0, 0, 1.0)');
 
                     for (let lightSource of this.boardLightService.lightSources) {
-                        this.boardCanvasService.clear_polygon(this.ctx_dark, lightSource.dim_polygon);
-                        this.boardCanvasService.clear_polygon(this.ctx_dim, lightSource.bright_polygon);
+                        this.boardCanvasService.clear_xy_array(this.ctx_dark, lightSource.dim_polygon);
+                        this.boardCanvasService.clear_xy_array(this.ctx_dim, lightSource.bright_polygon);
                     }
 
                     for (let player of this.boardPlayerService.players) {
@@ -71,8 +71,8 @@ export class LightRendererComponent implements OnInit, OnDestroy {
                                 if (playerVision > 0) {
                                     let lightSource = this.boardPlayerService.player_lightSource_map.get(player._id);
                                     if (isDefined(lightSource)) {
-                                        this.boardCanvasService.clear_polygon(this.ctx_dark, lightSource.dim_polygon);
-                                        this.boardCanvasService.clear_polygon(this.ctx_dim, lightSource.bright_polygon);
+                                        this.boardCanvasService.clear_xy_array(this.ctx_dark, lightSource.dim_polygon);
+                                        this.boardCanvasService.clear_xy_array(this.ctx_dim, lightSource.bright_polygon);
                                     }
                                 }
                             }
@@ -84,8 +84,8 @@ export class LightRendererComponent implements OnInit, OnDestroy {
                     this.boardCanvasService.fill_canvas(this.ctx_dark, 'rgba(0, 0, 0, 0.45)');
 
                     for (let lightSource of [...this.boardLightService.lightSources, ...this.boardPlayerService.player_lightSource_map.values()]) {
-                        this.boardCanvasService.clear_polygon(this.ctx_dark, lightSource.dim_polygon);
-                        this.boardCanvasService.clear_polygon(this.ctx_dim, lightSource.bright_polygon);
+                        this.boardCanvasService.clear_xy_array(this.ctx_dark, lightSource.dim_polygon);
+                        this.boardCanvasService.clear_xy_array(this.ctx_dim, lightSource.bright_polygon);
                     }
                     break;
             }

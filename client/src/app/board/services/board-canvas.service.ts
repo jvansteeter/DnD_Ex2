@@ -6,7 +6,6 @@ import {CellRegion} from '../shared/enum/cell-region';
 import {BoardStateService} from './board-state.service';
 import {CellTargetStatics} from '../statics/cell-target-statics';
 import {IsReadyService} from "../../utilities/services/isReady.service";
-import {Polygon} from "../../../../../shared/types/encounter/board/polygon";
 import { Subscription } from 'rxjs';
 
 @Injectable()
@@ -567,14 +566,14 @@ export class BoardCanvasService extends IsReadyService {
         ctx.restore();
     }
 
-    clear_polygon(ctx: CanvasRenderingContext2D, polygon: Polygon) {
+    clear_xy_array(ctx: CanvasRenderingContext2D, xyArray: Array<XyPair>) {
         ctx.save();
 
         ctx.beginPath();
-        for (let point of polygon.border) {
+        for (let point of xyArray) {
             ctx.lineTo(point.x, point.y);
         }
-        ctx.lineTo(polygon.border[0].x, polygon.border[0].y);
+        ctx.lineTo(xyArray[0].x, xyArray[0].y);
 
         ctx.clip();
         this.clear_canvas(ctx);

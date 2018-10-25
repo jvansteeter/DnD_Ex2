@@ -4,7 +4,6 @@ import {BoardStateService} from './board-state.service';
 import {XyPair} from '../../../../../shared/types/encounter/board/xy-pair';
 import {BoardVisibilityService} from './board-visibility.service';
 import {IsReadyService} from "../../utilities/services/isReady.service";
-import {Polygon} from "../../../../../shared/types/encounter/board/polygon";
 import {EncounterService} from "../../encounter/encounter.service";
 import { LightSourcesState } from '../map-objects/light-sources.state';
 import { Observable } from 'rxjs';
@@ -43,7 +42,7 @@ export class BoardLightService extends IsReadyService {
 	    lightSource.bright_polygon = polys.bright_poly;
     }
 
-    generateLightPolygons(source: LightSource): {bright_poly: Polygon, dim_poly: Polygon} {
+    generateLightPolygons(source: LightSource): {bright_poly: Array<XyPair>, dim_poly: Array<XyPair>} {
         const lightSourcePixelLocation = new XyPair(source.location.x * BoardStateService.cell_res  + BoardStateService.cell_res/2, source.location.y * BoardStateService.cell_res  + BoardStateService.cell_res/2);
 
         const bright_pixel_range = source.bright_range * BoardStateService.cell_res + BoardStateService.cell_res / 2;

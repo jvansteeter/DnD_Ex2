@@ -5,7 +5,6 @@ import {CellTarget} from '../shared/cell-target';
 import {CellRegion} from '../shared/enum/cell-region';
 import {isNullOrUndefined} from "util";
 import {IsReadyService} from "../../utilities/services/isReady.service";
-import {Polygon} from "../../../../../shared/types/encounter/board/polygon";
 import {Line} from "../geometry/line";
 import {Ray} from "../geometry/ray";
 import {BoardCanvasService} from "./board-canvas.service";
@@ -78,9 +77,9 @@ export class BoardVisibilityService extends IsReadyService {
         return this.cellHasLOSTo_TopQuad(source, target) || this.cellHasLOSTo_RightQuad(source, target) || this.cellHasLOSTo_BottomQuad(source, target) || this.cellHasLOSTo_LeftQuad(source, target);
     }
 
-    public raytraceVisibilityFromCell(source: XyPair, rayCount, ...additionalBlockingPoints: Array<XyPair>): Polygon {
+    public raytraceVisibilityFromCell(source: XyPair, rayCount, ...additionalBlockingPoints: Array<XyPair>): Array<XyPair> {
         const degreeInc = 360 / rayCount;
-        const poly = new Polygon();
+        const poly = new Array<XyPair>();
         let additionalBlockingPointsArray: BitArray;
 
         if (additionalBlockingPoints.length > 0) {
@@ -96,7 +95,7 @@ export class BoardVisibilityService extends IsReadyService {
             const boundPoint = this.getBoundIntercept(rayToCast);
             const boundPointFloor = new XyPair(Math.floor(boundPoint.x), Math.floor(boundPoint.y));
             const endPoint = this.rayCastToPoint(source, boundPointFloor, additionalBlockingPointsArray);
-            poly.border.push(endPoint);
+            poly.push(endPoint);
         }
 
         return poly;
