@@ -19,7 +19,6 @@ import { MqService } from '../mq/mq.service';
 import { RightsService } from '../data-services/rights.service';
 import { timer } from 'rxjs';
 
-
 @Component({
 	selector: 'campaign-page',
 	templateUrl: 'campaign.component.html',

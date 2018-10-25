@@ -58,6 +58,14 @@ export class EncounterService extends IsReadyService {
 		}
 	}
 
+	public addTeam(teamName: string): void {
+		this.encounterState.addTeam(teamName);
+	}
+
+	public removeTeam(team: string): void {
+		this.encounterState.removeTeam(team);
+	}
+
 	get players(): Player[] {
 		if (this.encounterState) {
 			return this.encounterState._players as Player[];
@@ -157,5 +165,23 @@ export class EncounterService extends IsReadyService {
 			playerWallsEnabled: this.encounterState.configState.playerWallsEnabled,
 			showHealth: this.encounterState.configState.showHealth
 		}
+	}
+
+	get teams(): string[] {
+		if (this.encounterState) {
+			return this.encounterState.teams;
+		}
+
+		return [];
+	}
+
+	set teams(teams: string[]) {
+		if (this.encounterState) {
+			this.encounterState.teams = teams;
+		}
+	}
+
+	get teamsChangeObservable(): Observable<void> {
+		return this.encounterState.teamsChangeObservable;
 	}
 }

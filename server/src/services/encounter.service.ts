@@ -250,6 +250,16 @@ export class EncounterService {
 		}
 	}
 
+	public async setEncounterTeams(encounterId: string, teams: string[]): Promise<EncounterModel> {
+		try {
+			const encounter: EncounterModel = await this.encounterRepo.findById(encounterId);
+			return encounter.setTeams(teams);
+		}
+		catch (error) {
+			throw error;
+		}
+	}
+
 	private async getPlayerPlacementMap(encounterModel: EncounterModel): Promise<boolean[][]> {
 		const encounterState = await this.buildEncounterState(encounterModel);
 		const placementMap: boolean[][] = [];

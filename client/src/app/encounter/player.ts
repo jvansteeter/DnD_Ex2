@@ -19,6 +19,7 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 	private _token_img: HTMLImageElement;
 	private _actions: { action: string, detail: string }[];
 	private _initiative: number;
+	private _teams: string[] = [];
 
 	encounterId: string;
 	characterData: CharacterData;
@@ -40,6 +41,7 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 			initiative: this._initiative,
 			location: this._location,
 			isVisible: this._isVisible,
+			teams: this._teams,
 		}
 	}
 
@@ -82,11 +84,35 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 		}
 		this._isVisible = playerData.isVisible;
 		this._userId = playerData.userId;
+		this._teams = playerData.teams;
 	}
 
-	addAction(action: string, detail: string) {
-		this._actions.push({action, detail});
+	public isMemberOfTeam(team: string): boolean {
+		for (let myTeam of this._teams) {
+			if (myTeam === team) {
+				return true;
+			}
+		}
+
+		return false;
 	}
+
+	public toggleTeam(team: string): void {
+		for (let i = 0; i < this._teams.length; i++) {
+			if (team === this._teams[i]) {
+				this._teams.splice(i, 1);
+				this.emitChange();
+				return;
+			}
+		}
+
+		this._teams.push(team);
+		this.emitChange();
+	}
+
+	/*////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		GETTERS & SETTERS
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
 
 	get id(): string {
 		return this._id;
@@ -196,6 +222,15 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 
 	set initiative(value: number) {
 		this._initiative = value;
+		this.emitChange();
+	}
+
+	get teams(): string[] {
+		return this._teams;
+	}
+
+	set teams(value: string[]) {
+		this._teams = value;
 		this.emitChange();
 	}
 }

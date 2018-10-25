@@ -58,6 +58,7 @@ import {EncounterConfigControlModuleComponent} from "./board-control/controller-
 import {DiagnosticControlModuleComponent} from "./board-control/controller-modules/diagnostic-control-module/diagnostic-control-module.component";
 import {NotationControlModuleComponent} from "./board-control/controller-modules/notation-control-module/notation-control-module.component";
 import {LightVisibilityControlModuleComponent} from "./board-control/controller-modules/light-visibility-control-module/light-visibility-control-module.component";
+import { TeamSettingsComponent } from './dialogs/team-settings/team-settings.component';
 
 
 @NgModule({
@@ -89,7 +90,8 @@ import {LightVisibilityControlModuleComponent} from "./board-control/controller-
         EncounterConfigControlModuleComponent,
         DiagnosticControlModuleComponent,
         NotationControlModuleComponent,
-        LightVisibilityControlModuleComponent
+        LightVisibilityControlModuleComponent,
+		    TeamSettingsComponent,
     ],
     imports: [
         BrowserModule,
@@ -133,7 +135,8 @@ import {LightVisibilityControlModuleComponent} from "./board-control/controller-
         NotationTextEditDialogComponent,
         NotationTextCreateDialogComponent,
         CharacterPopComponent,
-        TempPlayerInitDialogComponent
+        TempPlayerInitDialogComponent,
+		    TeamSettingsComponent,
     ],
     bootstrap: [],
     exports: [

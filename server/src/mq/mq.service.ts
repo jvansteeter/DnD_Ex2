@@ -120,6 +120,11 @@ export class MqService {
 						this.encounterService.setEncounterConfig(encounterId, data);
 						break;
 					}
+					case EncounterCommandType.TEAMS_CHANGE: {
+						const data = command.body.data;
+						this.encounterService.setEncounterTeams(encounterId, data);
+						break;
+					}
 					default: {
 						console.error('Unrecognized Command Type')
 					}

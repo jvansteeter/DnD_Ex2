@@ -16,7 +16,8 @@ export class EncounterRepository {
         date: new Date(),
         campaignId: campaignId,
 	      mapDimX: mapDimX,
-	      mapDimY: mapDimY
+	      mapDimY: mapDimY,
+	      teams: ['GM', 'Player'],
       }, (error, encounterModel: EncounterModel) => {
         if (error) {
           reject(error);

@@ -11,6 +11,7 @@ export class PlayerModel extends MongooseModel implements PlayerData {
 	initiative: number;
 	location: {x: number, y: number};
 	isVisible: boolean;
+	teams: string[];
 
 	constructor() {
 		super({
@@ -19,7 +20,8 @@ export class PlayerModel extends MongooseModel implements PlayerData {
 			characterData: {type: Object, required: true},
 			initiative: Number,
 			location: {type: Object, default: {x: 0, y: 0}},
-			isVisible: {type: Boolean, default: false}
+			isVisible: {type: Boolean, default: false},
+			teams: [String],
 		});
 
 		this._id = this.methods._id;
@@ -28,6 +30,7 @@ export class PlayerModel extends MongooseModel implements PlayerData {
 		this.initiative = this.methods.initiative;
 		this.location = this.methods.location;
 		this.isVisible = this.methods.isVisible;
+		this.teams = this.methods.teams;
 
 		this.methods.setLocation = this.setLocation;
 		this.methods.setVisible = this.setVisible;

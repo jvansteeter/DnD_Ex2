@@ -26,6 +26,7 @@ export class EncounterConcurrencyService extends IsReadyService {
 	private playerSubscriptions: Subscription[] = [];
 	private wallSubscription: Subscription;
 	private configSubscription: Subscription;
+	private teamsChangeSubscription: Subscription;
 
 	constructor(private encounterService: EncounterService,
 	            private playerService: BoardPlayerService,
@@ -49,6 +50,7 @@ export class EncounterConcurrencyService extends IsReadyService {
 				this.observeNotationChanges();
 				this.observerWallChanges();
 				this.observeConfigChanges();
+				this.observeTeamChanges();
 				this.setReady(true);
 			}
 		});
@@ -135,6 +137,16 @@ export class EncounterConcurrencyService extends IsReadyService {
 		});
 	}
 
+	private observeTeamChanges(): void {
+		if (this.teamsChangeSubscription) {
+			this.teamsChangeSubscription.unsubscribe();
+		}
+		this.teamsChangeSubscription = this.encounterService.teamsChangeObservable.subscribe(() => {
+			this.mqService.publishEncounterCommand(this.encounterService.encounterState._id, this.encounterService.encounterState.version + 1,
+					EncounterCommandType.TEAMS_CHANGE, this.encounterService.teams);
+		});
+	}
+
 	private doEncounterCommand(message: EncounterCommandMessage): void {
 		switch (message.body.dataType) {
 			case EncounterCommandType.PLAYER_UPDATE: {
@@ -153,7 +165,9 @@ export class EncounterConcurrencyService extends IsReadyService {
 				break;
 			}
 			case EncounterCommandType.LIGHT_SOURCE: {
-				this.lightService.lightSources = JSON.parse(String(message.body.data)) as Array<LightSource>;
+				if (message.body.userId !== this.userProfileService.userId) {
+					this.lightService.lightSources = JSON.parse(String(message.body.data)) as Array<LightSource>;
+				}
 				break;
 			}
 			case EncounterCommandType.ADD_NOTATION: {
@@ -183,6 +197,10 @@ export class EncounterConcurrencyService extends IsReadyService {
 			}
 			case EncounterCommandType.SETTINGS_CHANGE: {
 				this.encounterService.config = message.body.data as EncounterConfigData;
+				break;
+			}
+			case EncounterCommandType.TEAMS_CHANGE: {
+				this.encounterService.teams = message.body.data as string[];
 				break;
 			}
 			default: {

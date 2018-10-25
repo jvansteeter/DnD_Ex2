@@ -15,6 +15,7 @@ export interface EncounterData {
 	players?: PlayerData[];
 	isOpen: boolean;
 	config: EncounterConfigData;
+	teams: string[];
 
 	/**************************************
 	 * GENERAL BOARD VARIABLES

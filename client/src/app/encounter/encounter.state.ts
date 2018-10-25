@@ -7,6 +7,7 @@ import { LightSourceData } from '../../../../shared/types/encounter/board/light-
 import { NotationData } from '../../../../shared/types/encounter/board/notation.data';
 import { EncounterConfigData } from '../../../../shared/types/encounter/encounter-config.data';
 import { EncounterConfigState } from './encounter-config.state';
+import { Observable, Subject } from 'rxjs';
 
 export class EncounterState implements EncounterData {
 	_id: string;
@@ -32,6 +33,8 @@ export class EncounterState implements EncounterData {
 	mapUrl: string;
 	notations: NotationData[];
 
+	private _teams: string[];
+	private teamsChangeSubject: Subject<void> = new Subject();
 	private playerMap: Map<string, number>;
 
 	constructor(encounterStateData: EncounterData) {
@@ -74,5 +77,37 @@ export class EncounterState implements EncounterData {
 			this._players[i] = new Player(player);
 			this.playerMap.set(player._id, i);
 		}
+	}
+
+	public addTeam(team: string): void {
+		for (let existingTeam of this._teams) {
+			if (team === existingTeam) {
+				return;
+			}
+		}
+		this._teams.push(team);
+		this.teamsChangeSubject.next();
+	}
+
+	public removeTeam(team: string): void {
+		for (let i = 0; i < this._teams.length; i++) {
+			if (team === this._teams[i]) {
+				this._teams.splice(i, 1);
+				this.teamsChangeSubject.next();
+				return;
+			}
+		}
+	}
+
+	get teamsChangeObservable(): Observable<void> {
+		return this.teamsChangeSubject.asObservable();
+	}
+
+	get teams(): string[] {
+		return this._teams;
+	}
+
+	set teams(value: string[]) {
+		this._teams = value;
 	}
 }

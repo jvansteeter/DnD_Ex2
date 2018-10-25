@@ -8,4 +8,5 @@ export interface PlayerData {
 	initiative: number;
 	location: {x: number, y: number};
 	isVisible: boolean;
+	teams: string[];
 }

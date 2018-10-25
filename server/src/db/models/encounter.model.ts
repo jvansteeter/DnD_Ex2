@@ -19,6 +19,7 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 	public playerIds: string[];
 	public isOpen: boolean;
 	public config: EncounterConfigData;
+	public teams: string[];
 
 	cell_res: number;
 	mapDimX: number;
@@ -70,7 +71,8 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 				bright_range: Number,
 				dim_range: Number
 			}],
-			notationIds: [Schema.Types.ObjectId]
+			notationIds: [Schema.Types.ObjectId],
+			teams: [String],
 		});
 
 		this._id = this.methods._id;
@@ -89,6 +91,7 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 		this.wallData = this.methods.wallData;
 		this.lightSources = this.methods.lightSources;
 		this.notationIds = this.methods.notationIds;
+		this.teams = this.methods.teams;
 
 		this.methods.addGameMaster = this.addGameMaster;
 		this.methods.addPlayer = this.addPlayer;
@@ -101,6 +104,7 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 		this.methods.removeNotation = this.removeNotation;
 		this.methods.setWallData = this.setWallData;
 		this.methods.setConfig = this.setConfig;
+		this.methods.setTeams = this.setTeams;
 	}
 
 	public addGameMaster(userId: string): Promise<EncounterModel> {
@@ -185,6 +189,11 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 
 	public setConfig(config: EncounterConfigData): Promise<EncounterModel> {
 		this.config = config;
+		return this.save();
+	}
+
+	public setTeams(teams: string[]): Promise<EncounterModel> {
+		this.teams = teams;
 		return this.save();
 	}
 }

@@ -11,37 +11,45 @@ import { NotationVisibility } from "../../../../../shared/types/encounter/board/
 import { AddPlayerDialogComponent } from '../dialogs/add-player-dialog/add-player-dialog.component';
 import { EncounterService } from '../../encounter/encounter.service';
 import { BoardVisibilityService } from "../services/board-visibility.service";
+import { TeamSettingsComponent } from '../dialogs/team-settings/team-settings.component';
 
 @Component({
-    selector: 'board-controller',
-    templateUrl: 'board-controller.component.html',
-    styleUrls: ['board-controller.component.scss']
+	selector: 'board-controller',
+	templateUrl: 'board-controller.component.html',
+	styleUrls: ['board-controller.component.scss']
 })
 
 export class BoardControllerComponent implements OnInit, OnDestroy {
-    public NotationVisibility = NotationVisibility;
-    public NotationMode = NotationMode;
-    public ViewMode = ViewMode;
-    public BoardMode = BoardMode;
-    public BoardControllerMode = BoardControllerMode;
-    public PlayerVisibilityMode = PlayerVisibilityMode;
+	public NotationVisibility = NotationVisibility;
+	public NotationMode = NotationMode;
+	public ViewMode = ViewMode;
+	public BoardMode = BoardMode;
+	public BoardControllerMode = BoardControllerMode;
+	public PlayerVisibilityMode = PlayerVisibilityMode;
 
-    constructor(public boardStateService: BoardStateService,
-                public boardLightService: BoardLightService,
-                public boardVisibilityService: BoardVisibilityService,
-                private encounterService: EncounterService,
-                private dialog: MatDialog,
-    ) {}
+	constructor(public boardStateService: BoardStateService,
+	            public boardLightService: BoardLightService,
+	            public boardVisibilityService: BoardVisibilityService,
+	            private encounterService: EncounterService,
+	            private dialog: MatDialog,
+	) {
+	}
 
-    ngOnInit(): void {
-    }
+	ngOnInit(): void {
+	}
 
-    ngOnDestroy(): void {
-    }
+	ngOnDestroy(): void {
+	}
 
-    addPlayer(): void {
-        this.dialog.open(AddPlayerDialogComponent, {data: {
-        	  campaignId: this.encounterService.encounterState.campaignId
-        }});
-    }
+	addPlayer(): void {
+		this.dialog.open(AddPlayerDialogComponent, {
+			data: {
+				campaignId: this.encounterService.encounterState.campaignId
+			}
+		});
+	}
+
+	openTeamSettings(): void {
+		this.dialog.open(TeamSettingsComponent);
+	}
 }
