@@ -84,6 +84,7 @@ export class BoardPlayerService extends IsReadyService {
      * LIGHT SOURCE
      *********************************************************************************************************************************************/
     public updateAllPlayerLightSource() {
+        console.log('boardPlayerService: updateAllPlayerLightSource()');
         for (const player of this.encounterService.players) {
             this.updatePlayerLightSource(player._id);
         }
@@ -94,6 +95,7 @@ export class BoardPlayerService extends IsReadyService {
     }
 
     public updatePlayerLightSource(playerId: string) {
+        console.log('boardPlayerService: updatePlayerLightSource()');
         const player = this.encounterService.getPlayerById(playerId);
         let playerVision = player.characterData.values['Vision'];
         if (isUndefined(playerVision)) {
@@ -111,6 +113,7 @@ export class BoardPlayerService extends IsReadyService {
      * TRAVERSE
      *********************************************************************************************************************************************/
     public updateAllPlayerTraverse() {
+        console.log('boardPlayerService: updateAllPlayerTraverse()');
         for (const player of this.encounterService.players) {
             this.updatePlayerTraverse(player._id);
         }
@@ -121,6 +124,7 @@ export class BoardPlayerService extends IsReadyService {
     }
 
     public updatePlayerTraverse(id: string) {
+        console.log('boardPlayerService: updatePlayerTraverse');
         const player = this.encounterService.getPlayerById(id);
         this.player_traverse_map.set(player._id, this.boardTraverseService.dijkstraTraverse(player.location, player.speed * 2));
     }
@@ -130,6 +134,7 @@ export class BoardPlayerService extends IsReadyService {
      * VISIBILITY
      *********************************************************************************************************************************************/
     public updateAllPlayerVisibility() {
+        console.log('boardPlayerService: updateAllPlayerVisibility()');
         for (let player of this.encounterService.players) {
             this.updatePlayerVisibility(player._id);
         }
@@ -140,6 +145,7 @@ export class BoardPlayerService extends IsReadyService {
     }
 
     public updatePlayerVisibility(id: string) {
+        console.log('boardPlayerService: updatePlayerVisibility');
         const player = this.encounterService.getPlayerById(id);
         const playerPixelLocation = new XyPair(player.location.x * BoardStateService.cell_res + (BoardStateService.cell_res / 2), player.location.y * BoardStateService.cell_res + (BoardStateService.cell_res / 2));
 

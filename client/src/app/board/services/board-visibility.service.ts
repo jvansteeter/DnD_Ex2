@@ -78,6 +78,7 @@ export class BoardVisibilityService extends IsReadyService {
     }
 
     public raytraceVisibilityFromCell(source: XyPair, rayCount, ...additionalBlockingPoints: Array<XyPair>): Array<XyPair> {
+        console.log('\t\traytracing visibility from a cell');
         const degreeInc = 360 / rayCount;
         const poly = new Array<XyPair>();
         let additionalBlockingPointsArray: BitArray;
