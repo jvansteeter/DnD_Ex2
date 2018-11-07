@@ -133,8 +133,11 @@ export class BoardStateService extends IsReadyService {
     }
 
     public init(): void {
-        this.dependenciesReady().subscribe((isReady: boolean) => {
-            if (isReady) {
+        this.dependenciesSub = this.dependenciesReady().subscribe((isReady: boolean) => {
+            if (isReady && !this.isReady()) {
+            	  if (!this.rightsService.hasEncounterService()) {
+            	  	this.rightsService.setEncounterService(this.encounterService);
+	              }
                 if (this.rightsService.isEncounterGM()) {
                     this.isGM = true;
                     this.set_viewMode_gameMaster();

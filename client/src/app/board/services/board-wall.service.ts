@@ -34,8 +34,8 @@ export class BoardWallService extends IsReadyService {
 
     public init(): void {
         console.log('boardWallService: init()');
-        this.dependenciesReady().subscribe((isReady) => {
-    		if (isReady) {
+        this.dependenciesSub = this.dependenciesReady().subscribe((isReady) => {
+    		if (isReady && !this.isReady()) {
     			this.wallData = this.encounterService.wallData;
                 this.setReady(true);
             }

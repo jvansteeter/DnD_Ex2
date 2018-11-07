@@ -58,8 +58,8 @@ export class BoardNotationService extends IsReadyService {
 	}
 
 	public init(): void {
-		this.dependenciesReady().subscribe(isReady => {
-			if (isReady) {
+		this.dependenciesSub = this.dependenciesReady().subscribe(isReady => {
+			if (isReady && !this.isReady()) {
 				this.notationState.setNotations(this.encounterService.notations);
 				this.setReady(true);
 			}

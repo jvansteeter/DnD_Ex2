@@ -11,14 +11,11 @@ import {BoardCanvasService} from "./board-canvas.service";
 import {BitArray} from "../shared/bit-array";
 import {GeometryStatics} from "../statics/geometry-statics";
 import {isDefined} from "@angular/compiler/src/util";
-import { Subscription } from 'rxjs';
 
 @Injectable()
 export class BoardVisibilityService extends IsReadyService {
     public blockingSegments: Set<string>;       // Set<CellTarget.hash()>
     private blockingBitmap: BitArray;
-
-    private dependenciesSub: Subscription;
 
     constructor(
         public boardStateService: BoardStateService,
@@ -33,8 +30,7 @@ export class BoardVisibilityService extends IsReadyService {
         this.blockingSegments = new Set();
         this.blockingBitmap = new BitArray(BoardStateService.num_pixels);
         this.dependenciesSub = this.dependenciesReady().subscribe((isReady: boolean) => {
-            if (isReady) {
-                this.dependenciesSub.unsubscribe();
+            if (isReady && !this.isReady()) {
                 this.setReady(true);
             }
         })

@@ -1,4 +1,4 @@
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { of } from "rxjs/internal/observable/of";
 import { merge } from 'rxjs/internal/observable/merge';
 import { map } from 'rxjs/operators';
@@ -6,6 +6,7 @@ import { map } from 'rxjs/operators';
 export abstract class IsReadyService {
 	private readonly isReadySubject: BehaviorSubject<boolean>;
 	private readonly dependencies: IsReadyService[];
+	protected dependenciesSub: Subscription;
 
 	protected constructor(...dependencies: IsReadyService[]) {
 		this.isReadySubject = new BehaviorSubject<boolean>(false);
@@ -18,17 +19,24 @@ export abstract class IsReadyService {
 		this.setReady(false);
 	}
 
-	public isReady(): BehaviorSubject<boolean> {
-		return this.isReadySubject;
+	public isReady(): boolean {
+		return this.isReadySubject.getValue();
+	}
+
+	get isReadyObservable(): Observable<boolean> {
+		return this.isReadySubject.asObservable();
 	}
 
 	protected setReady(ready: boolean): void {
+		if (ready && this.dependenciesSub) {
+			this.dependenciesSub.unsubscribe();
+		}
 		this.isReadySubject.next(ready);
 	}
 
 	protected dependenciesReady(): Observable<boolean> {
 		let dependencyObservables: Observable<boolean>[] = this.dependencies.map((dep) => {
-			return dep.isReady();
+			return dep.isReadyObservable;
 		});
 		if (dependencyObservables.length === 0) {
 			return of(true);
@@ -40,7 +48,7 @@ export abstract class IsReadyService {
 				map(() => {
 					let ready = true;
 					for (let dependency of this.dependencies) {
-						ready = ready && dependency.isReady().getValue();
+						ready = ready && dependency.isReady();
 					}
 
 					return ready;

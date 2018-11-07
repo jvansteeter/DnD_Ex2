@@ -11,8 +11,8 @@ export class SocialService extends IsReadyService {
 	}
 
 	public init(): void {
-		this.dependenciesReady().subscribe((isReady: boolean) => {
-			if (isReady) {
+		this.dependenciesSub = this.dependenciesReady().subscribe((isReady: boolean) => {
+			if (isReady && !this.isReady()) {
 				this.setReady(true);
 			}
 			else {

@@ -21,8 +21,8 @@ export class NotificationService extends IsReadyService {
 	}
 
 	public init(): void {
-		this.dependenciesReady().subscribe((isReady: boolean) => {
-			if (isReady) {
+		this.dependenciesSub = this.dependenciesReady().subscribe((isReady: boolean) => {
+			if (isReady && !this.isReady()) {
 				this.getPendingNotifications();
 				this.observeIncomingNotifications();
 				this.setReady(true);

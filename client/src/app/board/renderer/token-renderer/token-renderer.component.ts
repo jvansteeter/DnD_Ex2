@@ -30,7 +30,7 @@ export class TokenRendererComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.ctx = this.tokenRenderCanvas.nativeElement.getContext('2d');
-        this.boardTraverseService.isReady().subscribe((isReady: boolean) => {
+        this.boardTraverseService.isReadyObservable.subscribe((isReady: boolean) => {
             if (isReady) {
                 this.render();
             }

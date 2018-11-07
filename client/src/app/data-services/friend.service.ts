@@ -23,8 +23,8 @@ export class FriendService extends IsReadyService {
 	}
 
 	public init(): void {
-		this.dependenciesReady().subscribe((isReady: boolean) => {
-			if (isReady) {
+		this.dependenciesSub = this.dependenciesReady().subscribe((isReady: boolean) => {
+			if (isReady && !this.isReady()) {
 				this.updateFriendList();
 				this.handleAcceptFriendRequestMessages();
 				this.setReady(true);

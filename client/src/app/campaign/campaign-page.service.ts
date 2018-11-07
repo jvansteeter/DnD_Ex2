@@ -37,8 +37,8 @@ export class CampaignPageService extends IsReadyService {
 	}
 
 	public init(): void {
-		this.dependenciesReady().subscribe((isReady: boolean) => {
-			if (isReady) {
+		this.dependenciesSub = this.dependenciesReady().subscribe((isReady: boolean) => {
+			if (isReady && !this.isReady()) {
 				this.getCampaignState().pipe(
 						tap(() => {
 							this.rightsService.setCampaignService(this);

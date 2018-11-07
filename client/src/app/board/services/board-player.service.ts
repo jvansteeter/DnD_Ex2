@@ -11,7 +11,6 @@ import {LightSource} from "../map-objects/light-source";
 import { isNullOrUndefined, isUndefined } from 'util';
 import {RightsService} from "../../data-services/rights.service";
 import {GeometryStatics} from "../statics/geometry-statics";
-import { Subscription } from 'rxjs';
 import {UserProfileService} from "../../data-services/userProfile.service";
 
 @Injectable()
@@ -25,8 +24,6 @@ export class BoardPlayerService extends IsReadyService {
     public hoveredPlayerId: string;
 
     public playerToSyncInit: Player;
-
-    private dependenciesSub: Subscription;
 
     constructor(private encounterService: EncounterService,
                 private boardVisibilityService: BoardVisibilityService,
@@ -45,11 +42,10 @@ export class BoardPlayerService extends IsReadyService {
         this.player_visibility_map = new Map<string, Array<XyPair>>();
         this.player_traverse_map = new Map<string, Array<number>>();
         this.dependenciesSub = this.dependenciesReady().subscribe((isReady: boolean) => {
-            if (isReady) {
+            if (isReady && !this.isReady()) {
                 this.updateAllPlayerVisibility();
                 this.updateAllPlayerTraverse();
                 this.updateAllPlayerLightSource();
-                this.dependenciesSub.unsubscribe();
                 this.setReady(true);
             }
         })

@@ -16,8 +16,9 @@ export class RightsService extends IsReadyService {
 	}
 
 	init(): void {
-		this.dependenciesReady().subscribe((isReady) => {
-			if (isReady) {
+		console.log('rightsService init()')
+		this.dependenciesSub = this.dependenciesReady().subscribe((isReady) => {
+			if (isReady && !this.isReady()) {
 				this.setReady(true);
 			}
 		});
@@ -57,6 +58,10 @@ export class RightsService extends IsReadyService {
 	public setEncounterService(encounterService: EncounterService): void {
 		this.encounterService = encounterService;
 		this.init();
+	}
+
+	public hasEncounterService(): boolean {
+		return !isUndefined(this.encounterService);
 	}
 
 	public isMyPlayer(player: Player): boolean {

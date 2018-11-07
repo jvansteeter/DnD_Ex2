@@ -39,11 +39,8 @@ export class EncounterConcurrencyService extends IsReadyService {
 	}
 
 	init(): void {
-		this.dependenciesReady().subscribe((isReady: boolean) => {
-			if (isReady) {
-				if (this.isReady().getValue()) {
-					return;
-				}
+		this.dependenciesSub = this.dependenciesReady().subscribe((isReady: boolean) => {
+			if (isReady && !this.isReady()) {
 				this.observeEncounterMqMessages();
 				this.observeAllPlayerChanges();
 				this.observeLightSourceChanges();

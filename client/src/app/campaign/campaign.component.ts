@@ -58,7 +58,7 @@ export class CampaignComponent implements OnInit, OnDestroy {
 							this.campaignPageService.setCampaignId(this.campaignId);
 						}),
 						mergeMap(() => {
-							return this.campaignPageService.isReady();
+							return this.campaignPageService.isReadyObservable;
 						})
 				).subscribe((isReady: boolean) => {
 			if (isReady) {

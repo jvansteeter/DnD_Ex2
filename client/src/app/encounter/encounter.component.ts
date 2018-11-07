@@ -35,7 +35,7 @@ export class EncounterComponent implements OnInit, OnDestroy {
         this.activatedRoute.params.subscribe((params) => {
             let encounterId = params['encounterId'];
             this.encounterService.setEncounterId(encounterId);
-            this.encounterService.isReady().subscribe((isReady: boolean) => {
+            this.encounterService.isReadyObservable.subscribe((isReady: boolean) => {
                 if (isReady) {
                     this.rightsService.setEncounterService(this.encounterService);
                 }

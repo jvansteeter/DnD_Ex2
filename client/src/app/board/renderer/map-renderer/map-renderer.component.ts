@@ -14,6 +14,7 @@ import {XyPair} from "../../../../../../shared/types/encounter/board/xy-pair";
 })
 export class MapRendererComponent extends IsReadyService implements OnInit, OnDestroy {
     // public static DEV_MAP_URL_STRING = 'resources/images/maps/shack.jpg';
+	// TODO: this shouldn't be isReady
 
     @ViewChild('mapRenderCanvas') mapRenderCanvas: ElementRef;
     private ctx: CanvasRenderingContext2D;
@@ -33,8 +34,8 @@ export class MapRendererComponent extends IsReadyService implements OnInit, OnDe
     }
 
     init(): void {
-        this.dependenciesReady().subscribe((isReady) => {
-            if (isReady) {
+        this.dependenciesSub = this.dependenciesReady().subscribe((isReady) => {
+            if (isReady && !this.isReady()) {
                 this.bgImage.src = this.encounterService.mapUrl;
                 this.setReady(true);
             }

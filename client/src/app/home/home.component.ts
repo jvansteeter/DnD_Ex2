@@ -50,7 +50,7 @@ export class HomeComponent implements OnInit {
 	}
 
 	public ngOnInit(): void {
-		this.userProfileService.isReady().subscribe((isReady: boolean) => {
+		this.userProfileService.isReadyObservable.subscribe((isReady: boolean) => {
 			if (isReady) {
 				this.profilePhotoUrl = this.userProfileService.profilePhotoUrl;
 			}

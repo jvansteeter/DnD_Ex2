@@ -6,17 +6,12 @@ import {CellRegion} from '../shared/enum/cell-region';
 import {BoardStateService} from './board-state.service';
 import {CellTargetStatics} from '../statics/cell-target-statics';
 import {IsReadyService} from "../../utilities/services/isReady.service";
-import { Subscription } from 'rxjs';
 
 @Injectable()
 export class BoardCanvasService extends IsReadyService {
-
     public mapContainerNativeElement;
-
     public cvs_width: number;
     public cvs_height: number;
-
-    private dependenciesSub: Subscription;
 
     constructor(
         private boardStateService: BoardStateService
@@ -27,7 +22,7 @@ export class BoardCanvasService extends IsReadyService {
     public init(): void {
         console.log('boardCanvasService: init()');
         this.dependenciesSub = this.dependenciesReady().subscribe((isReady: boolean) => {
-            if (isReady) {
+            if (isReady && !this.isReady()) {
             	  if (this.dependenciesSub) {
 		              this.dependenciesSub.unsubscribe();
 	              }

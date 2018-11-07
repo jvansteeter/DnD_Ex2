@@ -5,12 +5,9 @@ import {BoardCanvasService} from './board-canvas.service';
 import {CellTarget} from '../shared/cell-target';
 import {CellRegion} from '../shared/enum/cell-region';
 import {IsReadyService} from "../../utilities/services/isReady.service";
-import { Subscription } from 'rxjs';
 
 @Injectable()
 export class BoardTransformService extends IsReadyService{
-		private dependenciesSub: Subscription;
-
     constructor(
         private boardStateService: BoardStateService,
         private boardCanvasService: BoardCanvasService
@@ -21,8 +18,7 @@ export class BoardTransformService extends IsReadyService{
     public init(): void {
         console.log('boardTransformService: init()');
         this.dependenciesSub = this.dependenciesReady().subscribe((isReady: boolean) => {
-            if (isReady) {
-                this.dependenciesSub.unsubscribe();
+            if (isReady && !this.isReady()) {
                 this.setReady(true);
             }
         })

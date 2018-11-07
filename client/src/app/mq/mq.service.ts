@@ -28,8 +28,8 @@ export class MqService extends IsReadyService {
 	}
 
 	public init(): void {
-		this.dependenciesReady().subscribe((isReady: boolean) => {
-			if (isReady) {
+		this.dependenciesSub = this.dependenciesReady().subscribe((isReady: boolean) => {
+			if (isReady && !this.isReady()) {
 				let stompConfig = StompConfiguration;
 				stompConfig.headers.login = this.userProfileService.userId;
 				stompConfig.headers.passcode = this.userProfileService.passwordHash;
