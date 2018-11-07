@@ -151,6 +151,9 @@ export class EncounterConcurrencyService extends IsReadyService {
 		switch (message.body.dataType) {
 			case EncounterCommandType.PLAYER_UPDATE: {
 				this.updatePlayer(message.body.data as PlayerData);
+
+				// THIS IS A HACK, FIX THIS LATER
+				this.playerService.updatePlayerLightSource(message.body.data['_id']);
 				break;
 			}
 			case EncounterCommandType.ADD_PLAYER: {
