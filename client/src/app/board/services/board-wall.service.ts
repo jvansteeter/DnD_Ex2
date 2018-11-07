@@ -160,6 +160,8 @@ export class BoardWallService extends IsReadyService {
     public addWall(target: CellTarget) {
         this._addWall(target);
         this.wallChangeSubject.next();
+		    this.boardLightService.updateAllLightValues();
+		    this.boardPlayerService.updateAllPlayerTraverse();
     }
 
     private _addWall(target: CellTarget) {
@@ -184,8 +186,6 @@ export class BoardWallService extends IsReadyService {
 				    break;
 		    }
 	    }
-        this.boardLightService.updateAllLightValues();
-        this.boardPlayerService.updateAllPlayerTraverse();
     }
 
     public removeWall(target: CellTarget): void {
@@ -331,5 +331,7 @@ export class BoardWallService extends IsReadyService {
     		let newTarget = new CellTarget(new XyPair(data[key].location.x, data[key].location.y), data[key].region);
 		    this._addWall(newTarget);
 	    }
+	    this.boardLightService.updateAllLightValues();
+	    this.boardPlayerService.updateAllPlayerTraverse();
     }
 }

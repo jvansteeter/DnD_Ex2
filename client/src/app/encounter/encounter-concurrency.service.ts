@@ -195,6 +195,9 @@ export class EncounterConcurrencyService extends IsReadyService {
 				break;
 			}
 			case EncounterCommandType.WALL_CHANGE: {
+				if (message.body.userId === this.userProfileService.userId) {
+					return;
+				}
 				this.wallService.wallData = message.body.data as Map<string, CellTarget>;
 				break;
 			}
