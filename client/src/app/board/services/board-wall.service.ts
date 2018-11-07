@@ -44,7 +44,7 @@ export class BoardWallService extends IsReadyService {
 
     public unInit(): void {
         console.log('boardWallService: unInit()');
-        // JOSH SHOULD UNINIT THIS SERVICE
+        delete this.wallData;
         this.setReady(false);
     }
 

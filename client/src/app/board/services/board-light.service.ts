@@ -17,11 +17,11 @@ export class BoardLightService extends IsReadyService {
                 private encounterService: EncounterService,
                 private boardVisibilityService: BoardVisibilityService,) {
         super(boardStateService, encounterService);
-        this.lightSourceState = new LightSourcesState();
         this.init();
     }
 
     public init(): void {
+        this.lightSourceState = new LightSourcesState();
         this.dependenciesReady().subscribe((isReady: boolean) => {
             if (isReady) {
             	  this.lightSourceState.lightSources = this.encounterService.encounterState.lightSources;
@@ -29,6 +29,10 @@ export class BoardLightService extends IsReadyService {
                 this.setReady(true);
             }
         });
+    }
+
+    public unInit(): void {
+        delete this.lightSourceState;
     }
 
     toggleLightSource(source: LightSource) {
