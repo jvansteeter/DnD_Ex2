@@ -29,7 +29,7 @@ export class BoardWallService extends IsReadyService {
         private boardPlayerService: BoardPlayerService,
         private encounterService: EncounterService,
     ) {
-    	super(boardStateService, boardVisibilityService, boardTraverseService, boardLightService, boardPlayerService);
+    	super(boardStateService, boardVisibilityService, boardTraverseService, boardLightService, boardPlayerService, encounterService);
     }
 
     public init(): void {
