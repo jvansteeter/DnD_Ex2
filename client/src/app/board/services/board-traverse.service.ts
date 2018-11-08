@@ -12,7 +12,7 @@ export class BoardTraverseService extends IsReadyService {
     public blockingSegments: Set<string>;
 
     public numNodes: number;
-    public traverseWeights = [];            // traverseWeights[fromIndex][toIndex] = 1|1.5|Infinity, adj|diag|not
+    public traverseWeights = [];
 
     constructor(
         private boardStateService: BoardStateService
@@ -343,7 +343,7 @@ export class BoardTraverseService extends IsReadyService {
         return distTo;
     }
 
-    private targetIsBlocked(target: CellTarget): boolean {
+    public targetIsBlocked(target: CellTarget): boolean {
         return this.blockingSegments.has(target.hash());
     }
 

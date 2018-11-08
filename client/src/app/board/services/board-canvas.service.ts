@@ -49,6 +49,16 @@ export class BoardCanvasService extends IsReadyService {
         ctx.clearRect(-50, -50, this.boardStateService.mapDimX * BoardStateService.cell_res + 100, this.boardStateService.mapDimY * BoardStateService.cell_res + 100);
     }
 
+    public trim_canvas(ctx: CanvasRenderingContext2D) {
+        const map_res_x = this.boardStateService.mapDimX * BoardStateService.cell_res;
+        const map_res_y = this.boardStateService.mapDimY * BoardStateService.cell_res;
+
+        ctx.clearRect(-map_res_x, -map_res_y, map_res_x, map_res_y * 3);
+        ctx.clearRect(-map_res_x, -map_res_y, map_res_x * 3, map_res_y);
+        ctx.clearRect(map_res_x, -map_res_y, map_res_x, map_res_y * 3);
+        ctx.clearRect(-map_res_x, map_res_y, map_res_x * 3, map_res_y);
+    }
+
     draw_img(ctx: CanvasRenderingContext2D, origin: XyPair, img: HTMLImageElement, opacity: number = 1.0) {
         ctx.globalAlpha = opacity;
         ctx.drawImage(img, origin.x, origin.y);
@@ -201,6 +211,7 @@ export class BoardCanvasService extends IsReadyService {
             }
         }
         ctx.fill();
+        this.trim_canvas(ctx);
     }
 
     draw_health_basic(ctx: CanvasRenderingContext2D, cell: XyPair, percent: number) {
@@ -799,5 +810,104 @@ export class BoardCanvasService extends IsReadyService {
         ctx.lineTo(loc_canvas.x, loc_canvas.y + BoardStateService.cell_res);
         ctx.lineTo(loc_canvas.x, loc_canvas.y);
         ctx.fill();
+    }
+
+    /*****************************************************************************************************
+     *  Direction pointers
+     *****************************************************************************************************/
+    draw_pointer_N(ctx: CanvasRenderingContext2D, cell:XyPair, rgba_code: string) {
+        const cell_center_canvas = new XyPair(cell.x * BoardStateService.cell_res + BoardStateService.cell_res / 2, cell.y * BoardStateService.cell_res + BoardStateService.cell_res / 2);
+        const target_canvas = new XyPair(cell.x * BoardStateService.cell_res + BoardStateService.cell_res / 2, cell.y * BoardStateService.cell_res);
+        ctx.strokeStyle = rgba_code;
+        ctx.lineWidth = 3;
+
+        ctx.beginPath();
+        ctx.moveTo(cell_center_canvas.x, cell_center_canvas.y);
+        ctx.lineTo(target_canvas.x, target_canvas.y);
+        ctx.stroke();
+    }
+
+    draw_pointer_E(ctx: CanvasRenderingContext2D, cell:XyPair, rgba_code: string) {
+        const cell_center_canvas = new XyPair(cell.x * BoardStateService.cell_res + BoardStateService.cell_res / 2, cell.y * BoardStateService.cell_res + BoardStateService.cell_res / 2);
+        const target_canvas = new XyPair(cell.x * BoardStateService.cell_res + BoardStateService.cell_res, cell.y * BoardStateService.cell_res + BoardStateService.cell_res / 2);
+        ctx.strokeStyle = rgba_code;
+        ctx.lineWidth = 3;
+
+        ctx.beginPath();
+        ctx.moveTo(cell_center_canvas.x, cell_center_canvas.y);
+        ctx.lineTo(target_canvas.x, target_canvas.y);
+        ctx.stroke();
+    }
+
+    draw_pointer_S(ctx: CanvasRenderingContext2D, cell:XyPair, rgba_code: string) {
+        const cell_center_canvas = new XyPair(cell.x * BoardStateService.cell_res + BoardStateService.cell_res / 2, cell.y * BoardStateService.cell_res + BoardStateService.cell_res / 2);
+        const target_canvas = new XyPair(cell.x * BoardStateService.cell_res + BoardStateService.cell_res / 2, cell.y * BoardStateService.cell_res + BoardStateService.cell_res);
+        ctx.strokeStyle = rgba_code;
+        ctx.lineWidth = 3;
+
+        ctx.beginPath();
+        ctx.moveTo(cell_center_canvas.x, cell_center_canvas.y);
+        ctx.lineTo(target_canvas.x, target_canvas.y);
+        ctx.stroke();
+    }
+
+    draw_pointer_W(ctx: CanvasRenderingContext2D, cell:XyPair, rgba_code: string) {
+        const cell_center_canvas = new XyPair(cell.x * BoardStateService.cell_res + BoardStateService.cell_res / 2, cell.y * BoardStateService.cell_res + BoardStateService.cell_res / 2);
+        const target_canvas = new XyPair(cell.x * BoardStateService.cell_res, cell.y * BoardStateService.cell_res + BoardStateService.cell_res / 2);
+        ctx.strokeStyle = rgba_code;
+        ctx.lineWidth = 3;
+
+        ctx.beginPath();
+        ctx.moveTo(cell_center_canvas.x, cell_center_canvas.y);
+        ctx.lineTo(target_canvas.x, target_canvas.y);
+        ctx.stroke();
+    }
+
+    draw_pointer_NW(ctx: CanvasRenderingContext2D, cell:XyPair, rgba_code: string) {
+        const cell_center_canvas = new XyPair(cell.x * BoardStateService.cell_res + BoardStateService.cell_res / 2, cell.y * BoardStateService.cell_res + BoardStateService.cell_res / 2);
+        const target_canvas = new XyPair(cell.x * BoardStateService.cell_res, cell.y * BoardStateService.cell_res);
+        ctx.strokeStyle = rgba_code;
+        ctx.lineWidth = 3;
+
+        ctx.beginPath();
+        ctx.moveTo(cell_center_canvas.x, cell_center_canvas.y);
+        ctx.lineTo(target_canvas.x, target_canvas.y);
+        ctx.stroke();
+    }
+
+    draw_pointer_NE(ctx: CanvasRenderingContext2D, cell:XyPair, rgba_code: string) {
+        const cell_center_canvas = new XyPair(cell.x * BoardStateService.cell_res + BoardStateService.cell_res / 2, cell.y * BoardStateService.cell_res + BoardStateService.cell_res / 2);
+        const target_canvas = new XyPair(cell.x * BoardStateService.cell_res + BoardStateService.cell_res, cell.y * BoardStateService.cell_res + BoardStateService.cell_res);
+        ctx.strokeStyle = rgba_code;
+        ctx.lineWidth = 3;
+
+        ctx.beginPath();
+        ctx.moveTo(cell_center_canvas.x, cell_center_canvas.y);
+        ctx.lineTo(target_canvas.x, target_canvas.y);
+        ctx.stroke();
+    }
+
+    draw_pointer_SE(ctx: CanvasRenderingContext2D, cell:XyPair, rgba_code: string) {
+        const cell_center_canvas = new XyPair(cell.x * BoardStateService.cell_res + BoardStateService.cell_res / 2, cell.y * BoardStateService.cell_res + BoardStateService.cell_res / 2);
+        const target_canvas = new XyPair(cell.x * BoardStateService.cell_res + BoardStateService.cell_res, cell.y * BoardStateService.cell_res + BoardStateService.cell_res);
+        ctx.strokeStyle = rgba_code;
+        ctx.lineWidth = 3;
+
+        ctx.beginPath();
+        ctx.moveTo(cell_center_canvas.x, cell_center_canvas.y);
+        ctx.lineTo(target_canvas.x, target_canvas.y);
+        ctx.stroke();
+    }
+
+    draw_pointer_SW(ctx: CanvasRenderingContext2D, cell:XyPair, rgba_code: string) {
+        const cell_center_canvas = new XyPair(cell.x * BoardStateService.cell_res + BoardStateService.cell_res / 2, cell.y * BoardStateService.cell_res + BoardStateService.cell_res / 2);
+        const target_canvas = new XyPair(cell.x * BoardStateService.cell_res + BoardStateService.cell_res, cell.y * BoardStateService.cell_res);
+        ctx.strokeStyle = rgba_code;
+        ctx.lineWidth = 3;
+
+        ctx.beginPath();
+        ctx.moveTo(cell_center_canvas.x, cell_center_canvas.y);
+        ctx.lineTo(target_canvas.x, target_canvas.y);
+        ctx.stroke();
     }
 }

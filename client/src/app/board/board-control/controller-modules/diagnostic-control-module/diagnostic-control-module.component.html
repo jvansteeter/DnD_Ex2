@@ -6,6 +6,7 @@
             <mat-checkbox style="flex: auto" [(ngModel)]="boardStateService.diag_show_visibility_blocking_bitmap">
                 Obstruction Bitmap
             </mat-checkbox>
+
             <input matInput
                    class="font"
                    [(ngModel)]="boardStateService.diag_layer_opacity"
@@ -14,6 +15,10 @@
                    min="0"
                    max="100">
         </div>
+
+        <mat-checkbox style="flex: auto" [(ngModel)]="boardStateService.diag_show_traverse_markup">
+            Traverse Markup
+        </mat-checkbox>
 
         <div>
             <mat-form-field>
