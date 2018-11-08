@@ -37,12 +37,13 @@ export class BoardPlayerService extends IsReadyService {
     }
 
     public init(): void {
-        console.log('boardPlayerService: init()');
+        console.log('boardPlayerService.init()');
         this.player_lightSource_map = new Map<string, LightSource>();
         this.player_visibility_map = new Map<string, Array<XyPair>>();
         this.player_traverse_map = new Map<string, Array<number>>();
         this.dependenciesSub = this.dependenciesReady().subscribe((isReady: boolean) => {
             if (isReady && !this.isReady()) {
+                console.log('\t\tboardPlayerService.init() -> isReady');
                 this.updateAllPlayerVisibility();
                 this.updateAllPlayerTraverse();
                 this.updateAllPlayerLightSource();
@@ -52,7 +53,7 @@ export class BoardPlayerService extends IsReadyService {
     }
 
     public unInit(): void {
-        console.log('boardPlayerService: unInit()');
+        console.log('boardPlayerService.unInit()');
         this.setReady(false);
         delete this.player_traverse_map;
         delete this.player_visibility_map;

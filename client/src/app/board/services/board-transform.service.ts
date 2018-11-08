@@ -16,16 +16,17 @@ export class BoardTransformService extends IsReadyService{
     }
 
     public init(): void {
-        console.log('boardTransformService: init()');
+        console.log('boardTransformService.init()');
         this.dependenciesSub = this.dependenciesReady().subscribe((isReady: boolean) => {
             if (isReady && !this.isReady()) {
+                console.log('\t\tboardTransformService.init() -> isReady');
                 this.setReady(true);
             }
         })
     }
 
     public unInit() {
-        console.log('boardTransformService: unInit()');
+        console.log('boardTransformService.unInit()');
         this.setReady(false);
     }
 

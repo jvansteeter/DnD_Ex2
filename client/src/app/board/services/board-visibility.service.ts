@@ -26,18 +26,19 @@ export class BoardVisibilityService extends IsReadyService {
     }
 
     public init(): void {
-        console.log('boardVisibilityService: init()');
-        this.blockingSegments = new Set();
-        this.blockingBitmap = new BitArray(BoardStateService.num_pixels);
+        console.log('boardVisibilityService.init()');
         this.dependenciesSub = this.dependenciesReady().subscribe((isReady: boolean) => {
             if (isReady && !this.isReady()) {
+                console.log('\t\tboardVisibilityService.init() -> isReady');
+                this.blockingSegments = new Set();
+                this.blockingBitmap = new BitArray(BoardStateService.num_pixels);
                 this.setReady(true);
             }
         })
     }
 
     public unInit(): void {
-        console.log('boardVisibilityService: unInit()');
+        console.log('boardVisibilityService.unInit()');
         this.setReady(false);
         delete this.blockingBitmap;
         delete this.blockingSegments;

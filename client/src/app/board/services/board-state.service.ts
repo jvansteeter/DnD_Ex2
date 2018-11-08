@@ -41,7 +41,7 @@ export class BoardStateService extends IsReadyService {
     /*************************************************************************************************************************************
      * LOCAL - diagnostic variables, not intended for production code
      *************************************************************************************************************************************/
-    public diag_mode = false;
+    public diag_mode = true;
     public diag_visibility_ray_count = 500;
     public diag_show_visibility_blocking_bitmap = false;
     public diag_layer_opacity = 75;
@@ -52,7 +52,7 @@ export class BoardStateService extends IsReadyService {
     public x_offset = 0;
     public y_offset = 0;
     public scale = 1.0;
-    public maxZoom = 2.5;        // default: 2.50
+    public maxZoom = 2.5;        // default: 2.50vis
     public minZoom = 0.35;
     public mapOffsetTop: number;
     public mapOffsetLeft: number;

@@ -21,9 +21,10 @@ export class BoardTraverseService extends IsReadyService {
     }
 
     public init(): void {
-        console.log('boardTraverseService: init()');
+        console.log('boardTraverseService.init()');
         this.dependenciesSub = this.dependenciesReady().subscribe((isReady: boolean) => {
             if (isReady && !this.isReady()) {
+                console.log('\t\tboardTraverseService.init() -> isReady');
                 this.blockingSegments = new Set();
                 this.numNodes = this.boardStateService.mapDimX * this.boardStateService.mapDimY;
                 this.initTraverseWeights();
@@ -33,7 +34,7 @@ export class BoardTraverseService extends IsReadyService {
     }
 
     public unInit(): void {
-        console.log('boardTraverseService: unInit()');
+        console.log('boardTraverseService.unInit()');
         this.setReady(false);
         delete this.blockingSegments;
         delete this.numNodes;

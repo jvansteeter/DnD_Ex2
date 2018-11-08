@@ -21,9 +21,11 @@ export class BoardLightService extends IsReadyService {
     }
 
     public init(): void {
+        console.log('boardLightService.init()');
         this.lightSourceState = new LightSourcesState();
         this.dependenciesSub = this.dependenciesReady().subscribe((isReady: boolean) => {
             if (isReady && !this.isReady()) {
+                console.log('\t\tboardLightService.init() -> isReady');
             	  this.lightSourceState.lightSources = this.encounterService.encounterState.lightSources;
             	  this.updateAllLightValues();
                 this.setReady(true);
@@ -32,10 +34,11 @@ export class BoardLightService extends IsReadyService {
     }
 
     public unInit(): void {
+        console.log('boardLightService.unInit()');
         delete this.lightSourceState;
     }
 
-    toggleLightSource(source: LightSource) {
+    public toggleLightSource(source: LightSource) {
         let index = this.lightSourceState.getLightSourceIndex(source);
         if (index === -1) {
             this.updateLightValue(source);
@@ -45,14 +48,14 @@ export class BoardLightService extends IsReadyService {
         }
     }
 
-    updateLightValue(lightSource: LightSource): void {
+    public updateLightValue(lightSource: LightSource): void {
+        console.log('boardLightService.updateLightValue: %o', lightSource);
 	    const polys = this.generateLightPolygons(lightSource);
 	    lightSource.dim_polygon = polys.dim_poly;
 	    lightSource.bright_polygon = polys.bright_poly;
     }
 
-    generateLightPolygons(source: LightSource): {bright_poly: Array<XyPair>, dim_poly: Array<XyPair>} {
-        console.log('generating light polygons');
+    public generateLightPolygons(source: LightSource): {bright_poly: Array<XyPair>, dim_poly: Array<XyPair>} {
         const lightSourcePixelLocation = new XyPair(source.location.x * BoardStateService.cell_res  + BoardStateService.cell_res/2, source.location.y * BoardStateService.cell_res  + BoardStateService.cell_res/2);
 
         const bright_pixel_range = source.bright_range * BoardStateService.cell_res + BoardStateService.cell_res / 2;
