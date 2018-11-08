@@ -16,7 +16,7 @@ export class BoardLightService extends IsReadyService {
     constructor(private boardStateService: BoardStateService,
                 private encounterService: EncounterService,
                 private boardVisibilityService: BoardVisibilityService,) {
-        super(boardStateService, encounterService);
+        super(boardStateService, encounterService, boardVisibilityService);
         this.init();
     }
 

@@ -133,11 +133,14 @@ export class BoardStateService extends IsReadyService {
     }
 
     public init(): void {
+        console.log('boardStateService.init()');
         this.dependenciesSub = this.dependenciesReady().subscribe((isReady: boolean) => {
             if (isReady && !this.isReady()) {
-            	  if (!this.rightsService.hasEncounterService()) {
+                console.log('\t\tboardStateService.init() -> isReady');
+                if (!this.rightsService.hasEncounterService()) {
             	  	this.rightsService.setEncounterService(this.encounterService);
 	              }
+
                 if (this.rightsService.isEncounterGM()) {
                     this.isGM = true;
                     this.set_viewMode_gameMaster();
@@ -156,10 +159,14 @@ export class BoardStateService extends IsReadyService {
                 }
 
                 BoardStateService.num_pixels = this.mapDimX * this.mapDimY * BoardStateService.cell_res ** 2;
-
                 this.setReady(true);
             }
         });
+    }
+
+    public unInit(): void {
+        console.log('boardStateService.unInit()');
+        this.setReady(false);
     }
 
     coorInBounds(x: number, y: number): boolean {
