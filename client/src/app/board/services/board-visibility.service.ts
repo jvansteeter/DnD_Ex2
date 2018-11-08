@@ -1,9 +1,9 @@
-import {Injectable, ɵangular_packages_core_core_x} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {XyPair} from '../../../../../shared/types/encounter/board/xy-pair';
 import {BoardStateService} from './board-state.service';
 import {CellTarget} from '../shared/cell-target';
 import {CellRegion} from '../shared/enum/cell-region';
-import {isNullOrUndefined} from "util";
+import { isNullOrUndefined, isUndefined } from "util";
 import {IsReadyService} from "../../utilities/services/isReady.service";
 import {Line} from "../geometry/line";
 import {Ray} from "../geometry/ray";
@@ -416,6 +416,9 @@ export class BoardVisibilityService extends IsReadyService {
     }
 
     public rayCastToPoint(origin: XyPair, target: XyPair, additionalBlockingPoints?: BitArray): XyPair {
+    	  if (isUndefined(this.blockingBitmap)) {
+    	  	return;
+	      }
         const points = GeometryStatics.BresenhamLine(origin.x, origin.y, target.x, target.y);
         for (const point of points) {
             if (isDefined(additionalBlockingPoints)) {
