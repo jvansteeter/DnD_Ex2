@@ -347,36 +347,36 @@ export class BoardTraverseService extends IsReadyService {
         return this.blockingSegments.has(target.hash());
     }
 
-    private canMoveIndexToIndex(index1: number, index2: number): boolean {
-        const dimX = this.boardStateService.mapDimX;
-        const cellPair = GeometryStatics.indexToXY(index1, dimX);
-
-        if (index1 + 1 === index2) {
-            return this.canMoveE(cellPair);
-        }
-        if (index1 - 1 === index2) {
-            return this.canMoveW(cellPair);
-        }
-        if (index1 - dimX === index2) {
-            return this.canMoveN(cellPair);
-        }
-        if (index1 + dimX === index2) {
-            return this.canMoveS(cellPair);
-        }
-        if (index1 + 1 - dimX === index2) {
-            return this.canMoveNE(cellPair);
-        }
-        if (index1 + 1 + dimX === index2) {
-            return this.canMoveSE(cellPair);
-        }
-        if (index1 - 1 - dimX === index2) {
-            return this.canMoveNW(cellPair);
-        }
-        if (index1 - 1 + dimX === index2) {
-            return this.canMoveSW(cellPair);
-        }
-        return false;
-    }
+    // private canMoveIndexToIndex(index1: number, index2: number): boolean {
+    //     const dimX = this.boardStateService.mapDimX;
+    //     const cellPair = GeometryStatics.indexToXY(index1, dimX);
+    //
+    //     if (index1 + 1 === index2) {
+    //         return this.canMoveE(cellPair);
+    //     }
+    //     if (index1 - 1 === index2) {
+    //         return this.canMoveW(cellPair);
+    //     }
+    //     if (index1 - dimX === index2) {
+    //         return this.canMoveN(cellPair);
+    //     }
+    //     if (index1 + dimX === index2) {
+    //         return this.canMoveS(cellPair);
+    //     }
+    //     if (index1 + 1 - dimX === index2) {
+    //         return this.canMoveNE(cellPair);
+    //     }
+    //     if (index1 + 1 + dimX === index2) {
+    //         return this.canMoveSE(cellPair);
+    //     }
+    //     if (index1 - 1 - dimX === index2) {
+    //         return this.canMoveNW(cellPair);
+    //     }
+    //     if (index1 - 1 + dimX === index2) {
+    //         return this.canMoveSW(cellPair);
+    //     }
+    //     return false;
+    // }
 
     public canMoveN(loc: XyPair): boolean {
         if (this.targetIsBlocked(new CellTarget(new XyPair(loc.x, loc.y), CellRegion.TOP_EDGE)) ||
@@ -430,6 +430,13 @@ export class BoardTraverseService extends IsReadyService {
     }
 
     public canMoveSW(loc: XyPair): boolean {
+        console.log('%o - ' + this.targetIsBlocked(new CellTarget(new XyPair(loc.x - 1, loc.y + 1), CellRegion.FWRD_EDGE)) +
+            ', ' + this.targetIsBlocked(new CellTarget(new XyPair(loc.x - 1, loc.y + 1), CellRegion.BKWD_EDGE)) +
+            ', ' + (this.targetIsBlocked(new CellTarget(new XyPair(loc.x, loc.y), CellRegion.LEFT_EDGE)) && this.targetIsBlocked(new CellTarget(new XyPair(loc.x, loc.y + 1), CellRegion.TOP_EDGE))) +
+            ', ' + (this.targetIsBlocked(new CellTarget(new XyPair(loc.x, loc.y), CellRegion.LEFT_EDGE)) && this.targetIsBlocked(new CellTarget(new XyPair(loc.x, loc.y + 1), CellRegion.LEFT_EDGE))) +
+            ', ' + (this.targetIsBlocked(new CellTarget(new XyPair(loc.x - 1, loc.y + 1), CellRegion.TOP_EDGE)) && this.targetIsBlocked(new CellTarget(new XyPair(loc.x, loc.y + 1), CellRegion.TOP_EDGE))) +
+            ', ' + (this.targetIsBlocked(new CellTarget(new XyPair(loc.x - 1, loc.y + 1), CellRegion.TOP_EDGE)) && this.targetIsBlocked(new CellTarget(new XyPair(loc.x, loc.y + 1), CellRegion.LEFT_EDGE))), loc);
+
         if (this.targetIsBlocked(new CellTarget(new XyPair(loc.x - 1, loc.y + 1), CellRegion.FWRD_EDGE)) ||
             this.targetIsBlocked(new CellTarget(new XyPair(loc.x - 1, loc.y + 1), CellRegion.BKWD_EDGE)) ||
             (this.targetIsBlocked(new CellTarget(new XyPair(loc.x - 1, loc.y + 1), CellRegion.TOP_EDGE)) && this.targetIsBlocked(new CellTarget(new XyPair(loc.x, loc.y + 1), CellRegion.LEFT_EDGE))) ||

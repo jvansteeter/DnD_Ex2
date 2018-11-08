@@ -820,6 +820,7 @@ export class BoardCanvasService extends IsReadyService {
         const target_canvas = new XyPair(cell.x * BoardStateService.cell_res + BoardStateService.cell_res / 2, cell.y * BoardStateService.cell_res);
         ctx.strokeStyle = rgba_code;
         ctx.lineWidth = 3;
+        ctx.lineCap = 'round';
 
         ctx.beginPath();
         ctx.moveTo(cell_center_canvas.x, cell_center_canvas.y);
@@ -832,6 +833,7 @@ export class BoardCanvasService extends IsReadyService {
         const target_canvas = new XyPair(cell.x * BoardStateService.cell_res + BoardStateService.cell_res, cell.y * BoardStateService.cell_res + BoardStateService.cell_res / 2);
         ctx.strokeStyle = rgba_code;
         ctx.lineWidth = 3;
+        ctx.lineCap = 'round';
 
         ctx.beginPath();
         ctx.moveTo(cell_center_canvas.x, cell_center_canvas.y);
@@ -844,6 +846,7 @@ export class BoardCanvasService extends IsReadyService {
         const target_canvas = new XyPair(cell.x * BoardStateService.cell_res + BoardStateService.cell_res / 2, cell.y * BoardStateService.cell_res + BoardStateService.cell_res);
         ctx.strokeStyle = rgba_code;
         ctx.lineWidth = 3;
+        ctx.lineCap = 'round';
 
         ctx.beginPath();
         ctx.moveTo(cell_center_canvas.x, cell_center_canvas.y);
@@ -856,6 +859,7 @@ export class BoardCanvasService extends IsReadyService {
         const target_canvas = new XyPair(cell.x * BoardStateService.cell_res, cell.y * BoardStateService.cell_res + BoardStateService.cell_res / 2);
         ctx.strokeStyle = rgba_code;
         ctx.lineWidth = 3;
+        ctx.lineCap = 'round';
 
         ctx.beginPath();
         ctx.moveTo(cell_center_canvas.x, cell_center_canvas.y);
@@ -868,6 +872,7 @@ export class BoardCanvasService extends IsReadyService {
         const target_canvas = new XyPair(cell.x * BoardStateService.cell_res, cell.y * BoardStateService.cell_res);
         ctx.strokeStyle = rgba_code;
         ctx.lineWidth = 3;
+        ctx.lineCap = 'round';
 
         ctx.beginPath();
         ctx.moveTo(cell_center_canvas.x, cell_center_canvas.y);
@@ -877,9 +882,10 @@ export class BoardCanvasService extends IsReadyService {
 
     draw_pointer_NE(ctx: CanvasRenderingContext2D, cell:XyPair, rgba_code: string) {
         const cell_center_canvas = new XyPair(cell.x * BoardStateService.cell_res + BoardStateService.cell_res / 2, cell.y * BoardStateService.cell_res + BoardStateService.cell_res / 2);
-        const target_canvas = new XyPair(cell.x * BoardStateService.cell_res + BoardStateService.cell_res, cell.y * BoardStateService.cell_res + BoardStateService.cell_res);
+        const target_canvas = new XyPair(cell.x * BoardStateService.cell_res + BoardStateService.cell_res, cell.y * BoardStateService.cell_res);
         ctx.strokeStyle = rgba_code;
         ctx.lineWidth = 3;
+        ctx.lineCap = 'round';
 
         ctx.beginPath();
         ctx.moveTo(cell_center_canvas.x, cell_center_canvas.y);
@@ -892,6 +898,7 @@ export class BoardCanvasService extends IsReadyService {
         const target_canvas = new XyPair(cell.x * BoardStateService.cell_res + BoardStateService.cell_res, cell.y * BoardStateService.cell_res + BoardStateService.cell_res);
         ctx.strokeStyle = rgba_code;
         ctx.lineWidth = 3;
+        ctx.lineCap = 'round';
 
         ctx.beginPath();
         ctx.moveTo(cell_center_canvas.x, cell_center_canvas.y);
@@ -901,9 +908,10 @@ export class BoardCanvasService extends IsReadyService {
 
     draw_pointer_SW(ctx: CanvasRenderingContext2D, cell:XyPair, rgba_code: string) {
         const cell_center_canvas = new XyPair(cell.x * BoardStateService.cell_res + BoardStateService.cell_res / 2, cell.y * BoardStateService.cell_res + BoardStateService.cell_res / 2);
-        const target_canvas = new XyPair(cell.x * BoardStateService.cell_res + BoardStateService.cell_res, cell.y * BoardStateService.cell_res);
+        const target_canvas = new XyPair(cell.x * BoardStateService.cell_res, cell.y * BoardStateService.cell_res  + BoardStateService.cell_res);
         ctx.strokeStyle = rgba_code;
         ctx.lineWidth = 3;
+        ctx.lineCap = 'round';
 
         ctx.beginPath();
         ctx.moveTo(cell_center_canvas.x, cell_center_canvas.y);
