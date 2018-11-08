@@ -17,7 +17,13 @@ export class EncounterRepository {
         campaignId: campaignId,
 	      mapDimX: mapDimX,
 	      mapDimY: mapDimY,
-	      teams: ['GM', 'Player'],
+	      teamsData: {
+        	teams: [
+            'GM',
+		        'Player',
+	        ],
+		      users: []
+	      },
       }, (error, encounterModel: EncounterModel) => {
         if (error) {
           reject(error);

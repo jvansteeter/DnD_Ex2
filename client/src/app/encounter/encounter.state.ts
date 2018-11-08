@@ -7,7 +7,9 @@ import { LightSourceData } from '../../../../shared/types/encounter/board/light-
 import { NotationData } from '../../../../shared/types/encounter/board/notation.data';
 import { EncounterConfigData } from '../../../../shared/types/encounter/encounter-config.data';
 import { EncounterConfigState } from './encounter-config.state';
-import { Observable, Subject } from 'rxjs';
+import { Observable } from 'rxjs';
+import { EncounterTeamsData } from '../../../../shared/types/encounter/encounter-teams.data';
+import { EncounterTeamsState } from './encounter-teams.state';
 
 export class EncounterState implements EncounterData {
 	_id: string;
@@ -33,9 +35,9 @@ export class EncounterState implements EncounterData {
 	mapUrl: string;
 	notations: NotationData[];
 
-	private _teams: string[];
-	private teamsChangeSubject: Subject<void> = new Subject();
+	private _teamsData: EncounterTeamsData;
 	private playerMap: Map<string, number>;
+	private teamsState: EncounterTeamsState;
 
 	constructor(encounterStateData: EncounterData) {
 		for (let items in encounterStateData) {
@@ -43,6 +45,8 @@ export class EncounterState implements EncounterData {
 		}
 		this.configState = new EncounterConfigState();
 		this.configState.setEncounterConfigData(encounterStateData.config);
+		this.teamsState = new EncounterTeamsState();
+		this.teamsState.setEncounterTeamsData(encounterStateData.teamsData);
 	}
 
 	public getAspectValue(playerId: string, aspectLabel: string): any {
@@ -80,34 +84,33 @@ export class EncounterState implements EncounterData {
 	}
 
 	public addTeam(team: string): void {
-		for (let existingTeam of this._teams) {
+		for (let existingTeam of this.teamsState.teams) {
 			if (team === existingTeam) {
 				return;
 			}
 		}
-		this._teams.push(team);
-		this.teamsChangeSubject.next();
+		this.teamsState.addTeam(team);
 	}
 
 	public removeTeam(team: string): void {
-		for (let i = 0; i < this._teams.length; i++) {
-			if (team === this._teams[i]) {
-				this._teams.splice(i, 1);
-				this.teamsChangeSubject.next();
-				return;
-			}
-		}
+		this.teamsState.removeTeam(team);
+	}
+
+	public toggleUserTeam(userId: string, team: string): void {
+		this.teamsState.toggleUserTeam(userId, team);
 	}
 
 	get teamsChangeObservable(): Observable<void> {
-		return this.teamsChangeSubject.asObservable();
+		return this.teamsState.changeObservable;
 	}
 
-	get teams(): string[] {
-		return this._teams;
+	get teamsData(): EncounterTeamsData {
+		return this.teamsState.serialized();
 	}
 
-	set teams(value: string[]) {
-		this._teams = value;
+	set teamsData(value) {
+		if (this.teamsState) {
+			this.teamsState.setEncounterTeamsData(value);
+		}
 	}
 }

@@ -15,6 +15,7 @@ import { NotationModel } from '../db/models/notation.model';
 import { EncounterConfigData } from '../../../shared/types/encounter/encounter-config.data';
 import { LightValue } from '../../../shared/types/encounter/board/light-value';
 import { PlayerVisibilityMode } from '../../../shared/types/encounter/board/player-visibility-mode';
+import { EncounterTeamsData } from '../../../shared/types/encounter/encounter-teams.data';
 
 export class EncounterService {
 	private encounterRepo: EncounterRepository;
@@ -59,6 +60,24 @@ export class EncounterService {
 			const encounter = await this.encounterRepo.findById(encounterId);
 			const encounterState = await this.buildEncounterState(encounter);
 			return encounterState;
+		}
+		catch (error) {
+			throw error;
+		}
+	}
+
+	public async addUserToEncounter(encounterId: string, userId: string): Promise<EncounterModel> {
+		try {
+			const encounter: EncounterModel = await this.encounterRepo.findById(encounterId);
+			for (let user of encounter.teamsData.users) {
+				if (user.userId == userId) {
+					return encounter;
+				}
+			}
+
+			const isGameMaster = this.isGameMaster(userId, encounter);
+			const teams = isGameMaster ? ['GM'] : ['Player'];
+			return encounter.addUser(userId, teams);
 		}
 		catch (error) {
 			throw error;
@@ -250,10 +269,10 @@ export class EncounterService {
 		}
 	}
 
-	public async setEncounterTeams(encounterId: string, teams: string[]): Promise<EncounterModel> {
+	public async setEncounterTeamsData(encounterId: string, teamsData: EncounterTeamsData): Promise<EncounterModel> {
 		try {
 			const encounter: EncounterModel = await this.encounterRepo.findById(encounterId);
-			return encounter.setTeams(teams);
+			return encounter.setTeamsData(teamsData);
 		}
 		catch (error) {
 			throw error;
@@ -296,5 +315,15 @@ export class EncounterService {
 		delete encounterState['notationIds'];
 
 		return encounterState;
+	}
+
+	private isGameMaster(userId: string, encounter: EncounterModel): boolean {
+		for (let gameMaster of encounter.gameMasters) {
+			if (gameMaster == userId) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 }

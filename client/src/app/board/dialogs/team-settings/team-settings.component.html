@@ -1,5 +1,5 @@
 <mat-table [dataSource]="encounterService.players">
-	<ng-container matColumnDef="name">
+	<ng-container matColumnDef="token">
 		<mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
 		<mat-cell *matCellDef="let player">{{player.name}}</mat-cell>
 	</ng-container>
@@ -13,12 +13,34 @@
 				><mat-icon>remove</mat-icon></button>
 			</mat-header-cell>
 			<mat-cell *matCellDef="let player">
-				<mat-checkbox [checked]="player.isMemberOfTeam(team)" (change)="toggleTeam(team, player)"></mat-checkbox>
+				<mat-checkbox [checked]="player.isMemberOfTeam(team)" (change)="toggleTokenTeam(player, team)"></mat-checkbox>
 			</mat-cell>
 		</ng-container>
 	</ng-container>
-	<mat-header-row *matHeaderRowDef="teamTableCols"></mat-header-row>
-	<mat-row *matRowDef="let player; columns: teamTableCols"></mat-row>
+	<mat-header-row *matHeaderRowDef="tokenTableCols"></mat-header-row>
+	<mat-row *matRowDef="let player; columns: tokenTableCols"></mat-row>
+</mat-table>
+<mat-table [dataSource]="userDataSource">
+	<ng-container matColumnDef="user">
+		<mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
+		<mat-cell *matCellDef="let user">{{user.userProfile.username}}</mat-cell>
+	</ng-container>
+	<ng-container *ngFor="let team of encounterService.teams">
+		<ng-container [matColumnDef]="team">
+			<mat-header-cell *matHeaderCellDef>{{team}}
+				<button mat-icon-button matTooltip="Remove Team"
+				        *ngIf="team !== 'GM' && team !== 'Player'"
+				        color="primary"
+				        (click)="removeTeam(team)"
+				><mat-icon>remove</mat-icon></button>
+			</mat-header-cell>
+			<mat-cell *matCellDef="let user">
+				<mat-checkbox [checked]="isUserMemberOfTeam(user.userProfile._id, team)" (change)="toggleUserTeam(user, team)"></mat-checkbox>
+			</mat-cell>
+		</ng-container>
+	</ng-container>
+	<mat-header-row *matHeaderRowDef="userTableCols"></mat-header-row>
+	<mat-row *matRowDef="let user; columns: userTableCols"></mat-row>
 </mat-table>
 <div class="new-team-section">
 	<input class="app-input" [(ngModel)]="newTeam" />

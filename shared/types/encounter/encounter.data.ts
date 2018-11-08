@@ -3,6 +3,7 @@ import { PlayerData } from './player.data';
 import { LightSourceData } from './board/light-source.data';
 import { NotationData } from './board/notation.data';
 import { EncounterConfigData } from './encounter-config.data';
+import { EncounterTeamsData } from './encounter-teams.data';
 
 export interface EncounterData {
 	_id: string;
@@ -15,7 +16,7 @@ export interface EncounterData {
 	players?: PlayerData[];
 	isOpen: boolean;
 	config: EncounterConfigData;
-	teams: string[];
+	teamsData: EncounterTeamsData;
 
 	/**************************************
 	 * GENERAL BOARD VARIABLES

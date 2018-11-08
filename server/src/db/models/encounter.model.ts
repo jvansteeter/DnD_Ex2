@@ -7,6 +7,7 @@ import { PlayerData } from '../../../../shared/types/encounter/player.data';
 import { LightSourceData } from '../../../../shared/types/encounter/board/light-source.data';
 import { NotationData } from '../../../../shared/types/encounter/board/notation.data';
 import { EncounterConfigData } from '../../../../shared/types/encounter/encounter-config.data';
+import { EncounterTeamsData } from '../../../../shared/types/encounter/encounter-teams.data';
 
 export class EncounterModel extends MongooseModel implements EncounterData {
 	public _id;
@@ -19,7 +20,7 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 	public playerIds: string[];
 	public isOpen: boolean;
 	public config: EncounterConfigData;
-	public teams: string[];
+	public teamsData: EncounterTeamsData;
 
 	cell_res: number;
 	mapDimX: number;
@@ -72,7 +73,13 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 				dim_range: Number
 			}],
 			notationIds: [Schema.Types.ObjectId],
-			teams: [String],
+			teamsData: {
+				teams: [String],
+				users: [{
+					userId: String,
+					teams: [String],
+				}],
+			},
 		});
 
 		this._id = this.methods._id;
@@ -91,7 +98,7 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 		this.wallData = this.methods.wallData;
 		this.lightSources = this.methods.lightSources;
 		this.notationIds = this.methods.notationIds;
-		this.teams = this.methods.teams;
+		this.teamsData = this.methods.teamsData;
 
 		this.methods.addGameMaster = this.addGameMaster;
 		this.methods.addPlayer = this.addPlayer;
@@ -104,7 +111,8 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 		this.methods.removeNotation = this.removeNotation;
 		this.methods.setWallData = this.setWallData;
 		this.methods.setConfig = this.setConfig;
-		this.methods.setTeams = this.setTeams;
+		this.methods.setTeamsData = this.setTeamsData;
+		this.methods.addUser = this.addUser;
 	}
 
 	public addGameMaster(userId: string): Promise<EncounterModel> {
@@ -192,8 +200,16 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 		return this.save();
 	}
 
-	public setTeams(teams: string[]): Promise<EncounterModel> {
-		this.teams = teams;
+	public setTeamsData(teamsData: EncounterTeamsData): Promise<EncounterModel> {
+		this.teamsData = teamsData;
+		return this.save();
+	}
+
+	public addUser(userId: string, teams: string[]): Promise<EncounterModel> {
+		this.teamsData.users.push({
+			userId: userId,
+			teams: teams,
+		});
 		return this.save();
 	}
 }

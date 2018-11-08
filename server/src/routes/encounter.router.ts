@@ -23,7 +23,10 @@ export class EncounterRouter {
 	init() {
 		this.router.get('/encounter/:encounterId', async (req: Request, res: Response) => {
 			try {
-				const encounter: EncounterData = await this.encounterService.getEncounter(req.params.encounterId);
+				const encounterId: string = req.params.encounterId;
+				const userId: string = req.user._id;
+				await this.encounterService.addUserToEncounter(encounterId, userId);
+				const encounter: EncounterData = await this.encounterService.getEncounter(encounterId);
 				res.json(encounter);
 			}
 			catch (error) {

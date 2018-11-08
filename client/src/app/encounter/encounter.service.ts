@@ -10,6 +10,7 @@ import { NotationData } from '../../../../shared/types/encounter/board/notation.
 import { EncounterConfigData } from '../../../../shared/types/encounter/encounter-config.data';
 import { LightValue } from '../../../../shared/types/encounter/board/light-value';
 import { PlayerVisibilityMode } from '../../../../shared/types/encounter/board/player-visibility-mode';
+import { EncounterTeamsData } from '../../../../shared/types/encounter/encounter-teams.data';
 
 @Injectable()
 export class EncounterService extends IsReadyService {
@@ -64,6 +65,10 @@ export class EncounterService extends IsReadyService {
 
 	public removeTeam(team: string): void {
 		this.encounterState.removeTeam(team);
+	}
+
+	public toggleUserTeam(userId: string, team: string): void {
+		this.encounterState.toggleUserTeam(userId, team);
 	}
 
 	get players(): Player[] {
@@ -169,7 +174,7 @@ export class EncounterService extends IsReadyService {
 
 	get teams(): string[] {
 		if (this.encounterState) {
-			return this.encounterState.teams;
+			return this.encounterState.teamsData.teams;
 		}
 
 		return [];
@@ -177,11 +182,27 @@ export class EncounterService extends IsReadyService {
 
 	set teams(teams: string[]) {
 		if (this.encounterState) {
-			this.encounterState.teams = teams;
+			this.encounterState.teamsData.teams = teams;
 		}
 	}
 
 	get teamsChangeObservable(): Observable<void> {
 		return this.encounterState.teamsChangeObservable;
+	}
+
+	get users() {
+		if (this.encounterState) {
+			return this.encounterState.teamsData.users;
+		}
+
+		return [];
+	}
+
+	get teamsData(): EncounterTeamsData {
+		return this.encounterState.teamsData;
+	}
+
+	set teamsData(value) {
+		this.encounterState.teamsData = value;
 	}
 }

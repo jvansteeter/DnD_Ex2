@@ -16,6 +16,7 @@ import { Subscription } from 'rxjs';
 import { BoardWallService } from '../board/services/board-wall.service';
 import { CellTarget } from '../board/shared/cell-target';
 import { EncounterConfigData } from '../../../../shared/types/encounter/encounter-config.data';
+import { EncounterTeamsData } from '../../../../shared/types/encounter/encounter-teams.data';
 
 @Injectable()
 export class EncounterConcurrencyService extends IsReadyService {
@@ -140,7 +141,7 @@ export class EncounterConcurrencyService extends IsReadyService {
 		}
 		this.teamsChangeSubscription = this.encounterService.teamsChangeObservable.subscribe(() => {
 			this.mqService.publishEncounterCommand(this.encounterService.encounterState._id, this.encounterService.encounterState.version + 1,
-					EncounterCommandType.TEAMS_CHANGE, this.encounterService.teams);
+					EncounterCommandType.TEAMS_CHANGE, this.encounterService.teamsData);
 		});
 	}
 
@@ -203,7 +204,7 @@ export class EncounterConcurrencyService extends IsReadyService {
 				break;
 			}
 			case EncounterCommandType.TEAMS_CHANGE: {
-				this.encounterService.teams = message.body.data as string[];
+				this.encounterService.teamsData = message.body.data as EncounterTeamsData;
 				break;
 			}
 			default: {
