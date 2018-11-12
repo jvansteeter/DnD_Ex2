@@ -53,6 +53,7 @@ export class TeamSettingsComponent implements OnInit, OnDestroy {
 		}
 		this.encounterService.addTeam(this.newTeam);
 		this.tokenTableCols.push(this.newTeam);
+		this.userTableCols.push(this.newTeam);
 		this.newTeam = '';
 	}
 
@@ -61,6 +62,7 @@ export class TeamSettingsComponent implements OnInit, OnDestroy {
 		for (let i = 0; i < this.tokenTableCols.length; i++) {
 			if (team === this.tokenTableCols[i]) {
 				this.tokenTableCols.splice(i, 1);
+				this.userTableCols.splice(i, 1);
 				return;
 			}
 		}
