@@ -36,6 +36,7 @@ export class BoardLightService extends IsReadyService {
     public unInit(): void {
         console.log('boardLightService.unInit()');
         delete this.lightSourceState;
+        super.unInit();
     }
 
     public toggleLightSource(source: LightSource) {
