@@ -9,7 +9,7 @@ module.exports = {
   },
 
   resolve: {
-    extensions: ['.ts', '.js', '.css']
+    extensions: ['.ts', '.js', '.css', '.scss']
   },
 
   module: {
@@ -54,17 +54,9 @@ module.exports = {
     ]
   },
 
-  optimization: {
-    splitChunks: {
-      cacheGroups: {
-        commons: {
-          test: /[\\/]node_modules[\\/]/,
-          name: 'vendor',
-          chunks: 'all'
-        }
-      }
-    }
-  },
+  // optimization: {
+	//
+  // },
 
   plugins: [
     new HtmlWebpackPlugin({
