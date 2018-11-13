@@ -26,6 +26,7 @@ import {MatDialog} from "@angular/material";
 import {TempPlayerInitDialogComponent} from "../dialogs/temp-player-init-dialog/temp-player-init-dialog.component";
 import {BoardControllerMode} from "../shared/enum/board-controller-mode";
 import { RightsService } from '../../data-services/rights.service';
+import {BoardTeamsService} from "../services/board-teams-service";
 
 
 @Component({
@@ -46,6 +47,7 @@ export class BoardMapComponent implements OnInit, AfterViewInit {
                 private encounterService: EncounterService,
                 private dialog: MatDialog,
                 private popService: PopService,
+                private boardTeamsService: BoardTeamsService,
                 public rightsService: RightsService,
                 ) {
     }
@@ -65,7 +67,7 @@ export class BoardMapComponent implements OnInit, AfterViewInit {
     }
 
     public showInitCoin(player: Player): boolean {
-        if (this.rightsService.isEncounterGM() || this.rightsService.isMyPlayer(player) || (player.isVisible && this.boardPlayerService.tokenHasLOSToSomeUserToken(player))) {
+        if (this.rightsService.isEncounterGM() || this.rightsService.isMyPlayer(player) || (player.isVisible && this.boardPlayerService.tokenHasLOSToSomeUserToken(player)) || this.boardTeamsService.userSharesTeamWithPlayer(player)) {
             return true;
         }
         return false;

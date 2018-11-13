@@ -7,6 +7,8 @@ import {BoardPlayerService} from '../../services/board-player.service';
 import {PlayerVisibilityMode} from "../../../../../../shared/types/encounter/board/player-visibility-mode";
 import {isDefined} from "@angular/compiler/src/util";
 import { EncounterService } from '../../../encounter/encounter.service';
+import {UserProfileService} from "../../../data-services/userProfile.service";
+import {BoardTeamsService} from "../../services/board-teams-service";
 
 @Component({
     selector: 'visibility-renderer',
@@ -24,6 +26,8 @@ export class VisibilityRendererComponent implements OnInit, OnDestroy {
         private boardVisibilityService: BoardVisibilityService,
         private boardPlayerService: BoardPlayerService,
         private encounterService: EncounterService,
+        private userProfileService: UserProfileService,
+        private boardTeamsService: BoardTeamsService,
     ) {
     }
 
@@ -45,44 +49,47 @@ export class VisibilityRendererComponent implements OnInit, OnDestroy {
              * View mode - BOARD_MAKER
              ***************************************************************************************************************************************************************************************/
             case ViewMode.BOARD_MAKER:
-                switch (this.encounterService.config.playerVisibilityMode) {
-                    case PlayerVisibilityMode.PLAYER:
-                        break;
-                    case PlayerVisibilityMode.TEAM:
-                        break;
-                    case PlayerVisibilityMode.GLOBAL:
-                        break;
-                }
-
-                break;
-
-            /***************************************************************************************************************************************************************************************
-             * View mode - MASTER
-             ***************************************************************************************************************************************************************************************/
-            case ViewMode.MASTER:
-                switch (this.encounterService.config.playerVisibilityMode) {
-                    case PlayerVisibilityMode.PLAYER:
-                        if (this.boardStateService.visibilityHighlightEnabled) {
+                if (this.boardStateService.visibilityHighlightEnabled) {
+                    switch (this.encounterService.config.playerVisibilityMode) {
+                        case PlayerVisibilityMode.PLAYER:
                             const hoverPlayerId = this.boardPlayerService.hoveredPlayerId;
                             if (hoverPlayerId !== '') {
-                                const fillCode = 'rgba(255,0,0,0.08)';
-                                // this.boardCanvasService.draw_fill_polygon(this.ctx, this.boardPlayerService.player_visibility_map.get(hoverPlayerId).border, fillCode);
-                                this.boardCanvasService.fill_xy_array(this.ctx, this.boardPlayerService.player_visibility_map.get(hoverPlayerId), fillCode)
+                                this.boardCanvasService.fill_xy_array(this.ctx, this.boardPlayerService.player_visibility_map.get(hoverPlayerId), 'rgba(255,0,0,0.08)')
                             }
-                        }
-                        break;
-                    case PlayerVisibilityMode.TEAM:
-                        if (this.boardStateService.visibilityHighlightEnabled) {
+                            break;
+                        case PlayerVisibilityMode.TEAM:
                             for (let player of this.boardPlayerService.players) {
                                 const visPoly = this.boardPlayerService.player_visibility_map.get(player._id);
                                 if (isDefined(visPoly)) {
                                     this.boardCanvasService.fill_xy_array(this.ctx, visPoly, 'rgba(255, 0, 0, 0.08)');
                                 }
                             }
-                        }
-                        break;
-                    case PlayerVisibilityMode.GLOBAL:
-                        break;
+                            break;
+                    }
+                }
+                break;
+
+            /***************************************************************************************************************************************************************************************
+             * View mode - MASTER
+             ***************************************************************************************************************************************************************************************/
+            case ViewMode.MASTER:
+                if (this.boardStateService.visibilityHighlightEnabled) {
+                    switch (this.encounterService.config.playerVisibilityMode) {
+                        case PlayerVisibilityMode.PLAYER:
+                            const hoverPlayerId = this.boardPlayerService.hoveredPlayerId;
+                            if (hoverPlayerId !== '') {
+                                this.boardCanvasService.fill_xy_array(this.ctx, this.boardPlayerService.player_visibility_map.get(hoverPlayerId), 'rgba(255,0,0,0.08)')
+                            }
+                            break;
+                        case PlayerVisibilityMode.TEAM:
+                            for (let player of this.boardPlayerService.players) {
+                                const visPoly = this.boardPlayerService.player_visibility_map.get(player._id);
+                                if (isDefined(visPoly)) {
+                                    this.boardCanvasService.fill_xy_array(this.ctx, visPoly, 'rgba(255, 0, 0, 0.08)');
+                                }
+                            }
+                            break;
+                    }
                 }
                 break;
 
@@ -90,19 +97,26 @@ export class VisibilityRendererComponent implements OnInit, OnDestroy {
              * View mode - PLAYER
              ***************************************************************************************************************************************************************************************/
             case ViewMode.PLAYER:
+                this.boardCanvasService.fill_canvas(this.ctx, 'rgba(0, 0, 0, 1.0)');
                 switch (this.encounterService.config.playerVisibilityMode) {
                     case PlayerVisibilityMode.PLAYER:
+                        for (let player of this.boardPlayerService.players) {
+                            if (player.userId === this.userProfileService.userId) {
+                                const visPoly = this.boardPlayerService.player_visibility_map.get(player._id);
+                                this.boardCanvasService.clear_xy_array(this.ctx, visPoly);
+                            }
+                        }
                         break;
                     case PlayerVisibilityMode.TEAM:
-                        this.boardCanvasService.fill_canvas(this.ctx, 'rgba(0, 0, 0, 1.0)');
                         for (let player of this.boardPlayerService.players) {
-                            if (player.isVisible) {
+                            if (player.isVisible && this.boardTeamsService.userSharesTeamWithPlayer(player)) {
                                 const visPoly = this.boardPlayerService.player_visibility_map.get(player._id);
                                 this.boardCanvasService.clear_xy_array(this.ctx, visPoly);
                             }
                         }
                         break;
                     case PlayerVisibilityMode.GLOBAL:
+                        this.boardCanvasService.clear_canvas(this.ctx);
                         break;
                 }
                 break;
