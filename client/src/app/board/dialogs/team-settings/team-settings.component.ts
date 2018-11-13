@@ -5,6 +5,7 @@ import { SocialRepository } from '../../../social/social.repository';
 import { UserProfile } from '../../../types/userProfile';
 import { SubjectDataSource } from '../../../utilities/subjectDataSource';
 import { Subject, Subscription } from 'rxjs';
+import { isNullOrUndefined } from 'util';
 
 @Component({
 	templateUrl: 'team-settings.component.html',
@@ -45,6 +46,9 @@ export class TeamSettingsComponent implements OnInit, OnDestroy {
 	}
 
 	public addTeam(): void {
+		if (isNullOrUndefined(this.newTeam) || this.newTeam === '') {
+			return;
+		}
 		for (let existingTeam of this.encounterService.teams) {
 			if (this.newTeam === existingTeam) {
 				this.newTeam = '';
