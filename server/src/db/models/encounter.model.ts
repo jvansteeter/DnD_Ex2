@@ -36,6 +36,7 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 	 * WALL RELATED VARIABLES
 	 **************************************/
 	wallData: Object;
+	doorData: Object;
 	playerWallsEnabled: boolean;
 
 	/**************************************
@@ -64,6 +65,7 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 			mapDimX: Number,
 			mapDimY: Number,
 			wallData: Object,
+			doorData: Object,
 			lightSources: [{
 				location: {
 					x: Number,
@@ -96,6 +98,7 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 		this.mapDimX = this.methods.mapDimX;
 		this.mapDimY = this.methods.mapDimY;
 		this.wallData = this.methods.wallData;
+		this.doorData = this.methods.doorData;
 		this.lightSources = this.methods.lightSources;
 		this.notationIds = this.methods.notationIds;
 		this.teamsData = this.methods.teamsData;
@@ -110,6 +113,7 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 		this.methods.addNotation = this.addNotation;
 		this.methods.removeNotation = this.removeNotation;
 		this.methods.setWallData = this.setWallData;
+		this.methods.setDoorData = this.setDoorData;
 		this.methods.setConfig = this.setConfig;
 		this.methods.setTeamsData = this.setTeamsData;
 		this.methods.addUser = this.addUser;
@@ -192,6 +196,11 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 
 	public setWallData(data: any): Promise<EncounterModel> {
 		this.wallData = data;
+		return this.save();
+	}
+
+	public setDoorData(data: any): Promise<EncounterModel> {
+		this.doorData = data;
 		return this.save();
 	}
 

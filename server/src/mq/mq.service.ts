@@ -115,6 +115,11 @@ export class MqService {
 						this.encounterService.setWallData(encounterId, data);
 						break;
 					}
+					case EncounterCommandType.DOOR_CHANGE: {
+						const data = command.body.data;
+						this.encounterService.setDoorData(encounterId, data);
+						break;
+					}
 					case EncounterCommandType.SETTINGS_CHANGE: {
 						const data = command.body.data;
 						this.encounterService.setEncounterConfig(encounterId, data);

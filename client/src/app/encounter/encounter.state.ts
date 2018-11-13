@@ -32,6 +32,7 @@ export class EncounterState implements EncounterData {
 	configState: EncounterConfigState;
 	_players: PlayerData[];
 	wallData: Object;
+	doorData: Object;
 	mapUrl: string;
 	notations: NotationData[];
 

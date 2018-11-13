@@ -37,32 +37,32 @@ export class WallRendererComponent implements OnInit, OnDestroy {
 
         switch (this.boardStateService.board_view_mode) {
             case ViewMode.BOARD_MAKER:
-                for (const wall of Array.from(this.wallService.walls)) {
+                for (const wall of this.wallService.walls) {
                     this.boardCanvasService.draw_wall(this.ctx, wall, 10, 'rgba(0, 180, 0, 0.75)');
                 }
 
-                for (const door of Array.from(this.wallService.doorData.values())) {
+                for (const door of this.wallService.doors) {
                     this.boardCanvasService.draw_door(this.ctx, door.target, door.isOpen);
                 }
 
                 break;
             case ViewMode.PLAYER:
                 if (this.encounterService.config.playerWallsEnabled) {
-                    for (const wall of Array.from(this.wallService.walls)) {
+                    for (const wall of this.wallService.walls) {
                         this.boardCanvasService.draw_wall(this.ctx, wall, 10, 'rgba(64, 80, 107, 1)');
                     }
 
-                    for (const door of Array.from(this.wallService.doorData.values())) {
+                    for (const door of this.wallService.doors) {
                         this.boardCanvasService.draw_door(this.ctx, door.target, door.isOpen);
                     }
                 }
                 break;
             case ViewMode.MASTER:
-                for (const wall of Array.from(this.wallService.walls)) {
+                for (const wall of this.wallService.walls) {
                     this.boardCanvasService.draw_wall(this.ctx, wall, 10, 'rgba(64, 80, 107, 1)');
                 }
 
-                for (const door of Array.from(this.wallService.doorData.values())) {
+                for (const door of this.wallService.doors) {
                     this.boardCanvasService.draw_door(this.ctx, door.target, door.isOpen);
                 }
                 break;

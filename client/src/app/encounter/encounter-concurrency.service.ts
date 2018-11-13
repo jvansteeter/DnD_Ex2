@@ -26,6 +26,7 @@ export class EncounterConcurrencyService extends IsReadyService {
 	private ephemeralNotationSubscription: Subscription;
 	private playerSubscriptions: Subscription[] = [];
 	private wallSubscription: Subscription;
+	private doorSubscription: Subscription;
 	private configSubscription: Subscription;
 	private teamsChangeSubscription: Subscription;
 
@@ -47,6 +48,7 @@ export class EncounterConcurrencyService extends IsReadyService {
 				this.observeLightSourceChanges();
 				this.observeNotationChanges();
 				this.observerWallChanges();
+				this.observerDoorChanges();
 				this.observeConfigChanges();
 				this.observeTeamChanges();
 				this.setReady(true);
@@ -125,6 +127,16 @@ export class EncounterConcurrencyService extends IsReadyService {
 		});
 	}
 
+	private observerDoorChanges(): void {
+		if (this.doorSubscription) {
+			this.doorSubscription.unsubscribe();
+		}
+		this.doorSubscription = this.wallService.doorChangeEvent.subscribe(() => {
+			this.mqService.publishEncounterCommand(this.encounterService.encounterState._id, this.encounterService.encounterState.version + 1,
+					EncounterCommandType.DOOR_CHANGE, this.wallService.doorData);
+		});
+	}
+
 	private observeConfigChanges(): void {
 		if (this.configSubscription) {
 			this.configSubscription.unsubscribe();
@@ -197,6 +209,13 @@ export class EncounterConcurrencyService extends IsReadyService {
 					return;
 				}
 				this.wallService.wallData = message.body.data as Map<string, CellTarget>;
+				break;
+			}
+			case EncounterCommandType.DOOR_CHANGE: {
+				if (message.body.userId === this.userProfileService.userId) {
+					return;
+				}
+				this.wallService.doorData = message.body.data as Map<string, CellTarget>;
 				break;
 			}
 			case EncounterCommandType.SETTINGS_CHANGE: {

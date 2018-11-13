@@ -35,6 +35,7 @@ export interface EncounterData {
 	 * WALL RELATED VARIABLES
 	 **************************************/
 	wallData: Object;
+	doorData: Object;
 	playerWallsEnabled: boolean;
 
 	/**************************************
