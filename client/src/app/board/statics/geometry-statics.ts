@@ -1,4 +1,5 @@
 import {XyPair} from "../../../../../shared/types/encounter/board/xy-pair";
+import {BoardStateService} from "../services/board-state.service";
 
 export class GeometryStatics {
     static distanceBetweenXyPairs(pair1: XyPair, pair2: XyPair): number {
@@ -100,5 +101,19 @@ export class GeometryStatics {
         array.push(new XyPair(xc - y, yc + x));
         array.push(new XyPair(xc + y, yc - x));
         array.push(new XyPair(xc - y, yc - x));
+    }
+
+    static CellsUnderALine(start: XyPair, end: XyPair): Array<XyPair> {
+        const line = GeometryStatics.BresenhamLine(start.x, start.y, end.x, end.y);
+        const returnMe = [];
+        const returnSet = new Set<string>();
+        for (let point of line) {
+            let cell = new XyPair(Math.trunc(point.x / BoardStateService.cell_res), Math.trunc(point.y / BoardStateService.cell_res));
+            if (!returnSet.has(cell.toString())) {
+                returnMe.push(cell);
+                returnSet.add(cell.toString());
+            }
+        }
+        return returnMe;
     }
 }

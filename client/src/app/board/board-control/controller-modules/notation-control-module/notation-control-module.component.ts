@@ -60,6 +60,10 @@ export class NotationControlModuleComponent {
         this.notationService.activeNotationMode = NotationMode.FREEFORM;
     }
 
+    handleSetNotationModeToLine() {
+        this.notationService.activeNotationMode = NotationMode.LINE;
+    }
+
     openIconDialog() {
         this.dialog.open(NotationIconSelectorComponent,{});
     }

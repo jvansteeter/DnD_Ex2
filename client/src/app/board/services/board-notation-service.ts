@@ -15,7 +15,8 @@ import { Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { RightsService } from '../../data-services/rights.service';
 import { UserProfileService } from '../../data-services/userProfile.service';
-import { isUndefined } from 'util';
+import {isNullOrUndefined, isUndefined} from 'util';
+import {GeometryStatics} from "../statics/geometry-statics";
 
 @Injectable()
 export class BoardNotationService extends IsReadyService {
@@ -30,6 +31,9 @@ export class BoardNotationService extends IsReadyService {
 	public returnToMeNotationMode: NotationMode;
 
 	public startNewFreeform = true;
+
+	public lineNotationStartPoint: XyPair = null;
+	public lineNotationCells: Array<XyPair>;
 
 	private sourceCell: XyPair;
 	public anchor_img: HTMLImageElement;
@@ -47,6 +51,7 @@ export class BoardNotationService extends IsReadyService {
 			private userProfileService: UserProfileService,
 	) {
 		super(boardStateService, boardVisibilityService, encounterService, rightsService, userProfileService);
+		this.lineNotationCells = new Array<XyPair>();
 		this.ephemeralNotationMap = new Map();
 		this.ephemeralNotationMap.set(this.userProfileService.userId, []);
 		this.anchor_img = new Image();
@@ -137,6 +142,13 @@ export class BoardNotationService extends IsReadyService {
 					}
 				}
 				break;
+			case NotationMode.LINE:
+				if (isNullOrUndefined(this.lineNotationStartPoint)) {
+
+				} else {
+					this.lineNotationCells = GeometryStatics.CellsUnderALine(this.lineNotationStartPoint, this.boardStateService.mouse_loc_map);
+				}
+				break;
 		}
 	}
 
@@ -162,6 +174,15 @@ export class BoardNotationService extends IsReadyService {
 					this.returnToMeNotationMode = null;
 				}
 				break;
+			case NotationMode.LINE:
+				if (isNullOrUndefined(this.lineNotationStartPoint)) {
+                    this.lineNotationStartPoint = this.boardStateService.mouse_loc_map;
+                } else {
+					this.getActiveNotation().addBatchCells(this.lineNotationCells);
+					this.lineNotationStartPoint = null;
+					this.lineNotationCells = new Array<XyPair>();
+				}
+                break;
 		}
 	}
 

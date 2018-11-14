@@ -23,7 +23,7 @@ export class BoardNotationGroup extends ConcurrentBoardObject implements Notatio
 	red = 255;
 	green = 0;
 	blue = 0;
-	alpha = 1.0;
+	alpha = 0.35;
 
 	constructor(data: NotationData) {
 		super();

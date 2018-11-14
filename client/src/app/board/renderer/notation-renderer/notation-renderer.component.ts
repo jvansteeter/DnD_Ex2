@@ -4,6 +4,7 @@ import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/co
 import {BoardNotationService} from '../../services/board-notation-service';
 import {XyPair} from "../../../../../../shared/types/encounter/board/xy-pair";
 import {GeometryStatics} from "../../statics/geometry-statics";
+import {isNullOrUndefined} from "util";
 
 @Component({
     selector: 'notation-renderer',
@@ -33,6 +34,14 @@ export class NotationRendererComponent implements OnInit, OnDestroy {
     render = () => {
         this.boardCanvasService.clear_canvas(this.ctx);
         this.boardCanvasService.updateTransform(this.ctx);
+
+        if (!isNullOrUndefined(this.boardNotationService.lineNotationStartPoint)) {
+
+            this.boardCanvasService.draw_line(this.ctx, this.boardNotationService.lineNotationStartPoint, this.boardStateService.mouse_loc_map, 1, this.boardNotationService.getActiveNotation().getRgbCode());
+            for (let cell of this.boardNotationService.lineNotationCells) {
+                this.boardCanvasService.draw_fill_all(this.ctx, cell, this.boardNotationService.getActiveNotation().getRgbaCode());
+            }
+        }
 
         this.boardNotationService.purgeEphemNotations();
         for (let playerNotation of this.boardNotationService.ephemeralNotationMap.values()) {

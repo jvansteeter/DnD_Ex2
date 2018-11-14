@@ -3,5 +3,6 @@ export enum NotationMode {
     CELL,
     FREEFORM,
     TEXT,
-    CONE
+    CONE,
+    LINE,
 }

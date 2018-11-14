@@ -62,6 +62,15 @@
                     <mat-icon>gesture</mat-icon>
                 </button>
 
+                <button matTooltip="line"
+                        class="strokeButtonOverride"
+                        (click)="handleSetNotationModeToLine()"
+                        [ngClass]="{'selectedNotationMode': notationService.activeNotationMode === NotationMode.LINE}"
+                        mat-stroked-button
+                        *ngIf="boardStateService.isGM || notationService.activeNotationIsMine()">
+                    <mat-icon>arrow_right_alt</mat-icon>
+                </button>
+
                 <button matTooltip="text"
                         class="specialAnnotationOverride"
                         (click)="openTextNotationDialog()"
