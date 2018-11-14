@@ -134,10 +134,9 @@ export class BoardStateService extends IsReadyService {
     }
 
     public init(): void {
-        console.log('boardStateService.init()');
         this.dependenciesSub = this.dependenciesReady().subscribe((isReady: boolean) => {
             if (isReady && !this.isReady()) {
-                console.log('\t\tboardStateService.init() -> isReady');
+                console.log('boardStateService.init() -> isReady');
                 if (!this.rightsService.hasEncounterService()) {
             	  	this.rightsService.setEncounterService(this.encounterService);
 	              }

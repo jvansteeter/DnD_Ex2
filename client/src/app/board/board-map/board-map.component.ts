@@ -332,22 +332,12 @@ export class BoardMapComponent implements OnInit, AfterViewInit {
         }
 
         if (!isNullOrUndefined(this.boardStateService.mouse_right_cell_target)) {
-            switch (this.boardStateService.mouse_right_cell_target.region) {
-                case CellRegion.TOP_EDGE:
-                    this.boardWallService.openCloseDoor(this.boardStateService.mouse_right_cell_target);
-                    break;
-                case CellRegion.LEFT_EDGE:
-                    this.boardWallService.openCloseDoor(this.boardStateService.mouse_right_cell_target);
-                    break;
-                case CellRegion.FWRD_EDGE:
-                    this.boardWallService.openCloseDoor(this.boardStateService.mouse_right_cell_target);
-                    break;
-                case CellRegion.BKWD_EDGE:
-                    this.boardWallService.openCloseDoor(this.boardStateService.mouse_right_cell_target);
-                    break;
+            if (this.boardStateService.mouse_right_cell_target.region === CellRegion.TOP_EDGE ||
+                this.boardStateService.mouse_right_cell_target.region === CellRegion.LEFT_EDGE ||
+                this.boardStateService.mouse_right_cell_target.region === CellRegion.FWRD_EDGE ||
+                this.boardStateService.mouse_right_cell_target.region === CellRegion.BKWD_EDGE) {
+                this.boardWallService.openCloseDoor(this.boardStateService.mouse_right_cell_target);
             }
-            this.boardPlayerService.updateAllPlayerVisibility();
-            this.boardPlayerService.updateAllPlayerTraverse();
         }
     }
 

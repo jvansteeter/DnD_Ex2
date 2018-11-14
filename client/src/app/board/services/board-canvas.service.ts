@@ -20,10 +20,9 @@ export class BoardCanvasService extends IsReadyService {
     }
 
     public init(): void {
-        console.log('boardCanvasService.init()');
         this.dependenciesSub = this.dependenciesReady().subscribe((isReady: boolean) => {
             if (isReady && !this.isReady()) {
-                console.log('\t\tboardCanvasService.init -> isReady');
+                console.log('boardCanvasService.init -> isReady');
             	  if (this.dependenciesSub) {
 		              this.dependenciesSub.unsubscribe();
 	              }

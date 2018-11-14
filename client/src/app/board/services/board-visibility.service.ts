@@ -26,10 +26,9 @@ export class BoardVisibilityService extends IsReadyService {
     }
 
     public init(): void {
-        console.log('boardVisibilityService.init()');
         this.dependenciesSub = this.dependenciesReady().subscribe((isReady: boolean) => {
             if (isReady && !this.isReady()) {
-                console.log('\t\tboardVisibilityService.init() -> isReady');
+                console.log('boardVisibilityService.init() -> isReady');
                 this.blockingSegments = new Set();
                 this.blockingBitmap = new BitArray(BoardStateService.num_pixels);
                 this.setReady(true);
@@ -75,7 +74,6 @@ export class BoardVisibilityService extends IsReadyService {
     }
 
     public raytraceVisibilityFromCell(source: XyPair, rayCount, ...additionalBlockingPoints: Array<XyPair>): Array<XyPair> {
-        console.log('\t\traytracing visibility from a cell');
         const degreeInc = 360 / rayCount;
         const poly = new Array<XyPair>();
         let additionalBlockingPointsArray: BitArray;
@@ -104,6 +102,40 @@ export class BoardVisibilityService extends IsReadyService {
      *******************************************************************************************************************/
     private targetIsBlocked(loc: CellTarget): boolean {
         return this.blockingSegments.has(loc.hash());
+    }
+
+    public blockCellTarget(cellTarget: CellTarget) {
+        switch (cellTarget.region) {
+            case CellRegion.TOP_EDGE:
+                this.blockNorth(cellTarget.location);
+                break;
+            case CellRegion.LEFT_EDGE:
+                this.blockWest(cellTarget.location);
+                break;
+            case CellRegion.FWRD_EDGE:
+                this.blockFwd(cellTarget.location);
+                break;
+            case CellRegion.BKWD_EDGE:
+                this.blockBkw(cellTarget.location);
+                break;
+        }
+    }
+
+    public unblockCellTarget(cellTarget: CellTarget) {
+        switch (cellTarget.region) {
+            case CellRegion.TOP_EDGE:
+                this.unblockNorth(cellTarget.location);
+                break;
+            case CellRegion.LEFT_EDGE:
+                this.unblockWest(cellTarget.location);
+                break;
+            case CellRegion.FWRD_EDGE:
+                this.unblockFwd(cellTarget.location);
+                break;
+            case CellRegion.BKWD_EDGE:
+                this.unblockBkw(cellTarget.location);
+                break;
+        }
     }
 
     public blockNorth(cell: XyPair) {

@@ -164,6 +164,7 @@ export class EncounterConcurrencyService extends IsReadyService {
 
 				// THIS IS A HACK, FIX THIS LATER
 				this.playerService.updatePlayerLightSource(message.body.data['_id']);
+				this.playerService.updatePlayerVisibility(message.body.data['_id']);
 				break;
 			}
 			case EncounterCommandType.ADD_PLAYER: {
@@ -209,6 +210,7 @@ export class EncounterConcurrencyService extends IsReadyService {
 					return;
 				}
 				this.wallService.wallData = message.body.data as Map<string, CellTarget>;
+				this.wallService.updateLightAndTraverse();
 				break;
 			}
 			case EncounterCommandType.DOOR_CHANGE: {
@@ -216,7 +218,8 @@ export class EncounterConcurrencyService extends IsReadyService {
 					return;
 				}
 				this.wallService.doorData = message.body.data as Map<string, CellTarget>;
-				break;
+                this.wallService.updateLightAndTraverse();
+                break;
 			}
 			case EncounterCommandType.SETTINGS_CHANGE: {
 				this.encounterService.config = message.body.data as EncounterConfigData;

@@ -16,10 +16,9 @@ export class BoardTeamsService extends IsReadyService {
     }
 
     public init(): void {
-        console.log('boardTeamsService.init()');
         this.dependenciesSub = this.dependenciesReady().subscribe((isReady: boolean) => {
             if (isReady && !this.isReady()) {
-                console.log('\t\tboardTeamsService.init() -> isReady');
+                console.log('boardTeamsService.init() -> isReady');
                 this.setReady(true);
             }
         })

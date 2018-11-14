@@ -21,10 +21,9 @@ export class BoardTraverseService extends IsReadyService {
     }
 
     public init(): void {
-        console.log('boardTraverseService.init()');
         this.dependenciesSub = this.dependenciesReady().subscribe((isReady: boolean) => {
             if (isReady && !this.isReady()) {
-                console.log('\t\tboardTraverseService.init() -> isReady');
+                console.log('boardTraverseService.init() -> isReady');
                 this.blockingSegments = new Set();
                 this.numNodes = this.boardStateService.mapDimX * this.boardStateService.mapDimY;
                 this.initTraverseWeights();
@@ -187,6 +186,40 @@ export class BoardTraverseService extends IsReadyService {
         }
 
         return adj;
+    }
+
+    public blockCellTarget(cellTarget: CellTarget) {
+        switch (cellTarget.region) {
+            case CellRegion.TOP_EDGE:
+                this.blockNorth(cellTarget.location);
+                break;
+            case CellRegion.LEFT_EDGE:
+                this.blockWest(cellTarget.location);
+                break;
+            case CellRegion.FWRD_EDGE:
+                this.blockFwd(cellTarget.location);
+                break;
+            case CellRegion.BKWD_EDGE:
+                this.blockBkw(cellTarget.location);
+                break;
+        }
+    }
+
+    public unblockCellTarget(cellTarget: CellTarget) {
+        switch (cellTarget.region) {
+            case CellRegion.TOP_EDGE:
+                this.unblockNorth(cellTarget.location);
+                break;
+            case CellRegion.LEFT_EDGE:
+                this.unblockWest(cellTarget.location);
+                break;
+            case CellRegion.FWRD_EDGE:
+                this.unblockFwd(cellTarget.location);
+                break;
+            case CellRegion.BKWD_EDGE:
+                this.unblockBkw(cellTarget.location);
+                break;
+        }
     }
 
     public blockNorth(cell: XyPair) {
