@@ -66,6 +66,9 @@ export class BoardMapComponent implements OnInit, AfterViewInit {
 
     }
 
+    /****************************************************************************************************************
+     * Initiative Functions
+     ****************************************************************************************************************/
     public showInitCoin(player: Player): boolean {
         if (this.rightsService.isEncounterGM() || this.rightsService.isMyPlayer(player) || (player.isVisible && this.boardPlayerService.tokenHasLOSToSomeUserToken(player)) || this.boardTeamsService.userSharesTeamWithPlayer(player)) {
             return true;
@@ -73,24 +76,48 @@ export class BoardMapComponent implements OnInit, AfterViewInit {
         return false;
     }
 
-    getCursorClass(): string {
-        if (this.boardStateService.spaceDown) {
-            if (this.boardStateService.mouseLeftDown) {
-                return 'cursorGrabbing'
-            } else {
-                return 'cursorGrab'
-            }
-        }
-
-        if (this.boardStateService.mouseMiddleDown) {
-            return 'cursorGrabbing'
+    private boardMap_handleInitBadgeMouseUp(event: MouseEvent, player: Player) {
+        switch(event.which) {
+            case 1:
+                this.boardMap_handleInitDialog(player);
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
         }
     }
 
-    clickResponse(): void {
+    private boardMap_handleInitIconMouseUp(event: MouseEvent, player: Player) {
+        switch(event.which) {
+            case 1:
+                if (this.boardStateService.ctrlDown) {
+                    this.boardPlayerService.tryTogglePlayerVisibility(player);
+                } else {
+                    this.boardPlayerService.toggleSelectPlayer(player);
+                }
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+        }
     }
 
-    boardMap_mouseMove(event): void {
+    private boardMap_handleInitDialog(player: Player) {
+        this.boardPlayerService.playerToSyncInit = player;
+        this.dialog.open(TempPlayerInitDialogComponent);
+    }
+
+    private boardMap_mouseOverInitIcon(player: Player): void {
+        this.boardPlayerService.hoveredPlayerId = player._id;
+    }
+
+
+    /****************************************************************************************************************
+     * Event Handler/Listener Functions
+     ****************************************************************************************************************/
+    private boardMap_mouseMove(event): void {
         const mouse_screen = new XyPair(event.clientX, event.clientY);
 
         if (this.boardStateService.isEditingNotation || this.boardStateService.board_controller_mode === BoardControllerMode.EPHEM_NOTATION) {
@@ -113,7 +140,7 @@ export class BoardMapComponent implements OnInit, AfterViewInit {
         this.boardPlayerService.syncPlayerHover(this.boardStateService.mouse_loc_cell);
     }
 
-    boardMap_handleMouseUp(event) {
+    private boardMap_handleMouseUp(event) {
         switch (event.which) {
             case 1:
                 // left click
@@ -125,12 +152,12 @@ export class BoardMapComponent implements OnInit, AfterViewInit {
                 break;
             case 3:
                 // right click
-                this.doMouseRightUp(event);
+                this.boardMap_doMouseRightUp(event);
                 break;
         }
     }
 
-    boardMap_handleMouseDown(event) {
+    private boardMap_handleMouseDown(event) {
         switch (event.which) {
             case 1:
                 // left click
@@ -149,7 +176,7 @@ export class BoardMapComponent implements OnInit, AfterViewInit {
         }
     }
 
-    boardMap_handleMouseWheel(event) {
+    private boardMap_handleMouseWheel(event) {
         const scroll_scale_delta = 0.10;
         const max_scale = this.boardStateService.maxZoom;
         const min_scale = this.boardStateService.minZoom;
@@ -177,150 +204,16 @@ export class BoardMapComponent implements OnInit, AfterViewInit {
         this.boardStateService.y_offset += y_delta;
     }
 
-    boardMap_handleMouseLeave(event) {
+    private boardMap_handleMouseLeave(event) {
         this.boardMap_clearMouseLocation();
         this.boardStateService.mouseLeftDown = false;
     }
 
-    boardMap_handleMouseEnter(event) {
+    private boardMap_handleMouseEnter(event) {
     }
 
-    boardMap_handleContextMenu(event) {
+    private boardMap_handleContextMenu(event) {
         return false;
-    }
-
-    private syncMapContainerDims(): void {
-        this.boardCanvasService.cvs_height = this.mapContainer.nativeElement.clientHeight;
-        this.boardCanvasService.cvs_width = this.mapContainer.nativeElement.clientWidth;
-
-        this.boardStateService.mapOffsetTop = this.mapContainer.nativeElement.offsetTop;
-        this.boardStateService.mapOffsetLeft = this.mapContainer.nativeElement.offsetLeft;
-    }
-
-    @HostListener('document:keydown', ['$event'])
-    boardMap_handleKeyDownEvent(event: KeyboardEvent) {
-        const key_code = event.code;
-        switch (key_code) {
-            case 'ShiftLeft' :
-                this.boardStateService.shiftDown = true;
-                this.boardStateService.board_controller_mode = BoardControllerMode.EPHEM_NOTATION;
-                this.boardMap_refreshMouseLocation();
-                break;
-            case 'ShiftRight' :
-                break;
-            case 'Space' :
-                this.boardStateService.spaceDown = true;
-                break;
-            case 'ControlLeft':
-                this.boardStateService.ctrlDown = true;
-                break;
-        }
-    }
-
-    @HostListener('document:keyup', ['$event'])
-    boardMap_handleKeyUpEvent(event: KeyboardEvent) {
-        const key_code = event.code;
-        switch (key_code) {
-            case 'ShiftLeft' :
-                this.boardStateService.shiftDown = false;
-                this.boardStateService.board_controller_mode = BoardControllerMode.DEFAULT;
-                this.boardMap_refreshMouseLocation();
-                break;
-            case 'ShiftRight' :
-                break;
-            case 'Space' :
-                this.boardStateService.spaceDown = false;
-                break;
-            case 'Escape':
-                this.boardStateService.source_click_location = null;
-                break;
-            case 'ControlLeft':
-                this.boardStateService.ctrlDown = false;
-                break;
-        }
-    }
-
-    boardMap_updateMouseLocation(location: XyPair): void {
-        // UPDATE GLOBAL MOUSE LOCATIONS
-        this.boardStateService.mouse_loc_screen = location;
-        this.boardStateService.mouse_loc_canvas = this.boardTransformService.screen_to_canvas(this.boardStateService.mouse_loc_screen);
-        this.boardStateService.mouse_loc_map = this.boardTransformService.screen_to_map(this.boardStateService.mouse_loc_screen);
-        this.boardStateService.mouse_loc_cell = this.boardTransformService.screen_to_cell(this.boardStateService.mouse_loc_screen);
-        this.boardStateService.mouse_loc_cell_pix = new XyPair(this.boardStateService.mouse_loc_map.x - (this.boardStateService.mouse_loc_cell.x * BoardStateService.cell_res), this.boardStateService.mouse_loc_map.y - (this.boardStateService.mouse_loc_cell.y * BoardStateService.cell_res));
-        this.boardStateService.mouse_cell_target = this.boardTransformService.calculate_cell_target(this.boardStateService.mouse_loc_cell_pix);
-        this.boardStateService.mouse_right_cell_target = this.boardTransformService.calculate_cell_target(this.boardStateService.mouse_loc_cell_pix, 0.2);
-        this.boardStateService.mouseOnMap = this.boardStateService.coorInBounds(this.boardStateService.mouse_loc_cell.x, this.boardStateService.mouse_loc_cell.y);
-    }
-
-    boardMap_refreshMouseLocation(): void {
-        this.boardStateService.mouse_loc_canvas = this.boardTransformService.screen_to_canvas(this.boardStateService.mouse_loc_screen);
-        this.boardStateService.mouse_loc_map = this.boardTransformService.screen_to_map(this.boardStateService.mouse_loc_screen);
-        this.boardStateService.mouse_loc_cell = this.boardTransformService.screen_to_cell(this.boardStateService.mouse_loc_screen);
-        this.boardStateService.mouse_loc_cell_pix = new XyPair(this.boardStateService.mouse_loc_map.x - (this.boardStateService.mouse_loc_cell.x * BoardStateService.cell_res), this.boardStateService.mouse_loc_map.y - (this.boardStateService.mouse_loc_cell.y * BoardStateService.cell_res));
-        this.boardStateService.mouse_cell_target = this.boardTransformService.calculate_cell_target(this.boardStateService.mouse_loc_cell_pix);
-        this.boardStateService.mouse_right_cell_target = this.boardTransformService.calculate_cell_target(this.boardStateService.mouse_loc_cell_pix, 0.2);
-        this.boardStateService.mouseOnMap = this.boardStateService.coorInBounds(this.boardStateService.mouse_loc_cell.x, this.boardStateService.mouse_loc_cell.y);
-    }
-
-    boardMap_clearMouseLocation(): void {
-        this.boardStateService.mouse_loc_canvas = null;
-        this.boardStateService.mouse_loc_map = null;
-        this.boardStateService.mouse_loc_cell = null;
-        this.boardStateService.mouse_loc_cell_pix = null;
-        this.boardStateService.mouse_cell_target = null;
-        this.boardStateService.mouse_right_cell_target = null;
-        this.boardStateService.mouseOnMap = false;
-    }
-
-    private doMouseRightUp(event) {
-        this.checkForPlayerPops(
-            new XyPair(this.boardStateService.mouse_loc_cell.x, this.boardStateService.mouse_loc_cell.y),
-            this.boardTransformService.map_to_screen(new XyPair((this.boardStateService.mouse_loc_cell.x + 1) * BoardStateService.cell_res, ((this.boardStateService.mouse_loc_cell.y) * BoardStateService.cell_res)))
-        );
-
-        switch (this.boardStateService.board_view_mode) {
-            case ViewMode.BOARD_MAKER:
-                break;
-            case ViewMode.PLAYER:
-                break;
-            case ViewMode.MASTER:
-                break;
-        }
-
-        if (!isNullOrUndefined(this.boardStateService.mouse_right_cell_target)) {
-            switch (this.boardStateService.mouse_right_cell_target.region) {
-                case CellRegion.TOP_EDGE:
-                    this.boardWallService.openCloseDoor(this.boardStateService.mouse_right_cell_target);
-                    break;
-                case CellRegion.LEFT_EDGE:
-                    this.boardWallService.openCloseDoor(this.boardStateService.mouse_right_cell_target);
-                    break;
-                case CellRegion.FWRD_EDGE:
-                    this.boardWallService.openCloseDoor(this.boardStateService.mouse_right_cell_target);
-                    break;
-                case CellRegion.BKWD_EDGE:
-                    this.boardWallService.openCloseDoor(this.boardStateService.mouse_right_cell_target);
-                    break;
-            }
-            this.boardPlayerService.updateAllPlayerVisibility();
-            this.boardPlayerService.updateAllPlayerTraverse();
-        }
-    }
-
-    private checkForPlayerPops(loc_cell: XyPair, pop_origin: XyPair) {
-        if (this.boardStateService.do_pops) {
-            for (const player of this.encounterService.players) {
-                if (player.location.x === loc_cell.x && player.location.y === loc_cell.y) {
-                    if (this.popService.popIsActive(player._id)) {
-                        this.popService.clearPlayerPop(player._id);
-                    } else {
-                        const x = (loc_cell.x + 1) * BoardStateService.cell_res;
-                        const y = (loc_cell.y) * BoardStateService.cell_res;
-                        this.popService.addPlayerPop(pop_origin.x, pop_origin.y, player);
-                    }
-                }
-            }
-        }
     }
 
     private boardMap_doMouseLeftUp(event) {
@@ -423,7 +316,150 @@ export class BoardMapComponent implements OnInit, AfterViewInit {
         this.boardStateService.mouseDrag = false;
     }
 
-    getSortedPlayers(): Array<Player> {
+    private boardMap_doMouseRightUp(event) {
+        this.checkForPlayerPops(
+            new XyPair(this.boardStateService.mouse_loc_cell.x, this.boardStateService.mouse_loc_cell.y),
+            this.boardTransformService.map_to_screen(new XyPair((this.boardStateService.mouse_loc_cell.x + 1) * BoardStateService.cell_res, ((this.boardStateService.mouse_loc_cell.y) * BoardStateService.cell_res)))
+        );
+
+        switch (this.boardStateService.board_view_mode) {
+            case ViewMode.BOARD_MAKER:
+                break;
+            case ViewMode.PLAYER:
+                break;
+            case ViewMode.MASTER:
+                break;
+        }
+
+        if (!isNullOrUndefined(this.boardStateService.mouse_right_cell_target)) {
+            switch (this.boardStateService.mouse_right_cell_target.region) {
+                case CellRegion.TOP_EDGE:
+                    this.boardWallService.openCloseDoor(this.boardStateService.mouse_right_cell_target);
+                    break;
+                case CellRegion.LEFT_EDGE:
+                    this.boardWallService.openCloseDoor(this.boardStateService.mouse_right_cell_target);
+                    break;
+                case CellRegion.FWRD_EDGE:
+                    this.boardWallService.openCloseDoor(this.boardStateService.mouse_right_cell_target);
+                    break;
+                case CellRegion.BKWD_EDGE:
+                    this.boardWallService.openCloseDoor(this.boardStateService.mouse_right_cell_target);
+                    break;
+            }
+            this.boardPlayerService.updateAllPlayerVisibility();
+            this.boardPlayerService.updateAllPlayerTraverse();
+        }
+    }
+
+    private boardMap_clickResponse(): void {
+    }
+
+    @HostListener('document:keydown', ['$event'])
+    public boardMap_handleKeyDownEvent(event: KeyboardEvent) {
+        const key_code = event.code;
+        switch (key_code) {
+            case 'ShiftLeft' :
+                this.boardStateService.shiftDown = true;
+                this.boardStateService.board_controller_mode = BoardControllerMode.EPHEM_NOTATION;
+                this.boardMap_refreshMouseLocation();
+                break;
+            case 'ShiftRight' :
+                break;
+            case 'Space' :
+                this.boardStateService.spaceDown = true;
+                break;
+            case 'ControlLeft':
+                this.boardStateService.ctrlDown = true;
+                break;
+        }
+    }
+
+    @HostListener('document:keyup', ['$event'])
+    public boardMap_handleKeyUpEvent(event: KeyboardEvent) {
+        const key_code = event.code;
+        switch (key_code) {
+            case 'ShiftLeft' :
+                this.boardStateService.shiftDown = false;
+                this.boardStateService.board_controller_mode = BoardControllerMode.DEFAULT;
+                this.boardMap_refreshMouseLocation();
+                break;
+            case 'ShiftRight' :
+                break;
+            case 'Space' :
+                this.boardStateService.spaceDown = false;
+                break;
+            case 'Escape':
+                this.boardStateService.source_click_location = null;
+                break;
+            case 'ControlLeft':
+                this.boardStateService.ctrlDown = false;
+                break;
+        }
+    }
+
+
+    /****************************************************************************************************************
+     * Mouse/Cursor Syncing Functions
+     ****************************************************************************************************************/
+    private boardMap_updateMouseLocation(location: XyPair): void {
+        // UPDATE GLOBAL MOUSE LOCATIONS
+        this.boardStateService.mouse_loc_screen = location;
+        this.boardStateService.mouse_loc_canvas = this.boardTransformService.screen_to_canvas(this.boardStateService.mouse_loc_screen);
+        this.boardStateService.mouse_loc_map = this.boardTransformService.screen_to_map(this.boardStateService.mouse_loc_screen);
+        this.boardStateService.mouse_loc_cell = this.boardTransformService.screen_to_cell(this.boardStateService.mouse_loc_screen);
+        this.boardStateService.mouse_loc_cell_pix = new XyPair(this.boardStateService.mouse_loc_map.x - (this.boardStateService.mouse_loc_cell.x * BoardStateService.cell_res), this.boardStateService.mouse_loc_map.y - (this.boardStateService.mouse_loc_cell.y * BoardStateService.cell_res));
+        this.boardStateService.mouse_cell_target = this.boardTransformService.calculate_cell_target(this.boardStateService.mouse_loc_cell_pix);
+        this.boardStateService.mouse_right_cell_target = this.boardTransformService.calculate_cell_target(this.boardStateService.mouse_loc_cell_pix, 0.2);
+        this.boardStateService.mouseOnMap = this.boardStateService.coorInBounds(this.boardStateService.mouse_loc_cell.x, this.boardStateService.mouse_loc_cell.y);
+    }
+
+    private boardMap_refreshMouseLocation(): void {
+        this.boardStateService.mouse_loc_canvas = this.boardTransformService.screen_to_canvas(this.boardStateService.mouse_loc_screen);
+        this.boardStateService.mouse_loc_map = this.boardTransformService.screen_to_map(this.boardStateService.mouse_loc_screen);
+        this.boardStateService.mouse_loc_cell = this.boardTransformService.screen_to_cell(this.boardStateService.mouse_loc_screen);
+        this.boardStateService.mouse_loc_cell_pix = new XyPair(this.boardStateService.mouse_loc_map.x - (this.boardStateService.mouse_loc_cell.x * BoardStateService.cell_res), this.boardStateService.mouse_loc_map.y - (this.boardStateService.mouse_loc_cell.y * BoardStateService.cell_res));
+        this.boardStateService.mouse_cell_target = this.boardTransformService.calculate_cell_target(this.boardStateService.mouse_loc_cell_pix);
+        this.boardStateService.mouse_right_cell_target = this.boardTransformService.calculate_cell_target(this.boardStateService.mouse_loc_cell_pix, 0.2);
+        this.boardStateService.mouseOnMap = this.boardStateService.coorInBounds(this.boardStateService.mouse_loc_cell.x, this.boardStateService.mouse_loc_cell.y);
+    }
+
+    private boardMap_clearMouseLocation(): void {
+        this.boardStateService.mouse_loc_canvas = null;
+        this.boardStateService.mouse_loc_map = null;
+        this.boardStateService.mouse_loc_cell = null;
+        this.boardStateService.mouse_loc_cell_pix = null;
+        this.boardStateService.mouse_cell_target = null;
+        this.boardStateService.mouse_right_cell_target = null;
+        this.boardStateService.mouseOnMap = false;
+    }
+
+
+    /****************************************************************************************************************
+     * View/Helper/Other Functions
+     ****************************************************************************************************************/
+    private getCursorClass(): string {
+        if (this.boardStateService.spaceDown) {
+            if (this.boardStateService.mouseLeftDown) {
+                return 'cursorGrabbing'
+            } else {
+                return 'cursorGrab'
+            }
+        }
+
+        if (this.boardStateService.mouseMiddleDown) {
+            return 'cursorGrabbing'
+        }
+    }
+
+    private syncMapContainerDims(): void {
+        this.boardCanvasService.cvs_height = this.mapContainer.nativeElement.clientHeight;
+        this.boardCanvasService.cvs_width = this.mapContainer.nativeElement.clientWidth;
+
+        this.boardStateService.mapOffsetTop = this.mapContainer.nativeElement.offsetTop;
+        this.boardStateService.mapOffsetLeft = this.mapContainer.nativeElement.offsetLeft;
+    }
+
+    private getSortedPlayers(): Array<Player> {
         return this.boardPlayerService.players.sort(this.playerCompare);
     }
 
@@ -452,41 +488,20 @@ export class BoardMapComponent implements OnInit, AfterViewInit {
         return 0;
     }
 
-    boardMap_handleInitBadgeMouseUp(event: MouseEvent, player: Player) {
-        switch(event.which) {
-            case 1:
-                this.boardMap_handleInitDialog(player);
-                break;
-            case 2:
-                break;
-            case 3:
-                break;
-        }
-    }
-
-
-    boardMap_handleInitIconMouseUp(event: MouseEvent, player: Player) {
-        switch(event.which) {
-            case 1:
-                if (this.boardStateService.ctrlDown) {
-                    this.boardPlayerService.tryTogglePlayerVisibility(player);
-                } else {
-                    this.boardPlayerService.toggleSelectPlayer(player);
+    private checkForPlayerPops(loc_cell: XyPair, pop_origin: XyPair) {
+        if (this.boardStateService.do_pops) {
+            for (const player of this.encounterService.players) {
+                if (player.location.x === loc_cell.x && player.location.y === loc_cell.y) {
+                    if (this.popService.popIsActive(player._id)) {
+                        this.popService.clearPlayerPop(player._id);
+                    } else {
+                        const x = (loc_cell.x + 1) * BoardStateService.cell_res;
+                        const y = (loc_cell.y) * BoardStateService.cell_res;
+                        this.popService.addPlayerPop(pop_origin.x, pop_origin.y, player);
+                    }
                 }
-                break;
-            case 2:
-                break;
-            case 3:
-                break;
+            }
         }
     }
 
-    boardMap_handleInitDialog(player: Player) {
-        this.boardPlayerService.playerToSyncInit = player;
-        this.dialog.open(TempPlayerInitDialogComponent);
-    }
-
-    boardMap_mouseOverInitIcon(player: Player): void {
-        this.boardPlayerService.hoveredPlayerId = player._id;
-    }
 }

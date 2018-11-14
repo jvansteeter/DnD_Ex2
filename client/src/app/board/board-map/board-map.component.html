@@ -42,14 +42,14 @@
             height={{boardCanvasService.cvs_height}} width={{boardCanvasService.cvs_width}}
             (mouseleave)="boardMap_handleMouseLeave($event)"
             (mouseenter)="boardMap_handleMouseEnter($event)"
-            mouseWheel
             (mouseWheelUp)="boardMap_handleMouseWheel($event)"
             (mouseWheelDown)="boardMap_handleMouseWheel($event)"
             (mousemove)="boardMap_mouseMove($event)"
             (mousedown)="boardMap_handleMouseDown($event)"
             (mouseup)="boardMap_handleMouseUp($event)"
             (contextmenu)="boardMap_handleContextMenu($event)"
-            (click)="clickResponse()">
+            (click)="boardMap_clickResponse()"
+            mouseWheel>
     </canvas>
 </div>
 
