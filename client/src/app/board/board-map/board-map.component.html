@@ -39,7 +39,7 @@
     <canvas
             class="inputCanvas"
             [ngClass]="getCursorClass()"
-            height={{boardCanvasService.cvs_height}} width={{boardCanvasService.cvs_width}}
+            height={{boardStateService.canvasElement_height}} width={{boardStateService.canvasElement_width}}
             (mouseleave)="boardMap_handleMouseLeave($event)"
             (mouseenter)="boardMap_handleMouseEnter($event)"
             (mouseWheelUp)="boardMap_handleMouseWheel($event)"

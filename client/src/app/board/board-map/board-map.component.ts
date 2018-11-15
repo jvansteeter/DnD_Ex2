@@ -4,7 +4,7 @@ import {
     ElementRef,
     OnInit,
     HostListener,
-    AfterViewInit,
+    AfterViewInit, OnDestroy,
 } from '@angular/core';
 import {BoardCanvasService} from "../services/board-canvas.service";
 import {BoardStateService} from "../services/board-state.service";
@@ -34,8 +34,9 @@ import {BoardTeamsService} from "../services/board-teams-service";
     templateUrl: 'board-map.component.html',
     styleUrls: ['board-map.component.scss']
 })
-export class BoardMapComponent implements OnInit, AfterViewInit {
+export class BoardMapComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChild('mapContainer') mapContainer: ElementRef;
+    private frameId;
 
     constructor(private boardCanvasService: BoardCanvasService,
                 private boardStateService: BoardStateService,
@@ -54,7 +55,7 @@ export class BoardMapComponent implements OnInit, AfterViewInit {
 
     render = () => {
         this.syncMapContainerDims();
-        requestAnimationFrame(this.render);
+        this.frameId = requestAnimationFrame(this.render);
     };
 
     ngOnInit(): void {
@@ -63,7 +64,10 @@ export class BoardMapComponent implements OnInit, AfterViewInit {
 
     ngAfterViewInit(): void {
         this.boardCanvasService.mapContainerNativeElement = this.mapContainer.nativeElement;
+    }
 
+    ngOnDestroy(): void {
+        cancelAnimationFrame(this.frameId);
     }
 
     /****************************************************************************************************************
@@ -131,8 +135,8 @@ export class BoardMapComponent implements OnInit, AfterViewInit {
             const deltaX = this.boardStateService.mouse_loc_map.x - trans_coor.x;
             const deltaY = this.boardStateService.mouse_loc_map.y - trans_coor.y;
 
-            this.boardStateService.x_offset -= (deltaX * this.boardStateService.scale);
-            this.boardStateService.y_offset -= (deltaY * this.boardStateService.scale);
+            this.boardStateService.canvasTransform_xOffset -= (deltaX * this.boardStateService.canvasTransform_scale);
+            this.boardStateService.canvasTransform_yOffset -= (deltaY * this.boardStateService.canvasTransform_scale);
         }
 
         this.boardMap_updateMouseLocation(mouse_screen);
@@ -181,7 +185,7 @@ export class BoardMapComponent implements OnInit, AfterViewInit {
         const max_scale = this.boardStateService.maxZoom;
         const min_scale = this.boardStateService.minZoom;
 
-        const start_scale = this.boardStateService.scale;
+        const start_scale = this.boardStateService.canvasTransform_scale;
 
         const preferred_scale_delta = (-event.deltaY / 100) * scroll_scale_delta;
         const preferred_new_scale = start_scale + preferred_scale_delta;
@@ -199,9 +203,9 @@ export class BoardMapComponent implements OnInit, AfterViewInit {
         const x_delta = -(this.boardStateService.mouse_loc_map.x * new_scale_delta);
         const y_delta = -(this.boardStateService.mouse_loc_map.y * new_scale_delta);
 
-        this.boardStateService.scale += new_scale_delta;
-        this.boardStateService.x_offset += x_delta;
-        this.boardStateService.y_offset += y_delta;
+        this.boardStateService.canvasTransform_scale += new_scale_delta;
+        this.boardStateService.canvasTransform_xOffset += x_delta;
+        this.boardStateService.canvasTransform_yOffset += y_delta;
     }
 
     private boardMap_handleMouseLeave(event) {
@@ -442,11 +446,11 @@ export class BoardMapComponent implements OnInit, AfterViewInit {
     }
 
     private syncMapContainerDims(): void {
-        this.boardCanvasService.cvs_height = this.mapContainer.nativeElement.clientHeight;
-        this.boardCanvasService.cvs_width = this.mapContainer.nativeElement.clientWidth;
+        this.boardStateService.canvasElement_height = this.mapContainer.nativeElement.clientHeight;
+        this.boardStateService.canvasElement_width = this.mapContainer.nativeElement.clientWidth;
 
-        this.boardStateService.mapOffsetTop = this.mapContainer.nativeElement.offsetTop;
-        this.boardStateService.mapOffsetLeft = this.mapContainer.nativeElement.offsetLeft;
+        this.boardStateService.canvasElement_offsetTop = this.mapContainer.nativeElement.offsetTop;
+        this.boardStateService.canvasElement_offsetLeft = this.mapContainer.nativeElement.offsetLeft;
     }
 
     private getSortedPlayers(): Array<Player> {

@@ -22,6 +22,8 @@ import {RightsService} from "../../data-services/rights.service";
 export class BoardStateService extends IsReadyService {
 
     static cell_res = 50;
+    static map_res_x = 0;
+    static map_res_y = 0;
     static num_pixels = 0;
 
 
@@ -50,13 +52,17 @@ export class BoardStateService extends IsReadyService {
     /*************************************************************************************************************************************
      * LOCAL - Transform
      *************************************************************************************************************************************/
-    public x_offset = 0;
-    public y_offset = 0;
-    public scale = 1.0;
+    public canvasTransform_xOffset = 0;
+    public canvasTransform_yOffset = 0;
+    public canvasTransform_scale = 1.0;
+
     public maxZoom = 2.5;        // default: 2.50vis
     public minZoom = 0.35;
-    public mapOffsetTop: number;
-    public mapOffsetLeft: number;
+
+    public canvasElement_height: number;
+    public canvasElement_width: number;
+    public canvasElement_offsetTop: number;
+    public canvasElement_offsetLeft: number;
 
     // board-map controls
     public isGM = false;
@@ -159,6 +165,8 @@ export class BoardStateService extends IsReadyService {
                 }
 
                 BoardStateService.num_pixels = this.mapDimX * this.mapDimY * BoardStateService.cell_res ** 2;
+                BoardStateService.map_res_x = this.mapDimX * BoardStateService.cell_res;
+                BoardStateService.map_res_y = this.mapDimY * BoardStateService.cell_res;
                 this.setReady(true);
             }
         });

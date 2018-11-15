@@ -37,15 +37,21 @@ export class BoardCanvasService extends IsReadyService {
     }
 
     public updateTransform(ctx: CanvasRenderingContext2D) {
-        const scale = this.boardStateService.scale;
-        const x_offset = this.boardStateService.x_offset;
-        const y_offset = this.boardStateService.y_offset;
+        const scale = this.boardStateService.canvasTransform_scale;
+        const x_offset = this.boardStateService.canvasTransform_xOffset;
+        const y_offset = this.boardStateService.canvasTransform_yOffset;
 
         ctx.setTransform(scale, 0, 0, scale, x_offset, y_offset);
     }
 
     clear_canvas(ctx: CanvasRenderingContext2D) {
-        ctx.clearRect(-50, -50, this.boardStateService.mapDimX * BoardStateService.cell_res + 100, this.boardStateService.mapDimY * BoardStateService.cell_res + 100);
+        const visible_pix_x = (this.boardStateService.canvasElement_width / this.boardStateService.canvasTransform_scale) + 100;
+        const visible_pix_y = (this.boardStateService.canvasElement_height / this.boardStateService.canvasTransform_scale) + 100;
+        const scaled_offset_x = (-this.boardStateService.canvasTransform_xOffset / this.boardStateService.canvasTransform_scale) - 50;
+        const scaled_offset_y = (-this.boardStateService.canvasTransform_yOffset / this.boardStateService.canvasTransform_scale) - 50;
+
+        ctx.clearRect(scaled_offset_x, scaled_offset_y, visible_pix_x, visible_pix_y);
+
     }
 
     public trim_canvas(ctx: CanvasRenderingContext2D) {

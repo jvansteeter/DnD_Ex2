@@ -56,8 +56,8 @@ export class BoardTransformService extends IsReadyService{
 
     screen_to_map(screenRes: XyPair): XyPair {
         const canvasPixel = this.screen_to_canvas(screenRes);
-        const mapX = (canvasPixel.x - this.boardStateService.x_offset) / this.boardStateService.scale;
-        const mapY = (canvasPixel.y - this.boardStateService.y_offset) / this.boardStateService.scale;
+        const mapX = (canvasPixel.x - this.boardStateService.canvasTransform_xOffset) / this.boardStateService.canvasTransform_scale;
+        const mapY = (canvasPixel.y - this.boardStateService.canvasTransform_yOffset) / this.boardStateService.canvasTransform_scale;
         return new XyPair(mapX, mapY);
     }
 
@@ -71,8 +71,8 @@ export class BoardTransformService extends IsReadyService{
     }
 
     map_to_canvas(mapRes: XyPair): XyPair {
-        const canvasX = (mapRes.x * this.boardStateService.scale) + this.boardStateService.x_offset;
-        const canvasY = (mapRes.y * this.boardStateService.scale) + this.boardStateService.y_offset;
+        const canvasX = (mapRes.x * this.boardStateService.canvasTransform_scale) + this.boardStateService.canvasTransform_xOffset;
+        const canvasY = (mapRes.y * this.boardStateService.canvasTransform_scale) + this.boardStateService.canvasTransform_yOffset;
         return new XyPair(canvasX, canvasY);
     }
 

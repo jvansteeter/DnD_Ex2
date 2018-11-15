@@ -2,7 +2,6 @@ import {BoardStateService} from '../../services/board-state.service';
 import {BoardCanvasService} from '../../services/board-canvas.service';
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import {BoardVisibilityService} from "../../services/board-visibility.service";
-import {XyPair} from "../../../../../../shared/types/encounter/board/xy-pair";
 import {GeometryStatics} from "../../statics/geometry-statics";
 import {BoardTraverseService} from "../../services/board-traverse.service";
 import {CellRegion} from "../../shared/enum/cell-region";
