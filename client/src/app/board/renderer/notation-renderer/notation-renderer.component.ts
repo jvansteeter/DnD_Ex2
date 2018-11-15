@@ -39,9 +39,6 @@ export class NotationRendererComponent implements OnInit, OnDestroy {
 
             if (!isNullOrUndefined(this.boardStateService.mouse_loc_map)) {
                 const end_point = this.boardStateService.mouse_loc_map;
-                const angle = Math.atan2(end_point.y, end_point.x);
-                console.log(angle * 180 / Math.PI);
-
                 this.boardCanvasService.draw_line(this.ctx, this.boardNotationService.lineNotationStartPoint, this.boardStateService.mouse_loc_map, 1, this.boardNotationService.getActiveNotation().getRgbCode());
             }
 
@@ -82,6 +79,8 @@ export class NotationRendererComponent implements OnInit, OnDestroy {
                 }
             }
         }
+
+        this.boardCanvasService.trim_canvas(this.ctx);
 
         this.frameId = requestAnimationFrame(this.render);
     }

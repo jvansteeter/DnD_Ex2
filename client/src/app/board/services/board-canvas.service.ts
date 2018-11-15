@@ -10,8 +10,6 @@ import {IsReadyService} from "../../utilities/services/isReady.service";
 @Injectable()
 export class BoardCanvasService extends IsReadyService {
     public mapContainerNativeElement;
-    public cvs_width: number;
-    public cvs_height: number;
 
     constructor(
         private boardStateService: BoardStateService
@@ -55,13 +53,10 @@ export class BoardCanvasService extends IsReadyService {
     }
 
     public trim_canvas(ctx: CanvasRenderingContext2D) {
-        const map_res_x = this.boardStateService.mapDimX * BoardStateService.cell_res;
-        const map_res_y = this.boardStateService.mapDimY * BoardStateService.cell_res;
-
-        ctx.clearRect(-map_res_x, -map_res_y, map_res_x, map_res_y * 3);
-        ctx.clearRect(-map_res_x, -map_res_y, map_res_x * 3, map_res_y);
-        ctx.clearRect(map_res_x, -map_res_y, map_res_x, map_res_y * 3);
-        ctx.clearRect(-map_res_x, map_res_y, map_res_x * 3, map_res_y);
+        ctx.globalCompositeOperation = 'destination-in';
+        ctx.fillStyle = 'rgba(255,0,0,1)';
+        ctx.fillRect(0,0,BoardStateService.map_res_x, BoardStateService.map_res_y);
+        ctx.globalCompositeOperation = 'source-over';
     }
 
     draw_img(ctx: CanvasRenderingContext2D, origin: XyPair, img: HTMLImageElement, opacity: number = 1.0) {
