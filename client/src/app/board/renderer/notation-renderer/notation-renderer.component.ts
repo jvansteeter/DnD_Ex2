@@ -37,7 +37,14 @@ export class NotationRendererComponent implements OnInit, OnDestroy {
 
         if (!isNullOrUndefined(this.boardNotationService.lineNotationStartPoint)) {
 
-            this.boardCanvasService.draw_line(this.ctx, this.boardNotationService.lineNotationStartPoint, this.boardStateService.mouse_loc_map, 1, this.boardNotationService.getActiveNotation().getRgbCode());
+            if (!isNullOrUndefined(this.boardStateService.mouse_loc_map)) {
+                const end_point = this.boardStateService.mouse_loc_map;
+                const angle = Math.atan2(end_point.y, end_point.x);
+                console.log(angle * 180 / Math.PI);
+
+                this.boardCanvasService.draw_line(this.ctx, this.boardNotationService.lineNotationStartPoint, this.boardStateService.mouse_loc_map, 1, this.boardNotationService.getActiveNotation().getRgbCode());
+            }
+
             for (let cell of this.boardNotationService.lineNotationCells) {
                 this.boardCanvasService.draw_fill_all(this.ctx, cell, this.boardNotationService.getActiveNotation().getRgbaCode());
             }

@@ -146,7 +146,13 @@ export class BoardNotationService extends IsReadyService {
 				if (isNullOrUndefined(this.lineNotationStartPoint)) {
 
 				} else {
-					this.lineNotationCells = GeometryStatics.CellsUnderALine(this.lineNotationStartPoint, this.boardStateService.mouse_loc_map);
+					let potentialCells = GeometryStatics.CellsUnderALine(this.lineNotationStartPoint, this.boardStateService.mouse_loc_map);
+                    this.lineNotationCells = new Array<XyPair>();
+                    for (let cell of potentialCells) {
+						if (this.boardStateService.coorInBounds(cell.x, cell.y)) {
+							this.lineNotationCells.push(cell);
+						}
+					}
 				}
 				break;
 		}
@@ -176,7 +182,9 @@ export class BoardNotationService extends IsReadyService {
 				break;
 			case NotationMode.LINE:
 				if (isNullOrUndefined(this.lineNotationStartPoint)) {
-                    this.lineNotationStartPoint = this.boardStateService.mouse_loc_map;
+					if (this.boardStateService.pixelPointInBounds(this.boardStateService.mouse_loc_map)) {
+                        this.lineNotationStartPoint = this.boardStateService.mouse_loc_map;
+                    }
                 } else {
 					this.getActiveNotation().addBatchCells(this.lineNotationCells);
 					this.lineNotationStartPoint = null;

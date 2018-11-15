@@ -40,7 +40,7 @@ export class NotationModel extends MongooseModel implements NotationData {
 			red: {type: Number, default: 255},
 			green: {type: Number, default: 0},
 			blue: {type: Number, default: 0},
-			alpha: {type: Number, default: 1.0},
+			alpha: {type: Number, default: 0.3},
 		});
 
 		this._id = this.methods._id;

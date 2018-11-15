@@ -1,5 +1,6 @@
 import {XyPair} from "../../../../../shared/types/encounter/board/xy-pair";
 import {BoardStateService} from "../services/board-state.service";
+import {isNullOrUndefined} from "util";
 
 export class GeometryStatics {
     static distanceBetweenXyPairs(pair1: XyPair, pair2: XyPair): number {
@@ -104,6 +105,10 @@ export class GeometryStatics {
     }
 
     static CellsUnderALine(start: XyPair, end: XyPair): Array<XyPair> {
+        if (isNullOrUndefined(start) || isNullOrUndefined(end)) {
+            return [];
+        }
+
         const line = GeometryStatics.BresenhamLine(start.x, start.y, end.x, end.y);
         const returnMe = [];
         const returnSet = new Set<string>();
