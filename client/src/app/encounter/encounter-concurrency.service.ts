@@ -17,6 +17,7 @@ import { BoardWallService } from '../board/services/board-wall.service';
 import { CellTarget } from '../board/shared/cell-target';
 import { EncounterConfigData } from '../../../../shared/types/encounter/encounter-config.data';
 import { EncounterTeamsData } from '../../../../shared/types/encounter/encounter-teams.data';
+import { BoardTeamsService } from '../board/services/board-teams.service';
 
 @Injectable()
 export class EncounterConcurrencyService extends IsReadyService {
@@ -36,6 +37,7 @@ export class EncounterConcurrencyService extends IsReadyService {
 	            private lightService: BoardLightService,
 	            private notationService: BoardNotationService,
 	            private wallService: BoardWallService,
+	            private teamsService: BoardTeamsService,
 	            private mqService: MqService) {
 		super(encounterService, mqService, notationService, userProfileService, playerService, lightService, wallService);
 	}
@@ -51,6 +53,8 @@ export class EncounterConcurrencyService extends IsReadyService {
 				this.observerDoorChanges();
 				this.observeConfigChanges();
 				this.observeTeamChanges();
+				this.mqService.publishEncounterCommand(this.encounterService.encounterId, this.encounterService.version + 1,
+						EncounterCommandType.TEAMS_CHANGE, this.encounterService.teamsData);
 				this.setReady(true);
 			}
 		});
@@ -218,15 +222,18 @@ export class EncounterConcurrencyService extends IsReadyService {
 					return;
 				}
 				this.wallService.doorData = message.body.data as Map<string, CellTarget>;
-                this.wallService.updateLightAndTraverse();
-                break;
+				this.wallService.updateLightAndTraverse();
+				break;
 			}
 			case EncounterCommandType.SETTINGS_CHANGE: {
 				this.encounterService.config = message.body.data as EncounterConfigData;
 				break;
 			}
 			case EncounterCommandType.TEAMS_CHANGE: {
-				this.encounterService.teamsData = message.body.data as EncounterTeamsData;
+				if (message.body.userId === this.userProfileService.userId) {
+					return;
+				}
+				this.teamsService.setTeamsData(message.body.data as EncounterTeamsData);
 				break;
 			}
 			default: {

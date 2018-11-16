@@ -11,7 +11,6 @@ import { EncounterConfigData } from '../../../../shared/types/encounter/encounte
 import { LightValue } from '../../../../shared/types/encounter/board/light-value';
 import { PlayerVisibilityMode } from '../../../../shared/types/encounter/board/player-visibility-mode';
 import { EncounterTeamsData } from '../../../../shared/types/encounter/encounter-teams.data';
-import { LightSource } from '../board/map-objects/light-source';
 import { LightSourceData } from '../../../../shared/types/encounter/board/light-source.data';
 
 @Injectable()

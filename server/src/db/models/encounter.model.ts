@@ -72,7 +72,7 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 					y: Number
 				},
 				bright_range: Number,
-				dim_range: Number
+				dim_range: Number,
 			}],
 			notationIds: [Schema.Types.ObjectId],
 			teamsData: {

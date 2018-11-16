@@ -78,7 +78,6 @@ export class EncounterService {
 			const isGameMaster = this.isGameMaster(userId, encounter);
 			const teams = isGameMaster ? ['GM'] : ['Player'];
 			encounter = await encounter.addUser(userId, teams);
-			await MqServiceSingleton.sendEncounterCommand(encounterId, userId, EncounterCommandType.TEAMS_CHANGE, encounter.version + 1, encounter.teamsData);
 			return encounter;
 		}
 		catch (error) {
