@@ -25,7 +25,7 @@ export class BoardLightService extends IsReadyService {
         this.dependenciesSub = this.dependenciesReady().subscribe((isReady: boolean) => {
             if (isReady && !this.isReady()) {
                 console.log('boardLightService.init() -> isReady');
-            	  this.lightSourceState.lightSources = this.encounterService.encounterState.lightSources;
+            	  this.lightSourceState.lightSources = this.encounterService.lightSources;
             	  this.updateAllLightValues();
                 this.setReady(true);
             }

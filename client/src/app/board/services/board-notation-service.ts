@@ -206,7 +206,7 @@ export class BoardNotationService extends IsReadyService {
 	}
 
 	public addNewNotation(): Observable<void> {
-		return this.encounterRepo.addNewNotation(this.encounterService.encounterState._id).pipe(map((notation: BoardNotationGroup) => {
+		return this.encounterRepo.addNewNotation(this.encounterService.encounterId).pipe(map((notation: BoardNotationGroup) => {
 			this.activeNotationId = notation._id;
 			this.notationState.add(notation);
 			return;

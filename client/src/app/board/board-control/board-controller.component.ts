@@ -44,7 +44,7 @@ export class BoardControllerComponent implements OnInit, OnDestroy {
 	addPlayer(): void {
 		this.dialog.open(AddPlayerDialogComponent, {
 			data: {
-				campaignId: this.encounterService.encounterState.campaignId
+				campaignId: this.encounterService.campaignId
 			}
 		});
 	}

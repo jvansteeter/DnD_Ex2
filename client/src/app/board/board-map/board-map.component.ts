@@ -26,7 +26,7 @@ import {MatDialog} from "@angular/material";
 import {TempPlayerInitDialogComponent} from "../dialogs/temp-player-init-dialog/temp-player-init-dialog.component";
 import {BoardControllerMode} from "../shared/enum/board-controller-mode";
 import { RightsService } from '../../data-services/rights.service';
-import {BoardTeamsService} from "../services/board-teams-service";
+import {BoardTeamsService} from "../services/board-teams.service";
 
 
 @Component({

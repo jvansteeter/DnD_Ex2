@@ -11,14 +11,16 @@ import { EncounterConfigData } from '../../../../shared/types/encounter/encounte
 import { LightValue } from '../../../../shared/types/encounter/board/light-value';
 import { PlayerVisibilityMode } from '../../../../shared/types/encounter/board/player-visibility-mode';
 import { EncounterTeamsData } from '../../../../shared/types/encounter/encounter-teams.data';
+import { LightSource } from '../board/map-objects/light-source';
+import { LightSourceData } from '../../../../shared/types/encounter/board/light-source.data';
 
 @Injectable()
 export class EncounterService extends IsReadyService {
 	protected claimedPlayerId: string;
 	protected hasClaimedPlayer = false;
 
-	private encounterId: string;
-	public encounterState: EncounterState;
+	public encounterId: string;
+	private encounterState: EncounterState;
 
 	constructor(
 			protected encounterRepo: EncounterRepository,
@@ -212,5 +214,25 @@ export class EncounterService extends IsReadyService {
 
 	set teamsData(value) {
 		this.encounterState.teamsData = value;
+	}
+
+	get gameMasters(): string[] {
+		if (this.encounterState) {
+			return this.encounterState.gameMasters;
+		}
+
+		return [];
+	}
+
+	get lightSources(): LightSourceData[] {
+		if (this.encounterState) {
+			return this.encounterState.lightSources;
+		}
+
+		return [];
+	}
+
+	get campaignId(): string {
+		return this.encounterState.campaignId;
 	}
 }

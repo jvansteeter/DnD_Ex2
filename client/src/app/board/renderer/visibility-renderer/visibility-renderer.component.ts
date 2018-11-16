@@ -8,7 +8,7 @@ import {PlayerVisibilityMode} from "../../../../../../shared/types/encounter/boa
 import {isDefined} from "@angular/compiler/src/util";
 import { EncounterService } from '../../../encounter/encounter.service';
 import {UserProfileService} from "../../../data-services/userProfile.service";
-import {BoardTeamsService} from "../../services/board-teams-service";
+import {BoardTeamsService} from "../../services/board-teams.service";
 
 @Component({
     selector: 'visibility-renderer',

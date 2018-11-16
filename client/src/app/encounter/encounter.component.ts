@@ -11,7 +11,7 @@ import {BoardPlayerService} from "../board/services/board-player.service";
 import {BoardWallService} from "../board/services/board-wall.service";
 import {BoardLightService} from "../board/services/board-light.service";
 import {BoardStateService} from "../board/services/board-state.service";
-import {BoardTeamsService} from "../board/services/board-teams-service";
+import {BoardTeamsService} from "../board/services/board-teams.service";
 import {BoardNotationService} from "../board/services/board-notation-service";
 
 @Component({

@@ -59,7 +59,7 @@ import {DiagnosticControlModuleComponent} from "./board-control/controller-modul
 import {NotationControlModuleComponent} from "./board-control/controller-modules/notation-control-module/notation-control-module.component";
 import {LightVisibilityControlModuleComponent} from "./board-control/controller-modules/light-visibility-control-module/light-visibility-control-module.component";
 import { TeamSettingsComponent } from './dialogs/team-settings/team-settings.component';
-import {BoardTeamsService} from "./services/board-teams-service";
+import {BoardTeamsService} from "./services/board-teams.service";
 
 
 @NgModule({

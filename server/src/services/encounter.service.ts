@@ -68,7 +68,7 @@ export class EncounterService {
 
 	public async addUserToEncounter(encounterId: string, userId: string): Promise<EncounterModel> {
 		try {
-			const encounter: EncounterModel = await this.encounterRepo.findById(encounterId);
+			let encounter: EncounterModel = await this.encounterRepo.findById(encounterId);
 			for (let user of encounter.teamsData.users) {
 				if (user.userId == userId) {
 					return encounter;
@@ -77,7 +77,9 @@ export class EncounterService {
 
 			const isGameMaster = this.isGameMaster(userId, encounter);
 			const teams = isGameMaster ? ['GM'] : ['Player'];
-			return encounter.addUser(userId, teams);
+			encounter = await encounter.addUser(userId, teams);
+			await MqServiceSingleton.sendEncounterCommand(encounterId, userId, EncounterCommandType.TEAMS_CHANGE, encounter.version + 1, encounter.teamsData);
+			return encounter;
 		}
 		catch (error) {
 			throw error;

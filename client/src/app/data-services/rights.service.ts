@@ -28,7 +28,7 @@ export class RightsService extends IsReadyService {
 		if (isUndefined(this.encounterService)) {
 			return false;
 		}
-		for (let gm of this.encounterService.encounterState.gameMasters) {
+		for (let gm of this.encounterService.gameMasters) {
 			if (gm === this.userProfileService.userId) {
 				return true;
 			}
