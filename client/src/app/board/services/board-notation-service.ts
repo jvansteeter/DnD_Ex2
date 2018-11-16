@@ -35,7 +35,6 @@ export class BoardNotationService extends IsReadyService {
 	public lineNotationStartPoint: XyPair = null;
 	public lineNotationCells: Array<XyPair>;
 
-	private sourceCell: XyPair;
 	public anchor_img: HTMLImageElement;
 	public anchor_active_image: HTMLImageElement;
 
@@ -51,24 +50,32 @@ export class BoardNotationService extends IsReadyService {
 			private userProfileService: UserProfileService,
 	) {
 		super(boardStateService, boardVisibilityService, encounterService, rightsService, userProfileService);
-		this.lineNotationCells = new Array<XyPair>();
-		this.ephemeralNotationMap = new Map();
-		this.ephemeralNotationMap.set(this.userProfileService.userId, []);
-		this.anchor_img = new Image();
-		this.notationState = new NotationState();
-		this.anchor_img.src = '../../../resources/icons/anchor.png';
-		this.anchor_active_image = new Image();
-		this.anchor_active_image.src = '../../../resources/icons/anchor_active.png';
 		this.init();
 	}
 
 	public init(): void {
 		this.dependenciesSub = this.dependenciesReady().subscribe(isReady => {
 			if (isReady && !this.isReady()) {
+				console.log('boardNotationService.init() -> isReady');
+
+                this.lineNotationCells = new Array<XyPair>();
+                this.ephemeralNotationMap = new Map();
+                this.ephemeralNotationMap.set(this.userProfileService.userId, []);
+                this.anchor_img = new Image();
+                this.notationState = new NotationState();
+                this.anchor_img.src = '../../../resources/icons/anchor.png';
+                this.anchor_active_image = new Image();
+                this.anchor_active_image.src = '../../../resources/icons/anchor_active.png';
+
 				this.notationState.setNotations(this.encounterService.notations);
 				this.setReady(true);
 			}
 		});
+	}
+
+	public unInit(): void {
+		console.log('boardNotationService.unInit()');
+		this.setReady(false);
 	}
 
 	public purgeEphemNotations() {
