@@ -1,0 +1,13 @@
+<div style="width: 180px;">
+    <mat-form-field>
+        <input matInput [(ngModel)]="newBright" type="number" placeholder="New Bright Range">
+    </mat-form-field>
+
+    <mat-form-field>
+        <input matInput [(ngModel)]="newDim" type="number" placeholder="New Dim Range">
+    </mat-form-field>
+</div>
+
+<div style="display: flex;">
+    <button style="margin: auto;" mat-raised-button color="primary" (click)="saveAndClose()">Save</button>
+</div>

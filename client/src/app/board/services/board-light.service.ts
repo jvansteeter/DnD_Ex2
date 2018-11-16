@@ -8,6 +8,9 @@ import {EncounterService} from "../../encounter/encounter.service";
 import { LightSourcesState } from '../map-objects/light-sources.state';
 import { Observable } from 'rxjs';
 import {GeometryStatics} from "../statics/geometry-statics";
+import {MatDialog} from "@angular/material";
+import {LightEditDialogComponent} from "../dialogs/light-edit-dialog/light-edit-dialog.component";
+import {isNullOrUndefined} from "util";
 
 @Injectable()
 export class BoardLightService extends IsReadyService {
@@ -15,6 +18,7 @@ export class BoardLightService extends IsReadyService {
 
     constructor(private boardStateService: BoardStateService,
                 private encounterService: EncounterService,
+                private dialog: MatDialog,
                 private boardVisibilityService: BoardVisibilityService,) {
         super(boardStateService, encounterService, boardVisibilityService);
         this.init();
@@ -53,6 +57,20 @@ export class BoardLightService extends IsReadyService {
 	    const polys = this.generateLightPolygons(lightSource);
 	    lightSource.dim_polygon = polys.dim_poly;
 	    lightSource.bright_polygon = polys.bright_poly;
+    }
+
+    public attemptLightDialog(cell: XyPair): void {
+        const lightSource = this.lightSourceState.getLightSourceData_byCell(cell) as LightSource;
+        if (!isNullOrUndefined(lightSource)) {
+            this.dialog.open(LightEditDialogComponent, {data: {lightSource: lightSource}}).afterClosed().subscribe((lightRanges: {bright_range: number, dim_range: number}) => {
+                if (!isNullOrUndefined(lightRanges)) {
+                    this.lightSourceState.updateLightSourceBrightRange_byCell(cell, lightRanges.bright_range);
+                    this.lightSourceState.updateLightSourceDimRange_byCell(cell, lightRanges.dim_range);
+                    this.updateLightValue(this.lightSourceState.getLightSourceData_byCell(cell) as LightSource);
+                    this.lightSourceState.manualEmitChange();
+                }
+            });
+        }
     }
 
     public generateLightPolygons(source: LightSource): {bright_poly: Array<XyPair>, dim_poly: Array<XyPair>} {
@@ -104,5 +122,9 @@ export class BoardLightService extends IsReadyService {
 
     get lightSourcesChangeObservable(): Observable<void> {
     	return this.lightSourceState.changeObservable;
+    }
+
+    public getLightSourceAtCell(cell: XyPair): LightSource {
+        return this.lightSourceState.getLightSourceData_byCell(cell) as LightSource;
     }
 }

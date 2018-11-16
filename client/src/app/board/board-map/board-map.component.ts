@@ -328,6 +328,7 @@ export class BoardMapComponent implements OnInit, AfterViewInit, OnDestroy {
 
         switch (this.boardStateService.board_view_mode) {
             case ViewMode.BOARD_MAKER:
+
                 break;
             case ViewMode.PLAYER:
                 break;
@@ -336,11 +337,16 @@ export class BoardMapComponent implements OnInit, AfterViewInit, OnDestroy {
         }
 
         if (!isNullOrUndefined(this.boardStateService.mouse_right_cell_target)) {
-            if (this.boardStateService.mouse_right_cell_target.region === CellRegion.TOP_EDGE ||
-                this.boardStateService.mouse_right_cell_target.region === CellRegion.LEFT_EDGE ||
-                this.boardStateService.mouse_right_cell_target.region === CellRegion.FWRD_EDGE ||
-                this.boardStateService.mouse_right_cell_target.region === CellRegion.BKWD_EDGE) {
-                this.boardWallService.openCloseDoor(this.boardStateService.mouse_right_cell_target);
+            const cellTarget = this.boardStateService.mouse_right_cell_target;
+            if (cellTarget.region === CellRegion.TOP_EDGE ||
+                cellTarget.region === CellRegion.LEFT_EDGE ||
+                cellTarget.region === CellRegion.FWRD_EDGE ||
+                cellTarget.region === CellRegion.BKWD_EDGE) {
+                this.boardWallService.openCloseDoor(cellTarget);
+            }
+
+            if (cellTarget.region === CellRegion.CENTER) {
+                this.boardLightService.attemptLightDialog(cellTarget.location);
             }
         }
     }

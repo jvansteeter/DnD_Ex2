@@ -58,8 +58,9 @@ import {EncounterConfigControlModuleComponent} from "./board-control/controller-
 import {DiagnosticControlModuleComponent} from "./board-control/controller-modules/diagnostic-control-module/diagnostic-control-module.component";
 import {NotationControlModuleComponent} from "./board-control/controller-modules/notation-control-module/notation-control-module.component";
 import {LightVisibilityControlModuleComponent} from "./board-control/controller-modules/light-visibility-control-module/light-visibility-control-module.component";
-import { TeamSettingsComponent } from './dialogs/team-settings/team-settings.component';
-import {BoardTeamsService} from "./services/board-teams.service";
+import {TeamSettingsComponent} from './dialogs/team-settings/team-settings.component';
+import {BoardTeamsService} from "./services/board-teams-service";
+import {LightEditDialogComponent} from "./dialogs/light-edit-dialog/light-edit-dialog.component";
 
 
 @NgModule({
@@ -84,6 +85,7 @@ import {BoardTeamsService} from "./services/board-teams.service";
         NotationSettingsDialogComponent,
         NotationTextEditDialogComponent,
         NotationTextCreateDialogComponent,
+        LightEditDialogComponent,
         CharacterPopComponent,
         DiagnosticRendererComponent,
         TempPlayerInitDialogComponent,
@@ -92,7 +94,7 @@ import {BoardTeamsService} from "./services/board-teams.service";
         DiagnosticControlModuleComponent,
         NotationControlModuleComponent,
         LightVisibilityControlModuleComponent,
-		    TeamSettingsComponent,
+        TeamSettingsComponent,
     ],
     imports: [
         BrowserModule,
@@ -136,15 +138,16 @@ import {BoardTeamsService} from "./services/board-teams.service";
         AddPlayerDialogComponent,
         NotationTextEditDialogComponent,
         NotationTextCreateDialogComponent,
+        LightEditDialogComponent,
         CharacterPopComponent,
         TempPlayerInitDialogComponent,
-		    TeamSettingsComponent,
+        TeamSettingsComponent,
     ],
     bootstrap: [],
     exports: [
-    		BoardControllerComponent,
-		    BoardMapComponent,
-		    PopRootComponent,
+        BoardControllerComponent,
+        BoardMapComponent,
+        PopRootComponent,
     ]
 })
 export class BoardModule {
