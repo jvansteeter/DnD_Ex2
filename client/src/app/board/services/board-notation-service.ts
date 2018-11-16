@@ -80,6 +80,9 @@ export class BoardNotationService extends IsReadyService {
 
 	public purgeEphemNotations() {
 		let index;
+		if (isNullOrUndefined(this.ephemeralNotationMap)) {
+			return;
+		}
 		for (let notation of this.ephemeralNotationMap.values()) {
 			for (index = notation.length - 1; index >= 0; index--) {
 				let note = notation[index];

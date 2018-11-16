@@ -48,9 +48,11 @@ export class NotationRendererComponent implements OnInit, OnDestroy {
         }
 
         this.boardNotationService.purgeEphemNotations();
-        for (let playerNotation of this.boardNotationService.ephemeralNotationMap.values()) {
-	        for (let ephemFreeformPolyline of playerNotation) {
-		        this.boardCanvasService.draw_polyline(this.ctx, ephemFreeformPolyline, 'rgba(0, 0, 255, 1.0)', 5);
+        if (!isNullOrUndefined(this.boardNotationService.ephemeralNotationMap)) {
+	        for (let playerNotation of this.boardNotationService.ephemeralNotationMap.values()) {
+		        for (let ephemFreeformPolyline of playerNotation) {
+			        this.boardCanvasService.draw_polyline(this.ctx, ephemFreeformPolyline, 'rgba(0, 0, 255, 1.0)', 5);
+		        }
 	        }
         }
 
