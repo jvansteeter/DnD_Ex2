@@ -297,4 +297,11 @@ export class BoardStateService extends IsReadyService {
         this.inputOffset = 0;
         this.doDiagonals = false;
     }
+
+    public set_inputMode_window() {
+        this.source_click_location = null;
+        this.board_edit_mode = BoardMode.WINDOW;
+        this.inputOffset = 0.10;
+        this.doDiagonals = true;
+    }
 }

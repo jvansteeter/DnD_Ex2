@@ -92,6 +92,22 @@ export class HoverRendererComponent implements OnInit, OnDestroy {
                             }
                         }
                         break;
+                    case BoardMode.WINDOW:
+                        switch (this.boardStateService.mouse_cell_target.region) {
+                            case CellRegion.LEFT_EDGE:
+                                this.boardCanvasService.draw_wall(this.ctx, this.boardStateService.mouse_cell_target, 8, 'rgba(0, 0, 255, 0.2');
+                                break;
+                            case CellRegion.TOP_EDGE:
+                                this.boardCanvasService.draw_wall(this.ctx, this.boardStateService.mouse_cell_target, 8, 'rgba(0, 0, 255, 0.2');
+                                break;
+                            case CellRegion.FWRD_EDGE:
+                                this.boardCanvasService.draw_wall(this.ctx, this.boardStateService.mouse_cell_target, 8, 'rgba(0, 0, 255, 0.2');
+                                break;
+                            case CellRegion.BKWD_EDGE:
+                                this.boardCanvasService.draw_wall(this.ctx, this.boardStateService.mouse_cell_target, 8, 'rgba(0, 0, 255, 0.2');
+                                break;
+                        }
+                        break;
                     case BoardMode.DOORS:
                         switch (this.boardStateService.mouse_cell_target.region) {
                             case CellRegion.CENTER:
@@ -101,8 +117,6 @@ export class HoverRendererComponent implements OnInit, OnDestroy {
                                 break;
                             case CellRegion.TOP_EDGE:
                                 this.boardCanvasService.draw_wall(this.ctx, new CellTarget(this.boardStateService.mouse_cell_target.location, CellRegion.TOP_EDGE), 6, 'rgba(255, 0, 0, 0.2)');
-                                break;
-                            case CellRegion.CORNER:
                                 break;
                             case CellRegion.FWRD_EDGE:
                                 this.boardCanvasService.draw_wall(this.ctx, new CellTarget(this.boardStateService.mouse_cell_target.location, CellRegion.FWRD_EDGE), 6, 'rgba(255, 0, 0, 0.2)');

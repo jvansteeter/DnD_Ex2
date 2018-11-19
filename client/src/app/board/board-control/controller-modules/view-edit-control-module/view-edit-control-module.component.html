@@ -44,6 +44,14 @@
                         mat-stroked-button>
                     <mat-icon>flare</mat-icon>
                 </button>
+
+                <button class="strokeButtonOverride"
+                        matTooltip="Window Mode"
+                        (click)="boardStateService.set_inputMode_window()"
+                        [ngClass]="{'selectedNotationMode': boardStateService.board_edit_mode === BoardMode.WINDOW}"
+                        mat-stroked-button>
+                    <mat-icon>video_label</mat-icon>
+                </button>
             </div>
         </ng-container>
 

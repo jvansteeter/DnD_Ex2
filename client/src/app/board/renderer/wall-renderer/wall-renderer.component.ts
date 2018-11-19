@@ -45,6 +45,10 @@ export class WallRendererComponent implements OnInit, OnDestroy {
                     this.boardCanvasService.draw_door(this.ctx, door.target, door.isOpen);
                 }
 
+                for (const window of this.wallService.windows) {
+                    this.boardCanvasService.draw_window(this.ctx, window.target, window.isTransparent, window.isBlocking)
+                }
+
                 break;
             case ViewMode.PLAYER:
                 if (this.encounterService.config.playerWallsEnabled) {

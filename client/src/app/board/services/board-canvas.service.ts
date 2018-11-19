@@ -367,6 +367,52 @@ export class BoardCanvasService extends IsReadyService {
         }
     }
 
+    draw_window(ctx: CanvasRenderingContext2D, target: CellTarget, isTransparent = true, isBlocking = true) {
+        const loc = new XyPair(target.location.x * BoardStateService.cell_res, target.location.y * BoardStateService.cell_res);
+
+        ctx.strokeStyle = 'rgba(50, 50, 50, 1)';
+        if (isTransparent) {
+            ctx.fillStyle = 'rgba(255, 255, 255, 1)';
+        } else {
+            ctx.fillStyle = 'rgba(120, 120, 120, 1)';
+        }
+        ctx.lineWidth = 3;
+
+        let x;
+        let y;
+
+        switch (target.region) {
+            case CellRegion.TOP_EDGE:
+                ctx.beginPath();
+
+
+                ctx.fill();
+                ctx.stroke();
+                break;
+            case CellRegion.LEFT_EDGE:
+                ctx.beginPath();
+
+
+                ctx.fill();
+                ctx.stroke();
+                break;
+            case CellRegion.FWRD_EDGE:
+                ctx.beginPath();
+
+
+                ctx.fill();
+                ctx.stroke();
+                break;
+            case CellRegion.BKWD_EDGE:
+                ctx.beginPath();
+
+
+                ctx.fill();
+                ctx.stroke();
+                break;
+        }
+    }
+
     draw_door(ctx: CanvasRenderingContext2D, target: CellTarget, isOpen = false) {
         const loc = new XyPair(target.location.x * BoardStateService.cell_res, target.location.y * BoardStateService.cell_res);
 

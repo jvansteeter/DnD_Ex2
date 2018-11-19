@@ -12,12 +12,13 @@ import {BoardPlayerService} from "./board-player.service";
 import {Observable, Subject} from 'rxjs';
 import {IsReadyService} from '../../utilities/services/isReady.service';
 import {isUndefined} from 'util';
+import {BoardWindow} from "../map-objects/board-window";
 
 @Injectable()
 export class BoardWallService extends IsReadyService {
     private _wallData: Map<string, CellTarget> = new Map<string, CellTarget>();
     private _doorData: Map<string, BoardDoor> = new Map<string, BoardDoor>();
-    public windowData: Map<string, CellTarget> = new Map<string, CellTarget>();
+    public _windowData: Map<string, BoardWindow> = new Map<string, BoardWindow>();
 
     private wallChangeSubject: Subject<void> = new Subject();
     private doorChangeSubject: Subject<void> = new Subject();
@@ -49,6 +50,37 @@ export class BoardWallService extends IsReadyService {
         console.log('boardWallService.unInit()');
         delete this.wallData;
         this.setReady(false);
+    }
+
+    public toggleWindow(target: CellTarget) {
+        if (this.hasObstruction(target) && this._windowData.has(target.hash())) {
+            this.removeWindow(target);
+        } else {
+            this.addWindow(target);
+        }
+    }
+
+    public addWindow(target: CellTarget) {
+        this._addWindow(target);
+        this.updateLightAndTraverse();
+        // trigger the window change subject
+    }
+
+    public _addWindow(target: CellTarget, isOpen = false) {
+        if (!this.hasObstruction(target)) {
+            this._windowData.set(target.hash(), new BoardWindow(target));
+            this.boardVisibilityService.blockCellTarget(target);
+            this.boardTraverseService.blockCellTarget(target);
+        }
+    }
+
+    public removeWindow(target: CellTarget) {
+        if (this.hasObstruction(target) && this._windowData.has(target.hash())) {
+            this._windowData.delete(target.hash());
+            this.boardVisibilityService.unblockCellTarget(target);
+            this.boardTraverseService.unblockCellTarget(target);
+        }
+        this.updateLightAndTraverse();
     }
 
     public addDoor(target: CellTarget) {
@@ -207,7 +239,7 @@ export class BoardWallService extends IsReadyService {
     }
 
     public hasObstruction(target: CellTarget): boolean {
-        return this._wallData.has(target.hash()) || this._doorData.has(target.hash()) || this.windowData.has(target.hash());
+        return this._wallData.has(target.hash()) || this._doorData.has(target.hash()) || this._windowData.has(target.hash());
     }
 
     get wallChangeEvent(): Observable<void> {
@@ -267,6 +299,34 @@ export class BoardWallService extends IsReadyService {
             return new Map<string, BoardDoor>().values();
         }
         return this._doorData.values();
+    }
+
+    get windowData(): Object {
+        const data = {};
+        for (let key of this._windowData.keys()) {
+            data[key] = {
+                isTransparent: this._windowData.get(key).isTransparent,
+                isBlocking: this._windowData.get(key).isBlocking,
+                target: this._windowData.get(key).target.serialize(),
+            };
+        }
+
+        return data;
+    }
+
+    get windows(): IterableIterator<BoardWindow> {
+        if (isUndefined(this._windowData)) {
+            return new Map<string, BoardWindow>().values();
+        }
+        return this._windowData.values();
+    }
+
+    set windowData(data: Object) {
+        this._windowData = new Map();
+        for (let key in data) {
+            let newTarget = new CellTarget(new XyPair(data[key].target.location.x, data[key].target.location.y), data[key].target.region);
+            this._addWindow(newTarget, data[key].isTransparent. data[key].isBlocking);
+        }
     }
 
     public updateLightAndTraverse(): void {

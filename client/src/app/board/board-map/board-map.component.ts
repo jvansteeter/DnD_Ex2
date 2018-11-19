@@ -248,6 +248,28 @@ export class BoardMapComponent implements OnInit, AfterViewInit, OnDestroy {
                         case BoardMode.PLAYER:
                             this.boardPlayerService.playerService_handleClick(this.boardStateService.mouse_loc_cell);
                             break;
+                        case BoardMode.WINDOW:
+                            if (!isNullOrUndefined(this.boardStateService.mouse_cell_target)) {
+                                switch (this.boardStateService.mouse_cell_target.region) {
+                                    case CellRegion.TOP_EDGE:
+                                        this.boardStateService.source_click_location = null;
+                                        this.boardWallService.toggleWindow(this.boardStateService.mouse_cell_target);
+                                        break;
+                                    case CellRegion.LEFT_EDGE:
+                                        this.boardStateService.source_click_location = null;
+                                        this.boardWallService.toggleWindow(this.boardStateService.mouse_cell_target);
+                                        break;
+                                    case CellRegion.FWRD_EDGE:
+                                        this.boardStateService.source_click_location = null;
+                                        this.boardWallService.toggleWindow(this.boardStateService.mouse_cell_target);
+                                        break;
+                                    case CellRegion.BKWD_EDGE:
+                                        this.boardStateService.source_click_location = null;
+                                        this.boardWallService.toggleWindow(this.boardStateService.mouse_cell_target);
+                                        break;
+                                }
+                            }
+                            break;
                         case BoardMode.WALLS:
                             if (!isNullOrUndefined(this.boardStateService.mouse_cell_target)) {
                                 if (!isNullOrUndefined(this.boardStateService.source_click_location)) {
