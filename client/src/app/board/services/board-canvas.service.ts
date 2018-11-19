@@ -372,11 +372,19 @@ export class BoardCanvasService extends IsReadyService {
 
         ctx.strokeStyle = 'rgba(50, 50, 50, 1)';
         if (isTransparent) {
-            ctx.fillStyle = 'rgba(255, 255, 255, 1)';
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
         } else {
-            ctx.fillStyle = 'rgba(120, 120, 120, 1)';
+            ctx.fillStyle = 'rgba(25, 25, 25, 1)';
         }
-        ctx.lineWidth = 3;
+        ctx.lineJoin = 'round';
+        ctx.lineCap = 'round';
+        ctx.lineWidth = 2;
+        ctx.setLineDash([1,4]);
+
+        const window_depth = 3;
+        const window_width_percent = 0.7;
+        const window_width_px = BoardStateService.cell_res * window_width_percent;
+        const window_width_offset = BoardStateService.cell_res * (1 - window_width_percent) / 2;
 
         let x;
         let y;
@@ -385,6 +393,14 @@ export class BoardCanvasService extends IsReadyService {
             case CellRegion.TOP_EDGE:
                 ctx.beginPath();
 
+                x = loc.x + window_width_offset;
+                y = loc.y - window_depth;
+
+                ctx.lineTo(x, y);
+                ctx.lineTo(x + window_width_px, y);
+                ctx.lineTo(x + window_width_px, y + (2 * window_depth));
+                ctx.lineTo(x, y + (2 * window_depth));
+                ctx.lineTo(x, y);
 
                 ctx.fill();
                 ctx.stroke();
