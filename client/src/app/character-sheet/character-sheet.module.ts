@@ -45,6 +45,7 @@ import { CharacterTooltipComponent } from './character-tooltip/character-tooltip
 import { AddTooltipAspectComponent } from "./maker/dialog/add-tooltip-aspect.component";
 import { CharacterRepository } from '../repositories/character.repository';
 import { CurrentMaxComponent } from './shared/subcomponents/currentMax/current-max.component';
+import { GridsterModule } from 'angular-gridster2';
 
 @NgModule({
     imports: [
@@ -72,6 +73,7 @@ import { CurrentMaxComponent } from './shared/subcomponents/currentMax/current-m
 		    MatSlideToggleModule,
 		    AlertModule,
 		    MatTabsModule,
+		    GridsterModule,
     ],
     declarations: [
         CharacterSheetComponent,

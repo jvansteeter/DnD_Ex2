@@ -1,3 +1,9 @@
-<ng-container *ngIf="characterService">
-	<character-aspect *ngFor="let aspect of characterService.aspects" [aspect]="aspect" (heightChange)="changeHeight()"></character-aspect>
-</ng-container>
+<!--<ng-container *ngIf="characterService">-->
+	<!--<character-aspect *ngFor="let aspect of characterService.aspects" [aspect]="aspect" (heightChange)="changeHeight()"></character-aspect>-->
+<!--</ng-container>-->
+
+<gridster [options]="options" style="flex: 1;">
+	<gridster-item *ngFor="let item of dashboard" [item]="item">
+		<mat-card>item</mat-card>
+	</gridster-item>
+</gridster>
