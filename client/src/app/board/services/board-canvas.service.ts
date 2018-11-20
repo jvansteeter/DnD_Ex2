@@ -367,22 +367,27 @@ export class BoardCanvasService extends IsReadyService {
         }
     }
 
-    draw_window(ctx: CanvasRenderingContext2D, target: CellTarget, isTransparent = true, isBlocking = true) {
+    draw_window(ctx: CanvasRenderingContext2D, target: CellTarget, isTransparent:boolean = true, isBlocking:boolean = true) {
         const loc = new XyPair(target.location.x * BoardStateService.cell_res, target.location.y * BoardStateService.cell_res);
 
         ctx.strokeStyle = 'rgba(50, 50, 50, 1)';
         if (isTransparent) {
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+            ctx.fillStyle = 'rgba(255, 255, 255, 1)';
         } else {
-            ctx.fillStyle = 'rgba(25, 25, 25, 1)';
+            ctx.fillStyle = 'rgba(120, 120, 120, 1)';
         }
         ctx.lineJoin = 'round';
         ctx.lineCap = 'round';
         ctx.lineWidth = 2;
-        ctx.setLineDash([1,4]);
+
+        if (isBlocking) {
+            ctx.setLineDash([]);
+        } else {
+            ctx.setLineDash([1,4]);
+        }
 
         const window_depth = 3;
-        const window_width_percent = 0.7;
+        const window_width_percent = 0.65;
         const window_width_px = BoardStateService.cell_res * window_width_percent;
         const window_width_offset = BoardStateService.cell_res * (1 - window_width_percent) / 2;
 
@@ -408,6 +413,14 @@ export class BoardCanvasService extends IsReadyService {
             case CellRegion.LEFT_EDGE:
                 ctx.beginPath();
 
+                x = loc.x - window_depth;
+                y = loc.y + window_width_offset;
+
+                ctx.lineTo(x, y);
+                ctx.lineTo(x, y + window_width_px);
+                ctx.lineTo(x + (2 * window_depth), y + window_width_px);
+                ctx.lineTo(x + (2 * window_depth), y);
+                ctx.lineTo(x, y);
 
                 ctx.fill();
                 ctx.stroke();
@@ -415,6 +428,14 @@ export class BoardCanvasService extends IsReadyService {
             case CellRegion.FWRD_EDGE:
                 ctx.beginPath();
 
+                x = loc.x;
+                y = loc.y;
+
+                ctx.lineTo(x, y);
+                ctx.lineTo(x, y);
+                ctx.lineTo(x, y);
+                ctx.lineTo(x, y);
+                ctx.lineTo(x, y);
 
                 ctx.fill();
                 ctx.stroke();
@@ -427,6 +448,7 @@ export class BoardCanvasService extends IsReadyService {
                 ctx.stroke();
                 break;
         }
+        ctx.setLineDash([]);
     }
 
     draw_door(ctx: CanvasRenderingContext2D, target: CellTarget, isOpen = false) {
@@ -439,7 +461,7 @@ export class BoardCanvasService extends IsReadyService {
             ctx.fillStyle = 'rgba(120, 120, 120, 1)';
         }
         ctx.lineWidth = 3;
-        const radius = 6;
+        const radius = 7;
 
         let x;
         let y;

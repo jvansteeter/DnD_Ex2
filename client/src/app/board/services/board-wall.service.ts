@@ -66,11 +66,17 @@ export class BoardWallService extends IsReadyService {
         // trigger the window change subject
     }
 
-    public _addWindow(target: CellTarget, isOpen = false) {
+    private _addWindow(target: CellTarget, isTransparent: boolean = true, isBlocking: boolean = true) {
         if (!this.hasObstruction(target)) {
             this._windowData.set(target.hash(), new BoardWindow(target));
-            this.boardVisibilityService.blockCellTarget(target);
-            this.boardTraverseService.blockCellTarget(target);
+
+            if (!isTransparent) {
+                this.boardVisibilityService.blockCellTarget(target);
+            }
+
+            if (isBlocking) {
+                this.boardTraverseService.blockCellTarget(target);
+            }
         }
     }
 
