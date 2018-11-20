@@ -26,8 +26,8 @@ export class CharacterGridComponent implements OnInit, OnDestroy {
 		this.removeComponentSubscription = this.characterService.removeComponentObservable.subscribe(() => this.changeHeight());
 
 		this.options = {
-			gridType: GridType.Fit,
-			compactType: CompactType.None,
+			gridType: GridType.ScrollVertical,
+			compactType: CompactType.CompactLeft,
 			margin: 10,
 			outerMargin: true,
 			outerMarginTop: null,
@@ -47,8 +47,8 @@ export class CharacterGridComponent implements OnInit, OnDestroy {
 			minItemArea: 1,
 			defaultItemCols: 1,
 			defaultItemRows: 1,
-			fixedColWidth: 105,
-			fixedRowHeight: 105,
+			fixedColWidth: 50,
+			fixedRowHeight: 20,
 			keepFixedHeightInMobile: false,
 			keepFixedWidthInMobile: false,
 			scrollSensitivity: 10,
@@ -66,13 +66,13 @@ export class CharacterGridComponent implements OnInit, OnDestroy {
 			resizable: {
 				enabled: true,
 			},
-			swap: false,
+			swap: true,
 			pushItems: true,
 			disablePushOnDrag: false,
 			disablePushOnResize: false,
 			pushDirections: {north: true, east: true, south: true, west: true},
-			pushResizeItems: false,
-			displayGrid: DisplayGrid.Always,
+			pushResizeItems: true,
+			displayGrid: DisplayGrid.OnDragAndResize,
 			disableWindowResize: false,
 			disableWarnings: false,
 			scrollToNewItems: false
