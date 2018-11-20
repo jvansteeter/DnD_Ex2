@@ -3,7 +3,7 @@
 <!--</ng-container>-->
 
 <gridster [options]="options" style="flex: 1;">
-	<gridster-item *ngFor="let item of dashboard" [item]="item">
-		<mat-card>item</mat-card>
+	<gridster-item *ngFor="let aspect of characterService.aspects" [item]="aspect.config">
+		<character-aspect [aspect]="aspect"></character-aspect>
 	</gridster-item>
 </gridster>

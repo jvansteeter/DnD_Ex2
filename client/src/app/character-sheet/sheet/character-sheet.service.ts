@@ -9,6 +9,7 @@ import { AspectData } from '../../../../../shared/types/rule-set/aspect.data';
 import { isUndefined } from 'util';
 import { CharacterRepository } from '../../repositories/character.repository';
 import { TokenComponent } from '../shared/subcomponents/token/token.component';
+import { CharacterAspectComponent } from '../shared/character-aspect.component';
 
 @Injectable()
 export class CharacterSheetService implements CharacterInterfaceService {
@@ -17,7 +18,7 @@ export class CharacterSheetService implements CharacterInterfaceService {
 	public readonly immutable = true;
 
 	private characterData: CharacterData;
-	private subComponents: Map<string, SubComponent>;
+	private aspectComponents: Map<string, CharacterAspectComponent>;
 
 	constructor(private characterRepo: CharacterRepository) {
 		this.init();
@@ -25,20 +26,20 @@ export class CharacterSheetService implements CharacterInterfaceService {
 
 	init(): void {
 		this.aspects = [];
-		this.subComponents = new Map<string, SubComponent>();
+		this.aspectComponents = new Map<string, CharacterAspectComponent>();
 	}
 
-	registerSubComponent(subComponent: SubComponent): void {
-		this.subComponents.set(subComponent.aspect.label.toLowerCase(), subComponent);
-		subComponent.child.setValue(this.characterData.values[subComponent.aspect.label]);
+	registerAspectComponent(aspectComponent: CharacterAspectComponent): void {
+		this.aspectComponents.set(aspectComponent.aspect.label.toLowerCase(), aspectComponent);
+		aspectComponent.child.setValue(this.characterData.values[aspectComponent.aspect.label]);
 	}
 
 	getAspectValue(aspectLabel: string): any {
-		return this.subComponents.get(aspectLabel.toLowerCase()) ? this.subComponents.get(aspectLabel.toLowerCase()).getValue() : undefined;
+		return this.aspectComponents.get(aspectLabel.toLowerCase()) ? this.aspectComponents.get(aspectLabel.toLowerCase()).getValue() : undefined;
 	}
 
 	updateFunctionAspects(): void {
-		this.subComponents.forEach(subComponent => {
+		this.aspectComponents.forEach(subComponent => {
 			if (subComponent.aspect.aspectType === AspectType.FUNCTION) {
 				subComponent.getValue();
 			}

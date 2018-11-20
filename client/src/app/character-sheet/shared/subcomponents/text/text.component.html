@@ -1,10 +1,5 @@
-<mat-form-field [style.font-size.px]="aspect.fontSize">
+<mat-form-field [style.font-size.pt]="aspect.fontSize">
 	<input matInput placeholder="{{aspect.label}}" [required]="aspect.required" [style.resize]="'none'" [(ngModel)]="value" />
 </mat-form-field>
 <mat-menu #options>
-	<div class="changeFontSize" (click)="stopClickPropagate($event)" (keyup.enter)="closeMenu()">
-		<mat-form-field>
-			<input matInput type="number" placeholder="Font Size" [(ngModel)]="aspect.fontSize" #fontSizeInput>
-		</mat-form-field>
-	</div>
 </mat-menu>

@@ -1,6 +1,6 @@
-import { AspectConfig } from './aspect-config';
 import { isUndefined } from 'util';
 import { AspectData } from "../../../../../shared/types/rule-set/aspect.data";
+import { GridsterItem } from 'angular-gridster2';
 
 export enum AspectType {
 	TEXT = 'TEXT',
@@ -26,7 +26,7 @@ export class Aspect implements AspectData {
 	ruleFunction: any;
 	characterSheetId: string;
 
-	config: AspectConfig;
+	config: GridsterItem;
 	isNew: boolean = true;
 
 	constructor(label: string, aspectType: AspectType, required: boolean, isPredefined?: boolean) {
@@ -38,20 +38,12 @@ export class Aspect implements AspectData {
 
 		this.config = this.defaultConfig();
 		switch (aspectType) {
-			// case (AspectType.TOKEN): {
-			// 	this.config.resizeY = true;
-			// 	this.config.minWidth = 50;
-			// 	this.config.minHeight = 50;
-			// 	this.config.width = 50;
-			// 	this.config.height = 50;
-			// 	break;
-			// }
-			case (AspectType.FUNCTION): {
+			case AspectType.FUNCTION: {
 				this.config.minWidth = 50;
 				this.config.minHeight = 50;
 				break;
 			}
-			case (AspectType.TEXT_AREA): {
+			case AspectType.TEXT_AREA: {
 				this.config.resizeY = true;
 				this.config.minWidth = 180;
 				this.config.minHeight = 50;
@@ -66,15 +58,12 @@ export class Aspect implements AspectData {
 		return aspect.label.toLowerCase() === this.label.toLowerCase();
 	}
 
-	private defaultConfig(): AspectConfig {
+	private defaultConfig(): GridsterItem {
 		return {
-			top: 1,
-			left: 1,
-			width: 100,
-			height: 1,
-			resizeY: false,
-			minWidth: 1,
-			minHeight: 1,
-		} as AspectConfig;
+			x: 0,
+			y: 0,
+			cols: 1,
+			rows: 1,
+		} as GridsterItem;
 	}
 }
