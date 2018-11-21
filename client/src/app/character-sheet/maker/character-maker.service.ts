@@ -214,6 +214,11 @@ export class CharacterMakerService implements CharacterInterfaceService {
 				aspect.fontSize = fontSize;
 				break;
 			}
+			case AspectType.CURRENT_MAX: {
+				const fontSize = height / (this.materialConstant * 1.64);
+				aspect.fontSize = fontSize;
+				break;
+			}
 		}
 	}
 }

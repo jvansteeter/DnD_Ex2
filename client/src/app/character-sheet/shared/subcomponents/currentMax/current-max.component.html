@@ -9,9 +9,4 @@
 	</mat-form-field>
 </div>
 <mat-menu #options="matMenu">
-	<div class="changeFontSize" (click)="stopClickPropagate($event)" (keyup.enter)="closeMenu()">
-		<mat-form-field>
-			<input matInput type="number" placeholder="Font Size" [(ngModel)]="aspect.fontSize" #fontSizeInput>
-		</mat-form-field>
-	</div>
 </mat-menu>

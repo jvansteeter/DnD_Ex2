@@ -62,8 +62,9 @@ export class Aspect implements AspectData {
 		return {
 			x: 0,
 			y: 0,
-			cols: 1,
-			rows: 1,
+			cols: 2,
+			rows: 4,
+			maxItemCols: 20
 		} as GridsterItem;
 	}
 }
