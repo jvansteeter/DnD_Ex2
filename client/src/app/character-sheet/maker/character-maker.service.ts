@@ -219,6 +219,11 @@ export class CharacterMakerService implements CharacterInterfaceService {
 				aspect.fontSize = fontSize;
 				break;
 			}
+			case AspectType.FUNCTION: {
+				const fontSize = height / (this.materialConstant * 1.2);
+				aspect.fontSize = fontSize;
+				break;
+			}
 		}
 	}
 }

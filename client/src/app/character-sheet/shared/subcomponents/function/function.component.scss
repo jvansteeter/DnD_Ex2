@@ -1,0 +1,23 @@
+:host {
+	width: 100%;
+
+	/deep/ .mat-form-field-label {
+		color: rgba(0,0,0,.6);
+	}
+
+	/deep/ .mat-form-field-underline {
+		background-color: rgba(0,0,0,.42) !important;
+		background-image: none !important;
+	}
+}
+
+mat-form-field {
+	width: 100%;
+	top: .5em;
+}
+
+input {
+	width: 100%;
+	text-align: center;
+	color: rgba(0,0,0,.87) !important;
+}
