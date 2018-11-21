@@ -145,6 +145,14 @@ export class EncounterService extends IsReadyService {
 		return undefined;
 	}
 
+    get windowData(): Object {
+        if (this.encounterState) {
+            return this.encounterState.windowData;
+        }
+
+        return undefined;
+    }
+
 	get config(): EncounterConfigData {
 		if (this.encounterState) {
 			return this.encounterState.configState;

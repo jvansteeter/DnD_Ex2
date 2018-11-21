@@ -41,6 +41,7 @@ export class BoardWallService extends IsReadyService {
                 console.log('boardWallService.init() -> isReady');
                 this.wallData = this.encounterService.wallData;
                 this.doorData = this.encounterService.doorData;
+                this.windowData = this.encounterService.windowData;
                 this.updateLightAndTraverse();
                 this.setReady(true);
             }
@@ -336,7 +337,7 @@ export class BoardWallService extends IsReadyService {
         this._windowData = new Map();
         for (let key in data) {
             let newTarget = new CellTarget(new XyPair(data[key].target.location.x, data[key].target.location.y), data[key].target.region);
-            this._addWindow(newTarget, data[key].isTransparent. data[key].isBlocking);
+            this._addWindow(newTarget, data[key].isTransparent, data[key].isBlocking);
         }
     }
 
