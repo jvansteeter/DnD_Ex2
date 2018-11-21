@@ -30,6 +30,7 @@ export class EncounterConcurrencyService extends IsReadyService {
 	private doorSubscription: Subscription;
 	private configSubscription: Subscription;
 	private teamsChangeSubscription: Subscription;
+	private windowChangeSubscription: Subscription;
 
 	constructor(private encounterService: EncounterService,
 	            private playerService: BoardPlayerService,
@@ -53,6 +54,7 @@ export class EncounterConcurrencyService extends IsReadyService {
 				this.observerDoorChanges();
 				this.observeConfigChanges();
 				this.observeTeamChanges();
+				this.observeWindowChanges();
 				this.mqService.publishEncounterCommand(this.encounterService.encounterId, this.encounterService.version + 1,
 						EncounterCommandType.TEAMS_CHANGE, this.encounterService.teamsData);
 				this.setReady(true);
@@ -141,6 +143,16 @@ export class EncounterConcurrencyService extends IsReadyService {
 		});
 	}
 
+	private observeWindowChanges(): void {
+		if (this.windowChangeSubscription) {
+			this.windowChangeSubscription.unsubscribe();
+		}
+		this.windowChangeSubscription = this.wallService.windowChangeEvent.subscribe(() => {
+			this.mqService.publishEncounterCommand(this.encounterService.encounterId, this.encounterService.version + 1,
+					EncounterCommandType.WINDOW_CHANGE, this.wallService.windowData);
+		});
+	}
+
 	private observeConfigChanges(): void {
 		if (this.configSubscription) {
 			this.configSubscription.unsubscribe();
@@ -222,6 +234,14 @@ export class EncounterConcurrencyService extends IsReadyService {
 					return;
 				}
 				this.wallService.doorData = message.body.data as Map<string, CellTarget>;
+				this.wallService.updateLightAndTraverse();
+				break;
+			}
+			case EncounterCommandType.WINDOW_CHANGE: {
+				if (message.body.userId === this.userProfileService.userId) {
+					return;
+				}
+				this.wallService.windowData = message.body.data as Map<string, CellTarget>;
 				this.wallService.updateLightAndTraverse();
 				break;
 			}

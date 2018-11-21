@@ -22,6 +22,7 @@ export class BoardWallService extends IsReadyService {
 
     private wallChangeSubject: Subject<void> = new Subject();
     private doorChangeSubject: Subject<void> = new Subject();
+    private windowChangeSubject: Subject<void> = new Subject();
 
     constructor(
         private boardStateService: BoardStateService,
@@ -63,7 +64,7 @@ export class BoardWallService extends IsReadyService {
     public addWindow(target: CellTarget) {
         this._addWindow(target);
         this.updateLightAndTraverse();
-        // trigger the window change subject
+        this.windowChangeSubject.next();
     }
 
     private _addWindow(target: CellTarget, isTransparent: boolean = true, isBlocking: boolean = true) {
@@ -254,6 +255,10 @@ export class BoardWallService extends IsReadyService {
 
     get doorChangeEvent(): Observable<void> {
         return this.doorChangeSubject.asObservable();
+    }
+
+    get windowChangeEvent(): Observable<void> {
+    	return this.windowChangeSubject.asObservable();
     }
 
     get wallData(): {} {

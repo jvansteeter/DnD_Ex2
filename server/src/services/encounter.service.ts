@@ -270,6 +270,16 @@ export class EncounterService {
 		}
 	}
 
+	public async setWindowData(encounterId: string, windowData: any): Promise<EncounterModel> {
+		try {
+			const encounter: EncounterModel = await this.encounterRepo.findById(encounterId);
+			return await encounter.setWindowData(windowData);
+		}
+		catch (error) {
+			throw error;
+		}
+	}
+
 	public async setEncounterConfig(encounterId: string, encounterConfig: EncounterConfigData): Promise<EncounterModel> {
 		try {
 			const encounter: EncounterModel = await this.encounterRepo.findById(encounterId);

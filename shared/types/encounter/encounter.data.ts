@@ -36,6 +36,7 @@ export interface EncounterData {
 	 **************************************/
 	wallData: Object;
 	doorData: Object;
+	windowData: Object;
 	playerWallsEnabled: boolean;
 
 	/**************************************
