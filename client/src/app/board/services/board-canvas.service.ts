@@ -387,9 +387,10 @@ export class BoardCanvasService extends IsReadyService {
         }
 
         const window_depth = 3;
-        const window_width_percent = 0.65;
-        const window_width_px = BoardStateService.cell_res * window_width_percent;
-        const window_width_offset = BoardStateService.cell_res * (1 - window_width_percent) / 2;
+        const magikarp = Math.sqrt((window_depth ** 2) / 2);
+        let window_width_percent = 0.65;
+        let window_width_px = BoardStateService.cell_res * window_width_percent;
+        let window_width_offset = BoardStateService.cell_res * (1 - window_width_percent) / 2;
 
         let x;
         let y;
@@ -428,14 +429,18 @@ export class BoardCanvasService extends IsReadyService {
             case CellRegion.FWRD_EDGE:
                 ctx.beginPath();
 
-                x = loc.x;
-                y = loc.y;
+                window_width_percent = window_width_percent * 0.7;
+                window_width_px = BoardStateService.cell_res * window_width_percent;
+                window_width_offset = BoardStateService.cell_res * (1 - window_width_percent) / 2;
 
-                ctx.lineTo(x, y);
-                ctx.lineTo(x, y);
-                ctx.lineTo(x, y);
-                ctx.lineTo(x, y);
-                ctx.lineTo(x, y);
+                x = loc.x + window_width_offset;
+                y = loc.y + window_width_offset + window_width_px;
+
+                ctx.lineTo(x - magikarp, y - magikarp);
+                ctx.lineTo(x + magikarp, y + magikarp);
+                ctx.lineTo(x + window_width_px + magikarp, y - window_width_px + magikarp);
+                ctx.lineTo(x + window_width_px - magikarp, y - window_width_px - magikarp);
+                ctx.lineTo(x - magikarp, y - magikarp);
 
                 ctx.fill();
                 ctx.stroke();
@@ -443,6 +448,18 @@ export class BoardCanvasService extends IsReadyService {
             case CellRegion.BKWD_EDGE:
                 ctx.beginPath();
 
+                window_width_percent = window_width_percent * 0.7;
+                window_width_px = BoardStateService.cell_res * window_width_percent;
+                window_width_offset = BoardStateService.cell_res * (1 - window_width_percent) / 2;
+
+                x = loc.x + window_width_offset;
+                y = loc.y + window_width_offset;
+
+                ctx.lineTo(x + magikarp, y - magikarp);
+                ctx.lineTo(x - magikarp, y + magikarp);
+                ctx.lineTo(x + window_width_px - magikarp, y + window_width_px + magikarp);
+                ctx.lineTo(x + window_width_px + magikarp, y + window_width_px - magikarp);
+                ctx.lineTo(x + magikarp, y - magikarp);
 
                 ctx.fill();
                 ctx.stroke();
