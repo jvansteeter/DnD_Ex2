@@ -53,7 +53,6 @@ export class BoardLightService extends IsReadyService {
     }
 
     public updateLightValue(lightSource: LightSource): void {
-        console.log('boardLightService.updateLightValue: %o', lightSource);
 	    const polys = this.generateLightPolygons(lightSource);
 	    lightSource.dim_polygon = polys.dim_poly;
 	    lightSource.bright_polygon = polys.bright_poly;
