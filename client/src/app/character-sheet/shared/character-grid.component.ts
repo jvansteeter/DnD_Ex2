@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { CharacterInterfaceService } from './character-interface.service';
 import { CharacterInterfaceFactory } from './character-interface.factory';
 import {
 	CompactType,

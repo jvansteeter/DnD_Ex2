@@ -11,7 +11,7 @@ import { CharacterInterfaceFactory } from '../character-interface.factory';
 @Component({
 	selector: 'sub-component',
 	templateUrl: 'sub-component.html',
-	styleUrls: ['sub-component.scss']
+	styleUrls: []
 })
 export class SubComponent implements AfterViewInit {
 	@Input() aspect: Aspect;

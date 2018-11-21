@@ -195,12 +195,22 @@ export class CharacterMakerService implements CharacterInterfaceService {
 		const aspect = this.aspectMap.get(item);
 		switch (aspect.aspectType) {
 			case AspectType.TEXT: {
-				const fontSize = height / (this.materialConstant * 1.85);
+				const fontSize = height / (this.materialConstant * 1.2);
 				aspect.fontSize = fontSize;
 				break;
 			}
 			case AspectType.NUMBER: {
 				const fontSize = height / (this.materialConstant * 1.2);
+				aspect.fontSize = fontSize;
+				break;
+			}
+			case AspectType.CATEGORICAL: {
+				const fontSize = height / (this.materialConstant * 1.2);
+				aspect.fontSize = fontSize;
+				break;
+			}
+			case AspectType.BOOLEAN: {
+				const fontSize = (height / 25) * 16;
 				aspect.fontSize = fontSize;
 				break;
 			}

@@ -10,7 +10,7 @@ import { RuleFunction } from './rule-function';
 @Component({
 	selector: 'characterMaker-functionComponent',
 	templateUrl: 'function.component.html',
-	styleUrls: ['../sub-component.scss']
+	styleUrls: []
 })
 export class FunctionComponent implements SubComponentChild, AfterViewInit {
 	@Input() aspect: Aspect;

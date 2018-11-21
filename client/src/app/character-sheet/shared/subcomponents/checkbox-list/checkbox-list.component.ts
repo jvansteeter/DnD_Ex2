@@ -5,7 +5,6 @@ import { MatMenu } from '@angular/material';
 import { CharacterInterfaceFactory } from '../../character-interface.factory';
 import { CharacterInterfaceService } from '../../character-interface.service';
 
-
 interface CheckboxItem {
 	label: string;
 	value: boolean;
@@ -14,7 +13,7 @@ interface CheckboxItem {
 @Component({
 	selector: 'characterMaker-checkBoxListComponent',
 	templateUrl: 'checkbox-list.component.html',
-	styleUrls: ['../sub-component.scss']
+	styleUrls: ['checkbox-list.component.scss']
 })
 export class CheckboxListComponent implements SubComponentChild, AfterViewInit {
 	@Input() aspect: Aspect;
