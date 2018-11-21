@@ -100,8 +100,13 @@ export class BoardWallService extends IsReadyService {
     private _addDoor(target: CellTarget, isOpen = false): void {
         if (!this.hasObstruction(target)) {
             this._doorData.set(target.hash(), new BoardDoor(target, isOpen));
-            this.boardVisibilityService.blockCellTarget(target);
-            this.boardTraverseService.blockCellTarget(target);
+            if (isOpen) {
+                this.boardVisibilityService.unblockCellTarget(target);
+                this.boardTraverseService.unblockCellTarget(target);
+            } else {
+                this.boardVisibilityService.blockCellTarget(target);
+                this.boardTraverseService.blockCellTarget(target);
+            }
         }
     }
 
