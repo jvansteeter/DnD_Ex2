@@ -135,12 +135,13 @@ export class CharacterMakerComponent implements OnInit, AfterViewInit {
 				return;
 			}
 		}
-		let aspect = new Aspect(aspectLabel, aspectType, true, true);
 		if (checked) {
+			let aspect = new Aspect(aspectLabel, aspectType, true, true);
 			this.characterService.addComponent(aspect);
 			this.characterToolTipComponent.addAspect(aspect, icon);
 		}
 		else {
+			let aspect = this.characterService.getAspectByLabel(aspectLabel);
 			this.characterService.removeComponent(aspect);
 			this.characterToolTipComponent.removeAspect(aspect.label);
 		}

@@ -226,4 +226,8 @@ export class CharacterMakerService implements CharacterInterfaceService {
 			}
 		}
 	}
+
+	public getAspectByLabel(aspectLabel: string): Aspect {
+		return this.aspectComponents.get(aspectLabel.toLowerCase()).aspect;
+	}
 }
