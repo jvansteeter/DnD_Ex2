@@ -1,7 +1,6 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import { SubComponentChild } from '../sub-component-child';
 import { Aspect } from '../../aspect';
-import { SubComponent } from '../sub-component';
 import { MatMenu } from '@angular/material';
 
 
@@ -12,7 +11,7 @@ interface TextItem {
 @Component({
     selector: 'characterMaker-textListComponent',
     templateUrl: 'text-list.component.html',
-    styleUrls: []
+    styleUrls: ['text-list.component.scss']
 })
 export class TextListComponent implements SubComponentChild {
     @Input() aspect: Aspect;
