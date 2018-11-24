@@ -1,21 +1,21 @@
-import { Injectable, ViewChild } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { CharacterInterfaceService } from '../shared/character-interface.service';
 import { Aspect, AspectType } from '../shared/aspect';
-import { SubComponent } from '../shared/subcomponents/sub-component';
 import { CharacterSheetData } from '../../../../../shared/types/rule-set/character-sheet.data';
 import { Observable, of } from 'rxjs';
 import { CharacterData } from '../../../../../shared/types/character.data';
 import { AspectData } from '../../../../../shared/types/rule-set/aspect.data';
 import { isUndefined } from 'util';
 import { CharacterRepository } from '../../repositories/character.repository';
-import { TokenComponent } from '../shared/subcomponents/token/token.component';
 import { CharacterAspectComponent } from '../shared/character-aspect.component';
+import { CompactType, DisplayGrid, GridsterConfig, GridType } from "angular-gridster2";
 
 @Injectable()
 export class CharacterSheetService implements CharacterInterfaceService {
 	public aspects: Aspect[];
 	public characterSheet: CharacterSheetData;
 	public readonly immutable = true;
+	public gridOptions: GridsterConfig;
 
 	private characterData: CharacterData;
 	private aspectComponents: Map<string, CharacterAspectComponent>;
@@ -27,6 +27,59 @@ export class CharacterSheetService implements CharacterInterfaceService {
 	init(): void {
 		this.aspects = [];
 		this.aspectComponents = new Map<string, CharacterAspectComponent>();
+
+		this.gridOptions = {
+			gridType: GridType.VerticalFixed,
+			compactType: CompactType.CompactLeft,
+			margin: 10,
+			outerMargin: true,
+			outerMarginTop: null,
+			outerMarginRight: null,
+			outerMarginBottom: null,
+			outerMarginLeft: null,
+			mobileBreakpoint: 640,
+			minCols: 20,
+			maxCols: 20,
+			minRows: 1,
+			maxRows: 100,
+			maxItemCols: 10,
+			minItemCols: 1,
+			maxItemRows: 100,
+			minItemRows: 1,
+			maxItemArea: 2500,
+			minItemArea: 1,
+			defaultItemCols: 1,
+			defaultItemRows: 1,
+			fixedColWidth: 50,
+			fixedRowHeight: 25,
+			keepFixedHeightInMobile: false,
+			keepFixedWidthInMobile: false,
+			scrollSensitivity: 10,
+			scrollSpeed: 20,
+			enableEmptyCellClick: false,
+			enableEmptyCellContextMenu: false,
+			enableEmptyCellDrop: false,
+			enableEmptyCellDrag: false,
+			emptyCellDragMaxCols: 50,
+			emptyCellDragMaxRows: 50,
+			ignoreMarginInRow: false,
+			draggable: {
+				enabled: false,
+			},
+			resizable: {
+				enabled: false,
+			},
+			swap: false,
+			pushItems: false,
+			disablePushOnDrag: true,
+			disablePushOnResize: true,
+			pushDirections: {north: true, east: true, south: true, west: true},
+			pushResizeItems: false,
+			displayGrid: DisplayGrid.OnDragAndResize,
+			disableWindowResize: false,
+			disableWarnings: true,
+			scrollToNewItems: false,
+		};
 	}
 
 	registerAspectComponent(aspectComponent: CharacterAspectComponent): void {
@@ -46,22 +99,8 @@ export class CharacterSheetService implements CharacterInterfaceService {
 		})
 	}
 
-	getGridHeight(): number {
-		let aspects = document.getElementsByTagName('character-aspect');
-		let height = 0;
-		for (let i = 0; i < aspects.length; i++) {
-			let aspect = aspects[i];
-			let clientRect = aspect.getBoundingClientRect();
-			let tempHeight = this.aspects[i].config.top + clientRect.height;
-			if (tempHeight > height) {
-				height = tempHeight;
-			}
-		}
-
-		return height;
-	}
-
 	public setCharacterData(data: CharacterData): void {
+		console.log(data)
 		this.characterData = data;
 		this.characterSheet = this.characterData.characterSheet;
 		if (this.characterData.characterSheet.aspects) {
@@ -88,10 +127,6 @@ export class CharacterSheetService implements CharacterInterfaceService {
 		}
 	}
 
-	get removeComponentObservable(): Observable<void> {
-		return of();
-	}
-
 	removeComponent(aspect: Aspect): void {
 
 	}
@@ -108,4 +143,5 @@ export class CharacterSheetService implements CharacterInterfaceService {
 
 		this.characterRepo.saveCharacter(this.characterData).subscribe();
 	}
+
 }

@@ -4,6 +4,7 @@ import { Aspect } from '../../aspect';
 import { MatMenu } from '@angular/material';
 import { CharacterInterfaceFactory } from '../../character-interface.factory';
 import { CharacterInterfaceService } from '../../character-interface.service';
+import { isUndefined } from "util";
 
 interface CheckboxItem {
 	label: string;
@@ -23,8 +24,7 @@ export class CheckboxListComponent implements SubComponentChild, AfterViewInit {
 	readonly hasOptions = true;
 	value: any;
 
-	private checkboxes: CheckboxItem[];
-
+	public checkboxes: CheckboxItem[];
 	private characterService: CharacterInterfaceService;
 
 	constructor(private characterInterfaceFactory: CharacterInterfaceFactory) {
@@ -62,10 +62,6 @@ export class CheckboxListComponent implements SubComponentChild, AfterViewInit {
 		event.stopPropagation();
 	}
 
-	closeMenu(): void {
-		// this.options._emitCloseEvent();
-	}
-
 	valueChanged(): void {
 		this.characterService.updateFunctionAspects();
 	}
@@ -75,7 +71,9 @@ export class CheckboxListComponent implements SubComponentChild, AfterViewInit {
 	}
 
 	setValue(value: any): any {
-		this.checkboxes = value;
+		if (!isUndefined(value)) {
+			this.checkboxes = value;
+		}
 	}
 
 	getCheckboxLabels(): string[] {

@@ -1,11 +1,11 @@
 <span class="current-max-label" [style.fontSize.px]="aspect.fontSize">{{aspect.label}}</span>
 <div class="current-max">
 	<mat-form-field [style.fontSize.px]="aspect.fontSize" class="current-max-input">
-		<input matInput type="number" placeholder="Current" [required]="aspect.required" class="align-center" [(ngModel)]="value.current" (change)="valueChanged()">
+		<input matInput type="number" placeholder="Current" [required]="aspect.required" class="align-center" [(ngModel)]="value.current" (change)="valueChanged()" (mousedown)="$event.stopPropagation()" (touchstart)="$event.stopPropagation()">
 	</mat-form-field>
 	<span [style.fontSize.px]="aspect.fontSize + 5">/</span>
 	<mat-form-field [style.fontSize.px]="aspect.fontSize" class="current-max-input">
-		<input matInput type="number" placeholder="Max" [required]="aspect.required" class="align-center" [(ngModel)]="value.max" (change)="valueChanged()">
+		<input matInput type="number" placeholder="Max" [required]="aspect.required" class="align-center" [(ngModel)]="value.max" (change)="valueChanged()" (mousedown)="$event.stopPropagation()" (touchstart)="$event.stopPropagation()">
 	</mat-form-field>
 </div>
 <mat-menu #options="matMenu">

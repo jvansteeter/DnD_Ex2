@@ -13,7 +13,15 @@ import { AlertService } from '../../alert/alert.service';
 import { CharacterSheetData } from '../../../../../shared/types/rule-set/character-sheet.data';
 import { CharacterSheetTooltipData } from '../../../../../shared/types/rule-set/character-sheet-tooltip.data';
 import { CharacterAspectComponent } from '../shared/character-aspect.component';
-import { GridsterItem } from 'angular-gridster2';
+import {
+	CompactType,
+	DisplayGrid,
+	GridsterConfig,
+	GridsterItem,
+	GridsterItemComponentInterface,
+	GridType
+} from 'angular-gridster2';
+import { TextListComponent } from "../shared/subcomponents/text-list/text-list.component";
 
 @Injectable()
 export class CharacterMakerService implements CharacterInterfaceService {
@@ -27,6 +35,8 @@ export class CharacterMakerService implements CharacterInterfaceService {
 
 	public readonly immutable = false;
 
+	public gridOptions: GridsterConfig;
+
 	constructor(private characterSheetRepository: CharacterSheetRepository,
 	            private alertService: AlertService) {
 		this.init();
@@ -35,6 +45,61 @@ export class CharacterMakerService implements CharacterInterfaceService {
 	public init(): void {
 		this.aspectComponents = new Map<string, CharacterAspectComponent>();
 		this.aspectMap = new Map<GridsterItem, Aspect>();
+
+		this.gridOptions = {
+			gridType: GridType.VerticalFixed,
+			compactType: CompactType.CompactLeft,
+			margin: 10,
+			outerMargin: true,
+			outerMarginTop: null,
+			outerMarginRight: null,
+			outerMarginBottom: null,
+			outerMarginLeft: null,
+			mobileBreakpoint: 640,
+			minCols: 20,
+			maxCols: 20,
+			minRows: 1,
+			maxRows: 100,
+			maxItemCols: 10,
+			minItemCols: 1,
+			maxItemRows: 100,
+			minItemRows: 1,
+			maxItemArea: 2500,
+			minItemArea: 1,
+			defaultItemCols: 1,
+			defaultItemRows: 1,
+			fixedColWidth: 50,
+			fixedRowHeight: 25,
+			keepFixedHeightInMobile: false,
+			keepFixedWidthInMobile: false,
+			scrollSensitivity: 10,
+			scrollSpeed: 20,
+			enableEmptyCellClick: false,
+			enableEmptyCellContextMenu: false,
+			enableEmptyCellDrop: false,
+			enableEmptyCellDrag: false,
+			emptyCellDragMaxCols: 50,
+			emptyCellDragMaxRows: 50,
+			ignoreMarginInRow: false,
+			draggable: {
+				enabled: true,
+			},
+			resizable: {
+				enabled: true,
+			},
+			swap: true,
+			pushItems: true,
+			disablePushOnDrag: false,
+			disablePushOnResize: false,
+			pushDirections: {north: true, east: true, south: true, west: true},
+			pushResizeItems: true,
+			displayGrid: DisplayGrid.OnDragAndResize,
+			disableWindowResize: false,
+			disableWarnings: false,
+			scrollToNewItems: false,
+			itemResizeCallback: this.resizeItem,
+			itemChangeCallback: this.changeItem,
+		};
 	}
 
 	public setCharacterSheet(sheet: CharacterSheetData): void {
@@ -109,6 +174,13 @@ export class CharacterMakerService implements CharacterInterfaceService {
 			}
 			else if (aspect.aspectType === AspectType.BOOLEAN_LIST) {
 				aspectObj.items = (<CheckboxListComponent>this.getChildOf(aspect)).getCheckboxLabels();
+			}
+			else if (aspect.aspectType === AspectType.TEXT_LIST) {
+				let items = [];
+				for (let i in (<TextListComponent>this.getChildOf(aspect)).items) {
+					items.push({value: ''});
+				}
+				aspectObj.items = items;
 			}
 			else if (aspect.aspectType === AspectType.FUNCTION) {
 				aspectObj.ruleFunction = (<FunctionComponent>this.getChildOf(aspect)).getFunction();
@@ -193,6 +265,9 @@ export class CharacterMakerService implements CharacterInterfaceService {
 
 	public resizeAspect(item: GridsterItem, height: number): void {
 		const aspect = this.aspectMap.get(item);
+		if (isUndefined(aspect)) {
+			return;
+		}
 		switch (aspect.aspectType) {
 			case AspectType.TEXT: {
 				const fontSize = height / (this.materialConstant * 1.2);
@@ -230,4 +305,12 @@ export class CharacterMakerService implements CharacterInterfaceService {
 	public getAspectByLabel(aspectLabel: string): Aspect {
 		return this.aspectComponents.get(aspectLabel.toLowerCase()).aspect;
 	}
+
+	private resizeItem = (item: GridsterItem, itemComponent: GridsterItemComponentInterface) => {
+		const height = itemComponent.height;
+		this.resizeAspect(item, height);
+	};
+
+	private changeItem = (item, itemComponent) => {
+	};
 }

@@ -3,6 +3,7 @@ import { SubComponent } from './subcomponents/sub-component';
 import { CharacterSheetData } from '../../../../../shared/types/rule-set/character-sheet.data';
 import { Observable } from 'rxjs';
 import { CharacterAspectComponent } from './character-aspect.component';
+import { GridsterConfig } from "angular-gridster2";
 
 export interface CharacterInterfaceService {
 	aspects: Aspect[];
@@ -11,7 +12,7 @@ export interface CharacterInterfaceService {
 
 	characterSheet: CharacterSheetData;
 
-	removeComponentObservable: Observable<void>;
+	gridOptions: GridsterConfig;
 
 	init(): void;
 
@@ -22,6 +23,4 @@ export interface CharacterInterfaceService {
 	getAspectValue(aspectLabel: string): any;
 
 	updateFunctionAspects(): void;
-
-	getGridHeight(): number;
 }

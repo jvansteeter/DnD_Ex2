@@ -1,5 +1,5 @@
 <mat-form-field [style.fontSize.px]="aspect.fontSize" class="number-sub-component">
-	<input matInput type="number" placeholder="{{aspect.label}}" [required]="aspect.required" class="align-center" [(ngModel)]="value" (change)="valueChanged()">
+	<input matInput type="number" placeholder="{{aspect.label}}" [required]="aspect.required" class="align-center" [(ngModel)]="value" (change)="valueChanged()" (mousedown)="$event.stopPropagation()" (touchstart)="$event.stopPropagation()">
 </mat-form-field>
 <mat-menu #options="matMenu">
 </mat-menu>
