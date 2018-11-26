@@ -30,7 +30,7 @@ export class CharacterSheetService implements CharacterInterfaceService {
 
 		this.gridOptions = {
 			gridType: GridType.VerticalFixed,
-			compactType: CompactType.CompactLeft,
+			compactType: CompactType.CompactUp,
 			margin: 10,
 			outerMargin: true,
 			outerMarginTop: null,
@@ -54,7 +54,7 @@ export class CharacterSheetService implements CharacterInterfaceService {
 			fixedRowHeight: 25,
 			keepFixedHeightInMobile: false,
 			keepFixedWidthInMobile: false,
-			scrollSensitivity: 10,
+			scrollSensitivity: 1,
 			scrollSpeed: 20,
 			enableEmptyCellClick: false,
 			enableEmptyCellContextMenu: false,
