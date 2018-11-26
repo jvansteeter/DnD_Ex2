@@ -1,0 +1,15 @@
+:host {
+	margin-left: 5px;
+
+	/deep/ .mat-checkbox-layout {
+		align-items: center;
+	}
+
+	/deep/ .mat-checkbox-inner-container {
+		min-width: 16px;
+		min-height: 16px;
+		width: .5em;
+		height: .5em;
+	}
+}
+

@@ -10,7 +10,7 @@ import { TokenComponent } from '../shared/subcomponents/token/token.component';
 @Component({
 	selector: 'character-sheet',
 	templateUrl: 'character-sheet.component.html',
-	styleUrls: ['../shared/character-sheet.scss', 'character-sheet.component.scss']
+	styleUrls: ['character-sheet.component.scss']
 })
 export class CharacterSheetComponent implements OnInit {
 	private npcId: string;

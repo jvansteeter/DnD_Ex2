@@ -1,11 +1,21 @@
-<div class="sub-component-header" (drag)="onMoveDrag($event)" (dragstart)="onMoveDragStart($event)" (dragend)="onMoveDragEnd()" [style.zIndex]="headerZIndex" [style.display]="characterService.immutable ? 'none' : 'flex'">
-	<mat-icon class="move-handle" draggable="true">reorder</mat-icon>
-	<button *ngIf="hasOptions" mat-icon-button [matMenuTriggerFor]="subComponent.options" class="sub-component-options">
+<div class="aspect-header" [style.display]="characterService.immutable ? 'none' : 'flex'">
+	<button *ngIf="hasOptions" mat-icon-button [matMenuTriggerFor]="options" class="aspect-options">
 		<mat-icon>settings</mat-icon>
 	</button>
-	<button mat-icon-button (click)="removeComponent(aspect)" class="sub-component-close" *ngIf="!aspect.isPredefined">
+	<button mat-icon-button (click)="removeComponent(aspect)" class="aspect-close" *ngIf="!aspect.isPredefined">
 		<mat-icon>close</mat-icon>
 	</button>
 </div>
-<sub-component [aspect]="aspect" #component></sub-component>
-<mat-icon class="resize-handle" (dragstart)="onResizeDragStart($event)" (drag)="onResizeDrag($event)" (dragend)="onResizeDragEnd()" draggable="true" [style.display]="characterService.immutable ? 'none' : 'initial'">signal_cellular_null</mat-icon>
+<mat-card *ngIf="aspect" class="sub-component">
+	<ng-container [ngSwitch]="aspect.aspectType">
+		<characterMaker-textComponent *ngSwitchCase="aspectType.TEXT" [aspect]="aspect" #child></characterMaker-textComponent>
+		<characterMaker-textArea *ngSwitchCase="aspectType.TEXT_AREA" [aspect]="aspect" #child></characterMaker-textArea>
+		<characterMaker-checkBoxComponent *ngSwitchCase="aspectType.BOOLEAN" [aspect]="aspect" #child></characterMaker-checkBoxComponent>
+		<characterMaker-numberComponent *ngSwitchCase="aspectType.NUMBER" [aspect]="aspect" #child></characterMaker-numberComponent>
+		<characterMaker-checkBoxListComponent *ngSwitchCase="aspectType.BOOLEAN_LIST" [aspect]="aspect" #child></characterMaker-checkBoxListComponent>
+		<characterMaker-textListComponent *ngSwitchCase="aspectType.TEXT_LIST" [aspect]="aspect" #child></characterMaker-textListComponent>
+		<characterMaker-categoryComponent *ngSwitchCase="aspectType.CATEGORICAL" [aspect]="aspect" #child></characterMaker-categoryComponent>
+		<characterMaker-functionComponent *ngSwitchCase="aspectType.FUNCTION" [aspect]="aspect" #child></characterMaker-functionComponent>
+		<characterMaker-currentMax *ngSwitchCase="aspectType.CURRENT_MAX" [aspect]="aspect" #child></characterMaker-currentMax>
+	</ng-container>
+</mat-card>

@@ -17,7 +17,7 @@ export class CurrentMaxComponent implements SubComponentChild {
 	@ViewChild('fontSizeInput') fontSizeInput: ElementRef;
 	label: string;
 	required: boolean;
-	hasOptions = true;
+	readonly hasOptions = false;
 	value: {
 		current: number,
 		max: number
@@ -35,14 +35,6 @@ export class CurrentMaxComponent implements SubComponentChild {
 
 	getMenuOptions(): MatMenu {
 		return this.options;
-	}
-
-	stopClickPropagate(event): void {
-		event.stopPropagation();
-	}
-
-	closeMenu(): void {
-		// this.options._emitCloseEvent();
 	}
 
 	getValue() {

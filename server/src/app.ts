@@ -66,7 +66,6 @@ class App {
 
     // mongodb and mongoose
     await mongoose.connect('mongodb://localhost/ex2', {
-      useMongoClient: true,
       promiseLibrary: bluebird
     });
 

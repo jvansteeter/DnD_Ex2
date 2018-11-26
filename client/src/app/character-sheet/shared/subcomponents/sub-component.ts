@@ -11,7 +11,7 @@ import { CharacterInterfaceFactory } from '../character-interface.factory';
 @Component({
 	selector: 'sub-component',
 	templateUrl: 'sub-component.html',
-	styleUrls: ['sub-component.scss']
+	styleUrls: []
 })
 export class SubComponent implements AfterViewInit {
 	@Input() aspect: Aspect;
@@ -27,16 +27,6 @@ export class SubComponent implements AfterViewInit {
 	}
 
 	ngAfterViewInit(): void {
-		this.options = this.child.getMenuOptions();
-		this.hasOptions = this.child.hasOptions;
-		setTimeout(() => this.characterService.registerSubComponent(this));
-	}
 
-	getValue(): any {
-		return this.child.getValue();
-	}
-
-	closeOptions(): void {
-		this.optionsOpen = false;
 	}
 }

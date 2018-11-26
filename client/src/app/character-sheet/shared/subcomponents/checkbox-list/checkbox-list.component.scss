@@ -1,0 +1,41 @@
+:host {
+	height: 100%;
+	width: 100%;
+}
+
+.checkbox-list {
+	display: flex;
+	flex-direction: column;
+}
+
+.checkbox-list-label {
+	height: 22px;
+	width: 100%;
+	text-align: left;
+	padding-right: 0;
+	margin-left: 5px;
+	margin-right: 10px;
+}
+
+.immutable {
+	border: 0;
+	background-color: inherit;
+	box-shadow: none;
+
+	input {
+		border-style: hidden;
+		background: inherit;
+		margin-top: 2px;
+		margin-bottom: 2px;
+	}
+}
+
+.editable {
+
+}
+
+.checkbox-list-item {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}

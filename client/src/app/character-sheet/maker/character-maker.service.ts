@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Aspect, AspectType } from '../shared/aspect';
-import { SubComponent } from '../shared/subcomponents/sub-component';
 import { CategoryComponent } from '../shared/subcomponents/category/category.component';
 import { CheckboxListComponent } from '../shared/subcomponents/checkbox-list/checkbox-list.component';
 import { FunctionComponent } from '../shared/subcomponents/function/function.component';
@@ -13,17 +12,30 @@ import { Observable, Subject } from 'rxjs';
 import { AlertService } from '../../alert/alert.service';
 import { CharacterSheetData } from '../../../../../shared/types/rule-set/character-sheet.data';
 import { CharacterSheetTooltipData } from '../../../../../shared/types/rule-set/character-sheet-tooltip.data';
+import { CharacterAspectComponent } from '../shared/character-aspect.component';
+import {
+	CompactType,
+	DisplayGrid,
+	GridsterConfig,
+	GridsterItem,
+	GridsterItemComponentInterface,
+	GridType
+} from 'angular-gridster2';
+import { TextListComponent } from "../shared/subcomponents/text-list/text-list.component";
 
 @Injectable()
 export class CharacterMakerService implements CharacterInterfaceService {
 	public characterSheet: CharacterSheetData;
-	public aspects: Aspect[];
 
-	private subComponents: Map<string, SubComponent>;
+	private aspectMap: Map<GridsterItem, Aspect>;
+	private aspectComponents: Map<string, CharacterAspectComponent>;
 	private removeComponentSubject = new Subject<void>();
-	private registerSubComponentSubject = new Subject<SubComponent>();
+	private registerAspectComponentSubject = new Subject<CharacterAspectComponent>();
+	private readonly materialConstant = 2.71875;
 
 	public readonly immutable = false;
+
+	public gridOptions: GridsterConfig;
 
 	constructor(private characterSheetRepository: CharacterSheetRepository,
 	            private alertService: AlertService) {
@@ -31,8 +43,63 @@ export class CharacterMakerService implements CharacterInterfaceService {
 	}
 
 	public init(): void {
-		this.aspects = [];
-		this.subComponents = new Map<string, SubComponent>();
+		this.aspectComponents = new Map<string, CharacterAspectComponent>();
+		this.aspectMap = new Map<GridsterItem, Aspect>();
+
+		this.gridOptions = {
+			gridType: GridType.VerticalFixed,
+			compactType: CompactType.CompactUp,
+			margin: 10,
+			outerMargin: true,
+			outerMarginTop: null,
+			outerMarginRight: null,
+			outerMarginBottom: null,
+			outerMarginLeft: null,
+			mobileBreakpoint: 640,
+			minCols: 20,
+			maxCols: 20,
+			minRows: 1,
+			maxRows: 100,
+			maxItemCols: 10,
+			minItemCols: 1,
+			maxItemRows: 100,
+			minItemRows: 1,
+			maxItemArea: 2500,
+			minItemArea: 1,
+			defaultItemCols: 1,
+			defaultItemRows: 1,
+			fixedColWidth: 50,
+			fixedRowHeight: 25,
+			keepFixedHeightInMobile: false,
+			keepFixedWidthInMobile: false,
+			scrollSensitivity: 1,
+			scrollSpeed: 20,
+			enableEmptyCellClick: false,
+			enableEmptyCellContextMenu: false,
+			enableEmptyCellDrop: false,
+			enableEmptyCellDrag: false,
+			emptyCellDragMaxCols: 50,
+			emptyCellDragMaxRows: 50,
+			ignoreMarginInRow: false,
+			draggable: {
+				enabled: true,
+			},
+			resizable: {
+				enabled: true,
+			},
+			swap: true,
+			pushItems: true,
+			disablePushOnDrag: false,
+			disablePushOnResize: false,
+			pushDirections: {north: false, east: true, south: true, west: false},
+			pushResizeItems: false,
+			displayGrid: DisplayGrid.OnDragAndResize,
+			disableWindowResize: false,
+			disableWarnings: true,
+			scrollToNewItems: false,
+			itemResizeCallback: this.resizeItem,
+			itemChangeCallback: this.changeItem,
+		};
 	}
 
 	public setCharacterSheet(sheet: CharacterSheetData): void {
@@ -41,20 +108,17 @@ export class CharacterMakerService implements CharacterInterfaceService {
 	}
 
 	public addComponent(aspect: Aspect): void {
-		if (!isUndefined(this.subComponents.get(aspect.label.toLowerCase()))) {
+		if (!isUndefined(this.aspectComponents.get(aspect.label.toLowerCase()))) {
 			console.error('aspect with that name already exists');
 			this.alertService.showAlert('Aspect with that name already exists');
 			return;
 		}
-		this.aspects.push(aspect);
+		this.aspectMap.set(aspect.config, aspect);
 	}
 
 	public removeComponent(aspect: Aspect): void {
-		let index: number = this.aspects.findIndex((nextAspect: Aspect) => {
-			return aspect.equals(nextAspect);
-		});
-		this.aspects.splice(index, 1);
-		this.subComponents.delete(aspect.label.toLowerCase());
+		this.aspectMap.delete(aspect.config);
+		this.aspectComponents.delete(aspect.label.toLowerCase());
 		setTimeout(() => this.removeComponentSubject.next());
 	}
 
@@ -62,40 +126,39 @@ export class CharacterMakerService implements CharacterInterfaceService {
 		return this.removeComponentSubject.asObservable();
 	}
 
-	public registerSubComponent(subComponent: SubComponent): void {
-		this.subComponents.set(subComponent.aspect.label.toLowerCase(), subComponent);
-		this.registerSubComponentSubject.next(subComponent);
+	public registerAspectComponent(subComponent: CharacterAspectComponent): void {
+		this.aspectComponents.set(subComponent.aspect.label.toLowerCase(), subComponent);
+		this.registerAspectComponentSubject.next(subComponent);
 	}
 
-	get registerSubComponentObservable(): Observable<SubComponent> {
-		return this.registerSubComponentSubject.asObservable();
+	get registerAspectComponentObservable(): Observable<CharacterAspectComponent> {
+		return this.registerAspectComponentSubject.asObservable();
 	}
 
 	public getAspectValue(aspectLabel: string): any {
-		return this.subComponents.get(aspectLabel.toLowerCase()) ? this.subComponents.get(aspectLabel.toLowerCase()).getValue() : undefined;
+		return this.aspectComponents.get(aspectLabel.toLowerCase()) ? this.aspectComponents.get(aspectLabel.toLowerCase()).getValue() : undefined;
 	}
 
 	public setAspectValue(aspectLabel: string, value: any): void {
-		this.subComponents.get(aspectLabel.toLowerCase()).child.setValue(value);
+		this.aspectComponents.get(aspectLabel.toLowerCase()).child.setValue(value);
 	}
 
 	public getAspect(aspectLabel: string): Aspect {
-		return this.subComponents.get(aspectLabel.toLowerCase()).aspect;
+		return this.aspectComponents.get(aspectLabel.toLowerCase()).aspect;
 	}
 
 	public updateFunctionAspects(): void {
-		this.subComponents.forEach(subComponent => {
-		    if (subComponent.aspect.aspectType === AspectType.FUNCTION) {
-		        subComponent.getValue();
-		    }
+		this.aspectComponents.forEach(subComponent => {
+			if (subComponent.aspect.aspectType === AspectType.FUNCTION) {
+				subComponent.getValue();
+			}
 		});
 	}
 
 	public save() {
 		let characterSheet = JSON.parse(JSON.stringify(this.characterSheet));
 		let aspects: AspectData[] = [];
-		for (let i = 0; i < this.aspects.length; i++) {
-			let aspect = this.aspects[i];
+		for (let aspect of this.aspects) {
 			let aspectObj: AspectData = {
 				_id: aspect._id,
 				characterSheetId: this.characterSheet._id,
@@ -112,6 +175,13 @@ export class CharacterMakerService implements CharacterInterfaceService {
 			else if (aspect.aspectType === AspectType.BOOLEAN_LIST) {
 				aspectObj.items = (<CheckboxListComponent>this.getChildOf(aspect)).getCheckboxLabels();
 			}
+			else if (aspect.aspectType === AspectType.TEXT_LIST) {
+				let items = [];
+				for (let i in (<TextListComponent>this.getChildOf(aspect)).items) {
+					items.push({value: ''});
+				}
+				aspectObj.items = items;
+			}
 			else if (aspect.aspectType === AspectType.FUNCTION) {
 				aspectObj.ruleFunction = (<FunctionComponent>this.getChildOf(aspect)).getFunction();
 			}
@@ -122,14 +192,13 @@ export class CharacterMakerService implements CharacterInterfaceService {
 	}
 
 	public initAspects(aspects: AspectData[]): void {
-		this.aspects = [];
 		aspects.forEach((aspectObj: AspectData) => {
 			let aspect = new Aspect(aspectObj.label, aspectObj.aspectType, aspectObj.required, aspectObj.isPredefined);
 			aspect._id = aspectObj._id;
 			aspect.fontSize = aspectObj.fontSize;
 			aspect.isNew = false;
 			if (!!aspectObj.config) {
-			    aspect.config = aspectObj.config;
+				aspect.config = aspectObj.config;
 			}
 			if (aspectObj.hasOwnProperty('items')) {
 				aspect.items = aspectObj.items;
@@ -138,7 +207,7 @@ export class CharacterMakerService implements CharacterInterfaceService {
 				aspect.ruleFunction = aspectObj.ruleFunction;
 			}
 
-			this.aspects.push(aspect);
+			this.aspectMap.set(aspect.config, aspect);
 		});
 	}
 
@@ -183,6 +252,65 @@ export class CharacterMakerService implements CharacterInterfaceService {
 	}
 
 	private getChildOf(aspect: Aspect): SubComponentChild | undefined {
-		return this.subComponents.get(aspect.label.toLowerCase()) ? this.subComponents.get(aspect.label.toLowerCase()).child : undefined;
+		return this.aspectComponents.get(aspect.label.toLowerCase()) ? this.aspectComponents.get(aspect.label.toLowerCase()).child : undefined;
 	}
+
+	get aspects(): Aspect[] {
+		return [...this.aspectMap.values()];
+	}
+
+	set aspects(value) {
+		// do nothing
+	}
+
+	public resizeAspect(item: GridsterItem, height: number): void {
+		const aspect = this.aspectMap.get(item);
+		if (isUndefined(aspect)) {
+			return;
+		}
+		switch (aspect.aspectType) {
+			case AspectType.TEXT: {
+				const fontSize = height / (this.materialConstant * 1.2);
+				aspect.fontSize = fontSize;
+				break;
+			}
+			case AspectType.NUMBER: {
+				const fontSize = height / (this.materialConstant * 1.2);
+				aspect.fontSize = fontSize;
+				break;
+			}
+			case AspectType.CATEGORICAL: {
+				const fontSize = height / (this.materialConstant * 1.2);
+				aspect.fontSize = fontSize;
+				break;
+			}
+			case AspectType.BOOLEAN: {
+				const fontSize = (height / 25) * 16;
+				aspect.fontSize = fontSize;
+				break;
+			}
+			case AspectType.CURRENT_MAX: {
+				const fontSize = height / (this.materialConstant * 1.64);
+				aspect.fontSize = fontSize;
+				break;
+			}
+			case AspectType.FUNCTION: {
+				const fontSize = height / (this.materialConstant * 1.2);
+				aspect.fontSize = fontSize;
+				break;
+			}
+		}
+	}
+
+	public getAspectByLabel(aspectLabel: string): Aspect {
+		return this.aspectComponents.get(aspectLabel.toLowerCase()).aspect;
+	}
+
+	private resizeItem = (item: GridsterItem, itemComponent: GridsterItemComponentInterface) => {
+		const height = itemComponent.height;
+		this.resizeAspect(item, height);
+	};
+
+	private changeItem = (item, itemComponent) => {
+	};
 }

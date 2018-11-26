@@ -1,3 +1,5 @@
-<ng-container *ngIf="characterService">
-	<character-aspect *ngFor="let aspect of characterService.aspects" [aspect]="aspect" (heightChange)="changeHeight()"></character-aspect>
-</ng-container>
+<gridster *ngIf="characterService && characterService.gridOptions" [options]="characterService.gridOptions">
+	<gridster-item *ngFor="let aspect of characterService.aspects" [item]="aspect.config">
+		<character-aspect [aspect]="aspect"></character-aspect>
+	</gridster-item>
+</gridster>

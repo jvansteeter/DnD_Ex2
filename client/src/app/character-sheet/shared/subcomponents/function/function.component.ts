@@ -10,7 +10,7 @@ import { RuleFunction } from './rule-function';
 @Component({
 	selector: 'characterMaker-functionComponent',
 	templateUrl: 'function.component.html',
-	styleUrls: ['../sub-component.scss']
+	styleUrls: ['function.component.scss']
 })
 export class FunctionComponent implements SubComponentChild, AfterViewInit {
 	@Input() aspect: Aspect;
@@ -49,14 +49,6 @@ export class FunctionComponent implements SubComponentChild, AfterViewInit {
     	this.ruleFunction = ruleFunction;
     	this.value = this.ruleFunction.execute();
 		});
-	}
-
-	stopClickPropagate(event): void {
-		event.stopPropagation();
-	}
-
-	closeMenu(): void {
-		// this.options._emitCloseEvent();
 	}
 
 	getValue(): any {

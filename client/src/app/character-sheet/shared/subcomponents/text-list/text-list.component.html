@@ -1,9 +1,7 @@
-<div class="text-list">
-	<span class="text-list-header" [style.font-size.px]="aspect.fontSize">{{aspect.label}}</span>
-	<span *ngFor="let item of items" class="checkbox-list-item">
-		<input class="app-input text-list-item" [(ngModel)]="item.value">
-	</span>
-</div>
+<span class="text-list-header" [style.font-size.px]="aspect.fontSize">{{aspect.label}}</span>
+<span *ngFor="let item of items" class="checkbox-list-item">
+	<input class="app-input text-list-item" [(ngModel)]="item.value" (mousedown)="$event.stopPropagation()" (touchstart)="$event.stopPropagation()">
+</span>
 <mat-menu #options>
 	<span mat-menu-item (click)="addItem()">Add Item</span>
 	<span mat-menu-item (click)="removeItem()">Remove Item</span>

@@ -3,41 +3,32 @@ import { Aspect } from '../../aspect';
 import { SubComponentChild } from '../sub-component-child';
 import { MatMenu } from '@angular/material';
 
-
 @Component({
-    selector:  'characterMaker-textComponent',
-    templateUrl: 'text.component.html',
-    styleUrls: ['../sub-component.scss']
+	selector: 'characterMaker-textComponent',
+	templateUrl: 'text.component.html',
+	styleUrls: ['text.component.scss']
 })
 export class TextComponent implements SubComponentChild {
-    @Input() aspect: Aspect;
-    @ViewChild('options') options: MatMenu;
-    label: string;
-    required: boolean;
-    hasOptions = true;
-    value: any;
+	@Input() aspect: Aspect;
+	@ViewChild('options') options: MatMenu;
+	label: string;
+	required: boolean;
+	readonly hasOptions = false;
+	value: any;
 
-    constructor() {
+	constructor() {
 
-    }
+	}
 
-    getMenuOptions(): MatMenu {
-        return this.options;
-    }
+	getMenuOptions(): MatMenu {
+		return this.options;
+	}
 
-    stopClickPropagate(event): void {
-        event.stopPropagation();
-    }
+	getValue() {
+		return this.value;
+	}
 
-    closeMenu(): void {
-        // this.options._emitCloseEvent();
-    }
-
-    getValue() {
-        return this.value;
-    }
-
-    setValue(value: any): any {
-        this.value = value;
-    }
+	setValue(value: any): any {
+		this.value = value;
+	}
 }

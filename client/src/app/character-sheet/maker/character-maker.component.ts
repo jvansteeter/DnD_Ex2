@@ -6,12 +6,12 @@ import { ActivatedRoute } from '@angular/router';
 import { CharacterInterfaceFactory } from '../shared/character-interface.factory';
 import { CharacterSheetRepository } from '../../repositories/character-sheet.repository';
 import { Aspect, AspectType } from '../shared/aspect';
-import { SubComponent } from '../shared/subcomponents/sub-component';
 import { CharacterTooltipComponent } from '../character-tooltip/character-tooltip.component';
 import { DashboardCard } from '../../cdk/dashboard-card/dashboard-card';
 import { AddTooltipAspectComponent } from "./dialog/add-tooltip-aspect.component";
 import { AspectData } from '../../../../../shared/types/rule-set/aspect.data';
 import { PredefinedAspects, RequiredAspects } from '../../../../../shared/required-aspects.enum';
+import { CharacterAspectComponent } from '../shared/character-aspect.component';
 
 @Component({
 	selector: 'character-maker',
@@ -70,10 +70,10 @@ export class CharacterMakerComponent implements OnInit, AfterViewInit {
 	}
 
 	ngOnInit(): void {
-		this.characterService.registerSubComponentObservable.subscribe((subComponent: SubComponent) => {
-			if (subComponent.aspect.isPredefined) {
+		this.characterService.registerAspectComponentObservable.subscribe((aspectComponent: CharacterAspectComponent) => {
+			if (aspectComponent.aspect.isPredefined) {
 				for (let preDefinedAspect of this.preDefinedAspects) {
-					if (preDefinedAspect.label.toLowerCase() === subComponent.aspect.label.toLowerCase()) {
+					if (preDefinedAspect.label.toLowerCase() === aspectComponent.aspect.label.toLowerCase()) {
 						preDefinedAspect.checked = true;
 					}
 				}
@@ -135,12 +135,13 @@ export class CharacterMakerComponent implements OnInit, AfterViewInit {
 				return;
 			}
 		}
-		let aspect = new Aspect(aspectLabel, aspectType, true, true);
 		if (checked) {
+			let aspect = new Aspect(aspectLabel, aspectType, true, true);
 			this.characterService.addComponent(aspect);
 			this.characterToolTipComponent.addAspect(aspect, icon);
 		}
 		else {
+			let aspect = this.characterService.getAspectByLabel(aspectLabel);
 			this.characterService.removeComponent(aspect);
 			this.characterToolTipComponent.removeAspect(aspect.label);
 		}
