@@ -21,9 +21,9 @@ export class BoardCanvasService extends IsReadyService {
         this.dependenciesSub = this.dependenciesReady().subscribe((isReady: boolean) => {
             if (isReady && !this.isReady()) {
                 console.log('boardCanvasService.init -> isReady');
-            	  if (this.dependenciesSub) {
-		              this.dependenciesSub.unsubscribe();
-	              }
+                if (this.dependenciesSub) {
+                    this.dependenciesSub.unsubscribe();
+                }
                 this.setReady(true);
             }
         })
@@ -55,7 +55,7 @@ export class BoardCanvasService extends IsReadyService {
     public trim_canvas(ctx: CanvasRenderingContext2D) {
         ctx.globalCompositeOperation = 'destination-in';
         ctx.fillStyle = 'rgba(255,0,0,1)';
-        ctx.fillRect(0,0,BoardStateService.map_res_x, BoardStateService.map_res_y);
+        ctx.fillRect(0, 0, BoardStateService.map_res_x, BoardStateService.map_res_y);
         ctx.globalCompositeOperation = 'source-over';
     }
 
@@ -367,7 +367,7 @@ export class BoardCanvasService extends IsReadyService {
         }
     }
 
-    draw_window(ctx: CanvasRenderingContext2D, target: CellTarget, isTransparent:boolean = true, isBlocking:boolean = true) {
+    draw_window(ctx: CanvasRenderingContext2D, target: CellTarget, isTransparent: boolean = true, isBlocking: boolean = true) {
         const loc = new XyPair(target.location.x * BoardStateService.cell_res, target.location.y * BoardStateService.cell_res);
 
         ctx.strokeStyle = 'rgba(50, 50, 50, 1)';
@@ -383,7 +383,7 @@ export class BoardCanvasService extends IsReadyService {
         if (isBlocking) {
             ctx.setLineDash([]);
         } else {
-            ctx.setLineDash([1,4]);
+            ctx.setLineDash([1, 4]);
         }
 
         const window_depth = 3;
@@ -675,28 +675,27 @@ export class BoardCanvasService extends IsReadyService {
     }
 
     clear_xy_array(ctx: CanvasRenderingContext2D, xyArray: Array<XyPair>) {
-        if (isNullOrUndefined(xyArray)){
+        if (isNullOrUndefined(xyArray)) {
             return;
         }
 
-        ctx.save();
-
+        ctx.fillStyle = 'rgba(0, 0, 0, 1.0)';
+        ctx.globalCompositeOperation = 'destination-out';
         ctx.beginPath();
         for (let point of xyArray) {
             ctx.lineTo(point.x, point.y);
         }
-        ctx.lineTo(xyArray[0].x, xyArray[0].y);
+        ctx.closePath();
+        ctx.fill();
+        ctx.globalCompositeOperation = 'source-over';
 
-        ctx.clip();
-        this.clear_canvas(ctx);
-        ctx.restore();
     }
 
     /*****************************************************************************************************
      *  Cell FILL region functions
      *****************************************************************************************************/
     fill_xy_array(ctx: CanvasRenderingContext2D, xyArray: Array<XyPair>, rgbaCode: string) {
-        if (isNullOrUndefined(xyArray)){
+        if (isNullOrUndefined(xyArray)) {
             return;
         }
 
@@ -916,7 +915,7 @@ export class BoardCanvasService extends IsReadyService {
     /*****************************************************************************************************
      *  Direction pointers
      *****************************************************************************************************/
-    draw_pointer_N(ctx: CanvasRenderingContext2D, cell:XyPair, rgba_code: string) {
+    draw_pointer_N(ctx: CanvasRenderingContext2D, cell: XyPair, rgba_code: string) {
         const cell_center_canvas = new XyPair(cell.x * BoardStateService.cell_res + BoardStateService.cell_res / 2, cell.y * BoardStateService.cell_res + BoardStateService.cell_res / 2);
         const target_canvas = new XyPair(cell.x * BoardStateService.cell_res + BoardStateService.cell_res / 2, cell.y * BoardStateService.cell_res);
         ctx.strokeStyle = rgba_code;
@@ -929,7 +928,7 @@ export class BoardCanvasService extends IsReadyService {
         ctx.stroke();
     }
 
-    draw_pointer_E(ctx: CanvasRenderingContext2D, cell:XyPair, rgba_code: string) {
+    draw_pointer_E(ctx: CanvasRenderingContext2D, cell: XyPair, rgba_code: string) {
         const cell_center_canvas = new XyPair(cell.x * BoardStateService.cell_res + BoardStateService.cell_res / 2, cell.y * BoardStateService.cell_res + BoardStateService.cell_res / 2);
         const target_canvas = new XyPair(cell.x * BoardStateService.cell_res + BoardStateService.cell_res, cell.y * BoardStateService.cell_res + BoardStateService.cell_res / 2);
         ctx.strokeStyle = rgba_code;
@@ -942,7 +941,7 @@ export class BoardCanvasService extends IsReadyService {
         ctx.stroke();
     }
 
-    draw_pointer_S(ctx: CanvasRenderingContext2D, cell:XyPair, rgba_code: string) {
+    draw_pointer_S(ctx: CanvasRenderingContext2D, cell: XyPair, rgba_code: string) {
         const cell_center_canvas = new XyPair(cell.x * BoardStateService.cell_res + BoardStateService.cell_res / 2, cell.y * BoardStateService.cell_res + BoardStateService.cell_res / 2);
         const target_canvas = new XyPair(cell.x * BoardStateService.cell_res + BoardStateService.cell_res / 2, cell.y * BoardStateService.cell_res + BoardStateService.cell_res);
         ctx.strokeStyle = rgba_code;
@@ -955,7 +954,7 @@ export class BoardCanvasService extends IsReadyService {
         ctx.stroke();
     }
 
-    draw_pointer_W(ctx: CanvasRenderingContext2D, cell:XyPair, rgba_code: string) {
+    draw_pointer_W(ctx: CanvasRenderingContext2D, cell: XyPair, rgba_code: string) {
         const cell_center_canvas = new XyPair(cell.x * BoardStateService.cell_res + BoardStateService.cell_res / 2, cell.y * BoardStateService.cell_res + BoardStateService.cell_res / 2);
         const target_canvas = new XyPair(cell.x * BoardStateService.cell_res, cell.y * BoardStateService.cell_res + BoardStateService.cell_res / 2);
         ctx.strokeStyle = rgba_code;
@@ -968,7 +967,7 @@ export class BoardCanvasService extends IsReadyService {
         ctx.stroke();
     }
 
-    draw_pointer_NW(ctx: CanvasRenderingContext2D, cell:XyPair, rgba_code: string) {
+    draw_pointer_NW(ctx: CanvasRenderingContext2D, cell: XyPair, rgba_code: string) {
         const cell_center_canvas = new XyPair(cell.x * BoardStateService.cell_res + BoardStateService.cell_res / 2, cell.y * BoardStateService.cell_res + BoardStateService.cell_res / 2);
         const target_canvas = new XyPair(cell.x * BoardStateService.cell_res, cell.y * BoardStateService.cell_res);
         ctx.strokeStyle = rgba_code;
@@ -981,7 +980,7 @@ export class BoardCanvasService extends IsReadyService {
         ctx.stroke();
     }
 
-    draw_pointer_NE(ctx: CanvasRenderingContext2D, cell:XyPair, rgba_code: string) {
+    draw_pointer_NE(ctx: CanvasRenderingContext2D, cell: XyPair, rgba_code: string) {
         const cell_center_canvas = new XyPair(cell.x * BoardStateService.cell_res + BoardStateService.cell_res / 2, cell.y * BoardStateService.cell_res + BoardStateService.cell_res / 2);
         const target_canvas = new XyPair(cell.x * BoardStateService.cell_res + BoardStateService.cell_res, cell.y * BoardStateService.cell_res);
         ctx.strokeStyle = rgba_code;
@@ -994,7 +993,7 @@ export class BoardCanvasService extends IsReadyService {
         ctx.stroke();
     }
 
-    draw_pointer_SE(ctx: CanvasRenderingContext2D, cell:XyPair, rgba_code: string) {
+    draw_pointer_SE(ctx: CanvasRenderingContext2D, cell: XyPair, rgba_code: string) {
         const cell_center_canvas = new XyPair(cell.x * BoardStateService.cell_res + BoardStateService.cell_res / 2, cell.y * BoardStateService.cell_res + BoardStateService.cell_res / 2);
         const target_canvas = new XyPair(cell.x * BoardStateService.cell_res + BoardStateService.cell_res, cell.y * BoardStateService.cell_res + BoardStateService.cell_res);
         ctx.strokeStyle = rgba_code;
@@ -1007,9 +1006,9 @@ export class BoardCanvasService extends IsReadyService {
         ctx.stroke();
     }
 
-    draw_pointer_SW(ctx: CanvasRenderingContext2D, cell:XyPair, rgba_code: string) {
+    draw_pointer_SW(ctx: CanvasRenderingContext2D, cell: XyPair, rgba_code: string) {
         const cell_center_canvas = new XyPair(cell.x * BoardStateService.cell_res + BoardStateService.cell_res / 2, cell.y * BoardStateService.cell_res + BoardStateService.cell_res / 2);
-        const target_canvas = new XyPair(cell.x * BoardStateService.cell_res, cell.y * BoardStateService.cell_res  + BoardStateService.cell_res);
+        const target_canvas = new XyPair(cell.x * BoardStateService.cell_res, cell.y * BoardStateService.cell_res + BoardStateService.cell_res);
         ctx.strokeStyle = rgba_code;
         ctx.lineWidth = 3;
         ctx.lineCap = 'round';

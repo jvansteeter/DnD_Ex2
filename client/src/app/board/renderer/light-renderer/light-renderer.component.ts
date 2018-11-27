@@ -48,7 +48,7 @@ export class LightRendererComponent implements OnInit, OnDestroy {
                 for (let lightSource of [...this.boardLightService.lightSources, ...this.boardPlayerService.player_lightSource_map.values()]) {
                     this.boardCanvasService.clear_xy_array(this.boardLightService.canvas_dark_context, lightSource.dim_polygon);
                     this.boardCanvasService.clear_xy_array(this.boardLightService.canvas_dim_context, lightSource.bright_polygon);
-                }
+                    }
                 this.boardLightService.canvas_rebuild_lightSources = false;
             }
 
