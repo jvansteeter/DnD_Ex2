@@ -60,6 +60,11 @@ export class BoardLightService extends IsReadyService {
     public unInit(): void {
         console.log('boardLightService.unInit()');
         delete this.lightSourceState;
+        delete this.canvas_dim;
+        delete this.canvas_dim_context;
+        delete this.canvas_dark;
+        delete this.canvas_dark_context;
+
         super.unInit();
     }
 
