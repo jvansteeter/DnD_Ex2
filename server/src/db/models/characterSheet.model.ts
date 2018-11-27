@@ -20,6 +20,13 @@ export class CharacterSheetModel extends MongooseModel implements CharacterSheet
 		this.ruleSetId = this.methods.ruleSetId;
 		this.label = this.methods.label;
 		this.tooltipConfig = this.methods.tooltipConfig;
+
+		this.methods.setTooltipConfig = this.setTooltipConfig;
+	}
+
+	public setTooltipConfig(config: any): Promise<CharacterSheetModel> {
+		this.tooltipConfig = config;
+		return this.save();
 	}
 }
 

@@ -1,5 +1,4 @@
 import * as mongoose from 'mongoose';
-import { Promise } from 'bluebird';
 import { RuleSetModel } from '../models/ruleSet.model';
 
 export class RuleSetRepository {
@@ -9,10 +8,10 @@ export class RuleSetRepository {
         this.RuleSet = mongoose.model('RuleSet');
     }
 
-    public create(ruleSetObj: any): Promise<Error | RuleSetModel> {
+    public create(label: string): Promise<RuleSetModel> {
         return new Promise((resolve, reject) => {
             this.RuleSet.create({
-                label: ruleSetObj.label
+                label: label
             }, (error, newRuleSet: RuleSetModel) => {
                 if (error) {
                     reject (error);
@@ -26,7 +25,7 @@ export class RuleSetRepository {
 
     public findById(id: string): Promise<RuleSetModel> {
         return new Promise((resolve, reject) => {
-            this.RuleSet.findById(id, (error, ruleSet) => {
+            this.RuleSet.findById(id, (error, ruleSet: RuleSetModel) => {
                 if (error) {
                     reject(error);
                     return;

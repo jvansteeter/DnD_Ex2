@@ -1,8 +1,6 @@
 import * as mongoose from 'mongoose';
-import { Promise } from 'bluebird';
 import { CharacterSheetModel } from '../models/characterSheet.model';
 import { CharacterAspectRepository } from './characterAspect.repository';
-import { CharacterAspectModel } from '../models/characterAspect.model';
 
 export class CharacterSheetRepository {
 	private CharacterSheet: mongoose.Model<mongoose.Document>;
@@ -13,7 +11,7 @@ export class CharacterSheetRepository {
 		this.characterAspectRepository = new CharacterAspectRepository();
 	}
 
-	public create(ruleSetId: string, label: string): Promise<Error | CharacterSheetModel> {
+	public create(ruleSetId: string, label: string): Promise<CharacterSheetModel> {
 		return new Promise((resolve, reject) => {
 			this.CharacterSheet.create({
 				ruleSetId: ruleSetId,
@@ -42,17 +40,17 @@ export class CharacterSheetRepository {
 		});
 	}
 
-	public async getCompiledCharacterSheet(id: string): Promise<any> {
-		try {
-			let characterSheet = await this.findById(id);
-			let characterSheetObj = JSON.parse(JSON.stringify(characterSheet));
-			let aspects: CharacterAspectModel[] = await this.characterAspectRepository.findByCharacterSheetId(characterSheet._id);
-			characterSheetObj.aspects = JSON.parse(JSON.stringify(aspects));
-			return characterSheetObj;
-		}
-		catch (error) {
-			throw error;
-		}
+	public findByLabel(label: string, ruleSetId: string): Promise<CharacterSheetModel> {
+		return new Promise((resolve, reject) => {
+			this.CharacterSheet.findOne({label: label, ruleSetId: ruleSetId}, (error, characterSheet: CharacterSheetModel) => {
+				if (error) {
+					reject(error);
+					return;
+				}
+
+				resolve(characterSheet);
+			});
+		});
 	}
 
 	public getAllForRuleSet(ruleSetId: string): Promise<CharacterSheetModel[]> {

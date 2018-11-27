@@ -54,10 +54,6 @@ module.exports = {
     ]
   },
 
-  // optimization: {
-	//
-  // },
-
   plugins: [
     new HtmlWebpackPlugin({
       filename: 'index.html',

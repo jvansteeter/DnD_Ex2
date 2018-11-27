@@ -4,7 +4,7 @@ import { UserRepository } from '../db/repositories/user.repository';
 import { CharacterSheetRepository } from '../db/repositories/characterSheet.repository';
 import { UserRuleSetRepository } from '../db/repositories/user-ruleSet.repository';
 import { CharacterAspectRepository } from '../db/repositories/characterAspect.repository';
-import { CharacterSheetService } from '../services/characterSheet-service';
+import { CharacterSheetService } from '../services/character-sheet.service';
 import { SocialService } from '../services/social.service';
 import { UserModel } from "../db/models/user.model";
 import { CharacterRepository } from '../db/repositories/character.repository';

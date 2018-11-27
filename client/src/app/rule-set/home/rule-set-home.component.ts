@@ -1,3 +1,4 @@
+import * as FileSaver from 'file-saver';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material';
@@ -12,6 +13,7 @@ import { ConfigService } from '../../data-services/config.service';
 import { NewCharacterDialogComponent } from './dialog/new-character-dialog.component';
 import { CharacterRepository } from '../../repositories/character.repository';
 import { CharacterData } from '../../../../../shared/types/character.data';
+import { isUndefined } from 'util';
 
 @Component({
 	selector: 'rule-set-home',
@@ -120,6 +122,12 @@ export class RuleSetHomeComponent implements OnInit {
 	public deleteCharacter(npc: CharacterData): void {
 		this.characterRepo.deleteCharacter(npc._id).subscribe(() => {
 			this.ngOnInit();
+		});
+	}
+
+	public exportRuleSet(): void {
+		this.ruleSetRepository.getExportJson(this.ruleSetId).subscribe((data) => {
+			FileSaver.saveAs(new Blob([JSON.stringify(data)], {type: 'application/json'}), !isUndefined(data['label']) ? data['label'] : 'ruleSet' + '.json');
 		});
 	}
 

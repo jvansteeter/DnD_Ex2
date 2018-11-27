@@ -3,7 +3,7 @@ import {UserProfileService} from '../data-services/userProfile.service';
 import {SubjectDataSource} from '../utilities/subjectDataSource';
 import {RuleSetRepository} from '../repositories/rule-set.repository';
 import {NewCampaignDialogComponent} from './dialog/new-campaign-dialog.component';
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 import {Subject} from 'rxjs';
 import {MatDialog} from '@angular/material';
 import {Router} from '@angular/router';
@@ -21,7 +21,8 @@ import { RuleSetData } from '../../../../shared/types/rule-set/rule-set.data';
 })
 export class HomeComponent implements OnInit {
 	@ViewChild('fileInput') fileInput: ElementRef;
-	private reader: FileReader = new FileReader();
+	private imageReader: FileReader = new FileReader();
+	private jsonReader: FileReader = new FileReader();
 	private profilePhotoUrl: string = '';
 
 	public ruleSets: RuleSetData[];
@@ -43,6 +44,7 @@ export class HomeComponent implements OnInit {
 	            private userProfileService: UserProfileService,
 	            private ruleSetRepository: RuleSetRepository,
 	            private friendService: FriendService,
+	            private renderer: Renderer2,
 	            public campaignService: CampaignService) {
 		this.ruleSetSubject = new Subject<any>();
 		this.ruleSetDataSource = new SubjectDataSource(this.ruleSetSubject);
@@ -63,7 +65,11 @@ export class HomeComponent implements OnInit {
 				{
 					title: 'New Rule Set',
 					function: this.newRuleSet
-				}
+				},
+				{
+					title: 'Import from file',
+					function: this.importRuleSet
+				},
 			]
 		};
 		this.campaignCard = {
@@ -97,12 +103,12 @@ export class HomeComponent implements OnInit {
 	}
 
 	public loadImage(): void {
-		this.reader.addEventListener('load', () => {
-			this.profilePhotoUrl = this.reader.result;
+		this.imageReader.addEventListener('load', () => {
+			this.profilePhotoUrl = this.imageReader.result;
 			this.userProfileService.setProfilePhotoUrl(this.profilePhotoUrl);
 		});
 		if (this.fileInput.nativeElement.files[0]) {
-			this.reader.readAsDataURL(this.fileInput.nativeElement.files[0]);
+			this.imageReader.readAsDataURL(this.fileInput.nativeElement.files[0]);
 		}
 	}
 
@@ -133,5 +139,22 @@ export class HomeComponent implements OnInit {
 
 	private openFriendInviteDialog = () => {
 		this.dialog.open(AddFriendComponent);
-	}
+	};
+
+	private importRuleSet = () => {
+		let inputTag = this.renderer.createElement('input');
+		this.renderer.setAttribute(inputTag, 'type', 'file');
+		this.renderer.setAttribute(inputTag, 'accept', '.json');
+		this.renderer.listen(inputTag, 'change', () => {
+			this.jsonReader.addEventListener('load', () => {
+				this.ruleSetRepository.importRuleSetFromJson(this.jsonReader.result).subscribe(() => {
+					this.getRuleSets();
+				});
+			});
+			if (inputTag.files[0]) {
+				this.jsonReader.readAsText(inputTag.files[0]);
+			}
+		});
+		inputTag.click();
+	};
 }

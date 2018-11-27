@@ -6,9 +6,10 @@ import { CharacterSheetRepository } from '../db/repositories/characterSheet.repo
 import { UserRuleSetRepository } from '../db/repositories/user-ruleSet.repository';
 import { CharacterSheetModel } from '../db/models/characterSheet.model';
 import { CharacterAspectRepository } from '../db/repositories/characterAspect.repository';
-import { CharacterSheetService } from '../services/characterSheet-service';
+import { CharacterSheetService } from '../services/character-sheet.service';
 import { CharacterRepository } from '../db/repositories/character.repository';
 import { CharacterModel } from '../db/models/character.model';
+import { RuleSetService } from '../services/rule-set.service';
 
 
 /**********************************************************************************************************
@@ -24,8 +25,9 @@ export class RuleSetRouter {
 	private sheetRepository: CharacterSheetRepository;
 	private characterSheetService: CharacterSheetService;
 	private characterAspectRepository: CharacterAspectRepository;
-	private userRuleSetRepository: UserRuleSetRepository;
 	private characterRepository: CharacterRepository;
+	private ruleSetService: RuleSetService;
+	private userRuleSetRepo: UserRuleSetRepository;
 
 	constructor() {
 		this.router = Router();
@@ -34,8 +36,9 @@ export class RuleSetRouter {
 		this.sheetRepository = new CharacterSheetRepository();
 		this.characterSheetService = new CharacterSheetService();
 		this.characterAspectRepository = new CharacterAspectRepository();
-		this.userRuleSetRepository = new UserRuleSetRepository();
 		this.characterRepository = new CharacterRepository();
+		this.ruleSetService = new RuleSetService();
+		this.userRuleSetRepo = new UserRuleSetRepository();
 		this.init();
 	}
 
@@ -57,13 +60,17 @@ export class RuleSetRouter {
 			}
 		});
 
-		this.router.post('/new/ruleset', (req: Request, res: Response) => {
-			this.ruleSetRepository.create(req.body).then((ruleSet: RuleSetModel) => {
-				ruleSet.addAdmin(req.user._id, 'superuser');
-				this.userRuleSetRepository.create(req.user._id, ruleSet._id).then(() => {
-					res.status(200).send();
-				}).catch(error => res.status(500).send(error));
-			}).catch(error => res.status(500).send(error));
+		this.router.post('/new/ruleset', async (req: Request, res: Response) => {
+			try {
+				const userId = req.user._id;
+				const ruleSetLabel = req.body.label;
+				await this.ruleSetService.createNewRuleSet(userId, ruleSetLabel);
+				res.status(200).send();
+			}
+			catch (error) {
+				console.error(error);
+				res.status(500).send(error);
+			}
 		});
 
 		this.router.post('/new/charactersheet', (req: Request, res: Response) => {
@@ -75,7 +82,7 @@ export class RuleSetRouter {
 		this.router.get('/userrulesets', async (req: Request, res: Response) => {
 			try {
 				const userId = req.user._id;
-				const ruleSets = await this.userRuleSetRepository.getAllRuleSets(userId);
+				const ruleSets = await this.userRuleSetRepo.getAllRuleSets(userId);
 				res.json(ruleSets);
 			}
 			catch (error) {
@@ -92,7 +99,7 @@ export class RuleSetRouter {
 
 		this.router.get('/charactersheet/:characterSheetId', async (req: Request, res: Response) => {
 			try {
-				let characterSheet: CharacterSheetModel = await this.sheetRepository.getCompiledCharacterSheet(req.params.characterSheetId);
+				let characterSheet: CharacterSheetModel = await this.characterSheetService.getCompiledCharacterSheet(req.params.characterSheetId);
 				res.json(characterSheet);
 			}
 			catch (error) {
@@ -111,6 +118,31 @@ export class RuleSetRouter {
 			try {
 				let npcs: CharacterModel[] = await this.characterRepository.findByRuleSetId(req.params.ruleSetId);
 				res.json(npcs);
+			}
+			catch (error) {
+				console.error(error);
+				res.status(500).send(error);
+			}
+		});
+
+		this.router.get('/export/:ruleSetId', async (req: Request, res: Response) => {
+			try {
+				const ruleSetId = req.params.ruleSetId;
+				const ruleSetData = await this.ruleSetService.getRuleSetJson(ruleSetId);
+				res.json(ruleSetData);
+			}
+			catch (error) {
+				console.error(error);
+				res.status(500).send(error);
+			}
+		});
+
+		this.router.post('/import', async (req: Request, res: Response) => {
+			try {
+				let file = req.body.file;
+				const userId = req.user._id;
+				await this.ruleSetService.createRuleSetFromJson(userId, JSON.parse(file));
+				res.status(200).send();
 			}
 			catch (error) {
 				console.error(error);

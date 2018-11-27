@@ -1,5 +1,4 @@
 import * as mongoose from 'mongoose';
-import { Promise } from 'bluebird';
 import { CharacterModel } from '../models/character.model';
 
 export class CharacterRepository {
@@ -9,7 +8,7 @@ export class CharacterRepository {
 		this.Character = mongoose.model('Character');
 	}
 
-	public create(label: string, creatorUserId: string, characterSheetId: string, npc: boolean = true): Promise<Error | CharacterModel> {
+	public create(creatorUserId: string, label: string, characterSheetId: string, npc: boolean = true): Promise<CharacterModel> {
 		return new Promise((resolve, reject) => {
 			this.Character.create({
 				label: label,
@@ -29,13 +28,13 @@ export class CharacterRepository {
 
 	public findById(id: string): Promise<CharacterModel> {
 		return new Promise((resolve, reject) => {
-			this.Character.findById(id, (error, ruleSet) => {
+			this.Character.findById(id, (error, character: CharacterModel) => {
 				if (error) {
 					reject(error);
 					return;
 				}
 
-				resolve(ruleSet);
+				resolve(character);
 			})
 		});
 	}
