@@ -4,18 +4,13 @@ import { UserProfileService } from "../../data-services/userProfile.service";
 import { Player } from "../../encounter/player";
 import { isUndefined } from "util";
 import { IsReadyService } from "../../utilities/services/isReady.service";
-import { UserProfile } from '../../types/userProfile';
-import { SocialRepository } from '../../social/social.repository';
 import { EncounterTeamsData } from '../../../../../shared/types/encounter/encounter-teams.data';
 
 @Injectable()
 export class BoardTeamsService extends IsReadyService {
-	private _users: {userProfile: UserProfile, teams: string[]}[];
-
 	constructor(
 			private encounterService: EncounterService,
 			private userProfileService: UserProfileService,
-			private socialRepo: SocialRepository,
 	) {
 		super(encounterService, userProfileService);
 		this.init();
@@ -25,7 +20,6 @@ export class BoardTeamsService extends IsReadyService {
 		this.dependenciesSub = this.dependenciesReady().subscribe((isReady: boolean) => {
 			if (isReady && !this.isReady()) {
 				console.log('boardTeamsService.init() -> isReady');
-				this.initUsers();
 				this.setReady(true);
 			}
 		})
@@ -72,23 +66,8 @@ export class BoardTeamsService extends IsReadyService {
 		return false;
 	}
 
-	public isUserMemberOfTeam(userId: string, team: string): boolean {
-		for (let user of this._users) {
-			if (userId === user.userProfile._id) {
-				for (let userTeam of user.teams) {
-					if (team === userTeam) {
-						return true;
-					}
-				}
-			}
-		}
-
-		return false;
-	}
-
 	public setTeamsData(data: EncounterTeamsData): void {
 		this.encounterService.teamsData = data;
-		this.initUsers();
 	}
 
 	get teams(): string[] {
@@ -96,29 +75,6 @@ export class BoardTeamsService extends IsReadyService {
 	}
 
 	get users() {
-		return this._users;
-	}
-
-	private initUsers(): void {
-		let users = [];
-		for (let userObj of this.encounterService.users) {
-			this.socialRepo.getUserById(userObj.userId).subscribe((user: UserProfile) => {
-				let unique = true;
-				for (let _user of this._users) {
-					if (user._id === _user.userProfile._id) {
-						unique = false;
-						break;
-					}
-				}
-
-				if (unique) {
-					users.push({
-						userProfile: user,
-						teams: userObj.teams,
-					});
-				}
-			});
-		}
-		this._users = users;
+		return [];
 	}
 }

@@ -13,7 +13,7 @@
 				><mat-icon>remove</mat-icon></button>
 			</mat-header-cell>
 			<mat-cell *matCellDef="let user">
-				<mat-checkbox [checked]="isUserMemberOfTeam(user.userProfile._id, team)" (change)="toggleUserTeam(user, team)"></mat-checkbox>
+				<mat-checkbox [checked]="user.isMemberOfTeam(team)" (change)="toggleUserTeam(user, team)"></mat-checkbox>
 			</mat-cell>
 		</ng-container>
 	</ng-container>

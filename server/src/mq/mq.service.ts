@@ -133,6 +133,8 @@ export class MqService {
 					case EncounterCommandType.TEAMS_CHANGE: {
 						const data = command.body.data;
 						this.encounterService.setEncounterTeamsData(encounterId, data);
+						console.log('teams have changed')
+						console.log(data)
 						break;
 					}
 					default: {

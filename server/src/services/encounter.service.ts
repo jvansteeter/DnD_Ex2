@@ -16,6 +16,8 @@ import { EncounterConfigData } from '../../../shared/types/encounter/encounter-c
 import { LightValue } from '../../../shared/types/encounter/board/light-value';
 import { PlayerVisibilityMode } from '../../../shared/types/encounter/board/player-visibility-mode';
 import { EncounterTeamsData } from '../../../shared/types/encounter/encounter-teams.data';
+import { UserRepository } from '../db/repositories/user.repository';
+import { UserModel } from '../db/models/user.model';
 
 export class EncounterService {
 	private encounterRepo: EncounterRepository;
@@ -23,6 +25,7 @@ export class EncounterService {
 	private characterSheetRepo: CharacterSheetRepository;
 	private characterService: CharacterService;
 	private notationRepo: NotationRepository;
+	private userRepo: UserRepository;
 
 	constructor() {
 		this.encounterRepo = new EncounterRepository();
@@ -30,6 +33,7 @@ export class EncounterService {
 		this.characterSheetRepo = new CharacterSheetRepository();
 		this.characterService = new CharacterService();
 		this.notationRepo = new NotationRepository();
+		this.userRepo = new UserRepository();
 	}
 
 	public async create(hostId: string, label: string, campaignId: string, mapDimX: number, mapDimY: number, mapUrl?: string): Promise<EncounterModel> {
@@ -67,22 +71,19 @@ export class EncounterService {
 	}
 
 	public async addUserToEncounter(encounterId: string, userId: string): Promise<EncounterModel> {
-		try {
-			let encounter: EncounterModel = await this.encounterRepo.findById(encounterId);
-			for (let user of encounter.teamsData.users) {
-				if (user.userId == userId) {
-					return encounter;
-				}
+		let encounter: EncounterModel = await this.encounterRepo.findById(encounterId);
+		for (let user of encounter.teamsData.users) {
+			if (user.userId == userId) {
+				return encounter;
 			}
+		}
 
-			const isGameMaster = this.isGameMaster(userId, encounter);
-			const teams = isGameMaster ? ['GM'] : ['Player'];
-			encounter = await encounter.addUser(userId, teams);
-			return encounter;
-		}
-		catch (error) {
-			throw error;
-		}
+		const isGameMaster = this.isGameMaster(userId, encounter);
+		const teams = isGameMaster ? ['GM'] : ['Player'];
+		console.log('add user to encounter')
+		const userModel: UserModel = await this.userRepo.findById(userId);
+		encounter = await encounter.addUser(userId, userModel.username, teams);
+		return encounter;
 	}
 
 	public async setEncounter(encounterData: EncounterData): Promise<EncounterModel> {

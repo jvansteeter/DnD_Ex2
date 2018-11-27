@@ -17,6 +17,7 @@ export class TeamSettingsComponent implements OnInit {
 	            public encounterService: EncounterService) {}
 
 	public ngOnInit(): void {
+		console.log('init')
 		this.tokenTableCols.push(...this.teamsService.teams);
 		this.userTableCols.push(...this.teamsService.teams);
 	}
@@ -54,9 +55,5 @@ export class TeamSettingsComponent implements OnInit {
 				return;
 			}
 		}
-	}
-
-	public isUserMemberOfTeam(userId: string, team: string): void {
-		this.teamsService.isUserMemberOfTeam(userId, team);
 	}
 }

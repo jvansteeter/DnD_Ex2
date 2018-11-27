@@ -47,8 +47,7 @@ export class EncounterState implements EncounterData {
 		}
 		this.configState = new EncounterConfigState();
 		this.configState.setEncounterConfigData(encounterStateData.config);
-		this.teamsState = new EncounterTeamsState();
-		this.teamsState.setEncounterTeamsData(encounterStateData.teamsData);
+		this.teamsState = new EncounterTeamsState(encounterStateData.teamsData);
 	}
 
 	public getAspectValue(playerId: string, aspectLabel: string): any {

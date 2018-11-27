@@ -81,6 +81,7 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 				teams: [String],
 				users: [{
 					userId: String,
+					username: String,
 					teams: [String],
 				}],
 			},
@@ -223,9 +224,10 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 		return this.save();
 	}
 
-	public addUser(userId: string, teams: string[]): Promise<EncounterModel> {
+	public addUser(userId: string, username: string, teams: string[]): Promise<EncounterModel> {
 		this.teamsData.users.push({
 			userId: userId,
+			username: username,
 			teams: teams,
 		});
 		return this.save();

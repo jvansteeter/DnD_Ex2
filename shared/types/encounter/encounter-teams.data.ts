@@ -1,7 +1,8 @@
 export interface EncounterTeamsData {
 	teams: string[];
-	users: [{
+	users: {
 		userId: string,
+		username: string,
 		teams: string[],
-	}];
+	}[];
 }
