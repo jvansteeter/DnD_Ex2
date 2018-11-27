@@ -52,11 +52,29 @@ export class LightRendererComponent implements OnInit, OnDestroy {
                 this.boardLightService.canvas_rebuild_lightSources = false;
             }
 
-            this.ctx_root.drawImage(this.boardLightService.canvas_dark, 0, 0);
-
-            this.ctx_root.globalAlpha = 0.5;
-            this.ctx_root.drawImage(this.boardLightService.canvas_dim, 0, 0);
-            this.ctx_root.globalAlpha = 1.0;
+            switch (this.boardStateService.board_view_mode) {
+                case ViewMode.BOARD_MAKER:
+                    this.ctx_root.globalAlpha = 0.45;
+                    this.ctx_root.drawImage(this.boardLightService.canvas_dark, 0, 0);
+                    this.ctx_root.globalAlpha = 0.25;
+                    this.ctx_root.drawImage(this.boardLightService.canvas_dim, 0, 0);
+                    this.ctx_root.globalAlpha = 1.0;
+                    break;
+                case ViewMode.MASTER:
+                    this.ctx_root.globalAlpha = 0.45;
+                    this.ctx_root.drawImage(this.boardLightService.canvas_dark, 0, 0);
+                    this.ctx_root.globalAlpha = 0.25;
+                    this.ctx_root.drawImage(this.boardLightService.canvas_dim, 0, 0);
+                    this.ctx_root.globalAlpha = 1.0;
+                    break;
+                case ViewMode.PLAYER:
+                    this.ctx_root.globalAlpha = 1.0;
+                    this.ctx_root.drawImage(this.boardLightService.canvas_dark, 0, 0);
+                    this.ctx_root.globalAlpha = 0.75;
+                    this.ctx_root.drawImage(this.boardLightService.canvas_dim, 0, 0);
+                    this.ctx_root.globalAlpha = 1.0;
+                    break;
+            }
         }
 
         this.frameId = requestAnimationFrame(this.render);
