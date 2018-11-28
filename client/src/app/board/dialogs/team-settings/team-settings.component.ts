@@ -3,6 +3,7 @@ import { Player } from '../../../encounter/player';
 import { isNullOrUndefined } from 'util';
 import { BoardTeamsService } from '../../services/board-teams.service';
 import { EncounterService } from '../../../encounter/encounter.service';
+import { TeamUser } from "../../services/team-user";
 
 @Component({
 	templateUrl: 'team-settings.component.html',
@@ -17,7 +18,6 @@ export class TeamSettingsComponent implements OnInit {
 	            public encounterService: EncounterService) {}
 
 	public ngOnInit(): void {
-		console.log('init')
 		this.tokenTableCols.push(...this.teamsService.teams);
 		this.userTableCols.push(...this.teamsService.teams);
 	}
@@ -26,8 +26,8 @@ export class TeamSettingsComponent implements OnInit {
 		player.toggleTeam(team);
 	}
 
-	public toggleUserTeam(user, team: string): void {
-		this.teamsService.toggleUserTeam(user.userProfile._id, team);
+	public toggleUserTeam(user: TeamUser, team: string): void {
+		this.teamsService.toggleUserTeam(user.id, team);
 	}
 
 	public addTeam(): void {

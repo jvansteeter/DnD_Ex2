@@ -105,40 +105,39 @@ export class EncounterService {
 	}
 
 	public async addCharacters(encounterId: string, userId: string, characters: CharacterData[]): Promise<void> {
-		try {
-			let encounter: EncounterModel = await this.encounterRepo.findById(encounterId);
-			const placementMap: boolean[][] = await this.getPlayerPlacementMap(encounter);
-			let playerCount = 0;
-			for (let character of characters) {
-				let player = await this.playerRepo.create(encounterId, userId, character);
-				let placed: boolean = false;
-				let x;
-				let y = 0;
-				while (!placed && y < placementMap[0].length) {
-					x = 0;
-					while (!placed && x < placementMap.length) {
-						if (placementMap[x][y] === false) {
-							player = await player.setLocation(x, y);
-							player.location.x = x;
-							player.location.y = y;
-							playerCount++;
-							await encounter.addPlayer(player);
-							player.characterData.characterSheet = await this.characterSheetRepo.findById(player.characterData.characterSheetId);
-							await MqServiceSingleton.sendEncounterCommand(encounterId, userId, EncounterCommandType.ADD_PLAYER, encounter.version + playerCount, player);
-							placementMap[x][y] = true;
-							placed = true;
+		let encounter: EncounterModel = await this.encounterRepo.findById(encounterId);
+		const placementMap: boolean[][] = await this.getPlayerPlacementMap(encounter);
+		let playerCount = 0;
+		for (let character of characters) {
+			let player = await this.playerRepo.create(encounterId, userId, character);
+			let placed: boolean = false;
+			let x;
+			let y = 0;
+			while (!placed && y < placementMap[0].length) {
+				x = 0;
+				while (!placed && x < placementMap.length) {
+					if (placementMap[x][y] === false) {
+						player = await player.setLocation(x, y);
+						if (this.isGameMaster(userId, encounter)) {
+							player = await player.setTeams(['GM'])
 						}
-						x++;
+						else {
+							player = await player.setTeams(['Player']);
+						}
+						playerCount++;
+						await encounter.addPlayer(player);
+						player.characterData.characterSheet = await this.characterSheetRepo.findById(player.characterData.characterSheetId);
+						await MqServiceSingleton.sendEncounterCommand(encounterId, userId, EncounterCommandType.ADD_PLAYER, encounter.version + playerCount, player);
+						placementMap[x][y] = true;
+						placed = true;
 					}
-					y++;
+					x++;
 				}
+				y++;
 			}
+		}
 
-			return;
-		}
-		catch (error) {
-			throw error;
-		}
+		return;
 	}
 
 	public async deleteEncounter(encounterId: string): Promise<void> {

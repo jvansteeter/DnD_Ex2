@@ -34,6 +34,7 @@ export class PlayerModel extends MongooseModel implements PlayerData {
 
 		this.methods.setLocation = this.setLocation;
 		this.methods.setVisible = this.setVisible;
+		this.methods.setTeams = this.setTeams;
 	}
 
 	public setLocation(x: number, y: number): Promise<PlayerModel> {
@@ -46,6 +47,11 @@ export class PlayerModel extends MongooseModel implements PlayerData {
 
 	public setVisible(isVisible: boolean): Promise<PlayerModel> {
 		this.isVisible = isVisible;
+		return this.save();
+	}
+
+	public setTeams(teams: string[]): Promise<PlayerModel> {
+		this.teams = teams;
 		return this.save();
 	}
 }

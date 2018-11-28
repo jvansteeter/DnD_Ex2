@@ -12,6 +12,7 @@ import { LightValue } from '../../../../shared/types/encounter/board/light-value
 import { PlayerVisibilityMode } from '../../../../shared/types/encounter/board/player-visibility-mode';
 import { EncounterTeamsData } from '../../../../shared/types/encounter/encounter-teams.data';
 import { LightSourceData } from '../../../../shared/types/encounter/board/light-source.data';
+import { TeamUser } from "../board/services/team-user";
 
 @Injectable()
 export class EncounterService extends IsReadyService {
@@ -207,9 +208,9 @@ export class EncounterService extends IsReadyService {
 		return this.encounterState.teamsChangeObservable;
 	}
 
-	get users() {
+	get users(): TeamUser[] {
 		if (this.encounterState) {
-			return this.encounterState.teamsData.users;
+			return this.encounterState.users;
 		}
 
 		return [];

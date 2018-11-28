@@ -10,6 +10,7 @@ import { EncounterConfigState } from './encounter-config.state';
 import { Observable } from 'rxjs';
 import { EncounterTeamsData } from '../../../../shared/types/encounter/encounter-teams.data';
 import { EncounterTeamsState } from './encounter-teams.state';
+import { TeamUser } from "../board/services/team-user";
 
 export class EncounterState implements EncounterData {
 	_id: string;
@@ -113,5 +114,13 @@ export class EncounterState implements EncounterData {
 		if (this.teamsState) {
 			this.teamsState.setEncounterTeamsData(value);
 		}
+	}
+
+	get users(): TeamUser[] {
+		if (this.teamsState) {
+			return this.teamsState.users;
+		}
+
+		return [];
 	}
 }

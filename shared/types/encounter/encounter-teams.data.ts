@@ -1,8 +1,6 @@
+import { TeamUserData } from "./team-user.data";
+
 export interface EncounterTeamsData {
 	teams: string[];
-	users: {
-		userId: string,
-		username: string,
-		teams: string[],
-	}[];
+	users: TeamUserData[];
 }

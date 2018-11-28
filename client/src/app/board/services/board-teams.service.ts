@@ -75,6 +75,6 @@ export class BoardTeamsService extends IsReadyService {
 	}
 
 	get users() {
-		return [];
+		return this.encounterService.users;
 	}
 }

@@ -1,12 +1,14 @@
-export class TeamUser {
-	private userId: string;
-	private username: string;
-	private teams: string[];
+import { TeamUserData } from "../../../../../shared/types/encounter/team-user.data";
 
-	constructor(userId: string, username: string, teams: string[]) {
-		this.userId = userId;
-		this.username = username;
-		this.teams = teams;
+export class TeamUser implements TeamUserData {
+	userId: string;
+	username: string;
+	teams: string[];
+
+	constructor(user: TeamUserData) {
+		this.userId = user.userId;
+		this.username = user.username;
+		this.teams = user.teams;
 	}
 
 	public isMemberOfTeam(team: string): boolean {

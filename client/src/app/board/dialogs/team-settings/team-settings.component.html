@@ -1,7 +1,7 @@
 <mat-table [dataSource]="teamsService.users">
 	<ng-container matColumnDef="user">
 		<mat-header-cell *matHeaderCellDef>User</mat-header-cell>
-		<mat-cell *matCellDef="let user">{{user.userProfile.username}}</mat-cell>
+		<mat-cell *matCellDef="let user">{{user.username}}</mat-cell>
 	</ng-container>
 	<ng-container *ngFor="let team of encounterService.teams">
 		<ng-container [matColumnDef]="team">
