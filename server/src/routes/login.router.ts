@@ -63,7 +63,8 @@ export class LoginRouter {
 					return;
 				}
 
-				await this.userRepo.create(username, password, firstName, lastName);
+				let newUser: UserModel = await this.userRepo.create(username, password, firstName, lastName);
+				await MqServiceSingleton.createMqAccount(newUser);
 				res.send('OK');
 			}
 			catch (error) {

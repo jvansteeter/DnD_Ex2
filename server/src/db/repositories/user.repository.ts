@@ -1,7 +1,5 @@
 import * as mongoose from 'mongoose';
 import { UserModel } from '../models/user.model';
-import { Promise } from 'bluebird';
-import { MqServiceSingleton } from '../../mq/mq.service';
 
 export class UserRepository {
 	private user: mongoose.Model<mongoose.Document>;
@@ -27,14 +25,22 @@ export class UserRepository {
 					newUser.setLastName(lastName);
 				}
 
-				await MqServiceSingleton.createMqAccount(newUser);
 				resolve(newUser);
 			});
 		});
 	}
 
 	public findById(id: string): Promise<UserModel> {
-		return this.user.findById(id);
+		return new Promise((resolve, reject) => {
+			this.user.findById(id, (error, user: UserModel) => {
+				if (error) {
+					reject(error);
+					return;
+				}
+
+				resolve(user);
+			});
+		});
 	}
 
 	public findBySearch(searchCriteria: string): Promise<UserModel[]> {
@@ -52,6 +58,15 @@ export class UserRepository {
 	}
 
 	public findByUsername(username: string): Promise<UserModel> {
-		return this.user.findOne({username: username});
+		return new Promise((resolve, reject) => {
+			this.user.findOne({username: username}, (error, user: UserModel) => {
+				if (error) {
+					reject(error);
+					return;
+				}
+
+				resolve(user);
+			})
+		});
 	}
 }
