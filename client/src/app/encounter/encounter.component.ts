@@ -20,6 +20,8 @@ import {BoardNotationService} from "../board/services/board-notation-service";
     styleUrls: ['encounter.component.scss']
 })
 export class EncounterComponent implements OnInit, OnDestroy {
+    public finishedLoading: boolean = false;
+
     constructor(private encounterService: EncounterService,
                 private activatedRoute: ActivatedRoute,
                 private encounterConcurrencyService: EncounterConcurrencyService,
@@ -46,6 +48,12 @@ export class EncounterComponent implements OnInit, OnDestroy {
                     this.rightsService.setEncounterService(this.encounterService);
                 }
             });
+        });
+
+        this.boardCanvasService.isReadyObservable.subscribe((isReady: boolean) => {
+            if (isReady) {
+                this.finishedLoading = true;
+            }
         });
 
         this.boardStateService.init();

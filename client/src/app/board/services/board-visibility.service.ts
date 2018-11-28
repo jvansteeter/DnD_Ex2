@@ -17,6 +17,10 @@ export class BoardVisibilityService extends IsReadyService {
     public blockingSegments: Set<string>;       // Set<CellTarget.hash()>
     private blockingBitmap: BitArray;
 
+    public canvas_rebuild_visibility_ctx: boolean = true;
+    public canvas_vis: HTMLCanvasElement;
+    public canvas_vis_context: CanvasRenderingContext2D;
+
     constructor(
         public boardStateService: BoardStateService,
         public boardCanvasService: BoardCanvasService,
@@ -31,6 +35,13 @@ export class BoardVisibilityService extends IsReadyService {
                 console.log('boardVisibilityService.init() -> isReady');
                 this.blockingSegments = new Set();
                 this.blockingBitmap = new BitArray(BoardStateService.num_pixels);
+
+                this.canvas_rebuild_visibility_ctx = true;
+                this.canvas_vis = document.createElement('canvas');
+                this.canvas_vis.height = BoardStateService.map_res_y;
+                this.canvas_vis.width = BoardStateService.map_res_x;
+                this.canvas_vis_context = this.canvas_vis.getContext('2d');
+
                 this.setReady(true);
             }
         })
@@ -41,6 +52,8 @@ export class BoardVisibilityService extends IsReadyService {
         this.setReady(false);
         delete this.blockingBitmap;
         delete this.blockingSegments;
+        delete this.canvas_vis;
+        delete this.canvas_vis_context
     }
 
     public iKnowWhatImDoingGetTheBlockingBitMap(): BitArray {

@@ -5,22 +5,31 @@ import {XyPair} from '../../../../../shared/types/encounter/board/xy-pair';
 import {BoardVisibilityService} from './board-visibility.service';
 import {IsReadyService} from "../../utilities/services/isReady.service";
 import {EncounterService} from "../../encounter/encounter.service";
-import { LightSourcesState } from '../map-objects/light-sources.state';
-import { Observable } from 'rxjs';
+import {LightSourcesState} from '../map-objects/light-sources.state';
+import {Observable} from 'rxjs';
 import {GeometryStatics} from "../statics/geometry-statics";
 import {MatDialog} from "@angular/material";
 import {LightEditDialogComponent} from "../dialogs/light-edit-dialog/light-edit-dialog.component";
 import {isNullOrUndefined} from "util";
+import {BoardCanvasService} from "./board-canvas.service";
 
 @Injectable()
 export class BoardLightService extends IsReadyService {
     private lightSourceState: LightSourcesState;
 
+    public canvas_rebuild_lightSources: boolean = true;
+    public canvas_dark: HTMLCanvasElement;
+    public canvas_dark_context: CanvasRenderingContext2D;
+    public canvas_dim: HTMLCanvasElement;
+    public canvas_dim_context: CanvasRenderingContext2D;
+
+
     constructor(private boardStateService: BoardStateService,
                 private encounterService: EncounterService,
+                private boardCanvasService: BoardCanvasService,
                 private dialog: MatDialog,
                 private boardVisibilityService: BoardVisibilityService,) {
-        super(boardStateService, encounterService, boardVisibilityService);
+        super(boardStateService, encounterService, boardVisibilityService, boardCanvasService);
         this.init();
     }
 
@@ -29,8 +38,20 @@ export class BoardLightService extends IsReadyService {
         this.dependenciesSub = this.dependenciesReady().subscribe((isReady: boolean) => {
             if (isReady && !this.isReady()) {
                 console.log('boardLightService.init() -> isReady');
-            	  this.lightSourceState.lightSources = this.encounterService.lightSources;
-            	  this.updateAllLightValues();
+                this.lightSourceState.lightSources = this.encounterService.lightSources;
+
+                this.canvas_rebuild_lightSources = true;
+                this.canvas_dark = document.createElement('canvas');
+                this.canvas_dark.height = BoardStateService.map_res_y;
+                this.canvas_dark.width = BoardStateService.map_res_x;
+                this.canvas_dark_context = this.canvas_dark.getContext('2d');
+
+                this.canvas_dim = document.createElement('canvas');
+                this.canvas_dim.height = BoardStateService.map_res_y;
+                this.canvas_dim.width = BoardStateService.map_res_x;
+                this.canvas_dim_context = this.canvas_dim.getContext('2d');
+
+                this.updateAllLightValues();
                 this.setReady(true);
             }
         });
@@ -39,6 +60,11 @@ export class BoardLightService extends IsReadyService {
     public unInit(): void {
         console.log('boardLightService.unInit()');
         delete this.lightSourceState;
+        delete this.canvas_dim;
+        delete this.canvas_dim_context;
+        delete this.canvas_dark;
+        delete this.canvas_dark_context;
+
         super.unInit();
     }
 
@@ -53,15 +79,15 @@ export class BoardLightService extends IsReadyService {
     }
 
     public updateLightValue(lightSource: LightSource): void {
-	    const polys = this.generateLightPolygons(lightSource);
-	    lightSource.dim_polygon = polys.dim_poly;
-	    lightSource.bright_polygon = polys.bright_poly;
+        const polys = this.generateLightPolygons(lightSource);
+        lightSource.dim_polygon = polys.dim_poly;
+        lightSource.bright_polygon = polys.bright_poly;
     }
 
     public attemptLightDialog(cell: XyPair): void {
         const lightSource = this.lightSourceState.getLightSourceData_byCell(cell) as LightSource;
         if (!isNullOrUndefined(lightSource)) {
-            this.dialog.open(LightEditDialogComponent, {data: {lightSource: lightSource}}).afterClosed().subscribe((lightRanges: {bright_range: number, dim_range: number}) => {
+            this.dialog.open(LightEditDialogComponent, {data: {lightSource: lightSource}}).afterClosed().subscribe((lightRanges: { bright_range: number, dim_range: number }) => {
                 if (!isNullOrUndefined(lightRanges)) {
                     this.lightSourceState.updateLightSourceBrightRange_byCell(cell, lightRanges.bright_range);
                     this.lightSourceState.updateLightSourceDimRange_byCell(cell, lightRanges.dim_range);
@@ -72,8 +98,8 @@ export class BoardLightService extends IsReadyService {
         }
     }
 
-    public generateLightPolygons(source: LightSource): {bright_poly: Array<XyPair>, dim_poly: Array<XyPair>} {
-        const lightSourcePixelLocation = new XyPair(source.location.x * BoardStateService.cell_res  + BoardStateService.cell_res/2, source.location.y * BoardStateService.cell_res  + BoardStateService.cell_res/2);
+    public generateLightPolygons(source: LightSource): { bright_poly: Array<XyPair>, dim_poly: Array<XyPair> } {
+        const lightSourcePixelLocation = new XyPair(source.location.x * BoardStateService.cell_res + BoardStateService.cell_res / 2, source.location.y * BoardStateService.cell_res + BoardStateService.cell_res / 2);
 
         const bright_pixel_range = source.bright_range * BoardStateService.cell_res + BoardStateService.cell_res / 2;
         const bright_range_circle = GeometryStatics.BresenhamCircle(lightSourcePixelLocation, bright_pixel_range);
@@ -83,6 +109,7 @@ export class BoardLightService extends IsReadyService {
         const dim_range_circle = GeometryStatics.BresenhamCircle(lightSourcePixelLocation, dim_pixel_range);
         const dim_poly = this.boardVisibilityService.raytraceVisibilityFromCell(lightSourcePixelLocation, this.boardStateService.diag_visibility_ray_count, ...this.cropCircle(dim_range_circle));
 
+        this.canvas_rebuild_lightSources = true;
         return {bright_poly: bright_poly, dim_poly: dim_poly};
     }
 
@@ -108,19 +135,19 @@ export class BoardLightService extends IsReadyService {
     }
 
     public getSerializedState(): string {
-    	return JSON.stringify(this.lightSourceState.lightSources);
+        return JSON.stringify(this.lightSourceState.lightSources);
     }
 
     get lightSources(): Array<LightSource> {
-    	return this.lightSourceState.lightSources as LightSource[];
+        return this.lightSourceState.lightSources as LightSource[];
     }
 
     set lightSources(value: Array<LightSource>) {
-    	this.lightSourceState.lightSources = value;
+        this.lightSourceState.lightSources = value;
     }
 
     get lightSourcesChangeObservable(): Observable<void> {
-    	return this.lightSourceState.changeObservable;
+        return this.lightSourceState.changeObservable;
     }
 
     public getLightSourceAtCell(cell: XyPair): LightSource {

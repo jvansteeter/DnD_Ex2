@@ -44,6 +44,10 @@ export class VisibilityRendererComponent implements OnInit, OnDestroy {
         this.boardCanvasService.clear_canvas(this.ctx);
         this.boardCanvasService.updateTransform(this.ctx);
 
+        if (this.boardVisibilityService.canvas_rebuild_visibility_ctx) {
+
+        }
+
         switch (this.boardStateService.board_view_mode) {
             /***************************************************************************************************************************************************************************************
              * View mode - BOARD_MAKER
