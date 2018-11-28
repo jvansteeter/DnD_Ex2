@@ -11,6 +11,10 @@ import {IsReadyService} from "../../utilities/services/isReady.service";
 export class BoardCanvasService extends IsReadyService {
     public mapContainerNativeElement;
 
+    public rebuild_grid_canvas: boolean = true;
+    public grid_canvas: HTMLCanvasElement;
+    public grid_canvas_ctx: CanvasRenderingContext2D;
+
     constructor(
         private boardStateService: BoardStateService
     ) {
@@ -24,6 +28,13 @@ export class BoardCanvasService extends IsReadyService {
                 if (this.dependenciesSub) {
                     this.dependenciesSub.unsubscribe();
                 }
+
+                this.rebuild_grid_canvas = true;
+                this.grid_canvas = document.createElement('canvas');
+                this.grid_canvas.height = BoardStateService.map_res_y;
+                this.grid_canvas.width = BoardStateService.map_res_x;
+                this.grid_canvas_ctx = this.grid_canvas.getContext('2d');
+
                 this.setReady(true);
             }
         })

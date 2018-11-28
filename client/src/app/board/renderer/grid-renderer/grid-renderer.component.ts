@@ -9,7 +9,7 @@ import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/co
 
 export class GridRendererComponent implements OnInit, OnDestroy {
   @ViewChild('gridRenderCanvas') gridRenderCanvas: ElementRef;
-  private ctx: CanvasRenderingContext2D;
+  private ctx_root: CanvasRenderingContext2D;
   private frameId;
 
   constructor(
@@ -18,7 +18,7 @@ export class GridRendererComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.ctx = this.gridRenderCanvas.nativeElement.getContext('2d');
+    this.ctx_root = this.gridRenderCanvas.nativeElement.getContext('2d');
     this.render();
   }
 
@@ -27,13 +27,16 @@ export class GridRendererComponent implements OnInit, OnDestroy {
   }
 
   render = () => {
-    this.boardCanvasService.clear_canvas(this.ctx);
-    this.boardCanvasService.updateTransform(this.ctx);
+    this.boardCanvasService.clear_canvas(this.ctx_root);
+    this.boardCanvasService.updateTransform(this.ctx_root);
 
     if (this.boardStateService.gridEnabled) {
-        this.boardCanvasService.draw_grid(this.ctx);
+      if (this.boardCanvasService.rebuild_grid_canvas) {
+          this.boardCanvasService.draw_grid(this.boardCanvasService.grid_canvas_ctx);
+      }
     }
 
+    this.ctx_root.drawImage(this.boardCanvasService.grid_canvas, 0, 0);
     this.frameId = requestAnimationFrame(this.render);
   }
 }
