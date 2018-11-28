@@ -1,4 +1,3 @@
-import { Promise } from 'bluebird';
 import { FriendRepository } from '../db/repositories/friend.repository';
 import { UserModel } from "../db/models/user.model";
 import { FriendModel } from '../db/models/friend.model';
@@ -79,7 +78,7 @@ export class SocialService {
 
 	public async findUserById(userId: string): Promise<UserModel> {
 		try {
-			let user: UserModel = this.userRepo.findById(userId);
+			let user: UserModel = await this.userRepo.findById(userId);
 			delete user.passwordHash;
 			return user;
 		}
