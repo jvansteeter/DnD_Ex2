@@ -1,5 +1,4 @@
 import * as mongoose from 'mongoose';
-import { Promise } from 'bluebird';
 import { CharacterAspectModel } from '../models/characterAspect.model';
 import { AspectData } from '../../../../shared/types/rule-set/aspect.data';
 
@@ -35,7 +34,7 @@ export class CharacterAspectRepository {
 	}
 
 	public async findById(id: string): Promise<CharacterAspectModel> {
-		return new Promise((resolve, reject) => {
+		return new Promise<CharacterAspectModel>((resolve, reject) => {
 			this.CharacterAspect.findById(id, (error, characterAspect: CharacterAspectModel) => {
 				if (error) {
 					reject(error);
@@ -71,7 +70,7 @@ export class CharacterAspectRepository {
 		});
 	}
 
-	public removeByCharacterSheetId(id: string): Promise<CharacterAspectModel[]> {
+	public removeByCharacterSheetId(id: string): Promise<void> {
 		return new Promise((resolve, reject) => {
 			this.CharacterAspect.remove({characterSheetId: id}, (error) => {
 				if (error) {

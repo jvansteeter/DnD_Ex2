@@ -32,6 +32,19 @@ export class CampaignRouter {
 			}).catch(error => res.status(500).send(error));
 		});
 
+		this.router.post('/delete', async (req: Request, res: Response) => {
+			try {
+				const userId: string = req.user._id;
+				const campaignId: string = req.body.campaignId;
+				await this.campaignService.delete(userId, campaignId);
+				res.status(200).send();
+			}
+			catch (error) {
+				console.error(error);
+				res.status(500).send(error);
+			}
+		});
+
 		this.router.get('/all', (req: Request, res: Response) => {
 			this.campaignService.findAllForUser(req.user._id).then((campaigns: CampaignModel[]) => {
 				res.json(campaigns);

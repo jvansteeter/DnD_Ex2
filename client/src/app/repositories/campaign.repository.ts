@@ -5,7 +5,6 @@ import { UserProfile } from '../types/userProfile';
 import { map } from 'rxjs/operators';
 import { CampaignData } from '../../../../shared/types/campaign.data';
 import { EncounterData } from '../../../../shared/types/encounter/encounter.data';
-import { isUndefined } from 'util';
 
 @Injectable()
 export class CampaignRepository {
@@ -51,5 +50,9 @@ export class CampaignRepository {
 		};
 
 		return this.http.post<void>('/api/campaign/setGameMaster', body);
+	}
+
+	public deleteCampaign(campaignId: string): Observable<void> {
+		return this.http.post<void>('/api/campaign/delete', {campaignId: campaignId});
 	}
 }

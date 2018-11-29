@@ -37,4 +37,8 @@ export class RuleSetRepository {
 	public importRuleSetFromJson(jsonFile: any): Observable<void> {
 		return this.http.post<void>('/api/ruleset/import/', {file: jsonFile});
 	}
+
+	public deleteRuleSet(ruleSetId: string): Observable<void> {
+		return this.http.post<void>('/api/ruleset/delete', {ruleSetId: ruleSetId});
+	}
 }

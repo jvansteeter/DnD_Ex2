@@ -4,23 +4,20 @@ import { CharacterAspectModel } from '../db/models/characterAspect.model';
 import { CharacterSheetModel } from '../db/models/characterSheet.model';
 
 export class CharacterSheetService {
-	private sheetRepository: CharacterSheetRepository;
-	private aspectRepository: CharacterAspectRepository;
+	private sheetRepo: CharacterSheetRepository;
+	private aspectRepo: CharacterAspectRepository;
 
 	constructor() {
-		this.sheetRepository = new CharacterSheetRepository();
-		this.aspectRepository = new CharacterAspectRepository();
+		this.sheetRepo = new CharacterSheetRepository();
+		this.aspectRepo = new CharacterAspectRepository();
 	}
 
 	public async saveCharacterSheet(characterSheetObj: any): Promise<CharacterSheetModel> {
-		let sheetModel: CharacterSheetModel = await this.sheetRepository.findById(characterSheetObj._id);
-		let oldAspects = await this.aspectRepository.findByCharacterSheetId(sheetModel._id);
+		let sheetModel: CharacterSheetModel = await this.sheetRepo.findById(characterSheetObj._id);
+		await this.aspectRepo.removeByCharacterSheetId(sheetModel._id);
 		let newAspects = characterSheetObj.aspects;
-		for (let aspect of oldAspects) {
-			await this.aspectRepository.deleteById(aspect._id);
-		}
 		for (let aspect of newAspects) {
-			await this.aspectRepository.create(sheetModel._id, aspect);
+			await this.aspectRepo.create(sheetModel._id, aspect);
 		}
 
 		sheetModel.tooltipConfig = characterSheetObj.tooltipConfig;
@@ -28,10 +25,15 @@ export class CharacterSheetService {
 	}
 
 	public async getCompiledCharacterSheet(id: string): Promise<any> {
-		let characterSheet = await this.sheetRepository.findById(id);
+		let characterSheet = await this.sheetRepo.findById(id);
 		let characterSheetObj = JSON.parse(JSON.stringify(characterSheet));
-		let aspects: CharacterAspectModel[] = await this.aspectRepository.findByCharacterSheetId(characterSheet._id);
+		let aspects: CharacterAspectModel[] = await this.aspectRepo.findByCharacterSheetId(characterSheet._id);
 		characterSheetObj.aspects = JSON.parse(JSON.stringify(aspects));
 		return characterSheetObj;
+	}
+
+	public async deleteById(id: string): Promise<void> {
+		await this.aspectRepo.removeByCharacterSheetId(id);
+		await this.sheetRepo.deleteById(id);
 	}
 }

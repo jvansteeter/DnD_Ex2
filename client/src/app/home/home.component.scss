@@ -30,16 +30,8 @@
 	margin: 20px;
 }
 
-.home-leftContent {
-
-}
-
 .home-rightContent {
 	flex: 1;
-}
-
-.home-menuOptions {
-
 }
 
 .home-menuOptions mat-list mat-list-item button {
@@ -53,4 +45,8 @@
 
 /deep/ .profilePhoto-card mat-card mat-card-content {
 	height: 100%;
+}
+
+.options-button {
+	margin-left: auto;
 }

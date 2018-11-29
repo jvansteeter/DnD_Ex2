@@ -34,6 +34,10 @@ export class CampaignService extends IsReadyService {
 		return this.campaignRepository.getCampaign(campaignId);
 	}
 
+	public deleteCampaign(campaignId: string): Observable<void> {
+		return this.campaignRepository.deleteCampaign(campaignId);
+	}
+
 	public joinCampaign(campaignId: string): Observable<void> {
 		return this.campaignRepository.joinCampaign(campaignId).pipe(
 				tap(() => {

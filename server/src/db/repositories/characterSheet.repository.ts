@@ -53,7 +53,7 @@ export class CharacterSheetRepository {
 		});
 	}
 
-	public getAllForRuleSet(ruleSetId: string): Promise<CharacterSheetModel[]> {
+	public findByRuleSetId(ruleSetId: string): Promise<CharacterSheetModel[]> {
 		return new Promise((resolve, reject) => {
 			this.CharacterSheet.find({ruleSetId: ruleSetId}, (error, characterSheets: CharacterSheetModel[]) => {
 				if (error) {
@@ -62,6 +62,19 @@ export class CharacterSheetRepository {
 				}
 
 				resolve(characterSheets);
+			});
+		});
+	}
+
+	public deleteById(id: string): Promise<void> {
+		return new Promise((resolve, reject) => {
+			this.CharacterSheet.remove({_id: id}, (error) => {
+				if (error) {
+					reject(error);
+					return;
+				}
+
+				resolve();
 			});
 		});
 	}

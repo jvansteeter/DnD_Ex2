@@ -49,6 +49,19 @@ export class RuleSetRouter {
 			}).catch(error => res.status(500).send(error));
 		});
 
+		this.router.post('/delete', async (req: Request, res: Response) => {
+			try {
+				const userId: string = req.user._id;
+				const ruleSetId: string = req.body.ruleSetId;
+				await this.ruleSetService.deleteRuleSet(userId, ruleSetId);
+				res.status(200).send();
+			}
+			catch (error) {
+				console.error(error);
+				res.status(500).send(error);
+			}
+		});
+
 		this.router.post('/charactersheet/save', async (req: Request, res: Response) => {
 			try {
 				await this.characterSheetService.saveCharacterSheet(req.body);
@@ -82,7 +95,7 @@ export class RuleSetRouter {
 		this.router.get('/userrulesets', async (req: Request, res: Response) => {
 			try {
 				const userId = req.user._id;
-				const ruleSets = await this.userRuleSetRepo.getAllRuleSets(userId);
+				const ruleSets: RuleSetModel[] = await this.userRuleSetRepo.getAllRuleSets(userId);
 				res.json(ruleSets);
 			}
 			catch (error) {
@@ -92,7 +105,7 @@ export class RuleSetRouter {
 		});
 
 		this.router.get('/charactersheets/:ruleSetId', (req: Request, res: Response) => {
-			this.sheetRepository.getAllForRuleSet(req.params.ruleSetId).then((characterSheets: CharacterSheetModel[]) => {
+			this.sheetRepository.findByRuleSetId(req.params.ruleSetId).then((characterSheets: CharacterSheetModel[]) => {
 				res.json(characterSheets);
 			}).catch(error => res.status(500).send(error));
 		});

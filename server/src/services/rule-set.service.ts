@@ -7,6 +7,10 @@ import { UserRuleSetRepository } from '../db/repositories/user-ruleSet.repositor
 import { CharacterRepository } from '../db/repositories/character.repository';
 import { CharacterModel } from '../db/models/character.model';
 import { CharacterService } from './character.service';
+import { CampaignRepository } from '../db/repositories/campaign.repository';
+import { CampaignModel } from '../db/models/campaign.model';
+import { CampaignService } from './campaign.service';
+import { CharacterAspectRepository } from '../db/repositories/characterAspect.repository';
 
 export class RuleSetService {
 	private ruleSetRepo: RuleSetRepository;
@@ -15,6 +19,9 @@ export class RuleSetService {
 	private characterSheetService: CharacterSheetService;
 	private userRuleSetRepo:  UserRuleSetRepository;
 	private characterService: CharacterService;
+	private campaignRepo: CampaignRepository;
+	private campaignService: CampaignService;
+	private aspectRepo: CharacterAspectRepository;
 
 	constructor() {
 		this.ruleSetRepo = new RuleSetRepository();
@@ -23,6 +30,9 @@ export class RuleSetService {
 		this.characterSheetService = new CharacterSheetService();
 		this.userRuleSetRepo = new UserRuleSetRepository();
 		this.characterService = new CharacterService();
+		this.campaignRepo = new CampaignRepository();
+		this.campaignService = new CampaignService();
+		this.aspectRepo = new CharacterAspectRepository();
 	}
 
 	public async createNewRuleSet(userId: string, label: string): Promise<RuleSetModel> {
@@ -35,7 +45,7 @@ export class RuleSetService {
 	public async getRuleSetJson(ruleSetId: string): Promise<Object> {
 		try {
 			const ruleSetModel: RuleSetModel = await this.ruleSetRepo.findById(ruleSetId);
-			const characterSheetModels = await this.characterSheetRepo.getAllForRuleSet(ruleSetId);
+			const characterSheetModels = await this.characterSheetRepo.findByRuleSetId(ruleSetId);
 			const compiledSheets: any[] = [];
 			for (let sheetModel of characterSheetModels) {
 				const compiledSheet = await this.characterSheetService.getCompiledCharacterSheet(sheetModel._id);
@@ -82,6 +92,25 @@ export class RuleSetService {
 			await characterModel.setTokenUrl(npc.tokenUrl)
 		}
 		await this.userRuleSetRepo.create(userId, ruleSetModel._id);
+		return;
+	}
+
+	public async deleteRuleSet(userId: string, ruleSetId: string): Promise<void> {
+		await this.userRuleSetRepo.deleteAllByRuleSetId(ruleSetId);
+		const campaignModels: CampaignModel[] = await this.campaignRepo.findByRuleSetId(ruleSetId);
+		for (let campaign of campaignModels) {
+			await this.campaignService.delete(userId, campaign._id, true);
+		}
+		const ruleSetNpcs: CharacterModel[] = await this.characterRepo.findByRuleSetId(ruleSetId);
+		for (let npc of ruleSetNpcs) {
+			await this.characterRepo.deleteById(npc._id);
+		}
+		const characterSheets: CharacterSheetModel[] = await this.characterSheetRepo.findByRuleSetId(ruleSetId);
+		for (let sheet of characterSheets) {
+			await this.characterSheetService.deleteById(sheet._id);
+		}
+
+		await this.ruleSetRepo.deleteById(ruleSetId);
 		return;
 	}
 }

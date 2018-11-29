@@ -1,18 +1,19 @@
-import {NewRuleSetDialogComponent} from './dialog/new-rule-set-dialog.component';
-import {UserProfileService} from '../data-services/userProfile.service';
-import {SubjectDataSource} from '../utilities/subjectDataSource';
-import {RuleSetRepository} from '../repositories/rule-set.repository';
-import {NewCampaignDialogComponent} from './dialog/new-campaign-dialog.component';
+import { NewRuleSetDialogComponent } from './dialog/new-rule-set-dialog.component';
+import { UserProfileService } from '../data-services/userProfile.service';
+import { SubjectDataSource } from '../utilities/subjectDataSource';
+import { RuleSetRepository } from '../repositories/rule-set.repository';
+import { NewCampaignDialogComponent } from './dialog/new-campaign-dialog.component';
 import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
-import {Subject} from 'rxjs';
-import {MatDialog} from '@angular/material';
-import {Router} from '@angular/router';
-import {DashboardCard} from '../cdk/dashboard-card/dashboard-card';
-import {AddFriendComponent} from '../social/add-friend/add-friend.component';
-import {UserProfile} from '../types/userProfile';
-import {FriendService} from '../data-services/friend.service';
+import { Subject } from 'rxjs';
+import { MatDialog } from '@angular/material';
+import { Router } from '@angular/router';
+import { DashboardCard } from '../cdk/dashboard-card/dashboard-card';
+import { AddFriendComponent } from '../social/add-friend/add-friend.component';
+import { UserProfile } from '../types/userProfile';
+import { FriendService } from '../data-services/friend.service';
 import { CampaignService } from '../data-services/campaign.service';
 import { RuleSetData } from '../../../../shared/types/rule-set/rule-set.data';
+import { CampaignData } from '../../../../shared/types/campaign.data';
 
 @Component({
 	selector: 'home-page',
@@ -26,11 +27,11 @@ export class HomeComponent implements OnInit {
 	private profilePhotoUrl: string = '';
 
 	public ruleSets: RuleSetData[];
-	public ruleSetTableColumns = ['label'];
-	private readonly ruleSetSubject: Subject<any>;
-	private ruleSetDataSource: SubjectDataSource<any>;
+	public ruleSetTableColumns = ['label', 'options'];
+	private readonly ruleSetSubject: Subject<RuleSetData[]>;
+	private ruleSetDataSource: SubjectDataSource<RuleSetData>;
 
-	public campaignTableColumns = ['label'];
+	public campaignTableColumns = ['label', 'options'];
 
 	public ruleSetCard: DashboardCard;
 	public campaignCard: DashboardCard;
@@ -46,7 +47,7 @@ export class HomeComponent implements OnInit {
 	            private friendService: FriendService,
 	            private renderer: Renderer2,
 	            public campaignService: CampaignService) {
-		this.ruleSetSubject = new Subject<any>();
+		this.ruleSetSubject = new Subject<RuleSetData[]>();
 		this.ruleSetDataSource = new SubjectDataSource(this.ruleSetSubject);
 		this.friendDataSource = new SubjectDataSource(this.friendService.getFriendsSubject());
 	}
@@ -112,7 +113,15 @@ export class HomeComponent implements OnInit {
 		}
 	}
 
+	public deleteRuleSet(ruleSet: RuleSetData): void {
+		this.ruleSetRepository.deleteRuleSet(ruleSet._id).subscribe(() => {
+			this.getRuleSets();
+			this.getCampaigns();
+		});
+	}
+
 	private getRuleSets(): void {
+		console.log('getRuleSets')
 		this.ruleSetRepository.getRuleSets().subscribe((ruleSets: RuleSetData[]) => {
 			this.ruleSets = ruleSets;
 			this.ruleSetSubject.next(ruleSets);
@@ -136,6 +145,12 @@ export class HomeComponent implements OnInit {
 			this.getCampaigns();
 		});
 	};
+
+	public deleteCampaign(campaign: CampaignData): void {
+		this.campaignService.deleteCampaign(campaign._id).subscribe(() => {
+			this.getCampaigns();
+		});
+	}
 
 	private openFriendInviteDialog = () => {
 		this.dialog.open(AddFriendComponent);
