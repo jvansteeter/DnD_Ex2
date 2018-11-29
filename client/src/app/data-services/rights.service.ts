@@ -5,6 +5,7 @@ import { Injectable } from '@angular/core';
 import { EncounterService } from '../encounter/encounter.service';
 import { isUndefined } from 'util';
 import { Player } from '../encounter/player';
+import { TeamUser } from '../board/services/team-user';
 
 @Injectable()
 export class RightsService extends IsReadyService {
@@ -66,5 +67,26 @@ export class RightsService extends IsReadyService {
 
 	public isMyPlayer(player: Player): boolean {
 		return player.userId === this.userProfileService.userId;
+	}
+
+	public hasRightsToPlayer(playerId: string): boolean {
+		if (this.isEncounterGM()) {
+			return true;
+		}
+
+		const player: Player = this.encounterService.getPlayerById(playerId);
+		const user: TeamUser = this.encounterService.getTeamUser(this.userProfileService.userId);
+		if (isUndefined(player) || isUndefined(user)) {
+			return false;
+		}
+		for (let playerTeam of player.teams) {
+			for (let userTeam of user.teams) {
+				if (userTeam === playerTeam) {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 }

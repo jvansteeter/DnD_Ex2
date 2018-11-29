@@ -123,4 +123,8 @@ export class EncounterState implements EncounterData {
 
 		return [];
 	}
+
+	public getTeamUser(userId: string): TeamUser {
+		return this.teamsState.getUser(userId);
+	}
 }

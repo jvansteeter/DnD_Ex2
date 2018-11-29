@@ -68,6 +68,10 @@ export class EncounterTeamsState extends ConcurrentBoardObject {
 		return [...this._users.values()];
 	}
 
+	public getUser(userId: string): TeamUser {
+		return this._users.get(userId);
+	}
+
 	set users(value) {}
 
 	private getSerializedUsers(): {userId: string, username: string, teams: string[]}[] {

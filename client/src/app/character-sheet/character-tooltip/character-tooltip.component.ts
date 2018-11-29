@@ -16,8 +16,6 @@ export class CharacterTooltipComponent {
 	characterSheetId: string;
 	@Input()
 	public editable: boolean = false;
-	@Input()
-	public hasRights: boolean = false;
 
 	public tooltipConfig: CharacterSheetTooltipData;
 	public aspectType = AspectType;
@@ -30,6 +28,7 @@ export class CharacterTooltipComponent {
 	constructor(private characterSheetRepo: CharacterSheetRepository,
 	            private characterService: CharacterMakerService,
 	            private encounterService: EncounterService,
+	            private rightsService: RightsService,
 	            ) {
 	}
 
@@ -141,7 +140,15 @@ export class CharacterTooltipComponent {
 		this.editingIndex = -1;
 	}
 
+	public hasRights(): boolean {
+		return this.rightsService.hasRightsToPlayer(this._playerId);
+	}
+
 	set playerId(value) {
 		this._playerId = value;
+	}
+
+	get playerId(): string {
+		return this._playerId;
 	}
 }

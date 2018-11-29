@@ -5,7 +5,7 @@ import { CharacterTooltipComponent } from '../../../character-sheet/character-to
 import { BoardStateService } from '../../services/board-state.service';
 import { EncounterRepository } from '../../../repositories/encounter.repository';
 import { RightsService } from '../../../data-services/rights.service';
-import { UserProfileService } from '../../../data-services/userProfile.service';
+import { isUndefined } from 'util';
 
 @Component({
 	templateUrl: 'character-pop.component.html',
@@ -23,7 +23,6 @@ export class CharacterPopComponent {
 	@ViewChild(CharacterTooltipComponent)
 	tooltipComponent: CharacterTooltipComponent;
 	hovered = false;
-	hasRights = false;
 
 	constructor(private boardStateService: BoardStateService,
 	            private encounterRepo: EncounterRepository,
@@ -38,10 +37,6 @@ export class CharacterPopComponent {
 		this.player = player;
 		this.tooltipComponent.playerId = player.id;
 		this.tooltipComponent.tooltipConfig = player.characterData.characterSheet.tooltipConfig;
-
-		if (this.rightsService.isEncounterGM() || this.rightsService.isMyPlayer(player)) {
-			this.hasRights = true;
-		}
 
 		this.window = window;
 	}
@@ -98,5 +93,13 @@ export class CharacterPopComponent {
 
 	toggleVisibility(): void {
 		this.player.isVisible = !this.player.isVisible;
+	}
+
+	public hasRights(): boolean {
+		if (isUndefined(this.tooltipComponent)) {
+			return false;
+		}
+
+		return this.rightsService.hasRightsToPlayer(this.tooltipComponent.playerId);
 	}
 }

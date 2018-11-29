@@ -4,18 +4,18 @@
      (mouseup)="mouseUp($event)"
      [ngStyle]="{'left': pos_x + 'px', 'top': pos_y + 'px'}">
 	<div class="tooltip-container">
-		<button mat-icon-button class="visibility-button" *ngIf="hovered && hasRights && player.isVisible" (click)="toggleVisibility()">
+		<button mat-icon-button class="visibility-button" *ngIf="hovered && hasRights() && player.isVisible" (click)="toggleVisibility()">
 			<mat-icon>visibility</mat-icon>
 		</button>
-		<button mat-icon-button class="visibility-button" *ngIf="hovered && hasRights && !player.isVisible" (click)="toggleVisibility()">
+		<button mat-icon-button class="visibility-button" *ngIf="hovered && hasRights() && !player.isVisible" (click)="toggleVisibility()">
 			<mat-icon>visibility_off</mat-icon>
 		</button>
-		<button mat-icon-button class="menu-button" [matMenuTriggerFor]="characterMenu" [ngStyle]="{'display': hovered ? 'inherit' : 'none'}"><mat-icon>settings</mat-icon></button>
+		<button mat-icon-button class="menu-button" *ngIf="hasRights()" [matMenuTriggerFor]="characterMenu" [ngStyle]="{'display': hovered ? 'inherit' : 'none'}"><mat-icon>settings</mat-icon></button>
 		<mat-menu #characterMenu="matMenu">
 			<button mat-menu-item (click)="deletePlayer()">Delete Player</button>
 		</mat-menu>
 		<button mat-icon-button class="close-button" (click)="close()" *ngIf="hovered"><mat-icon>close</mat-icon></button>
-		<character-tooltip [hasRights]="hasRights"></character-tooltip>
+		<character-tooltip></character-tooltip>
 	</div>
 </div>
 
