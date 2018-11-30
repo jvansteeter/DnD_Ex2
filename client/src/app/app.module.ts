@@ -25,8 +25,8 @@ import { MainTableComponent } from './main-table/main-table.component';
 import { MainNavModule } from './main-nav/main-nav.module';
 import { StompRService } from "@stomp/ng2-stompjs";
 import { MqService } from './mq/mq.service';
-import { UserProfileService } from './data-services/userProfile.service';
-import { UserRepository } from './repositories/user.repository';
+import { MessageService } from './data-services/message.service';
+import { ChatModule } from './chat/chat.module';
 
 @NgModule({
 	imports: [
@@ -54,14 +54,16 @@ import { UserRepository } from './repositories/user.repository';
 		MatGridListModule,
 		MatCardModule,
 		MatMenuModule,
+		ChatModule,
 	],
 	declarations: [
 		AppComponent,
-		MainTableComponent
+		MainTableComponent,
 	],
 	providers: [
 		StompRService,
 		MqService,
+		MessageService,
 	],
 	bootstrap: [AppComponent]
 })

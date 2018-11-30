@@ -56,7 +56,7 @@ export class NotificationService extends IsReadyService {
 						message.headers.type === MqMessageType.CAMPAIGN_INVITE  ||
 						message.headers.type === MqMessageType.FRIEND_REQUEST
 				),
-		).subscribe(() => {
+		).subscribe((message: StompMessage) => {
 			this.getPendingNotifications();
 		});
 	}

@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 @Component({
     selector: 'main-nav',
     templateUrl: './main-nav.component.html',
-    styleUrls: ['./main-nav.component.css']
+    styleUrls: ['./main-nav.component.scss']
 })
 export class MainNavComponent implements OnInit {
     isHandset: Observable<BreakpointState> = this.breakpointObserver.observe(Breakpoints.Handset);

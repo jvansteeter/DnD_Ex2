@@ -91,10 +91,15 @@ export class MqService extends IsReadyService {
 		return this.userQueue;
 	}
 
+	public sendChat(url: string, message: string, headers: Object): void {
+		this.stompService.publish(url, message, headers);
+	}
+
 	private connectToUserQueue(): void {
 		this.userQueue = this.stompService.subscribe(MqMessageUrlFactory.createGetUserMessagesUrl(this.userProfileService.userId))
 				.pipe(
 						map((message: Message) => {
+							console.log('user message:', message)
 							switch (message.headers['type']) {
 								case MqMessageType.FRIEND_REQUEST: {
 									return new FriendRequestMessage(message);

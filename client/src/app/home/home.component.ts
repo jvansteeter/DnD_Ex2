@@ -121,7 +121,6 @@ export class HomeComponent implements OnInit {
 	}
 
 	private getRuleSets(): void {
-		console.log('getRuleSets')
 		this.ruleSetRepository.getRuleSets().subscribe((ruleSets: RuleSetData[]) => {
 			this.ruleSets = ruleSets;
 			this.ruleSetSubject.next(ruleSets);

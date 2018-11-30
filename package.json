@@ -80,6 +80,7 @@
     "@types/passport": "^0.3.5",
     "amqplib": "^0.5.2",
     "angular-gridster2": "^7.0.1",
+    "angular2-draggable": "^2.1.9",
     "bcryptjs": "^2.4.3",
     "bluebird": "^3.5.3",
     "body-parser": "^1.18.3",

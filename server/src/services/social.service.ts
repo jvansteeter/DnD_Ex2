@@ -19,21 +19,16 @@ export class SocialService {
 	}
 
 	public async acceptFriendRequest(toUserId, fromUserId): Promise<void> {
-		try {
-			let friendRequests: NotificationModel[] = await this.notificationRepo.findAllToByType(toUserId, NotificationType.FRIEND_REQUEST);
-			friendRequests.forEach(async (friendRequest: NotificationModel) => {
-				let data: FriendRequestNotification = friendRequest.body as FriendRequestNotification;
-				if (data.fromUserId === fromUserId) {
-					await this.friendRepo.create(toUserId, fromUserId);
-					await this.friendRepo.create(fromUserId, toUserId);
-					await this.notificationRepo.removeById(friendRequest._id);
-					return;
-				}
-			});
-		}
-		catch (error) {
-			throw error;
-		}
+		let friendRequests: NotificationModel[] = await this.notificationRepo.findAllToByType(toUserId, NotificationType.FRIEND_REQUEST);
+		friendRequests.forEach(async (friendRequest: NotificationModel) => {
+			let data: FriendRequestNotification = friendRequest.body as FriendRequestNotification;
+			if (data.fromUserId === fromUserId) {
+				await this.friendRepo.create(toUserId, fromUserId);
+				await this.friendRepo.create(fromUserId, toUserId);
+				await this.notificationRepo.removeById(friendRequest._id);
+				return;
+			}
+		});
 	}
 
 	public async rejectFriendRequest(toUserId, fromUserId): Promise<void> {
@@ -46,8 +41,7 @@ export class SocialService {
 					return;
 				}
 			});
-		}
-		catch (error) {
+		} catch (error) {
 			throw (error);
 		}
 	}
@@ -81,8 +75,7 @@ export class SocialService {
 			let user: UserModel = await this.userRepo.findById(userId);
 			delete user.passwordHash;
 			return user;
-		}
-		catch (error) {
+		} catch (error) {
 			throw error;
 		}
 	}
