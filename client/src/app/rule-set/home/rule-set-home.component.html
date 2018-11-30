@@ -29,10 +29,21 @@
 				<mat-table [dataSource]="characterSheetDataSource">
 					<ng-container matColumnDef="label">
 						<mat-header-cell *matHeaderCellDef>Character Sheet</mat-header-cell>
-						<mat-cell *matCellDef="let characterSheet">{{characterSheet.label}}</mat-cell>
+						<mat-cell *matCellDef="let characterSheet" (click)="editCharacterSheet(characterSheet._id)">{{characterSheet.label}}</mat-cell>
+					</ng-container>
+					<ng-container matColumnDef="options">
+						<mat-header-cell *matHeaderCellDef></mat-header-cell>
+						<mat-cell *matCellDef="let characterSheet">
+							<button mat-icon-button matTooltip="Options" class="options-button" [matMenuTriggerFor]="characterOptionsMenu">
+								<mat-icon>settings</mat-icon>
+							</button>
+							<mat-menu #characterOptionsMenu="matMenu">
+								<button mat-menu-item (click)="deleteCharacterSheet(characterSheet)">Delete Character Sheet</button>
+							</mat-menu>
+						</mat-cell>
 					</ng-container>
 					<mat-header-row *matHeaderRowDef="characterSheetColumns"></mat-header-row>
-					<mat-row class="clickable-row" *matRowDef="let characterSheet; columns: characterSheetColumns" (click)="editCharacterSheet(characterSheet._id)"></mat-row>
+					<mat-row class="clickable-row" *matRowDef="let characterSheet; columns: characterSheetColumns"></mat-row>
 				</mat-table>
 			</dashboard-card>
 		</mat-grid-tile>
@@ -41,10 +52,25 @@
 				<mat-table [dataSource]="npcDataSource">
 					<ng-container matColumnDef="label">
 						<mat-header-cell *matHeaderCellDef>NPCs</mat-header-cell>
-						<mat-cell *matCellDef="let npc">{{npc.label}}</mat-cell>
+						<mat-cell *matCellDef="let npc" (click)="editNpc(npc._id)">{{npc.label}}</mat-cell>
+					</ng-container>
+					<ng-container matColumnDef="sheet">
+						<mat-header-cell *matHeaderCellDef>Character Sheet</mat-header-cell>
+						<mat-cell *matCellDef="let npc" (click)="editNpc(npc._id)">{{npc.characterSheetLabel}}</mat-cell>
+					</ng-container>
+					<ng-container matColumnDef="options">
+						<mat-header-cell *matHeaderCellDef></mat-header-cell>
+						<mat-cell *matCellDef="let character">
+							<button mat-icon-button matTooltip="Options" class="options-button" [matMenuTriggerFor]="characterOptionsMenu">
+								<mat-icon>settings</mat-icon>
+							</button>
+							<mat-menu #characterOptionsMenu="matMenu">
+								<button mat-menu-item (click)="deleteCharacter(character)">Delete NPC</button>
+							</mat-menu>
+						</mat-cell>
 					</ng-container>
 					<mat-header-row *matHeaderRowDef="npcColumns"></mat-header-row>
-					<mat-row class="clickable-row" *matRowDef="let npc; columns: characterSheetColumns" (click)="editNpc(npc._id)"></mat-row>
+					<mat-row class="clickable-row" *matRowDef="let npc; columns: npcColumns"></mat-row>
 				</mat-table>
 			</dashboard-card>
 		</mat-grid-tile>

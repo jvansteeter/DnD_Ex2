@@ -73,6 +73,18 @@ export class RuleSetRouter {
 			}
 		});
 
+		this.router.post('/charactersheet/delete', async (req: Request, res: Response) => {
+			try {
+				const characterSheetId: string = req.body.characterSheetId;
+				await this.characterSheetService.deleteById(characterSheetId);
+				res.status(200).send();
+			}
+			catch (error) {
+				console.error(error);
+				res.status(500).send(error);
+			}
+		});
+
 		this.router.post('/new/ruleset', async (req: Request, res: Response) => {
 			try {
 				const userId = req.user._id;

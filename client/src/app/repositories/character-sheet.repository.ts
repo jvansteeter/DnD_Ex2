@@ -17,4 +17,8 @@ export class CharacterSheetRepository {
 	public getCharacterSheet(id: string): Observable<any> {
 		return this.http.get<CharacterSheetData>('/api/ruleset/charactersheet/' + id, {responseType: 'json'});
 	}
+
+	public deleteCharacterSheet(id: string): Observable<void> {
+		return this.http.post<void>('/api/ruleset/charactersheet/delete', {characterSheetId: id});
+	}
 }

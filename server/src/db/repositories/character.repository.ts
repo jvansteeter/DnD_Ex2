@@ -65,6 +65,19 @@ export class CharacterRepository {
 		});
 	}
 
+	public findBySheetId(sheetId: string): Promise<CharacterModel[]> {
+		return new Promise((resolve, reject) => {
+			this.Character.find({characterSheetId: sheetId}, (error, characters: CharacterModel[]) => {
+				if (error) {
+					reject(error);
+					return;
+				}
+
+				resolve(characters);
+			});
+		});
+	}
+
 	public deleteById(characterId: string): Promise<void> {
 		return new Promise((resolve, reject) => {
 			this.Character.remove({_id: characterId}, (error) => {

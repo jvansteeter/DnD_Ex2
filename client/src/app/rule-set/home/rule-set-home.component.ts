@@ -14,6 +14,8 @@ import { NewCharacterDialogComponent } from './dialog/new-character-dialog.compo
 import { CharacterRepository } from '../../repositories/character.repository';
 import { CharacterData } from '../../../../../shared/types/character.data';
 import { isUndefined } from 'util';
+import { CharacterSheetRepository } from '../../repositories/character-sheet.repository';
+import { flatMap, map, tap } from 'rxjs/operators';
 
 @Component({
 	selector: 'rule-set-home',
@@ -37,19 +39,20 @@ export class RuleSetHomeComponent implements OnInit {
 	public characterSheetCard: DashboardCard;
 	private readonly characterSheetSubject: BehaviorSubject<CharacterSheetData[]>;
 	private characterSheetDataSource: SubjectDataSource<CharacterSheetData>;
-	public characterSheetColumns = ['label'];
+	public characterSheetColumns = ['label', 'options'];
 
 	public npcCard: DashboardCard;
 	private readonly npcSubject: Subject<NpcData[]>;
 	private npcDataSource: SubjectDataSource<NpcData>;
-	public npcColumns = ['label'];
+	public npcColumns = ['label', 'sheet', 'options'];
 
 	constructor(private activatedRoute: ActivatedRoute,
 	            private dialog: MatDialog,
 	            private router: Router,
 	            private ruleSetRepository: RuleSetRepository,
 	            private characterRepo: CharacterRepository,
-	            private configService: ConfigService) {
+	            private configService: ConfigService,
+	            private characterSheetRepo: CharacterSheetRepository) {
 		this.adminSubject = new Subject<AdminData[]>();
 		this.adminDataSource = new SubjectDataSource(this.adminSubject);
 
@@ -90,17 +93,17 @@ export class RuleSetHomeComponent implements OnInit {
 				ruleSet.config = completeConfig;
 				this.ruleSet = ruleSet;
 			});
-			this.ruleSetRepository.getCharacterSheets(this.ruleSetId).subscribe((characterSheets: CharacterSheetData[]) => {
-				this.characterSheets = characterSheets;
-				this.characterSheetSubject.next(characterSheets);
+			this.ruleSetRepository.getCharacterSheets(this.ruleSetId).pipe(
+					tap((characterSheets: CharacterSheetData[]) => {
+						this.characterSheets = characterSheets;
+						this.characterSheetSubject.next(characterSheets);
+					})
+			).subscribe(() => {
+				this.getNPCs();
 			});
 			this.ruleSetRepository.getAdmin(this.ruleSetId).subscribe((admins: any[]) => {
 				this.admins = admins;
 				this.adminSubject.next(admins);
-			});
-			this.ruleSetRepository.getNpcs(this.ruleSetId).subscribe((npcs: any[]) => {
-				this.npcs = npcs;
-				this.npcSubject.next(npcs);
 			});
 		});
 	}
@@ -125,9 +128,33 @@ export class RuleSetHomeComponent implements OnInit {
 		});
 	}
 
+	public deleteCharacterSheet(sheet: CharacterSheetData): void {
+		this.characterSheetRepo.deleteCharacterSheet(sheet._id).subscribe(() => {
+			this.ngOnInit();
+		});
+	}
+
 	public exportRuleSet(): void {
 		this.ruleSetRepository.getExportJson(this.ruleSetId).subscribe((data) => {
 			FileSaver.saveAs(new Blob([JSON.stringify(data)], {type: 'application/json'}), !isUndefined(data['label']) ? data['label'] : 'ruleSet' + '.json');
+		});
+	}
+
+	private getNPCs(): void {
+		this.ruleSetRepository.getNpcs(this.ruleSetId).pipe(map((npcs: NpcData[]) => {
+			for (let npc of npcs) {
+				for (let sheet of this.characterSheets) {
+					if (npc.characterSheetId === sheet._id) {
+						npc.characterSheetLabel = sheet.label;
+						break;
+					}
+				}
+			}
+
+			return npcs;
+		})).subscribe((npcs: NpcData[]) => {
+			this.npcs = npcs;
+			this.npcSubject.next(npcs);
 		});
 	}
 
@@ -136,10 +163,11 @@ export class RuleSetHomeComponent implements OnInit {
 			data: {
 				characterSheets: this.characterSheets,
 				isNpc: true
-			}}).afterClosed().subscribe((npc) => {
-					if (npc) {
-						this.router.navigate(['character', npc._id]);
-					}
+			}
+		}).afterClosed().subscribe((npc) => {
+			if (npc) {
+				this.router.navigate(['character', npc._id]);
+			}
 		});
 	};
 }
@@ -153,6 +181,7 @@ interface NpcData {
 	_id: string,
 	label: string,
 	characterSheetId: string,
+	characterSheetLabel?: string,
 	ruleSetId: string,
 	values: any[]
 }

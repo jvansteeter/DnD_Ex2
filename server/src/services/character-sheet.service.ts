@@ -2,14 +2,18 @@ import { CharacterSheetRepository } from '../db/repositories/characterSheet.repo
 import { CharacterAspectRepository } from '../db/repositories/characterAspect.repository';
 import { CharacterAspectModel } from '../db/models/characterAspect.model';
 import { CharacterSheetModel } from '../db/models/characterSheet.model';
+import { CharacterRepository } from '../db/repositories/character.repository';
+import { CharacterModel } from '../db/models/character.model';
 
 export class CharacterSheetService {
 	private sheetRepo: CharacterSheetRepository;
 	private aspectRepo: CharacterAspectRepository;
+	private characterRepo: CharacterRepository;
 
 	constructor() {
 		this.sheetRepo = new CharacterSheetRepository();
 		this.aspectRepo = new CharacterAspectRepository();
+		this.characterRepo = new CharacterRepository();
 	}
 
 	public async saveCharacterSheet(characterSheetObj: any): Promise<CharacterSheetModel> {
@@ -35,5 +39,10 @@ export class CharacterSheetService {
 	public async deleteById(id: string): Promise<void> {
 		await this.aspectRepo.removeByCharacterSheetId(id);
 		await this.sheetRepo.deleteById(id);
+		const characters: CharacterModel[] = await this.characterRepo.findBySheetId(id);
+		await characters.forEach((character: CharacterModel) => {
+			this.characterRepo.deleteById(character._id);
+		});
+		return;
 	}
 }
