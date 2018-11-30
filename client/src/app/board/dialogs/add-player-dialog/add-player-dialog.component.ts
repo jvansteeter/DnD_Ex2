@@ -15,8 +15,6 @@ export class AddPlayerDialogComponent implements OnInit {
 	public hasCampaignNPCs: boolean = false;
 	public hasRuleSetNPCs: boolean = false;
 
-	@ViewChild(MatSort)
-	public sort: MatSort;
 	public selection = new SelectionModel<CharacterData>(true, []);
 
 	public campaignCharacterDataSource: MatTableDataSource<CharacterData>;
@@ -38,12 +36,10 @@ export class AddPlayerDialogComponent implements OnInit {
 			if (data.campaignCharacters.length > 0) {
 				this.hasCampaignCharacters = true;
 				this.campaignCharacterDataSource = new MatTableDataSource<CharacterData>(data.campaignCharacters);
-				this.campaignCharacterDataSource.sort = this.sort;
 			}
 			if (data.ruleSetNPCs.length > 0) {
 				this.hasRuleSetNPCs = true;
 				this.ruleSetNPCDataSource = new MatTableDataSource<CharacterData>(data.ruleSetNPCs);
-				this.ruleSetNPCDataSource.sort = this.sort;
 			}
 		});
 	}

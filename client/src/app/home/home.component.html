@@ -50,7 +50,7 @@
 				<mat-table [dataSource]="campaignService.campaigns">
 					<ng-container matColumnDef="label">
 						<mat-header-cell *matHeaderCellDef>Campaign</mat-header-cell>
-						<mat-cell *matCellDef="let campaign">{{campaign.label}}</mat-cell>
+						<mat-cell *matCellDef="let campaign" (click)="campaignHome(campaign)">{{campaign.label}}</mat-cell>
 					</ng-container>
 					<ng-container matColumnDef="options">
 						<mat-header-cell *matHeaderCellDef></mat-header-cell>
@@ -64,8 +64,7 @@
 						</mat-cell>
 					</ng-container>
 					<mat-header-row *matHeaderRowDef="campaignTableColumns"></mat-header-row>
-					<mat-row class="clickable-row" *matRowDef="let campaign; columns: campaignTableColumns"
-									 (click)="campaignHome(campaign)"></mat-row>
+					<mat-row class="clickable-row" *matRowDef="let campaign; columns: campaignTableColumns"></mat-row>
 				</mat-table>
 			</dashboard-card>
 		</mat-grid-tile>

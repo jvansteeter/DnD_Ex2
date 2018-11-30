@@ -2,8 +2,8 @@
 	<h3>No Characters</h3>
 </ng-container>
 <mat-tab-group>
-	<mat-tab *ngIf="hasCampaignCharacters" label="Campaign Characters">
-		<mat-table [dataSource]="campaignCharacterDataSource" matSort>
+	<mat-tab label="Campaign Characters" [disabled]="!hasCampaignCharacters">
+		<mat-table [dataSource]="campaignCharacterDataSource">
 			<ng-container matColumnDef="check">
 				<mat-header-cell *matHeaderCellDef></mat-header-cell>
 				<mat-cell *matCellDef="let character">
@@ -14,7 +14,7 @@
 				</mat-cell>
 			</ng-container>
 			<ng-container matColumnDef="label">
-				<mat-header-cell *matHeaderCellDef mat-sort-header>Character</mat-header-cell>
+				<mat-header-cell *matHeaderCellDef>Character</mat-header-cell>
 				<mat-cell *matCellDef="let character">{{character.label}}</mat-cell>
 			</ng-container>
 			<ng-container matColumnDef="count">
@@ -31,15 +31,39 @@
 			<mat-row *matRowDef="let character; columns: characterTableColumns"></mat-row>
 		</mat-table>
 	</mat-tab>
-	<mat-tab *ngIf="hasCampaignNPCs" label="Campaign NPCs">
+	<mat-tab label="Campaign NPCs" [disabled]="!hasCampaignNPCs">
 		<ng-container *ngFor="let character of campaignNPCs">
 			{{character.label}}
 		</ng-container>
 	</mat-tab>
-	<mat-tab *ngIf="hasRuleSetNPCs" label="RuleSet NPCs">
-		<ng-container *ngFor="let character of ruleSetNPCs">
-			{{character.label}}
-		</ng-container>
+	<mat-tab label="RuleSet NPCs" [disabled]="!hasRuleSetNPCs">
+		<mat-table [dataSource]="ruleSetNPCDataSource">
+			<ng-container matColumnDef="check">
+				<mat-header-cell *matHeaderCellDef></mat-header-cell>
+				<mat-cell *matCellDef="let character">
+					<mat-checkbox (click)="$event.stopPropagation()"
+					              (change)="toggleCheckbox(character)"
+					              [checked]="selection.isSelected(character)"
+					></mat-checkbox>
+				</mat-cell>
+			</ng-container>
+			<ng-container matColumnDef="label">
+				<mat-header-cell *matHeaderCellDef>Character</mat-header-cell>
+				<mat-cell *matCellDef="let character">{{character.label}}</mat-cell>
+			</ng-container>
+			<ng-container matColumnDef="count">
+				<mat-header-cell *matHeaderCellDef></mat-header-cell>
+				<mat-cell *matCellDef="let character">
+					<div *ngIf="selection.isSelected(character)" class="add-player-count">
+						<button mat-icon-button color="primary" (click)="decrementCount(character)"><mat-icon>remove</mat-icon></button>
+						<input type="number" [value]="counts.get(character)" (change)="inputChange(character, $event.target.value)"/>
+						<button mat-icon-button color="primary" (click)="incrementCount(character)"><mat-icon>add</mat-icon></button>
+					</div>
+				</mat-cell>
+			</ng-container>
+			<mat-header-row *matHeaderRowDef="characterTableColumns"></mat-header-row>
+			<mat-row *matRowDef="let character; columns: characterTableColumns"></mat-row>
+		</mat-table>
 	</mat-tab>
 </mat-tab-group>
 <button mat-raised-button color="primary" class="ok-button" (click)="submit()">OK</button>
