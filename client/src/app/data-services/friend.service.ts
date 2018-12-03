@@ -50,6 +50,16 @@ export class FriendService extends IsReadyService {
 		return this.friendsSubject;
 	}
 
+	public getFriendByUserName(username: string): UserProfile {
+		for (let friend of this.friends) {
+			if (friend.username === username) {
+				return friend;
+			}
+		}
+
+		return undefined;
+	}
+
 	private updateFriendList(): void {
 		this.socialRepo.getFriends().subscribe((friends: UserProfile[]) => {
 			this.friendsSubject.next(friends);

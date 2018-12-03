@@ -15,6 +15,8 @@ import { StompMessage } from './messages/stomp-message';
 import { CampaignInviteMessage } from './messages/campaign-invite.message';
 import { EncounterCommandType } from '../../../../shared/types/encounter/encounter-command.enum';
 import { EncounterCommandMessage } from './messages/encounter-command.message';
+import { Chat } from './messages/chat.message';
+import { ChatType } from '../../../../shared/types/mq/chat-type.enum';
 
 @Injectable()
 export class MqService extends IsReadyService {
@@ -91,8 +93,19 @@ export class MqService extends IsReadyService {
 		return this.userQueue;
 	}
 
-	public sendChat(url: string, message: string, headers: Object): void {
-		this.stompService.publish(url, message, headers);
+	public sendChat(chat: Chat): void {
+		console.log('send chat:', chat)
+		switch (chat.headers.chatType) {
+			case ChatType.USER: {
+				let url: string;
+				for (let toUser of chat.headers.userIds) {
+					url = MqMessageUrlFactory.createUserChatUrl(toUser);
+					this.stompService.publish(url, chat.body, chat.headers);
+				}
+				break;
+			}
+		}
+		// this.stompService.publish(url, message, headers);
 	}
 
 	private connectToUserQueue(): void {
@@ -109,6 +122,9 @@ export class MqService extends IsReadyService {
 								}
 								case MqMessageType.CAMPAIGN_INVITE: {
 									return new CampaignInviteMessage(message);
+								}
+								case MqMessageType.CHAT: {
+									return new Chat(message);
 								}
 								default: {
 									console.error('Message Type not recognized');

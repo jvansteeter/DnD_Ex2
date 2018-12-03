@@ -25,8 +25,8 @@ import { MainTableComponent } from './main-table/main-table.component';
 import { MainNavModule } from './main-nav/main-nav.module';
 import { StompRService } from "@stomp/ng2-stompjs";
 import { MqService } from './mq/mq.service';
-import { MessageService } from './data-services/message.service';
 import { ChatModule } from './chat/chat.module';
+import { ChatService } from './data-services/chat.service';
 
 @NgModule({
 	imports: [
@@ -63,7 +63,7 @@ import { ChatModule } from './chat/chat.module';
 	providers: [
 		StompRService,
 		MqService,
-		MessageService,
+		ChatService,
 	],
 	bootstrap: [AppComponent]
 })

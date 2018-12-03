@@ -1,4 +1,17 @@
-<mat-card class="app-chat" cdkDrag ngResizable>
-	<mat-toolbar color="primary"></mat-toolbar>
-	<h1>here</h1>
+<mat-card class="app-chat" cdkDrag ngResizable *ngIf="chatService.showChatWindow">
+	<div class="toolbar"></div>
+	<mat-tab-group>
+		<mat-tab>
+			<ng-template mat-tab-label>
+				Tab 1
+			</ng-template>
+			<div class="chat-history">
+				chat history will be here
+			</div>
+			<div class="input-line">
+				<input class="app-input" (keypress.enter)="send.click()" [(ngModel)]="chatContent"/>
+				<button mat-raised-button color="primary" (click)="sendChat()" #send>Send</button>
+			</div>
+		</mat-tab>
+	</mat-tab-group>
 </mat-card>

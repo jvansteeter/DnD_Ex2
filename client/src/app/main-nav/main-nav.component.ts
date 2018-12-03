@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
-import { Observable } from 'rxjs';
+import { ChatService } from '../data-services/chat.service';
 
 @Component({
     selector: 'main-nav',
@@ -8,9 +7,8 @@ import { Observable } from 'rxjs';
     styleUrls: ['./main-nav.component.scss']
 })
 export class MainNavComponent implements OnInit {
-    isHandset: Observable<BreakpointState> = this.breakpointObserver.observe(Breakpoints.Handset);
 
-    constructor(private breakpointObserver: BreakpointObserver) {}
+    constructor(public chatService: ChatService) {}
 
     ngOnInit(): void {
     }

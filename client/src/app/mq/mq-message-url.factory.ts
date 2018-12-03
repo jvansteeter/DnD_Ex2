@@ -13,6 +13,10 @@ export class MqMessageUrlFactory {
 		return MqClientConfig.userExchangeUrl + toUserId + '.acceptRequest';
 	}
 
+	public static createUserChatUrl(toUserId: string): string {
+		return MqClientConfig.userExchangeUrl + toUserId + '.chat';
+	}
+
 	public static createGetUserMessagesUrl(userId: string): string {
 		return MqClientConfig.userExchangeUrl + userId + '.*';
 	}
