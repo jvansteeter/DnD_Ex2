@@ -13,6 +13,7 @@
 							[removable]="true"
 							(removed)="removeChip(chip)">
 							{{chip}}
+							<mat-icon matChipRemove>cancel</mat-icon>
 						</mat-chip>
 						<input placeholder="Users in chat" #chipInput
 						       [formControl]="toBarControl"

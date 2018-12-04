@@ -19,7 +19,7 @@ export class ChatComponent {
 	@ViewChild('auto') matAutocomplete: MatAutocomplete;
 	@ViewChild('chipInput') chipInput: ElementRef<HTMLInputElement>;
 
-	public toBarList: string[] = ['test'];
+	public toBarList: string[] = [];
 	public toBarControl = new FormControl();
 	separatorKeysCodes: number[] = [ENTER, COMMA];
 	filteredFriends: Observable<UserProfile[]>;
@@ -33,8 +33,12 @@ export class ChatComponent {
 	}
 
 	public sendChat(): void {
-		let friend = this.friendService.getFriendByUserName('qwer');
-		this.chatService.sendToUsers([friend._id], this.chatContent);
+		const userIds = [];
+		for (let username of this.toBarList) {
+			let friend = this.friendService.getFriendByUserName(username);
+			userIds.push(friend._id);
+		}
+		this.chatService.sendToUsers(userIds, this.chatContent);
 		this.chatContent = '';
 	}
 
@@ -49,18 +53,14 @@ export class ChatComponent {
 	}
 
 	add(event: MatChipInputEvent): void {
-		// Add fruit only when MatAutocomplete is not open
-		// To make sure this does not conflict with OptionSelected Event
 		if (!this.matAutocomplete.isOpen) {
 			const input = event.input;
 			const value = event.value;
 
-			// Add our fruit
 			if ((value || '').trim()) {
 				this.toBarList.push(value.trim());
 			}
 
-			// Reset the input value
 			if (input) {
 				input.value = '';
 			}

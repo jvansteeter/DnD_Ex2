@@ -5,7 +5,7 @@ import {
 	MatButtonModule,
 	MatCardModule,
 	MatChipsModule,
-	MatFormFieldModule,
+	MatFormFieldModule, MatIconModule,
 	MatTabsModule,
 	MatToolbarModule
 } from '@angular/material';
@@ -31,6 +31,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 			MatChipsModule,
 			MatAutocompleteModule,
 			ReactiveFormsModule,
+			MatIconModule,
 	],
 	declarations: [
 			ChatComponent,

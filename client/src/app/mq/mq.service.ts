@@ -94,12 +94,13 @@ export class MqService extends IsReadyService {
 	}
 
 	public sendChat(chat: Chat): void {
-		console.log('send chat:', chat)
 		switch (chat.headers.chatType) {
 			case ChatType.USER: {
 				let url: string;
 				for (let toUser of chat.headers.userIds) {
 					url = MqMessageUrlFactory.createUserChatUrl(toUser);
+					console.log('send chat:', chat)
+					console.log('url:', url)
 					this.stompService.publish(url, chat.body, chat.headers);
 				}
 				break;
