@@ -4,7 +4,7 @@ import { IsReadyService } from '../utilities/services/isReady.service';
 import { UserProfile } from '../types/userProfile';
 import { CampaignState } from './campaign.state';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { first, map, mergeMap, tap } from 'rxjs/operators';
+import { first, flatMap, map, mergeMap, tap } from 'rxjs/operators';
 import { MqService } from '../mq/mq.service';
 import { Subscription, Subject } from 'rxjs';
 import { EncounterData } from '../../../../shared/types/encounter/encounter.data';
@@ -83,6 +83,12 @@ export class CampaignPageService extends IsReadyService {
 							return this.updateEncountersList();
 						})
 				).subscribe();
+	}
+
+	public createEncounterFromJson(json: EncounterData): Observable<void> {
+		return this.encounterRepo.createEncounterFromJson(this.campaignId, json).pipe(
+				flatMap(() => {return this.updateEncountersList();})
+		);
 	}
 
 	public deleteEncounter(encounterId: string): void {

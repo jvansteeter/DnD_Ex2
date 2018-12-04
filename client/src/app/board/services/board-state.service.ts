@@ -1,15 +1,15 @@
+import * as FileSaver from 'file-saver';
 import {Injectable} from '@angular/core';
 import {ViewMode} from '../shared/enum/view-mode';
 import {BoardMode} from '../shared/enum/board-mode';
-import {LightValue} from '../../../../../shared/types/encounter/board/light-value';
 import {CellTarget} from "../shared/cell-target";
 import {XyPair} from "../../../../../shared/types/encounter/board/xy-pair";
-import {PlayerVisibilityMode} from '../../../../../shared/types/encounter/board/player-visibility-mode';
 import {EncounterService} from '../../encounter/encounter.service';
 import {IsReadyService} from "../../utilities/services/isReady.service";
 import {Line} from "../geometry/line";
 import {BoardControllerMode} from "../shared/enum/board-controller-mode";
 import {RightsService} from "../../data-services/rights.service";
+import { isUndefined } from "util";
 
 /*************************************************************************************************************************************
  * BoardStateService
@@ -303,5 +303,11 @@ export class BoardStateService extends IsReadyService {
         this.board_edit_mode = BoardMode.WINDOW;
         this.inputOffset = 0.10;
         this.doDiagonals = true;
+    }
+
+    public getExportJson(): void {
+    	this.encounterService.getExportJson().subscribe((data) => {
+		    FileSaver.saveAs(new Blob([JSON.stringify(data)], {type: 'application/json'}), (!isUndefined(data['label']) ? data['label'] : 'Encounter') + '.encounter.json');
+	    });
     }
 }

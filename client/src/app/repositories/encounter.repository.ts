@@ -40,8 +40,20 @@ export class EncounterRepository {
 		}));
 	}
 
+	public createEncounterFromJson(campaignId: string, data: EncounterData): Observable<EncounterData> {
+		const body = {
+			data: data,
+			campaignId: campaignId,
+		};
+		return this.http.post<EncounterData>('/api/encounter/import', body, {responseType: 'json'});
+	}
+
 	public getEncounter(encounterId: string): Observable<EncounterData> {
 		return this.http.get<EncounterData>('api/encounter/encounter/' + encounterId, {responseType: 'json'});
+	}
+
+	public getEncounterExportJson(encounterId: string): Observable<any> {
+		return this.http.get('api/encounter/export/' + encounterId, {responseType: 'json'});
 	}
 
 	public addPlayer(encounterId: string, player: PlayerData): Observable<void> {

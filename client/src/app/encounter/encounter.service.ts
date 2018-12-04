@@ -88,6 +88,10 @@ export class EncounterService extends IsReadyService {
 		return this.encounterState.getTeamUser(userId);
 	}
 
+	public getExportJson(): Observable<any> {
+		return this.encounterRepo.getEncounterExportJson(this.encounterId);
+	}
+
 	get mapUrl(): string {
 		if (this.encounterState) {
 			return this.encounterState.mapUrl;
