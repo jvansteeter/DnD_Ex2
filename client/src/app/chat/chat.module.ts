@@ -1,13 +1,21 @@
 import { NgModule } from '@angular/core';
 import { ChatComponent } from './chat.component';
-import { MatButtonModule, MatCardModule, MatTabsModule, MatToolbarModule } from '@angular/material';
+import {
+	MatAutocompleteModule,
+	MatButtonModule,
+	MatCardModule,
+	MatChipsModule,
+	MatFormFieldModule,
+	MatTabsModule,
+	MatToolbarModule
+} from '@angular/material';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MqService } from '../mq/mq.service';
 import { StompRService } from '@stomp/ng2-stompjs';
 import { AngularDraggableModule } from 'angular2-draggable';
 import { ChatService } from '../data-services/chat.service';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
 	imports: [
@@ -19,6 +27,10 @@ import { FormsModule } from '@angular/forms';
 			AngularDraggableModule,
 			MatTabsModule,
 			MatButtonModule,
+			MatFormFieldModule,
+			MatChipsModule,
+			MatAutocompleteModule,
+			ReactiveFormsModule,
 	],
 	declarations: [
 			ChatComponent,

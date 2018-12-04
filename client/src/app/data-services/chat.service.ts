@@ -60,6 +60,6 @@ export class ChatService extends IsReadyService {
 				}),
 		).subscribe((chat: Chat) => {
 			console.log(chat);
-		})
+		});
 	}
 }

@@ -5,6 +5,28 @@
 			<ng-template mat-tab-label>
 				Tab 1
 			</ng-template>
+			<div class="toUsers-line">
+				<mat-form-field class="chip-list">
+					<mat-chip-list #matChipList>
+						<mat-chip *ngFor="let chip of toBarList"
+							[selectable]="true"
+							[removable]="true"
+							(removed)="removeChip(chip)">
+							{{chip}}
+						</mat-chip>
+						<input placeholder="Users in chat" #chipInput
+						       [formControl]="toBarControl"
+						       [matAutocomplete]="auto"
+						       [matChipInputFor]="matChipList"
+						       [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+						       [matChipInputAddOnBlur]="true"
+						       (matChipInputTokenEnd)="add($event)">
+					</mat-chip-list>
+					<mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+						<mat-option *ngFor="let friend of filteredFriends | async" [value]="friend.username">{{friend.username}}</mat-option>
+					</mat-autocomplete>
+				</mat-form-field>
+			</div>
 			<div class="chat-history">
 				chat history will be here
 			</div>

@@ -11,13 +11,13 @@ import { StompMessage } from '../mq/messages/stomp-message';
 
 @Injectable()
 export class FriendService extends IsReadyService {
-	public friends: UserProfile[];
+	public _friends: UserProfile[];
 	private readonly friendsSubject: BehaviorSubject<UserProfile[]>;
 
 	constructor(private socialRepo: SocialRepository,
 	            private mqService: MqService) {
 		super(mqService);
-		this.friends = [];
+		this._friends = [];
 		this.friendsSubject = new BehaviorSubject<UserProfile[]>([]);
 		this.init();
 	}
@@ -51,7 +51,7 @@ export class FriendService extends IsReadyService {
 	}
 
 	public getFriendByUserName(username: string): UserProfile {
-		for (let friend of this.friends) {
+		for (let friend of this._friends) {
 			if (friend.username === username) {
 				return friend;
 			}
@@ -60,10 +60,20 @@ export class FriendService extends IsReadyService {
 		return undefined;
 	}
 
+	public filterFriendsByUsername(input: string): UserProfile[] {
+		const filterValue = input.toLowerCase();
+
+		return this._friends.filter((friend: UserProfile) => friend.username.toLowerCase().indexOf(filterValue) === 0);
+	}
+
+	get friends(): UserProfile[] {
+		return this._friends;
+	}
+
 	private updateFriendList(): void {
 		this.socialRepo.getFriends().subscribe((friends: UserProfile[]) => {
 			this.friendsSubject.next(friends);
-			this.friends = friends;
+			this._friends = friends;
 		});
 	}
 
