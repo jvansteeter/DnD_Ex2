@@ -1,5 +1,5 @@
 import { XyPair } from "../../../../shared/types/encounter/board/xy-pair";
-import { isUndefined } from 'util';
+import { isNullOrUndefined, isUndefined } from 'util';
 import { PlayerData } from '../../../../shared/types/encounter/player.data';
 import { CharacterData } from '../../../../shared/types/character.data';
 import { PredefinedAspects, RequiredAspects } from '../../../../shared/required-aspects.enum';
@@ -201,6 +201,15 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 
 	get isVisible(): boolean {
 		return this._isVisible;
+	}
+
+	get isDead(): boolean {
+		if (!isNullOrUndefined(this.characterData.values['Health'])) {
+			if (this.characterData.values['Health'].current <= 0) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	set isVisible(value) {

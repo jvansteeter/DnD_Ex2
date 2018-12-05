@@ -61,6 +61,7 @@ import {LightVisibilityControlModuleComponent} from "./board-control/controller-
 import {TeamSettingsComponent} from './dialogs/team-settings/team-settings.component';
 import {LightEditDialogComponent} from "./dialogs/light-edit-dialog/light-edit-dialog.component";
 import {BoardTeamsService} from "./services/board-teams.service";
+import { DragDropModule } from "@angular/cdk/drag-drop";
 
 
 @NgModule({
@@ -116,6 +117,7 @@ import {BoardTeamsService} from "./services/board-teams.service";
         MatBadgeModule,
         CharacterSheetModule,
         MatMenuModule,
+        DragDropModule,
     ],
     providers: [
         PopService,

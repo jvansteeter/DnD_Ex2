@@ -6,6 +6,7 @@
             <div style="height: 40px; width: 40px; border: 3px solid #383838; background: #d8d8d8; border-radius: 50%; position: absolute">
                 <img src="{{player.tokenUrl}}" style="height: 100%; border-radius: 25px;">
 	              <mat-icon class="not-visible-icon" *ngIf="!player.isVisible">visibility_off</mat-icon>
+	              <mat-icon class="dead-icon" *ngIf="player.isDead">close</mat-icon>
             </div>
             <div
                     style="height:40px; width: 40px; border: 3px solid #383838; border-radius: 50%; position: absolute; cursor: pointer"
