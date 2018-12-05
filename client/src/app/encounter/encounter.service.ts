@@ -75,7 +75,7 @@ export class EncounterService extends IsReadyService {
 
 	get players(): Player[] {
 		if (this.encounterState) {
-			return this.encounterState._players as Player[];
+			return this.encounterState.players as Player[];
 		}
 		return [];
 	}
@@ -86,6 +86,10 @@ export class EncounterService extends IsReadyService {
 
 	public getTeamUser(userId: string): TeamUser {
 		return this.encounterState.getTeamUser(userId);
+	}
+
+	public getExportJson(): Observable<any> {
+		return this.encounterRepo.getEncounterExportJson(this.encounterId);
 	}
 
 	get mapUrl(): string {

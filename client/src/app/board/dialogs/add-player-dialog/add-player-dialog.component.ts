@@ -1,9 +1,11 @@
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { CharacterRepository } from '../../../repositories/character.repository';
-import { MAT_DIALOG_DATA, MatDialogRef, MatSort, MatTableDataSource } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef, MatTableDataSource } from '@angular/material';
 import { CharacterData } from '../../../../../../shared/types/character.data';
 import { SelectionModel } from '@angular/cdk/collections';
 import { EncounterService } from '../../../encounter/encounter.service';
+import { AlertService } from "../../../alert/alert.service";
+import { isNullOrUndefined } from "util";
 
 @Component({
 	templateUrl: 'add-player-dialog.component.html',
@@ -26,7 +28,8 @@ export class AddPlayerDialogComponent implements OnInit {
 	constructor(@Inject(MAT_DIALOG_DATA) data: any,
 	            private characterRepo: CharacterRepository,
 	            private encounterService: EncounterService,
-	            private dialogRef: MatDialogRef<AddPlayerDialogComponent>) {
+	            private dialogRef: MatDialogRef<AddPlayerDialogComponent>,
+	            private alertService: AlertService) {
 		this.campaignId = data.campaignId;
 		this.counts = new Map<CharacterData, number>();
 	}
@@ -76,6 +79,10 @@ export class AddPlayerDialogComponent implements OnInit {
 			for (let selectedCharacter of this.selection.selected) {
 				let count = this.counts.get(selectedCharacter);
 				for (let i = 0; i < count; i++) {
+					if (isNullOrUndefined(selectedCharacter.tokenUrl) || selectedCharacter.tokenUrl === '') {
+						this.alertService.showAlert('Cannot add a character that does not have a map token');
+						return;
+					}
 					characters.push(JSON.parse(JSON.stringify(selectedCharacter)));
 				}
 			}

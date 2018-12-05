@@ -31,7 +31,6 @@ export class EncounterState implements EncounterData {
 	isOpen: boolean;
 	config: EncounterConfigData;
 	configState: EncounterConfigState;
-	_players: PlayerData[];
 	wallData: Object;
 	doorData: Object;
 	windowData: Object;
@@ -39,7 +38,7 @@ export class EncounterState implements EncounterData {
 	notations: NotationData[];
 
 	private _teamsData: EncounterTeamsData;
-	private playerMap: Map<string, number>;
+	private playerMap: Map<string, Player>;
 	private teamsState: EncounterTeamsState;
 
 	constructor(encounterStateData: EncounterData) {
@@ -52,7 +51,7 @@ export class EncounterState implements EncounterData {
 	}
 
 	public getAspectValue(playerId: string, aspectLabel: string): any {
-		const player: PlayerData = this._players[this.playerMap.get(playerId)];
+		const player: PlayerData = this.playerMap.get(playerId);
 		return player.characterData.values[aspectLabel];
 	}
 
@@ -60,28 +59,21 @@ export class EncounterState implements EncounterData {
 		if (!isUndefined(this.playerMap.get(player.id))) {
 			return;
 		}
-		const index = this._players.length;
-		this._players[index] = player;
-		this.playerMap.set(player._id, index);
+		this.playerMap.set(player._id, player);
 	}
 
 	public removePlayer(player: Player): void {
-		const index = this.playerMap.get(player.id);
-		this._players.splice(index, 1);
-		this.players = this._players;
+		this.playerMap.delete(player.id);
 	}
 
 	get players(): PlayerData[] {
-		return this._players;
+		return [...this.playerMap.values()];
 	}
 
 	set players(players: PlayerData[]) {
-		this._players = [];
-		this.playerMap = new Map<string, number>();
-		for (let i = 0; i < players.length; i++) {
-			let player = players[i];
-			this._players[i] = new Player(player);
-			this.playerMap.set(player._id, i);
+		this.playerMap = new Map<string, Player>();
+		for (let player of players) {
+			this.playerMap.set(player._id, new Player(player));
 		}
 	}
 

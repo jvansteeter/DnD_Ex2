@@ -52,4 +52,8 @@ export class BoardControllerComponent implements OnInit, OnDestroy {
 	openTeamSettings(): void {
 		this.dialog.open(TeamSettingsComponent);
 	}
+
+	exportEncounterJson(): void {
+		this.boardStateService.getExportJson();
+	}
 }
