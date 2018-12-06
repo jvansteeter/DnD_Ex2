@@ -15,7 +15,7 @@ gulp.task('serverscripts', function() {
         .pipe(serverTsProject())
         .js
         // .pipe(uglify())
-        .pipe(gulp.dest('server/dist'));
+        .pipe(gulp.dest('dist'));
 });
 
 // copy certain files like index.html toUserId dist

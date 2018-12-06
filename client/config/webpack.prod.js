@@ -8,10 +8,15 @@ module.exports = webpackMerge(commonConfig, {
 	mode: 'production',
 
 	output: {
-		path: helpers.root('dist'),
+		path: helpers.root('../dist/client'),
 		publicPath: 'static/',
 		filename: '[name].[hash].js',
 		chunkFilename: '[id].[hash].js'
+	},
+	entry: {
+		polyfills: './client/src/polyfills.ts',
+		app: './client/src/prod.ts',
+		login: './client/src/login.ts'
 	}
 });
 
