@@ -76,6 +76,11 @@ module.exports = {
 		  from: 'node_modules/bootstrap/dist/css/bootstrap.min.css',
 		  to: 'resources/styles/[name].[ext]',
 		  toType: 'template'
+	  }]),
+	  new CopyWebpackPlugin([{
+	  	from: './package.json',
+		  to: './../',
+		  toFrom: 'template'
 	  }])
   ]
 };
