@@ -79,7 +79,7 @@ module.exports = {
 	  }]),
 	  new CopyWebpackPlugin([{
 	  	from: './package.json',
-		  to: './../',
+		  to: './../server/src',
 		  toFrom: 'template'
 	  }])
   ]
