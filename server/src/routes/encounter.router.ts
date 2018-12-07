@@ -35,17 +35,6 @@ export class EncounterRouter {
 			}
 		});
 
-		this.router.post('/encounter/', async (req: Request, res: Response) => {
-			try {
-				await this.encounterService.setEncounter(req.body);
-				res.status(200).send("OK");
-			}
-			catch (error) {
-				console.error(error);
-				res.status(500).send(error);
-			}
-		});
-
 		this.router.post('/addCharacters', async (req: Request, res: Response) => {
 			try {
 				const encounterId = req.body.encounterId;
@@ -128,6 +117,32 @@ export class EncounterRouter {
 				await this.encounterService.removeNotation(notationId, userId);
 
 				res.status(200).send();
+			}
+			catch (error) {
+				console.error(error);
+				res.status(500).send(error);
+			}
+		});
+
+		this.router.get('/export/:encounterId', async (req: Request, res: Response) => {
+			try {
+				const encounterId: string = req.params.encounterId;
+				const exportJson = await this.encounterService.getExportJson(encounterId);
+				res.json(exportJson);
+			}
+			catch (error) {
+				console.error(error);
+				res.status(500).send(error);
+			}
+		});
+
+		this.router.post('/import/', async (req: Request, res: Response) => {
+			try {
+				const userId: string = req.user._id;
+				const data = req.body.data;
+				const campaignId: string = req.body.campaignId;
+				const exportJson = await this.encounterService.createNewFromJson(userId, campaignId, data);
+				res.json(exportJson);
 			}
 			catch (error) {
 				console.error(error);

@@ -8,14 +8,14 @@ module.exports = webpackMerge(commonConfig, {
 	mode: 'development',
 
   output: {
-    path: helpers.root('dist'),
+    path: helpers.root('../dist/client'),
     publicPath: 'static/',
     filename: '[name].js',
     chunkFilename: '[id].js'
   },
-
-  devServer: {
-    historyApiFallback: true,
-    stats: 'minimal'
-  }
+	entry: {
+		polyfills: './client/src/polyfills.ts',
+		app: './client/src/main.ts',
+		login: './client/src/login.ts'
+	}
 });

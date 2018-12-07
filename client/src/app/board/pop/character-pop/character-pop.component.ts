@@ -60,37 +60,6 @@ export class CharacterPopComponent {
 		this.encounterRepo.removePlayer(this.player.serialize()).subscribe();
 	}
 
-	mouseDown(event) {
-		switch (event.which) {
-			case 1:
-				this.boardStateService.mouseLeftDown = true;
-				break;
-			case 2:
-				break;
-			case 3:
-				break;
-		}
-	}
-
-	mouseUp(event) {
-		switch (event.which) {
-			case 1:
-				this.boardStateService.mouseLeftDown = false;
-				break;
-			case 2:
-				break;
-			case 3:
-				break;
-		}
-	}
-
-	mouseMove(event) {
-		if (this.boardStateService.mouseLeftDown) {
-			this.pos_x = this.pos_x + event.movementX;
-			this.pos_y = this.pos_y + event.movementY;
-		}
-	}
-
 	toggleVisibility(): void {
 		this.player.isVisible = !this.player.isVisible;
 	}

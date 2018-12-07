@@ -86,16 +86,6 @@ export class EncounterService {
 		return encounter;
 	}
 
-	public async setEncounter(encounterData: EncounterData): Promise<EncounterModel> {
-		try {
-			const encounterModel = await this.encounterRepo.findById(encounterData._id);
-			return await encounterModel.setEncounterState(encounterData);
-		}
-		catch (error) {
-			throw error;
-		}
-	}
-
 	public getAllForCampaignId(campaignId: string): Promise<EncounterModel[]> {
 		return new Promise<EncounterModel[]>((resolve, reject) => {
 			this.encounterRepo.findByCampaignId(campaignId).then((encounters: EncounterModel[]) => {
@@ -205,16 +195,15 @@ export class EncounterService {
 		}
 	}
 
-	public async setLightSources(encounterId: string, lightSources: string): Promise<void> {
+	public async setLightSources(encounterId: string, lightSources: LightSourceData[]): Promise<EncounterModel> {
 		try {
 			const encounter: EncounterModel = await this.encounterRepo.findById(encounterId);
-			const lights: LightSourceData[] = JSON.parse(lightSources);
+			const lights: LightSourceData[] = lightSources;
 			for (let light of lights) {
 				delete light.dim_polygon;
 				delete light.bright_polygon;
 			}
-			await encounter.setLightSources(lights);
-			return;
+			return await encounter.setLightSources(lights);
 		}
 		catch (error) {
 			throw error;
@@ -298,6 +287,32 @@ export class EncounterService {
 		catch (error) {
 			throw error;
 		}
+	}
+
+	public async getExportJson(encounterId: string): Promise<any> {
+		const encounterJson = await this.buildEncounterState(await this.encounterRepo.findById(encounterId));
+		delete encounterJson._id;
+		delete encounterJson.version;
+		delete encounterJson.date;
+		delete encounterJson.campaignId;
+		delete encounterJson.gameMasters;
+		delete encounterJson.players;
+		delete encounterJson.playerIds;
+		delete encounterJson.notationIds;
+		delete encounterJson.teamsData.users;
+		encounterJson.isOpen = false;
+		return encounterJson;
+	}
+
+	public async createNewFromJson(userId: string, campaignId: string, data: EncounterData): Promise<EncounterModel> {
+		let encounterModel: EncounterModel = await this.create(userId, data.label, campaignId, data.mapDimX, data.mapDimY, data.mapUrl);
+		encounterModel = await this.setEncounterConfig(encounterModel._id, data.config);
+		encounterModel = await this.setWallData(encounterModel._id, data.wallData);
+		encounterModel = await this.setDoorData(encounterModel._id, data.doorData);
+		encounterModel = await this.setLightSources(encounterModel._id, data.lightSources);
+		encounterModel = await this.setWindowData(encounterModel._id, data.windowData);
+		encounterModel = await this.setEncounterTeamsData(encounterModel._id, data.teamsData);
+		return encounterModel;
 	}
 
 	private async getPlayerPlacementMap(encounterModel: EncounterModel): Promise<boolean[][]> {

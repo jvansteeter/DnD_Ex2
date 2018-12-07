@@ -78,7 +78,7 @@ class App {
 
   // Configure Express middleware.
   private middleware(): void {
-    this.app.use(favicon('./client/src/resources/images/favicon.ico'));
+    this.app.use(favicon('./dist/client/resources/images/favicon.ico'));
     this.app.use(logger('dev'));
     this.app.use(bodyParser.json({limit: '50mb'}));
     this.app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
@@ -93,7 +93,7 @@ class App {
       	res.redirect('login');
       }
       else {
-        res.sendFile(path.resolve('./client/dist/index.html'))
+        res.sendFile(path.resolve('./dist/client/index.html'))
       }
     });
     this.app.use('/', authenticationRouter);
@@ -105,10 +105,9 @@ class App {
 
     //  **************************************** Serve the client files ********************************************
     //  If not logged in, serve the login app
-    this.app.use('/login', Express.static('./client/dist/login.html'));
-    this.app.use('/static', Express.static('./client/dist'));
-    this.app.use('/node_modules', Express.static('./node_modules'));
-    this.app.use('/resources', Express.static('./client/src/resources'));
+    this.app.use('/login', Express.static('./dist/client/login.html'));
+    this.app.use('/static', Express.static('./dist/client'));
+    this.app.use('/resources', Express.static('./dist/client/resources'));
     // this.app.use('/static/resources', Express.static('./client/dist/resources'));
     //  If logged in, serve the app
     // this.app.use('/static/app.js', this.isAuthenticated, Express.static('./client/dist/app.js'));

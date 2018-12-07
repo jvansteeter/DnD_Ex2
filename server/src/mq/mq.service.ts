@@ -91,7 +91,7 @@ export class MqService {
 						break;
 					}
 					case EncounterCommandType.LIGHT_SOURCE: {
-						this.encounterService.setLightSources(encounterId, command.body.data);
+						this.encounterService.setLightSources(encounterId, JSON.parse(command.body.data));
 						break;
 					}
 					case EncounterCommandType.ADD_NOTATION: {

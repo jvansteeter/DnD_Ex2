@@ -161,20 +161,6 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 		return this.save();
 	}
 
-	public setEncounterState(encounterState: EncounterData): Promise<EncounterModel> {
-		let playerIds: string[] = [];
-		if (!!encounterState.players) {
-			for (let player of encounterState.players) {
-				playerIds.push(player._id);
-			}
-		}
-		for (let item in encounterState) {
-			this[item] = encounterState[item];
-		}
-		this.playerIds = playerIds;
-		return this.save();
-	}
-
 	public setMapUrl(url: string): Promise<EncounterModel> {
 		this.mapUrl = url;
 		this.config.mapEnabled = true;

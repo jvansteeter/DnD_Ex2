@@ -11,10 +11,12 @@
 		</mat-form-field>
 	</mat-tab>
 	<mat-tab label="Background Image">
-		<a class="image-thumbnail" (click)="upload()">
+		<a class="image-thumbnail" (click)="uploadImage()">
 			<img *ngIf="mapUrl" class="token-component-image" [src]="mapUrl"/>
 		</a>
 	</mat-tab>
+	<mat-tab label="Import from JSON">
+		<button mat-raised-button color="primary" (click)="uploadImportJson()">Import</button>
+	</mat-tab>
 </mat-tab-group>
-<input type="file" accept="image/*" #fileInput (change)="loadImage()" />
 <button mat-raised-button color="primary" (click)="createEncounter()">Create</button>

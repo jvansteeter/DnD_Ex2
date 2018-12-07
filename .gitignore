@@ -67,3 +67,5 @@ client/typings/
 .idea/
 
 docs/
+
+dist/

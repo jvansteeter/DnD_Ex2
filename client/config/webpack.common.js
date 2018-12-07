@@ -1,13 +1,8 @@
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var helpers = require('./helpers');
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 module.exports = {
-  entry: {
-    polyfills: './client/src/polyfills.ts',
-    app: './client/src/main.ts',
-    login: './client/src/login.ts'
-  },
-
   resolve: {
     extensions: ['.ts', '.js', '.css', '.scss']
   },
@@ -50,7 +45,7 @@ module.exports = {
         test: /\.css$/,
         include: [helpers.root('src', 'app'), helpers.root('src', 'login'), helpers.root('src', 'resources')],
         use: 'raw-loader'
-      },
+      }
     ]
   },
 
@@ -65,6 +60,28 @@ module.exports = {
       template: 'client/login.html',
       chunks: ['login', 'vendor', 'polyfills']
     }),
+		new CopyWebpackPlugin([{
+			from: helpers.root('src', 'resources'),
+			to: 'resources/[path]/[name].[ext]',
+			toType: 'template'
+		}], {
+			copyUnmodified: true
+		}),
+	  new CopyWebpackPlugin([{
+	    from: 'node_modules/@angular/material/prebuilt-themes/indigo-pink.css',
+		  to: 'resources/styles/[name].[ext]',
+		  toType: 'template'
+	  }]),
+	  new CopyWebpackPlugin([{
+		  from: 'node_modules/bootstrap/dist/css/bootstrap.min.css',
+		  to: 'resources/styles/[name].[ext]',
+		  toType: 'template'
+	  }]),
+	  new CopyWebpackPlugin([{
+	  	from: './package.json',
+		  to: './../server/src',
+		  toFrom: 'template'
+	  }])
   ]
 };
 

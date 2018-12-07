@@ -6,11 +6,13 @@
   "types": "lib/index",
   "scripts": {
     "start": "npm run build && npm run server",
-    "server": "concurrently \"gulp watch\" \"nodemon server/dist/server/src/index.js secretArg\" \"webpack --progress --colors --watch\"",
+    "server": "concurrently \"gulp watch\" \"nodemon ./dist/server/src/index.js secretArg\" \"webpack --progress --colors --watch\"",
     "build": "npm run clean && gulp && webpack",
     "test": "mocha --reporter spec --compilers ts:ts-node/register test/helloWorld.test.ts",
-    "clean": "rimraf client/dist client/typings server/dist",
-    "prod": "cross-env ENV=production npm run clean && gulp && webpack --config client/config/webpack.prod.js && node server/dist/src/index.js secretArg",
+    "clean": "rimraf ./dist client/typings",
+    "prod-build": "npm run clean && cross-env ENV=production && gulp && webpack --config client/config/webpack.prod.js",
+    "prod-start": "node ./dist/server/src/index.js secretArg",
+    "prod": "npm run prod-build && npm run prod-start",
     "docs": "./node_modules/.bin/compodoc -p client/tsconfig.json -d docs/client"
   },
   "repository": {
