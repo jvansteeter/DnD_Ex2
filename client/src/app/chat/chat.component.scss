@@ -67,6 +67,10 @@ mat-tab {
 	flex: 1;
 }
 
+/deep/ app-chat .mat-tab-body-content {
+	overflow: hidden;
+}
+
 /deep/ .ng-resizable-diagonal {
 	z-index: 1000;
 }

@@ -8,6 +8,7 @@ export class Chat extends StompMessage implements ChatMessage {
 		type: MqMessageType.CHAT;
 		chatType: ChatType;
 		fromUserId: string;
+		timestamp: number;
 		userIds?: string[];
 	};
 	body: string;
@@ -17,6 +18,7 @@ export class Chat extends StompMessage implements ChatMessage {
 		this.headers.chatType = message.headers.chatType;
 		this.headers.fromUserId = message.headers.fromUserId;
 		this.headers.userIds = message.headers.userIds;
+		this.headers.timestamp = message.headers.timestamp;
 	}
 
 	serializeBody(): string {

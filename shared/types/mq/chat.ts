@@ -8,6 +8,7 @@ export interface ChatMessage extends MqMessage{
 		chatType: ChatType,
 		fromUserId: string,
 		userIds?: string[],
+		timestamp: number,
 	}
 	body: string
 }

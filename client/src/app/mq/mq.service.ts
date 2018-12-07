@@ -125,6 +125,7 @@ export class MqService extends IsReadyService {
 									return new CampaignInviteMessage(message);
 								}
 								case MqMessageType.CHAT: {
+									console.log('new chat')
 									return new Chat(message);
 								}
 								default: {
