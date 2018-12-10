@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ChatService } from '../data-services/chat.service';
 import { FriendService } from '../data-services/friend.service';
 import { FormControl } from '@angular/forms';
@@ -7,49 +7,56 @@ import { MatAutocomplete, MatChipInputEvent } from '@angular/material';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { UserProfile } from '../types/userProfile';
+import { UserProfileService } from '../data-services/userProfile.service';
+import { ChatRoom } from './chat-room';
 
 @Component({
 	selector: 'app-chat',
 	templateUrl: 'chat.component.html',
 	styleUrls: ['chat.component.scss', 'resizable.css'],
 })
-export class ChatComponent {
+export class ChatComponent implements OnInit {
 	public chatContent: string;
 
 	@ViewChild('auto') matAutocomplete: MatAutocomplete;
 	@ViewChild('chipInput') chipInput: ElementRef<HTMLInputElement>;
 
-	public toBarList: string[] = [];
 	public toBarControl = new FormControl();
 	separatorKeysCodes: number[] = [ENTER, COMMA];
 	filteredFriends: Observable<UserProfile[]>;
+	selectedIndex: number;
 
 	constructor(public chatService: ChatService,
-	            public friendService: FriendService) {
+	            public friendService: FriendService,
+	            private userProfileService: UserProfileService) {
 		this.filteredFriends = this.toBarControl.valueChanges.pipe(
 				startWith(null),
 				map((input: string | null) => input ? this.friendService.filterFriendsByUsername(input) : this.friendService.friends)
 		);
 	}
 
+	public ngOnInit(): void {
+
+	}
+
 	public sendChat(): void {
-		const userIds = [];
-		for (let username of this.toBarList) {
-			let friend = this.friendService.getFriendByUserName(username);
-			userIds.push(friend._id);
-		}
+		const room: ChatRoom = this.chatService.chatRooms[this.selectedIndex];
+		const userIds = [this.userProfileService.userId, ...room.userIds];
 		this.chatService.sendToUsers(userIds, this.chatContent);
 		this.chatContent = '';
 	}
 
-	public removeChip(chip): void {
-		this.toBarList.splice(this.toBarList.indexOf(chip), 1);
+	public removeUser(userId: string): void {
+		const room: ChatRoom = this.chatService.chatRooms[this.selectedIndex];
+		room.removeUser(userId);
 	}
 
 	selected(event): void {
-		this.toBarList.push(event.option.viewValue);
-		this.chipInput.nativeElement.value = '';
-		this.toBarControl.setValue(null);
+		// const room: ChatRoom = this.chatService.chatRooms[this.selectedIndex];
+		// const user: UserProfile = this.friendService.getFriendByUserId(event.option.viewValue);
+		// room.addUserId(user._id);
+		// this.chipInput.nativeElement.value = '';
+		// this.toBarControl.setValue(null);
 	}
 
 	add(event: MatChipInputEvent): void {
@@ -58,7 +65,11 @@ export class ChatComponent {
 			const value = event.value;
 
 			if ((value || '').trim()) {
-				this.toBarList.push(value.trim());
+				const room: ChatRoom = this.chatService.chatRooms[this.selectedIndex];
+				const user: UserProfile = this.friendService.getFriendByUserId(value.trim());
+				room.addUserId(user._id);
+				this.chipInput.nativeElement.value = '';
+				this.toBarControl.setValue(null);
 			}
 
 			if (input) {

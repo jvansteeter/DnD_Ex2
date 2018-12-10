@@ -106,7 +106,6 @@ export class MqService extends IsReadyService {
 				break;
 			}
 		}
-		// this.stompService.publish(url, message, headers);
 	}
 
 	private connectToUserQueue(): void {
@@ -125,7 +124,6 @@ export class MqService extends IsReadyService {
 									return new CampaignInviteMessage(message);
 								}
 								case MqMessageType.CHAT: {
-									console.log('new chat')
 									return new Chat(message);
 								}
 								default: {

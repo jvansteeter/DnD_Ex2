@@ -60,6 +60,16 @@ export class FriendService extends IsReadyService {
 		return undefined;
 	}
 
+	public getFriendByUserId(id: string): UserProfile {
+		for (let friend of this._friends) {
+			if (friend._id === id) {
+				return friend;
+			}
+		}
+
+		return undefined;
+	}
+
 	public filterFriendsByUsername(input: string): UserProfile[] {
 		const filterValue = input.toLowerCase();
 

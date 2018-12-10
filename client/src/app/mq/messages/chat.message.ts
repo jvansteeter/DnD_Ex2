@@ -17,8 +17,13 @@ export class Chat extends StompMessage implements ChatMessage {
 		super(message);
 		this.headers.chatType = message.headers.chatType;
 		this.headers.fromUserId = message.headers.fromUserId;
-		this.headers.userIds = message.headers.userIds;
 		this.headers.timestamp = message.headers.timestamp;
+		if (!Array.isArray(message.headers.userIds)) {
+			this.headers.userIds = message.headers.userIds.split(',');
+		}
+		else {
+			this.headers.userIds = message.headers.userIds;
+		}
 	}
 
 	serializeBody(): string {

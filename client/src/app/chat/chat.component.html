@@ -1,18 +1,18 @@
 <mat-card class="app-chat" cdkDrag ngResizable *ngIf="chatService.showChatWindow">
-	<div class="toolbar"></div>
-	<mat-tab-group>
+	<div class="toolbar" cdkDragHandle></div>
+	<mat-tab-group [(selectedIndex)]="selectedIndex">
 		<mat-tab *ngFor="let chatRoom of chatService.chatRooms">
 			<ng-template mat-tab-label>
-				Tab 1
+				<span>{{chatRoom.hash()}}</span>
 			</ng-template>
 			<div class="toUsers-line">
 				<mat-form-field class="chip-list">
 					<mat-chip-list #matChipList>
-						<mat-chip *ngFor="let chip of toBarList"
+						<mat-chip *ngFor="let userId of chatRoom.userIds"
 							[selectable]="true"
 							[removable]="true"
-							(removed)="removeChip(chip)">
-							{{chip}}
+							(removed)="removeUser(userId)">
+							{{friendService.getFriendByUserId(userId).username}}
 							<mat-icon matChipRemove>cancel</mat-icon>
 						</mat-chip>
 						<input placeholder="Users in chat" #chipInput
@@ -28,11 +28,11 @@
 					</mat-autocomplete>
 				</mat-form-field>
 			</div>
-			<mat-chip-list class="chat-history mat-chip-list-stacked">
-				<mat-chip *ngFor="let chat of chatService.getChats(chatRoom)">{{chat.body}}</mat-chip>
-			</mat-chip-list>
+			<div class="chat-history">
+				<div *ngFor="let chat of chatRoom.chats" class="chat-bubble">{{chat.body}}</div>
+			</div>
 			<div class="input-line">
-				<input class="app-input" (keypress.return)="sendChat()" [(ngModel)]="chatContent"/>
+				<input class="app-input" (submit)="sendChat()" [(ngModel)]="chatContent"/>
 				<button mat-raised-button color="primary" (click)="sendChat()">Send</button>
 			</div>
 		</mat-tab>
