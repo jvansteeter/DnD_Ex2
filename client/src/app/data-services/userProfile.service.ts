@@ -42,6 +42,14 @@ export class UserProfileService extends IsReadyService {
 		return this.userProfile._id;
 	}
 
+	get username(): string {
+		if (this.userProfile) {
+			return this.userProfile.username;
+		}
+
+		return '';
+	}
+
 	get passwordHash(): string {
 		if (!this.userProfile) {
 			return '';

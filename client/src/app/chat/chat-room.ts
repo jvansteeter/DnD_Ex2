@@ -1,10 +1,11 @@
 import { Chat } from '../mq/messages/chat.message';
+import { UserIdToUsernamePipe } from '../utilities/pipes/userId-to-username.pipe';
 
 export class ChatRoom {
 	private _userIds: string[];
 	private _chats: Chat[];
 
-	constructor(userIds: string[]) {
+	constructor(userIds: string[], private userIdToUsernamePipe: UserIdToUsernamePipe) {
 		this._userIds = userIds;
 		this._userIds.sort();
 		this._chats = [];
@@ -43,7 +44,7 @@ export class ChatRoom {
 	public hash(): string {
 		let hash = '';
 		for (let id of this._userIds) {
-			hash += id;
+			hash += ', ' + this.userIdToUsernamePipe.transform(id);
 		}
 
 		return hash;

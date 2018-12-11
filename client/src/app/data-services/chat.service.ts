@@ -10,6 +10,7 @@ import { filter, map, tap } from 'rxjs/operators';
 import { StompMessage } from '../mq/messages/stomp-message';
 import { isUndefined } from 'util';
 import { ChatRoom } from '../chat/chat-room';
+import { UserIdToUsernamePipe } from '../utilities/pipes/userId-to-username.pipe';
 
 @Injectable()
 export class ChatService extends IsReadyService {
@@ -18,7 +19,8 @@ export class ChatService extends IsReadyService {
 	private chatSub: Subscription;
 
 	constructor(private mqService: MqService,
-	            private userProfileService: UserProfileService) {
+	            private userProfileService: UserProfileService,
+	            private userIdToUsernamePipe: UserIdToUsernamePipe) {
 		super(mqService, userProfileService);
 		this._chatRooms = new Map();
 		this.init();
@@ -27,7 +29,7 @@ export class ChatService extends IsReadyService {
 	init(): void {
 		this.dependenciesSub = this.dependenciesReady().subscribe((isReady: boolean) => {
 			if (isReady) {
-				const newChat = new ChatRoom([]);
+				const newChat = new ChatRoom([], this.userIdToUsernamePipe);
 				this._chatRooms.set(newChat.hash(), newChat);
 				this.handleIncomingChats();
 				this.setReady(true);
@@ -83,7 +85,7 @@ export class ChatService extends IsReadyService {
 				}),
 		).subscribe((chat: Chat) => {
 			console.log(chat);
-			const newChatRoom = new ChatRoom(chat.headers.userIds);
+			const newChatRoom = new ChatRoom(chat.headers.userIds, this.userIdToUsernamePipe);
 			if (this._chatRooms.size === 1 && this._chatRooms.has('')) {
 				this._chatRooms.clear();
 			}

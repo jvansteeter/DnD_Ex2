@@ -16,6 +16,7 @@ import { AngularDraggableModule } from 'angular2-draggable';
 import { ChatService } from '../data-services/chat.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { UtilityModule } from '../utilities/utility.module';
 
 @NgModule({
 	imports: [
@@ -32,6 +33,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 			MatAutocompleteModule,
 			ReactiveFormsModule,
 			MatIconModule,
+			UtilityModule,
 	],
 	declarations: [
 			ChatComponent,
