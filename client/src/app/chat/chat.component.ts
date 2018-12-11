@@ -9,6 +9,7 @@ import { map, startWith } from 'rxjs/operators';
 import { UserProfile } from '../types/userProfile';
 import { UserProfileService } from '../data-services/userProfile.service';
 import { ChatRoom } from './chat-room';
+import { isUndefined } from "util";
 
 @Component({
 	selector: 'app-chat',
@@ -24,7 +25,7 @@ export class ChatComponent implements OnInit {
 	public toBarControl = new FormControl();
 	separatorKeysCodes: number[] = [ENTER, COMMA];
 	filteredFriends: Observable<UserProfile[]>;
-	selectedIndex: number;
+	selectedIndex: number = 0;
 
 	constructor(public chatService: ChatService,
 	            public friendService: FriendService,
@@ -41,8 +42,7 @@ export class ChatComponent implements OnInit {
 
 	public sendChat(): void {
 		const room: ChatRoom = this.chatService.chatRooms[this.selectedIndex];
-		const userIds = [this.userProfileService.userId, ...room.userIds];
-		this.chatService.sendToUsers(userIds, this.chatContent);
+		this.chatService.sendToUsers(room.userIds, this.chatContent);
 		this.chatContent = '';
 	}
 
@@ -51,23 +51,24 @@ export class ChatComponent implements OnInit {
 		room.removeUser(userId);
 	}
 
-	selected(event): void {
-		// const room: ChatRoom = this.chatService.chatRooms[this.selectedIndex];
-		// const user: UserProfile = this.friendService.getFriendByUserId(event.option.viewValue);
-		// room.addUserId(user._id);
-		// this.chipInput.nativeElement.value = '';
-		// this.toBarControl.setValue(null);
+	public addUserToChatRoom(username: string): void {
+		const room: ChatRoom = this.chatService.chatRooms[this.selectedIndex];
+		const user: UserProfile = this.friendService.getFriendByUserName(username);
+		room.addUserId(user._id);
+		this.chipInput.nativeElement.value = '';
+		this.toBarControl.setValue(null);
 	}
 
-	add(event: MatChipInputEvent): void {
+	public autoCompleteInput(event: MatChipInputEvent): void {
 		if (!this.matAutocomplete.isOpen) {
 			const input = event.input;
-			const value = event.value;
+			let value = event.value;
 
 			if ((value || '').trim()) {
-				const room: ChatRoom = this.chatService.chatRooms[this.selectedIndex];
-				const user: UserProfile = this.friendService.getFriendByUserId(value.trim());
-				room.addUserId(user._id);
+				value = value.trim();
+				if (!isUndefined(this.friendService.getFriendByUserName(value))) {
+					this.addUserToChatRoom(value);
+				}
 				this.chipInput.nativeElement.value = '';
 				this.toBarControl.setValue(null);
 			}

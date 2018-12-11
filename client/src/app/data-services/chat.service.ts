@@ -47,6 +47,16 @@ export class ChatService extends IsReadyService {
 	}
 
 	public sendToUsers(userIds: string[], message: string): void {
+		let containsLocalUserId = false;
+		for (let userId of userIds) {
+			if (userId === this.userProfileService.userId) {
+				containsLocalUserId = true;
+				break;
+			}
+		}
+		if (!containsLocalUserId) {
+			userIds.push(this.userProfileService.userId);
+		}
 		const chat: Chat = new Chat({
 			headers: {
 				type: MqMessageType.CHAT,

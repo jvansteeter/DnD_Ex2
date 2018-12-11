@@ -8,28 +8,30 @@
 			<div class="toUsers-line">
 				<mat-form-field class="chip-list">
 					<mat-chip-list #matChipList>
-						<mat-chip *ngFor="let userId of chatRoom.userIds"
-							[selectable]="true"
-							[removable]="true"
-							(removed)="removeUser(userId)">
-							{{friendService.getFriendByUserId(userId).username}}
-							<mat-icon matChipRemove>cancel</mat-icon>
-						</mat-chip>
+						<ng-container *ngFor="let userId of chatRoom.userIds">
+							<mat-chip *ngIf="userId !== userProfileService.userId"
+									[selectable]="true"
+									[removable]="true"
+									(removed)="removeUser(userId)">
+								{{friendService.getFriendByUserId(userId).username}}
+								<mat-icon matChipRemove>cancel</mat-icon>
+							</mat-chip>
+						</ng-container>
 						<input placeholder="Users in chat" #chipInput
 						       [formControl]="toBarControl"
 						       [matAutocomplete]="auto"
 						       [matChipInputFor]="matChipList"
 						       [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
 						       [matChipInputAddOnBlur]="true"
-						       (matChipInputTokenEnd)="add($event)">
+						       (matChipInputTokenEnd)="autoCompleteInput($event)">
 					</mat-chip-list>
-					<mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+					<mat-autocomplete #auto="matAutocomplete" (optionSelected)="addUserToChatRoom($event.option.viewValue)">
 						<mat-option *ngFor="let friend of filteredFriends | async" [value]="friend.username">{{friend.username}}</mat-option>
 					</mat-autocomplete>
 				</mat-form-field>
 			</div>
 			<div class="chat-history">
-				<div *ngFor="let chat of chatRoom.chats" class="chat-bubble">{{chat.body}}</div>
+				<div *ngFor="let chat of chatRoom.chats" [class]="chat.headers.fromUserId === userProfileService.userId ? 'chat-bubble mine' : 'chat-bubble theirs'" >{{chat.body}}</div>
 			</div>
 			<div class="input-line">
 				<input class="app-input" (submit)="sendChat()" [(ngModel)]="chatContent"/>

@@ -64,10 +64,11 @@ mat-tab {
 	flex: 1;
 	margin-bottom: 50px;
 	overflow-y: auto;
+	display: flex;
+	flex-direction: column;
 }
 
 .chat-bubble {
-	background-color: lightskyblue;
 	margin: 4px;
 	padding: 7px 8px 7px 12px;
 	transition: box-shadow 280ms cubic-bezier(.4,0,.2,1);
@@ -76,7 +77,17 @@ mat-tab {
 	align-items: center;
 	cursor: default;
 	min-height: 32px;
-	width: 60%;
+	max-width: 60%;
+}
+
+.chat-bubble.theirs {
+	margin-right: auto;
+	background-color: lightskyblue;
+}
+
+.chat-bubble.mine {
+	margin-left: auto;
+	background-color: lightgray;
 }
 
 /deep/ app-chat .mat-tab-body-wrapper {

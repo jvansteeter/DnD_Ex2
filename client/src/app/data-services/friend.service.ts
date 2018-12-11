@@ -67,7 +67,7 @@ export class FriendService extends IsReadyService {
 			}
 		}
 
-		return undefined;
+		return {username: ''} as UserProfile;
 	}
 
 	public filterFriendsByUsername(input: string): UserProfile[] {
