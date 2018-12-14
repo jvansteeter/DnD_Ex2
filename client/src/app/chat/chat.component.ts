@@ -1,46 +1,60 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { ChatService } from '../data-services/chat.service';
 import { FriendService } from '../data-services/friend.service';
 import { FormControl } from '@angular/forms';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { MatAutocomplete, MatChipInputEvent } from '@angular/material';
+import { MatAutocomplete, MatChipInputEvent, MatTabGroup } from '@angular/material';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { UserProfile } from '../types/userProfile';
 import { UserProfileService } from '../data-services/userProfile.service';
 import { ChatRoom } from './chat-room';
-import { isUndefined } from "util";
+import { isNull, isUndefined } from "util";
 
 @Component({
 	selector: 'app-chat',
 	templateUrl: 'chat.component.html',
 	styleUrls: ['chat.component.scss', 'resizable.css'],
 })
-export class ChatComponent implements OnInit {
-	public chatContent: string;
-
+export class ChatComponent {
 	@ViewChild('auto') matAutocomplete: MatAutocomplete;
 	@ViewChild('chipInput') chipInput: ElementRef<HTMLInputElement>;
+	@ViewChild('tabGroup') tabGroup: MatTabGroup;
 
+	public chatContent: string = '';
 	public toBarControl = new FormControl();
-	separatorKeysCodes: number[] = [ENTER, COMMA];
-	filteredFriends: Observable<UserProfile[]>;
-	selectedIndex: number = 0;
+	public separatorKeysCodes: number[] = [ENTER, COMMA];
+	public filteredFriends: Observable<UserProfile[]>;
+
+	private selectedIndex: number = 0;
 
 	constructor(public chatService: ChatService,
 	            public friendService: FriendService,
 	            private userProfileService: UserProfileService) {
 		this.filteredFriends = this.toBarControl.valueChanges.pipe(
 				startWith(null),
-				map((input: string | null) => input ? this.friendService.filterFriendsByUsername(input) : this.friendService.friends)
+				map((input: string | null) => this.filterFriends(input))
 		);
 	}
 
-	public ngOnInit(): void {
+	@HostListener('mouseover')
+	public onHover(): void {
+		const room: ChatRoom = this.chatService.chatRooms[this.selectedIndex];
+		if (room.unreadChatCount > 0) {
+			room.clearUnreadChatCount();
+			this.chatService.calculateUnreadCount();
+		}
+	}
 
+	public selectedTabIndexChange(index: number): void {
+		this.selectedIndex = index;
 	}
 
 	public sendChat(): void {
+		this.chatContent = this.chatContent.trim();
+		if (this.chatContent === '') {
+			return;
+		}
 		const room: ChatRoom = this.chatService.chatRooms[this.selectedIndex];
 		this.chatService.sendToUsers(room.userIds, this.chatContent);
 		this.chatContent = '';
@@ -54,9 +68,20 @@ export class ChatComponent implements OnInit {
 	public addUserToChatRoom(username: string): void {
 		const room: ChatRoom = this.chatService.chatRooms[this.selectedIndex];
 		const user: UserProfile = this.friendService.getFriendByUserName(username);
+		if (room.userIds.includes(user._id)) {
+			return;
+		}
 		room.addUserId(user._id);
 		this.chipInput.nativeElement.value = '';
 		this.toBarControl.setValue(null);
+	}
+
+	public addNewChatRoom(): void {
+		this.chatService.addNewChatRoom();
+		setTimeout(() => {
+			this.selectedIndex = this.tabGroup._tabs.length - 1;
+			this.tabGroup.selectedIndex = this.selectedIndex;
+		});
 	}
 
 	public autoCompleteInput(event: MatChipInputEvent): void {
@@ -79,5 +104,17 @@ export class ChatComponent implements OnInit {
 
 			this.toBarControl.setValue(null);
 		}
+	}
+
+	private filterFriends(input: string | null): UserProfile[] {
+		let friendList = [];
+		if (isNull(input)) {
+			friendList = this.friendService.friends;
+		}
+		else {
+			friendList = this.friendService.filterFriendsByUsername(input);
+		}
+		const room = this.chatService.chatRooms[this.selectedIndex];
+		return friendList.filter((friend: UserProfile) => !room.userIds.includes(friend._id));
 	}
 }

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { ChatComponent } from './chat.component';
 import {
-	MatAutocompleteModule,
+	MatAutocompleteModule, MatBadgeModule,
 	MatButtonModule,
 	MatCardModule,
 	MatChipsModule,
@@ -17,6 +17,7 @@ import { ChatService } from '../data-services/chat.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UtilityModule } from '../utilities/utility.module';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @NgModule({
 	imports: [
@@ -34,6 +35,8 @@ import { UtilityModule } from '../utilities/utility.module';
 			ReactiveFormsModule,
 			MatIconModule,
 			UtilityModule,
+			MatBadgeModule,
+			ScrollingModule,
 	],
 	declarations: [
 			ChatComponent,

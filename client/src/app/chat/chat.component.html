@@ -1,9 +1,14 @@
 <mat-card class="app-chat" cdkDrag ngResizable *ngIf="chatService.showChatWindow">
 	<div class="toolbar" cdkDragHandle></div>
-	<mat-tab-group [(selectedIndex)]="selectedIndex">
+	<button class="add-chat-room" mat-mini-fab color="primary" (click)="addNewChatRoom()"><mat-icon>add</mat-icon></button>
+	<mat-tab-group (selectedIndexChange)="selectedTabIndexChange($event)" #tabGroup>
 		<mat-tab *ngFor="let chatRoom of chatService.chatRooms">
 			<ng-template mat-tab-label>
-				<span>{{chatRoom.hash()}}</span>
+				<span *ngIf="chatRoom.unreadChatCount === 0">{{chatRoom.label}}</span>
+				<span *ngIf="chatRoom.unreadChatCount > 0"
+				      [matBadge]="chatRoom.unreadChatCount"
+						  matBadgePosition="above after"
+						  matBadgeColor="warn">{{chatRoom.label}}</span>
 			</ng-template>
 			<div class="toUsers-line">
 				<mat-form-field class="chip-list">
@@ -11,13 +16,14 @@
 						<ng-container *ngFor="let userId of chatRoom.userIds">
 							<mat-chip *ngIf="userId !== userProfileService.userId"
 									[selectable]="true"
-									[removable]="true"
+									[removable]="chatRoom.editable"
 									(removed)="removeUser(userId)">
 								{{friendService.getFriendByUserId(userId).username}}
-								<mat-icon matChipRemove>cancel</mat-icon>
+								<mat-icon matChipRemove *ngIf="chatRoom.editable">cancel</mat-icon>
 							</mat-chip>
 						</ng-container>
 						<input placeholder="Users in chat" #chipInput
+						       [disabled]="!chatRoom.editable"
 						       [formControl]="toBarControl"
 						       [matAutocomplete]="auto"
 						       [matChipInputFor]="matChipList"
@@ -34,7 +40,7 @@
 				<div *ngFor="let chat of chatRoom.chats" [class]="chat.headers.fromUserId === userProfileService.userId ? 'chat-bubble mine' : 'chat-bubble theirs'" >{{chat.body}}</div>
 			</div>
 			<div class="input-line">
-				<input class="app-input" (submit)="sendChat()" [(ngModel)]="chatContent"/>
+				<input class="app-input" (keyup.enter)="sendChat()" [(ngModel)]="chatContent"/>
 				<button mat-raised-button color="primary" (click)="sendChat()">Send</button>
 			</div>
 		</mat-tab>

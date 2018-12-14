@@ -1,17 +1,33 @@
 import { Chat } from '../mq/messages/chat.message';
-import { UserIdToUsernamePipe } from '../utilities/pipes/userId-to-username.pipe';
+import { ChatType } from '../../../../shared/types/mq/chat-type.enum';
 
 export class ChatRoom {
 	private _userIds: string[];
 	private _chats: Chat[];
+	private _unreadChatCount: number;
+	private _label: string;
+	readonly chatType: ChatType;
 
-	constructor(userIds: string[], private userIdToUsernamePipe: UserIdToUsernamePipe) {
+	public editable: boolean = true;
+
+	static readonly NEW_CHAT = 'New Chat';
+
+	constructor(userIds: string[], type: ChatType) {
+		if (userIds.length === 0) {
+			console.error('User creating chatroom must be present in room');
+		}
+		this.chatType = type;
 		this._userIds = userIds;
 		this._userIds.sort();
 		this._chats = [];
+		this._unreadChatCount = 0;
 	}
 
-	public addChat(chat: Chat): void {
+	public addChat(chat: Chat, isFromMe: boolean = false): void {
+		this.editable = false;
+		if (!isFromMe) {
+			this._unreadChatCount++;
+		}
 		this._chats.push(chat);
 		this._chats.sort((a: Chat, b: Chat) => {
 			if (a.headers.timestamp < b.headers.timestamp) {
@@ -33,6 +49,10 @@ export class ChatRoom {
 		this._userIds.splice(this._userIds.indexOf(userId), 1);
 	}
 
+	public clearUnreadChatCount(): void {
+		this._unreadChatCount = 0;
+	}
+
 	get userIds(): string[] {
 		return this._userIds;
 	}
@@ -41,10 +61,26 @@ export class ChatRoom {
 		return this._chats;
 	}
 
+	get label(): string {
+		return this._label;
+	}
+
+	set label(value) {
+		this._label = value;
+	}
+
+	get unreadChatCount(): number {
+		return this._unreadChatCount;
+	}
+
 	public hash(): string {
-		let hash = '';
+		if (this._userIds.length === 1) {
+			return ChatRoom.NEW_CHAT;
+		}
+
+		let hash = this.chatType.toString();
 		for (let id of this._userIds) {
-			hash += ', ' + this.userIdToUsernamePipe.transform(id);
+			hash += ',' + id;
 		}
 
 		return hash;

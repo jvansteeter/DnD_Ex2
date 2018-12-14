@@ -23,10 +23,15 @@ import { BoardModule } from "./board/board.module";
 import { HttpClientModule } from '@angular/common/http';
 import { MainTableComponent } from './main-table/main-table.component';
 import { MainNavModule } from './main-nav/main-nav.module';
-import { StompRService } from "@stomp/ng2-stompjs";
+import {
+	InjectableRxStompConfig,
+	RxStompService,
+	rxStompServiceFactory,
+} from "@stomp/ng2-stompjs";
 import { MqService } from './mq/mq.service';
 import { ChatModule } from './chat/chat.module';
 import { ChatService } from './data-services/chat.service';
+import { StompConfiguration } from './mq/StompConfig';
 
 @NgModule({
 	imports: [
@@ -61,7 +66,15 @@ import { ChatService } from './data-services/chat.service';
 		MainTableComponent,
 	],
 	providers: [
-		StompRService,
+		{
+			provide: RxStompService,
+			useFactory: rxStompServiceFactory,
+			deps: [InjectableRxStompConfig]
+		},
+		{
+			provide: InjectableRxStompConfig,
+			useValue: StompConfiguration,
+		},
 		MqService,
 		ChatService,
 	],
