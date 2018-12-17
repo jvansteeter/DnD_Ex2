@@ -8,6 +8,7 @@ import { CharacterSheetService } from '../services/character-sheet.service';
 import { SocialService } from '../services/social.service';
 import { UserModel } from "../db/models/user.model";
 import { CharacterRepository } from '../db/repositories/character.repository';
+import { from } from 'rxjs';
 
 /**********************************************************************************************************
  * Social ROUTER
@@ -40,14 +41,17 @@ export class SocialRouter {
 	}
 
 	init() {
-
-		this.router.post('/acceptFriendRequest', (req: Request, res: Response) => {
-			this.socialService.acceptFriendRequest(req.user._id, req.body.userId).then(() => {
-				res.send("OK");
-			}).catch(error => {
+		this.router.post('/acceptFriendRequest', async (req: Request, res: Response) => {
+			try {
+				const toUserId: string = req.user._id;
+				const fromUserId: string = req.body.userId;
+				await this.socialService.acceptFriendRequest(toUserId, fromUserId);
+				res.status(200).send();
+			}
+			catch (error) {
 				console.error(error);
 				res.status(500).send(error);
-			});
+			}
 		});
 
 		this.router.post('/rejectFriendRequest', (req: Request, res: Response) => {

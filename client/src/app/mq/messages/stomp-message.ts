@@ -28,6 +28,10 @@ export abstract class StompMessage implements MqMessage {
 				type = MqMessageType.CAMPAIGN_UPDATE;
 				break;
 			}
+			case MqMessageType.CHAT: {
+				type = MqMessageType.CHAT;
+				break;
+			}
 		}
 
 		this.headers = {

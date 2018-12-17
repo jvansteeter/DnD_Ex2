@@ -1,7 +1,14 @@
 <mat-toolbar color="primary" class="main-toolbar">
-	<span [routerLink]="'home'" class="app-title">Game Map</span>
+	<span [routerLink]="'home'" class="app-title">Co GM</span>
 	<span class="right-toolbarButtons" [style.right.px]="0">
-        <app-notifications></app-notifications>
+		<button mat-button class="navbar-menuButton" (click)="chatService.toggleChatWindow()">
+			<mat-icon *ngIf="chatService.totalUnreadCount === 0">mail</mat-icon>
+			<mat-icon *ngIf="chatService.totalUnreadCount > 0"
+			          [matBadge]="chatService.totalUnreadCount"
+			          matBadgePosition="below after"
+							  matBadgeColor="warn">mail</mat-icon>
+		</button>
+    <app-notifications></app-notifications>
 		<button mat-button class="navbar-menuButton" [matMenuTriggerFor]="profileMenu">
 			<mat-icon>person</mat-icon>
 		</button>

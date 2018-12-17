@@ -1,0 +1,130 @@
+:host {
+	position: absolute;
+	z-index: 996;
+	top: -1000px;
+	left: -1000px;
+}
+
+.app-chat {
+	top: 1100px;
+	left: 1100px;
+	padding: 0;
+	max-height: 85vh;
+}
+
+.toolbar {
+	background-color: #3f51b4;
+	height: 25px;
+	min-height: 25px;
+	width: 100%;
+	border-radius: 4px 4px 0 0;
+}
+
+.toUsers-line {
+
+}
+
+.chip-list {
+	width: 100%;
+	overflow: hidden;
+}
+
+.input-line {
+	position: absolute;
+	bottom: 0;
+	display: flex;
+	width: 100%;
+	align-items: center;
+	background-color: inherit;
+
+	input {
+		margin-left: 5px;
+	}
+
+	button {
+		margin: 5px;
+	}
+}
+
+mat-card {
+	display: flex;
+	flex-direction: column;
+	min-width: 350px;
+	min-height: 250px;
+
+	box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.2) !important;
+}
+
+mat-tab-group {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+}
+
+mat-tab {
+	flex: 1;
+	display: flex;
+}
+
+.chat-history {
+	flex: 1;
+	margin-bottom: 50px;
+	overflow-y: auto;
+	display: flex;
+	flex-direction: column;
+}
+
+.chat-bubble {
+	margin: 4px;
+	padding: 7px 8px 7px 12px;
+	transition: box-shadow 280ms cubic-bezier(.4,0,.2,1);
+	display: inline-flex;
+	border-radius: 24px;
+	align-items: center;
+	cursor: default;
+	min-height: 32px;
+	max-width: 60%;
+}
+
+.chat-bubble.theirs {
+	margin-right: auto;
+	background-color: lightskyblue;
+}
+
+.chat-bubble.mine {
+	margin-left: auto;
+	background-color: lightgray;
+}
+
+/deep/ app-chat {
+	.mat-tab-header {
+		margin-right: 40px;
+	}
+
+	.mat-tab-body-wrapper {
+		flex: 1;
+	}
+
+	.mat-tab-body-content {
+		overflow: hidden;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.ng-resizable-diagonal {
+		z-index: 1000;
+	}
+}
+
+.add-chat-room {
+	position: absolute;
+	top: 30px;
+	right: 1px;
+
+	mat-icon {
+		position: relative;
+		font-size: 30px;
+		top: -3px;
+		left: -3px;
+	}
+}
