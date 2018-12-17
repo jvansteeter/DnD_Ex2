@@ -1,10 +1,10 @@
-import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ChatService } from '../data-services/chat.service';
 import { FriendService } from '../data-services/friend.service';
 import { FormControl } from '@angular/forms';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatAutocomplete, MatChipInputEvent, MatTabGroup } from '@angular/material';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { UserProfile } from '../types/userProfile';
 import { UserProfileService } from '../data-services/userProfile.service';
@@ -16,10 +16,11 @@ import { isNull, isUndefined } from "util";
 	templateUrl: 'chat.component.html',
 	styleUrls: ['chat.component.scss', 'resizable.css'],
 })
-export class ChatComponent {
+export class ChatComponent implements OnInit, OnDestroy {
 	@ViewChild('auto') matAutocomplete: MatAutocomplete;
 	@ViewChild('chipInput') chipInput: ElementRef<HTMLInputElement>;
 	@ViewChild('tabGroup') tabGroup: MatTabGroup;
+	@ViewChild('chatHistory') chatHistory: ElementRef;
 
 	public chatContent: string = '';
 	public toBarControl = new FormControl();
@@ -27,6 +28,7 @@ export class ChatComponent {
 	public filteredFriends: Observable<UserProfile[]>;
 
 	private selectedIndex: number = 0;
+	private newChatSub: Subscription;
 
 	constructor(public chatService: ChatService,
 	            public friendService: FriendService,
@@ -35,6 +37,29 @@ export class ChatComponent {
 				startWith(null),
 				map((input: string | null) => this.filterFriends(input))
 		);
+	}
+
+	public ngOnInit(): void {
+		this.newChatSub = this.chatService.newChatObservable.subscribe((newChat: ChatRoom) => {
+			const activeRoom: ChatRoom = this.chatService.chatRooms[this.selectedIndex];
+			if (newChat === activeRoom) {
+				console.log('received a new chat for the active room')
+				console.log(this.chatHistory)
+				setTimeout(() => {
+					this.chatHistory.nativeElement.scrollTo({
+						top: this.chatHistory.nativeElement.scrollHeight,
+						left: 0,
+						behavior: 'smooth'
+					});
+				});
+			}
+		});
+	}
+
+	public ngOnDestroy(): void {
+		if (this.newChatSub) {
+			this.newChatSub.unsubscribe();
+		}
 	}
 
 	@HostListener('mouseover')

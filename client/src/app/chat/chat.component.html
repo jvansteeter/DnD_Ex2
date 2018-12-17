@@ -36,7 +36,7 @@
 					</mat-autocomplete>
 				</mat-form-field>
 			</div>
-			<div class="chat-history">
+			<div class="chat-history" #chatHistory>
 				<div *ngFor="let chat of chatRoom.chats" [class]="chat.headers.fromUserId === userProfileService.userId ? 'chat-bubble mine' : 'chat-bubble theirs'" >{{chat.body}}</div>
 			</div>
 			<div class="input-line">

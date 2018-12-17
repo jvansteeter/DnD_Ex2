@@ -5,7 +5,7 @@ import { Chat } from '../mq/messages/chat.message';
 import { MqMessageType } from '../../../../shared/types/mq/message-type.enum';
 import { ChatType } from '../../../../shared/types/mq/chat-type.enum';
 import { UserProfileService } from './userProfile.service';
-import { Subscription } from 'rxjs';
+import { Observable, Subject, Subscription } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { StompMessage } from '../mq/messages/stomp-message';
 import { isUndefined } from 'util';
@@ -18,6 +18,7 @@ export class ChatService extends IsReadyService {
 	private _chatRooms: Map<string, ChatRoom>;
 	private chatSub: Subscription;
 	private _totalUnreadCount: number;
+	private newChatSubject: Subject<ChatRoom>;
 
 	constructor(private mqService: MqService,
 	            private userProfileService: UserProfileService,
@@ -25,6 +26,7 @@ export class ChatService extends IsReadyService {
 		super(mqService, userProfileService);
 		this._chatRooms = new Map();
 		this._totalUnreadCount = 0;
+		this.newChatSubject = new Subject();
 		this.init();
 	}
 
@@ -87,6 +89,10 @@ export class ChatService extends IsReadyService {
 		return this._totalUnreadCount;
 	}
 
+	get newChatObservable(): Observable<ChatRoom> {
+		return this.newChatSubject.asObservable();
+	}
+
 	private handleIncomingChats(): void {
 		this.chatSub = this.mqService.getIncomingUserMessages().pipe(
 				filter((message: StompMessage) => message.headers.type === MqMessageType.CHAT),
@@ -96,9 +102,6 @@ export class ChatService extends IsReadyService {
 		).subscribe((chat: Chat) => {
 			console.log(chat);
 			const newChatRoom = new ChatRoom(chat.headers.userIds, chat.headers.chatType);
-			// if (this._chatRooms.size === 1 && this._chatRooms.has(ChatRoom.NEW_CHAT) && newChatRoom.hash() !== ChatRoom.NEW_CHAT) {
-			// 	this._chatRooms.clear();
-			// }
 			let existingChatRoom = this._chatRooms.get(newChatRoom.hash());
 			const isFromMe: boolean = this.userProfileService.userId === chat.headers.fromUserId;
 			if (isFromMe && this._chatRooms.has(ChatRoom.NEW_CHAT)) {
@@ -111,6 +114,7 @@ export class ChatService extends IsReadyService {
 			}
 			else {
 				existingChatRoom.addChat(chat, isFromMe);
+				this.newChatSubject.next(existingChatRoom);
 			}
 
 			this.calculateUnreadCount();
