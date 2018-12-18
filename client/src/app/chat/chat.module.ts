@@ -18,6 +18,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UtilityModule } from '../utilities/utility.module';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { ChatRepository } from '../repositories/chat.repository';
 
 @NgModule({
 	imports: [
@@ -48,6 +49,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 		StompRService,
 		MqService,
 		ChatService,
+		ChatRepository,
 	]
 })
 export class ChatModule {

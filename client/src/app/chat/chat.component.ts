@@ -43,8 +43,6 @@ export class ChatComponent implements OnInit, OnDestroy {
 		this.newChatSub = this.chatService.newChatObservable.subscribe((newChat: ChatRoom) => {
 			const activeRoom: ChatRoom = this.chatService.chatRooms[this.selectedIndex];
 			if (newChat === activeRoom) {
-				console.log('received a new chat for the active room')
-				console.log(this.chatHistory)
 				setTimeout(() => {
 					this.chatHistory.nativeElement.scrollTo({
 						top: this.chatHistory.nativeElement.scrollHeight,
@@ -81,7 +79,7 @@ export class ChatComponent implements OnInit, OnDestroy {
 			return;
 		}
 		const room: ChatRoom = this.chatService.chatRooms[this.selectedIndex];
-		this.chatService.sendToUsers(room.userIds, this.chatContent);
+		this.chatService.sendToUsers(room, this.chatContent);
 		this.chatContent = '';
 	}
 

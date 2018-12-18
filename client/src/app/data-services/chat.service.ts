@@ -5,12 +5,14 @@ import { Chat } from '../mq/messages/chat.message';
 import { MqMessageType } from '../../../../shared/types/mq/message-type.enum';
 import { ChatType } from '../../../../shared/types/mq/chat-type.enum';
 import { UserProfileService } from './userProfile.service';
-import { Observable, Subject, Subscription } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs';
+import { filter, first, map, mergeMap, tap } from 'rxjs/operators';
 import { StompMessage } from '../mq/messages/stomp-message';
 import { isUndefined } from 'util';
 import { ChatRoom } from '../chat/chat-room';
 import { UserIdToUsernamePipe } from '../utilities/pipes/userId-to-username.pipe';
+import { ChatRepository } from '../repositories/chat.repository';
+import { ChatRoomData } from '../../../../shared/types/mq/chat-room.data';
 
 @Injectable()
 export class ChatService extends IsReadyService {
@@ -22,7 +24,8 @@ export class ChatService extends IsReadyService {
 
 	constructor(private mqService: MqService,
 	            private userProfileService: UserProfileService,
-	            private userIdToUsernamePipe: UserIdToUsernamePipe) {
+	            private userIdToUsernamePipe: UserIdToUsernamePipe,
+	            private chatRepo: ChatRepository) {
 		super(mqService, userProfileService);
 		this._chatRooms = new Map();
 		this._totalUnreadCount = 0;
@@ -33,9 +36,10 @@ export class ChatService extends IsReadyService {
 	init(): void {
 		this.dependenciesSub = this.dependenciesReady().subscribe((isReady: boolean) => {
 			if (isReady) {
-				this.addNewChatRoom();
-				this.handleIncomingChats();
-				this.setReady(true);
+				this.initRooms().pipe(first()).subscribe(() => {
+					this.handleIncomingChats();
+					this.setReady(true);
+				});
 			}
 		});
 	}
@@ -47,26 +51,45 @@ export class ChatService extends IsReadyService {
 		}
 	}
 
+	private initRooms(): Observable<void> {
+		return this.chatRepo.getAllChatRooms().pipe(
+				tap((roomsData: ChatRoomData[]) => {
+					for (let room of roomsData) {
+						this._chatRooms.set(room._id, new ChatRoom(room));
+					}
+				}),
+				mergeMap(() => {
+					if (this._chatRooms.size === 0) {
+						return this.chatRepo.createChatRoom().pipe(map((room: ChatRoomData) => {
+							this._chatRooms.set(room._id, new ChatRoom(room));
+						}));
+					} else {
+						return new BehaviorSubject<void>(null);
+					}
+				})
+		);
+	}
+
 	public addNewChatRoom(): void {
-		const newRoom = new ChatRoom([this.userProfileService.userId], ChatType.USER);
-		newRoom.label = ChatRoom.NEW_CHAT;
-		this._chatRooms.set(ChatRoom.NEW_CHAT, newRoom);
+		// const newRoom = new ChatRoom([this.userProfileService.userId], ChatType.USER);
+		// newRoom.label = ChatRoom.NEW_CHAT;
+		// this._chatRooms.set('test room', newRoom);
 	}
 
 	public toggleChatWindow(): void {
 		this.showChatWindow = !this.showChatWindow;
 	}
 
-	public sendToUsers(userIds: string[], message: string): void {
+	public sendToUsers(room: ChatRoom, message: string): void {
 		let containsLocalUserId = false;
-		for (let userId of userIds) {
+		for (let userId of room.userIds) {
 			if (userId === this.userProfileService.userId) {
 				containsLocalUserId = true;
 				break;
 			}
 		}
 		if (!containsLocalUserId) {
-			userIds.push(this.userProfileService.userId);
+			room.userIds.push(this.userProfileService.userId);
 		}
 		const chat: Chat = new Chat({
 			headers: {
@@ -74,11 +97,11 @@ export class ChatService extends IsReadyService {
 				chatType: ChatType.USER,
 				fromUserId: this.userProfileService.userId,
 				timestamp: new Date().getTime(),
-				userIds: userIds,
+				chatRoomId: room._id,
 			},
 			body: message
 		});
-		this.mqService.sendChat(chat);
+		this.mqService.sendChat(chat, room);
 	}
 
 	get chatRooms(): ChatRoom[] {
@@ -101,18 +124,18 @@ export class ChatService extends IsReadyService {
 				}),
 		).subscribe((chat: Chat) => {
 			console.log(chat);
-			const newChatRoom = new ChatRoom(chat.headers.userIds, chat.headers.chatType);
-			let existingChatRoom = this._chatRooms.get(newChatRoom.hash());
+			// const newChatRoom = new ChatRoom(chat.headers.userIds, chat.headers.chatType);
+			let existingChatRoom = this._chatRooms.get(chat.headers.chatRoomId);
 			const isFromMe: boolean = this.userProfileService.userId === chat.headers.fromUserId;
 			if (isFromMe && this._chatRooms.has(ChatRoom.NEW_CHAT)) {
 				this._chatRooms.delete(ChatRoom.NEW_CHAT);
 			}
 			if (isUndefined(existingChatRoom)) {
-				newChatRoom.addChat(chat, isFromMe);
-				newChatRoom.label = this.makeChatRoomLabel(newChatRoom);
-				this._chatRooms.set(newChatRoom.hash(), newChatRoom);
-			}
-			else {
+				// const newChatRoom = new ChatRoom([], ChatType.USER);
+				// newChatRoom.addChat(chat, isFromMe);
+				// newChatRoom.label = this.makeChatRoomLabel(newChatRoom);
+				// this._chatRooms.set(newChatRoom.hash(), newChatRoom);
+			} else {
 				existingChatRoom.addChat(chat, isFromMe);
 				this.newChatSubject.next(existingChatRoom);
 			}

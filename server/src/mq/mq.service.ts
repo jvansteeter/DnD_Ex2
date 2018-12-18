@@ -16,6 +16,8 @@ import { EncounterCommandMessage } from './messages/encounter-command.message';
 import { EncounterService } from '../services/encounter.service';
 import { NotationRepository } from '../db/repositories/notation.repository';
 import { NotationData } from '../../../shared/types/encounter/board/notation.data';
+import { Chat } from './messages/chat.message';
+import { ChatService } from '../services/chat.service';
 
 export class MqService {
 	private friendRepo: FriendRepository;
@@ -23,6 +25,7 @@ export class MqService {
 	private playerRepository: PlayerRepository;
 	private encounterService: EncounterService;
 	private notationRepo: NotationRepository;
+	private chatService: ChatService;
 
 	constructor(private mqProxy: MqProxy) {
 		this.friendRepo = new FriendRepository();
@@ -30,6 +33,7 @@ export class MqService {
 		this.playerRepository = new PlayerRepository();
 		this.encounterService = new EncounterService();
 		this.notationRepo = new NotationRepository();
+		this.chatService = new ChatService();
 	}
 
 	public handleMessages(): void {
@@ -41,6 +45,9 @@ export class MqService {
 		});
 		this.mqProxy.observeAllCampaignInvites().subscribe((campaignInvite: CampaignInvite) => {
 			this.handleCampaignInvite(campaignInvite);
+		});
+		this.mqProxy.observeAllChats().subscribe((chat: Chat) => {
+			this.chatService.handleChat(chat);
 		});
 	}
 

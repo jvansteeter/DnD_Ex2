@@ -1,7 +1,11 @@
 import { Chat } from '../mq/messages/chat.message';
 import { ChatType } from '../../../../shared/types/mq/chat-type.enum';
+import { ChatRoomData } from '../../../../shared/types/mq/chat-room.data';
 
-export class ChatRoom {
+export class ChatRoom implements ChatRoomData {
+	_id: string;
+	creatorId: string;
+	mostRecentTimestamp: number;
 	private _userIds: string[];
 	private _chats: Chat[];
 	private _unreadChatCount: number;
@@ -12,15 +16,23 @@ export class ChatRoom {
 
 	static readonly NEW_CHAT = 'New Chat';
 
-	constructor(userIds: string[], type: ChatType) {
-		if (userIds.length === 0) {
+	constructor(data: ChatRoomData) {
+		if (data.userIds.length === 0) {
 			console.error('User creating chatroom must be present in room');
 		}
-		this.chatType = type;
-		this._userIds = userIds;
+
+		this._id = data._id;
+		this.chatType = data.chatType;
+		this._userIds = data.userIds;
 		this._userIds.sort();
+		this._label = data.label;
 		this._chats = [];
 		this._unreadChatCount = 0;
+		if (Array.isArray(data.chats) && data.chats.length > 0) {
+			for (let chat of data.chats) {
+				this._chats.push(new Chat(chat));
+			}
+		}
 	}
 
 	public addChat(chat: Chat, isFromMe: boolean = false): void {

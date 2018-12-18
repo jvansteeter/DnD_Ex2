@@ -18,6 +18,7 @@ import { EncounterCommandType } from '../../../../shared/types/encounter/encount
 import { EncounterCommandMessage } from './messages/encounter-command.message';
 import { Chat } from './messages/chat.message';
 import { ChatType } from '../../../../shared/types/mq/chat-type.enum';
+import { ChatRoom } from '../chat/chat-room';
 
 @Injectable()
 export class MqService extends IsReadyService {
@@ -38,6 +39,7 @@ export class MqService extends IsReadyService {
 				stompConfig.connectHeaders.passcode = this.userProfileService.passwordHash;
 				this.stompService.configure(stompConfig);
 				this.stompService.connectionState$.subscribe((state: RxStompState) => {
+					console.log('State change:', state)
 					if (this.stompState !== state) {
 						this.stompState = state;
 						if (state === RxStompState.OPEN) {
@@ -110,11 +112,11 @@ export class MqService extends IsReadyService {
 		return this.userQueue;
 	}
 
-	public sendChat(chat: Chat): void {
+	public sendChat(chat: Chat, room: ChatRoom): void {
 		switch (chat.headers.chatType) {
 			case ChatType.USER: {
 				let url: string;
-				for (let toUser of chat.headers.userIds) {
+				for (let toUser of room.userIds) {
 					url = MqMessageUrlFactory.createUserChatUrl(toUser);
 					this.stompService.publish({
 						destination: MqMessageUrlFactory.createUserChatUrl(toUser),

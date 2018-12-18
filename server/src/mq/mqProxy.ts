@@ -13,6 +13,8 @@ import { CampaignInviteMessage } from './messages/campaign-invite.message';
 import { MqError } from '../../../shared/errors/MqError';
 import { EncounterCommandMessage } from './messages/encounter-command.message';
 import { EncounterCommand } from '../../../shared/types/mq/encounter-command';
+import { ChatMessage } from '../../../shared/types/mq/chat';
+import { Chat } from './messages/chat.message';
 
 export class MqProxy {
 
@@ -39,6 +41,7 @@ export class MqProxy {
 						await this.createServerQueue(channel, MqConfig.encounterQueueName);
 						await this.createServerQueue(channel, MqConfig.friendRequestQueueName);
 						await this.createServerQueue(channel, MqConfig.campaignInviteQueueName);
+						await this.createServerQueue(channel, MqConfig.chatQueueName);
 						this.connection = connection;
 						resolve();
 					}
@@ -110,6 +113,25 @@ export class MqProxy {
 		});
 
 		return campaignInviteSubject.asObservable();
+	}
+
+	public observeAllChats(): Observable<ChatMessage> {
+		if (!this.connection) {
+			return throwError('Not connected to MQ Server');
+		}
+		const chatSubject = new Subject<ChatMessage>();
+		this.connection.createChannel((error, channel) => {
+			if (error) {
+				merge(chatSubject, throwError(new Error(error)));
+			}
+
+			channel.bindQueue(MqConfig.chatQueueName, MqConfig.userExchange, MqConfig.chatTopic);
+			channel.consume(MqConfig.chatQueueName, (message) => {
+				chatSubject.next(new Chat(message));
+			});
+		});
+
+		return chatSubject.asObservable();
 	}
 
 	public async sendEncounterCommand(encounterId: string, encounterUpdate: EncounterCommand): Promise<void> {

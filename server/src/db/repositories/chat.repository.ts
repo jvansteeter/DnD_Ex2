@@ -1,0 +1,103 @@
+import * as mongoose from 'mongoose';
+import { ChatRoomModel } from '../models/chat-room.model';
+import { ChatType } from '../../../../shared/types/mq/chat-type.enum';
+import { Chat } from '../../mq/messages/chat.message';
+import { ChatModel } from '../models/chat.model';
+
+export class ChatRepository {
+	private ChatRoom: mongoose.Model<mongoose.Document>;
+	private Chat: mongoose.Model<mongoose.Document>;
+
+	constructor() {
+		this.ChatRoom = mongoose.model('ChatRoom');
+		this.Chat = mongoose.model('Chat');
+	}
+
+	public createChatRoom(userId: string, type: ChatType): Promise<ChatRoomModel> {
+		return new Promise<ChatRoomModel>((resolve, reject) => {
+			this.ChatRoom.create({
+				label: 'New',
+				creatorId: userId,
+				chatType: type,
+				mostRecentTimestamp: new Date().getTime(),
+			}, (error, room: ChatRoomModel) => {
+				if (error) {
+					reject(error);
+					return;
+				}
+
+				resolve(room);
+			});
+		});
+	}
+
+	public createChat(chat: Chat): Promise<ChatModel> {
+		return new Promise((resolve, reject) => {
+			this.Chat.create({
+				chatType: chat.headers.chatType,
+				fromUserId: chat.headers.fromUserId,
+				timestamp: chat.headers.timestamp,
+				chatRoomId: chat.headers.chatRoomId,
+				body: chat.body,
+			}, (error, chatModel: ChatModel) => {
+				if (error) {
+					reject(error);
+					return;
+				}
+
+				resolve(chatModel);
+			});
+		});
+	}
+
+	public getAllChatRooms(userId: string): Promise<ChatRoomModel[]> {
+		return new Promise((resolve, reject) => {
+			this.ChatRoom.find({
+				userIds: userId
+			})
+			.or([
+				{
+					creatorId: userId
+				}
+			])
+			.sort({mostRecentTimestamp: 'desc'})
+			.exec((error, rooms: ChatRoomModel[]) => {
+				if (error) {
+					reject(error);
+					return;
+				}
+
+				resolve(rooms);
+			});
+		});
+	}
+
+	public getChatRoomById(id: string): Promise<ChatRoomModel> {
+		return new Promise((resolve, reject) => {
+			this.ChatRoom.findById(id).exec((error, room: ChatRoomModel) => {
+				if (error) {
+					reject(error);
+					return;
+				}
+
+				resolve(room);
+			});
+		});
+	}
+
+	public getChatsByRoomId(roomId: string): Promise<ChatModel[]> {
+		return new Promise((resolve, reject) => {
+			this.Chat.find({chatRoomId: roomId})
+					.sort(({timestamp: 'desc'}))
+					.limit(50)
+					.exec((error, chats: ChatModel[]) => {
+				if (error) {
+					reject(error);
+					return;
+				}
+
+				resolve(chats);
+			});
+		});
+	}
+}
