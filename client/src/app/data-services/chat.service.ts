@@ -70,6 +70,13 @@ export class ChatService extends IsReadyService {
 		);
 	}
 
+	public addUserToRoom(userId: string, roomId: string): void {
+		this.chatRepo.addUserToRoom(userId, roomId).subscribe((room: ChatRoomData) => {
+			const chatRoom: ChatRoom = this._chatRooms.get(room._id);
+			chatRoom.userIds = room.userIds;
+		});
+	}
+
 	public addNewChatRoom(): void {
 		// const newRoom = new ChatRoom([this.userProfileService.userId], ChatType.USER);
 		// newRoom.label = ChatRoom.NEW_CHAT;

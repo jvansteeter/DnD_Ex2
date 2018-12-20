@@ -15,6 +15,8 @@ import { EncounterCommandMessage } from './messages/encounter-command.message';
 import { EncounterCommand } from '../../../shared/types/mq/encounter-command';
 import { ChatMessage } from '../../../shared/types/mq/chat';
 import { Chat } from './messages/chat.message';
+import { ChatRoomModel } from '../db/models/chat-room.model';
+import { ChatType } from '../../../shared/types/mq/chat-type.enum';
 
 export class MqProxy {
 
@@ -135,23 +137,36 @@ export class MqProxy {
 	}
 
 	public async sendEncounterCommand(encounterId: string, encounterUpdate: EncounterCommand): Promise<void> {
-		try {
-			if (!this.connection) {
-				throw new Error(MqError.NOT_CONNECTED);
+		if (!this.connection) {
+			throw new Error(MqError.NOT_CONNECTED);
+		}
+		this.connection.createChannel((error, channel) => {
+			if (error) {
+				throw new Error(MqError.CHANNEL);
 			}
-			this.connection.createChannel((error, channel) => {
-				if (error) {
-					throw new Error(MqError.CHANNEL);
-				}
 
-				const options = { headers: encounterUpdate.headers };
-				channel.publish(MqConfig.encounterExchange, 'encounter.' + encounterId, new Buffer(JSON.stringify(encounterUpdate.body)), options);
-				return;
-			});
+			const options = { headers: encounterUpdate.headers };
+			channel.publish(MqConfig.encounterExchange, 'encounter.' + encounterId, new Buffer(JSON.stringify(encounterUpdate.body)), options);
+			return;
+		});
+	}
+
+	public async sendChat(room: ChatRoomModel, chat: ChatMessage): Promise<void> {
+		if (!this.connection) {
+			throw new Error(MqError.NOT_CONNECTED);
 		}
-		catch (error) {
-			throw error;
-		}
+		this.connection.createChannel((error, channel) => {
+			if (error) {
+				throw new Error(MqError.CHANNEL);
+			}
+
+			if (room.chatType === ChatType.USER) {
+				for (let userId of room.userIds) {
+					let options = { headers: chat.headers };
+					channel.publish(MqConfig.userExchange, 'user.' + userId + '.chat', new Buffer(JSON.stringify(chat.body)), options);
+				}
+			}
+		});
 	}
 
 	public createMqAccount(user: UserModel): Promise<void> {

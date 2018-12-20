@@ -6,12 +6,17 @@ import { ChatModel } from '../db/models/chat.model';
 import { MqMessageType } from '../../../shared/types/mq/message-type.enum';
 import { ChatMessage } from '../../../shared/types/mq/chat';
 import { ChatRoomData } from '../../../shared/types/mq/chat-room.data';
+import { MqServiceSingleton } from '../mq/mq.service';
+import { UserModel } from '../db/models/user.model';
+import { UserRepository } from '../db/repositories/user.repository';
 
 export class ChatService {
 	private chatRepo: ChatRepository;
+	private userRepo: UserRepository;
 
 	constructor() {
 		this.chatRepo = new ChatRepository();
+		this.userRepo = new UserRepository();
 	}
 
 	public async handleChat(chat: Chat): Promise<void> {
@@ -47,5 +52,26 @@ export class ChatService {
 		}
 
 		return chatRooms;
+	}
+
+	public async addUserToRoom(authorizingId: string, inviteeId: string, roomId: string): Promise<ChatRoomModel> {
+		console.log('addUserToRoom')
+		let room: ChatRoomModel = await this.chatRepo.getChatRoomById(roomId);
+		console.log('authorizingId:', authorizingId)
+		console.log(room.creatorId)
+		console.log(room.creatorId === authorizingId)
+		console.log(room.creatorId == authorizingId)
+		console.log(room.userIds.includes(authorizingId))
+		console.log(room.userIds.indexOf(authorizingId))
+		if (room.creatorId != authorizingId && !room.userIds.includes(authorizingId)) {
+			console.log('not authorized')
+			throw new Error('Not Authorized');
+		}
+		const invitee: UserModel = await this.userRepo.findById(inviteeId);
+
+		console.log(invitee)
+		MqServiceSingleton.sendChat(room, invitee.username + ' added to chat');
+		console.log('chat sent')
+		return await room.addUserId(inviteeId);
 	}
 }

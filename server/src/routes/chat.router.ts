@@ -43,6 +43,19 @@ export class ChatRouter {
 				res.status(500).send(error);
 			}
 		});
+
+		this.router.post('/adduser', async (req: Request, res: Response) => {
+			try {
+				const userId: string = req.user._id;
+				const inviteeId: string = req.body.userId;
+				const roomId: string = req.body.roomId;
+				const room: ChatRoomModel = await this.chatService.addUserToRoom(userId, inviteeId, roomId);
+				res.json(room);
+			}
+			catch (error) {
+				res.status(500).send(error);
+			}
+		});
 	}
 }
 

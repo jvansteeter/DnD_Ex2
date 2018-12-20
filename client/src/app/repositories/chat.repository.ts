@@ -17,4 +17,12 @@ export class ChatRepository {
 	public createChatRoom(): Observable<ChatRoomData> {
 		return this.http.post<ChatRoomData>('/api/chat/new/room', {}, {responseType: 'json'});
 	}
+
+	public addUserToRoom(userId: string, roomId: string): Observable<ChatRoomData> {
+		const data = {
+			userId: userId,
+			roomId: roomId
+		};
+		return this.http.post<ChatRoomData>('/api/chat/adduser', data, {responseType: 'json'});
+	}
 }

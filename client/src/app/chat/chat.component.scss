@@ -96,7 +96,7 @@ mat-tab {
 	background-color: lightgray;
 }
 
-/deep/ app-chat {
+::ng-deep  app-chat {
 	.mat-tab-header {
 		margin-right: 40px;
 	}

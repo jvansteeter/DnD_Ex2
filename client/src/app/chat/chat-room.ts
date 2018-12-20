@@ -69,6 +69,10 @@ export class ChatRoom implements ChatRoomData {
 		return this._userIds;
 	}
 
+	set userIds(value) {
+		this._userIds = value;
+	}
+
 	get chats(): Chat[] {
 		return this._chats;
 	}

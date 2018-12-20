@@ -18,6 +18,8 @@ import { NotationRepository } from '../db/repositories/notation.repository';
 import { NotationData } from '../../../shared/types/encounter/board/notation.data';
 import { Chat } from './messages/chat.message';
 import { ChatService } from '../services/chat.service';
+import { ChatRoomModel } from '../db/models/chat-room.model';
+import { ChatMessage } from '../../../shared/types/mq/chat';
 
 export class MqService {
 	private friendRepo: FriendRepository;
@@ -77,6 +79,20 @@ export class MqService {
 		catch (error) {
 			throw error;
 		}
+	}
+
+	public async sendChat(room: ChatRoomModel, message: string): Promise<void> {
+		const chat: ChatMessage = {
+			headers: {
+				type: MqMessageType.CHAT,
+				chatType: room.chatType,
+				fromUserId: 'SYSTEM',
+				timestamp: new Date().getTime(),
+				chatRoomId: room._id,
+			},
+			body: message
+		};
+		return this.mqProxy.sendChat(room, chat);
 	}
 
 	private async handleEncounterCommand(command: EncounterCommandMessage): Promise<void> {
