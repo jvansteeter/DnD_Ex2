@@ -16,14 +16,13 @@
 						<ng-container *ngFor="let userId of chatRoom.userIds">
 							<mat-chip *ngIf="userId !== userProfileService.userId"
 									[selectable]="true"
-									[removable]="chatRoom.editable"
+									[removable]="true"
 									(removed)="removeUser(userId)">
 								{{friendService.getFriendByUserId(userId).username}}
-								<mat-icon matChipRemove *ngIf="chatRoom.editable">cancel</mat-icon>
+								<mat-icon matChipRemove>cancel</mat-icon>
 							</mat-chip>
 						</ng-container>
 						<input placeholder="Users in chat" #chipInput
-						       [disabled]="!chatRoom.editable"
 						       [formControl]="toBarControl"
 						       [matAutocomplete]="auto"
 						       [matChipInputFor]="matChipList"

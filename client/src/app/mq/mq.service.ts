@@ -4,7 +4,7 @@ import { RxStompState } from '@stomp/rx-stomp';
 import { Message } from '@stomp/stompjs';
 import { UserProfileService } from '../data-services/userProfile.service';
 import { StompConfiguration } from './StompConfig';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { MqMessageFactory } from './mq-message.factory';
 import { IsReadyService } from "../utilities/services/isReady.service";
@@ -24,6 +24,7 @@ import { ChatRoom } from '../chat/chat-room';
 export class MqService extends IsReadyService {
 	private stompState: RxStompState = RxStompState.CLOSED;
 	private userQueue: Observable<StompMessage>;
+	private stompStateSub: Subscription;
 
 	constructor(private stompService: RxStompService,
 	            private userProfileService: UserProfileService) {
@@ -38,7 +39,7 @@ export class MqService extends IsReadyService {
 				stompConfig.connectHeaders.login = this.userProfileService.userId;
 				stompConfig.connectHeaders.passcode = this.userProfileService.passwordHash;
 				this.stompService.configure(stompConfig);
-				this.stompService.connectionState$.subscribe((state: RxStompState) => {
+				this.stompStateSub = this.stompService.connectionState$.subscribe((state: RxStompState) => {
 					console.log('State change:', state)
 					if (this.stompState !== state) {
 						this.stompState = state;
@@ -46,8 +47,11 @@ export class MqService extends IsReadyService {
 							this.connectToUserQueue();
 							this.setReady(true);
 						}
-						else {
-							this.setReady(false);
+						else if (state === RxStompState.CLOSED) {
+							this.stompService.deactivate();
+							setTimeout(() => {
+								this.stompService.activate();
+							});
 						}
 					}
 				});

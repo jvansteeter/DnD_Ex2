@@ -18,7 +18,12 @@ export class Chat extends AmqpMessage implements ChatMessage {
 		this.headers.type = MqMessageType.CHAT;
 		this.headers.chatType = data.properties.headers.chatType;
 		this.headers.fromUserId = data.properties.headers.fromUserId;
-		this.headers.timestamp = data.properties.timestamp;
+		if (!data.properties.timestamp) {
+			this.headers.timestamp = Number(data.properties.headers.timestamp);
+		}
+		else {
+			this.headers.timestamp = Number(data.properties.timestamp);
+		}
 		this.headers.chatRoomId = data.properties.headers.chatRoomId;
 	}
 }

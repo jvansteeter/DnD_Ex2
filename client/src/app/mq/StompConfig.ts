@@ -14,7 +14,7 @@ export const StompConfiguration: InjectableRxStompConfig = {
 	// Wait in milliseconds before attempting auto reconnect
 	// Set toUserId 0 toUserId disable
 	// Typical value 5000 (5 seconds)
-	reconnectDelay: 500,
+	reconnectDelay: 0,
 
 	// Will log diagnostics on console
 	debug: (str) => {

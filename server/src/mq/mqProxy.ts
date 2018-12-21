@@ -46,8 +46,7 @@ export class MqProxy {
 						await this.createServerQueue(channel, MqConfig.chatQueueName);
 						this.connection = connection;
 						resolve();
-					}
-					catch (error) {
+					} catch (error) {
 						reject(error);
 					}
 				});
@@ -145,7 +144,7 @@ export class MqProxy {
 				throw new Error(MqError.CHANNEL);
 			}
 
-			const options = { headers: encounterUpdate.headers };
+			const options = {headers: encounterUpdate.headers};
 			channel.publish(MqConfig.encounterExchange, 'encounter.' + encounterId, new Buffer(JSON.stringify(encounterUpdate.body)), options);
 			return;
 		});
@@ -155,18 +154,15 @@ export class MqProxy {
 		if (!this.connection) {
 			throw new Error(MqError.NOT_CONNECTED);
 		}
-		this.connection.createChannel((error, channel) => {
-			if (error) {
-				throw new Error(MqError.CHANNEL);
-			}
 
-			if (room.chatType === ChatType.USER) {
-				for (let userId of room.userIds) {
-					let options = { headers: chat.headers };
-					channel.publish(MqConfig.userExchange, 'user.' + userId + '.chat', new Buffer(JSON.stringify(chat.body)), options);
-				}
+		const channel = await this.connection.createChannel();
+		if (room.chatType === ChatType.USER) {
+			for (let userId of room.userIds) {
+				const options = {headers: JSON.parse(JSON.stringify(chat.headers))};
+				options.headers.timestamp = String(options.headers.timestamp);
+				channel.publish(MqConfig.userExchange, 'user.' + userId + '.chat', new Buffer(chat.body), options);
 			}
-		});
+		}
 	}
 
 	public createMqAccount(user: UserModel): Promise<void> {

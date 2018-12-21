@@ -89,15 +89,6 @@ export class ChatComponent implements OnInit, OnDestroy {
 	}
 
 	public addUserToChatRoom(username: string): void {
-		// const room: ChatRoom = this.chatService.chatRooms[this.selectedIndex];
-		// const user: UserProfile = this.friendService.getFriendByUserName(username);
-		// if (room.userIds.includes(user._id)) {
-		// 	return;
-		// }
-		// room.addUserId(user._id);
-		// this.chipInput.nativeElement.value = '';
-		// this.toBarControl.setValue(null);
-
 		const room: ChatRoom = this.chatService.chatRooms[this.selectedIndex];
 		const user: UserProfile = this.friendService.getFriendByUserName(username);
 		this.chatService.addUserToRoom(user._id, room._id);

@@ -55,11 +55,6 @@ export class ChatRepository {
 			this.ChatRoom.find({
 				userIds: userId
 			})
-			.or([
-				{
-					creatorId: userId
-				}
-			])
 			.sort({mostRecentTimestamp: 'desc'})
 			.exec((error, rooms: ChatRoomModel[]) => {
 				if (error) {
@@ -98,6 +93,20 @@ export class ChatRepository {
 
 				resolve(chats);
 			});
+		});
+	}
+
+	public getChatByRoomIdAndTimestamp(roomId: string, timestamp: number): Promise<ChatModel> {
+		return new Promise((resolve, reject) => {
+			this.Chat.findOne({chatRoomId: roomId, timestamp: timestamp})
+					.exec((error, chat: ChatModel) => {
+						if (error) {
+							reject(error);
+							return;
+						}
+
+						resolve(chat);
+					});
 		});
 	}
 }
