@@ -4,7 +4,6 @@ import { ChatRoomData } from '../../../../shared/types/mq/chat-room.data';
 
 export class ChatRoom implements ChatRoomData {
 	_id: string;
-	creatorId: string;
 	mostRecentTimestamp: number;
 	private _userIds: string[];
 	private _chats: Chat[];
@@ -28,10 +27,12 @@ export class ChatRoom implements ChatRoomData {
 		this._label = data.label;
 		this._chats = [];
 		this._unreadChatCount = 0;
+		this.mostRecentTimestamp = data.mostRecentTimestamp;
 		if (Array.isArray(data.chats) && data.chats.length > 0) {
 			for (let chat of data.chats) {
 				this._chats.push(new Chat(chat));
 			}
+			this.sortChats();
 		}
 	}
 
@@ -40,16 +41,9 @@ export class ChatRoom implements ChatRoomData {
 		if (!isFromMe) {
 			this._unreadChatCount++;
 		}
+		this.mostRecentTimestamp = new Date().getTime();
 		this._chats.push(chat);
-		this._chats.sort((a: Chat, b: Chat) => {
-			if (a.headers.timestamp < b.headers.timestamp) {
-				return -1;
-			}
-			else if (a.headers.timestamp > b.headers.timestamp) {
-				return 1;
-			}
-			return 0;
-		});
+		this.sortChats();
 	}
 
 	public addUserId(userId: string): void {
@@ -100,5 +94,17 @@ export class ChatRoom implements ChatRoomData {
 		}
 
 		return hash;
+	}
+
+	private sortChats(): void {
+		this._chats.sort((a: Chat, b: Chat) => {
+			if (a.headers.timestamp < b.headers.timestamp) {
+				return -1;
+			}
+			else if (a.headers.timestamp > b.headers.timestamp) {
+				return 1;
+			}
+			return 0;
+		});
 	}
 }

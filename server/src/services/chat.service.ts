@@ -25,14 +25,14 @@ export class ChatService {
 		let room: ChatRoomModel = await this.chatRepo.getChatRoomById(chat.headers.chatRoomId);
 		const existingChat = await this.chatRepo.getChatByRoomIdAndTimestamp(room._id, chat.headers.timestamp);
 		if (!existingChat) {
-			room.snapTimestamp();
-			this.chatRepo.createChat(chat);
+			await room.snapTimestamp();
+			await this.chatRepo.createChat(chat);
 		}
 		return;
 	}
 
 	public async createChatRoom(userId: string, type: ChatType): Promise<ChatRoomModel> {
-		const room: ChatRoomModel = await this.chatRepo.createChatRoom(userId, type);
+		const room: ChatRoomModel = await this.chatRepo.createChatRoom(type);
 		return room.addUserId(userId);
 	}
 
@@ -41,7 +41,6 @@ export class ChatService {
 		for (let room of chatRooms) {
 			let chats: ChatModel[] = await this.chatRepo.getChatsByRoomId(room._id);
 			room.chats = [];
-			room['test'] = 'be here';
 			for (let chat of chats) {
 				room.chats.push({
 					headers: {
@@ -61,12 +60,27 @@ export class ChatService {
 
 	public async addUserToRoom(authorizingId: string, inviteeId: string, roomId: string): Promise<ChatRoomModel> {
 		let room: ChatRoomModel = await this.chatRepo.getChatRoomById(roomId);
-		if (room.creatorId != authorizingId && room.userIds.indexOf(authorizingId) > -1) {
+		if (room.userIds.indexOf(authorizingId) > -1) {
 			throw new Error('Not Authorized');
 		}
 		const invitee: UserModel = await this.userRepo.findById(inviteeId);
 
 		MqServiceSingleton.sendChat(room, invitee.username + ' added to chat');
 		return await room.addUserId(inviteeId);
+	}
+
+	public async getOrCreateRoomOfUsers(userId: string, userIds: string[]): Promise<ChatRoomModel> {
+		if (userIds.indexOf(userId) > -1) {
+			throw new Error('Not in this conversation');
+		}
+		let room: ChatRoomModel = await this.chatRepo.getRoomOfUsers(userIds);
+		if (!room) {
+			room = await this.chatRepo.createChatRoom(ChatType.USER);
+			for (let user of userIds) {
+				room = await room.addUserId(user);
+			}
+		}
+
+		return room;
 	}
 }

@@ -5,7 +5,7 @@ import {
 	MatButtonModule,
 	MatCardModule,
 	MatChipsModule,
-	MatFormFieldModule, MatIconModule,
+	MatFormFieldModule, MatIconModule, MatListModule, MatSidenavModule,
 	MatTabsModule,
 	MatToolbarModule
 } from '@angular/material';
@@ -38,6 +38,8 @@ import { ChatRepository } from '../repositories/chat.repository';
 			UtilityModule,
 			MatBadgeModule,
 			ScrollingModule,
+			MatSidenavModule,
+			MatListModule,
 	],
 	declarations: [
 			ChatComponent,

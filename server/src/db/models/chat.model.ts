@@ -26,4 +26,7 @@ export class ChatModel extends MongooseModel {
 	}
 }
 
-mongoose.model('Chat', new ChatModel());
+const chatSchema = new ChatModel();
+chatSchema.index({chatRoomId: 1, timestamp: 1}, {unique: true});
+
+mongoose.model('Chat', chatSchema);

@@ -6,7 +6,6 @@ import { ChatMessage } from '../../../../shared/types/mq/chat';
 
 export class ChatRoomModel extends MongooseModel implements ChatRoomData {
 	public _id: string;
-	public creatorId: string;
 	public userIds: string[];
 	public label: string;
 	public chatType: ChatType;
@@ -16,14 +15,12 @@ export class ChatRoomModel extends MongooseModel implements ChatRoomData {
 	constructor() {
 		super({
 			userIds: {type: [String], default: []},
-			creatorId: {type: String, required: true},
 			label: String,
 			chatType: String,
 			mostRecentTimestamp: {type: Number, required: true},
 		});
 
 		this._id = this.methods._id;
-		this.creatorId = this.methods.creatorId;
 		this.userIds = this.methods.userIds;
 		this.label = this.methods.label;
 		this.chatType = this.methods.chatType;
@@ -31,6 +28,7 @@ export class ChatRoomModel extends MongooseModel implements ChatRoomData {
 
 		this.methods.addUserId = this.addUserId;
 		this.methods.snapTimestamp = this.snapTimestamp;
+		this.methods.setLabel = this.setLabel;
 	}
 
 	public addUserId(userId: string): Promise<ChatRoomModel> {
@@ -40,6 +38,11 @@ export class ChatRoomModel extends MongooseModel implements ChatRoomData {
 
 	public snapTimestamp(): Promise<ChatRoomModel> {
 		this.mostRecentTimestamp = new Date().getTime();
+		return this.save();
+	}
+
+	public setLabel(label: string): Promise<ChatRoomModel> {
+		this.label = label;
 		return this.save();
 	}
 }

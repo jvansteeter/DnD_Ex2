@@ -29,6 +29,7 @@ export class ChatRouter {
 				res.json(rooms);
 			}
 			catch (error) {
+				console.error(error);
 				res.status(500).send(error);
 			}
 		});
@@ -40,6 +41,7 @@ export class ChatRouter {
 				res.status(200).json(room);
 			}
 			catch (error) {
+				console.error(error);
 				res.status(500).send(error);
 			}
 		});
@@ -53,6 +55,20 @@ export class ChatRouter {
 				res.json(room);
 			}
 			catch (error) {
+				console.error(error);
+				res.status(500).send(error);
+			}
+		});
+
+		this.router.post('/roomOfUsers', async (req: Request, res: Response) => {
+			try {
+				const userIds: string[] = req.body.userIds;
+				const userId: string = req.user._id;
+				const room: ChatRoomModel = await this.chatService.getOrCreateRoomOfUsers(userId, userIds);
+				res.json(room);
+			}
+			catch (error) {
+				console.error(error);
 				res.status(500).send(error);
 			}
 		});

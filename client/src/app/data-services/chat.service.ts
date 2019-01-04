@@ -5,10 +5,10 @@ import { Chat } from '../mq/messages/chat.message';
 import { MqMessageType } from '../../../../shared/types/mq/message-type.enum';
 import { ChatType } from '../../../../shared/types/mq/chat-type.enum';
 import { UserProfileService } from './userProfile.service';
-import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs';
-import { filter, first, map, mergeMap, tap } from 'rxjs/operators';
+import { Observable, Subject, Subscription } from 'rxjs';
+import { filter, first, map } from 'rxjs/operators';
 import { StompMessage } from '../mq/messages/stomp-message';
-import { isUndefined } from 'util';
+import { isNullOrUndefined, isUndefined } from 'util';
 import { ChatRoom } from '../chat/chat-room';
 import { UserIdToUsernamePipe } from '../utilities/pipes/userId-to-username.pipe';
 import { ChatRepository } from '../repositories/chat.repository';
@@ -53,41 +53,56 @@ export class ChatService extends IsReadyService {
 
 	private initRooms(): Observable<void> {
 		return this.chatRepo.getAllChatRooms().pipe(
-				tap((roomsData: ChatRoomData[]) => {
+				map((roomsData: ChatRoomData[]) => {
 					for (let room of roomsData) {
-						this._chatRooms.set(room._id, new ChatRoom(room));
+						this.initRoom(room);
 					}
-				}),
-				mergeMap(() => {
 					if (this._chatRooms.size === 0) {
-						return this.chatRepo.createChatRoom().pipe(map((room: ChatRoomData) => {
-							this._chatRooms.set(room._id, new ChatRoom(room));
-						}));
-					} else {
-						return new BehaviorSubject<void>(null);
+						this.addNewChatRoom();
 					}
+					return;
 				})
 		);
 	}
 
+	private initRoom(data: ChatRoomData): ChatRoom {
+		let newRoom: ChatRoom = new ChatRoom(data);
+		newRoom.label = this.makeChatRoomLabel(newRoom);
+		this._chatRooms.set(data._id, newRoom);
+		return newRoom;
+	}
+
 	public addUserToRoom(userId: string, roomId: string): void {
-		this.chatRepo.addUserToRoom(userId, roomId).subscribe((room: ChatRoomData) => {
-			const chatRoom: ChatRoom = this._chatRooms.get(room._id);
-			chatRoom.userIds = room.userIds;
-		});
+		// this.chatRepo.addUserToRoom(userId, roomId).subscribe((room: ChatRoomData) => {
+			const chatRoom: ChatRoom = this._chatRooms.get(roomId);
+			chatRoom.addUserId(userId);
+			chatRoom.label = this.makeChatRoomLabel(chatRoom);
+		// });
 	}
 
 	public addNewChatRoom(): void {
-		// const newRoom = new ChatRoom([this.userProfileService.userId], ChatType.USER);
-		// newRoom.label = ChatRoom.NEW_CHAT;
-		// this._chatRooms.set('test room', newRoom);
+		this._chatRooms.set(ChatRoom.NEW_CHAT, new ChatRoom({
+			_id: ChatRoom.NEW_CHAT,
+			userIds: [this.userProfileService.userId],
+			label: 'New',
+			chatType: ChatType.USER,
+			mostRecentTimestamp: new Date().getTime(),
+		}));
+		// this.chatRepo.createChatRoom().subscribe((room: ChatRoomData) => {
+		// 	this._chatRooms.set(room._id, new ChatRoom(room));
+		// });
 	}
 
 	public toggleChatWindow(): void {
 		this.showChatWindow = !this.showChatWindow;
 	}
 
+	public getRoomById(id: string): ChatRoom {
+		return this._chatRooms.get(id);
+	}
+
 	public sendToUsers(room: ChatRoom, message: string): void {
+		console.log('\n\nsendToUsers\n\n')
 		let containsLocalUserId = false;
 		for (let userId of room.userIds) {
 			if (userId === this.userProfileService.userId) {
@@ -111,8 +126,17 @@ export class ChatService extends IsReadyService {
 		this.mqService.sendChat(chat, room);
 	}
 
+	public getOrCreateRoomOfUsers(room: ChatRoom): Observable<ChatRoom> {
+		return this.chatRepo.getOrCreateRoomOfUsers(room.userIds).pipe(map((roomData: ChatRoomData) => {
+			console.log(roomData)
+			return this.initRoom(roomData);
+		}));
+	}
+
 	get chatRooms(): ChatRoom[] {
-		return [...this._chatRooms.values()];
+		return [...this._chatRooms.values()].sort((a: ChatRoom, b: ChatRoom) => {
+			return b.mostRecentTimestamp - a.mostRecentTimestamp;
+		});
 	}
 
 	get totalUnreadCount(): number {
@@ -138,10 +162,7 @@ export class ChatService extends IsReadyService {
 				this._chatRooms.delete(ChatRoom.NEW_CHAT);
 			}
 			if (isUndefined(existingChatRoom)) {
-				// const newChatRoom = new ChatRoom([], ChatType.USER);
-				// newChatRoom.addChat(chat, isFromMe);
-				// newChatRoom.label = this.makeChatRoomLabel(newChatRoom);
-				// this._chatRooms.set(newChatRoom.hash(), newChatRoom);
+				this.initRooms().subscribe();
 			} else {
 				existingChatRoom.addChat(chat, isFromMe);
 				this.newChatSubject.next(existingChatRoom);
@@ -161,14 +182,17 @@ export class ChatService extends IsReadyService {
 	}
 
 	private makeChatRoomLabel(room: ChatRoom): string {
+		if (room.userIds.length <= 1) {
+			return 'New';
+		}
 		let label = '';
 		if (room.chatType === ChatType.USER) {
 			for (let userId of room.userIds) {
 				if (userId !== this.userProfileService.userId) {
-					label += this.userIdToUsernamePipe.transform(userId) + ' ';
+					label += ', ' + this.userIdToUsernamePipe.transform(userId);
 				}
 			}
-			label.trim();
+			label = label.substr(2);
 		}
 
 		return label;

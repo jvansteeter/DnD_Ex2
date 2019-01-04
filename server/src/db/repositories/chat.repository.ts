@@ -13,11 +13,9 @@ export class ChatRepository {
 		this.Chat = mongoose.model('Chat');
 	}
 
-	public createChatRoom(userId: string, type: ChatType): Promise<ChatRoomModel> {
+	public createChatRoom(type: ChatType): Promise<ChatRoomModel> {
 		return new Promise<ChatRoomModel>((resolve, reject) => {
 			this.ChatRoom.create({
-				label: 'New',
-				creatorId: userId,
 				chatType: type,
 				mostRecentTimestamp: new Date().getTime(),
 			}, (error, room: ChatRoomModel) => {
@@ -106,6 +104,24 @@ export class ChatRepository {
 						}
 
 						resolve(chat);
+					});
+		});
+	}
+
+	public getRoomOfUsers(userIds: string[]): Promise<ChatRoomModel> {
+		return new Promise((resolve, reject) => {
+			this.ChatRoom.findOne({
+				userIds: { $all: userIds}
+			})
+					.where('userIds')
+					.size(userIds.length)
+					.exec((error, room: ChatRoomModel) => {
+						if (error) {
+							reject(error);
+							return;
+						}
+
+						resolve(room);
 					});
 		});
 	}

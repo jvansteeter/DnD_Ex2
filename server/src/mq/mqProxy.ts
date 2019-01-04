@@ -128,6 +128,7 @@ export class MqProxy {
 
 			channel.bindQueue(MqConfig.chatQueueName, MqConfig.userExchange, MqConfig.chatTopic);
 			channel.consume(MqConfig.chatQueueName, (message) => {
+				console.log('got chat:', message)
 				chatSubject.next(new Chat(message));
 			});
 		});
