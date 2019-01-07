@@ -19,6 +19,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UtilityModule } from '../utilities/utility.module';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { ChatRepository } from '../repositories/chat.repository';
+import { SocialModule } from '../social/social.module';
 
 @NgModule({
 	imports: [
@@ -40,6 +41,7 @@ import { ChatRepository } from '../repositories/chat.repository';
 			ScrollingModule,
 			MatSidenavModule,
 			MatListModule,
+			SocialModule,
 	],
 	declarations: [
 			ChatComponent,

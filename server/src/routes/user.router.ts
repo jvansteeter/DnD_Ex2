@@ -51,6 +51,18 @@ export class UserRouter {
 				res.status(500).send(error);
 			}
 		});
+
+		this.router.get('/user/:userId', async (req: Request, res: Response) => {
+			try {
+				const userId: string = req.params.userId;
+				const user: UserModel = await this.userRepository.findById(userId);
+				res.json(user);
+			}
+			catch (error) {
+				console.error(error);
+				res.status(500).send(error);
+			}
+		});
 	}
 }
 

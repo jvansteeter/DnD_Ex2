@@ -3,13 +3,15 @@ import { UserProfileService } from '../../data-services/userProfile.service';
 import { FriendService } from '../../data-services/friend.service';
 import { UserProfile } from '../../types/userProfile';
 import { isUndefined } from 'util';
+import { UserRepository } from '../../repositories/user.repository';
 
 @Pipe({
 	name: 'userIdToUsername'
 })
 export class UserIdToUsernamePipe implements PipeTransform {
 	constructor(private userProfileService: UserProfileService,
-	            private friendService: FriendService) {
+	            private friendService: FriendService,
+	            private userRepo: UserRepository) {
 
 	}
 
@@ -22,7 +24,10 @@ export class UserIdToUsernamePipe implements PipeTransform {
 		if (!isUndefined(friend)) {
 			return friend.username;
 		}
-
-		return '';
+		else {
+			this.userRepo.getUserById(value).subscribe((user: UserProfile) => {
+				return user.username;
+			});
+		}
 	}
 }

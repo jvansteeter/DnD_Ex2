@@ -1,8 +1,8 @@
 import * as mongoose from 'mongoose';
 import { ChatRoomModel } from '../models/chat-room.model';
 import { ChatType } from '../../../../shared/types/mq/chat-type.enum';
-import { Chat } from '../../mq/messages/chat.message';
 import { ChatModel } from '../models/chat.model';
+import { ChatMessage } from '../../../../shared/types/mq/chat';
 
 export class ChatRepository {
 	private ChatRoom: mongoose.Model<mongoose.Document>;
@@ -29,7 +29,7 @@ export class ChatRepository {
 		});
 	}
 
-	public createChat(chat: Chat): Promise<ChatModel> {
+	public createChat(chat: ChatMessage): Promise<ChatModel> {
 		return new Promise((resolve, reject) => {
 			this.Chat.create({
 				chatType: chat.headers.chatType,

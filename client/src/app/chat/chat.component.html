@@ -1,10 +1,12 @@
 <mat-card class="app-chat" cdkDrag ngResizable *ngIf="chatService.showChatWindow">
-	<div class="toolbar" cdkDragHandle></div>
+	<div class="toolbar" cdkDragHandle>
+		<button mat-icon-button class="minimize-button" (click)="minimizeChatWindow()"><mat-icon>minimize</mat-icon></button>
+	</div>
 	<mat-drawer-container autosize>
 		<mat-drawer mode="side" [(opened)]="sideBarOpen">
-			<button class="add-chat-room" mat-mini-fab color="primary" (click)="addNewChatRoom()"><mat-icon>add</mat-icon></button>
+			<button class="add-chat-room" mat-icon-button color="primary" (click)="addNewChatRoom()"><mat-icon>add</mat-icon></button>
 			<mat-nav-list>
-				<a mat-list-item *ngFor="let chatRoom of chatService.chatRooms" (click)="changeSelectedRoom(chatRoom)">
+				<a mat-list-item *ngFor="let chatRoom of chatService.chatRooms" (click)="changeSelectedRoom(chatRoom)" [ngClass]="chatRoom === activeChatRoom ? 'active-chat-room' : ''">
 					<span *ngIf="chatRoom.unreadChatCount === 0">{{chatRoom.label}}</span>
 					<span *ngIf="chatRoom.unreadChatCount > 0"
 					      [matBadge]="chatRoom.unreadChatCount"
@@ -23,7 +25,7 @@
 							          [selectable]="true"
 							          [removable]="true"
 							          (removed)="removeUser(userId)">
-								{{friendService.getFriendByUserId(userId).username}}
+								{{socialService.getUsernameByUserId(userId)}}
 								<mat-icon matChipRemove>cancel</mat-icon>
 							</mat-chip>
 						</ng-container>
@@ -33,8 +35,7 @@
 						       [matChipInputFor]="matChipList"
 						       [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
 						       [matChipInputAddOnBlur]="true"
-						       (matChipInputTokenEnd)="autoCompleteInput($event)"
-						       (blur)="findRoom()">
+						       (matChipInputTokenEnd)="autoCompleteInput($event)">
 					</mat-chip-list>
 					<mat-autocomplete #auto="matAutocomplete" (optionSelected)="addUserToChatRoom($event.option.viewValue)">
 						<mat-option *ngFor="let friend of filteredFriends | async" [value]="friend.username">{{friend.username}}</mat-option>
@@ -42,7 +43,10 @@
 				</mat-form-field>
 			</div>
 			<div class="chat-history" #chatHistory>
-				<div *ngFor="let chat of activeChatRoom.chats" [ngClass]="chat.headers.fromUserId === userProfileService.userId ? 'chat-bubble mine' : chat.headers.fromUserId === 'SYSTEM' ? 'chat-bubble system' : 'chat-bubble theirs'" >{{chat.body}}</div>
+				<ng-container *ngFor="let chat of activeChatRoom.chats">
+					<div *ngIf="chat.headers.fromUserId !== userProfileService.userId && activeChatRoom.userIds.length > 2" class="chat-label">{{socialService.getUsernameByUserId(chat.headers.fromUserId)}}</div>
+					<div [ngClass]="chat.headers.fromUserId === userProfileService.userId ? 'chat-bubble mine' : chat.headers.fromUserId === 'SYSTEM' ? 'chat-bubble system' : 'chat-bubble theirs'" >{{chat.body}}</div>
+				</ng-container>
 			</div>
 			<div class="input-line">
 				<input class="app-input" (keyup.enter)="sendChat()" [(ngModel)]="chatContent"/>

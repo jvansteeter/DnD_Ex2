@@ -1,5 +1,4 @@
 import { ChatRepository } from '../db/repositories/chat.repository';
-import { Chat } from '../mq/messages/chat.message';
 import { ChatRoomModel } from '../db/models/chat-room.model';
 import { ChatType } from '../../../shared/types/mq/chat-type.enum';
 import { ChatModel } from '../db/models/chat.model';
@@ -21,7 +20,7 @@ export class ChatService {
 		this.userRepo = new UserRepository();
 	}
 
-	public async handleChat(chat: Chat): Promise<void> {
+	public async saveChat(chat: ChatMessage): Promise<void> {
 		let room: ChatRoomModel = await this.chatRepo.getChatRoomById(chat.headers.chatRoomId);
 		const existingChat = await this.chatRepo.getChatByRoomIdAndTimestamp(room._id, chat.headers.timestamp);
 		if (!existingChat) {
@@ -38,24 +37,13 @@ export class ChatService {
 
 	public async getAllChatRooms(userId: string): Promise<ChatRoomData[]> {
 		const chatRooms: ChatRoomData[] = JSON.parse(JSON.stringify(await this.chatRepo.getAllChatRooms(userId)));
+		const assembledRooms: any[] = [];
 		for (let room of chatRooms) {
-			let chats: ChatModel[] = await this.chatRepo.getChatsByRoomId(room._id);
-			room.chats = [];
-			for (let chat of chats) {
-				room.chats.push({
-					headers: {
-						type: MqMessageType.CHAT,
-						chatType: chat.chatType,
-						fromUserId: chat.fromUserId,
-						timestamp: chat.timestamp,
-						chatRoomId: chat.chatRoomId,
-					},
-					body: chat.body
-				} as ChatMessage);
-			}
+			let assembledRoom = await this.assembleChatRoom(room);
+			assembledRooms.push(assembledRoom);
 		}
 
-		return chatRooms;
+		return assembledRooms;
 	}
 
 	public async addUserToRoom(authorizingId: string, inviteeId: string, roomId: string): Promise<ChatRoomModel> {
@@ -81,6 +69,26 @@ export class ChatService {
 			}
 		}
 
-		return room;
+		return await this.assembleChatRoom(room);
+	}
+
+	private async assembleChatRoom(room: ChatRoomData): Promise<any> {
+		const chatRoomData = JSON.parse(JSON.stringify(room));
+		chatRoomData.chats = [];
+		let chats: ChatModel[] = await this.chatRepo.getChatsByRoomId(room._id);
+		for (let chat of chats) {
+			chatRoomData.chats.push({
+				headers: {
+					type: MqMessageType.CHAT,
+					chatType: chat.chatType,
+					fromUserId: chat.fromUserId,
+					timestamp: chat.timestamp,
+					chatRoomId: chat.chatRoomId,
+				},
+				body: chat.body
+			} as ChatMessage);
+		}
+
+		return chatRoomData;
 	}
 }

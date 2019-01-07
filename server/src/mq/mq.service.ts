@@ -16,10 +16,9 @@ import { EncounterCommandMessage } from './messages/encounter-command.message';
 import { EncounterService } from '../services/encounter.service';
 import { NotationRepository } from '../db/repositories/notation.repository';
 import { NotationData } from '../../../shared/types/encounter/board/notation.data';
-import { Chat } from './messages/chat.message';
 import { ChatService } from '../services/chat.service';
 import { ChatRoomModel } from '../db/models/chat-room.model';
-import { ChatType } from '../../../shared/types/mq/chat-type.enum';
+import { ChatMessage } from '../../../shared/types/mq/chat';
 
 export class MqService {
 	private friendRepo: FriendRepository;
@@ -47,11 +46,6 @@ export class MqService {
 		});
 		this.mqProxy.observeAllCampaignInvites().subscribe((campaignInvite: CampaignInvite) => {
 			this.handleCampaignInvite(campaignInvite);
-		});
-		this.mqProxy.observeAllChats().subscribe((chat: Chat) => {
-			if (chat.headers.fromUserId != ChatService.SYSTEM) {
-				this.chatService.handleChat(chat);
-			}
 		});
 	}
 
@@ -83,19 +77,7 @@ export class MqService {
 	}
 
 	public async sendChat(room: ChatRoomModel, message: string): Promise<void> {
-		this.chatService.handleChat(new Chat({
-			properties: {
-				type: MqMessageType.CHAT,
-				headers: {
-					chatType: ChatType.USER,
-					fromUserId: ChatService.SYSTEM,
-					timestamp: new Date().getTime(),
-					chatRoomId: room._id,
-				}
-			},
-			content: message
-		}));
-		return this.mqProxy.sendChat(room, {
+		const chat = {
 			headers: {
 				type: MqMessageType.CHAT,
 				chatType: room.chatType,
@@ -104,7 +86,9 @@ export class MqService {
 				chatRoomId: room._id,
 			},
 			body: message,
-		});
+		} as ChatMessage;
+		await this.chatService.saveChat(chat);
+		return this.mqProxy.sendChat(room, chat);
 	}
 
 	private async handleEncounterCommand(command: EncounterCommandMessage): Promise<void> {

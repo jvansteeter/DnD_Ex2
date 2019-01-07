@@ -3,6 +3,7 @@ import { ChatService } from '../services/chat.service';
 import { ChatRoomModel } from '../db/models/chat-room.model';
 import { ChatType } from '../../../shared/types/mq/chat-type.enum';
 import { ChatRoomData } from '../../../shared/types/mq/chat-room.data';
+import { ChatMessage } from '../../../shared/types/mq/chat';
 
 
 /**********************************************************************************************************
@@ -66,6 +67,18 @@ export class ChatRouter {
 				const userId: string = req.user._id;
 				const room: ChatRoomModel = await this.chatService.getOrCreateRoomOfUsers(userId, userIds);
 				res.json(room);
+			}
+			catch (error) {
+				console.error(error);
+				res.status(500).send(error);
+			}
+		});
+
+		this.router.post('/save', async (req: Request, res: Response) => {
+			try {
+				const chatMessage: ChatMessage = req.body.chat;
+				await this.chatService.saveChat(chatMessage);
+				res.status(200).send();
 			}
 			catch (error) {
 				console.error(error);

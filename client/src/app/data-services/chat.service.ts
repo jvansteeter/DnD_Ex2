@@ -8,7 +8,7 @@ import { UserProfileService } from './userProfile.service';
 import { Observable, Subject, Subscription } from 'rxjs';
 import { filter, first, map } from 'rxjs/operators';
 import { StompMessage } from '../mq/messages/stomp-message';
-import { isNullOrUndefined, isUndefined } from 'util';
+import { isUndefined } from 'util';
 import { ChatRoom } from '../chat/chat-room';
 import { UserIdToUsernamePipe } from '../utilities/pipes/userId-to-username.pipe';
 import { ChatRepository } from '../repositories/chat.repository';
@@ -72,25 +72,16 @@ export class ChatService extends IsReadyService {
 		return newRoom;
 	}
 
-	public addUserToRoom(userId: string, roomId: string): void {
-		// this.chatRepo.addUserToRoom(userId, roomId).subscribe((room: ChatRoomData) => {
-			const chatRoom: ChatRoom = this._chatRooms.get(roomId);
-			chatRoom.addUserId(userId);
-			chatRoom.label = this.makeChatRoomLabel(chatRoom);
-		// });
-	}
-
-	public addNewChatRoom(): void {
-		this._chatRooms.set(ChatRoom.NEW_CHAT, new ChatRoom({
+	public addNewChatRoom(): ChatRoom {
+		const newRoom = new ChatRoom({
 			_id: ChatRoom.NEW_CHAT,
 			userIds: [this.userProfileService.userId],
 			label: 'New',
 			chatType: ChatType.USER,
 			mostRecentTimestamp: new Date().getTime(),
-		}));
-		// this.chatRepo.createChatRoom().subscribe((room: ChatRoomData) => {
-		// 	this._chatRooms.set(room._id, new ChatRoom(room));
-		// });
+		});
+		this._chatRooms.set(ChatRoom.NEW_CHAT, newRoom);
+		return newRoom;
 	}
 
 	public toggleChatWindow(): void {
@@ -102,7 +93,6 @@ export class ChatService extends IsReadyService {
 	}
 
 	public sendToUsers(room: ChatRoom, message: string): void {
-		console.log('\n\nsendToUsers\n\n')
 		let containsLocalUserId = false;
 		for (let userId of room.userIds) {
 			if (userId === this.userProfileService.userId) {
@@ -124,10 +114,14 @@ export class ChatService extends IsReadyService {
 			body: message
 		});
 		this.mqService.sendChat(chat, room);
+		this.chatRepo.saveChat(chat).subscribe();
 	}
 
-	public getOrCreateRoomOfUsers(room: ChatRoom): Observable<ChatRoom> {
-		return this.chatRepo.getOrCreateRoomOfUsers(room.userIds).pipe(map((roomData: ChatRoomData) => {
+	public getOrCreateRoomOfUsers(userIds: string[]): Observable<ChatRoom> {
+		return this.chatRepo.getOrCreateRoomOfUsers(userIds).pipe(map((roomData: ChatRoomData) => {
+			if (!isUndefined(this._chatRooms.get(ChatRoom.NEW_CHAT)) && !isUndefined(roomData)) {
+				this._chatRooms.delete(ChatRoom.NEW_CHAT);
+			}
 			console.log(roomData)
 			return this.initRoom(roomData);
 		}));

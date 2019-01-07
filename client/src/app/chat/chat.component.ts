@@ -9,7 +9,8 @@ import { map, startWith } from 'rxjs/operators';
 import { UserProfile } from '../types/userProfile';
 import { UserProfileService } from '../data-services/userProfile.service';
 import { ChatRoom } from './chat-room';
-import { isNull, isNullOrUndefined, isUndefined } from "util";
+import { isNull, isUndefined } from "util";
+import { SocialService } from '../social/social.service';
 
 @Component({
 	selector: 'app-chat',
@@ -32,7 +33,8 @@ export class ChatComponent implements OnInit, OnDestroy {
 
 	constructor(public chatService: ChatService,
 	            public friendService: FriendService,
-	            private userProfileService: UserProfileService) {
+	            private userProfileService: UserProfileService,
+	            private socialService: SocialService) {
 		this.filteredFriends = this.toBarControl.valueChanges.pipe(
 				startWith(null),
 				map((input: string | null) => this.filterFriends(input))
@@ -93,16 +95,21 @@ export class ChatComponent implements OnInit, OnDestroy {
 	}
 
 	public removeUser(userId: string): void {
-		this.activeChatRoom.removeUser(userId);
+		console.log('removeuser')
+		const userIds: any[] = JSON.parse(JSON.stringify(this.activeChatRoom.userIds));
+		userIds.splice(userIds.indexOf(userId), 1);
+		this.findRoomOfUsers(userIds);
 	}
 
 	public addUserToChatRoom(username: string): void {
 		const user: UserProfile = this.friendService.getFriendByUserName(username);
-		this.chatService.addUserToRoom(user._id, this.activeChatRoom._id);
+		if (this.activeChatRoom.userIds.indexOf(user._id) === -1) {
+			this.findRoomOfUsers([...this.activeChatRoom.userIds, user._id]);
+		}
 	}
 
 	public addNewChatRoom(): void {
-		this.chatService.addNewChatRoom();
+		this.activeChatRoom = this.chatService.addNewChatRoom();
 	}
 
 	public autoCompleteInput(event: MatChipInputEvent): void {
@@ -115,20 +122,23 @@ export class ChatComponent implements OnInit, OnDestroy {
 				if (!isUndefined(this.friendService.getFriendByUserName(value))) {
 					this.addUserToChatRoom(value);
 				}
-				this.chipInput.nativeElement.value = '';
-				this.toBarControl.setValue(null);
 			}
 
 			if (input) {
 				input.value = '';
 			}
 
+			this.chipInput.nativeElement.value = '';
 			this.toBarControl.setValue(null);
 		}
 	}
 
-	public findRoom(): void {
-		this.chatService.getOrCreateRoomOfUsers(this.activeChatRoom).subscribe((room: ChatRoom) => {
+	public minimizeChatWindow(): void {
+		this.chatService.toggleChatWindow();
+	}
+
+	private findRoomOfUsers(userIds: string[]): void {
+		this.chatService.getOrCreateRoomOfUsers(userIds).subscribe((room: ChatRoom) => {
 			this.activeChatRoom = room;
 		});
 	}
