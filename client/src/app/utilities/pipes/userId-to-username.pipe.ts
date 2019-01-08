@@ -1,33 +1,21 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { UserProfileService } from '../../data-services/userProfile.service';
 import { FriendService } from '../../data-services/friend.service';
-import { UserProfile } from '../../types/userProfile';
-import { isUndefined } from 'util';
 import { UserRepository } from '../../repositories/user.repository';
+import { SocialService } from '../../social/social.service';
 
 @Pipe({
-	name: 'userIdToUsername'
+	name: 'userIdToUsername',
+	pure: false
 })
 export class UserIdToUsernamePipe implements PipeTransform {
-	constructor(private userProfileService: UserProfileService,
-	            private friendService: FriendService,
-	            private userRepo: UserRepository) {
-
+	private usernameCache: Map<string, string>;
+	constructor(private friendService: FriendService,
+	            private userRepo: UserRepository,
+	            private socialService: SocialService) {
+		this.usernameCache = new Map();
 	}
 
-	transform(value: any, ...args: any[]): any {
-		if (value === this.userProfileService.userId) {
-			return this.userProfileService.username;
-		}
-
-		let friend: UserProfile = this.friendService.getFriendByUserId(value);
-		if (!isUndefined(friend)) {
-			return friend.username;
-		}
-		else {
-			this.userRepo.getUserById(value).subscribe((user: UserProfile) => {
-				return user.username;
-			});
-		}
+	transform(userId: any, ...args: any[]): any {
+		return this.socialService.getUsernameByUserId(userId);
 	}
 }

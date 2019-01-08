@@ -10,9 +10,9 @@ import { filter, first, map } from 'rxjs/operators';
 import { StompMessage } from '../mq/messages/stomp-message';
 import { isUndefined } from 'util';
 import { ChatRoom } from '../chat/chat-room';
-import { UserIdToUsernamePipe } from '../utilities/pipes/userId-to-username.pipe';
 import { ChatRepository } from '../repositories/chat.repository';
 import { ChatRoomData } from '../../../../shared/types/mq/chat-room.data';
+import { SocialService } from '../social/social.service';
 
 @Injectable()
 export class ChatService extends IsReadyService {
@@ -24,7 +24,7 @@ export class ChatService extends IsReadyService {
 
 	constructor(private mqService: MqService,
 	            private userProfileService: UserProfileService,
-	            private userIdToUsernamePipe: UserIdToUsernamePipe,
+	            private socialService: SocialService,
 	            private chatRepo: ChatRepository) {
 		super(mqService, userProfileService);
 		this._chatRooms = new Map();
@@ -67,7 +67,6 @@ export class ChatService extends IsReadyService {
 
 	private initRoom(data: ChatRoomData): ChatRoom {
 		let newRoom: ChatRoom = new ChatRoom(data);
-		newRoom.label = this.makeChatRoomLabel(newRoom);
 		this._chatRooms.set(data._id, newRoom);
 		return newRoom;
 	}
@@ -122,7 +121,6 @@ export class ChatService extends IsReadyService {
 			if (!isUndefined(this._chatRooms.get(ChatRoom.NEW_CHAT)) && !isUndefined(roomData)) {
 				this._chatRooms.delete(ChatRoom.NEW_CHAT);
 			}
-			console.log(roomData)
 			return this.initRoom(roomData);
 		}));
 	}
@@ -149,7 +147,6 @@ export class ChatService extends IsReadyService {
 				}),
 		).subscribe((chat: Chat) => {
 			console.log(chat);
-			// const newChatRoom = new ChatRoom(chat.headers.userIds, chat.headers.chatType);
 			let existingChatRoom = this._chatRooms.get(chat.headers.chatRoomId);
 			const isFromMe: boolean = this.userProfileService.userId === chat.headers.fromUserId;
 			if (isFromMe && this._chatRooms.has(ChatRoom.NEW_CHAT)) {
@@ -173,22 +170,5 @@ export class ChatService extends IsReadyService {
 		}
 
 		this._totalUnreadCount = value;
-	}
-
-	private makeChatRoomLabel(room: ChatRoom): string {
-		if (room.userIds.length <= 1) {
-			return 'New';
-		}
-		let label = '';
-		if (room.chatType === ChatType.USER) {
-			for (let userId of room.userIds) {
-				if (userId !== this.userProfileService.userId) {
-					label += ', ' + this.userIdToUsernamePipe.transform(userId);
-				}
-			}
-			label = label.substr(2);
-		}
-
-		return label;
 	}
 }

@@ -10,7 +10,6 @@ import { UserProfile } from '../types/userProfile';
 import { UserProfileService } from '../data-services/userProfile.service';
 import { ChatRoom } from './chat-room';
 import { isNull, isUndefined } from "util";
-import { SocialService } from '../social/social.service';
 
 @Component({
 	selector: 'app-chat',
@@ -33,8 +32,7 @@ export class ChatComponent implements OnInit, OnDestroy {
 
 	constructor(public chatService: ChatService,
 	            public friendService: FriendService,
-	            private userProfileService: UserProfileService,
-	            private socialService: SocialService) {
+	            private userProfileService: UserProfileService) {
 		this.filteredFriends = this.toBarControl.valueChanges.pipe(
 				startWith(null),
 				map((input: string | null) => this.filterFriends(input))
@@ -95,7 +93,6 @@ export class ChatComponent implements OnInit, OnDestroy {
 	}
 
 	public removeUser(userId: string): void {
-		console.log('removeuser')
 		const userIds: any[] = JSON.parse(JSON.stringify(this.activeChatRoom.userIds));
 		userIds.splice(userIds.indexOf(userId), 1);
 		this.findRoomOfUsers(userIds);
@@ -154,3 +151,4 @@ export class ChatComponent implements OnInit, OnDestroy {
 		return friendList.filter((friend: UserProfile) => !this.activeChatRoom.userIds.includes(friend._id));
 	}
 }
+

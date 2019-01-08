@@ -1,57 +1,59 @@
-<mat-card class="app-chat" cdkDrag ngResizable *ngIf="chatService.showChatWindow">
-	<div class="toolbar" cdkDragHandle>
-		<button mat-icon-button class="minimize-button" (click)="minimizeChatWindow()"><mat-icon>minimize</mat-icon></button>
-	</div>
-	<mat-drawer-container autosize>
-		<mat-drawer mode="side" [(opened)]="sideBarOpen">
-			<button class="add-chat-room" mat-icon-button color="primary" (click)="addNewChatRoom()"><mat-icon>add</mat-icon></button>
-			<mat-nav-list>
-				<a mat-list-item *ngFor="let chatRoom of chatService.chatRooms" (click)="changeSelectedRoom(chatRoom)" [ngClass]="chatRoom === activeChatRoom ? 'active-chat-room' : ''">
-					<span *ngIf="chatRoom.unreadChatCount === 0">{{chatRoom.label}}</span>
-					<span *ngIf="chatRoom.unreadChatCount > 0"
-					      [matBadge]="chatRoom.unreadChatCount"
-					      matBadgePosition="above after"
-					      matBadgeColor="warn">{{chatRoom.label}}</span>
-				</a>
-			</mat-nav-list>
-		</mat-drawer>
-		<mat-drawer-content>
-			<button mat-icon-button color="primary" [ngClass]="sideBarOpen ? 'toggle-sidebar open' : 'toggle-sidebar'" (click)="toggleSideBar()"><mat-icon>chevron_right</mat-icon></button>
-			<div class="toUsers-line">
-				<mat-form-field class="chip-list">
-					<mat-chip-list #matChipList>
-						<ng-container *ngFor="let userId of activeChatRoom.userIds">
-							<mat-chip *ngIf="userId !== userProfileService.userId"
-							          [selectable]="true"
-							          [removable]="true"
-							          (removed)="removeUser(userId)">
-								{{socialService.getUsernameByUserId(userId)}}
-								<mat-icon matChipRemove>cancel</mat-icon>
-							</mat-chip>
-						</ng-container>
-						<input placeholder="Users in chat" #chipInput
-						       [formControl]="toBarControl"
-						       [matAutocomplete]="auto"
-						       [matChipInputFor]="matChipList"
-						       [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-						       [matChipInputAddOnBlur]="true"
-						       (matChipInputTokenEnd)="autoCompleteInput($event)">
-					</mat-chip-list>
-					<mat-autocomplete #auto="matAutocomplete" (optionSelected)="addUserToChatRoom($event.option.viewValue)">
-						<mat-option *ngFor="let friend of filteredFriends | async" [value]="friend.username">{{friend.username}}</mat-option>
-					</mat-autocomplete>
-				</mat-form-field>
-			</div>
-			<div class="chat-history" #chatHistory>
-				<ng-container *ngFor="let chat of activeChatRoom.chats">
-					<div *ngIf="chat.headers.fromUserId !== userProfileService.userId && activeChatRoom.userIds.length > 2" class="chat-label">{{socialService.getUsernameByUserId(chat.headers.fromUserId)}}</div>
-					<div [ngClass]="chat.headers.fromUserId === userProfileService.userId ? 'chat-bubble mine' : chat.headers.fromUserId === 'SYSTEM' ? 'chat-bubble system' : 'chat-bubble theirs'" >{{chat.body}}</div>
-				</ng-container>
-			</div>
-			<div class="input-line">
-				<input class="app-input" (keyup.enter)="sendChat()" [(ngModel)]="chatContent"/>
-				<button mat-raised-button color="primary" (click)="sendChat()">Send</button>
-			</div>
-		</mat-drawer-content>
-	</mat-drawer-container>
-</mat-card>
+<ng-container *ngIf="activeChatRoom && chatService.isReady()">
+	<mat-card [ngClass]="chatService.showChatWindow ? 'app-chat' : 'app-chat hide'" cdkDrag ngResizable>
+		<div class="toolbar" cdkDragHandle>
+			<button mat-icon-button class="minimize-button" (click)="minimizeChatWindow()"><mat-icon>minimize</mat-icon></button>
+		</div>
+		<mat-drawer-container autosize>
+			<mat-drawer mode="side" [(opened)]="sideBarOpen">
+				<button class="add-chat-room" mat-icon-button color="primary" (click)="addNewChatRoom()"><mat-icon>add</mat-icon></button>
+				<mat-nav-list>
+					<a mat-list-item *ngFor="let chatRoom of chatService.chatRooms" (click)="changeSelectedRoom(chatRoom)" [ngClass]="chatRoom === activeChatRoom ? 'active-chat-room' : ''">
+						<span *ngIf="chatRoom.unreadChatCount === 0">{{chatRoom | chatRoomLabel}}</span>
+						<span *ngIf="chatRoom.unreadChatCount > 0"
+						      [matBadge]="chatRoom.unreadChatCount"
+						      matBadgePosition="above after"
+						      matBadgeColor="warn">{{chatRoom | chatRoomLabel}}</span>
+					</a>
+				</mat-nav-list>
+			</mat-drawer>
+			<mat-drawer-content>
+				<button mat-icon-button color="primary" [ngClass]="sideBarOpen ? 'toggle-sidebar open' : 'toggle-sidebar'" (click)="toggleSideBar()"><mat-icon>chevron_right</mat-icon></button>
+				<div class="toUsers-line">
+					<mat-form-field class="chip-list">
+						<mat-chip-list #matChipList>
+							<ng-container *ngFor="let userId of activeChatRoom.userIds">
+								<mat-chip *ngIf="userId !== userProfileService.userId"
+								          [selectable]="true"
+								          [removable]="true"
+								          (removed)="removeUser(userId)">
+									{{userId | userIdToUsername}}
+									<mat-icon matChipRemove>cancel</mat-icon>
+								</mat-chip>
+							</ng-container>
+							<input placeholder="Users in chat" #chipInput
+							       [formControl]="toBarControl"
+							       [matAutocomplete]="auto"
+							       [matChipInputFor]="matChipList"
+							       [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+							       [matChipInputAddOnBlur]="true"
+							       (matChipInputTokenEnd)="autoCompleteInput($event)">
+						</mat-chip-list>
+						<mat-autocomplete #auto="matAutocomplete" (optionSelected)="addUserToChatRoom($event.option.viewValue)">
+							<mat-option *ngFor="let friend of filteredFriends | async" [value]="friend.username">{{friend.username}}</mat-option>
+						</mat-autocomplete>
+					</mat-form-field>
+				</div>
+				<div class="chat-history" #chatHistory>
+					<ng-container *ngFor="let chat of activeChatRoom.chats">
+						<div *ngIf="chat.headers.fromUserId !== userProfileService.userId && activeChatRoom.userIds.length > 2" class="chat-label">{{chat.headers.fromUserId | userIdToUsername}}</div>
+						<div [ngClass]="chat.headers.fromUserId === userProfileService.userId ? 'chat-bubble mine' : chat.headers.fromUserId === 'SYSTEM' ? 'chat-bubble system' : 'chat-bubble theirs'" >{{chat.body}}</div>
+					</ng-container>
+				</div>
+				<div class="input-line">
+					<input class="app-input" (keyup.enter)="sendChat()" [(ngModel)]="chatContent"/>
+					<button mat-raised-button color="primary" (click)="sendChat()">Send</button>
+				</div>
+			</mat-drawer-content>
+		</mat-drawer-container>
+	</mat-card>
+</ng-container>

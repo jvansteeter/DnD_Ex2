@@ -40,8 +40,8 @@ export class SocialService extends IsReadyService {
 			this.userRepo.getUserById(userId).subscribe((user: UserProfile) => {
 				this.usernameCache.set(user._id, user.username);
 			});
-			this.usernameCache.set(userId, 'pending')
-			return userId;
+			this.usernameCache.set(userId, '...')
+			return '...';
 		}
 		else {
 			return username;
