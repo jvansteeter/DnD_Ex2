@@ -87,7 +87,7 @@ export class MqService {
 			},
 			body: message,
 		} as ChatMessage;
-		await this.chatService.saveChat(chat);
+		await this.chatService.saveChat(ChatService.SYSTEM, chat);
 		return this.mqProxy.sendChat(room, chat);
 	}
 

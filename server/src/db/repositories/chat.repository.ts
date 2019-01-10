@@ -18,6 +18,7 @@ export class ChatRepository {
 			this.ChatRoom.create({
 				chatType: type,
 				mostRecentTimestamp: new Date().getTime(),
+				lastChecked: {},
 			}, (error, room: ChatRoomModel) => {
 				if (error) {
 					reject(error);

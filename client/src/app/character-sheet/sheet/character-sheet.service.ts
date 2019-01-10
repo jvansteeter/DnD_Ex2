@@ -100,7 +100,6 @@ export class CharacterSheetService implements CharacterInterfaceService {
 	}
 
 	public setCharacterData(data: CharacterData): void {
-		console.log(data)
 		this.characterData = data;
 		this.characterSheet = this.characterData.characterSheet;
 		if (this.characterData.characterSheet.aspects) {

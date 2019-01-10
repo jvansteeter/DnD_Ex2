@@ -20,13 +20,14 @@ export class ChatService {
 		this.userRepo = new UserRepository();
 	}
 
-	public async saveChat(chat: ChatMessage): Promise<void> {
+	public async saveChat(userId: string, chat: ChatMessage): Promise<void> {
 		let room: ChatRoomModel = await this.chatRepo.getChatRoomById(chat.headers.chatRoomId);
 		const existingChat = await this.chatRepo.getChatByRoomIdAndTimestamp(room._id, chat.headers.timestamp);
 		if (!existingChat) {
-			await room.snapTimestamp();
+			await room.markTimestamp();
 			await this.chatRepo.createChat(chat);
 		}
+		await this.checkChatRoom(userId, room._id);
 		return;
 	}
 
@@ -68,8 +69,15 @@ export class ChatService {
 				room = await room.addUserId(user);
 			}
 		}
+		room = await room.markLastChecked(userId);
 
 		return await this.assembleChatRoom(room);
+	}
+
+	public async checkChatRoom(userId: string, roomId: string): Promise<void> {
+		let room: ChatRoomModel = await this.chatRepo.getChatRoomById(roomId);
+		await room.markLastChecked(userId);
+		return;
 	}
 
 	private async assembleChatRoom(room: ChatRoomData): Promise<any> {

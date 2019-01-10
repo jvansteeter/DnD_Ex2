@@ -1,6 +1,7 @@
 import { Chat } from '../mq/messages/chat.message';
 import { ChatType } from '../../../../shared/types/mq/chat-type.enum';
 import { ChatRoomData } from '../../../../shared/types/mq/chat-room.data';
+import { isUndefined } from 'util';
 
 export class ChatRoom implements ChatRoomData {
 	_id: string;
@@ -9,6 +10,7 @@ export class ChatRoom implements ChatRoomData {
 	private _chats: Chat[];
 	private _unreadChatCount: number;
 	private _label: string;
+	public lastChecked: {};
 	readonly chatType: ChatType;
 
 	public editable: boolean = true;
@@ -25,6 +27,7 @@ export class ChatRoom implements ChatRoomData {
 		this._userIds = data.userIds;
 		this._userIds.sort();
 		this._label = data.label;
+		this.lastChecked = isUndefined(data.lastChecked) ? {} : data.lastChecked;
 		this._chats = [];
 		this._unreadChatCount = 0;
 		this.mostRecentTimestamp = data.mostRecentTimestamp;
@@ -94,6 +97,14 @@ export class ChatRoom implements ChatRoomData {
 		}
 
 		return hash;
+	}
+
+	public calculateUnreadCount(lastChecked: number): void {
+		for (let chat of this._chats) {
+			if (chat.headers.timestamp > lastChecked) {
+				this._unreadChatCount++;
+			}
+		}
 	}
 
 	private sortChats(): void {

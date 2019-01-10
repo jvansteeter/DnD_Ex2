@@ -71,6 +71,7 @@ export class ChatComponent implements OnInit, OnDestroy {
 	public onHover(): void {
 		if (this.activeChatRoom.unreadChatCount > 0) {
 			this.activeChatRoom.clearUnreadChatCount();
+			this.chatService.checkRoom(this.activeChatRoom._id);
 			this.chatService.calculateUnreadCount();
 		}
 	}
@@ -81,6 +82,7 @@ export class ChatComponent implements OnInit, OnDestroy {
 
 	public changeSelectedRoom(room: ChatRoom): void {
 		this.activeChatRoom = this.chatService.getRoomById(room._id);
+		this.chatService.checkRoom(room._id);
 	}
 
 	public sendChat(): void {

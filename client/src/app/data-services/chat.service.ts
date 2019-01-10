@@ -38,6 +38,7 @@ export class ChatService extends IsReadyService {
 			if (isReady) {
 				this.initRooms().pipe(first()).subscribe(() => {
 					this.handleIncomingChats();
+					this.calculateUnreadCount();
 					this.setReady(true);
 				});
 			}
@@ -67,6 +68,11 @@ export class ChatService extends IsReadyService {
 
 	private initRoom(data: ChatRoomData): ChatRoom {
 		let newRoom: ChatRoom = new ChatRoom(data);
+		let lastChecked: number = newRoom.lastChecked[this.userProfileService.userId];
+		if (isUndefined(lastChecked)) {
+			lastChecked = 0;
+		}
+		newRoom.calculateUnreadCount(lastChecked);
 		this._chatRooms.set(data._id, newRoom);
 		return newRoom;
 	}
@@ -78,6 +84,7 @@ export class ChatService extends IsReadyService {
 			label: 'New',
 			chatType: ChatType.USER,
 			mostRecentTimestamp: new Date().getTime(),
+			lastChecked: {},
 		});
 		this._chatRooms.set(ChatRoom.NEW_CHAT, newRoom);
 		return newRoom;
@@ -125,6 +132,12 @@ export class ChatService extends IsReadyService {
 		}));
 	}
 
+	public checkRoom(roomId: string): void {
+		let room: ChatRoom = this._chatRooms.get(roomId);
+		room.clearUnreadChatCount();
+		this.chatRepo.checkRoom(roomId).subscribe();
+	}
+
 	get chatRooms(): ChatRoom[] {
 		return [...this._chatRooms.values()].sort((a: ChatRoom, b: ChatRoom) => {
 			return b.mostRecentTimestamp - a.mostRecentTimestamp;
@@ -146,7 +159,6 @@ export class ChatService extends IsReadyService {
 					return message as Chat;
 				}),
 		).subscribe((chat: Chat) => {
-			console.log(chat);
 			let existingChatRoom = this._chatRooms.get(chat.headers.chatRoomId);
 			const isFromMe: boolean = this.userProfileService.userId === chat.headers.fromUserId;
 			if (isFromMe && this._chatRooms.has(ChatRoom.NEW_CHAT)) {

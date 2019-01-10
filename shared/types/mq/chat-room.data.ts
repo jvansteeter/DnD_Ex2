@@ -7,5 +7,6 @@ export interface ChatRoomData {
 	label: string;
 	chatType: ChatType;
 	mostRecentTimestamp: number;
+	lastChecked: {};
 	chats?: ChatMessage[];
 }

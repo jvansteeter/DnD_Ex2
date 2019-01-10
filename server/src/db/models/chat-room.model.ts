@@ -10,6 +10,7 @@ export class ChatRoomModel extends MongooseModel implements ChatRoomData {
 	public label: string;
 	public chatType: ChatType;
 	public mostRecentTimestamp: number;
+	public lastChecked: Map<string, number>;
 	public chats?: ChatMessage[];
 
 	constructor() {
@@ -18,6 +19,7 @@ export class ChatRoomModel extends MongooseModel implements ChatRoomData {
 			label: String,
 			chatType: String,
 			mostRecentTimestamp: {type: Number, required: true},
+			lastChecked: {type: Map, of: Number, default: {}}
 		});
 
 		this._id = this.methods._id;
@@ -25,10 +27,12 @@ export class ChatRoomModel extends MongooseModel implements ChatRoomData {
 		this.label = this.methods.label;
 		this.chatType = this.methods.chatType;
 		this.mostRecentTimestamp = this.methods.mostRecentTimestamp;
+		this.lastChecked = this.methods.lastChecked;
 
 		this.methods.addUserId = this.addUserId;
-		this.methods.snapTimestamp = this.snapTimestamp;
+		this.methods.markTimestamp = this.markTimestamp;
 		this.methods.setLabel = this.setLabel;
+		this.methods.markLastChecked = this.markLastChecked;
 	}
 
 	public addUserId(userId: string): Promise<ChatRoomModel> {
@@ -36,13 +40,18 @@ export class ChatRoomModel extends MongooseModel implements ChatRoomData {
 		return this.save();
 	}
 
-	public snapTimestamp(): Promise<ChatRoomModel> {
+	public markTimestamp(): Promise<ChatRoomModel> {
 		this.mostRecentTimestamp = new Date().getTime();
 		return this.save();
 	}
 
 	public setLabel(label: string): Promise<ChatRoomModel> {
 		this.label = label;
+		return this.save();
+	}
+
+	public markLastChecked(userId: string): Promise<ChatRoomModel> {
+		this.lastChecked.set(String(userId), new Date().getTime());
 		return this.save();
 	}
 }

@@ -40,4 +40,11 @@ export class ChatRepository {
 		};
 		return this.http.post<ChatRoomData>('/api/chat/roomOfUsers', data, {responseType: 'json'});
 	}
+
+	public checkRoom(roomId: string): Observable<void> {
+		const data = {
+			roomId: roomId
+		};
+		return this.http.post<void>('/api/chat/check', data);
+	}
 }

@@ -40,7 +40,6 @@ export class MqService extends IsReadyService {
 				stompConfig.connectHeaders.passcode = this.userProfileService.passwordHash;
 				this.stompService.configure(stompConfig);
 				this.stompStateSub = this.stompService.connectionState$.subscribe((state: RxStompState) => {
-					console.log('State change:', state)
 					if (this.stompState !== state) {
 						this.stompState = state;
 						if (state === RxStompState.OPEN) {
@@ -122,7 +121,6 @@ export class MqService extends IsReadyService {
 				let url: string;
 				for (let toUser of room.userIds) {
 					url = MqMessageUrlFactory.createUserChatUrl(toUser);
-					console.log('send chat:', chat.body)
 					this.stompService.publish({
 						destination: MqMessageUrlFactory.createUserChatUrl(toUser),
 						headers: chat.headers as any,

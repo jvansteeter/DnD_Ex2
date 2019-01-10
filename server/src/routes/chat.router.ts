@@ -76,9 +76,23 @@ export class ChatRouter {
 
 		this.router.post('/save', async (req: Request, res: Response) => {
 			try {
+				const userId: string = req.user._id;
 				const chatMessage: ChatMessage = req.body.chat;
-				await this.chatService.saveChat(chatMessage);
+				await this.chatService.saveChat(userId, chatMessage);
 				res.status(200).send();
+			}
+			catch (error) {
+				console.error(error);
+				res.status(500).send(error);
+			}
+		});
+
+		this.router.post('/check', async (req: Request, res: Response) => {
+			try {
+				const userId: string = req.user._id;
+				const roomId: string = req.body.roomId;
+				await this.chatService.checkChatRoom(userId, roomId);
+				res.send();
 			}
 			catch (error) {
 				console.error(error);
