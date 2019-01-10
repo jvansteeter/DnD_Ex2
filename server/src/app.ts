@@ -101,11 +101,6 @@ class App {
     });
     this.app.use('/', authenticationRouter);
 
-    // in case of web scan, shutdown
-    this.app.use('/login.php', () => {
-      process.exit(1);
-    });
-
     //  **************************************** Serve the client files ********************************************
     //  If not logged in, serve the login app
     this.app.use('/login', Express.static('./dist/client/login.html'));
