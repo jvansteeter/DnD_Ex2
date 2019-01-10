@@ -23,6 +23,7 @@ export class CharacterSheetComponent implements OnInit {
 	            public characterService: CharacterSheetService,
 	            private characterInterfaceFactory: CharacterInterfaceFactory,
 	            private characterRepo: CharacterRepository) {
+		this.characterService.init();
 		this.characterInterfaceFactory.setCharacterInterface(this.characterService);
 	}
 

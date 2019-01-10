@@ -21,7 +21,6 @@ export class CharacterSheetService implements CharacterInterfaceService {
 	private aspectComponents: Map<string, CharacterAspectComponent>;
 
 	constructor(private characterRepo: CharacterRepository) {
-		this.init();
 	}
 
 	init(): void {

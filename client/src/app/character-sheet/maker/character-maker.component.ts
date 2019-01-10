@@ -57,6 +57,7 @@ export class CharacterMakerComponent implements OnInit, AfterViewInit {
 	            private characterSheetRepository: CharacterSheetRepository,
 	            private characterInterfaceFactory: CharacterInterfaceFactory,
 	            public characterService: CharacterMakerService) {
+		this.characterService.init();
 		this.characterInterfaceFactory.setCharacterInterface(this.characterService);
 		this.characterToolTipCard = {
 			title: 'Character Tooltip Preview',
