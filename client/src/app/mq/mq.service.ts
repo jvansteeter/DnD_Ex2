@@ -4,7 +4,7 @@ import { RxStompState } from '@stomp/rx-stomp';
 import { Message } from '@stomp/stompjs';
 import { UserProfileService } from '../data-services/userProfile.service';
 import { StompConfiguration } from './StompConfig';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { MqMessageFactory } from './mq-message.factory';
 import { IsReadyService } from "../utilities/services/isReady.service";
@@ -18,11 +18,13 @@ import { EncounterCommandType } from '../../../../shared/types/encounter/encount
 import { EncounterCommandMessage } from './messages/encounter-command.message';
 import { Chat } from './messages/chat.message';
 import { ChatType } from '../../../../shared/types/mq/chat-type.enum';
+import { ChatRoom } from '../chat/chat-room';
 
 @Injectable()
 export class MqService extends IsReadyService {
 	private stompState: RxStompState = RxStompState.CLOSED;
 	private userQueue: Observable<StompMessage>;
+	private stompStateSub: Subscription;
 
 	constructor(private stompService: RxStompService,
 	            private userProfileService: UserProfileService) {
@@ -37,15 +39,18 @@ export class MqService extends IsReadyService {
 				stompConfig.connectHeaders.login = this.userProfileService.userId;
 				stompConfig.connectHeaders.passcode = this.userProfileService.passwordHash;
 				this.stompService.configure(stompConfig);
-				this.stompService.connectionState$.subscribe((state: RxStompState) => {
+				this.stompStateSub = this.stompService.connectionState$.subscribe((state: RxStompState) => {
 					if (this.stompState !== state) {
 						this.stompState = state;
 						if (state === RxStompState.OPEN) {
 							this.connectToUserQueue();
 							this.setReady(true);
 						}
-						else {
-							this.setReady(false);
+						else if (state === RxStompState.CLOSED) {
+							this.stompService.deactivate();
+							setTimeout(() => {
+								this.stompService.activate();
+							});
 						}
 					}
 				});
@@ -110,11 +115,11 @@ export class MqService extends IsReadyService {
 		return this.userQueue;
 	}
 
-	public sendChat(chat: Chat): void {
+	public sendChat(chat: Chat, room: ChatRoom): void {
 		switch (chat.headers.chatType) {
 			case ChatType.USER: {
 				let url: string;
-				for (let toUser of chat.headers.userIds) {
+				for (let toUser of room.userIds) {
 					url = MqMessageUrlFactory.createUserChatUrl(toUser);
 					this.stompService.publish({
 						destination: MqMessageUrlFactory.createUserChatUrl(toUser),

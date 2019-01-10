@@ -1,26 +1,42 @@
 import { Chat } from '../mq/messages/chat.message';
 import { ChatType } from '../../../../shared/types/mq/chat-type.enum';
+import { ChatRoomData } from '../../../../shared/types/mq/chat-room.data';
+import { isUndefined } from 'util';
 
-export class ChatRoom {
+export class ChatRoom implements ChatRoomData {
+	_id: string;
+	mostRecentTimestamp: number;
 	private _userIds: string[];
 	private _chats: Chat[];
 	private _unreadChatCount: number;
 	private _label: string;
+	public lastChecked: {};
 	readonly chatType: ChatType;
 
 	public editable: boolean = true;
 
 	static readonly NEW_CHAT = 'New Chat';
 
-	constructor(userIds: string[], type: ChatType) {
-		if (userIds.length === 0) {
+	constructor(data: ChatRoomData) {
+		if (data.userIds.length === 0) {
 			console.error('User creating chatroom must be present in room');
 		}
-		this.chatType = type;
-		this._userIds = userIds;
+
+		this._id = data._id;
+		this.chatType = data.chatType;
+		this._userIds = data.userIds;
 		this._userIds.sort();
+		this._label = data.label;
+		this.lastChecked = isUndefined(data.lastChecked) ? {} : data.lastChecked;
 		this._chats = [];
 		this._unreadChatCount = 0;
+		this.mostRecentTimestamp = data.mostRecentTimestamp;
+		if (Array.isArray(data.chats) && data.chats.length > 0) {
+			for (let chat of data.chats) {
+				this._chats.push(new Chat(chat));
+			}
+			this.sortChats();
+		}
 	}
 
 	public addChat(chat: Chat, isFromMe: boolean = false): void {
@@ -28,16 +44,9 @@ export class ChatRoom {
 		if (!isFromMe) {
 			this._unreadChatCount++;
 		}
+		this.mostRecentTimestamp = new Date().getTime();
 		this._chats.push(chat);
-		this._chats.sort((a: Chat, b: Chat) => {
-			if (a.headers.timestamp < b.headers.timestamp) {
-				return -1;
-			}
-			else if (a.headers.timestamp > b.headers.timestamp) {
-				return 1;
-			}
-			return 0;
-		});
+		this.sortChats();
 	}
 
 	public addUserId(userId: string): void {
@@ -55,6 +64,10 @@ export class ChatRoom {
 
 	get userIds(): string[] {
 		return this._userIds;
+	}
+
+	set userIds(value) {
+		this._userIds = value;
 	}
 
 	get chats(): Chat[] {
@@ -84,5 +97,25 @@ export class ChatRoom {
 		}
 
 		return hash;
+	}
+
+	public calculateUnreadCount(lastChecked: number): void {
+		for (let chat of this._chats) {
+			if (chat.headers.timestamp > lastChecked) {
+				this._unreadChatCount++;
+			}
+		}
+	}
+
+	private sortChats(): void {
+		this._chats.sort((a: Chat, b: Chat) => {
+			if (a.headers.timestamp < b.headers.timestamp) {
+				return -1;
+			}
+			else if (a.headers.timestamp > b.headers.timestamp) {
+				return 1;
+			}
+			return 0;
+		});
 	}
 }

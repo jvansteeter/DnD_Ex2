@@ -5,7 +5,7 @@ import {
 	MatButtonModule,
 	MatCardModule,
 	MatChipsModule,
-	MatFormFieldModule, MatIconModule,
+	MatFormFieldModule, MatIconModule, MatListModule, MatSidenavModule,
 	MatTabsModule,
 	MatToolbarModule
 } from '@angular/material';
@@ -18,36 +18,45 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UtilityModule } from '../utilities/utility.module';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { ChatRepository } from '../repositories/chat.repository';
+import { SocialModule } from '../social/social.module';
+import { ChatRoomLabelPipe } from './chat-room-label.pipe';
 
 @NgModule({
 	imports: [
-			BrowserModule,
-			FormsModule,
-			MatCardModule,
-			DragDropModule,
-			MatToolbarModule,
-			AngularDraggableModule,
-			MatTabsModule,
-			MatButtonModule,
-			MatFormFieldModule,
-			MatChipsModule,
-			MatAutocompleteModule,
-			ReactiveFormsModule,
-			MatIconModule,
-			UtilityModule,
-			MatBadgeModule,
-			ScrollingModule,
+		BrowserModule,
+		FormsModule,
+		MatCardModule,
+		DragDropModule,
+		MatToolbarModule,
+		AngularDraggableModule,
+		MatTabsModule,
+		MatButtonModule,
+		MatFormFieldModule,
+		MatChipsModule,
+		MatAutocompleteModule,
+		ReactiveFormsModule,
+		MatIconModule,
+		UtilityModule,
+		MatBadgeModule,
+		ScrollingModule,
+		MatSidenavModule,
+		MatListModule,
+		SocialModule,
 	],
 	declarations: [
-			ChatComponent,
+		ChatComponent,
+		ChatRoomLabelPipe,
 	],
 	exports: [
-			ChatComponent,
+		ChatComponent,
 	],
 	providers: [
 		StompRService,
 		MqService,
 		ChatService,
+		ChatRepository,
+		ChatRoomLabelPipe,
 	]
 })
 export class ChatModule {

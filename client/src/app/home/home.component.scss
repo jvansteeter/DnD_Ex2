@@ -43,7 +43,7 @@
 	background: #CFD8DC;
 }
 
-/deep/ .profilePhoto-card mat-card mat-card-content {
+::ng-deep  .profilePhoto-card mat-card mat-card-content {
 	height: 100%;
 }
 

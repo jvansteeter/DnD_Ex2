@@ -23,6 +23,8 @@ import './db/models/encounter.model';
 import './db/models/user-campaign.model';
 import './db/models/player.model';
 import './db/models/notation.model';
+import './db/models/chat-room.model';
+import './db/models/chat.model';
 import './config/passport.config';
 
 import LoginRouter from './routes/login.router';
@@ -35,6 +37,7 @@ import NotificationRouter from './routes/notification.router';
 import CharacterRouter from './routes/character.router';
 import { MqProxy, MqProxySingleton } from './mq/mqProxy';
 import { MqServiceSingleton } from './mq/mq.service';
+import ChatRouter from './routes/chat.router';
 
 /***********************************************************************************************************************
  * EXPRESS APP
@@ -117,6 +120,7 @@ class App {
     this.app.use('/api/encounter', this.isAuthenticated, EncounterRouter);
 	  this.app.use('/api/character', this.isAuthenticated, CharacterRouter);
 	  this.app.use('/api/notification', this.isAuthenticated, NotificationRouter);
+	  this.app.use('/api/chat', this.isAuthenticated, ChatRouter);
 
     //  All other requests, redirect toUserId index
     this.app.get('*', (req, res) => {

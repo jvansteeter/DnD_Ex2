@@ -9,7 +9,7 @@ export class Chat extends StompMessage implements ChatMessage {
 		chatType: ChatType;
 		fromUserId: string;
 		timestamp: number;
-		userIds?: string[];
+		chatRoomId: string;
 	};
 	body: string;
 
@@ -18,12 +18,13 @@ export class Chat extends StompMessage implements ChatMessage {
 		this.headers.chatType = message.headers.chatType;
 		this.headers.fromUserId = message.headers.fromUserId;
 		this.headers.timestamp = message.headers.timestamp;
-		if (!Array.isArray(message.headers.userIds)) {
-			this.headers.userIds = message.headers.userIds.split(',');
-		}
-		else {
-			this.headers.userIds = message.headers.userIds;
-		}
+		this.headers.chatRoomId = message.headers.chatRoomId;
+		// if (!Array.isArray(message.headers.userIds)) {
+		// 	this.headers.userIds = message.headers.userIds.split(',');
+		// }
+		// else {
+		// 	this.headers.userIds = message.headers.userIds;
+		// }
 	}
 
 	serializeBody(): string {

@@ -1,11 +1,11 @@
 :host {
 	width: 100%;
 
-	/deep/ .mat-form-field-label {
+	::ng-deep  .mat-form-field-label {
 		color: rgba(0,0,0,.6);
 	}
 
-	/deep/ .mat-form-field-underline {
+	::ng-deep  .mat-form-field-underline {
 		background-color: rgba(0,0,0,.42) !important;
 		background-image: none !important;
 	}

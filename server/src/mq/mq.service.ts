@@ -16,6 +16,9 @@ import { EncounterCommandMessage } from './messages/encounter-command.message';
 import { EncounterService } from '../services/encounter.service';
 import { NotationRepository } from '../db/repositories/notation.repository';
 import { NotationData } from '../../../shared/types/encounter/board/notation.data';
+import { ChatService } from '../services/chat.service';
+import { ChatRoomModel } from '../db/models/chat-room.model';
+import { ChatMessage } from '../../../shared/types/mq/chat';
 
 export class MqService {
 	private friendRepo: FriendRepository;
@@ -23,6 +26,7 @@ export class MqService {
 	private playerRepository: PlayerRepository;
 	private encounterService: EncounterService;
 	private notationRepo: NotationRepository;
+	private chatService: ChatService;
 
 	constructor(private mqProxy: MqProxy) {
 		this.friendRepo = new FriendRepository();
@@ -30,13 +34,14 @@ export class MqService {
 		this.playerRepository = new PlayerRepository();
 		this.encounterService = new EncounterService();
 		this.notationRepo = new NotationRepository();
+		this.chatService = new ChatService();
 	}
 
 	public handleMessages(): void {
 		this.mqProxy.observeAllEncounters().subscribe((message: EncounterCommandMessage) => {
 			this.handleEncounterCommand(message);
 		});
-		this.mqProxy.observeAllFriendRequests().subscribe( (friendRequest: FriendRequest) => {
+		this.mqProxy.observeAllFriendRequests().subscribe((friendRequest: FriendRequest) => {
 			this.handleFriendRequest(friendRequest);
 		});
 		this.mqProxy.observeAllCampaignInvites().subscribe((campaignInvite: CampaignInvite) => {
@@ -66,10 +71,24 @@ export class MqService {
 					data: data
 				}
 			});
-		}
-		catch (error) {
+		} catch (error) {
 			throw error;
 		}
+	}
+
+	public async sendChat(room: ChatRoomModel, message: string): Promise<void> {
+		const chat = {
+			headers: {
+				type: MqMessageType.CHAT,
+				chatType: room.chatType,
+				fromUserId: ChatService.SYSTEM,
+				timestamp: new Date().getTime(),
+				chatRoomId: room._id,
+			},
+			body: message,
+		} as ChatMessage;
+		await this.chatService.saveChat(ChatService.SYSTEM, chat);
+		return this.mqProxy.sendChat(room, chat);
 	}
 
 	private async handleEncounterCommand(command: EncounterCommandMessage): Promise<void> {
@@ -141,8 +160,7 @@ export class MqService {
 				}
 				this.encounterService.incrementVersion(command.headers.encounterId);
 			}
-		}
-		catch (error) {
+		} catch (error) {
 			console.error(error);
 		}
 	}
@@ -166,8 +184,7 @@ export class MqService {
 				toUserId: toUserId,
 				fromUserId: fromUserId,
 			} as FriendRequestNotification);
-		}
-		catch (error) {
+		} catch (error) {
 			console.error(error);
 		}
 	}
@@ -188,8 +205,7 @@ export class MqService {
 				campaignId: campaignId
 			} as CampaignInviteNotification);
 			return;
-		}
-		catch (error) {
+		} catch (error) {
 			console.error(error);
 		}
 	}

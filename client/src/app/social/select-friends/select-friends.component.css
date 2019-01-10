@@ -27,7 +27,7 @@
     margin-right: 10px;
 }
 
-/deep/ mat-header-cell {
+::ng-deep  mat-header-cell {
     margin-right: 10px;
 }
 

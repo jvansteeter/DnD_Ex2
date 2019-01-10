@@ -3,7 +3,7 @@ import { ChatService } from '../data-services/chat.service';
 import { FriendService } from '../data-services/friend.service';
 import { FormControl } from '@angular/forms';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { MatAutocomplete, MatChipInputEvent, MatTabGroup } from '@angular/material';
+import { MatAutocomplete, MatChipInputEvent } from '@angular/material';
 import { Observable, Subscription } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { UserProfile } from '../types/userProfile';
@@ -19,15 +19,15 @@ import { isNull, isUndefined } from "util";
 export class ChatComponent implements OnInit, OnDestroy {
 	@ViewChild('auto') matAutocomplete: MatAutocomplete;
 	@ViewChild('chipInput') chipInput: ElementRef<HTMLInputElement>;
-	@ViewChild('tabGroup') tabGroup: MatTabGroup;
 	@ViewChild('chatHistory') chatHistory: ElementRef;
 
 	public chatContent: string = '';
 	public toBarControl = new FormControl();
 	public separatorKeysCodes: number[] = [ENTER, COMMA];
 	public filteredFriends: Observable<UserProfile[]>;
+	public activeChatRoom: ChatRoom;
+	public sideBarOpen: boolean = true;
 
-	private selectedIndex: number = 0;
 	private newChatSub: Subscription;
 
 	constructor(public chatService: ChatService,
@@ -40,17 +40,22 @@ export class ChatComponent implements OnInit, OnDestroy {
 	}
 
 	public ngOnInit(): void {
-		this.newChatSub = this.chatService.newChatObservable.subscribe((newChat: ChatRoom) => {
-			const activeRoom: ChatRoom = this.chatService.chatRooms[this.selectedIndex];
-			if (newChat === activeRoom) {
-				console.log('received a new chat for the active room')
-				console.log(this.chatHistory)
+		this.activeChatRoom = this.chatService.chatRooms[0];
+		this.chatService.isReadyObservable.subscribe((isReady: boolean) => {
+			if (isReady) {
 				setTimeout(() => {
-					this.chatHistory.nativeElement.scrollTo({
-						top: this.chatHistory.nativeElement.scrollHeight,
-						left: 0,
-						behavior: 'smooth'
-					});
+					this.activeChatRoom = this.chatService.chatRooms[0];
+				});
+				this.newChatSub = this.chatService.newChatObservable.subscribe((newChat: ChatRoom) => {
+					if (newChat === this.activeChatRoom) {
+						setTimeout(() => {
+							this.chatHistory.nativeElement.scrollTo({
+								top: this.chatHistory.nativeElement.scrollHeight,
+								left: 0,
+								behavior: 'smooth'
+							});
+						});
+					}
 				});
 			}
 		});
@@ -64,15 +69,20 @@ export class ChatComponent implements OnInit, OnDestroy {
 
 	@HostListener('mouseover')
 	public onHover(): void {
-		const room: ChatRoom = this.chatService.chatRooms[this.selectedIndex];
-		if (room.unreadChatCount > 0) {
-			room.clearUnreadChatCount();
+		if (this.activeChatRoom.unreadChatCount > 0) {
+			this.activeChatRoom.clearUnreadChatCount();
+			this.chatService.checkRoom(this.activeChatRoom._id);
 			this.chatService.calculateUnreadCount();
 		}
 	}
 
-	public selectedTabIndexChange(index: number): void {
-		this.selectedIndex = index;
+	public toggleSideBar(): void {
+		this.sideBarOpen = !this.sideBarOpen;
+	}
+
+	public changeSelectedRoom(room: ChatRoom): void {
+		this.activeChatRoom = this.chatService.getRoomById(room._id);
+		this.chatService.checkRoom(room._id);
 	}
 
 	public sendChat(): void {
@@ -80,33 +90,25 @@ export class ChatComponent implements OnInit, OnDestroy {
 		if (this.chatContent === '') {
 			return;
 		}
-		const room: ChatRoom = this.chatService.chatRooms[this.selectedIndex];
-		this.chatService.sendToUsers(room.userIds, this.chatContent);
+		this.chatService.sendToUsers(this.activeChatRoom, this.chatContent);
 		this.chatContent = '';
 	}
 
 	public removeUser(userId: string): void {
-		const room: ChatRoom = this.chatService.chatRooms[this.selectedIndex];
-		room.removeUser(userId);
+		const userIds: any[] = JSON.parse(JSON.stringify(this.activeChatRoom.userIds));
+		userIds.splice(userIds.indexOf(userId), 1);
+		this.findRoomOfUsers(userIds);
 	}
 
 	public addUserToChatRoom(username: string): void {
-		const room: ChatRoom = this.chatService.chatRooms[this.selectedIndex];
 		const user: UserProfile = this.friendService.getFriendByUserName(username);
-		if (room.userIds.includes(user._id)) {
-			return;
+		if (this.activeChatRoom.userIds.indexOf(user._id) === -1) {
+			this.findRoomOfUsers([...this.activeChatRoom.userIds, user._id]);
 		}
-		room.addUserId(user._id);
-		this.chipInput.nativeElement.value = '';
-		this.toBarControl.setValue(null);
 	}
 
 	public addNewChatRoom(): void {
-		this.chatService.addNewChatRoom();
-		setTimeout(() => {
-			this.selectedIndex = this.tabGroup._tabs.length - 1;
-			this.tabGroup.selectedIndex = this.selectedIndex;
-		});
+		this.activeChatRoom = this.chatService.addNewChatRoom();
 	}
 
 	public autoCompleteInput(event: MatChipInputEvent): void {
@@ -119,16 +121,25 @@ export class ChatComponent implements OnInit, OnDestroy {
 				if (!isUndefined(this.friendService.getFriendByUserName(value))) {
 					this.addUserToChatRoom(value);
 				}
-				this.chipInput.nativeElement.value = '';
-				this.toBarControl.setValue(null);
 			}
 
 			if (input) {
 				input.value = '';
 			}
 
+			this.chipInput.nativeElement.value = '';
 			this.toBarControl.setValue(null);
 		}
+	}
+
+	public minimizeChatWindow(): void {
+		this.chatService.toggleChatWindow();
+	}
+
+	private findRoomOfUsers(userIds: string[]): void {
+		this.chatService.getOrCreateRoomOfUsers(userIds).subscribe((room: ChatRoom) => {
+			this.activeChatRoom = room;
+		});
 	}
 
 	private filterFriends(input: string | null): UserProfile[] {
@@ -139,7 +150,7 @@ export class ChatComponent implements OnInit, OnDestroy {
 		else {
 			friendList = this.friendService.filterFriendsByUsername(input);
 		}
-		const room = this.chatService.chatRooms[this.selectedIndex];
-		return friendList.filter((friend: UserProfile) => !room.userIds.includes(friend._id));
+		return friendList.filter((friend: UserProfile) => !this.activeChatRoom.userIds.includes(friend._id));
 	}
 }
+
