@@ -109,8 +109,6 @@ export class CharacterMakerService implements CharacterInterfaceService {
 	public addComponent(aspect: Aspect): void {
 		if (!isUndefined(this.aspectComponents.get(aspect.label.toLowerCase()))) {
 			console.error('aspect with that name already exists');
-			console.log(this.aspectComponents)
-			console.log(this.aspectMap)
 			this.alertService.showAlert('Aspect with that name already exists');
 			return;
 		}

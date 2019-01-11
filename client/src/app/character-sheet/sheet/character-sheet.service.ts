@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { CharacterInterfaceService } from '../shared/character-interface.service';
 import { Aspect, AspectType } from '../shared/aspect';
 import { CharacterSheetData } from '../../../../../shared/types/rule-set/character-sheet.data';
-import { Observable, of } from 'rxjs';
 import { CharacterData } from '../../../../../shared/types/character.data';
 import { AspectData } from '../../../../../shared/types/rule-set/aspect.data';
 import { isUndefined } from 'util';
@@ -120,6 +119,12 @@ export class CharacterSheetService implements CharacterInterfaceService {
 				this.aspects.push(aspect);
 			});
 		}
+		this.aspects.sort((a: Aspect, b: Aspect) => {
+			if (a.config.y !== b.config.y) {
+				return a.config.y - b.config.y;
+			}
+			return a.config.x - b.config.x;
+		});
 		if (isUndefined(this.characterData.values)) {
 			this.characterData.values = {};
 		}

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CharacterInterfaceFactory } from './character-interface.factory';
-import { CharacterMakerService } from '../maker/character-maker.service';
+import { CharacterInterfaceService } from './character-interface.service';
 
 @Component({
 	selector: 'character-grid',
@@ -8,12 +8,12 @@ import { CharacterMakerService } from '../maker/character-maker.service';
 	styleUrls: ['character-grid.component.scss']
 })
 export class CharacterGridComponent implements OnInit {
-	public characterService: CharacterMakerService;
+	public characterService: CharacterInterfaceService;
 
 	constructor(private characterServiceFactory: CharacterInterfaceFactory) {
 	}
 
 	public ngOnInit(): void {
-		this.characterService = this.characterServiceFactory.getCharacterInterface() as CharacterMakerService;
+		this.characterService = this.characterServiceFactory.getCharacterInterface();
 	}
 }
