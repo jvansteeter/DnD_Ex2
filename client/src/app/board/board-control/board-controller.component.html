@@ -11,8 +11,8 @@
             <div class="sectionHeader"><span>Stuff</span></div>
             <div class="sectionContents">
                 <button mat-raised-button color="primary" (click)="addPlayer()">Add Player</button>
-                <button mat-raised-button color="primary" (click)="openTeamSettings()">Team Settings</button>
-                <button mat-raised-button color="primary" (click)="exportEncounterJson()">Export Encounter JSON</button>
+                <button *ngIf="rightsService.isEncounterGM()" mat-raised-button color="primary" (click)="openTeamSettings()">Team Settings</button>
+                <button *ngIf="rightsService.isEncounterGM()" mat-raised-button color="primary" (click)="exportEncounterJson()">Export Encounter JSON</button>
             </div>
         </div>
 

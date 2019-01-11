@@ -12,6 +12,7 @@ import { AddPlayerDialogComponent } from '../dialogs/add-player-dialog/add-playe
 import { EncounterService } from '../../encounter/encounter.service';
 import { BoardVisibilityService } from "../services/board-visibility.service";
 import { TeamSettingsComponent } from '../dialogs/team-settings/team-settings.component';
+import { RightsService } from '../../data-services/rights.service';
 
 @Component({
 	selector: 'board-controller',
@@ -31,6 +32,7 @@ export class BoardControllerComponent implements OnInit, OnDestroy {
 	            public boardLightService: BoardLightService,
 	            public boardVisibilityService: BoardVisibilityService,
 	            private encounterService: EncounterService,
+	            public rightsService: RightsService,
 	            private dialog: MatDialog,
 	) {
 	}

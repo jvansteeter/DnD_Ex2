@@ -343,6 +343,9 @@ export class BoardMapComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     private boardMap_doMouseRightUp(event) {
+    	  if (isNullOrUndefined(this.boardStateService.mouse_loc_cell)) {
+    	  	  return;
+	      }
         this.checkForPlayerPops(
             new XyPair(this.boardStateService.mouse_loc_cell.x, this.boardStateService.mouse_loc_cell.y),
             this.boardTransformService.map_to_screen(new XyPair((this.boardStateService.mouse_loc_cell.x + 1) * BoardStateService.cell_res, ((this.boardStateService.mouse_loc_cell.y) * BoardStateService.cell_res)))

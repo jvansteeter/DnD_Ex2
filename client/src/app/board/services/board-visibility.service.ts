@@ -102,6 +102,9 @@ export class BoardVisibilityService extends IsReadyService {
         for (degree = 0; degree < 360; degree = degree + degreeInc) {
             const rayToCast = new Ray(source, degree);
             const boundPoint = this.getBoundIntercept(rayToCast);
+            if (isNullOrUndefined(boundPoint)) {
+            	continue;
+            }
             const boundPointFloor = new XyPair(Math.floor(boundPoint.x), Math.floor(boundPoint.y));
             const endPoint = this.rayCastToPoint(source, boundPointFloor, additionalBlockingPointsArray);
             poly.push(endPoint);

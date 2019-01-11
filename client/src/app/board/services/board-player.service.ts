@@ -251,6 +251,9 @@ export class BoardPlayerService extends IsReadyService {
                 // there is no player selected ...
                 for (const player of this.encounterService.players) {
                     // ... search through the players to see if a player was selected ...
+	                  if (isNullOrUndefined(player) || isNullOrUndefined(player.location) || isNullOrUndefined(loc_cell)) {
+	                  	  return;
+	                  }
                     if (player.location.x === loc_cell.x && player.location.y === loc_cell.y) {
                         // ... select the player and return
                         if (player.isVisible) {
