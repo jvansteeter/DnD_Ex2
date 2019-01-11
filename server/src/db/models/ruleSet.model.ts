@@ -1,14 +1,15 @@
 import * as mongoose from 'mongoose';
 import { MongooseModel } from './mongoose.model';
 import { RuleSetData } from '../../../../shared/types/rule-set/rule-set.data';
-import { RuleSetConfigData } from '../../../../shared/types/rule-set/rule-set-config.data';
-
+import { RuleSetModulesConfigData } from '../../../../shared/types/rule-set/rule-set-modules-config.data';
+import { DamageTypeData } from '../../../../shared/types/rule-set/damage-type.data';
 
 export class RuleSetModel extends MongooseModel implements RuleSetData {
 	public _id: string;
 	public label: string;
 	public admins: any[];
-	public config: RuleSetConfigData;
+	public modulesConfig: RuleSetModulesConfigData;
+	public damageTypes?: DamageTypeData[];
 
 	constructor() {
 		super({
@@ -17,15 +18,19 @@ export class RuleSetModel extends MongooseModel implements RuleSetData {
 				userId: String,
 				role: String
 			}],
-			config: {type: Object, default: {}}
+			modulesConfig: {type: Object, default: {}},
+			damageTypes: {type: Array, of: Object},
 		});
 
 		this._id = this.methods._id;
 		this.label = this.methods.label;
 		this.admins = this.methods.admins;
+		this.modulesConfig = this.methods.modulesConfig;
+		this.damageTypes = this.methods.damageTypes;
 
 		this.methods.addAdmin = this.addAdmin;
 		this.methods.setConfig = this.setConfig;
+		this.methods.setDamageTypes = this.setDamageTypes;
 	}
 
 	public addAdmin(userId: string, role: string): Promise<RuleSetModel> {
@@ -33,8 +38,13 @@ export class RuleSetModel extends MongooseModel implements RuleSetData {
 		return this.save();
 	}
 
-	public setConfig(config: any): Promise<RuleSetModel> {
-		this.config = config;
+	public setConfig(config: RuleSetModulesConfigData): Promise<RuleSetModel> {
+		this.modulesConfig = config;
+		return this.save();
+	}
+
+	public setDamageTypes(types: DamageTypeData[]): Promise<RuleSetModel> {
+		this.damageTypes = types;
 		return this.save();
 	}
 }

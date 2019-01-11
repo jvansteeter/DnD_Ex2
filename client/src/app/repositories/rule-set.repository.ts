@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CharacterSheetData } from '../../../../shared/types/rule-set/character-sheet.data';
 import { RuleSetData } from '../../../../shared/types/rule-set/rule-set.data';
+import { RuleSetModulesConfigData } from '../../../../shared/types/rule-set/rule-set-modules-config.data';
+import { DamageTypeData } from '../../../../shared/types/rule-set/damage-type.data';
 
 @Injectable()
 export class RuleSetRepository {
@@ -40,5 +42,21 @@ export class RuleSetRepository {
 
 	public deleteRuleSet(ruleSetId: string): Observable<void> {
 		return this.http.post<void>('/api/ruleset/delete', {ruleSetId: ruleSetId});
+	}
+
+	public setModulesConfig(ruleSetId: string, modulesConfig: RuleSetModulesConfigData): Observable<void> {
+		const data = {
+			ruleSetId: ruleSetId,
+			config: modulesConfig,
+		};
+		return this.http.post<void>('/api/ruleset/modulesConfig', data);
+	}
+
+	public setDamageTypes(ruleSetId: string, damageTypes: DamageTypeData[]): Observable<void> {
+		const data = {
+			ruleSetId: ruleSetId,
+			damageTypes: damageTypes,
+		};
+		return this.http.post<void>('/api/ruleset/damageTypes', data);
 	}
 }

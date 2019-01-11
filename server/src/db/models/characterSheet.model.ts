@@ -8,18 +8,21 @@ export class CharacterSheetModel extends MongooseModel implements CharacterSheet
 	public ruleSetId: string;
 	public label: string;
 	public tooltipConfig: CharacterSheetTooltipData;
+	public rules: string[];
 
 	constructor() {
 		super({
 			ruleSetId: {type: String, required: true},
 			label: {type: String, required: true},
-			tooltipConfig: Object
+			tooltipConfig: Object,
+			rules: {type: Array, default: []},
 		});
 
 		this._id = this.methods._id;
 		this.ruleSetId = this.methods.ruleSetId;
 		this.label = this.methods.label;
 		this.tooltipConfig = this.methods.tooltipConfig;
+		this.rules = this.methods.rules;
 
 		this.methods.setTooltipConfig = this.setTooltipConfig;
 	}

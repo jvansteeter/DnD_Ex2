@@ -10,6 +10,7 @@ import { CharacterSheetService } from '../services/character-sheet.service';
 import { CharacterRepository } from '../db/repositories/character.repository';
 import { CharacterModel } from '../db/models/character.model';
 import { RuleSetService } from '../services/rule-set.service';
+import { RuleSetModulesConfigData } from '../../../shared/types/rule-set/rule-set-modules-config.data';
 
 
 /**********************************************************************************************************
@@ -167,6 +168,34 @@ export class RuleSetRouter {
 				let file = req.body.file;
 				const userId = req.user._id;
 				await this.ruleSetService.createRuleSetFromJson(userId, JSON.parse(file));
+				res.status(200).send();
+			}
+			catch (error) {
+				console.error(error);
+				res.status(500).send(error);
+			}
+		});
+
+		this.router.post('/modulesConfig', async (req: Request, res: Response) => {
+			try {
+				const userId: string = req.user._id;
+				const ruleSetId: string = req.body.ruleSetId;
+				const config: RuleSetModulesConfigData = req.body.config;
+				await this.ruleSetService.setModulesConfig(userId, ruleSetId, config);
+				res.status(200).send();
+			}
+			catch (error) {
+				console.error(error);
+				res.status(500).send(error);
+			}
+		});
+
+		this.router.post('/damageTypes', async (req: Request, res: Response) => {
+			try {
+				const userId: string = req.user._id;
+				const ruleSetId: string = req.body.ruleSetId;
+				const damageTypes: string[] = req.body.damageTypes;
+				await this.ruleSetService.setDamageTypes(userId, ruleSetId, damageTypes);
 				res.status(200).send();
 			}
 			catch (error) {

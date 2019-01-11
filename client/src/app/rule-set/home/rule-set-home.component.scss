@@ -14,3 +14,24 @@
 button.options-button {
 	margin-left: auto;
 }
+
+.ruleSet-config {
+	display: flex;
+	flex-direction: column;
+}
+
+.damage-type {
+	width: 100%;
+	display: flex;
+	align-items: center;
+	.type-icon {
+		padding-right: 5px;
+	}
+	button {
+		margin-left: auto;
+	}
+}
+
+.tabbed {
+	margin-left: 15px;
+}

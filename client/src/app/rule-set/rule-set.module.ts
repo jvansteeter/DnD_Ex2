@@ -14,7 +14,7 @@ import {
 	MatMenuModule,
 	MatSelectModule,
 	MatSlideToggleModule,
-	MatTableModule
+	MatTableModule, MatTooltipModule
 } from '@angular/material';
 import { NewCharacterSheetDialogComponent } from './home/dialog/new-character-sheet-dialog.component';
 import { RuleSetRepository } from '../repositories/rule-set.repository';
@@ -22,6 +22,8 @@ import { RuleSetSelectorComponent } from './selector/rule-set-selector.component
 import { AppCDKModule } from '../cdk/cdk.module';
 import { ConfigService } from '../data-services/config.service';
 import { NewCharacterDialogComponent } from './home/dialog/new-character-dialog.component';
+import { NewDamageTypeDialogComponent } from './home/dialog/new-damage-type-dialog.component';
+import { ColorPickerModule } from 'ngx-color-picker';
 
 @NgModule({
 	imports: [
@@ -40,12 +42,15 @@ import { NewCharacterDialogComponent } from './home/dialog/new-character-dialog.
 		MatSlideToggleModule,
 		MatMenuModule,
 		MatIconModule,
+		MatTooltipModule,
+		ColorPickerModule,
 	],
 	declarations: [
 		RuleSetHomeComponent,
 		NewCharacterSheetDialogComponent,
 		NewCharacterDialogComponent,
 		RuleSetSelectorComponent,
+		NewDamageTypeDialogComponent,
 	],
 	providers: [
 		RuleSetRepository,
@@ -58,6 +63,7 @@ import { NewCharacterDialogComponent } from './home/dialog/new-character-dialog.
 	entryComponents: [
 		NewCharacterSheetDialogComponent,
 		NewCharacterDialogComponent,
+		NewDamageTypeDialogComponent,
 	]
 })
 export class RuleSetModule {

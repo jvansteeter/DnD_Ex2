@@ -23,7 +23,7 @@
 			</mat-grid-tile>
 			<mat-grid-tile [colspan]="1" [rowspan]="1">
 				<mat-accordion>
-					<mat-expansion-panel>
+					<mat-expansion-panel expanded>
 						<mat-expansion-panel-header>Required Aspects</mat-expansion-panel-header>
 						<mat-tab-group class="map-aspects">
 							<mat-tab label="Map Token">
@@ -42,6 +42,10 @@
 							<mat-checkbox *ngFor="let aspect of preDefinedAspects" color="primary"
 							              (change)="changePredefinedAspect(aspect.label, $event.checked)" [checked]="aspect.checked">{{aspect.label}}</mat-checkbox>
 						</div>
+					</mat-expansion-panel>
+					<mat-expansion-panel>
+						<mat-expansion-panel-header>Rules</mat-expansion-panel-header>
+						<button mat-icon-button (click)="startNewRule()"><mat-icon>add</mat-icon></button>
 					</mat-expansion-panel>
 				</mat-accordion>
 			</mat-grid-tile>

@@ -5,5 +5,6 @@ export interface CharacterSheetData {
 	ruleSetId: string;
 	label: string;
 	tooltipConfig: CharacterSheetTooltipData;
+	rules: string[];
 	aspects?: any[];
 }

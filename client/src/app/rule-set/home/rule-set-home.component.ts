@@ -15,7 +15,9 @@ import { CharacterRepository } from '../../repositories/character.repository';
 import { CharacterData } from '../../../../../shared/types/character.data';
 import { isUndefined } from 'util';
 import { CharacterSheetRepository } from '../../repositories/character-sheet.repository';
-import { flatMap, map, tap } from 'rxjs/operators';
+import { first, map, tap } from 'rxjs/operators';
+import { NewDamageTypeDialogComponent } from './dialog/new-damage-type-dialog.component';
+import { DamageTypeData } from '../../../../../shared/types/rule-set/damage-type.data';
 
 @Component({
 	selector: 'rule-set-home',
@@ -46,6 +48,8 @@ export class RuleSetHomeComponent implements OnInit {
 	private npcDataSource: SubjectDataSource<NpcData>;
 	public npcColumns = ['label', 'sheet', 'options'];
 
+	public damageTypesCard: DashboardCard;
+
 	constructor(private activatedRoute: ActivatedRoute,
 	            private dialog: MatDialog,
 	            private router: Router,
@@ -59,7 +63,6 @@ export class RuleSetHomeComponent implements OnInit {
 		this.configCard = {
 			title: 'Rule Set Config'
 		};
-
 		this.characterSheetCard = {
 			menuOptions: [
 				{
@@ -68,12 +71,20 @@ export class RuleSetHomeComponent implements OnInit {
 				}
 			]
 		};
-
 		this.npcCard = {
 			menuOptions: [
 				{
 					title: 'Create NPC',
 					function: this.createNPC
+				}
+			]
+		};
+		this.damageTypesCard = {
+			title: 'Damage Types',
+			menuOptions: [
+				{
+					title: 'New Damage Type',
+					function: this.openNewDamageTypeDialog
 				}
 			]
 		};
@@ -89,8 +100,18 @@ export class RuleSetHomeComponent implements OnInit {
 		this.activatedRoute.params.subscribe((params) => {
 			this.ruleSetId = params['ruleSetId'];
 			this.ruleSetRepository.getRuleSet(this.ruleSetId).subscribe((ruleSet: RuleSetData) => {
-				let completeConfig = this.configService.completeConfig(ruleSet.config);
-				ruleSet.config = completeConfig;
+				if (isUndefined(ruleSet.modulesConfig)) {
+					ruleSet.modulesConfig = {
+						lightAndVision: true,
+						damageTypes: false,
+						damageMustBeTyped: false,
+						equipment: false,
+						characterAbilities: false,
+					}
+				}
+				if (isUndefined(ruleSet.damageTypes)) {
+					ruleSet.damageTypes = [];
+				}
 				this.ruleSet = ruleSet;
 			});
 			this.ruleSetRepository.getCharacterSheets(this.ruleSetId).pipe(
@@ -140,6 +161,22 @@ export class RuleSetHomeComponent implements OnInit {
 		});
 	}
 
+	public changeModulesConfig(): void {
+		setTimeout(() => {
+			this.ruleSetRepository.setModulesConfig(this.ruleSetId, this.ruleSet.modulesConfig).subscribe();
+		});
+	}
+
+	public removeDamageType(type: DamageTypeData): void {
+		for (let i = 0; i < this.ruleSet.damageTypes.length; i++) {
+			if (type.name === this.ruleSet.damageTypes[i].name) {
+				this.ruleSet.damageTypes.splice(i, 1);
+				this.ruleSetRepository.setDamageTypes(this.ruleSetId, this.ruleSet.damageTypes).subscribe();
+				return;
+			}
+		}
+	}
+
 	private getNPCs(): void {
 		this.ruleSetRepository.getNpcs(this.ruleSetId).pipe(map((npcs: NpcData[]) => {
 			for (let npc of npcs) {
@@ -167,6 +204,24 @@ export class RuleSetHomeComponent implements OnInit {
 		}).afterClosed().subscribe((npc) => {
 			if (npc) {
 				this.router.navigate(['character', npc._id]);
+			}
+		});
+	};
+
+	private openNewDamageTypeDialog = () => {
+		this.dialog.open(NewDamageTypeDialogComponent).afterClosed().pipe(first()).subscribe((damageType: DamageTypeData) => {
+			if (damageType) {
+				let unique = true;
+				for (let type of this.ruleSet.damageTypes) {
+					if (type.name === damageType.name) {
+						unique = false;
+						break;
+					}
+				}
+				if (unique) {
+					this.ruleSet.damageTypes.push(damageType);
+					this.ruleSetRepository.setDamageTypes(this.ruleSetId, this.ruleSet.damageTypes).subscribe();
+				}
 			}
 		});
 	};

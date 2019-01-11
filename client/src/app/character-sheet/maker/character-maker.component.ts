@@ -148,6 +148,10 @@ export class CharacterMakerComponent implements OnInit, AfterViewInit {
 		}
 	}
 
+	public startNewRule(): void {
+
+	}
+
 	private addTooltipAspect = () => {
 		let tooltipAspects = this.characterService.getTooltipAspects();
 		for (let tooltipAspect of this.characterToolTipComponent.tooltipConfig.aspects) {

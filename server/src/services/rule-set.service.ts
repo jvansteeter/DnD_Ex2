@@ -11,6 +11,8 @@ import { CampaignRepository } from '../db/repositories/campaign.repository';
 import { CampaignModel } from '../db/models/campaign.model';
 import { CampaignService } from './campaign.service';
 import { CharacterAspectRepository } from '../db/repositories/characterAspect.repository';
+import { RuleSetData } from '../../../shared/types/rule-set/rule-set.data';
+import { RuleSetModulesConfigData } from '../../../shared/types/rule-set/rule-set-modules-config.data';
 
 export class RuleSetService {
 	private ruleSetRepo: RuleSetRepository;
@@ -63,12 +65,13 @@ export class RuleSetService {
 				npcs.push(character);
 			}
 			return {
+				_id: ruleSetModel._id,
 				label: ruleSetModel.label,
-				config: ruleSetModel.config,
+				modulesConfig: ruleSetModel.modulesConfig,
 				admins: ruleSetModel.admins,
 				characterSheets: compiledSheets,
 				npcs: npcs,
-			};
+			} as RuleSetData;
 		}
 		catch (error) {
 			console.error(error);
@@ -111,6 +114,18 @@ export class RuleSetService {
 		}
 
 		await this.ruleSetRepo.deleteById(ruleSetId);
+		return;
+	}
+
+	public async setModulesConfig(userId: string, ruleSetId: string, config: RuleSetModulesConfigData): Promise<void> {
+		let ruleSet: RuleSetModel = await this.ruleSetRepo.findById(ruleSetId);
+		await ruleSet.setConfig(config);
+		return;
+	}
+
+	public async setDamageTypes(userId: string, ruleSetId: string, damageTypes: string[]): Promise<void> {
+		let ruleSet: RuleSetModel = await this.ruleSetRepo.findById(ruleSetId);
+		await ruleSet.setDamageTypes(damageTypes);
 		return;
 	}
 }

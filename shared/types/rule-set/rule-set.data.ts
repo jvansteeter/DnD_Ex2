@@ -1,8 +1,10 @@
-import { RuleSetConfigData } from './rule-set-config.data';
+import { RuleSetModulesConfigData } from './rule-set-modules-config.data';
+import { DamageTypeData } from './damage-type.data';
 
 export interface RuleSetData {
 	_id: string;
 	label: string;
 	admins: any[];
-	config: RuleSetConfigData;
+	modulesConfig: RuleSetModulesConfigData;
+	damageTypes?: DamageTypeData[];
 }

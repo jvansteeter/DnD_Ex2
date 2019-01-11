@@ -1,13 +1,27 @@
 <div *ngIf="ruleSet" class="ruleSet-content">
 	<h1>{{ruleSet.label}}</h1>
 	<mat-grid-list [cols]="5" rowHeight="20em">
+		<!--Rule modules config-->
 		<mat-grid-tile [colspan]="1" [rowspan]="2">
-			<dashboard-card [dashboardCard]="configCard" class="ruleSet-config">
-				<mat-slide-toggle color="primary">Light & Vision</mat-slide-toggle>
-				<mat-slide-toggle color="primary" [(ngModel)]="ruleSet.config.damageTypes">Damage Types</mat-slide-toggle>
-				<mat-slide-toggle color="primary">Resistance</mat-slide-toggle>
+			<dashboard-card [dashboardCard]="configCard">
+				<div class="ruleSet-config">
+					<mat-slide-toggle color="primary" checked disabled>Light & Vision</mat-slide-toggle>
+					<mat-slide-toggle color="primary" (click)="changeModulesConfig()"
+					                  [(ngModel)]="ruleSet.modulesConfig.damageTypes">Damage Types
+					</mat-slide-toggle>
+					<mat-slide-toggle color="primary" (click)="changeModulesConfig()" *ngIf="ruleSet.modulesConfig.damageTypes"
+					                  [(ngModel)]="ruleSet.modulesConfig.damageMustBeTyped" class="tabbed">Damage must be typed
+					</mat-slide-toggle>
+					<mat-slide-toggle color="primary" (click)="changeModulesConfig()"
+					                  [(ngModel)]="ruleSet.modulesConfig.equipment">Equipment
+					</mat-slide-toggle>
+					<mat-slide-toggle color="primary" (click)="changeModulesConfig()"
+					                  [(ngModel)]="ruleSet.modulesConfig.characterAbilities">Character Abilities
+					</mat-slide-toggle>
+				</div>
 			</dashboard-card>
 		</mat-grid-tile>
+		<!--Admins-->
 		<mat-grid-tile [colspan]="2" [rowspan]="1">
 			<dashboard-card>
 				<mat-table [dataSource]="adminDataSource">
@@ -24,17 +38,20 @@
 				</mat-table>
 			</dashboard-card>
 		</mat-grid-tile>
+		<!--Character sheets-->
 		<mat-grid-tile [colspan]="2" [rowspan]="1">
 			<dashboard-card [dashboardCard]="characterSheetCard">
 				<mat-table [dataSource]="characterSheetDataSource">
 					<ng-container matColumnDef="label">
 						<mat-header-cell *matHeaderCellDef>Character Sheet</mat-header-cell>
-						<mat-cell *matCellDef="let characterSheet" (click)="editCharacterSheet(characterSheet._id)">{{characterSheet.label}}</mat-cell>
+						<mat-cell *matCellDef="let characterSheet"
+						          (click)="editCharacterSheet(characterSheet._id)">{{characterSheet.label}}</mat-cell>
 					</ng-container>
 					<ng-container matColumnDef="options">
 						<mat-header-cell *matHeaderCellDef></mat-header-cell>
 						<mat-cell *matCellDef="let characterSheet">
-							<button mat-icon-button matTooltip="Options" class="options-button" [matMenuTriggerFor]="characterOptionsMenu">
+							<button mat-icon-button matTooltip="Options" class="options-button"
+							        [matMenuTriggerFor]="characterOptionsMenu">
 								<mat-icon>settings</mat-icon>
 							</button>
 							<mat-menu #characterOptionsMenu="matMenu">
@@ -47,6 +64,7 @@
 				</mat-table>
 			</dashboard-card>
 		</mat-grid-tile>
+		<!--NPCs-->
 		<mat-grid-tile [colspan]="2" [rowspan]="1">
 			<dashboard-card [dashboardCard]="npcCard">
 				<mat-table [dataSource]="npcDataSource">
@@ -61,7 +79,8 @@
 					<ng-container matColumnDef="options">
 						<mat-header-cell *matHeaderCellDef></mat-header-cell>
 						<mat-cell *matCellDef="let character">
-							<button mat-icon-button matTooltip="Options" class="options-button" [matMenuTriggerFor]="characterOptionsMenu">
+							<button mat-icon-button matTooltip="Options" class="options-button"
+							        [matMenuTriggerFor]="characterOptionsMenu">
 								<mat-icon>settings</mat-icon>
 							</button>
 							<mat-menu #characterOptionsMenu="matMenu">
@@ -74,7 +93,17 @@
 				</mat-table>
 			</dashboard-card>
 		</mat-grid-tile>
-		<mat-grid-tile [colspan]="2" [rowspan]="1">
+		<!--Damage Types-->
+		<mat-grid-tile [colspan]="1" [rowspan]="1" *ngIf="ruleSet.modulesConfig.damageTypes">
+			<dashboard-card [dashboardCard]="damageTypesCard" class="damage-types">
+				<div *ngFor="let type of ruleSet.damageTypes" class="damage-type">
+					<mat-icon [style.color]="type.color" class="type-icon">{{type.icon}}</mat-icon>{{type.name}}
+					<button mat-icon-button (click)="removeDamageType(type)"><mat-icon>close</mat-icon></button>
+				</div>
+			</dashboard-card>
+		</mat-grid-tile>
+		<!--Export-->
+		<mat-grid-tile [colspan]="1" [rowspan]="1">
 			<button mat-raised-button color="primary" (click)="exportRuleSet()">Export</button>
 		</mat-grid-tile>
 	</mat-grid-list>
