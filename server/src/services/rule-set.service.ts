@@ -13,6 +13,7 @@ import { CampaignService } from './campaign.service';
 import { CharacterAspectRepository } from '../db/repositories/characterAspect.repository';
 import { RuleSetData } from '../../../shared/types/rule-set/rule-set.data';
 import { RuleSetModulesConfigData } from '../../../shared/types/rule-set/rule-set-modules-config.data';
+import { DamageTypeData } from "../../../shared/types/rule-set/damage-type.data";
 
 export class RuleSetService {
 	private ruleSetRepo: RuleSetRepository;
@@ -123,7 +124,7 @@ export class RuleSetService {
 		return;
 	}
 
-	public async setDamageTypes(userId: string, ruleSetId: string, damageTypes: string[]): Promise<void> {
+	public async setDamageTypes(userId: string, ruleSetId: string, damageTypes: DamageTypeData[]): Promise<void> {
 		let ruleSet: RuleSetModel = await this.ruleSetRepo.findById(ruleSetId);
 		await ruleSet.setDamageTypes(damageTypes);
 		return;

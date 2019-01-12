@@ -11,6 +11,7 @@ import { CharacterRepository } from '../db/repositories/character.repository';
 import { CharacterModel } from '../db/models/character.model';
 import { RuleSetService } from '../services/rule-set.service';
 import { RuleSetModulesConfigData } from '../../../shared/types/rule-set/rule-set-modules-config.data';
+import { DamageTypeData } from "../../../shared/types/rule-set/damage-type.data";
 
 
 /**********************************************************************************************************
@@ -194,7 +195,7 @@ export class RuleSetRouter {
 			try {
 				const userId: string = req.user._id;
 				const ruleSetId: string = req.body.ruleSetId;
-				const damageTypes: string[] = req.body.damageTypes;
+				const damageTypes: DamageTypeData[] = req.body.damageTypes;
 				await this.ruleSetService.setDamageTypes(userId, ruleSetId, damageTypes);
 				res.status(200).send();
 			}
