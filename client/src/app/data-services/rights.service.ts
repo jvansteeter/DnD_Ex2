@@ -19,8 +19,8 @@ export class RightsService extends IsReadyService {
 	init(): void {
 		this.dependenciesSub = this.dependenciesReady().subscribe((isReady) => {
 			if (isReady && !this.isReady()) {
-                console.log('rightsService.init() -> isReady');
-                this.setReady(true);
+        console.log('rightsService.init() -> isReady');
+        this.setReady(true);
 			}
 		});
 	}

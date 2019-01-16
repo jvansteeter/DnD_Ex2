@@ -11,7 +11,7 @@ export interface EncounterData {
 	label: string;
 	date: Date;
 	campaignId: string;
-	gameMasters: string[];
+	gameMasters?: string[];
 	playerIds?: string[];
 	players?: PlayerData[];
 	isOpen: boolean;

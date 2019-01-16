@@ -2,6 +2,7 @@ import {Component} from "@angular/core";
 import {BoardStateService} from "../../../services/board-state.service";
 import {BoardMode} from "../../../shared/enum/board-mode";
 import {ViewMode} from "../../../shared/enum/view-mode";
+import { RightsService } from '../../../../data-services/rights.service';
 
 @Component({
     selector: 'view-edit-module',
@@ -21,7 +22,8 @@ export class ViewEditControlModuleComponent {
     ];
 
     constructor (
-        private boardStateService: BoardStateService
+        private boardStateService: BoardStateService,
+        private rightsService: RightsService,
     )
     {
         this.sync();

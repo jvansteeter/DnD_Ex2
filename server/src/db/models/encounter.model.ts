@@ -15,7 +15,6 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 	public label: string;
 	public date: Date;
 	public campaignId: string;
-	public gameMasters: string[];
 	public players: PlayerData[];
 	public playerIds: string[];
 	public isOpen: boolean;
@@ -58,7 +57,6 @@ export class EncounterModel extends MongooseModel implements EncounterData {
       version: {type: Number, default: 0},
 			date: {type: Date, required: true},
 			campaignId: {type: String, required: true},
-			gameMasters: [String],
 			playerIds: [Schema.Types.ObjectId],
 			isOpen: {type: Boolean, default: false},
 			config: {type: Object, default: {}},
@@ -92,7 +90,6 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 		this.label = this.methods.label;
 		this.date = this.methods.date;
 		this.campaignId = this.methods.campaignId;
-		this.gameMasters = this.methods.gameMasters;
 		this.players = [];
 		this.playerIds = this.methods.playerIds;
 		this.isOpen = this.methods.isOpen;
@@ -107,7 +104,6 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 		this.notationIds = this.methods.notationIds;
 		this.teamsData = this.methods.teamsData;
 
-		this.methods.addGameMaster = this.addGameMaster;
 		this.methods.addPlayer = this.addPlayer;
 		this.methods.removePlayer = this.removePlayer;
 		this.methods.setMapUrl = this.setMapUrl;
@@ -122,11 +118,6 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 		this.methods.setConfig = this.setConfig;
 		this.methods.setTeamsData = this.setTeamsData;
 		this.methods.addUser = this.addUser;
-	}
-
-	public addGameMaster(userId: string): Promise<EncounterModel> {
-		this.gameMasters.push(userId);
-		return this.save();
 	}
 
 	public addPlayer(player: PlayerData): Promise<EncounterModel> {

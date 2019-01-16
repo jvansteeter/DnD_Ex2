@@ -18,6 +18,8 @@ import { PlayerVisibilityMode } from '../../../shared/types/encounter/board/play
 import { EncounterTeamsData } from '../../../shared/types/encounter/encounter-teams.data';
 import { UserRepository } from '../db/repositories/user.repository';
 import { UserModel } from '../db/models/user.model';
+import { UserCampaignModel } from '../db/models/user-campaign.model';
+import { UserCampaignRepository } from '../db/repositories/user-campaign.repository';
 
 export class EncounterService {
 	private encounterRepo: EncounterRepository;
@@ -26,6 +28,7 @@ export class EncounterService {
 	private characterService: CharacterService;
 	private notationRepo: NotationRepository;
 	private userRepo: UserRepository;
+	private userCampaignRepo: UserCampaignRepository;
 
 	constructor() {
 		this.encounterRepo = new EncounterRepository();
@@ -34,12 +37,12 @@ export class EncounterService {
 		this.characterService = new CharacterService();
 		this.notationRepo = new NotationRepository();
 		this.userRepo = new UserRepository();
+		this.userCampaignRepo = new UserCampaignRepository();
 	}
 
 	public async create(hostId: string, label: string, campaignId: string, mapDimX: number, mapDimY: number, mapUrl?: string): Promise<EncounterModel> {
 		try {
 			let encounterModel: EncounterModel = await this.encounterRepo.create(label, campaignId, mapDimX, mapDimY);
-			await encounterModel.addGameMaster(hostId);
 			encounterModel = await this.setEncounterConfig(encounterModel._id, {
 				lightEnabled: false,
 				ambientLight: LightValue.FULL,
@@ -78,7 +81,7 @@ export class EncounterService {
 			}
 		}
 
-		const isGameMaster = this.isGameMaster(userId, encounter);
+		const isGameMaster = await this.isGameMaster(userId, encounter);
 		const teams = isGameMaster ? ['GM'] : ['Player'];
 		console.log('add user to encounter')
 		const userModel: UserModel = await this.userRepo.findById(userId);
@@ -108,7 +111,7 @@ export class EncounterService {
 				while (!placed && x < placementMap.length) {
 					if (placementMap[x][y] === false) {
 						player = await player.setLocation(x, y);
-						if (this.isGameMaster(userId, encounter)) {
+						if (await this.isGameMaster(userId, encounter)) {
 							player = await player.setTeams(['GM'])
 						}
 						else {
@@ -337,6 +340,7 @@ export class EncounterService {
 	private async buildEncounterState(encounterModel: EncounterModel): Promise<EncounterData> {
 		let encounterState: EncounterData = JSON.parse(JSON.stringify(encounterModel));
 		encounterState.players = [];
+		encounterState.gameMasters = [];
 		encounterState.notations = [];
 		for (let playerId of encounterModel.playerIds) {
 			const playerData = await this.playerRepo.findById(playerId);
@@ -347,19 +351,20 @@ export class EncounterService {
 			const notation = await this.notationRepo.findById(notationId);
 			encounterState.notations.push(notation);
 		}
+		let userCampaigns: UserCampaignModel[] = await this.userCampaignRepo.findAllForCampaign(encounterModel.campaignId);
+		for (let userCampaign of userCampaigns) {
+			if (userCampaign.gameMaster) {
+				encounterState.gameMasters.push(userCampaign.userId);
+			}
+		}
 		delete encounterState['playerIds'];
 		delete encounterState['notationIds'];
 
 		return encounterState;
 	}
 
-	private isGameMaster(userId: string, encounter: EncounterModel): boolean {
-		for (let gameMaster of encounter.gameMasters) {
-			if (gameMaster == userId) {
-				return true;
-			}
-		}
-
-		return false;
+	private async isGameMaster(userId: string, encounter: EncounterModel): Promise<boolean> {
+		const userCampaign: UserCampaignModel = await this.userCampaignRepo.find(userId, encounter.campaignId);
+		return userCampaign.gameMaster;
 	}
 }
