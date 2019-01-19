@@ -143,6 +143,25 @@ export class BoardNotationGroup extends ConcurrentBoardObject implements Notatio
 		this.emitChange();
 	}
 
+	public toggleBatchCells(cells: Array<XyPair>): void {
+		let allNotated: boolean = true;
+		for (let cell of cells) {
+			if (this.cellPresent(cell) === -1) {
+				allNotated = false;
+				break;
+			}
+		}
+		if (allNotated) {
+			for (let cell of cells) {
+				this.removeCell(cell);
+			}
+			this.emitChange();
+		}
+		else {
+			this.addBatchCells(cells);
+		}
+	}
+
 	public removeCell(cell: XyPair) {
 		const i = this.cellPresent(cell);
 		if (i !== -1) {

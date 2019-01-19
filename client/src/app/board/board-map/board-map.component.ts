@@ -419,6 +419,14 @@ export class BoardMapComponent implements OnInit, AfterViewInit, OnDestroy {
             case 'ControlLeft':
                 this.boardStateService.ctrlDown = false;
                 break;
+            case 'Minus':
+                if (this.boardStateService.brush_size > 0) {
+                    this.boardStateService.brush_size--;
+                }
+                break;
+            case 'Equal':
+                this.boardStateService.brush_size++;
+                break;
         }
     }
 
