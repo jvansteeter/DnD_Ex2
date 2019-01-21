@@ -94,7 +94,8 @@ export class MqService {
 	private async handleEncounterCommand(command: EncounterCommandMessage): Promise<void> {
 		try {
 			const version = await this.encounterService.getVersion(command.headers.encounterId);
-			if (command.body.version === version + 1) {
+			// if (command.body.version === version + 1) {  // currently versioning is causing more problems than it fixes
+			if (true) {
 				const encounterId = command.headers.encounterId;
 				switch (command.body.dataType) {
 					case EncounterCommandType.PLAYER_UPDATE: {

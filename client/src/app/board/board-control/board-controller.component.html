@@ -1,34 +1,22 @@
-<ng-container ngSwitch="{{boardStateService.board_controller_mode}}">
-    <ng-container *ngSwitchCase="BoardControllerMode.DEFAULT">
-
-        <view-edit-module></view-edit-module>
-        <diagnostic-module></diagnostic-module>
-        <encounter-config-module></encounter-config-module>
-        <notation-module></notation-module>
-        <light-visibility-module></light-visibility-module>
-
-        <div class="section">
-            <div class="sectionHeader"><span>Stuff</span></div>
-            <div class="sectionContents">
-                <button mat-raised-button color="primary" (click)="addPlayer()">Add Player</button>
-                <button *ngIf="rightsService.isEncounterGM()" mat-raised-button color="primary" (click)="openTeamSettings()">Team Settings</button>
-                <button *ngIf="rightsService.isEncounterGM()" mat-raised-button color="primary" (click)="exportEncounterJson()">Export Encounter JSON</button>
-            </div>
-        </div>
-
-    </ng-container>
-
-    <ng-container *ngSwitchCase="BoardControllerMode.EPHEM_NOTATION">
-
-    </ng-container>
-</ng-container>
-
-
-
-
-
-
-
-
-
-
+<div ngSwitch="{{boardStateService.board_controller_mode}}" [class]="boardStateService.toolbarIsHidden ? 'encounter-toolbar toolbar-hidden' : 'encounter-toolbar toolbar-show'">
+	<ng-container *ngIf="!boardStateService.toolbarIsHidden">
+		<view-edit-module></view-edit-module>
+		<diagnostic-module></diagnostic-module>
+		<encounter-config-module></encounter-config-module>
+		<notation-module></notation-module>
+		<light-visibility-module></light-visibility-module>
+		<div class="section">
+			<div class="sectionHeader"><span>Stuff</span></div>
+			<div class="sectionContents">
+				<button mat-raised-button color="primary" (click)="addPlayer()">Add Player</button>
+				<button *ngIf="rightsService.isEncounterGM()" mat-raised-button color="primary" (click)="openTeamSettings()">
+					Team Settings
+				</button>
+				<button *ngIf="rightsService.isEncounterGM()" mat-raised-button color="primary" (click)="exportEncounterJson()">
+					Export Encounter JSON
+				</button>
+			</div>
+		</div>
+	</ng-container>
+</div>
+<button mat-mini-fab color="primary" class="toggle-button" matTooltip="Toggle Toolbar" (click)="toggleToolBar()"><mat-icon>keyboard_arrow_down</mat-icon></button>

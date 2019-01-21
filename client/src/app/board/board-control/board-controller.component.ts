@@ -58,4 +58,8 @@ export class BoardControllerComponent implements OnInit, OnDestroy {
 	exportEncounterJson(): void {
 		this.boardStateService.getExportJson();
 	}
+
+	public toggleToolBar(): void {
+		this.boardStateService.toolbarIsHidden = !this.boardStateService.toolbarIsHidden;
+	}
 }

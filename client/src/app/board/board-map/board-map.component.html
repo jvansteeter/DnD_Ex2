@@ -1,7 +1,6 @@
-<div style="position: absolute; z-index: 5;">
-
+<div class="initiative-bar">
     <ng-container *ngFor="let player of getSortedPlayers()">
-        <div style="height:40px; width: 40px; margin-top: 13px; margin-left: 8px;" (contextmenu)="boardMap_handleContextMenu($event)"
+        <div class="initiative-icon" (contextmenu)="boardMap_handleContextMenu($event)"
              *ngIf="showInitCoin(player)">
             <div style="height: 40px; width: 40px; border: 3px solid #383838; background: #d8d8d8; border-radius: 50%; position: absolute">
                 <img src="{{player.tokenUrl}}" style="height: 100%; border-radius: 25px;">
@@ -21,9 +20,7 @@
             </div>
         </div>
     </ng-container>
-
 </div>
-
 
 <div style="height: 100%; width: 100%;" #mapContainer>
     <map-renderer></map-renderer>

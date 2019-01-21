@@ -1,85 +1,85 @@
 :host {
-  flex: 0 0 200px;
-  width: 100%;
-  border-bottom: 2px solid #cccccc;
-  display: flex;
+	width: 100%;
+	border-bottom: 2px solid #cccccc;
+	display: flex;
+	position: relative;
 }
 
 mat-radio-group {
-  display: inline-flex;
-  flex-direction: column;
+	display: inline-flex;
+	flex-direction: column;
 }
 
 mat-radio-button {
-  margin: 2px;
+	margin: 2px;
 }
 
 .section {
-  margin: 5px;
-  background-color: #fafafa;
-  border-radius: 5px;
-  border: 1px solid #b7b7b7;
-  display: flex;
-  flex-direction: column;
+	margin: 5px;
+	background-color: #fafafa;
+	border-radius: 5px;
+	border: 1px solid #b7b7b7;
+	display: flex;
+	flex-direction: column;
 }
 
 .sectionHeader {
-  padding: 5px 10px;
-  flex: 0 0 18px;
+	padding: 5px 10px;
+	flex: 0 0 18px;
 
-  font-family: Roboto, "Helvetica Neue", sans-serif;
-  font-weight: bold;
+	font-family: Roboto, "Helvetica Neue", sans-serif;
+	font-weight: bold;
 
-  display: flex;
-  background-color: #e1e1e1;
-  border-bottom: 1px solid #b7b7b7;
+	display: flex;
+	background-color: #e1e1e1;
+	border-bottom: 1px solid #b7b7b7;
 
-  span {
-    margin: auto;
-  }
+	span {
+		margin: auto;
+	}
 }
 
 .font {
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+	font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
 .sectionContents {
-  padding: 10px;
-  overflow-y: auto;
-  overflow-x: hidden;
-  flex: auto;
-  display: flex;
-  flex-direction: column;
+	padding: 10px;
+	overflow-y: auto;
+	overflow-x: hidden;
+	flex: auto;
+	display: flex;
+	flex-direction: column;
 }
 
 .activeTile {
-  border: 2px solid yellow;
-  margin: 0;
+	border: 2px solid yellow;
+	margin: 0;
 }
 
 .defaultTile {
-  margin: 2px;
+	margin: 2px;
 }
 
 .addButton {
-  margin-top: auto;
-  margin-bottom: auto;
-  margin-left: 15px;
+	margin-top: auto;
+	margin-bottom: auto;
+	margin-left: 15px;
 
-  cursor: pointer;
+	cursor: pointer;
 
-  &:hover {
-    font-weight: bold;
-  }
+	&:hover {
+		font-weight: bold;
+	}
 }
 
 .strokeButtonOverride {
-  padding: 0 0;
-  min-width: 0;
-  width: 36px;
-  margin: 3px;
-  border: 1px solid #dedede;
-  border-radius: 5px
+	padding: 0 0;
+	min-width: 0;
+	width: 36px;
+	margin: 3px;
+	border: 1px solid #dedede;
+	border-radius: 5px
 }
 
 //.specialAnnotationOverride {
@@ -94,20 +94,41 @@ mat-radio-button {
 //}
 
 .inputOverride {
-  font-family: Roboto,"Helvetica Neue",sans-serif;
-  width: 150px;
+	font-family: Roboto, "Helvetica Neue", sans-serif;
+	width: 150px;
 }
 
 .notationGrid {
-  display: block;
+	display: block;
 }
 
 .webkitHideScrollbar {
-  &::-webkit-scrollbar {
-    width: 0;
-  }
+	&::-webkit-scrollbar {
+		width: 0;
+	}
 }
 
 .selectedNotationMode {
-  background: #DEDEDE;
+	background: #DEDEDE;
+}
+
+.encounter-toolbar {
+	transition: max-height .5s;
+	width: 100%;
+	display: flex;
+}
+
+.toggle-button {
+	position: absolute;
+	right: 1px;
+	bottom: -45px;
+	z-index: 10;
+}
+
+.toolbar-hidden {
+	max-height: 0px;
+}
+
+.toolbar-show {
+	flex: 0 0 200px;
 }

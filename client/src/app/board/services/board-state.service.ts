@@ -41,6 +41,7 @@ export class BoardStateService extends IsReadyService {
 	 * LOCAL - Misc.
 	 *************************************************************************************************************************************/
 	public visibilityHighlightEnabled = true;
+	public toolbarIsHidden = false;
 
 	/*************************************************************************************************************************************
 	 * LOCAL - diagnostic variables, not intended for production code
