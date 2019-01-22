@@ -68,7 +68,8 @@ export class EncounterConcurrencyService extends IsReadyService {
 		}
 		this.encounterSubscription = this.mqService.getEncounterMessages(this.encounterService.encounterId).subscribe((message: EncounterCommandMessage) => {
 			console.log(message);
-			if (message.body.version > this.encounterService.version) {
+			// if (message.body.version > this.encounterService.version) {
+			if (true) { // versioning currently causing more problems than it fixes
 				this.doEncounterCommand(message);
 				this.encounterService.version = message.body.version;
 			}
