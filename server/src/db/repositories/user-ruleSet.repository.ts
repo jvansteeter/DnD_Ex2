@@ -64,6 +64,19 @@ export class UserRuleSetRepository {
 		});
 	}
 
+	public getAllByRuleSetId(ruleSetId: string): Promise<UserRuleSetModel[]> {
+		return new Promise((resolve, reject) => {
+			this.UserRuleSet.find({ruleSetId: ruleSetId}).exec((error, userRuleSets: UserRuleSetModel[]) => {
+				if (error) {
+					reject(error);
+					return;
+				}
+
+				resolve(userRuleSets);
+			});
+		});
+	}
+
 	public deleteAllByRuleSetId(ruleSetId: string): Promise<void> {
 		return new Promise((resolve, reject) => {
 			this.UserRuleSet.remove({ruleSetId: ruleSetId}, (error) => {

@@ -25,7 +25,7 @@
 		</mat-grid-tile>
 		<!--Admins-->
 		<mat-grid-tile [colspan]="2" [rowspan]="1">
-			<dashboard-card>
+			<dashboard-card [dashboardCard]="adminsCard">
 				<mat-table [dataSource]="adminDataSource">
 					<ng-container matColumnDef="username">
 						<mat-header-cell *matHeaderCellDef>Username</mat-header-cell>

@@ -59,4 +59,12 @@ export class RuleSetRepository {
 		};
 		return this.http.post<void>('/api/ruleset/damageTypes', data);
 	}
+
+	public addAdmins(ruleSetId: string, adminUserIds: string[]): Observable<void> {
+		const data = {
+			ruleSetId: ruleSetId,
+			adminUserIds: adminUserIds,
+		};
+		return this.http.post<void>('/api/ruleset/addAdmins', data);
+	}
 }

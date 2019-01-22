@@ -135,10 +135,16 @@ export class RuleSetRouter {
 			}
 		});
 
-		this.router.get('/admins/:ruleSetId', (req: Request, res: Response) => {
-			this.ruleSetRepository.getAdmins(req.params.ruleSetId).then((admins: any) => {
-				res.json([]);
-			}).catch(error => res.status(500).send(error));
+		this.router.get('/admins/:ruleSetId', async (req: Request, res: Response) => {
+			try {
+				const ruleSetId: string = req.params.ruleSetId;
+				const admins = await this.ruleSetService.getAdmins(ruleSetId);
+				res.json(admins);
+			}
+			catch (error) {
+				console.error(error);
+				res.status(500).send(error);
+			}
 		});
 
 		this.router.get('/npcs/:ruleSetId', async (req: Request, res: Response) => {
@@ -197,6 +203,20 @@ export class RuleSetRouter {
 				const ruleSetId: string = req.body.ruleSetId;
 				const damageTypes: DamageTypeData[] = req.body.damageTypes;
 				await this.ruleSetService.setDamageTypes(userId, ruleSetId, damageTypes);
+				res.status(200).send();
+			}
+			catch (error) {
+				console.error(error);
+				res.status(500).send(error);
+			}
+		});
+
+		this.router.post('/addAdmins', async (req: Request, res: Response) => {
+			try {
+				const userId: string = req.user._id;
+				const ruleSetId: string = req.body.ruleSetId;
+				const adminUserIds: string[] = req.body.adminUserIds;
+				await this.ruleSetService.addAdmins(userId, ruleSetId, adminUserIds);
 				res.status(200).send();
 			}
 			catch (error) {

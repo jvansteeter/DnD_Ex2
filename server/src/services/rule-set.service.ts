@@ -14,6 +14,10 @@ import { CharacterAspectRepository } from '../db/repositories/characterAspect.re
 import { RuleSetData } from '../../../shared/types/rule-set/rule-set.data';
 import { RuleSetModulesConfigData } from '../../../shared/types/rule-set/rule-set-modules-config.data';
 import { DamageTypeData } from "../../../shared/types/rule-set/damage-type.data";
+import { UserRuleSetModel } from '../db/models/user-ruleSet.model';
+import { UserModel } from '../db/models/user.model';
+import { UserRepository } from '../db/repositories/user.repository';
+import { UserData } from '../../../shared/types/user-data';
 
 export class RuleSetService {
 	private ruleSetRepo: RuleSetRepository;
@@ -25,6 +29,7 @@ export class RuleSetService {
 	private campaignRepo: CampaignRepository;
 	private campaignService: CampaignService;
 	private aspectRepo: CharacterAspectRepository;
+	private userRepo: UserRepository;
 
 	constructor() {
 		this.ruleSetRepo = new RuleSetRepository();
@@ -36,6 +41,7 @@ export class RuleSetService {
 		this.campaignRepo = new CampaignRepository();
 		this.campaignService = new CampaignService();
 		this.aspectRepo = new CharacterAspectRepository();
+		this.userRepo = new UserRepository();
 	}
 
 	public async createNewRuleSet(userId: string, label: string): Promise<RuleSetModel> {
@@ -128,5 +134,40 @@ export class RuleSetService {
 		let ruleSet: RuleSetModel = await this.ruleSetRepo.findById(ruleSetId);
 		await ruleSet.setDamageTypes(damageTypes);
 		return;
+	}
+
+	public async addAdmins(userId: string, ruleSetId: string, adminUserIds: string[]): Promise<void> {
+		const existingAdmins: UserRuleSetModel[] = await this.userRuleSetRepo.getAllByRuleSetId(ruleSetId);
+		let authorized: boolean = false;
+		for (let existingAdmin of existingAdmins) {
+			if (existingAdmin.userId == userId) {
+				authorized = true;
+				break;
+			}
+		}
+
+		if (!authorized) {
+			throw new Error('Not Authorized');
+		}
+
+		for (let adminUserId of adminUserIds) {
+			await this.userRuleSetRepo.create(adminUserId, ruleSetId);
+		}
+
+		return;
+	}
+
+	public async getAdmins(ruleSetId: string): Promise<UserData[]> {
+		const userRuleSets: UserRuleSetModel[] = await this.userRuleSetRepo.getAllByRuleSetId(ruleSetId);
+		const admins: UserData[] = [];
+
+		for (let userRuleSet of userRuleSets) {
+			let userModel: UserModel = await this.userRepo.findById(userRuleSet.userId);
+			let userData = JSON.parse(JSON.stringify(userModel));
+			delete userData.passwordHash;
+			admins.push(userData);
+		}
+
+		return admins;
 	}
 }

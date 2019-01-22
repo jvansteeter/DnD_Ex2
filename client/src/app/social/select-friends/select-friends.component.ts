@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component } from '@angular/core';
 import { UserProfile } from '../../types/userProfile';
 import { MatDialogRef } from '@angular/material';
 import { FriendService } from '../../data-services/friend.service';
@@ -10,8 +10,6 @@ import { SubjectDataSource } from '../../utilities/subjectDataSource';
 	styleUrls: ['select-friends.component.css']
 })
 export class SelectFriendsComponent {
-	@Output() public friendsSelected: EventEmitter<UserProfile[]> = new EventEmitter();
-
 	public selectedFriends: UserProfile[];
 	private friendDataSource: SubjectDataSource<UserProfile>;
 	public friendColumns = ['icon', 'username', 'firstName', 'lastName'];
@@ -44,7 +42,6 @@ export class SelectFriendsComponent {
 	}
 
 	select(): void {
-		this.friendsSelected.emit(this.selectedFriends);
-		this.dialogRef.close();
+		this.dialogRef.close(this.selectedFriends);
 	}
 }

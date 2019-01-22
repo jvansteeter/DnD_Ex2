@@ -18,6 +18,8 @@ import { CharacterSheetRepository } from '../../repositories/character-sheet.rep
 import { first, map, tap } from 'rxjs/operators';
 import { NewDamageTypeDialogComponent } from './dialog/new-damage-type-dialog.component';
 import { DamageTypeData } from '../../../../../shared/types/rule-set/damage-type.data';
+import { SelectFriendsComponent } from '../../social/select-friends/select-friends.component';
+import { UserProfile } from '../../types/userProfile';
 
 @Component({
 	selector: 'rule-set-home',
@@ -34,6 +36,7 @@ export class RuleSetHomeComponent implements OnInit {
 
 	public configCard: DashboardCard;
 
+	public adminsCard: DashboardCard;
 	private readonly adminSubject: Subject<AdminData[]>;
 	private adminDataSource: SubjectDataSource<AdminData>;
 	public adminColumns = ['username', 'role'];
@@ -62,6 +65,14 @@ export class RuleSetHomeComponent implements OnInit {
 
 		this.configCard = {
 			title: 'Rule Set Config'
+		};
+		this.adminsCard = {
+			menuOptions: [
+				{
+					title: 'Add Admin',
+					function: this.addAdmins
+				}
+			]
 		};
 		this.characterSheetCard = {
 			menuOptions: [
@@ -107,6 +118,7 @@ export class RuleSetHomeComponent implements OnInit {
 						damageMustBeTyped: false,
 						equipment: false,
 						characterAbilities: false,
+						conditions: false,
 					}
 				}
 				if (isUndefined(ruleSet.damageTypes)) {
@@ -225,6 +237,20 @@ export class RuleSetHomeComponent implements OnInit {
 			}
 		});
 	};
+
+	private addAdmins = () => {
+		const dialogRef = this.dialog.open(SelectFriendsComponent);
+		dialogRef.afterClosed().pipe(first()).subscribe((friends: UserProfile[]) => {
+			if (!isUndefined(friends)) {
+				const adminUserIds = [];
+				for (let friend of friends) {
+					adminUserIds.push(friend._id);
+				}
+
+				this.ruleSetRepository.addAdmins(this.ruleSetId, adminUserIds).subscribe();
+			}
+		});
+	}
 }
 
 interface AdminData {

@@ -24,6 +24,7 @@ import { ConfigService } from '../data-services/config.service';
 import { NewCharacterDialogComponent } from './home/dialog/new-character-dialog.component';
 import { NewDamageTypeDialogComponent } from './home/dialog/new-damage-type-dialog.component';
 import { ColorPickerModule } from 'ngx-color-picker';
+import { SocialModule } from '../social/social.module';
 
 @NgModule({
 	imports: [
@@ -44,6 +45,7 @@ import { ColorPickerModule } from 'ngx-color-picker';
 		MatIconModule,
 		MatTooltipModule,
 		ColorPickerModule,
+		SocialModule,
 	],
 	declarations: [
 		RuleSetHomeComponent,

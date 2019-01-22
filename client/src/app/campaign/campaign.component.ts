@@ -18,6 +18,7 @@ import { EncounterData } from '../../../../shared/types/encounter/encounter.data
 import { MqService } from '../mq/mq.service';
 import { RightsService } from '../data-services/rights.service';
 import { timer } from 'rxjs';
+import { isUndefined } from 'util';
 
 @Component({
 	selector: 'campaign-page',
@@ -145,8 +146,10 @@ export class CampaignComponent implements OnInit, OnDestroy {
 
 	private inviteFriends = () => {
 		let dialogRef = this.dialog.open(SelectFriendsComponent);
-		dialogRef.componentInstance.friendsSelected.subscribe((friends: UserProfile[]) => {
-			this.campaignPageService.sendInvitations(friends);
+		dialogRef.afterClosed().subscribe((friends: UserProfile[]) => {
+			if (!isUndefined(friends)) {
+				this.campaignPageService.sendInvitations(friends);
+			}
 		});
 	};
 
