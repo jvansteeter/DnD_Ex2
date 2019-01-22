@@ -17,7 +17,7 @@ export class Chat extends StompMessage implements ChatMessage {
 		super(message);
 		this.headers.chatType = message.headers.chatType;
 		this.headers.fromUserId = message.headers.fromUserId;
-		this.headers.timestamp = new Date().getTime();
+		this.headers.timestamp = message.headers.timestamp;
 		this.headers.chatRoomId = message.headers.chatRoomId;
 	}
 

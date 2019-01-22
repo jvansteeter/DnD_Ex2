@@ -1,5 +1,5 @@
 <ng-container *ngIf="activeChatRoom && chatService.isReady()">
-	<mat-card [ngClass]="chatService.showChatWindow ? 'app-chat' : 'app-chat hide'" cdkDrag ngResizable>
+	<mat-card [ngClass]="chatService.showChatWindow ? 'app-chat' : 'app-chat hide'" cdkDrag ngResizable style="height: 500px; width: 500px;">
 		<div class="toolbar" cdkDragHandle>
 			<button mat-icon-button class="minimize-button" (click)="minimizeChatWindow()"><mat-icon>minimize</mat-icon></button>
 		</div>

@@ -44,7 +44,9 @@ export class ChatRoom implements ChatRoomData {
 		if (!isFromMe) {
 			this._unreadChatCount++;
 		}
-		this.mostRecentTimestamp = new Date().getTime();
+		const timestamp = new Date().getTime();
+		this.mostRecentTimestamp = timestamp;
+		chat.headers.timestamp = timestamp;
 		this._chats.push(chat);
 		this.sortChats();
 	}

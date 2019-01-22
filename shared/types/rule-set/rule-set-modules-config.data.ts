@@ -4,4 +4,5 @@ export interface RuleSetModulesConfigData {
 	damageMustBeTyped: boolean;
 	equipment: boolean;
 	characterAbilities: boolean;
+	conditions: boolean;
 }
