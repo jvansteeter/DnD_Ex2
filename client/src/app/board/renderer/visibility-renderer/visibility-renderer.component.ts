@@ -9,16 +9,17 @@ import {isDefined} from "@angular/compiler/src/util";
 import { EncounterService } from '../../../encounter/encounter.service';
 import {UserProfileService} from "../../../data-services/userProfile.service";
 import {BoardTeamsService} from "../../services/board-teams.service";
+import { RendererConsolidationService } from '../renderer-consolidation.service';
+import { RendererComponent } from '../render-component.interface';
 
 @Component({
     selector: 'visibility-renderer',
     templateUrl: 'visibility-renderer.component.html'
 })
 
-export class VisibilityRendererComponent implements OnInit, OnDestroy {
+export class VisibilityRendererComponent implements OnInit, OnDestroy, RendererComponent {
     @ViewChild('visibilityRenderCanvas') visibilityRenderCanvas: ElementRef;
     private ctx: CanvasRenderingContext2D;
-    private frameId;
 
     constructor(
         private boardStateService: BoardStateService,
@@ -28,16 +29,17 @@ export class VisibilityRendererComponent implements OnInit, OnDestroy {
         private encounterService: EncounterService,
         private userProfileService: UserProfileService,
         private boardTeamsService: BoardTeamsService,
+        private renderConService: RendererConsolidationService,
     ) {
     }
 
     ngOnInit(): void {
         this.ctx = this.visibilityRenderCanvas.nativeElement.getContext('2d');
-        this.render();
+        this.renderConService.registerRenderer(this);
     }
 
     ngOnDestroy(): void {
-    	cancelAnimationFrame(this.frameId);
+	      this.renderConService.deregisterRenderer(this);
     }
 
     render = () => {
@@ -125,7 +127,5 @@ export class VisibilityRendererComponent implements OnInit, OnDestroy {
                 }
                 break;
         }
-
-        this.frameId = requestAnimationFrame(this.render);
     }
 }

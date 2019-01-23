@@ -5,31 +5,33 @@ import {BoardCanvasService} from '../../services/board-canvas.service';
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import {ViewMode} from '../../shared/enum/view-mode';
 import {BoardLightService} from '../../services/board-light.service';
+import { RendererConsolidationService } from '../renderer-consolidation.service';
+import { RendererComponent } from '../render-component.interface';
 
 @Component({
     selector: 'highlight-renderer',
     templateUrl: 'highlight-renderer.component.html'
 })
 
-export class HighlightRendererComponent implements OnInit, OnDestroy {
+export class HighlightRendererComponent implements OnInit, OnDestroy, RendererComponent {
     @ViewChild('highlightRenderCanvas') highlightRenderCanvas: ElementRef;
     private ctx: CanvasRenderingContext2D;
-		private frameId;
 
     constructor(
         private boardStateService: BoardStateService,
         private boardCanvasService: BoardCanvasService,
-        private boardLightService: BoardLightService
+        private boardLightService: BoardLightService,
+        private renderConService: RendererConsolidationService,
     ) {
     }
 
     ngOnInit() {
         this.ctx = this.highlightRenderCanvas.nativeElement.getContext('2d');
-        this.render();
+        this.renderConService.registerRenderer(this);
     }
 
     ngOnDestroy(): void {
-    	cancelAnimationFrame(this.frameId);
+    	this.renderConService.deregisterRenderer(this);
     }
 
     render = () => {
@@ -60,8 +62,6 @@ export class HighlightRendererComponent implements OnInit, OnDestroy {
             const sc_loc = this.boardStateService.source_click_location.location;
             this.render_corner_to_corner(sc_loc);
         }
-
-        this.frameId = requestAnimationFrame(this.render);
     };
 
     render_corner_to_corner(sc_loc: XyPair): void {

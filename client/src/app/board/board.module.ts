@@ -62,6 +62,7 @@ import {TeamSettingsComponent} from './dialogs/team-settings/team-settings.compo
 import {LightEditDialogComponent} from "./dialogs/light-edit-dialog/light-edit-dialog.component";
 import {BoardTeamsService} from "./services/board-teams.service";
 import { DragDropModule } from "@angular/cdk/drag-drop";
+import { RendererConsolidationService } from './renderer/renderer-consolidation.service';
 
 
 @NgModule({
@@ -131,6 +132,7 @@ import { DragDropModule } from "@angular/cdk/drag-drop";
         BoardPlayerService,
         BoardNotationService,
         BoardTeamsService,
+		    RendererConsolidationService,
     ],
     entryComponents: [
         NpcPopComponent,

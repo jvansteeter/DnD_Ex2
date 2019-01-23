@@ -27,6 +27,8 @@ import {TempPlayerInitDialogComponent} from "../dialogs/temp-player-init-dialog/
 import {BoardControllerMode} from "../shared/enum/board-controller-mode";
 import { RightsService } from '../../data-services/rights.service';
 import {BoardTeamsService} from "../services/board-teams.service";
+import { RendererConsolidationService } from '../renderer/renderer-consolidation.service';
+import { RendererComponent } from '../renderer/render-component.interface';
 
 
 @Component({
@@ -34,9 +36,8 @@ import {BoardTeamsService} from "../services/board-teams.service";
     templateUrl: 'board-map.component.html',
     styleUrls: ['board-map.component.scss']
 })
-export class BoardMapComponent implements OnInit, AfterViewInit, OnDestroy {
+export class BoardMapComponent implements OnInit, AfterViewInit, OnDestroy, RendererComponent {
     @ViewChild('mapContainer') mapContainer: ElementRef;
-    private frameId;
 
     constructor(private boardCanvasService: BoardCanvasService,
                 private boardStateService: BoardStateService,
@@ -50,16 +51,17 @@ export class BoardMapComponent implements OnInit, AfterViewInit, OnDestroy {
                 private popService: PopService,
                 private boardTeamsService: BoardTeamsService,
                 public rightsService: RightsService,
+                private renderConService: RendererConsolidationService,
                 ) {
     }
 
     render = () => {
         this.syncMapContainerDims();
-        this.frameId = requestAnimationFrame(this.render);
     };
 
     ngOnInit(): void {
-        this.render();
+        this.renderConService.registerRenderer(this);
+        this.renderConService.start();
     }
 
     ngAfterViewInit(): void {
@@ -67,7 +69,8 @@ export class BoardMapComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        cancelAnimationFrame(this.frameId);
+        this.renderConService.deregisterRenderer(this);
+        this.renderConService.stop();
     }
 
     /****************************************************************************************************************

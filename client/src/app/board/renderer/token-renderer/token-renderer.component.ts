@@ -7,16 +7,17 @@ import {BoardPlayerService} from "../../services/board-player.service";
 import {BoardTraverseService} from "../../services/board-traverse.service";
 import {GeometryStatics} from "../../statics/geometry-statics";
 import {RightsService} from '../../../data-services/rights.service';
+import { RendererConsolidationService } from '../renderer-consolidation.service';
+import { RendererComponent } from '../render-component.interface';
 
 @Component({
     selector: 'token-renderer',
     templateUrl: 'token-renderer.component.html'
 })
 
-export class TokenRendererComponent implements OnInit, OnDestroy {
+export class TokenRendererComponent implements OnInit, OnDestroy, RendererComponent {
     @ViewChild('tokenRenderCanvas') tokenRenderCanvas: ElementRef;
     private ctx: CanvasRenderingContext2D;
-    private frameId;
 
     constructor(
         private boardStateService: BoardStateService,
@@ -25,6 +26,7 @@ export class TokenRendererComponent implements OnInit, OnDestroy {
         private boardPlayerService: BoardPlayerService,
         private boardTraverseService: BoardTraverseService,
         private rightsService: RightsService,
+        private renderConService: RendererConsolidationService,
     ) {
     }
 
@@ -32,14 +34,14 @@ export class TokenRendererComponent implements OnInit, OnDestroy {
         this.ctx = this.tokenRenderCanvas.nativeElement.getContext('2d');
         this.boardTraverseService.isReadyObservable.subscribe((isReady: boolean) => {
             if (isReady) {
-                this.render();
+                this.renderConService.registerRenderer(this);
             }
         });
         // this.render();
     }
 
     ngOnDestroy(): void {
-        cancelAnimationFrame(this.frameId);
+        this.renderConService.deregisterRenderer(this);
     }
 
     render = () => {
@@ -83,7 +85,5 @@ export class TokenRendererComponent implements OnInit, OnDestroy {
                 }
             }
         }
-
-        this.frameId = requestAnimationFrame(this.render);
     }
 }

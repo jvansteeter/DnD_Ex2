@@ -9,32 +9,34 @@ import {BoardNotationService} from "../../services/board-notation-service";
 import {NotationMode} from "../../shared/enum/notation-mode";
 import {ColorStatics} from "../../statics/color-statics";
 import {BoardVisibilityService} from "../../services/board-visibility.service";
+import { RendererComponent } from '../render-component.interface';
+import { RendererConsolidationService } from '../renderer-consolidation.service';
 
 @Component({
     selector: 'hover-renderer',
     templateUrl: 'hover-renderer.component.html'
 })
 
-export class HoverRendererComponent implements OnInit, OnDestroy {
+export class HoverRendererComponent implements OnInit, OnDestroy, RendererComponent {
     @ViewChild('hoverRenderCanvas') hoverRenderCanvas: ElementRef;
     private ctx: CanvasRenderingContext2D;
-		private frameId;
 
     constructor(
         private boardStateService: BoardStateService,
         private boardCanvasService: BoardCanvasService,
         private boardNotationService: BoardNotationService,
-        private boardVisibilityService: BoardVisibilityService
+        private boardVisibilityService: BoardVisibilityService,
+        private rendererConsolidationService: RendererConsolidationService,
     ) {
     }
 
     ngOnInit() {
         this.ctx = this.hoverRenderCanvas.nativeElement.getContext('2d');
-        this.render();
+        this.rendererConsolidationService.registerRenderer(this);
     }
 
     ngOnDestroy(): void {
-    	cancelAnimationFrame(this.frameId);
+    	this.rendererConsolidationService.deregisterRenderer(this);
     }
 
     render = () => {
@@ -138,7 +140,5 @@ export class HoverRendererComponent implements OnInit, OnDestroy {
                 }
             }
         }
-
-        this.frameId = requestAnimationFrame(this.render);
     }
 }

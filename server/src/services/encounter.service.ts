@@ -83,7 +83,6 @@ export class EncounterService {
 
 		const isGameMaster = await this.isGameMaster(userId, encounter);
 		const teams = isGameMaster ? ['GM'] : ['Player'];
-		console.log('add user to encounter')
 		const userModel: UserModel = await this.userRepo.findById(userId);
 		encounter = await encounter.addUser(userId, userModel.username, teams);
 		return encounter;

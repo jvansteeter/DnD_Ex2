@@ -6,32 +6,34 @@ import {GeometryStatics} from "../../statics/geometry-statics";
 import {BoardTraverseService} from "../../services/board-traverse.service";
 import {CellRegion} from "../../shared/enum/cell-region";
 import {CellTarget} from "../../shared/cell-target";
+import { RendererConsolidationService } from '../renderer-consolidation.service';
+import { RendererComponent } from '../render-component.interface';
 
 @Component({
     selector: 'diagnostic-renderer',
     templateUrl: 'diagnostic-renderer.component.html'
 })
 
-export class DiagnosticRendererComponent implements OnInit, OnDestroy {
+export class DiagnosticRendererComponent implements OnInit, OnDestroy, RendererComponent {
     @ViewChild('diagnosticRenderCanvas') diagnosticRenderCanvas: ElementRef;
     private ctx: CanvasRenderingContext2D;
-    private frameId;
 
     constructor(
         private boardCanvasService: BoardCanvasService,
         private boardVisibilityService: BoardVisibilityService,
         private boardTraverseService: BoardTraverseService,
         private boardStateService: BoardStateService,
+        private renderConService: RendererConsolidationService,
     ) {
     }
 
     ngOnInit(): void {
         this.ctx = this.diagnosticRenderCanvas.nativeElement.getContext('2d');
-        this.render();
+        this.renderConService.registerRenderer(this);
     }
 
     ngOnDestroy(): void {
-    	cancelAnimationFrame(this.frameId);
+    	this.renderConService.deregisterRenderer(this);
     }
 
     render = () => {
@@ -108,7 +110,5 @@ export class DiagnosticRendererComponent implements OnInit, OnDestroy {
                 }
             }
         }
-
-        this.frameId = requestAnimationFrame(this.render);
     }
 }

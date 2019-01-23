@@ -4,31 +4,33 @@ import {BoardCanvasService} from '../../services/board-canvas.service';
 import {BoardWallService} from '../../services/board-wall.service';
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { EncounterService } from '../../../encounter/encounter.service';
+import { RendererConsolidationService } from '../renderer-consolidation.service';
+import { RendererComponent } from '../render-component.interface';
 
 @Component({
     selector: 'wall-renderer',
     templateUrl: 'wall-renderer.component.html'
 })
-export class WallRendererComponent implements OnInit, OnDestroy {
+export class WallRendererComponent implements OnInit, OnDestroy, RendererComponent {
     @ViewChild('wallRenderCanvas') wallRenderCanvas: ElementRef;
     private ctx: CanvasRenderingContext2D;
-    private frameId;
 
     constructor(
         private wallService: BoardWallService,
         private boardStateService: BoardStateService,
         private boardCanvasService: BoardCanvasService,
         private encounterService: EncounterService,
+        private renderConService: RendererConsolidationService,
     ) {
     }
 
     ngOnInit() {
         this.ctx = this.wallRenderCanvas.nativeElement.getContext('2d');
-        this.render();
+				this.renderConService.registerRenderer(this);
     }
 
     ngOnDestroy(): void {
-    	cancelAnimationFrame(this.frameId);
+	      this.renderConService.deregisterRenderer(this);
     }
 
     render = () => {
@@ -82,7 +84,5 @@ export class WallRendererComponent implements OnInit, OnDestroy {
                 }
                 break;
         }
-
-        this.frameId = requestAnimationFrame(this.render);
     }
 }

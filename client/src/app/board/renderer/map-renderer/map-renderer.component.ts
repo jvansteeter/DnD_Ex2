@@ -7,18 +7,19 @@ import {BoardLightService} from '../../services/board-light.service';
 import {EncounterService} from '../../../encounter/encounter.service';
 import {IsReadyService} from '../../../utilities/services/isReady.service';
 import {XyPair} from "../../../../../../shared/types/encounter/board/xy-pair";
+import { RendererConsolidationService } from '../renderer-consolidation.service';
+import { RendererComponent } from '../render-component.interface';
 
 @Component({
     selector: 'map-renderer',
     templateUrl: 'map-renderer.component.html'
 })
-export class MapRendererComponent extends IsReadyService implements OnInit, OnDestroy {
+export class MapRendererComponent extends IsReadyService implements OnInit, OnDestroy, RendererComponent {
     // public static DEV_MAP_URL_STRING = 'resources/images/maps/shack.jpg';
 	// TODO: this shouldn't be isReady
 
     @ViewChild('mapRenderCanvas') mapRenderCanvas: ElementRef;
     private ctx: CanvasRenderingContext2D;
-    private frameId;
 
     private bgImage = new Image();
 
@@ -28,6 +29,7 @@ export class MapRendererComponent extends IsReadyService implements OnInit, OnDe
         private boardWallService: BoardWallService,
         private boardLightService: BoardLightService,
         private encounterService: EncounterService,
+        private renderConService: RendererConsolidationService,
     ) {
         super(encounterService);
         this.init();
@@ -47,11 +49,11 @@ export class MapRendererComponent extends IsReadyService implements OnInit, OnDe
 
     ngOnInit(): void {
         this.ctx = this.mapRenderCanvas.nativeElement.getContext('2d');
-        this.render();
+        this.renderConService.registerRenderer(this);
     }
 
     ngOnDestroy(): void {
-        cancelAnimationFrame(this.frameId);
+        this.renderConService.deregisterRenderer(this);
     }
 
     render = () => {
@@ -71,6 +73,5 @@ export class MapRendererComponent extends IsReadyService implements OnInit, OnDe
                     break;
             }
         }
-        this.frameId = requestAnimationFrame(this.render);
     }
 }

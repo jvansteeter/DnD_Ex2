@@ -5,16 +5,16 @@ import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core
 import {BoardLightService} from '../../services/board-light.service';
 import {BoardPlayerService} from "../../services/board-player.service";
 import {EncounterService} from '../../../encounter/encounter.service';
+import { RendererConsolidationService } from '../renderer-consolidation.service';
+import { RendererComponent } from '../render-component.interface';
 
 @Component({
     selector: 'light-renderer',
     templateUrl: 'light-renderer.component.html'
 })
-export class LightRendererComponent implements OnInit, OnDestroy {
+export class LightRendererComponent implements OnInit, OnDestroy, RendererComponent {
     @ViewChild('lightRenderCanvasRoot') lightRenderCanvasRoot: ElementRef;
     private ctx_root: CanvasRenderingContext2D;
-
-    private frameId;
 
     constructor(
         private boardStateService: BoardStateService,
@@ -22,17 +22,17 @@ export class LightRendererComponent implements OnInit, OnDestroy {
         private boardCanvasService: BoardCanvasService,
         private boardLightService: BoardLightService,
         private encounterService: EncounterService,
+        private renderConService: RendererConsolidationService,
     ) {
     }
 
     ngOnInit() {
         this.ctx_root = this.lightRenderCanvasRoot.nativeElement.getContext('2d');
-
-        this.render();
+        this.renderConService.registerRenderer(this);
     }
 
     ngOnDestroy(): void {
-        cancelAnimationFrame(this.frameId);
+        this.renderConService.deregisterRenderer(this);
     }
 
     render = () => {
@@ -76,7 +76,5 @@ export class LightRendererComponent implements OnInit, OnDestroy {
                     break;
             }
         }
-
-        this.frameId = requestAnimationFrame(this.render);
     };
 }
