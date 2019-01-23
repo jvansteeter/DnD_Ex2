@@ -6,6 +6,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { EncounterService } from '../../../encounter/encounter.service';
 import { AlertService } from "../../../alert/alert.service";
 import { isNullOrUndefined } from "util";
+import { RightsService } from '../../../data-services/rights.service';
 
 @Component({
 	templateUrl: 'add-player-dialog.component.html',
@@ -29,7 +30,9 @@ export class AddPlayerDialogComponent implements OnInit {
 	            private characterRepo: CharacterRepository,
 	            private encounterService: EncounterService,
 	            private dialogRef: MatDialogRef<AddPlayerDialogComponent>,
-	            private alertService: AlertService) {
+	            private alertService: AlertService,
+	            public rightsService: RightsService,
+	            ) {
 		this.campaignId = data.campaignId;
 		this.counts = new Map<CharacterData, number>();
 	}

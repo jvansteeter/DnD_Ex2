@@ -21,6 +21,9 @@ export class TempPlayerInitDialogComponent {
             case 'Enter' :
                 this.dialogRef.close();
                 break;
+	          case 'NumpadEnter':
+	        	    this.dialogRef.close();
+	        	    break;
         }
     }
 }

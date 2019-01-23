@@ -1,7 +1,7 @@
-<ng-container *ngIf="!hasCampaignCharacters && !hasCampaignNPCs && !hasRuleSetNPCs">
+<ng-container *ngIf="(!hasCampaignCharacters && !hasCampaignNPCs && !hasRuleSetNPCs) || (!rightsService.isEncounterGM() && !hasCampaignCharacters)">
 	<h3>No Characters</h3>
 </ng-container>
-<mat-tab-group>
+<mat-tab-group *ngIf="(rightsService.isEncounterGM() && (hasCampaignCharacters || hasCampaignNPCs || hasRuleSetNPCs)) || (!rightsService.isEncounterGM() && hasCampaignCharacters)">
 	<mat-tab label="Campaign Characters" [disabled]="!hasCampaignCharacters">
 		<mat-table [dataSource]="campaignCharacterDataSource">
 			<ng-container matColumnDef="check">
@@ -31,12 +31,12 @@
 			<mat-row *matRowDef="let character; columns: characterTableColumns"></mat-row>
 		</mat-table>
 	</mat-tab>
-	<mat-tab label="Campaign NPCs" [disabled]="!hasCampaignNPCs">
+	<mat-tab label="Campaign NPCs" *ngIf="rightsService.isEncounterGM()" [disabled]="!hasCampaignNPCs">
 		<ng-container *ngFor="let character of campaignNPCs">
 			{{character.label}}
 		</ng-container>
 	</mat-tab>
-	<mat-tab label="RuleSet NPCs" [disabled]="!hasRuleSetNPCs">
+	<mat-tab label="RuleSet NPCs" *ngIf="rightsService.isEncounterGM()" [disabled]="!hasRuleSetNPCs">
 		<mat-table [dataSource]="ruleSetNPCDataSource">
 			<ng-container matColumnDef="check">
 				<mat-header-cell *matHeaderCellDef></mat-header-cell>
