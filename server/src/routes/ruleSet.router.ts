@@ -13,6 +13,7 @@ import { RuleSetService } from '../services/rule-set.service';
 import { RuleSetModulesConfigData } from '../../../shared/types/rule-set/rule-set-modules-config.data';
 import { DamageTypeData } from "../../../shared/types/rule-set/damage-type.data";
 import { ConditionData } from '../../../shared/types/rule-set/condition.data';
+import { CharacterSheetData } from '../../../shared/types/rule-set/character-sheet.data';
 
 
 /**********************************************************************************************************
@@ -127,7 +128,7 @@ export class RuleSetRouter {
 
 		this.router.get('/charactersheet/:characterSheetId', async (req: Request, res: Response) => {
 			try {
-				let characterSheet: CharacterSheetModel = await this.characterSheetService.getCompiledCharacterSheet(req.params.characterSheetId);
+				let characterSheet: CharacterSheetData = await this.characterSheetService.getCompiledCharacterSheet(req.params.characterSheetId);
 				res.json(characterSheet);
 			}
 			catch (error) {

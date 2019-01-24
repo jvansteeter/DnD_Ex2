@@ -4,6 +4,7 @@ import { CharacterAspectModel } from '../db/models/characterAspect.model';
 import { CharacterSheetModel } from '../db/models/characterSheet.model';
 import { CharacterRepository } from '../db/repositories/character.repository';
 import { CharacterModel } from '../db/models/character.model';
+import { CharacterSheetData } from '../../../shared/types/rule-set/character-sheet.data';
 
 export class CharacterSheetService {
 	private sheetRepo: CharacterSheetRepository;
@@ -28,7 +29,7 @@ export class CharacterSheetService {
 		return sheetModel.setTooltipConfig(characterSheetObj.tooltipConfig);
 	}
 
-	public async getCompiledCharacterSheet(id: string): Promise<any> {
+	public async getCompiledCharacterSheet(id: string): Promise<CharacterSheetData> {
 		let characterSheet = await this.sheetRepo.findById(id);
 		let characterSheetObj = JSON.parse(JSON.stringify(characterSheet));
 		let aspects: CharacterAspectModel[] = await this.aspectRepo.findByCharacterSheetId(characterSheet._id);

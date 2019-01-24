@@ -12,6 +12,7 @@ import { AddTooltipAspectComponent } from "./dialog/add-tooltip-aspect.component
 import { AspectData } from '../../../../../shared/types/rule-set/aspect.data';
 import { PredefinedAspects, RequiredAspects } from '../../../../../shared/required-aspects.enum';
 import { CharacterAspectComponent } from '../shared/character-aspect.component';
+import { RuleSetService } from '../../data-services/ruleSet.service';
 
 @Component({
 	selector: 'character-maker',
@@ -25,21 +26,6 @@ export class CharacterMakerComponent implements OnInit, AfterViewInit {
 	private characterToolTipComponent: CharacterTooltipComponent;
 
 	public characterToolTipCard: DashboardCard;
-
-	private readonly requiredAspects = [
-		{
-			label: RequiredAspects.VISION,
-			type: AspectType.NUMBER
-		},
-		{
-			label: RequiredAspects.DARK_VISION,
-			type: AspectType.BOOLEAN
-		},
-		{
-			label: RequiredAspects.SPEED,
-			type: AspectType.NUMBER
-		}
-	];
 
 	public readonly preDefinedAspects = [
 		{
@@ -57,7 +43,6 @@ export class CharacterMakerComponent implements OnInit, AfterViewInit {
 	            private characterSheetRepository: CharacterSheetRepository,
 	            private characterInterfaceFactory: CharacterInterfaceFactory,
 	            public characterService: CharacterMakerService) {
-		this.characterService.init();
 		this.characterInterfaceFactory.setCharacterInterface(this.characterService);
 		this.characterToolTipCard = {
 			label: 'Character Tooltip Preview',
@@ -67,7 +52,7 @@ export class CharacterMakerComponent implements OnInit, AfterViewInit {
 					function: this.addTooltipAspect
 				}
 			]
-		}
+		};
 	}
 
 	ngOnInit(): void {
@@ -90,17 +75,17 @@ export class CharacterMakerComponent implements OnInit, AfterViewInit {
 				}
 			}
 		});
+		this.characterService.isReadyObservable.subscribe((isReady: boolean) => {
+			if (isReady) {
+				this.characterToolTipComponent.tooltipConfig = this.characterService.characterTooltipConfig;
+			}
+		});
 	}
 
 	ngAfterViewInit(): void {
 		this.activatedRoute.params.subscribe(params => {
 			this.characterSheetId = params['characterSheetId'];
-			this.characterSheetRepository.getCharacterSheet(this.characterSheetId).subscribe((data: any) => {
-				this.characterService.setCharacterSheet(data);
-				let aspects = this.addRequiredAspects(data.aspects);
-				this.characterService.initAspects(aspects);
-				this.characterToolTipComponent.tooltipConfig = this.characterService.characterTooltipConfig;
-			});
+			this.characterService.setCharacterSheetId(this.characterSheetId);
 		});
 	}
 
@@ -172,21 +157,4 @@ export class CharacterMakerComponent implements OnInit, AfterViewInit {
 			}
 		});
 	};
-
-	private addRequiredAspects(aspects: AspectData[]): AspectData[] {
-		for (let requiredAspect of this.requiredAspects) {
-			let found = false;
-			for (let existingAspect of aspects) {
-				if (existingAspect.label.toLowerCase() === requiredAspect.label.toLowerCase()) {
-					found = true;
-					break;
-				}
-			}
-			if (!found) {
-				aspects.push(new Aspect(requiredAspect.label, requiredAspect.type, true, true));
-			}
-		}
-
-		return aspects;
-	}
 }

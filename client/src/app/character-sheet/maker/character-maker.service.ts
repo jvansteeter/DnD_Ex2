@@ -8,7 +8,7 @@ import { CharacterInterfaceService } from '../shared/character-interface.service
 import { CharacterSheetRepository } from '../../repositories/character-sheet.repository';
 import { isUndefined } from 'util';
 import { AspectData } from '../../../../../shared/types/rule-set/aspect.data';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, Subscription } from 'rxjs';
 import { AlertService } from '../../alert/alert.service';
 import { CharacterSheetData } from '../../../../../shared/types/rule-set/character-sheet.data';
 import { CharacterSheetTooltipData } from '../../../../../shared/types/rule-set/character-sheet-tooltip.data';
@@ -22,9 +22,13 @@ import {
 	GridType
 } from 'angular-gridster2';
 import { TextListComponent } from "../shared/subcomponents/text-list/text-list.component";
+import { IsReadyService } from '../../utilities/services/isReady.service';
+import { mergeMap } from 'rxjs/operators';
+import { RuleSetService } from '../../data-services/ruleSet.service';
 
 @Injectable()
-export class CharacterMakerService implements CharacterInterfaceService {
+export class CharacterMakerService extends IsReadyService implements CharacterInterfaceService {
+	private characterSheetId: string;
 	public characterSheet: CharacterSheetData;
 
 	private aspectMap: Map<GridsterItem, Aspect>;
@@ -34,11 +38,14 @@ export class CharacterMakerService implements CharacterInterfaceService {
 	private readonly materialConstant = 2.71875;
 
 	public readonly immutable = false;
+	public ruleModuleAspects: Aspect[] = [];
 
 	public gridOptions: GridsterConfig;
 
-	constructor(private characterSheetRepository: CharacterSheetRepository,
-	            private alertService: AlertService) {
+	constructor(private characterSheetRepo: CharacterSheetRepository,
+	            private alertService: AlertService,
+	            private ruleSetService: RuleSetService) {
+		super();
 	}
 
 	public init(): void {
@@ -97,12 +104,26 @@ export class CharacterMakerService implements CharacterInterfaceService {
 			disableWarnings: true,
 			scrollToNewItems: false,
 			itemResizeCallback: this.resizeItem,
-			itemChangeCallback: this.changeItem,
 		};
+
+		const isReadySub: Subscription = this.characterSheetRepo.getCharacterSheet(this.characterSheetId).pipe(
+				mergeMap((sheet: CharacterSheetData) => {
+					this.characterSheet = sheet;
+					this.initAspects(sheet.aspects);
+					this.ruleSetService.setRuleSetId(this.characterSheet.ruleSetId);
+					return this.ruleSetService.isReadyObservable;
+				})
+		).subscribe((isReady: boolean) => {
+			if (isReady) {
+				isReadySub.unsubscribe();
+				this.initRuleModuleAspects();
+				this.setReady(true);
+			}
+		});
 	}
 
-	public setCharacterSheet(sheet: CharacterSheetData): void {
-		this.characterSheet = sheet;
+	public setCharacterSheetId(id: string): void {
+		this.characterSheetId = id;
 		this.init();
 	}
 
@@ -187,11 +208,11 @@ export class CharacterMakerService implements CharacterInterfaceService {
 			aspects.push(aspectObj);
 		}
 		characterSheet['aspects'] = aspects;
-		this.characterSheetRepository.saveCharacterSheet(characterSheet).subscribe();
+		this.characterSheetRepo.saveCharacterSheet(characterSheet).subscribe();
 	}
 
 	public initAspects(aspects: AspectData[]): void {
-		aspects.forEach((aspectObj: AspectData) => {
+		for (let aspectObj of aspects) {
 			let aspect = new Aspect(aspectObj.label, aspectObj.aspectType, aspectObj.required, aspectObj.isPredefined);
 			aspect._id = aspectObj._id;
 			aspect.fontSize = aspectObj.fontSize;
@@ -207,22 +228,7 @@ export class CharacterMakerService implements CharacterInterfaceService {
 			}
 
 			this.aspectMap.set(aspect.config, aspect);
-		});
-	}
-
-	public getGridHeight(): number {
-		let aspects = document.getElementsByTagName('character-aspect');
-		let height = 0;
-		for (let i = 0; i < aspects.length; i++) {
-			let aspect = aspects[i];
-			let clientRect = aspect.getBoundingClientRect();
-			let tempHeight = this.aspects[i].config.top + clientRect.height;
-			if (tempHeight > height) {
-				height = tempHeight;
-			}
 		}
-
-		return height;
 	}
 
 	public getTooltipAspects(): Aspect[] {
@@ -305,11 +311,12 @@ export class CharacterMakerService implements CharacterInterfaceService {
 		return this.aspectComponents.get(aspectLabel.toLowerCase()).aspect;
 	}
 
+	private initRuleModuleAspects(): void {
+		console.log('init rule module aspects')
+	}
+
 	private resizeItem = (item: GridsterItem, itemComponent: GridsterItemComponentInterface) => {
 		const height = itemComponent.height;
 		this.resizeAspect(item, height);
-	};
-
-	private changeItem = (item, itemComponent) => {
 	};
 }

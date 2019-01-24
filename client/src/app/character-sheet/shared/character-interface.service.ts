@@ -4,8 +4,9 @@ import { CharacterSheetData } from '../../../../../shared/types/rule-set/charact
 import { Observable } from 'rxjs';
 import { CharacterAspectComponent } from './character-aspect.component';
 import { GridsterConfig } from "angular-gridster2";
+import { IsReadyService } from '../../utilities/services/isReady.service';
 
-export interface CharacterInterfaceService {
+export interface CharacterInterfaceService extends IsReadyService {
 	aspects: Aspect[];
 
 	readonly immutable: boolean;

@@ -14,7 +14,7 @@ export class CharacterSheetRepository {
 		return this.http.post('/api/ruleset/charactersheet/save', characterSheet, {responseType: 'text'});
 	}
 
-	public getCharacterSheet(id: string): Observable<any> {
+	public getCharacterSheet(id: string): Observable<CharacterSheetData> {
 		return this.http.get<CharacterSheetData>('/api/ruleset/charactersheet/' + id, {responseType: 'json'});
 	}
 

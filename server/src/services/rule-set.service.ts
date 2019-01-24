@@ -19,6 +19,7 @@ import { UserModel } from '../db/models/user.model';
 import { UserRepository } from '../db/repositories/user.repository';
 import { UserData } from '../../../shared/types/user-data';
 import { ConditionData } from '../../../shared/types/rule-set/condition.data';
+import { CharacterSheetData } from '../../../shared/types/rule-set/character-sheet.data';
 
 export class RuleSetService {
 	private ruleSetRepo: RuleSetRepository;
@@ -58,10 +59,12 @@ export class RuleSetService {
 			const characterSheetModels = await this.characterSheetRepo.findByRuleSetId(ruleSetId);
 			const compiledSheets: any[] = [];
 			for (let sheetModel of characterSheetModels) {
-				const compiledSheet = await this.characterSheetService.getCompiledCharacterSheet(sheetModel._id);
+				const compiledSheet: CharacterSheetData = await this.characterSheetService.getCompiledCharacterSheet(sheetModel._id);
 				delete compiledSheet._id;
-				for (let aspect of compiledSheet.aspects) {
-					delete aspect._id;
+				if (compiledSheet.aspects) {
+					for (let aspect of compiledSheet.aspects) {
+						delete aspect._id;
+					}
 				}
 				compiledSheets.push(compiledSheet);
 			}

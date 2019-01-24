@@ -8,9 +8,10 @@ import { isUndefined } from 'util';
 import { CharacterRepository } from '../../repositories/character.repository';
 import { CharacterAspectComponent } from '../shared/character-aspect.component';
 import { CompactType, DisplayGrid, GridsterConfig, GridType } from "angular-gridster2";
+import { IsReadyService } from '../../utilities/services/isReady.service';
 
 @Injectable()
-export class CharacterSheetService implements CharacterInterfaceService {
+export class CharacterSheetService extends IsReadyService implements CharacterInterfaceService {
 	public aspects: Aspect[];
 	public characterSheet: CharacterSheetData;
 	public readonly immutable = true;
@@ -20,6 +21,7 @@ export class CharacterSheetService implements CharacterInterfaceService {
 	private aspectComponents: Map<string, CharacterAspectComponent>;
 
 	constructor(private characterRepo: CharacterRepository) {
+		super();
 	}
 
 	init(): void {
@@ -78,6 +80,7 @@ export class CharacterSheetService implements CharacterInterfaceService {
 			disableWarnings: true,
 			scrollToNewItems: false,
 		};
+		this.setReady(true);
 	}
 
 	registerAspectComponent(aspectComponent: CharacterAspectComponent): void {

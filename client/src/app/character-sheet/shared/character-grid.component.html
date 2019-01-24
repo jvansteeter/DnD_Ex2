@@ -1,4 +1,4 @@
-<gridster *ngIf="characterService && characterService.gridOptions" [options]="characterService.gridOptions">
+<gridster *ngIf="characterService.isReady()" [options]="characterService.gridOptions">
 	<gridster-item *ngFor="let aspect of characterService.aspects" [item]="aspect.config">
 		<character-aspect [aspect]="aspect"></character-aspect>
 	</gridster-item>
