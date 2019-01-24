@@ -14,6 +14,7 @@ export class ChatRoom implements ChatRoomData {
 	readonly chatType: ChatType;
 
 	public editable: boolean = true;
+	public readonly isNew: boolean;
 
 	static readonly NEW_CHAT = 'New Chat';
 
@@ -23,6 +24,7 @@ export class ChatRoom implements ChatRoomData {
 		}
 
 		this._id = data._id;
+		this.isNew = this._id === ChatRoom.NEW_CHAT;
 		this.chatType = data.chatType;
 		this._userIds = data.userIds;
 		this._userIds.sort();

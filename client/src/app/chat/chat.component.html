@@ -24,10 +24,10 @@
 							<ng-container *ngFor="let userId of activeChatRoom.userIds">
 								<mat-chip *ngIf="userId !== userProfileService.userId"
 								          [selectable]="true"
-								          [removable]="true"
+								          [removable]="activeChatRoom.isNew"
 								          (removed)="removeUser(userId)">
 									{{userId | userIdToUsername}}
-									<mat-icon matChipRemove>cancel</mat-icon>
+									<mat-icon matChipRemove *ngIf="activeChatRoom.isNew">cancel</mat-icon>
 								</mat-chip>
 							</ng-container>
 							<input placeholder="Users in chat" #chipInput
@@ -36,7 +36,8 @@
 							       [matChipInputFor]="matChipList"
 							       [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
 							       [matChipInputAddOnBlur]="true"
-							       (matChipInputTokenEnd)="autoCompleteInput($event)">
+							       (matChipInputTokenEnd)="autoCompleteInput($event)"
+										 [disabled]="!activeChatRoom.isNew">
 						</mat-chip-list>
 						<mat-autocomplete #auto="matAutocomplete" (optionSelected)="addUserToChatRoom($event.option.viewValue)">
 							<mat-option *ngFor="let friend of filteredFriends | async" [value]="friend.username">{{friend.username}}</mat-option>
