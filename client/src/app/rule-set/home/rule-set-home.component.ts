@@ -20,6 +20,8 @@ import { NewDamageTypeDialogComponent } from './dialog/new-damage-type-dialog.co
 import { DamageTypeData } from '../../../../../shared/types/rule-set/damage-type.data';
 import { SelectFriendsComponent } from '../../social/select-friends/select-friends.component';
 import { UserProfile } from '../../types/userProfile';
+import { NewConditionDialogComponent } from './dialog/new-condition-dialog.component';
+import { ConditionData } from '../../../../../shared/types/rule-set/condition.data';
 
 @Component({
 	selector: 'rule-set-home',
@@ -51,6 +53,8 @@ export class RuleSetHomeComponent implements OnInit {
 	private npcDataSource: SubjectDataSource<NpcData>;
 	public npcColumns = ['label', 'sheet', 'options'];
 
+	public conditionsCard: DashboardCard;
+
 	public damageTypesCard: DashboardCard;
 
 	constructor(private activatedRoute: ActivatedRoute,
@@ -64,12 +68,12 @@ export class RuleSetHomeComponent implements OnInit {
 		this.adminDataSource = new SubjectDataSource(this.adminSubject);
 
 		this.configCard = {
-			title: 'Rule Set Config'
+			label: 'Rule Set Config'
 		};
 		this.adminsCard = {
 			menuOptions: [
 				{
-					title: 'Add Admin',
+					label: 'Add Admin',
 					function: this.addAdmins
 				}
 			]
@@ -77,7 +81,7 @@ export class RuleSetHomeComponent implements OnInit {
 		this.characterSheetCard = {
 			menuOptions: [
 				{
-					title: 'New Character Sheet',
+					label: 'New Character Sheet',
 					function: this.newCharacterSheet
 				}
 			]
@@ -85,16 +89,25 @@ export class RuleSetHomeComponent implements OnInit {
 		this.npcCard = {
 			menuOptions: [
 				{
-					title: 'Create NPC',
+					label: 'Create NPC',
 					function: this.createNPC
 				}
 			]
 		};
-		this.damageTypesCard = {
-			title: 'Damage Types',
+		this.conditionsCard = {
+			label: 'Conditions',
 			menuOptions: [
 				{
-					title: 'New Damage Type',
+					label: 'Add Condition',
+					function: this.openNewConditionDialog
+				}
+			]
+		};
+		this.damageTypesCard = {
+			label: 'Damage Types',
+			menuOptions: [
+				{
+					label: 'New Damage Type',
 					function: this.openNewDamageTypeDialog
 				}
 			]
@@ -189,6 +202,16 @@ export class RuleSetHomeComponent implements OnInit {
 		}
 	}
 
+	public removeCondition(condition: ConditionData): void {
+		for (let i = 0; i < this.ruleSet.conditions.length; i++) {
+			if (condition.name === this.ruleSet.conditions[i].name) {
+				this.ruleSet.conditions.splice(i, 1);
+				this.ruleSetRepository.setConditions(this.ruleSetId, this.ruleSet.conditions).subscribe();
+				return;
+			}
+		}
+	}
+
 	private getNPCs(): void {
 		this.ruleSetRepository.getNpcs(this.ruleSetId).pipe(map((npcs: NpcData[]) => {
 			for (let npc of npcs) {
@@ -233,6 +256,24 @@ export class RuleSetHomeComponent implements OnInit {
 				if (unique) {
 					this.ruleSet.damageTypes.push(damageType);
 					this.ruleSetRepository.setDamageTypes(this.ruleSetId, this.ruleSet.damageTypes).subscribe();
+				}
+			}
+		});
+	};
+
+	private openNewConditionDialog = () => {
+		this.dialog.open(NewConditionDialogComponent).afterClosed().pipe(first()).subscribe((condition: ConditionData) => {
+			if (condition) {
+				let unique = true;
+				for (let type of this.ruleSet.conditions) {
+					if (type.name === condition.name) {
+						unique = false;
+						break;
+					}
+				}
+				if (unique) {
+					this.ruleSet.conditions.push(condition);
+					this.ruleSetRepository.setConditions(this.ruleSetId, this.ruleSet.conditions).subscribe();
 				}
 			}
 		});

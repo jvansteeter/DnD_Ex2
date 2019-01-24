@@ -1,0 +1,25 @@
+:host {
+	display: flex;
+	flex-direction: column;
+}
+
+.icon-selector {
+	overflow-y: auto;
+	width: 14vw;
+	height: 30vh;
+}
+
+.icon-button {
+	padding: 0 0;
+	min-width: 0;
+	width: 36px;
+	margin: 3px;
+	border: 1px solid #dedede;
+	border-radius: 5px
+}
+
+.selected-button {
+	background-color: #aab1de;
+	border-color: #5061bb;
+}
+

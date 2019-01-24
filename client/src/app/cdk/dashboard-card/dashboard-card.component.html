@@ -1,14 +1,14 @@
 <mat-card class="dashboard-card">
 	<mat-card-header *ngIf="dashboardCard">
 		<mat-card-title>
-			<ng-container *ngIf="dashboardCard.title">{{dashboardCard.title}}</ng-container>
+			<ng-container *ngIf="dashboardCard.label">{{dashboardCard.label}}</ng-container>
 			<ng-container *ngIf="dashboardCard.menuOptions">
 				<button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
 					<mat-icon>more_vert</mat-icon>
 				</button>
 				<mat-menu #menu="matMenu" xPosition="before">
 					<button mat-menu-item *ngFor="let option of dashboardCard.menuOptions"
-									(click)="option.function()">{{ option.title }}</button>
+									(click)="option.function()">{{ option.label }}</button>
 				</mat-menu>
 			</ng-container>
 		</mat-card-title>

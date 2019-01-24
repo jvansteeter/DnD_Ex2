@@ -64,11 +64,11 @@ export class HomeComponent implements OnInit {
 		this.ruleSetCard = {
 			menuOptions: [
 				{
-					title: 'New Rule Set',
+					label: 'New Rule Set',
 					function: this.newRuleSet
 				},
 				{
-					title: 'Import from file',
+					label: 'Import from file',
 					function: this.importRuleSet
 				},
 			]
@@ -76,7 +76,7 @@ export class HomeComponent implements OnInit {
 		this.campaignCard = {
 			menuOptions: [
 				{
-					title: 'New Campaign',
+					label: 'New Campaign',
 					function: this.newCampaign
 				}
 			]
@@ -84,7 +84,7 @@ export class HomeComponent implements OnInit {
 		this.friendsCard = {
 			menuOptions: [
 				{
-					title: 'Find Friend',
+					label: 'Find Friend',
 					function: this.openFriendInviteDialog
 				}
 			]

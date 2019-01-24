@@ -7,6 +7,8 @@
 				<div class="ruleSet-config">
 					<mat-slide-toggle color="primary" checked disabled>Light & Vision</mat-slide-toggle>
 					<mat-slide-toggle color="primary" (click)="changeModulesConfig()"
+					                  [(ngModel)]="ruleSet.modulesConfig.conditions">Conditions</mat-slide-toggle>
+					<mat-slide-toggle color="primary" (click)="changeModulesConfig()"
 					                  [(ngModel)]="ruleSet.modulesConfig.damageTypes">Damage Types
 					</mat-slide-toggle>
 					<mat-slide-toggle color="primary" (click)="changeModulesConfig()" *ngIf="ruleSet.modulesConfig.damageTypes"
@@ -18,8 +20,6 @@
 					<mat-slide-toggle color="primary" (click)="changeModulesConfig()"
 					                  [(ngModel)]="ruleSet.modulesConfig.characterAbilities">Character Abilities
 					</mat-slide-toggle>
-					<mat-slide-toggle color="primary" (click)="changeModulesConfig()"
-													  [(ngModel)]="ruleSet.modulesConfig.conditions">Conditions</mat-slide-toggle>
 				</div>
 			</dashboard-card>
 		</mat-grid-tile>
@@ -93,6 +93,15 @@
 					<mat-header-row *matHeaderRowDef="npcColumns"></mat-header-row>
 					<mat-row class="clickable-row" *matRowDef="let npc; columns: npcColumns"></mat-row>
 				</mat-table>
+			</dashboard-card>
+		</mat-grid-tile>
+		<!--Conditions-->
+		<mat-grid-tile [colspan]="1" [rowspan]="1" *ngIf="ruleSet.modulesConfig.conditions">
+			<dashboard-card [dashboardCard]="conditionsCard" class="damage-types">
+				<div *ngFor="let condition of ruleSet.conditions" class="damage-type" [matTooltip]="condition.description">
+					<mat-icon [style.color]="condition.color" class="type-icon">{{condition.icon}}</mat-icon>{{condition.name}}
+					<button mat-icon-button (click)="removeCondition(condition)"><mat-icon>close</mat-icon></button>
+				</div>
 			</dashboard-card>
 		</mat-grid-tile>
 		<!--Damage Types-->

@@ -25,6 +25,7 @@ import { NewCharacterDialogComponent } from './home/dialog/new-character-dialog.
 import { NewDamageTypeDialogComponent } from './home/dialog/new-damage-type-dialog.component';
 import { ColorPickerModule } from 'ngx-color-picker';
 import { SocialModule } from '../social/social.module';
+import { NewConditionDialogComponent } from './home/dialog/new-condition-dialog.component';
 
 @NgModule({
 	imports: [
@@ -53,6 +54,7 @@ import { SocialModule } from '../social/social.module';
 		NewCharacterDialogComponent,
 		RuleSetSelectorComponent,
 		NewDamageTypeDialogComponent,
+		NewConditionDialogComponent,
 	],
 	providers: [
 		RuleSetRepository,
@@ -66,6 +68,7 @@ import { SocialModule } from '../social/social.module';
 		NewCharacterSheetDialogComponent,
 		NewCharacterDialogComponent,
 		NewDamageTypeDialogComponent,
+		NewConditionDialogComponent,
 	]
 })
 export class RuleSetModule {

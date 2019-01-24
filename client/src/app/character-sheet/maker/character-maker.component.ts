@@ -60,10 +60,10 @@ export class CharacterMakerComponent implements OnInit, AfterViewInit {
 		this.characterService.init();
 		this.characterInterfaceFactory.setCharacterInterface(this.characterService);
 		this.characterToolTipCard = {
-			title: 'Character Tooltip Preview',
+			label: 'Character Tooltip Preview',
 			menuOptions: [
 				{
-					title: 'Add Aspect to tooltip',
+					label: 'Add Aspect to tooltip',
 					function: this.addTooltipAspect
 				}
 			]

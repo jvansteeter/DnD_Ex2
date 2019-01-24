@@ -1,4 +1,4 @@
 export interface DashboardCardOption {
-  title: string;
+  label: string;
   function: Function;
 }

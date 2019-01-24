@@ -5,6 +5,7 @@ import { CharacterSheetData } from '../../../../shared/types/rule-set/character-
 import { RuleSetData } from '../../../../shared/types/rule-set/rule-set.data';
 import { RuleSetModulesConfigData } from '../../../../shared/types/rule-set/rule-set-modules-config.data';
 import { DamageTypeData } from '../../../../shared/types/rule-set/damage-type.data';
+import { ConditionData } from '../../../../shared/types/rule-set/condition.data';
 
 @Injectable()
 export class RuleSetRepository {
@@ -58,6 +59,14 @@ export class RuleSetRepository {
 			damageTypes: damageTypes,
 		};
 		return this.http.post<void>('/api/ruleset/damageTypes', data);
+	}
+
+	public setConditions(ruleSetId: string, conditions: ConditionData[]): Observable<void> {
+		const data = {
+			ruleSetId: ruleSetId,
+			conditions: conditions,
+		};
+		return this.http.post<void>('/api/ruleset/conditions', data);
 	}
 
 	public addAdmins(ruleSetId: string, adminUserIds: string[]): Observable<void> {

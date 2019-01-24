@@ -73,7 +73,7 @@ export class CampaignComponent implements OnInit, OnDestroy {
 		this.encountersCard = {
 			menuOptions: [
 				{
-					title: 'New Encounter',
+					label: 'New Encounter',
 					function: this.newEncounter
 				}
 			]
@@ -82,7 +82,7 @@ export class CampaignComponent implements OnInit, OnDestroy {
 		this.membersCard = {
 			menuOptions: [
 				{
-					title: 'Invite Friends',
+					label: 'Invite Friends',
 					function: this.inviteFriends
 				}
 			]
@@ -91,7 +91,7 @@ export class CampaignComponent implements OnInit, OnDestroy {
 		this.charactersCard = {
 			menuOptions: [
 				{
-					title: 'Create New Character',
+					label: 'Create New Character',
 					function: this.createCharacter
 				}
 			]

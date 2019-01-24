@@ -18,6 +18,7 @@ import { UserRuleSetModel } from '../db/models/user-ruleSet.model';
 import { UserModel } from '../db/models/user.model';
 import { UserRepository } from '../db/repositories/user.repository';
 import { UserData } from '../../../shared/types/user-data';
+import { ConditionData } from '../../../shared/types/rule-set/condition.data';
 
 export class RuleSetService {
 	private ruleSetRepo: RuleSetRepository;
@@ -133,6 +134,12 @@ export class RuleSetService {
 	public async setDamageTypes(userId: string, ruleSetId: string, damageTypes: DamageTypeData[]): Promise<void> {
 		let ruleSet: RuleSetModel = await this.ruleSetRepo.findById(ruleSetId);
 		await ruleSet.setDamageTypes(damageTypes);
+		return;
+	}
+
+	public async setConditions(userId: string, ruleSetId: string, conditions: ConditionData[]): Promise<void> {
+		let ruleSet: RuleSetModel = await this.ruleSetRepo.findById(ruleSetId);
+		await ruleSet.setConditions(conditions);
 		return;
 	}
 
