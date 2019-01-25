@@ -1,0 +1,21 @@
+<span [style.font-size.px]="aspect.fontSize">Conditions</span>
+<div *ngFor="let condition of conditions; let i = index;">
+	<mat-icon [style.color]="condition.color">{{condition.icon}}</mat-icon>
+	{{condition.name}}
+	<button mat-icon-button (click)="removeCondition(i)">
+		<mat-icon>close</mat-icon>
+	</button>
+</div>
+<mat-form-field>
+	<input matInput placeholder="Add Condition" [matAutocomplete]="auto" />
+	<mat-autocomplete #auto="matAutocomplete">
+		<mat-option *ngFor=""></mat-option>
+	</mat-autocomplete>
+</mat-form-field>
+<mat-menu #options>
+	<div class="changeFontSize" (click)="stopClickPropagate($event)">
+		<mat-form-field>
+			<input matInput type="number" placeholder="Label Font Size" [(ngModel)]="aspect.fontSize">
+		</mat-form-field>
+	</div>
+</mat-menu>

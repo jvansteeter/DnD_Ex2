@@ -11,7 +11,8 @@ export enum AspectType {
 	BOOLEAN_LIST = 'BOOLEAN_LIST',
 	TEXT_LIST = 'TEXT_LIST',
 	CATEGORICAL = 'CATEGORICAL',
-	FUNCTION = 'FUNCTION'
+	FUNCTION = 'FUNCTION',
+	CONDITIONS = 'CONDITIONS',
 }
 
 export class Aspect implements AspectData {

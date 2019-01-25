@@ -31,7 +31,6 @@ import { CheckboxComponent } from './shared/subcomponents/checkbox/checkbox.comp
 import { TextComponent } from './shared/subcomponents/text/text.component';
 import { AddComponentComponent } from './maker/dialog/add-component.component';
 import { CharacterMakerComponent } from './maker/character-maker.component';
-import { SubComponent } from './shared/subcomponents/sub-component';
 import { CharacterMakerService } from './maker/character-maker.service';
 import { CharacterSheetService } from './sheet/character-sheet.service';
 import { CharacterInterfaceFactory } from './shared/character-interface.factory';
@@ -47,6 +46,7 @@ import { CharacterRepository } from '../repositories/character.repository';
 import { CurrentMaxComponent } from './shared/subcomponents/currentMax/current-max.component';
 import { GridsterModule } from 'angular-gridster2';
 import { RuleSetService } from '../data-services/ruleSet.service';
+import { ConditionsComponent } from './shared/subcomponents/conditions/conditions.component';
 
 @NgModule({
     imports: [
@@ -78,7 +78,6 @@ import { RuleSetService } from '../data-services/ruleSet.service';
     ],
     declarations: [
         CharacterSheetComponent,
-        SubComponent,
         CharacterMakerComponent,
         AddComponentComponent,
         TextComponent,
@@ -96,6 +95,7 @@ import { RuleSetService } from '../data-services/ruleSet.service';
 		    CharacterTooltipComponent,
 		    AddTooltipAspectComponent,
 		    CurrentMaxComponent,
+		    ConditionsComponent,
     ],
     providers: [
         CharacterSheetRepository,

@@ -1,7 +1,6 @@
 import { Component, Input, ViewChild } from '@angular/core';
 import { SubComponentChild } from '../sub-component-child';
 import { Aspect } from '../../aspect';
-import { SubComponent } from '../sub-component';
 import { CharacterMakerService } from '../../../maker/character-maker.service';
 import { MatMenu } from '@angular/material';
 
@@ -13,10 +12,6 @@ import { MatMenu } from '@angular/material';
 })
 export class CheckboxComponent implements SubComponentChild {
     @Input() aspect: Aspect;
-    label: string;
-    required: boolean;
-    width: number;
-    height: number;
     hasOptions = false;
     value: boolean;
 

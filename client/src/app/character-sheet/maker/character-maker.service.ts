@@ -358,7 +358,7 @@ export class CharacterMakerService extends IsReadyService implements CharacterIn
 		let conditionsAspect = this.getAspectFromMapByLabel(RuleModuleAspects.CONDITIONS);
 		if (this.ruleSetService.hasConditions) {
 			if (isUndefined(conditionsAspect)) {
-				conditionsAspect = new Aspect(RuleModuleAspects.CONDITIONS, AspectType.TEXT, true, true);
+				conditionsAspect = new Aspect(RuleModuleAspects.CONDITIONS, AspectType.CONDITIONS, true, true);
 				aspectsToInit.push(conditionsAspect);
 			}
 			this.ruleModuleAspects.push(conditionsAspect);

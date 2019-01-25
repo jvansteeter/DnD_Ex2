@@ -17,5 +17,6 @@
 		<characterMaker-categoryComponent *ngSwitchCase="aspectType.CATEGORICAL" [aspect]="aspect" #child></characterMaker-categoryComponent>
 		<characterMaker-functionComponent *ngSwitchCase="aspectType.FUNCTION" [aspect]="aspect" #child></characterMaker-functionComponent>
 		<characterMaker-currentMax *ngSwitchCase="aspectType.CURRENT_MAX" [aspect]="aspect" #child></characterMaker-currentMax>
+		<aspect-conditions *ngSwitchCase="aspectType.CONDITIONS" [aspect]="aspectType" #child></aspect-conditions>
 	</ng-container>
 </mat-card>
