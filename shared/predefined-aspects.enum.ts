@@ -1,4 +1,4 @@
-export enum RequiredAspects {
+export enum RuleModuleAspects {
 	VISION = 'Vision',
 	DARK_VISION = 'Dark Vision',
 	SPEED = 'Speed',

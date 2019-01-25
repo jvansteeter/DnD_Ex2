@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AddComponentComponent } from './dialog/add-component.component';
 import { CharacterMakerService } from './character-maker.service';
 import { MatDialog } from '@angular/material';
@@ -9,17 +9,15 @@ import { Aspect, AspectType } from '../shared/aspect';
 import { CharacterTooltipComponent } from '../character-tooltip/character-tooltip.component';
 import { DashboardCard } from '../../cdk/dashboard-card/dashboard-card';
 import { AddTooltipAspectComponent } from "./dialog/add-tooltip-aspect.component";
-import { AspectData } from '../../../../../shared/types/rule-set/aspect.data';
-import { PredefinedAspects, RequiredAspects } from '../../../../../shared/required-aspects.enum';
 import { CharacterAspectComponent } from '../shared/character-aspect.component';
-import { RuleSetService } from '../../data-services/ruleSet.service';
+import { PredefinedAspects } from '../../../../../shared/predefined-aspects.enum';
 
 @Component({
 	selector: 'character-maker',
 	templateUrl: 'character-maker.component.html',
 	styleUrls: ['character-maker.component.scss']
 })
-export class CharacterMakerComponent implements OnInit, AfterViewInit {
+export class CharacterMakerComponent implements OnInit, AfterViewInit, OnDestroy {
 	private characterSheetId: string;
 
 	@ViewChild('characterTooltip')
@@ -87,6 +85,10 @@ export class CharacterMakerComponent implements OnInit, AfterViewInit {
 			this.characterSheetId = params['characterSheetId'];
 			this.characterService.setCharacterSheetId(this.characterSheetId);
 		});
+	}
+
+	public ngOnDestroy(): void {
+		this.characterService.unInit();
 	}
 
 	public openAddDialog(): void {

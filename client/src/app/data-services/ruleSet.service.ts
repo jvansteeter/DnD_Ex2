@@ -39,6 +39,10 @@ export class RuleSetService extends IsReadyService {
 		this.init();
 	}
 
+	get hasLightAndVision(): boolean {
+		return this.ruleSet.modulesConfig.lightAndVision;
+	}
+
 	get hasConditions(): boolean {
 		return this.ruleSet.modulesConfig.conditions;
 	}

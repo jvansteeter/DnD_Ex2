@@ -25,6 +25,7 @@ import { TextListComponent } from "../shared/subcomponents/text-list/text-list.c
 import { IsReadyService } from '../../utilities/services/isReady.service';
 import { mergeMap } from 'rxjs/operators';
 import { RuleSetService } from '../../data-services/ruleSet.service';
+import { RuleModuleAspects } from '../../../../../shared/predefined-aspects.enum';
 
 @Injectable()
 export class CharacterMakerService extends IsReadyService implements CharacterInterfaceService {
@@ -120,6 +121,12 @@ export class CharacterMakerService extends IsReadyService implements CharacterIn
 				this.setReady(true);
 			}
 		});
+	}
+
+	public unInit(): void {
+		super.unInit();
+		delete this.aspectMap;
+		delete this.aspectComponents;
 	}
 
 	public setCharacterSheetId(id: string): void {
@@ -312,7 +319,66 @@ export class CharacterMakerService extends IsReadyService implements CharacterIn
 	}
 
 	private initRuleModuleAspects(): void {
-		console.log('init rule module aspects')
+		this.ruleModuleAspects = [];
+		const aspectsToInit = [];
+
+		// Speed
+		let speedAspect = this.getAspectFromMapByLabel(RuleModuleAspects.SPEED);
+		if (isUndefined(speedAspect)) {
+			speedAspect = new Aspect(RuleModuleAspects.SPEED, AspectType.NUMBER, true, true);
+			aspectsToInit.push(speedAspect)
+		}
+		this.ruleModuleAspects.push(speedAspect);
+
+		// Light & Vision
+		let visionAspect = this.getAspectFromMapByLabel(RuleModuleAspects.VISION);
+		let darkVisionAspect = this.getAspectFromMapByLabel(RuleModuleAspects.DARK_VISION);
+		if (this.ruleSetService.hasLightAndVision) {
+			if (isUndefined(visionAspect)) {
+				visionAspect = new Aspect(RuleModuleAspects.VISION, AspectType.NUMBER, true, true);
+				aspectsToInit.push(visionAspect);
+			}
+			if (isUndefined(darkVisionAspect)) {
+				darkVisionAspect = new Aspect(RuleModuleAspects.DARK_VISION, AspectType.BOOLEAN, true, true);
+				aspectsToInit.push(darkVisionAspect);
+			}
+			this.ruleModuleAspects.push(visionAspect);
+			this.ruleModuleAspects.push(darkVisionAspect);
+		}
+		else {
+			if (!isUndefined(visionAspect) && visionAspect.isPredefined) {
+				this.aspectMap.delete(visionAspect.config);
+			}
+			if (!isUndefined(darkVisionAspect) && darkVisionAspect.isPredefined) {
+				this.aspectMap.delete(visionAspect.config);
+			}
+		}
+
+		// Conditions
+		let conditionsAspect = this.getAspectFromMapByLabel(RuleModuleAspects.CONDITIONS);
+		if (this.ruleSetService.hasConditions) {
+			if (isUndefined(conditionsAspect)) {
+				conditionsAspect = new Aspect(RuleModuleAspects.CONDITIONS, AspectType.TEXT, true, true);
+				aspectsToInit.push(conditionsAspect);
+			}
+			this.ruleModuleAspects.push(conditionsAspect);
+		}
+		else {
+			if (!isUndefined(conditionsAspect) && conditionsAspect.isPredefined) {
+				this.aspectMap.delete(conditionsAspect.config);
+			}
+		}
+
+		this.initAspects(aspectsToInit);
+	}
+
+	private getAspectFromMapByLabel(label: string): Aspect {
+		for (let aspect of this.aspectMap.values()) {
+			if (aspect.label.toLowerCase() === label.toLowerCase()) {
+				return aspect;
+			}
+		}
+		return undefined;
 	}
 
 	private resizeItem = (item: GridsterItem, itemComponent: GridsterItemComponentInterface) => {

@@ -2,8 +2,8 @@ import { XyPair } from "../../../../shared/types/encounter/board/xy-pair";
 import { isNullOrUndefined, isUndefined } from 'util';
 import { PlayerData } from '../../../../shared/types/encounter/player.data';
 import { CharacterData } from '../../../../shared/types/character.data';
-import { PredefinedAspects, RequiredAspects } from '../../../../shared/required-aspects.enum';
 import { ConcurrentBoardObject } from './concurrent-board-object';
+import { PredefinedAspects, RuleModuleAspects } from '../../../../shared/predefined-aspects.enum';
 
 export class Player extends ConcurrentBoardObject implements PlayerData {
 	_id: string;
@@ -67,7 +67,7 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 			this._maxHp = 1;
 			this._hp = 1;
 		}
-		this._speed = playerData.characterData.values[RequiredAspects.SPEED];
+		this._speed = playerData.characterData.values[RuleModuleAspects.SPEED];
 		this.encounterId = playerData.encounterId;
 		this.characterData = playerData.characterData;
 		this._initiative = playerData.initiative;
