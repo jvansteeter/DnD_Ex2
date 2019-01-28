@@ -3,6 +3,7 @@ import { IsReadyService } from '../utilities/services/isReady.service';
 import { RuleSetRepository } from '../repositories/rule-set.repository';
 import { RuleSetData } from '../../../../shared/types/rule-set/rule-set.data';
 import { isUndefined } from "util";
+import { ConditionData } from '../../../../shared/types/rule-set/condition.data';
 
 @Injectable()
 export class RuleSetService extends IsReadyService {
@@ -45,5 +46,12 @@ export class RuleSetService extends IsReadyService {
 
 	get hasConditions(): boolean {
 		return this.ruleSet.modulesConfig.conditions;
+	}
+
+	get conditions(): ConditionData[] {
+		if (isUndefined(this.ruleSet)) {
+			return [];
+		}
+		return this.ruleSet.conditions;
 	}
 }

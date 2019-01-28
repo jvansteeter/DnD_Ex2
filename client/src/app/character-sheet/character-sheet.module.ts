@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { CharacterSheetComponent } from './sheet/character-sheet.component';
 import { CharacterSheetRepository } from '../repositories/character-sheet.repository';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import {
 	MatAutocompleteModule,
@@ -51,6 +51,7 @@ import { ConditionsComponent } from './shared/subcomponents/conditions/condition
 @NgModule({
     imports: [
         FormsModule,
+		    ReactiveFormsModule,
         BrowserModule,
         HttpClientModule,
         MatCardModule,

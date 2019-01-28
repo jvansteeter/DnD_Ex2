@@ -9,6 +9,7 @@ import { CharacterRepository } from '../../repositories/character.repository';
 import { CharacterAspectComponent } from '../shared/character-aspect.component';
 import { CompactType, DisplayGrid, GridsterConfig, GridType } from "angular-gridster2";
 import { IsReadyService } from '../../utilities/services/isReady.service';
+import { RuleSetService } from '../../data-services/ruleSet.service';
 
 @Injectable()
 export class CharacterSheetService extends IsReadyService implements CharacterInterfaceService {
@@ -20,7 +21,8 @@ export class CharacterSheetService extends IsReadyService implements CharacterIn
 	private characterData: CharacterData;
 	private aspectComponents: Map<string, CharacterAspectComponent>;
 
-	constructor(private characterRepo: CharacterRepository) {
+	constructor(private characterRepo: CharacterRepository,
+	            private ruleSetService: RuleSetService) {
 		super();
 	}
 
@@ -103,6 +105,7 @@ export class CharacterSheetService extends IsReadyService implements CharacterIn
 	public setCharacterData(data: CharacterData): void {
 		this.characterData = data;
 		this.characterSheet = this.characterData.characterSheet;
+		this.ruleSetService.setRuleSetId(this.characterData.ruleSetId);
 		if (this.characterData.characterSheet.aspects) {
 			this.characterData.characterSheet.aspects.forEach((aspectObj: AspectData) => {
 				let aspect = new Aspect(aspectObj.label, aspectObj.aspectType, aspectObj.required, aspectObj.isPredefined);
