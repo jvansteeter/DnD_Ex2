@@ -1,5 +1,5 @@
 export enum NotationVisibility {
-    FULL,
-    PARTIAL,
-    OFF
+    FULL = 'FULL',
+    PARTIAL = 'PARTIAL',
+    OFF = 'OFF',
 }

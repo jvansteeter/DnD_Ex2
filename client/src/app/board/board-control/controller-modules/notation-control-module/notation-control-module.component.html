@@ -22,15 +22,15 @@
         <!--EDIT NOTATIONS DIV-->
         <div *ngIf="boardStateService.isEditingNotation" style="display: flex; flex-direction: column; flex: 1">
 
-            <div style="display: flex; margin-top: 8px;">
+            <div style="display: flex; margin-top: 8px; align-items: center">
                 <button (click)="openIconDialog()"
                         class="strokeButtonOverride"
                         [ngStyle]="{'color': notationService.getActiveNotation().getRgbCode()}"
                         mat-stroked-button>
                     <mat-icon>{{notationService.getActiveNotation().iconTag}}</mat-icon>
                 </button>
-                <input matInput placeholder="Notation Id" class="inputOverride"
-                       [(ngModel)]="notationService.getActiveNotation().name" style="margin-left: 5px">
+                <input placeholder="Notation Id" class="app-input"
+                       [(ngModel)]="notationService.getActiveNotation().name">
             </div>
 
             <div style="display: block; margin: auto;">

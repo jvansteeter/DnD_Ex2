@@ -119,7 +119,9 @@ export class MqService {
 						break;
 					}
 					case EncounterCommandType.NOTATION_UPDATE: {
-						this.notationRepo.updateNotation(JSON.parse(command.body.data) as NotationData);
+						if (command.body.data) {
+							this.notationRepo.updateNotation(JSON.parse(command.body.data) as NotationData);
+						}
 						break;
 					}
 					case EncounterCommandType.REMOVE_NOTATION: {

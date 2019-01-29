@@ -1,4 +1,4 @@
-import {XyPair} from "../../../../../../shared/types/encounter/board/xy-pair";
+import { XyPair } from "../../../../../../shared/types/encounter/board/xy-pair";
 import { NotationVisibility } from "../../../../../../shared/types/encounter/board/notation-visibility";
 import { ColorStatics } from "../../statics/color-statics";
 import { TextNotation } from "./text-notation";
@@ -78,7 +78,6 @@ export class BoardNotationGroup extends ConcurrentBoardObject implements Notatio
 				this.visibilityState = NotationVisibility.FULL;
 				break;
 		}
-		this.emitChange();
 	}
 
 	public getRgbCode(): string {
@@ -86,7 +85,14 @@ export class BoardNotationGroup extends ConcurrentBoardObject implements Notatio
 	}
 
 	public getRgbaCode() {
-		return 'rgba(' + this.red + ', ' + this.green + ', ' + this.blue + ', ' + this.alpha + ')';
+		let alpha = this.alpha;
+		if (this.visibilityState === NotationVisibility.PARTIAL) {
+			alpha = alpha / 2;
+		}
+		else if (this.visibilityState === NotationVisibility.OFF) {
+			alpha = 0;
+		}
+		return 'rgba(' + this.red + ', ' + this.green + ', ' + this.blue + ', ' + alpha + ')';
 	}
 
 	public setRgba(r: number, g: number, b: number, a: number) {
@@ -205,7 +211,6 @@ export class BoardNotationGroup extends ConcurrentBoardObject implements Notatio
 			textElements: this.textElements,
 			isVisible: this.isVisible,
 			isLocked: this.isLocked,
-			visibilityState: this.visibilityState,
 			red: this.red,
 			green: this.green,
 			blue: this.blue,

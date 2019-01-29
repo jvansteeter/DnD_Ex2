@@ -18,6 +18,7 @@ import { CellTarget } from '../board/shared/cell-target';
 import { EncounterConfigData } from '../../../../shared/types/encounter/encounter-config.data';
 import { EncounterTeamsData } from '../../../../shared/types/encounter/encounter-teams.data';
 import { BoardTeamsService } from '../board/services/board-teams.service';
+import { isUndefined } from 'util';
 
 @Injectable()
 export class EncounterConcurrencyService extends IsReadyService {
@@ -209,7 +210,9 @@ export class EncounterConcurrencyService extends IsReadyService {
 				break;
 			}
 			case EncounterCommandType.NOTATION_UPDATE: {
-				this.notationService.setNotation(JSON.parse(String(message.body.data)) as NotationData);
+				if (!isUndefined(message.body.data)) {
+					this.notationService.setNotation(JSON.parse(String(message.body.data)) as NotationData);
+				}
 				break;
 			}
 			case EncounterCommandType.REMOVE_NOTATION: {
