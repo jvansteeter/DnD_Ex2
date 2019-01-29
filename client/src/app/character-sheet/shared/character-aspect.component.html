@@ -1,4 +1,7 @@
-<div class="aspect-header" [style.display]="characterService.immutable ? 'none' : 'flex'">
+<div class="move-handle" [style.display]="characterService.immutable ? 'none' : 'flex'">
+	<mat-icon>reorder</mat-icon>
+</div>
+<div class="aspect-header" [style.display]="characterService.immutable ? 'none' : 'flex'" (mousedown)="$event.stopPropagation()">
 	<button *ngIf="hasOptions" mat-icon-button [matMenuTriggerFor]="options" class="aspect-options">
 		<mat-icon>settings</mat-icon>
 	</button>
@@ -6,7 +9,7 @@
 		<mat-icon>close</mat-icon>
 	</button>
 </div>
-<mat-card *ngIf="aspect" class="sub-component">
+<mat-card *ngIf="aspect" class="sub-component" (mousedown)="$event.stopPropagation()">
 	<ng-container [ngSwitch]="aspect.aspectType">
 		<characterMaker-textComponent *ngSwitchCase="aspectType.TEXT" [aspect]="aspect" #child></characterMaker-textComponent>
 		<characterMaker-textArea *ngSwitchCase="aspectType.TEXT_AREA" [aspect]="aspect" #child></characterMaker-textArea>

@@ -16,3 +16,11 @@
 	display: flex;
 	padding: 0;
 }
+
+.move-handle {
+	position: absolute;
+	left: 0;
+	z-index: 999;
+	background-color: lightgray;
+	cursor: move;
+}
