@@ -5,6 +5,13 @@ import { CharacterMakerService } from '../maker/character-maker.service';
 import { Aspect, AspectType } from '../shared/aspect';
 import { EncounterService } from '../../encounter/encounter.service';
 import { RightsService } from '../../data-services/rights.service';
+import { ConditionData } from '../../../../../shared/types/rule-set/condition.data';
+import { RuleSetService } from '../../data-services/ruleSet.service';
+import { FormControl } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
+import { isUndefined } from "util";
+import { RuleModuleAspects } from '../../../../../shared/predefined-aspects.enum';
 
 @Component({
 	selector: 'character-tooltip',
@@ -25,11 +32,42 @@ export class CharacterTooltipComponent {
 
 	private _playerId: string;
 
+	public filteredConditions: Observable<ConditionData[]>;
+	public addConditionControl = new FormControl();
+
 	constructor(private characterSheetRepo: CharacterSheetRepository,
 	            private characterService: CharacterMakerService,
 	            private encounterService: EncounterService,
 	            private rightsService: RightsService,
-	            ) {
+	            public ruleSetService: RuleSetService,
+	) {
+		this.filteredConditions = this.addConditionControl.valueChanges.pipe(
+				startWith(''),
+				map((value: string) => {
+					return this.filterConditions(value);
+				}));
+	}
+
+	private filterConditions(value: string): ConditionData[] {
+		if (isUndefined(value)) {
+			value = '';
+		}
+		const filterValue = value.toLowerCase();
+		return this.ruleSetService.conditions.filter((condition: ConditionData) => {
+			return (condition.name.toLowerCase().indexOf(filterValue) === 0 && !this.playerHasCondition(condition));
+		});
+	}
+
+	private playerHasCondition(condition: ConditionData): boolean {
+		const player = this.encounterService.getPlayerById(this._playerId);
+		const conditions: ConditionData[] = player.characterData.values[RuleModuleAspects.CONDITIONS];
+		for (let existingCondition of conditions) {
+			if (condition.name.toLowerCase() === existingCondition.name.toLowerCase()) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	public addAspect(aspect: Aspect, icon: string): void {
@@ -60,8 +98,7 @@ export class CharacterTooltipComponent {
 	public aspectValue(aspectLabel: string): string {
 		if (this.editable) {
 			return this.characterService.getAspectValue(aspectLabel);
-		}
-		else {
+		} else {
 			return this.encounterService.getAspectValue(this._playerId, aspectLabel);
 		}
 	}
@@ -69,8 +106,7 @@ export class CharacterTooltipComponent {
 	public changeAspectValue(aspectLabel: string, value: any): void {
 		if (this.editable) {
 			this.characterService.setAspectValue(aspectLabel, value);
-		}
-		else {
+		} else {
 			const player = this.encounterService.getPlayerById(this._playerId);
 			player.characterData.values[aspectLabel] = value;
 			player.emitChange();
@@ -81,8 +117,7 @@ export class CharacterTooltipComponent {
 		if (this.editable) {
 			const currentMaxValue = this.characterService.getAspectValue(aspectLabel);
 			currentMaxValue.current = value;
-		}
-		else {
+		} else {
 			const player = this.encounterService.getPlayerById(this._playerId);
 			player.characterData.values[aspectLabel].current = value;
 			player.emitChange();
@@ -93,12 +128,60 @@ export class CharacterTooltipComponent {
 		if (this.editable) {
 			const currentMaxValue = this.characterService.getAspectValue(aspectLabel);
 			currentMaxValue.max = value;
-		}
-		else {
+		} else {
 			const player = this.encounterService.getPlayerById(this._playerId);
 			player.characterData.values[aspectLabel].max = value;
 			player.emitChange();
 		}
+	}
+
+	public addCondition(aspectLabel: string, conditionName: string): void {
+		if (this.editable) {
+			const conditions: ConditionData[] = this.characterService.getAspectValue(aspectLabel);
+			for (let condition of this.ruleSetService.conditions) {
+				if (condition.name.toLowerCase() === conditionName.toLowerCase()) {
+					conditions.push(condition);
+					return;
+				}
+			}
+		}
+		else {
+			const player = this.encounterService.getPlayerById(this._playerId);
+			for (let condition of this.ruleSetService.conditions) {
+				if (condition.name.toLowerCase() === conditionName.toLowerCase()) {
+					player.characterData.values[aspectLabel].push(condition);
+					this.addConditionControl.setValue('');
+					player.emitChange();
+					return;
+				}
+			}
+		}
+	}
+
+	public removeCondition(aspectLabel: string, conditionName: string): void {
+		if (this.editable) {
+			const conditions: ConditionData[] = this.characterService.getAspectValue(aspectLabel);
+			for (let i = 0; i < conditions.length; i++) {
+				let condition = conditions[i];
+				if (conditionName.toLowerCase() === condition.name.toLowerCase()) {
+					conditions.splice(i, 1);
+					return;
+				}
+			}
+		} else {
+			const player = this.encounterService.getPlayerById(this._playerId);
+			const conditions: ConditionData[] = player.characterData.values[aspectLabel];
+			for (let i = 0; i < conditions.length; i++) {
+				if (conditionName.toLowerCase() === conditions[i].name.toLowerCase()) {
+					conditions.splice(i, 1);
+					player.emitChange();
+				}
+			}
+		}
+	}
+
+	public stopClickPropagate(event): void {
+		event.stopPropagation();
 	}
 
 	public startHover(index: number): void {
@@ -126,14 +209,17 @@ export class CharacterTooltipComponent {
 		this.currentMaxAdd = add;
 	}
 
+	public stopEditCurrentMax(): void {
+		this.editingIndex = -1;
+	}
+
 	public editCurrentMax(aspectLabel: string, value: number): void {
 		const player = this.encounterService.getPlayerById(this._playerId);
 		let aspectValue: number = +player.characterData.values[aspectLabel].current;
 
 		if (this.currentMaxAdd) {
 			aspectValue += value;
-		}
-		else {
+		} else {
 			aspectValue -= value;
 		}
 		this.changeCurrentAspectValue(aspectLabel, aspectValue);

@@ -13,6 +13,7 @@ import { CharacterRepository } from '../repositories/character.repository';
 import { CharacterData } from '../../../../shared/types/character.data';
 import { EncounterRepository } from '../repositories/encounter.repository';
 import { RightsService } from '../data-services/rights.service';
+import { RuleSetService } from '../data-services/ruleSet.service';
 
 @Injectable()
 export class CampaignPageService extends IsReadyService {
@@ -29,7 +30,8 @@ export class CampaignPageService extends IsReadyService {
 	            private characterRepo: CharacterRepository,
 	            private encounterRepo: EncounterRepository,
 	            private mqService: MqService,
-	            private rightsService: RightsService) {
+	            private rightsService: RightsService,
+	            private ruleSetService: RuleSetService) {
 		super(mqService);
 		this._encounterSubject = new BehaviorSubject<EncounterData[]>([]);
 		this._membersSubject = new BehaviorSubject<UserProfile[]>([]);
@@ -42,8 +44,8 @@ export class CampaignPageService extends IsReadyService {
 				this.getCampaignState().pipe(
 						tap(() => {
 							this.rightsService.setCampaignService(this);
+							this.ruleSetService.setRuleSetId(this.campaignState.ruleSetId);
 							this.observeCampaignUpdates();
-							// this.setReady(true);
 						}),
 						mergeMap(() => {
 							return this.updateEncountersList()

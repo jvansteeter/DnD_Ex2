@@ -1,5 +1,4 @@
 import {ComponentFactoryResolver, ComponentRef, Injectable, ViewContainerRef} from "@angular/core";
-import {NpcPopComponent} from "./npcPop/npc-pop.component";
 import {Player} from "../../encounter/player";
 import { CharacterPopComponent } from './character-pop/character-pop.component';
 

@@ -360,6 +360,10 @@ export class CharacterMakerService extends IsReadyService implements CharacterIn
 			if (isUndefined(conditionsAspect)) {
 				conditionsAspect = new Aspect(RuleModuleAspects.CONDITIONS, AspectType.CONDITIONS, true, true);
 				aspectsToInit.push(conditionsAspect);
+				this.characterSheet.tooltipConfig.aspects.push({
+					icon: 'warning',
+					aspect: conditionsAspect
+				});
 			}
 			this.ruleModuleAspects.push(conditionsAspect);
 		}

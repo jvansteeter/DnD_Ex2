@@ -14,7 +14,9 @@ export class CharacterSheetModel extends MongooseModel implements CharacterSheet
 		super({
 			ruleSetId: {type: String, required: true},
 			label: {type: String, required: true},
-			tooltipConfig: Object,
+			tooltipConfig: {type: Object, default: {
+				aspects: []
+			}},
 			rules: {type: Array, default: []},
 		});
 

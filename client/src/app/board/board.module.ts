@@ -34,7 +34,6 @@ import {BoardMapComponent} from './board-map/board-map.component';
 import {TokenRendererComponent} from './renderer/token-renderer/token-renderer.component';
 import {PopService} from "./pop/pop.service";
 import {PopRootComponent} from "./pop/pop-root.component";
-import {NpcPopComponent} from "./pop/npcPop/npc-pop.component";
 import {BoardTransformService} from './services/board-transform.service';
 import {BoardVisibilityService} from './services/board-visibility.service';
 import {BoardLightService} from './services/board-light.service';
@@ -80,7 +79,6 @@ import { RendererConsolidationService } from './renderer/renderer-consolidation.
         HighlightRendererComponent,
         TokenRendererComponent,
         VisibilityRendererComponent,
-        NpcPopComponent,
         NotationIconSelectorComponent,
         NotationColorSelectorComponent,
         AddPlayerDialogComponent,
@@ -135,7 +133,6 @@ import { RendererConsolidationService } from './renderer/renderer-consolidation.
 		    RendererConsolidationService,
     ],
     entryComponents: [
-        NpcPopComponent,
         NotationIconSelectorComponent,
         NotationColorSelectorComponent,
         NotationSettingsDialogComponent,

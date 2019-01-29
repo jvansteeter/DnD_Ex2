@@ -1,5 +1,4 @@
-import {Component, ComponentFactoryResolver, HostListener, OnInit, ViewChild, ViewContainerRef} from "@angular/core";
-import {NpcPopComponent} from "./npcPop/npc-pop.component";
+import {Component, ComponentFactoryResolver, OnInit, ViewChild, ViewContainerRef} from "@angular/core";
 import {PopService} from "./pop.service";
 
 @Component({

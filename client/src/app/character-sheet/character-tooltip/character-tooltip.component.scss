@@ -26,7 +26,7 @@
 	width: 50px;
 }
 
-button {
+.tooltip-button {
 	width: 24px;
 	height: 24px;
 	mat-icon {
@@ -62,4 +62,24 @@ input.current-max-input::-webkit-outer-spin-button,
 input.current-max-input::-webkit-inner-spin-button {
 	-webkit-appearance: none;
 	margin: 0;
+}
+
+.conditions-tooltip {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+}
+
+.add-condition-button {
+	margin-right: auto;
+}
+
+.condition-row {
+	width: 100%;
+	display: flex;
+	align-items: center;
+}
+
+.remove-condition-button {
+	margin-left: auto;
 }

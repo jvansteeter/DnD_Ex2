@@ -35,7 +35,8 @@ export class EncounterComponent implements OnInit, OnDestroy {
                 private boardLightService: BoardLightService,
                 private boardNotationService: BoardNotationService,
                 private boardTeamsService: BoardTeamsService,
-                private boardTraverseService: BoardTraverseService) {
+                private boardTraverseService: BoardTraverseService,
+                ) {
     }
 
     ngOnInit(): void {
