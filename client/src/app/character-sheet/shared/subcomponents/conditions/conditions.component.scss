@@ -7,13 +7,6 @@
 	flex-direction: column;
 }
 
-.add-condition {
-	position: absolute;
-	bottom: 1px;
-	width: 100%;
-	background: white;
-}
-
 .condition {
 	display: flex;
 	align-items: center;
@@ -25,5 +18,5 @@
 
 .conditions-container {
 	overflow-y: auto;
-	margin-bottom: 68px;
+	margin-bottom: 5px;
 }

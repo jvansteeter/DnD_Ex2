@@ -1,4 +1,22 @@
-<span [style.font-size.px]="aspect.fontSize">Conditions</span>
+<span [style.font-size.px]="aspect.fontSize">
+	<span>Conditions </span>
+	<button mat-icon-button color="primary" matTooltip="Add Condition" [matMenuTriggerFor]="addConditionMenu">
+		<mat-icon>add</mat-icon>
+	</button>
+	<mat-menu #addConditionMenu>
+	<div (click)="stopClickPropagate($event)">
+		<mat-form-field class="add-condition">
+			<input matInput placeholder="Add Condition" [matAutocomplete]="auto" [formControl]="autoCompleteControl"/>
+			<mat-autocomplete #auto="matAutocomplete" (optionSelected)="addCondition($event.option.value)">
+				<mat-option *ngFor="let condition of filteredConditions | async" [matTooltip]="condition.description" [value]="condition.name">
+					<mat-icon [style.color]="condition.color">{{condition.icon}}</mat-icon>
+					<span>{{condition.name}}</span>
+				</mat-option>
+			</mat-autocomplete>
+		</mat-form-field>
+	</div>
+</mat-menu>
+</span>
 <div class="conditions-container">
 	<div *ngFor="let condition of conditions; let i = index;" [matTooltip]="condition.description" class="condition">
 		<mat-icon [style.color]="condition.color">{{condition.icon}}</mat-icon>
@@ -8,15 +26,6 @@
 		</button>
 	</div>
 </div>
-<mat-form-field class="add-condition">
-	<input matInput placeholder="Add Condition" [matAutocomplete]="auto" [formControl]="autoCompleteControl"/>
-	<mat-autocomplete #auto="matAutocomplete" (optionSelected)="addCondition($event.option.value)">
-		<mat-option *ngFor="let condition of filteredConditions | async" [matTooltip]="condition.description" [value]="condition.name">
-			<mat-icon [style.color]="condition.color">{{condition.icon}}</mat-icon>
-			<span>{{condition.name}}</span>
-		</mat-option>
-	</mat-autocomplete>
-</mat-form-field>
 <mat-menu #options>
 	<div class="changeFontSize" (click)="stopClickPropagate($event)">
 		<mat-form-field>

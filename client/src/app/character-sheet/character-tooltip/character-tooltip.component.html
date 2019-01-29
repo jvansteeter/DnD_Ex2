@@ -48,7 +48,7 @@
 			<!--Conditions-->
 			<ng-container *ngSwitchCase="aspectType.CONDITIONS">
 				<div class="conditions-tooltip">
-					<button mat-icon-button color="primary" class="add-condition-button tooltip-button" [matMenuTriggerFor]="addConditionMenu">
+					<button mat-icon-button color="primary" class="add-condition-button tooltip-button" [matMenuTriggerFor]="addConditionMenu" *ngIf="editable || hasRights()">
 						<mat-icon>add</mat-icon>
 					</button>
 					<mat-menu #addConditionMenu>

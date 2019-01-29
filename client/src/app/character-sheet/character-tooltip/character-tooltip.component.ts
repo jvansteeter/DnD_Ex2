@@ -59,11 +59,13 @@ export class CharacterTooltipComponent {
 	}
 
 	private playerHasCondition(condition: ConditionData): boolean {
-		const player = this.encounterService.getPlayerById(this._playerId);
-		const conditions: ConditionData[] = player.characterData.values[RuleModuleAspects.CONDITIONS];
-		for (let existingCondition of conditions) {
-			if (condition.name.toLowerCase() === existingCondition.name.toLowerCase()) {
-				return true;
+		if (!this.editable) {
+			const player = this.encounterService.getPlayerById(this._playerId);
+			const conditions: ConditionData[] = player.characterData.values[RuleModuleAspects.CONDITIONS];
+			for (let existingCondition of conditions) {
+				if (condition.name.toLowerCase() === existingCondition.name.toLowerCase()) {
+					return true;
+				}
 			}
 		}
 
