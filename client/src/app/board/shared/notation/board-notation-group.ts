@@ -20,6 +20,8 @@ export class BoardNotationGroup extends ConcurrentBoardObject implements Notatio
 	public isLocked = false;
 	public visibilityState = NotationVisibility.FULL;
 
+	private timeoutToEmit;
+
 	red = 255;
 	green = 0;
 	blue = 0;
@@ -119,7 +121,12 @@ export class BoardNotationGroup extends ConcurrentBoardObject implements Notatio
 
 	public appendToFreeform(point: XyPair) {
 		this.freeformElements[this.freeformElements.length - 1].push(point);
-		this.emitChange();
+		if (this.timeoutToEmit) {
+			clearTimeout(this.timeoutToEmit);
+		}
+		this.timeoutToEmit = setTimeout(() => {
+			this.emitChange();
+		}, 1000);
 	}
 
 	public toggleCell(cell: XyPair) {
