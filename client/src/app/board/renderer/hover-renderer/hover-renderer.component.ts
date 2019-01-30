@@ -136,6 +136,9 @@ export class HoverRendererComponent implements OnInit, OnDestroy, RendererCompon
                         }
                         break;
                     case BoardMode.PLAYER:
+                    	  if (!isNullOrUndefined(this.boardStateService.mouse_loc_cell)) {
+		                      this.boardCanvasService.draw_fill_all(this.ctx, this.boardStateService.mouse_loc_cell,'rgba(255, 255, 255, 0.2)');
+	                      }
                         break;
                 }
             }

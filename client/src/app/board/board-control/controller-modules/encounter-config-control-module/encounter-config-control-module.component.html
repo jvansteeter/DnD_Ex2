@@ -1,13 +1,15 @@
 <div class="section">
     <div class="sectionHeader"><span>Encounter Config</span></div>
     <div class="sectionContents">
-        <mat-checkbox *ngIf="boardStateService.showGridControls" style="display: block" [(ngModel)]="boardStateService.gridEnabled">Grid Enabled</mat-checkbox>
-        <mat-checkbox *ngIf="boardStateService.showHealthBarControls" style="display: block" [(ngModel)]="encounterService.config.showHealth">Health Bars Enabled</mat-checkbox>
-        <mat-checkbox *ngIf="boardStateService.showShowWallsToPlayerControls" style="display: block" [(ngModel)]="encounterService.config.playerWallsEnabled">Show Walls to Player</mat-checkbox>
-        <mat-checkbox *ngIf="boardStateService.showMapEnabledControls" style="display: block" [(ngModel)]="encounterService.config.mapEnabled" [disabled]="!mapEnabledControlsIsEnabled()">Map Enabled</mat-checkbox>
+        <mat-checkbox *ngIf="boardStateService.showGridControls" [(ngModel)]="boardStateService.gridEnabled">Grid Enabled</mat-checkbox>
+	      <div *ngIf="boardStateService.gridEnabled">
+		        <mat-slider min="0.03" max="0.3" step="0.01" (input)="gridOpacitySliderInput($event.value)"></mat-slider>
+	      </div>
+        <mat-checkbox *ngIf="boardStateService.showHealthBarControls" [(ngModel)]="encounterService.config.showHealth">Health Bars Enabled</mat-checkbox>
+        <mat-checkbox *ngIf="boardStateService.showShowWallsToPlayerControls" [(ngModel)]="encounterService.config.playerWallsEnabled">Show Walls to Player</mat-checkbox>
+        <mat-checkbox *ngIf="boardStateService.showMapEnabledControls" [(ngModel)]="encounterService.config.mapEnabled" [disabled]="!mapEnabledControlsIsEnabled()">Map Enabled</mat-checkbox>
 
-        <div *ngIf="boardStateService.map_enabled">
-            <span class="font">Map Opacity </span>
+        <div *ngIf="encounterService.config.mapEnabled">
             <mat-slider min="0" max="1" step="0.01" [value]="boardStateService.board_maker_map_opacity" (input)="mapOpacitySliderInput($event)"></mat-slider>
         </div>
     </div>

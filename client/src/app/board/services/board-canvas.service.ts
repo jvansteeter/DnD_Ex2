@@ -153,7 +153,7 @@ export class BoardCanvasService extends IsReadyService {
     }
 
     draw_grid(ctx: CanvasRenderingContext2D) {
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.03)';
+        ctx.fillStyle = 'rgba(0, 0, 0, ' + this.boardStateService.gridOpacity + ')';
 
         let cell_res = BoardStateService.cell_res;
         let cur_x = 0;

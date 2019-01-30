@@ -50,8 +50,8 @@ export class TokenRendererComponent implements OnInit, OnDestroy, RendererCompon
 
         for (const player of this.encounterService.players) {
 
-            if (this.boardPlayerService.hoveredPlayerId === player._id) {
-                this.boardCanvasService.draw_fill_all(this.ctx, player.location, 'rgba(255, 0, 0, 0.35)');
+            if (this.boardPlayerService.hoveredPlayerId === player._id && (player.isVisible || this.rightsService.hasRightsToPlayer(player._id))) {
+                this.boardCanvasService.draw_fill_all(this.ctx, player.location, 'rgba(0, 255, 0, 0.35)');
             }
 
             if (this.boardPlayerService.selectedPlayerId === player._id) {

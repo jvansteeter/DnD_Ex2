@@ -79,6 +79,7 @@ export class BoardStateService extends IsReadyService {
 
 	public inputOffset = 0.2;    // offset used for input boundaries
 	public gridEnabled = true;
+	public gridOpacity = 0.03;
 
 	/*************************************************************************************************************************************
 	 * LOCAL - Mouse Location

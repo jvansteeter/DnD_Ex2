@@ -133,6 +133,7 @@ export class BoardMapComponent implements OnInit, AfterViewInit, OnDestroy, Rend
 
         if (this.boardStateService.mouseMiddleDown || (this.boardStateService.spaceDown && this.boardStateService.mouseLeftDown)) {
             this.boardStateService.mouseDrag = true;
+            this.boardCanvasService.rebuild_grid_canvas = true;
             const trans_coor = this.boardTransformService.screen_to_map(event);
 
             const deltaX = this.boardStateService.mouse_loc_map.x - trans_coor.x;
