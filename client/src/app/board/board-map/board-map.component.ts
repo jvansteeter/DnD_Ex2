@@ -29,6 +29,7 @@ import { RightsService } from '../../data-services/rights.service';
 import {BoardTeamsService} from "../services/board-teams.service";
 import { RendererConsolidationService } from '../renderer/renderer-consolidation.service';
 import { RendererComponent } from '../renderer/render-component.interface';
+import { RuleSetService } from '../../data-services/ruleSet.service';
 
 
 @Component({
@@ -52,6 +53,7 @@ export class BoardMapComponent implements OnInit, AfterViewInit, OnDestroy, Rend
                 private boardTeamsService: BoardTeamsService,
                 public rightsService: RightsService,
                 private renderConService: RendererConsolidationService,
+                public ruleSetService: RuleSetService,
                 ) {
     }
 
