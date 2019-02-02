@@ -73,10 +73,15 @@
 	padding-right: 15px;
 }
 
+.player-icon {
+	display: flex;
+}
+
 .conditions-icons {
-	background-color: pink;
-	height: 50px;
-	width: 50px;
+	display: flex;
+	align-items: center;
+	margin-left: 10px;
+	margin-top: 15px;
 }
 
 ::-webkit-scrollbar {

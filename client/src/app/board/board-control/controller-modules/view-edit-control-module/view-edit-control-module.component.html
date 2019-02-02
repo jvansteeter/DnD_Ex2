@@ -1,6 +1,6 @@
 <div id="view-edit-control-module" class="section" *ngIf="rightsService.isEncounterGM()">
     <div class="sectionHeader"><span>View/Edit Controls</span></div>
-    <div class="sectionContents">
+    <div class="sectionContents" style="min-width: 145px;">
 
         <mat-form-field>
             <mat-select [(value)]="currentView" (selectionChange)="handleViewChange()" placeholder="View Mode">

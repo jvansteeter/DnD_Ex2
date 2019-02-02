@@ -12,6 +12,7 @@ import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { isUndefined } from "util";
 import { RuleModuleAspects } from '../../../../../shared/predefined-aspects.enum';
+import { isDefined } from "@angular/compiler/src/util";
 
 @Component({
 	selector: 'character-tooltip',
@@ -53,18 +54,26 @@ export class CharacterTooltipComponent {
 			value = '';
 		}
 		const filterValue = value.toLowerCase();
-		return this.ruleSetService.conditions.filter((condition: ConditionData) => {
-			return (condition.name.toLowerCase().indexOf(filterValue) === 0 && !this.playerHasCondition(condition));
-		});
+		if (Array.isArray(this.ruleSetService.conditions)) {
+			return this.ruleSetService.conditions.filter((condition: ConditionData) => {
+				return (condition.name.toLowerCase().indexOf(filterValue) === 0 && !this.playerHasCondition(condition));
+			});
+		}
+		else {
+			return [];
+		}
+
 	}
 
 	private playerHasCondition(condition: ConditionData): boolean {
 		if (!this.editable) {
 			const player = this.encounterService.getPlayerById(this._playerId);
 			const conditions: ConditionData[] = player.characterData.values[RuleModuleAspects.CONDITIONS];
-			for (let existingCondition of conditions) {
-				if (condition.name.toLowerCase() === existingCondition.name.toLowerCase()) {
-					return true;
+			if (isDefined(conditions)) {
+				for (let existingCondition of conditions) {
+					if (condition.name.toLowerCase() === existingCondition.name.toLowerCase()) {
+						return true;
+					}
 				}
 			}
 		}
@@ -151,6 +160,9 @@ export class CharacterTooltipComponent {
 			const player = this.encounterService.getPlayerById(this._playerId);
 			for (let condition of this.ruleSetService.conditions) {
 				if (condition.name.toLowerCase() === conditionName.toLowerCase()) {
+					if (isUndefined(player.characterData.values[aspectLabel])) {
+						player.characterData.values[aspectLabel] = [];
+					}
 					player.characterData.values[aspectLabel].push(condition);
 					this.addConditionControl.setValue('');
 					player.emitChange();

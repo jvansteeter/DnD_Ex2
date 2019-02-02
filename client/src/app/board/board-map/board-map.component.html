@@ -1,28 +1,32 @@
 <div class="initiative-bar">
     <ng-container *ngFor="let player of getSortedPlayers()">
-        <div class="initiative-icon" (contextmenu)="boardMap_handleContextMenu($event)"
-             *ngIf="showInitCoin(player)">
-            <div style="height: 40px; width: 40px; border: 3px solid #383838; background: #d8d8d8; border-radius: 50%; position: absolute">
-                <img src="{{player.tokenUrl}}" style="height: 100%; border-radius: 25px;">
-	              <mat-icon class="not-visible-icon" *ngIf="!player.isVisible">visibility_off</mat-icon>
-	              <mat-icon class="dead-icon" *ngIf="player.isDead">close</mat-icon>
-            </div>
-            <div
+        <div class="player-icon" *ngIf="showInitCoin(player)">
+            <div class="initiative-icon" (contextmenu)="boardMap_handleContextMenu($event)">
+                <div style="height: 40px; width: 40px; border: 3px solid #383838; background: #d8d8d8; border-radius: 50%; position: absolute">
+                    <img src="{{player.tokenUrl}}" style="height: 100%; border-radius: 25px;">
+                    <mat-icon class="not-visible-icon" *ngIf="!player.isVisible">visibility_off</mat-icon>
+                    <mat-icon class="dead-icon" *ngIf="player.isDead">close</mat-icon>
+                </div>
+                <div
                     style="height:40px; width: 40px; border: 3px solid #383838; border-radius: 50%; position: absolute; cursor: pointer"
                     (mouseup)="boardMap_handleInitIconMouseUp($event, player)"
                     (mouseover)="boardMap_mouseOverInitIcon(player)"
                     matTooltip="{{player.name}}"
                     matTooltipPosition="after">
-            </div>
-            <div (mouseup)="boardMap_handleInitBadgeMouseUp($event, player)"
-                 class="font initiativeBadge">
-                {{player.initiative}}
-            </div>
+                </div>
+                <div (mouseup)="boardMap_handleInitBadgeMouseUp($event, player)"
+                     class="font initiativeBadge">
+                    {{player.initiative}}
+                </div>
 
+            </div>
+            <div class="conditions-icons" *ngIf="ruleSetService.hasConditions">
+                <mat-icon *ngFor="let condition of player.characterData.values['Conditions']" [style.color]="condition.color"
+                [matTooltip]="condition.name + ' | ' + condition.description">
+                    {{condition.icon}}
+                </mat-icon>
+            </div>
         </div>
-		    <!--<div class="conditions-icons" *ngIf="ruleSetService.hasConditions">-->
-
-		    <!--</div>-->
     </ng-container>
 </div>
 
