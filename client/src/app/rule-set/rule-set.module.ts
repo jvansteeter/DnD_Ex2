@@ -14,7 +14,8 @@ import {
 	MatMenuModule,
 	MatSelectModule,
 	MatSlideToggleModule,
-	MatTableModule, MatTooltipModule
+	MatTableModule,
+	MatTooltipModule
 } from '@angular/material';
 import { NewCharacterSheetDialogComponent } from './home/dialog/new-character-sheet-dialog.component';
 import { RuleSetRepository } from '../repositories/rule-set.repository';
@@ -23,9 +24,9 @@ import { AppCDKModule } from '../cdk/cdk.module';
 import { ConfigService } from '../data-services/config.service';
 import { NewCharacterDialogComponent } from './home/dialog/new-character-dialog.component';
 import { NewDamageTypeDialogComponent } from './home/dialog/new-damage-type-dialog.component';
-import { ColorPickerModule } from 'ngx-color-picker';
 import { SocialModule } from '../social/social.module';
-import { NewConditionDialogComponent } from './home/dialog/new-condition-dialog.component';
+import { ConditionsModule } from '../conditions/conditions.module';
+import { ColorPickerModule } from 'ngx-color-picker';
 
 @NgModule({
 	imports: [
@@ -45,8 +46,9 @@ import { NewConditionDialogComponent } from './home/dialog/new-condition-dialog.
 		MatMenuModule,
 		MatIconModule,
 		MatTooltipModule,
-		ColorPickerModule,
 		SocialModule,
+		ConditionsModule,
+			ColorPickerModule,
 	],
 	declarations: [
 		RuleSetHomeComponent,
@@ -54,7 +56,6 @@ import { NewConditionDialogComponent } from './home/dialog/new-condition-dialog.
 		NewCharacterDialogComponent,
 		RuleSetSelectorComponent,
 		NewDamageTypeDialogComponent,
-		NewConditionDialogComponent,
 	],
 	providers: [
 		RuleSetRepository,
@@ -68,7 +69,6 @@ import { NewConditionDialogComponent } from './home/dialog/new-condition-dialog.
 		NewCharacterSheetDialogComponent,
 		NewCharacterDialogComponent,
 		NewDamageTypeDialogComponent,
-		NewConditionDialogComponent,
 	]
 })
 export class RuleSetModule {

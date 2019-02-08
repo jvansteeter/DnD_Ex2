@@ -59,6 +59,9 @@
 						<mat-icon>add</mat-icon>
 					</button>
 					<mat-menu #addConditionMenu>
+						<button *ngIf="!editable" mat-icon-button color="primary" matTooltip="Create New Condition" class="create-condition-button" (click)="openCreateConditionDialog(aspect.aspect.label)">
+							<mat-icon>add</mat-icon>
+						</button>
 						<div class="filter-conditions" (click)="stopClickPropagate($event)">
 							<mat-form-field>
 								<input matInput placeholder="Filter Conditions" [matAutocomplete]="conditionsAutocomplete" [formControl]="addConditionControl"/>

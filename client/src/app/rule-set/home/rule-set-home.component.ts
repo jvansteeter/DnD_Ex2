@@ -20,7 +20,7 @@ import { NewDamageTypeDialogComponent } from './dialog/new-damage-type-dialog.co
 import { DamageTypeData } from '../../../../../shared/types/rule-set/damage-type.data';
 import { SelectFriendsComponent } from '../../social/select-friends/select-friends.component';
 import { UserProfile } from '../../types/userProfile';
-import { NewConditionDialogComponent } from './dialog/new-condition-dialog.component';
+import { NewConditionDialogComponent } from '../../conditions/new-condition-dialog.component';
 import { ConditionData } from '../../../../../shared/types/rule-set/condition.data';
 
 @Component({

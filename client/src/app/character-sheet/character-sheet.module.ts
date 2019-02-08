@@ -10,13 +10,17 @@ import {
 	MatCardModule,
 	MatCheckboxModule,
 	MatChipsModule,
-	MatDialogModule, MatExpansionModule,
+	MatDialogModule,
+	MatExpansionModule,
 	MatGridListModule,
 	MatIconModule,
 	MatInputModule,
 	MatListModule,
 	MatMenuModule,
-	MatSelectModule, MatSidenavModule, MatSlideToggleModule, MatTabsModule,
+	MatSelectModule,
+	MatSidenavModule,
+	MatSlideToggleModule,
+	MatTabsModule,
 	MatToolbarModule,
 	MatTooltipModule
 } from '@angular/material';
@@ -46,7 +50,8 @@ import { CharacterRepository } from '../repositories/character.repository';
 import { CurrentMaxComponent } from './shared/subcomponents/currentMax/current-max.component';
 import { GridsterModule } from 'angular-gridster2';
 import { RuleSetService } from '../data-services/ruleSet.service';
-import { ConditionsComponent } from './shared/subcomponents/conditions/conditions.component';
+import { ConditionsAspectComponent } from './shared/subcomponents/conditions/conditions-aspect.component';
+import { ConditionsModule } from '../conditions/conditions.module';
 
 @NgModule({
     imports: [
@@ -76,6 +81,7 @@ import { ConditionsComponent } from './shared/subcomponents/conditions/condition
 		    AlertModule,
 		    MatTabsModule,
 		    GridsterModule,
+		    ConditionsModule,
     ],
     declarations: [
         CharacterSheetComponent,
@@ -96,7 +102,7 @@ import { ConditionsComponent } from './shared/subcomponents/conditions/condition
 		    CharacterTooltipComponent,
 		    AddTooltipAspectComponent,
 		    CurrentMaxComponent,
-		    ConditionsComponent,
+		    ConditionsAspectComponent,
     ],
     providers: [
         CharacterSheetRepository,

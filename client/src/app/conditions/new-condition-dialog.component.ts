@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ConditionData } from '../../../../../../shared/types/rule-set/condition.data';
+import { ConditionData } from '../../../../shared/types/rule-set/condition.data';
 import { MatDialogRef } from '@angular/material';
 
 @Component({

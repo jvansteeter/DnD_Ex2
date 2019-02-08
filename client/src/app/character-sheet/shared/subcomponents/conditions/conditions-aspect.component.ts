@@ -11,10 +11,10 @@ import { isUndefined } from 'util';
 
 @Component({
 	selector: 'aspect-conditions',
-	templateUrl: 'conditions.component.html',
-	styleUrls: ['conditions.component.scss']
+	templateUrl: 'conditions-aspect.component.html',
+	styleUrls: ['conditions-aspect.component.scss']
 })
-export class ConditionsComponent implements SubComponentChild {
+export class ConditionsAspectComponent implements SubComponentChild {
 	@Input() aspect: Aspect;
 	@ViewChild('options') options: MatMenu;
 	readonly hasOptions: boolean = true;

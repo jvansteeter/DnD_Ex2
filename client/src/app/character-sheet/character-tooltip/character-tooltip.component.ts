@@ -9,10 +9,12 @@ import { ConditionData } from '../../../../../shared/types/rule-set/condition.da
 import { RuleSetService } from '../../data-services/ruleSet.service';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
+import { first, map, startWith } from 'rxjs/operators';
 import { isUndefined } from "util";
 import { RuleModuleAspects } from '../../../../../shared/predefined-aspects.enum';
 import { isDefined } from "@angular/compiler/src/util";
+import { MatDialog } from '@angular/material';
+import { NewConditionDialogComponent } from '../../conditions/new-condition-dialog.component';
 
 @Component({
 	selector: 'character-tooltip',
@@ -41,6 +43,7 @@ export class CharacterTooltipComponent {
 	            private encounterService: EncounterService,
 	            private rightsService: RightsService,
 	            public ruleSetService: RuleSetService,
+	            private dialog: MatDialog,
 	) {
 		this.filteredConditions = this.addConditionControl.valueChanges.pipe(
 				startWith(''),
@@ -170,6 +173,19 @@ export class CharacterTooltipComponent {
 				}
 			}
 		}
+	}
+
+	public openCreateConditionDialog(aspectLabel: string): void {
+		this.dialog.open(NewConditionDialogComponent).afterClosed().pipe(first()).subscribe((condition: ConditionData) => {
+			if (isDefined(condition)) {
+				const player = this.encounterService.getPlayerById(this._playerId);
+				if (isUndefined(player.characterData.values[aspectLabel])) {
+					player.characterData.values[aspectLabel] = [];
+				}
+				player.characterData.values[aspectLabel].push(condition);
+				player.emitChange();
+			}
+		});
 	}
 
 	public removeCondition(aspectLabel: string, conditionName: string): void {
