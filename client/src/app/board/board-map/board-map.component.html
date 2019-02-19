@@ -20,7 +20,7 @@
                 </div>
 
             </div>
-            <div class="conditions-icons" *ngIf="ruleSetService.hasConditions">
+            <div class="conditions-icons" *ngIf="rulesConfigService.hasConditions">
                 <mat-icon *ngFor="let condition of player.characterData.values['Conditions']" [style.color]="condition.color"
                 [matTooltip]="condition.name + ' | ' + condition.description">
                     {{condition.icon}}

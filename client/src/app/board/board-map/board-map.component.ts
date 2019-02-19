@@ -30,6 +30,7 @@ import {BoardTeamsService} from "../services/board-teams.service";
 import { RendererConsolidationService } from '../renderer/renderer-consolidation.service';
 import { RendererComponent } from '../renderer/render-component.interface';
 import { RuleSetService } from '../../data-services/ruleSet.service';
+import { RulesConfigService } from '../../data-services/rules-config.service';
 
 
 @Component({
@@ -53,7 +54,8 @@ export class BoardMapComponent implements OnInit, AfterViewInit, OnDestroy, Rend
                 private boardTeamsService: BoardTeamsService,
                 public rightsService: RightsService,
                 private renderConService: RendererConsolidationService,
-                public ruleSetService: RuleSetService,
+                private ruleSetService: RuleSetService,
+                public rulesConfigService: RulesConfigService,
                 ) {
     }
 
@@ -64,6 +66,8 @@ export class BoardMapComponent implements OnInit, AfterViewInit, OnDestroy, Rend
     ngOnInit(): void {
         this.renderConService.registerRenderer(this);
         this.renderConService.start();
+        this.rulesConfigService.setRuleSetService(this.ruleSetService);
+        this.rulesConfigService.setRuleSetRuleMode();
     }
 
     ngAfterViewInit(): void {
