@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { ConditionData } from '../../../../shared/types/rule-set/condition.data';
-import { MatDialogRef } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { isDefined } from '@angular/compiler/src/util';
 
 @Component({
 	templateUrl: 'new-condition-dialog.component.html',
@@ -15,7 +16,10 @@ export class NewConditionDialogComponent {
 	};
 	public iconOptions: string[];
 
-	constructor(private matDialogRef: MatDialogRef<NewConditionDialogComponent>) {
+	constructor(private matDialogRef: MatDialogRef<NewConditionDialogComponent>, @Inject(MAT_DIALOG_DATA) data: any) {
+		if (isDefined(data)) {
+			this.condition = data.condition;
+		}
 		this.iconOptions = [
 			'account_balance',
 			'account_circle',

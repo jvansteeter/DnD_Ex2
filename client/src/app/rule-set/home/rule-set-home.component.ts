@@ -8,20 +8,21 @@ import { RuleSetRepository } from '../../repositories/rule-set.repository';
 import { SubjectDataSource } from '../../utilities/subjectDataSource';
 import { CharacterSheetData } from '../../../../../shared/types/rule-set/character-sheet.data';
 import { DashboardCard } from '../../cdk/dashboard-card/dashboard-card';
-import { RuleSetData } from '../../../../../shared/types/rule-set/rule-set.data';
 import { ConfigService } from '../../data-services/config.service';
 import { NewCharacterDialogComponent } from './dialog/new-character-dialog.component';
 import { CharacterRepository } from '../../repositories/character.repository';
 import { CharacterData } from '../../../../../shared/types/character.data';
 import { isUndefined } from 'util';
 import { CharacterSheetRepository } from '../../repositories/character-sheet.repository';
-import { first, map, tap } from 'rxjs/operators';
+import { first, map, mergeMap, tap } from 'rxjs/operators';
 import { NewDamageTypeDialogComponent } from './dialog/new-damage-type-dialog.component';
 import { DamageTypeData } from '../../../../../shared/types/rule-set/damage-type.data';
 import { SelectFriendsComponent } from '../../social/select-friends/select-friends.component';
 import { UserProfile } from '../../types/userProfile';
 import { NewConditionDialogComponent } from '../../conditions/new-condition-dialog.component';
 import { ConditionData } from '../../../../../shared/types/rule-set/condition.data';
+import { RuleSetService } from '../../data-services/ruleSet.service';
+import { AlertService } from '../../alert/alert.service';
 
 @Component({
 	selector: 'rule-set-home',
@@ -30,7 +31,6 @@ import { ConditionData } from '../../../../../shared/types/rule-set/condition.da
 })
 export class RuleSetHomeComponent implements OnInit {
 	private ruleSetId: string;
-	private ruleSet: RuleSetData;
 
 	public characterSheets: CharacterSheetData[];
 	public admins: any[];
@@ -63,7 +63,9 @@ export class RuleSetHomeComponent implements OnInit {
 	            private ruleSetRepository: RuleSetRepository,
 	            private characterRepo: CharacterRepository,
 	            private configService: ConfigService,
-	            private characterSheetRepo: CharacterSheetRepository) {
+	            private characterSheetRepo: CharacterSheetRepository,
+	            private ruleSetService: RuleSetService,
+	            private alertService: AlertService) {
 		this.adminSubject = new Subject<AdminData[]>();
 		this.adminDataSource = new SubjectDataSource(this.adminSubject);
 
@@ -123,31 +125,22 @@ export class RuleSetHomeComponent implements OnInit {
 	ngOnInit(): void {
 		this.activatedRoute.params.subscribe((params) => {
 			this.ruleSetId = params['ruleSetId'];
-			this.ruleSetRepository.getRuleSet(this.ruleSetId).subscribe((ruleSet: RuleSetData) => {
-				if (isUndefined(ruleSet.modulesConfig)) {
-					ruleSet.modulesConfig = {
-						lightAndVision: true,
-						damageTypes: false,
-						damageMustBeTyped: false,
-						equipment: false,
-						characterAbilities: false,
-						conditions: false,
-					}
-				}
-				if (isUndefined(ruleSet.damageTypes)) {
-					ruleSet.damageTypes = [];
-				}
-				this.ruleSet = ruleSet;
-			});
-			this.ruleSetRepository.getCharacterSheets(this.ruleSetId).pipe(
+			this.ruleSetService.setRuleSetId(this.ruleSetId);
+			this.ruleSetService.isReadyObservable.pipe(
+					mergeMap(() => {
+						return this.ruleSetRepository.getCharacterSheets(this.ruleSetId);
+					}),
 					tap((characterSheets: CharacterSheetData[]) => {
 						this.characterSheets = characterSheets;
 						this.characterSheetSubject.next(characterSheets);
+					}),
+					tap(() => {
+						this.getNPCs();
+					}),
+					mergeMap(() => {
+						return this.ruleSetRepository.getAdmin(this.ruleSetId);
 					})
-			).subscribe(() => {
-				this.getNPCs();
-			});
-			this.ruleSetRepository.getAdmin(this.ruleSetId).subscribe((admins: any[]) => {
+			).subscribe((admins: any[]) => {
 				this.admins = admins;
 				this.adminSubject.next(admins);
 			});
@@ -188,28 +181,54 @@ export class RuleSetHomeComponent implements OnInit {
 
 	public changeModulesConfig(): void {
 		setTimeout(() => {
-			this.ruleSetRepository.setModulesConfig(this.ruleSetId, this.ruleSet.modulesConfig).subscribe();
+			this.ruleSetRepository.setModulesConfig(this.ruleSetId, this.ruleSetService.modulesConfig).subscribe();
 		});
 	}
 
 	public removeDamageType(type: DamageTypeData): void {
-		for (let i = 0; i < this.ruleSet.damageTypes.length; i++) {
-			if (type.name === this.ruleSet.damageTypes[i].name) {
-				this.ruleSet.damageTypes.splice(i, 1);
-				this.ruleSetRepository.setDamageTypes(this.ruleSetId, this.ruleSet.damageTypes).subscribe();
+		for (let i = 0; i < this.ruleSetService.damageTypes.length; i++) {
+			if (type.name === this.ruleSetService.damageTypes[i].name) {
+				this.ruleSetService.damageTypes.splice(i, 1);
+				this.ruleSetRepository.setDamageTypes(this.ruleSetId, this.ruleSetService.damageTypes).subscribe();
 				return;
 			}
 		}
 	}
 
 	public removeCondition(condition: ConditionData): void {
-		for (let i = 0; i < this.ruleSet.conditions.length; i++) {
-			if (condition.name === this.ruleSet.conditions[i].name) {
-				this.ruleSet.conditions.splice(i, 1);
-				this.ruleSetRepository.setConditions(this.ruleSetId, this.ruleSet.conditions).subscribe();
+		for (let i = 0; i < this.ruleSetService.conditions.length; i++) {
+			if (condition.name === this.ruleSetService.conditions[i].name) {
+				this.ruleSetService.conditions.splice(i, 1);
+				this.ruleSetRepository.setConditions(this.ruleSetId, this.ruleSetService.conditions).subscribe();
 				return;
 			}
 		}
+	}
+
+	public editCondition(conditionIndex: number): void {
+		let condition: ConditionData = JSON.parse(JSON.stringify(this.ruleSetService.conditions[conditionIndex]));
+		this.dialog.open(NewConditionDialogComponent, {data: {condition: condition}}).afterClosed().pipe(first()).subscribe((condition: ConditionData) => {
+			if (condition) {
+				let unique = true;
+				for (let i = 0; i < this.ruleSetService.conditions.length; i++) {
+					let type = this.ruleSetService.conditions[i];
+					if (i === conditionIndex) {
+						continue;
+					}
+					if (type.name === condition.name) {
+						unique = false;
+						break;
+					}
+				}
+				if (unique) {
+					this.ruleSetService.conditions.splice(conditionIndex, 1, condition);
+					this.ruleSetRepository.setConditions(this.ruleSetId, this.ruleSetService.conditions).subscribe();
+				}
+				else {
+					this.alertService.showAlert('Condition with that name already exists')
+				}
+			}
+		});
 	}
 
 	private getNPCs(): void {
@@ -247,15 +266,15 @@ export class RuleSetHomeComponent implements OnInit {
 		this.dialog.open(NewDamageTypeDialogComponent).afterClosed().pipe(first()).subscribe((damageType: DamageTypeData) => {
 			if (damageType) {
 				let unique = true;
-				for (let type of this.ruleSet.damageTypes) {
+				for (let type of this.ruleSetService.damageTypes) {
 					if (type.name === damageType.name) {
 						unique = false;
 						break;
 					}
 				}
 				if (unique) {
-					this.ruleSet.damageTypes.push(damageType);
-					this.ruleSetRepository.setDamageTypes(this.ruleSetId, this.ruleSet.damageTypes).subscribe();
+					this.ruleSetService.damageTypes.push(damageType);
+					this.ruleSetRepository.setDamageTypes(this.ruleSetId, this.ruleSetService.damageTypes).subscribe();
 				}
 			}
 		});
@@ -265,15 +284,15 @@ export class RuleSetHomeComponent implements OnInit {
 		this.dialog.open(NewConditionDialogComponent).afterClosed().pipe(first()).subscribe((condition: ConditionData) => {
 			if (condition) {
 				let unique = true;
-				for (let type of this.ruleSet.conditions) {
+				for (let type of this.ruleSetService.conditions) {
 					if (type.name === condition.name) {
 						unique = false;
 						break;
 					}
 				}
 				if (unique) {
-					this.ruleSet.conditions.push(condition);
-					this.ruleSetRepository.setConditions(this.ruleSetId, this.ruleSet.conditions).subscribe();
+					this.ruleSetService.conditions.push(condition);
+					this.ruleSetRepository.setConditions(this.ruleSetId, this.ruleSetService.conditions).subscribe();
 				}
 			}
 		});

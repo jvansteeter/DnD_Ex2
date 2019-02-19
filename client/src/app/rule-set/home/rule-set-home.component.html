@@ -1,5 +1,5 @@
-<div *ngIf="ruleSet" class="ruleSet-content">
-	<h1>{{ruleSet.label}}</h1>
+<div *ngIf="ruleSetService.isReady()" class="ruleSet-content">
+	<h1>{{ruleSetService.label}}</h1>
 	<mat-grid-list [cols]="5" rowHeight="20em">
 		<!--Rule modules config-->
 		<mat-grid-tile [colspan]="1" [rowspan]="2">
@@ -7,18 +7,19 @@
 				<div class="ruleSet-config">
 					<mat-slide-toggle color="primary" checked disabled>Light & Vision</mat-slide-toggle>
 					<mat-slide-toggle color="primary" (click)="changeModulesConfig()"
-					                  [(ngModel)]="ruleSet.modulesConfig.conditions">Conditions</mat-slide-toggle>
+					                  [(ngModel)]="ruleSetService.modulesConfig.conditions">Conditions</mat-slide-toggle>
+					<mat-slide-toggle color="primary" (click)="changeModulesConfig()" [(ngModel)]="ruleSetService.modulesConfig.rounds">Rounds</mat-slide-toggle>
 					<mat-slide-toggle color="primary" (click)="changeModulesConfig()"
-					                  [(ngModel)]="ruleSet.modulesConfig.damageTypes">Damage Types
+					                  [(ngModel)]="ruleSetService.modulesConfig.damageTypes">Damage Types
 					</mat-slide-toggle>
-					<mat-slide-toggle color="primary" (click)="changeModulesConfig()" *ngIf="ruleSet.modulesConfig.damageTypes"
-					                  [(ngModel)]="ruleSet.modulesConfig.damageMustBeTyped" class="tabbed">Damage must be typed
-					</mat-slide-toggle>
-					<mat-slide-toggle color="primary" (click)="changeModulesConfig()"
-					                  [(ngModel)]="ruleSet.modulesConfig.equipment">Equipment
+					<mat-slide-toggle color="primary" (click)="changeModulesConfig()" *ngIf="ruleSetService.modulesConfig.damageTypes"
+					                  [(ngModel)]="ruleSetService.modulesConfig.damageMustBeTyped" class="tabbed">Damage must be typed
 					</mat-slide-toggle>
 					<mat-slide-toggle color="primary" (click)="changeModulesConfig()"
-					                  [(ngModel)]="ruleSet.modulesConfig.characterAbilities">Character Abilities
+					                  [(ngModel)]="ruleSetService.modulesConfig.equipment">Equipment
+					</mat-slide-toggle>
+					<mat-slide-toggle color="primary" (click)="changeModulesConfig()"
+					                  [(ngModel)]="ruleSetService.modulesConfig.characterAbilities">Character Abilities
 					</mat-slide-toggle>
 				</div>
 			</dashboard-card>
@@ -96,18 +97,20 @@
 			</dashboard-card>
 		</mat-grid-tile>
 		<!--Conditions-->
-		<mat-grid-tile [colspan]="1" [rowspan]="1" *ngIf="ruleSet.modulesConfig.conditions">
-			<dashboard-card [dashboardCard]="conditionsCard" class="damage-types">
-				<div *ngFor="let condition of ruleSet.conditions" class="damage-type" [matTooltip]="condition.description">
-					<mat-icon [style.color]="condition.color" class="type-icon">{{condition.icon}}</mat-icon>{{condition.name}}
-					<button mat-icon-button (click)="removeCondition(condition)"><mat-icon>close</mat-icon></button>
+		<mat-grid-tile [colspan]="1" [rowspan]="1" *ngIf="ruleSetService.modulesConfig.conditions">
+			<dashboard-card [dashboardCard]="conditionsCard">
+				<div *ngFor="let condition of ruleSetService.conditions; let i = index" class="condition" [matTooltip]="condition.description">
+					<mat-icon [style.color]="condition.color" class="type-icon">{{condition.icon}}</mat-icon>
+					{{condition.name}}
+					<button mat-icon-button (click)="editCondition(i)" matTooltip="Edit" class="edit-button"><mat-icon>edit</mat-icon></button>
+					<button mat-icon-button (click)="removeCondition(condition)" matTooltip="Remove"><mat-icon>close</mat-icon></button>
 				</div>
 			</dashboard-card>
 		</mat-grid-tile>
 		<!--Damage Types-->
-		<mat-grid-tile [colspan]="1" [rowspan]="1" *ngIf="ruleSet.modulesConfig.damageTypes">
+		<mat-grid-tile [colspan]="1" [rowspan]="1" *ngIf="ruleSetService.modulesConfig.damageTypes">
 			<dashboard-card [dashboardCard]="damageTypesCard" class="damage-types">
-				<div *ngFor="let type of ruleSet.damageTypes" class="damage-type">
+				<div *ngFor="let type of ruleSetService.damageTypes" class="damage-type">
 					<mat-icon [style.color]="type.color" class="type-icon">{{type.icon}}</mat-icon>{{type.name}}
 					<button mat-icon-button (click)="removeDamageType(type)"><mat-icon>close</mat-icon></button>
 				</div>

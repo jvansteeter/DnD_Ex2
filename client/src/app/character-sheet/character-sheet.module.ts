@@ -52,6 +52,7 @@ import { GridsterModule } from 'angular-gridster2';
 import { RuleSetService } from '../data-services/ruleSet.service';
 import { ConditionsAspectComponent } from './shared/subcomponents/conditions/conditions-aspect.component';
 import { ConditionsModule } from '../conditions/conditions.module';
+import { RulesConfigService } from '../data-services/rules-config.service';
 
 @NgModule({
     imports: [
@@ -111,6 +112,7 @@ import { ConditionsModule } from '../conditions/conditions.module';
         CharacterInterfaceFactory,
 		    CharacterRepository,
 		    RuleSetService,
+		    RulesConfigService,
     ],
     entryComponents: [
         AddComponentComponent,

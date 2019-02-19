@@ -26,6 +26,7 @@ import { IsReadyService } from '../../utilities/services/isReady.service';
 import { mergeMap } from 'rxjs/operators';
 import { RuleSetService } from '../../data-services/ruleSet.service';
 import { RuleModuleAspects } from '../../../../../shared/predefined-aspects.enum';
+import { RulesConfigService } from '../../data-services/rules-config.service';
 
 @Injectable()
 export class CharacterMakerService extends IsReadyService implements CharacterInterfaceService {
@@ -45,7 +46,8 @@ export class CharacterMakerService extends IsReadyService implements CharacterIn
 
 	constructor(private characterSheetRepo: CharacterSheetRepository,
 	            private alertService: AlertService,
-	            private ruleSetService: RuleSetService) {
+	            private ruleSetService: RuleSetService,
+	            private rulesConfigService: RulesConfigService) {
 		super();
 	}
 
@@ -116,6 +118,8 @@ export class CharacterMakerService extends IsReadyService implements CharacterIn
 				})
 		).subscribe((isReady: boolean) => {
 			if (isReady) {
+				this.rulesConfigService.setRuleSetService(this.ruleSetService);
+				this.rulesConfigService.setRuleSetRuleMode();
 				isReadySub.unsubscribe();
 				this.initRuleModuleAspects();
 				this.setReady(true);
@@ -333,7 +337,7 @@ export class CharacterMakerService extends IsReadyService implements CharacterIn
 		// Light & Vision
 		let visionAspect = this.getAspectFromMapByLabel(RuleModuleAspects.VISION);
 		let darkVisionAspect = this.getAspectFromMapByLabel(RuleModuleAspects.DARK_VISION);
-		if (this.ruleSetService.hasLightAndVision) {
+		if (this.rulesConfigService.hasLightAndVision) {
 			if (isUndefined(visionAspect)) {
 				visionAspect = new Aspect(RuleModuleAspects.VISION, AspectType.NUMBER, true, true);
 				aspectsToInit.push(visionAspect);
@@ -356,7 +360,7 @@ export class CharacterMakerService extends IsReadyService implements CharacterIn
 
 		// Conditions
 		let conditionsAspect = this.getAspectFromMapByLabel(RuleModuleAspects.CONDITIONS);
-		if (this.ruleSetService.hasConditions) {
+		if (this.rulesConfigService.hasConditions) {
 			if (isUndefined(conditionsAspect)) {
 				conditionsAspect = new Aspect(RuleModuleAspects.CONDITIONS, AspectType.CONDITIONS, true, true);
 				aspectsToInit.push(conditionsAspect);

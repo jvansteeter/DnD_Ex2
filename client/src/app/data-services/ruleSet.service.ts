@@ -4,6 +4,8 @@ import { RuleSetRepository } from '../repositories/rule-set.repository';
 import { RuleSetData } from '../../../../shared/types/rule-set/rule-set.data';
 import { isUndefined } from "util";
 import { ConditionData } from '../../../../shared/types/rule-set/condition.data';
+import { RuleSetModulesConfigData } from '../../../../shared/types/rule-set/rule-set-modules-config.data';
+import { DamageTypeData } from '../../../../shared/types/rule-set/damage-type.data';
 
 @Injectable()
 export class RuleSetService extends IsReadyService {
@@ -19,12 +21,13 @@ export class RuleSetService extends IsReadyService {
 			if (isUndefined(ruleSet.modulesConfig)) {
 				ruleSet.modulesConfig = {
 					lightAndVision: true,
+					conditions: false,
+					rounds: false,
 					damageTypes: false,
 					damageMustBeTyped: false,
 					equipment: false,
 					characterAbilities: false,
-					conditions: false,
-				}
+				} as RuleSetModulesConfigData;
 			}
 			if (isUndefined(ruleSet.damageTypes)) {
 				ruleSet.damageTypes = [];
@@ -40,18 +43,19 @@ export class RuleSetService extends IsReadyService {
 		this.init();
 	}
 
-	get hasLightAndVision(): boolean {
-		return this.ruleSet.modulesConfig.lightAndVision;
+	get label(): string {
+		return this.ruleSet.label;
 	}
 
-	get hasConditions(): boolean {
-		return this.ruleSet.modulesConfig.conditions;
+	get modulesConfig(): RuleSetModulesConfigData {
+		return this.ruleSet.modulesConfig;
 	}
 
 	get conditions(): ConditionData[] {
-		if (isUndefined(this.ruleSet)) {
-			return [];
-		}
 		return this.ruleSet.conditions;
+	}
+
+	get damageTypes(): DamageTypeData[] {
+		return this.ruleSet.damageTypes;
 	}
 }
