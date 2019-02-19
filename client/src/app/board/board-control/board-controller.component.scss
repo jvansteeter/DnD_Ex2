@@ -1,8 +1,13 @@
 :host {
+	position: relative;
+}
+
+.board-controller {
+	flex: 0 0 200px;
 	width: 100%;
 	border-bottom: 2px solid #cccccc;
 	display: flex;
-	position: relative;
+	max-height: 200px;
 }
 
 mat-radio-group {
@@ -94,7 +99,7 @@ mat-radio-button {
 //}
 
 .inputOverride {
-	font-family: Roboto, "Helvetica Neue", sans-serif;
+	font-family: Roboto,"Helvetica Neue",sans-serif;
 	width: 150px;
 }
 
@@ -112,23 +117,9 @@ mat-radio-button {
 	background: #DEDEDE;
 }
 
-.encounter-toolbar {
-	transition: max-height .5s;
-	width: 100%;
-	display: flex;
-}
-
 .toggle-button {
 	position: absolute;
-	right: 1px;
-	bottom: -45px;
-	z-index: 10;
-}
-
-.toolbar-hidden {
-	max-height: 0px;
-}
-
-.toolbar-show {
-	flex: 0 0 200px;
+	right: 0;
+	margin: 3px;
+	z-index: 20;
 }
