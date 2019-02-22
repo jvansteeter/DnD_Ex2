@@ -31,6 +31,7 @@ export class EncounterState implements EncounterData {
 	isOpen: boolean;
 	config: EncounterConfigData;
 	configState: EncounterConfigState;
+	round?: number;
 	wallData: Object;
 	doorData: Object;
 	windowData: Object;

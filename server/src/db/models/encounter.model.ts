@@ -20,6 +20,7 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 	public isOpen: boolean;
 	public config: EncounterConfigData;
 	public teamsData: EncounterTeamsData;
+	public round?: number;
 
 	cell_res: number;
 	mapDimX: number;
@@ -83,6 +84,7 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 					teams: [String],
 				}],
 			},
+			round: Number,
 		});
 
 		this._id = this.methods._id;
@@ -103,6 +105,7 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 		this.lightSources = this.methods.lightSources;
 		this.notationIds = this.methods.notationIds;
 		this.teamsData = this.methods.teamsData;
+		this.round = this.methods.round;
 
 		this.methods.addPlayer = this.addPlayer;
 		this.methods.removePlayer = this.removePlayer;
@@ -207,6 +210,16 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 			username: username,
 			teams: teams,
 		});
+		return this.save();
+	}
+
+	public incrementRound(): Promise<EncounterModel> {
+		if (this.round) {
+			this.round++;
+		}
+		else {
+			this.round = 1;
+		}
 		return this.save();
 	}
 }

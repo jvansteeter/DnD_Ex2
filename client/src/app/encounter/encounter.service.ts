@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { IsReadyService } from '../utilities/services/isReady.service';
 import { EncounterRepository } from '../repositories/encounter.repository';
 import { Player } from './player';
-import { Observable } from "rxjs";
+import { Observable, Subject } from "rxjs";
 import { EncounterState } from './encounter.state';
 import { EncounterData } from '../../../../shared/types/encounter/encounter.data';
 import { CharacterData } from '../../../../shared/types/character.data';
@@ -13,6 +13,7 @@ import { PlayerVisibilityMode } from '../../../../shared/types/encounter/board/p
 import { EncounterTeamsData } from '../../../../shared/types/encounter/encounter-teams.data';
 import { LightSourceData } from '../../../../shared/types/encounter/board/light-source.data';
 import { TeamUser } from "../board/services/team-user";
+import { isDefined } from '@angular/compiler/src/util';
 
 @Injectable()
 export class EncounterService extends IsReadyService {
@@ -21,6 +22,7 @@ export class EncounterService extends IsReadyService {
 
 	public encounterId: string;
 	private encounterState: EncounterState;
+	private incrementRoundSubject: Subject<void>;
 
 	constructor(
 			protected encounterRepo: EncounterRepository,
@@ -29,6 +31,7 @@ export class EncounterService extends IsReadyService {
 	}
 
 	public init(): void {
+		this.incrementRoundSubject = new Subject();
 		this.encounterRepo.getEncounter(this.encounterId).subscribe((encounter: EncounterData) => {
 			this.encounterState = new EncounterState(encounter);
 			this.setReady(true);
@@ -91,6 +94,20 @@ export class EncounterService extends IsReadyService {
 	public getExportJson(): Observable<any> {
 		return this.encounterRepo.getEncounterExportJson(this.encounterId);
 	}
+
+	public incrementRound(): void {
+		if (isDefined(this.encounterState.round)) {
+			this.encounterState.round++;
+		}
+		else {
+			this.encounterState.round = 1;
+		}
+		this.incrementRoundSubject.next();
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// GETTERS AND SETTERS
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	get mapUrl(): string {
 		if (this.encounterState) {
@@ -250,5 +267,13 @@ export class EncounterService extends IsReadyService {
 
 	get campaignId(): string {
 		return this.encounterState.campaignId;
+	}
+
+	get round(): number {
+		return this.encounterState.round;
+	}
+
+	get incrementRoundObservable(): Observable<void> {
+		return this.incrementRoundSubject.asObservable();
 	}
 }

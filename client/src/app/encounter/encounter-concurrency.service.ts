@@ -32,6 +32,7 @@ export class EncounterConcurrencyService extends IsReadyService {
 	private configSubscription: Subscription;
 	private teamsChangeSubscription: Subscription;
 	private windowChangeSubscription: Subscription;
+	private incrementingRoundsSubscription: Subscription;
 
 	constructor(private encounterService: EncounterService,
 	            private playerService: BoardPlayerService,
@@ -56,6 +57,7 @@ export class EncounterConcurrencyService extends IsReadyService {
 				this.observeConfigChanges();
 				this.observeTeamChanges();
 				this.observeWindowChanges();
+				this.observeIncrementingRounds();
 				this.mqService.publishEncounterCommand(this.encounterService.encounterId, this.encounterService.version + 1,
 						EncounterCommandType.TEAMS_CHANGE, this.encounterService.teamsData);
 				this.setReady(true);
@@ -172,6 +174,16 @@ export class EncounterConcurrencyService extends IsReadyService {
 		this.teamsChangeSubscription = this.encounterService.teamsChangeObservable.subscribe(() => {
 			this.mqService.publishEncounterCommand(this.encounterService.encounterId, this.encounterService.version + 1,
 					EncounterCommandType.TEAMS_CHANGE, this.encounterService.teamsData);
+		});
+	}
+
+	private observeIncrementingRounds(): void {
+		if (this.incrementingRoundsSubscription) {
+			this.incrementingRoundsSubscription.unsubscribe();
+		}
+		this.incrementingRoundsSubscription = this.encounterService.incrementRoundObservable.subscribe(() => {
+			this.mqService.publishEncounterCommand(this.encounterService.encounterId, this.encounterService.version + 1,
+					EncounterCommandType.INCREMENT_ROUND, this.encounterService.round);
 		});
 	}
 

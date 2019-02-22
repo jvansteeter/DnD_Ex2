@@ -17,6 +17,7 @@ export interface EncounterData {
 	isOpen: boolean;
 	config: EncounterConfigData;
 	teamsData: EncounterTeamsData;
+	round?: number;
 
 	/**************************************
 	 * GENERAL BOARD VARIABLES

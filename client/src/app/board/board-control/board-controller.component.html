@@ -18,4 +18,9 @@
 		</div>
 	</div>
 </div>
-<button mat-mini-fab color="primary" class="toggle-button" matTooltip="Toggle Toolbar" (click)="toggleToolBar()"><mat-icon>keyboard_arrow_down</mat-icon></button>
+<div class="overlay-bar">
+	<button mat-mini-fab color="primary" class="toggle-button" matTooltip="Toggle Toolbar" (click)="toggleToolBar()">
+		<mat-icon>keyboard_arrow_down</mat-icon>
+	</button>
+	<span class="round-indicator">Round: 1</span>
+</div>
