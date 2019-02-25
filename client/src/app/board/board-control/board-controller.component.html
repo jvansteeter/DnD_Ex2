@@ -15,6 +15,9 @@
 			<button *ngIf="rightsService.isEncounterGM()" mat-raised-button color="primary" (click)="exportEncounterJson()">
 				Export Encounter JSON
 			</button>
+			<button *ngIf="rightsService.isEncounterGM() && rulesConfigService.hasRounds" mat-raised-button color="primary" (click)="incrementRound()">
+				Increment Round
+			</button>
 		</div>
 	</div>
 </div>
@@ -22,5 +25,5 @@
 	<button mat-mini-fab color="primary" class="toggle-button" matTooltip="Toggle Toolbar" (click)="toggleToolBar()">
 		<mat-icon>keyboard_arrow_down</mat-icon>
 	</button>
-	<span class="round-indicator">Round: 1</span>
+	<span class="round-indicator" *ngIf="rulesConfigService.hasRounds">Round: {{encounterService.round}}</span>
 </div>

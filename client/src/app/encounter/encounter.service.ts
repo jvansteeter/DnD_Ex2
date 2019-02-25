@@ -102,6 +102,7 @@ export class EncounterService extends IsReadyService {
 		else {
 			this.encounterState.round = 1;
 		}
+		this.encounterRepo.incrementRound(this.encounterId).subscribe();
 		this.incrementRoundSubject.next();
 	}
 
@@ -271,6 +272,10 @@ export class EncounterService extends IsReadyService {
 
 	get round(): number {
 		return this.encounterState.round;
+	}
+
+	set round(value) {
+		this.encounterState.round = value;
 	}
 
 	get incrementRoundObservable(): Observable<void> {

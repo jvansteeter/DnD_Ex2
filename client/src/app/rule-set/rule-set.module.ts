@@ -21,7 +21,6 @@ import { NewCharacterSheetDialogComponent } from './home/dialog/new-character-sh
 import { RuleSetRepository } from '../repositories/rule-set.repository';
 import { RuleSetSelectorComponent } from './selector/rule-set-selector.component';
 import { AppCDKModule } from '../cdk/cdk.module';
-import { ConfigService } from '../data-services/config.service';
 import { NewCharacterDialogComponent } from './home/dialog/new-character-dialog.component';
 import { NewDamageTypeDialogComponent } from './home/dialog/new-damage-type-dialog.component';
 import { SocialModule } from '../social/social.module';
@@ -59,7 +58,6 @@ import { ColorPickerModule } from 'ngx-color-picker';
 	],
 	providers: [
 		RuleSetRepository,
-		ConfigService,
 	],
 	exports: [
 		RuleSetHomeComponent,

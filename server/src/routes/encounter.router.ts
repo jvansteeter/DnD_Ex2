@@ -149,6 +149,19 @@ export class EncounterRouter {
 				res.status(500).send(error);
 			}
 		});
+
+		this.router.post('/incrementRound', async (req: Request, res: Response) => {
+			try {
+				const userId: string = req.user._id;
+				const encounterId = req.body.encounterId;
+				await this.encounterService.incrementRound(userId, encounterId);
+				res.status(200).send();
+			}
+			catch (error) {
+				console.error(error);
+				res.status(500).send(error);
+			}
+		});
 	}
 }
 

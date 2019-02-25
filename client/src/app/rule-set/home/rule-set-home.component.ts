@@ -8,7 +8,6 @@ import { RuleSetRepository } from '../../repositories/rule-set.repository';
 import { SubjectDataSource } from '../../utilities/subjectDataSource';
 import { CharacterSheetData } from '../../../../../shared/types/rule-set/character-sheet.data';
 import { DashboardCard } from '../../cdk/dashboard-card/dashboard-card';
-import { ConfigService } from '../../data-services/config.service';
 import { NewCharacterDialogComponent } from './dialog/new-character-dialog.component';
 import { CharacterRepository } from '../../repositories/character.repository';
 import { CharacterData } from '../../../../../shared/types/character.data';
@@ -62,7 +61,6 @@ export class RuleSetHomeComponent implements OnInit {
 	            private router: Router,
 	            private ruleSetRepository: RuleSetRepository,
 	            private characterRepo: CharacterRepository,
-	            private configService: ConfigService,
 	            private characterSheetRepo: CharacterSheetRepository,
 	            private ruleSetService: RuleSetService,
 	            private alertService: AlertService) {

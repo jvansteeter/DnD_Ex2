@@ -317,6 +317,16 @@ export class EncounterService {
 		return encounterModel;
 	}
 
+	public async incrementRound(userId: string, encounterId: string): Promise<EncounterModel> {
+		let encounterModel: EncounterModel = await this.encounterRepo.findById(encounterId);
+		if (this.isGameMaster(userId, encounterModel)) {
+			return await encounterModel.incrementRound();
+		}
+		else {
+			return encounterModel;
+		}
+	}
+
 	private async getPlayerPlacementMap(encounterModel: EncounterModel): Promise<boolean[][]> {
 		const encounterState = await this.buildEncounterState(encounterModel);
 		const placementMap: boolean[][] = [];

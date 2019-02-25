@@ -13,6 +13,7 @@ import { EncounterService } from '../../encounter/encounter.service';
 import { BoardVisibilityService } from "../services/board-visibility.service";
 import { TeamSettingsComponent } from '../dialogs/team-settings/team-settings.component';
 import { RightsService } from '../../data-services/rights.service';
+import { RulesConfigService } from '../../data-services/rules-config.service';
 
 @Component({
 	selector: 'board-controller',
@@ -31,8 +32,9 @@ export class BoardControllerComponent implements OnInit, OnDestroy {
 	constructor(public boardStateService: BoardStateService,
 	            public boardLightService: BoardLightService,
 	            public boardVisibilityService: BoardVisibilityService,
-	            private encounterService: EncounterService,
+	            public encounterService: EncounterService,
 	            public rightsService: RightsService,
+	            public rulesConfigService: RulesConfigService,
 	            private dialog: MatDialog,
 	) {
 	}
@@ -57,6 +59,10 @@ export class BoardControllerComponent implements OnInit, OnDestroy {
 
 	exportEncounterJson(): void {
 		this.boardStateService.getExportJson();
+	}
+
+	public incrementRound(): void {
+		this.encounterService.incrementRound();
 	}
 
 	public toggleToolBar(): void {

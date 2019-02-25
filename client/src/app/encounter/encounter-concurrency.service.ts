@@ -272,6 +272,13 @@ export class EncounterConcurrencyService extends IsReadyService {
 				this.teamsService.setTeamsData(message.body.data as EncounterTeamsData);
 				break;
 			}
+			case EncounterCommandType.INCREMENT_ROUND: {
+				if (message.body.userId === this.userProfileService.userId) {
+					return;
+				}
+				this.encounterService.round = Number(message.body.data);
+				break;
+			}
 			default: {
 				console.error('Encounter Command Type not recognized');
 				console.log(message)

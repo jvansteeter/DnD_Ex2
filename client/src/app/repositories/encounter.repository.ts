@@ -116,4 +116,11 @@ export class EncounterRepository {
 		};
 		return this.http.post<void>('/api/encounter/removeNotation', data);
 	}
+
+	public incrementRound(encounterId: string): Observable<void> {
+		const data = {
+			encounterId: encounterId
+		};
+		return this.http.post<void>('/api/encounter/incrementRound', data);
+	}
 }

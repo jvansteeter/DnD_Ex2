@@ -84,7 +84,7 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 					teams: [String],
 				}],
 			},
-			round: Number,
+			round: {type: Number, default: 0},
 		});
 
 		this._id = this.methods._id;
@@ -121,6 +121,7 @@ export class EncounterModel extends MongooseModel implements EncounterData {
 		this.methods.setConfig = this.setConfig;
 		this.methods.setTeamsData = this.setTeamsData;
 		this.methods.addUser = this.addUser;
+		this.methods.incrementRound = this.incrementRound;
 	}
 
 	public addPlayer(player: PlayerData): Promise<EncounterModel> {

@@ -144,7 +144,7 @@ export class MqService {
 					}
 					case EncounterCommandType.WINDOW_CHANGE: {
 						const data = command.body.data;
-						this.encounterService.setWindowData(encounterId, data)
+						this.encounterService.setWindowData(encounterId, data);
 						break;
 					}
 					case EncounterCommandType.SETTINGS_CHANGE: {
@@ -155,6 +155,11 @@ export class MqService {
 					case EncounterCommandType.TEAMS_CHANGE: {
 						const data = command.body.data;
 						this.encounterService.setEncounterTeamsData(encounterId, data);
+						break;
+					}
+					case EncounterCommandType.INCREMENT_ROUND: {
+						// do nothing
+						// TODO: Refactor this part of code so the server doesn't listen to rabbit messages at all
 						break;
 					}
 					default: {

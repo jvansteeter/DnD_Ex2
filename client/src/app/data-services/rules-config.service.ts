@@ -52,4 +52,12 @@ export class RulesConfigService {
 			return this.ruleSetService.conditions;
 		}
 	}
+
+	get hasRounds(): boolean {
+		if (this.ruleMode === RulesMode.RULE_SET) {
+			return this.ruleSetService.modulesConfig.rounds;
+		}
+
+		return false;
+	}
 }
