@@ -78,6 +78,7 @@ input.current-max-input::-webkit-inner-spin-button {
 	width: 100%;
 	display: flex;
 	align-items: center;
+	flex-direction: column-reverse;
 }
 
 .remove-condition-button {
@@ -86,4 +87,14 @@ input.current-max-input::-webkit-inner-spin-button {
 
 .create-condition-button {
 	float: right;
+}
+
+.round-count {
+	width: 30px;
+	margin-left: 10px;
+	border: none;
+}
+
+.condition-icon {
+	margin-right: auto;
 }

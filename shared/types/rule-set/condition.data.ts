@@ -3,4 +3,5 @@ export interface ConditionData {
 	description: string;
 	icon: string;
 	color: string;
+	rounds?: number;
 }

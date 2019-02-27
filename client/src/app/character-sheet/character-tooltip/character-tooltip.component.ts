@@ -15,6 +15,7 @@ import { RuleModuleAspects } from '../../../../../shared/predefined-aspects.enum
 import { isDefined } from "@angular/compiler/src/util";
 import { MatDialog } from '@angular/material';
 import { NewConditionDialogComponent } from '../../conditions/new-condition-dialog.component';
+import { RulesConfigService } from '../../data-services/rules-config.service';
 
 @Component({
 	selector: 'character-tooltip',
@@ -44,6 +45,7 @@ export class CharacterTooltipComponent {
 	            private rightsService: RightsService,
 	            public ruleSetService: RuleSetService,
 	            private dialog: MatDialog,
+	            private rulesConfigService: RulesConfigService,
 	) {
 		this.filteredConditions = this.addConditionControl.valueChanges.pipe(
 				startWith(''),
@@ -165,6 +167,9 @@ export class CharacterTooltipComponent {
 				if (condition.name.toLowerCase() === conditionName.toLowerCase()) {
 					if (isUndefined(player.characterData.values[aspectLabel])) {
 						player.characterData.values[aspectLabel] = [];
+					}
+					if (this.rulesConfigService.hasRounds) {
+						condition.rounds = 1;
 					}
 					player.characterData.values[aspectLabel].push(condition);
 					this.addConditionControl.setValue('');
