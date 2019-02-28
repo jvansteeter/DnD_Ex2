@@ -67,7 +67,6 @@ export class CharacterTooltipComponent {
 		else {
 			return [];
 		}
-
 	}
 
 	private playerHasCondition(condition: ConditionData): boolean {
@@ -168,9 +167,6 @@ export class CharacterTooltipComponent {
 					if (isUndefined(player.characterData.values[aspectLabel])) {
 						player.characterData.values[aspectLabel] = [];
 					}
-					if (this.rulesConfigService.hasRounds) {
-						condition.rounds = 1;
-					}
 					player.characterData.values[aspectLabel].push(condition);
 					this.addConditionControl.setValue('');
 					player.emitChange();
@@ -178,6 +174,10 @@ export class CharacterTooltipComponent {
 				}
 			}
 		}
+	}
+
+	public changeConditionRounds(): void {
+		this.encounterService.getPlayerById(this._playerId).emitChange();
 	}
 
 	public openCreateConditionDialog(aspectLabel: string): void {

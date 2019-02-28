@@ -4,6 +4,8 @@ import { PlayerData } from '../../../../shared/types/encounter/player.data';
 import { CharacterData } from '../../../../shared/types/character.data';
 import { ConcurrentBoardObject } from './concurrent-board-object';
 import { PredefinedAspects, RuleModuleAspects } from '../../../../shared/predefined-aspects.enum';
+import { ConditionData } from '../../../../shared/types/rule-set/condition.data';
+import { isDefined } from '@angular/compiler/src/util';
 
 export class Player extends ConcurrentBoardObject implements PlayerData {
 	_id: string;
@@ -108,6 +110,31 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 
 		this._teams.push(team);
 		this.emitChange();
+	}
+
+	public decrementConditionRounds(): void {
+		const conditions: ConditionData[] = this.characterData.values[RuleModuleAspects.CONDITIONS];
+		if (isDefined(conditions) && conditions.length > 0) {
+			let conditionChanged = false;
+			let conditionsToRemove = [];
+			for (let i = 0; i < conditions.length; i++) {
+				let condition = conditions[i];
+				if (Number.isInteger(condition.rounds)) {
+					condition.rounds--;
+					if (condition.rounds <= 0) {
+						conditionsToRemove.push(i)
+					}
+					conditionChanged = true;
+				}
+			}
+			while (conditionsToRemove.length > 0) {
+				const index = conditionsToRemove.pop();
+				conditions.splice(index, 1);
+			}
+			if (conditionChanged) {
+				this.emitChange();
+			}
+		}
 	}
 
 	/*////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

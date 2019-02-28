@@ -78,11 +78,15 @@ input.current-max-input::-webkit-inner-spin-button {
 	width: 100%;
 	display: flex;
 	align-items: center;
-	flex-direction: column-reverse;
+	flex-direction: row-reverse;
+}
+
+.condition-name {
+	margin-right: auto;
 }
 
 .remove-condition-button {
-	margin-left: auto;
+
 }
 
 .create-condition-button {
@@ -96,5 +100,5 @@ input.current-max-input::-webkit-inner-spin-button {
 }
 
 .condition-icon {
-	margin-right: auto;
+
 }

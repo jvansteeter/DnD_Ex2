@@ -52,8 +52,8 @@
 						<button mat-icon-button class="remove-condition-button tooltip-button" (click)="removeCondition(aspect.aspect.label, condition['name'])" *ngIf="editable || hasRights()">
 							<mat-icon>close</mat-icon>
 						</button>
-						<input *ngIf="rulesConfigService.hasRounds" type="number" class="round-count" matTooltip="Rounds" matTooltipPosition="above" [(ngModel)]="condition['rounds']"/>
-						<span>{{condition['name']}}</span>
+						<input *ngIf="rulesConfigService.hasRounds" type="number" class="round-count" matTooltip="Rounds" matTooltipPosition="above" [(ngModel)]="condition['rounds']" (change)="changeConditionRounds()" />
+						<span class="condition-name">{{condition['name']}}</span>
 						<mat-icon [style.color]="condition['color']" class="condition-icon">{{condition['icon']}}</mat-icon>
 					</div>
 					<button mat-icon-button color="primary" class="add-condition-button tooltip-button" [matMenuTriggerFor]="addConditionMenu" *ngIf="editable || hasRights()">

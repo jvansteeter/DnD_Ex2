@@ -14,6 +14,7 @@ import { EncounterTeamsData } from '../../../../shared/types/encounter/encounter
 import { LightSourceData } from '../../../../shared/types/encounter/board/light-source.data';
 import { TeamUser } from "../board/services/team-user";
 import { isDefined } from '@angular/compiler/src/util';
+import { RulesConfigService } from '../data-services/rules-config.service';
 
 @Injectable()
 export class EncounterService extends IsReadyService {
@@ -26,6 +27,7 @@ export class EncounterService extends IsReadyService {
 
 	constructor(
 			protected encounterRepo: EncounterRepository,
+			private rulesConfigService: RulesConfigService,
 	) {
 		super();
 	}
@@ -76,13 +78,6 @@ export class EncounterService extends IsReadyService {
 		this.encounterState.toggleUserTeam(userId, team);
 	}
 
-	get players(): Player[] {
-		if (this.encounterState) {
-			return this.encounterState.players as Player[];
-		}
-		return [];
-	}
-
 	public getAspectValue(playerId: string, aspectLabel: string): any {
 		return this.encounterState.getAspectValue(playerId, aspectLabel);
 	}
@@ -103,12 +98,24 @@ export class EncounterService extends IsReadyService {
 			this.encounterState.round = 1;
 		}
 		this.encounterRepo.incrementRound(this.encounterId).subscribe();
+		if (this.rulesConfigService.hasConditions) {
+			for (let player of this.players) {
+				player.decrementConditionRounds();
+			}
+		}
 		this.incrementRoundSubject.next();
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// GETTERS AND SETTERS
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	get players(): Player[] {
+		if (this.encounterState) {
+			return this.encounterState.players as Player[];
+		}
+		return [];
+	}
 
 	get mapUrl(): string {
 		if (this.encounterState) {
