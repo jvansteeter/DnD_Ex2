@@ -20,11 +20,16 @@
                 </div>
 
             </div>
-            <div class="conditions-icons" *ngIf="rulesConfigService.hasConditions">
-                <mat-icon *ngFor="let condition of player.characterData.values['Conditions']" [style.color]="condition.color"
-                [matTooltip]="condition.name + ' | ' + condition.description">
-                    {{condition.icon}}
-                </mat-icon>
+            <div class="conditions-icons" *ngIf="rulesConfigService.hasConditions || rulesConfigService.hasHiddenAndSneaking">
+	            <ng-container *ngIf="rulesConfigService.hasConditions">
+		            <mat-icon *ngFor="let condition of player.characterData.values['Conditions']" [style.color]="condition.color"
+		                      [matTooltip]="condition.name + ' | ' + condition.description">
+			            {{condition.icon}}
+		            </mat-icon>
+	            </ng-container>
+	            <ng-container *ngIf="rulesConfigService.hasHiddenAndSneaking && player.characterData.values[RuleModuleAspects.HIDDEN] === 'true'">
+		            <mat-icon [matTooltip]="'Hidden | ' + player.characterData.values[RuleModuleAspects.STEALTH]">visibility_off</mat-icon>
+	            </ng-container>
             </div>
         </div>
     </ng-container>

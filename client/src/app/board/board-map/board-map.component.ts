@@ -32,6 +32,7 @@ import { RendererComponent } from '../renderer/render-component.interface';
 import { RuleSetService } from '../../data-services/ruleSet.service';
 import { RulesConfigService } from '../../data-services/rules-config.service';
 import { BoardStealthService } from '../services/board-stealth.service';
+import { RuleModuleAspects } from '../../../../../shared/predefined-aspects.enum';
 
 
 @Component({
@@ -41,6 +42,7 @@ import { BoardStealthService } from '../services/board-stealth.service';
 })
 export class BoardMapComponent implements OnInit, AfterViewInit, OnDestroy, RendererComponent {
     @ViewChild('mapContainer') mapContainer: ElementRef;
+    public RuleModuleAspects = RuleModuleAspects;
 
     constructor(private boardCanvasService: BoardCanvasService,
                 private boardStateService: BoardStateService,
