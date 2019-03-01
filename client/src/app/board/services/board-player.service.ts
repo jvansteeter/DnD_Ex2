@@ -110,6 +110,10 @@ export class BoardPlayerService extends IsReadyService {
         this.player_lightSource_map.set(player.id, playerLightSource);
     }
 
+    public getPlayerLightSource(playerId: string): LightSource {
+    	return this.player_lightSource_map.get(playerId);
+    }
+
     /*********************************************************************************************************************************************
      * TRAVERSE
      *********************************************************************************************************************************************/

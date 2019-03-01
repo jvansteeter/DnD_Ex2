@@ -7,6 +7,10 @@ import {BoardPlayerService} from "../../services/board-player.service";
 import {EncounterService} from '../../../encounter/encounter.service';
 import { RendererConsolidationService } from '../renderer-consolidation.service';
 import { RendererComponent } from '../render-component.interface';
+import { RulesConfigService } from '../../../data-services/rules-config.service';
+import { RuleModuleAspects } from '../../../../../../shared/predefined-aspects.enum';
+import { BoardTeamsService } from '../../services/board-teams.service';
+import { Player } from '../../../encounter/player';
 
 @Component({
     selector: 'light-renderer',
@@ -23,6 +27,8 @@ export class LightRendererComponent implements OnInit, OnDestroy, RendererCompon
         private boardLightService: BoardLightService,
         private encounterService: EncounterService,
         private renderConService: RendererConsolidationService,
+        private rulesConfigService: RulesConfigService,
+        private teamsService: BoardTeamsService,
     ) {
     }
 
@@ -39,16 +45,23 @@ export class LightRendererComponent implements OnInit, OnDestroy, RendererCompon
         this.boardCanvasService.clear_canvas(this.ctx_root);
         this.boardCanvasService.updateTransform(this.ctx_root);
 
-        if (this.encounterService.config.lightEnabled) {
+        if (this.encounterService.isLightEnabled) {
 
             if (this.boardLightService.canvas_rebuild_lightSources) {
                 this.boardCanvasService.fill_canvas(this.boardLightService.canvas_dim_context, 'rgba(0, 0, 0, 1)');
                 this.boardCanvasService.fill_canvas(this.boardLightService.canvas_dark_context, 'rgba(0, 0, 0, 1)');
 
-                for (let lightSource of [...this.boardLightService.lightSources, ...this.boardPlayerService.player_lightSource_map.values()]) {
+                for (let lightSource of this.boardLightService.lightSources) {
                     this.boardCanvasService.clear_xy_array(this.boardLightService.canvas_dark_context, lightSource.dim_polygon);
                     this.boardCanvasService.clear_xy_array(this.boardLightService.canvas_dim_context, lightSource.bright_polygon);
-                    }
+                }
+                for (let player of this.boardPlayerService.players) {
+									if (this.shouldRenderPlayerLightSource(player)) {
+										const lightSource = this.boardPlayerService.getPlayerLightSource(player.id);
+										this.boardCanvasService.clear_xy_array(this.boardLightService.canvas_dark_context, lightSource.dim_polygon);
+										this.boardCanvasService.clear_xy_array(this.boardLightService.canvas_dim_context, lightSource.bright_polygon);
+									}
+                }
                 this.boardLightService.canvas_rebuild_lightSources = false;
             }
 
@@ -77,4 +90,13 @@ export class LightRendererComponent implements OnInit, OnDestroy, RendererCompon
             }
         }
     };
+
+    private shouldRenderPlayerLightSource(player: Player): boolean {
+	    if (this.rulesConfigService.hasHiddenAndSneaking) {
+		    const playerIsHidden = Boolean(player.characterData.values[RuleModuleAspects.HIDDEN]);
+		    const playerOnUsersTeam = this.teamsService.userSharesTeamWithPlayer(player);
+		    return player.isVisible && (!playerIsHidden || (playerIsHidden && playerOnUsersTeam));
+	    }
+	    return player.isVisible;
+    }
 }
