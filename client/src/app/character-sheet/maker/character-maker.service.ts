@@ -220,7 +220,9 @@ export class CharacterMakerService extends IsReadyService implements CharacterIn
 			aspects.push(aspectObj);
 		}
 		characterSheet['aspects'] = aspects;
-		this.characterSheetRepo.saveCharacterSheet(characterSheet).subscribe();
+		this.characterSheetRepo.saveCharacterSheet(characterSheet).subscribe(() => {
+			this.alertService.showAlert('Character Sheet Saved');
+		});
 	}
 
 	public initAspects(aspects: AspectData[]): void {

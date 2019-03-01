@@ -10,6 +10,7 @@ import { CharacterAspectComponent } from '../shared/character-aspect.component';
 import { CompactType, DisplayGrid, GridsterConfig, GridType } from "angular-gridster2";
 import { IsReadyService } from '../../utilities/services/isReady.service';
 import { RuleSetService } from '../../data-services/ruleSet.service';
+import { AlertService } from '../../alert/alert.service';
 
 @Injectable()
 export class CharacterSheetService extends IsReadyService implements CharacterInterfaceService {
@@ -22,7 +23,8 @@ export class CharacterSheetService extends IsReadyService implements CharacterIn
 	private aspectComponents: Map<string, CharacterAspectComponent>;
 
 	constructor(private characterRepo: CharacterRepository,
-	            private ruleSetService: RuleSetService) {
+	            private ruleSetService: RuleSetService,
+	            private alertService: AlertService) {
 		super();
 	}
 
@@ -150,7 +152,9 @@ export class CharacterSheetService extends IsReadyService implements CharacterIn
 			this.characterData.values[aspect.label] = this.getAspectValue(aspect.label);
 		}
 
-		this.characterRepo.saveCharacter(this.characterData).subscribe();
+		this.characterRepo.saveCharacter(this.characterData).subscribe(() => {
+			this.alertService.showAlert('Character Saved')
+		});
 	}
 
 }
