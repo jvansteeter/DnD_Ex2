@@ -62,6 +62,7 @@ import {LightEditDialogComponent} from "./dialogs/light-edit-dialog/light-edit-d
 import {BoardTeamsService} from "./services/board-teams.service";
 import { DragDropModule } from "@angular/cdk/drag-drop";
 import { RendererConsolidationService } from './renderer/renderer-consolidation.service';
+import { BoardStealthService } from './services/board-stealth.service';
 
 
 @NgModule({
@@ -131,6 +132,7 @@ import { RendererConsolidationService } from './renderer/renderer-consolidation.
         BoardNotationService,
         BoardTeamsService,
 		    RendererConsolidationService,
+		    BoardStealthService,
     ],
     entryComponents: [
         NotationIconSelectorComponent,

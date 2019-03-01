@@ -150,6 +150,7 @@ export class CharacterMakerService extends IsReadyService implements CharacterIn
 	public removeComponent(aspect: Aspect): void {
 		this.aspectMap.delete(aspect.config);
 		this.aspectComponents.delete(aspect.label.toLowerCase());
+		this.removeTooltipAspect(aspect.label);
 		setTimeout(() => this.removeComponentSubject.next());
 	}
 
@@ -358,26 +359,79 @@ export class CharacterMakerService extends IsReadyService implements CharacterIn
 			}
 		}
 
+		// Hidden & Sneaking
+		let hiddenAspect = this.getAspectFromMapByLabel(RuleModuleAspects.HIDDEN);
+		let stealthAspect = this.getAspectFromMapByLabel(RuleModuleAspects.STEALTH);
+		let perceptionAspect = this.getAspectFromMapByLabel(RuleModuleAspects.PERCEPTION);
+		if (this.rulesConfigService.hasHiddenAndSneaking) {
+			if (isUndefined(hiddenAspect)) {
+				hiddenAspect = new Aspect(RuleModuleAspects.HIDDEN, AspectType.BOOLEAN, false, true);
+				aspectsToInit.push(hiddenAspect);
+				this.addTooltipAspect('visibility_off', hiddenAspect);
+			}
+			if (isUndefined(stealthAspect)) {
+				stealthAspect = new Aspect(RuleModuleAspects.STEALTH, AspectType.NUMBER, false, true);
+				aspectsToInit.push(stealthAspect);
+				this.addTooltipAspect('brightness_3', stealthAspect);
+			}
+			if (isUndefined(perceptionAspect)) {
+				perceptionAspect = new Aspect(RuleModuleAspects.PERCEPTION, AspectType.NUMBER, false, true);
+				aspectsToInit.push(perceptionAspect);
+				this.addTooltipAspect('visibility', perceptionAspect);
+			}
+			this.ruleModuleAspects.push(hiddenAspect);
+			this.ruleModuleAspects.push(stealthAspect);
+			this.ruleModuleAspects.push(perceptionAspect);
+		}
+		else {
+			if (!isUndefined(hiddenAspect) && hiddenAspect.isPredefined) {
+				this.aspectMap.delete(hiddenAspect.config);
+				this.removeTooltipAspect(hiddenAspect.label);
+			}
+			if (!isUndefined(stealthAspect) && stealthAspect.isPredefined) {
+				this.aspectMap.delete(stealthAspect.config);
+				this.removeTooltipAspect(stealthAspect.label);
+			}
+			if (!isUndefined(perceptionAspect) && perceptionAspect.isPredefined) {
+				this.aspectMap.delete(perceptionAspect.config);
+				this.removeTooltipAspect(perceptionAspect.label);
+			}
+		}
+
 		// Conditions
 		let conditionsAspect = this.getAspectFromMapByLabel(RuleModuleAspects.CONDITIONS);
 		if (this.rulesConfigService.hasConditions) {
 			if (isUndefined(conditionsAspect)) {
 				conditionsAspect = new Aspect(RuleModuleAspects.CONDITIONS, AspectType.CONDITIONS, true, true);
 				aspectsToInit.push(conditionsAspect);
-				this.characterSheet.tooltipConfig.aspects.push({
-					icon: 'warning',
-					aspect: conditionsAspect
-				});
+				this.addTooltipAspect('warning', conditionsAspect);
 			}
 			this.ruleModuleAspects.push(conditionsAspect);
 		}
 		else {
 			if (!isUndefined(conditionsAspect) && conditionsAspect.isPredefined) {
 				this.aspectMap.delete(conditionsAspect.config);
+				this.removeTooltipAspect(conditionsAspect.label);
 			}
 		}
 
 		this.initAspects(aspectsToInit);
+	}
+
+	private addTooltipAspect(icon: string, aspect: Aspect): void {
+		this.characterSheet.tooltipConfig.aspects.push({
+			icon: icon,
+			aspect: aspect,
+		});
+	}
+
+	private removeTooltipAspect(aspectLabel: string): void {
+		for (let i = 0; i < this.characterSheet.tooltipConfig.aspects.length; i++) {
+			if (this.characterSheet.tooltipConfig.aspects[i].aspect.label === aspectLabel) {
+				this.characterSheet.tooltipConfig.aspects.splice(i, 1);
+				return;
+			}
+		}
 	}
 
 	private getAspectFromMapByLabel(label: string): Aspect {

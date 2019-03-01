@@ -3,6 +3,9 @@ export enum RuleModuleAspects {
 	DARK_VISION = 'Dark Vision',
 	SPEED = 'Speed',
 	CONDITIONS = 'Conditions',
+	PERCEPTION = 'Perception',
+	HIDDEN = 'Hidden',
+	STEALTH = 'Stealth',
 }
 
 export enum PredefinedAspects {

@@ -84,6 +84,11 @@
 				       (change)="changeAspectValue(aspect.aspect.label, $event.target.value)"/>
 				<span *ngIf="!editable && !hasRights()" class="aspect-unknown">???</span>
 			</ng-container>
+			<!--Check Box-->
+			<ng-container *ngSwitchCase="aspectType.BOOLEAN">
+				<mat-checkbox *ngIf="editable || hasRights()" [checked]="aspectValue(aspect.aspect.label) === 'true'" (change)="changeAspectValue(aspect.aspect.label, $event.checked ? 'true' : '')" class="aspect-checkbox"></mat-checkbox>
+				<span *ngIf="!editable && !hasRights()" class="aspect-unknown">???</span>
+			</ng-container>
 			<!--Other-->
 			<ng-container *ngSwitchDefault>
 				<input class="aspect-input" *ngIf="editable || hasRights()"

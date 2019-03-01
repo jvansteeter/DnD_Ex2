@@ -1,5 +1,5 @@
 export const enum LightValue {
-  DARK,
-  DIM,
-  FULL
+  DARK = 'DARK',
+  DIM = 'DIM',
+  FULL = 'FULL',
 }

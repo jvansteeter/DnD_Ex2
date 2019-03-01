@@ -1,17 +1,21 @@
-import {Injectable} from '@angular/core';
-import {XyPair} from '../../../../../shared/types/encounter/board/xy-pair';
-import {EncounterService} from '../../encounter/encounter.service';
-import {BoardVisibilityService} from './board-visibility.service';
-import {BoardTraverseService} from './board-traverse.service';
-import {BoardStateService} from './board-state.service';
-import {IsReadyService} from '../../utilities/services/isReady.service';
-import {Player} from '../../encounter/player';
-import {BoardLightService} from "./board-light.service";
-import {LightSource} from "../map-objects/light-source";
+import { Injectable } from '@angular/core';
+import { XyPair } from '../../../../../shared/types/encounter/board/xy-pair';
+import { EncounterService } from '../../encounter/encounter.service';
+import { BoardVisibilityService } from './board-visibility.service';
+import { BoardTraverseService } from './board-traverse.service';
+import { BoardStateService } from './board-state.service';
+import { IsReadyService } from '../../utilities/services/isReady.service';
+import { Player } from '../../encounter/player';
+import { BoardLightService } from "./board-light.service";
+import { LightSource } from "../map-objects/light-source";
 import { isNullOrUndefined, isUndefined } from 'util';
-import {RightsService} from "../../data-services/rights.service";
-import {GeometryStatics} from "../statics/geometry-statics";
-import {UserProfileService} from "../../data-services/userProfile.service";
+import { RightsService } from "../../data-services/rights.service";
+import { GeometryStatics } from "../statics/geometry-statics";
+import { UserProfileService } from "../../data-services/userProfile.service";
+import { BoardTeamsService } from './board-teams.service';
+import { RuleModuleAspects } from '../../../../../shared/predefined-aspects.enum';
+import { RulesConfigService } from '../../data-services/rules-config.service';
+import { LightValue } from '../../../../../shared/types/encounter/board/light-value';
 
 @Injectable()
 export class BoardPlayerService extends IsReadyService {
@@ -31,7 +35,10 @@ export class BoardPlayerService extends IsReadyService {
                 private boardTraverseService: BoardTraverseService,
                 private rightsService: RightsService,
                 private userProfileService: UserProfileService,
-                private boardStateService: BoardStateService) {
+                private boardStateService: BoardStateService,
+                private teamsService: BoardTeamsService,
+                private rulesConfigService: RulesConfigService,
+                ) {
         super(encounterService, boardStateService, boardTraverseService, boardVisibilityService);
         this.init();
     }
@@ -91,7 +98,7 @@ export class BoardPlayerService extends IsReadyService {
     public updatePlayerLightSource(playerId: string) {
         console.log('\t\tboardPlayerService: updatePlayerLightSource()');
         const player = this.encounterService.getPlayerById(playerId);
-        let playerVision = player.characterData.values['Vision'];
+        let playerVision = player.characterData.values[RuleModuleAspects.VISION];
         if (isUndefined(playerVision)) {
             playerVision = 0;
         }
@@ -143,7 +150,7 @@ export class BoardPlayerService extends IsReadyService {
         const player = this.encounterService.getPlayerById(id);
         const playerPixelLocation = new XyPair(player.location.x * BoardStateService.cell_res + (BoardStateService.cell_res / 2), player.location.y * BoardStateService.cell_res + (BoardStateService.cell_res / 2));
 
-        let playerVision = player.characterData.values['Vision'];
+        let playerVision = player.characterData.values[RuleModuleAspects.VISION];
         if (isUndefined(playerVision)) {
             playerVision = 0;
         }
@@ -164,20 +171,23 @@ export class BoardPlayerService extends IsReadyService {
     }
 
     public tokenHasLOSToSomeUserToken(target: Player): boolean {
-        let userTokens: Array<Player> = new Array<Player>();
-        for (let player of this.players) {
-            if (player.userId === this.userProfileService.userId) {
-                userTokens.push(player);
-            }
-        }
-
+        let userTokens: Player[] = this.teamsService.getAllPlayersOnMyTeams();
         if (userTokens.length === 0) {
             return false;
         }
 
-        for (let userToken of userTokens) {
-            if (this.boardVisibilityService.cellHasLOSToCell(target.location, userToken.location)) {
-                return true;
+        for (let player of userTokens) {
+            if (this.boardVisibilityService.cellHasLOSToCell(target.location, player.location)) {
+            	  if (this.rulesConfigService.hasLightAndVision &&
+			              this.encounterService.isLightEnabled &&
+			              this.encounterService.ambientLight !== LightValue.FULL) {
+		              const distance: number = BoardStateService.distanceCellToCell(target.location, player.location);
+		              const playerVision: number = Number(player.characterData.values[RuleModuleAspects.VISION]);
+		              return distance <= playerVision;
+	              }
+            	  else {
+		              return true;
+	              }
             }
         }
         return false;

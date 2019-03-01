@@ -6,20 +6,26 @@
 			<dashboard-card [dashboardCard]="configCard">
 				<div class="ruleSet-config">
 					<mat-slide-toggle color="primary" checked disabled>Light & Vision</mat-slide-toggle>
-					<mat-slide-toggle color="primary" (click)="changeModulesConfig()"
-					                  [(ngModel)]="ruleSetService.modulesConfig.conditions">Conditions</mat-slide-toggle>
-					<mat-slide-toggle color="primary" (click)="changeModulesConfig()" [(ngModel)]="ruleSetService.modulesConfig.rounds">Rounds</mat-slide-toggle>
-					<mat-slide-toggle color="primary" (click)="changeModulesConfig()"
-					                  [(ngModel)]="ruleSetService.modulesConfig.damageTypes">Damage Types
+					<mat-slide-toggle color="primary" (click)="changeModulesConfig()" [(ngModel)]="ruleSetService.modulesConfig.hiddenAndSneaking">
+						Hidden & Sneaking
 					</mat-slide-toggle>
-					<mat-slide-toggle color="primary" (click)="changeModulesConfig()" *ngIf="ruleSetService.modulesConfig.damageTypes"
-					                  [(ngModel)]="ruleSetService.modulesConfig.damageMustBeTyped" class="tabbed">Damage must be typed
+					<mat-slide-toggle color="primary" (click)="changeModulesConfig()" [(ngModel)]="ruleSetService.modulesConfig.conditions">
+						Conditions
 					</mat-slide-toggle>
-					<mat-slide-toggle color="primary" (click)="changeModulesConfig()"
-					                  [(ngModel)]="ruleSetService.modulesConfig.equipment">Equipment
+					<mat-slide-toggle color="primary" (click)="changeModulesConfig()" [(ngModel)]="ruleSetService.modulesConfig.rounds">
+						Rounds
 					</mat-slide-toggle>
-					<mat-slide-toggle color="primary" (click)="changeModulesConfig()"
-					                  [(ngModel)]="ruleSetService.modulesConfig.characterAbilities">Character Abilities
+					<mat-slide-toggle color="primary" (click)="changeModulesConfig()" [(ngModel)]="ruleSetService.modulesConfig.damageTypes">
+						Damage Types
+					</mat-slide-toggle>
+					<mat-slide-toggle color="primary" (click)="changeModulesConfig()" *ngIf="ruleSetService.modulesConfig.damageTypes" [(ngModel)]="ruleSetService.modulesConfig.damageMustBeTyped" class="tabbed">
+						Damage must be typed
+					</mat-slide-toggle>
+					<mat-slide-toggle color="primary" (click)="changeModulesConfig()" [(ngModel)]="ruleSetService.modulesConfig.equipment">
+						Equipment
+					</mat-slide-toggle>
+					<mat-slide-toggle color="primary" (click)="changeModulesConfig()" [(ngModel)]="ruleSetService.modulesConfig.characterAbilities">
+						Character Abilities
 					</mat-slide-toggle>
 				</div>
 			</dashboard-card>

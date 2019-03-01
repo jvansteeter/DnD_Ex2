@@ -44,7 +44,6 @@ export interface EncounterData {
 	 * LIGHT RELATED VARIABLES
 	 **************************************/
 	lightSources: LightSourceData[];
-	lightEnabled: boolean;
 	ambientLight: LightValue;
 
 	/**************************************

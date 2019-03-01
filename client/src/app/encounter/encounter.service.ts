@@ -288,4 +288,20 @@ export class EncounterService extends IsReadyService {
 	get incrementRoundObservable(): Observable<void> {
 		return this.incrementRoundSubject.asObservable();
 	}
+
+	get isLightEnabled(): boolean {
+		if (this.encounterState) {
+			return this.encounterState.configState.lightEnabled;
+		}
+
+		return false;
+	}
+
+	get ambientLight(): LightValue {
+		if (this.encounterState) {
+			return this.encounterState.configState.ambientLight;
+		}
+
+		return LightValue.FULL;
+	}
 }

@@ -13,6 +13,7 @@ import {BoardLightService} from "../board/services/board-light.service";
 import {BoardStateService} from "../board/services/board-state.service";
 import {BoardTeamsService} from "../board/services/board-teams.service";
 import {BoardNotationService} from "../board/services/board-notation-service";
+import { BoardStealthService } from '../board/services/board-stealth.service';
 
 @Component({
     selector: 'encounter',
@@ -36,6 +37,7 @@ export class EncounterComponent implements OnInit, OnDestroy {
                 private boardNotationService: BoardNotationService,
                 private boardTeamsService: BoardTeamsService,
                 private boardTraverseService: BoardTraverseService,
+                private stealthService: BoardStealthService,
                 ) {
     }
 
@@ -67,6 +69,7 @@ export class EncounterComponent implements OnInit, OnDestroy {
         this.boardTraverseService.init();
         this.boardTeamsService.init();
         this.boardNotationService.init();
+        this.stealthService.init();
     }
 
     ngOnDestroy(): void {
@@ -81,5 +84,6 @@ export class EncounterComponent implements OnInit, OnDestroy {
         this.boardVisibilityService.unInit();
         this.boardTeamsService.unInit();
         this.boardNotationService.unInit();
+        this.stealthService.unInit();
     }
 }

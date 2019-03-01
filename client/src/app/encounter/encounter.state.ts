@@ -21,7 +21,6 @@ export class EncounterState implements EncounterData {
 	date: Date;
 	gameMasters: string[];
 	label: string;
-	lightEnabled: boolean;
 	lightSources: LightSourceData[];
 	mapDimX: number;
 	mapDimY: number;

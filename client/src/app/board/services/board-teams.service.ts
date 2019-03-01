@@ -5,15 +5,19 @@ import { Player } from "../../encounter/player";
 import { isUndefined } from "util";
 import { IsReadyService } from "../../utilities/services/isReady.service";
 import { EncounterTeamsData } from '../../../../../shared/types/encounter/encounter-teams.data';
+import { Observable, Subject } from 'rxjs';
 
 @Injectable()
 export class BoardTeamsService extends IsReadyService {
+	private teamsChangedSubject: Subject<void>;
+
 	constructor(
 			private encounterService: EncounterService,
 			private userProfileService: UserProfileService,
 	) {
 		super(encounterService, userProfileService);
 		this.init();
+		this.teamsChangedSubject = new Subject<void>();
 	}
 
 	public init(): void {
@@ -28,10 +32,14 @@ export class BoardTeamsService extends IsReadyService {
 	public unInit(): void {
 		console.log('boardTeamsService.unInit()');
 		super.unInit();
+		if (this.dependenciesSub) {
+			this.dependenciesSub.unsubscribe();
+		}
 	}
 
 	public toggleUserTeam(userId: string, team: string): void {
 		this.encounterService.toggleUserTeam(userId, team);
+		this.teamsChangedSubject.next();
 	}
 
 	public addTeam(teamName: string): void {
@@ -40,6 +48,7 @@ export class BoardTeamsService extends IsReadyService {
 
 	public removeTeam(teamName: string): void {
 		this.encounterService.removeTeam(teamName);
+		this.teamsChangedSubject.next();
 	}
 
 	public userSharesTeamWithPlayer(player: Player): boolean {
@@ -66,8 +75,30 @@ export class BoardTeamsService extends IsReadyService {
 		return false;
 	}
 
+	public getAllPlayersOnMyTeams(): Player[] {
+		const teamPlayers = [];
+		let userTeams: string[];
+		for (let user of this.encounterService.teamsData.users) {
+			if (user.userId === this.userProfileService.userId) {
+				userTeams = user.teams;
+			}
+		}
+
+		for (let player of this.encounterService.players) {
+			let playerTeams = player.teams;
+			for (let userTeam of userTeams) {
+				if (playerTeams.includes(userTeam)) {
+					teamPlayers.push(player);
+				}
+			}
+		}
+
+		return teamPlayers;
+	}
+
 	public setTeamsData(data: EncounterTeamsData): void {
 		this.encounterService.teamsData = data;
+		this.teamsChangedSubject.next();
 	}
 
 	get teams(): string[] {
@@ -76,5 +107,9 @@ export class BoardTeamsService extends IsReadyService {
 
 	get users() {
 		return this.encounterService.users;
+	}
+
+	get teamsChangedObservable(): Observable<void> {
+		return this.teamsChangedSubject.asObservable();
 	}
 }

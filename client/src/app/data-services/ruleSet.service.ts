@@ -21,6 +21,7 @@ export class RuleSetService extends IsReadyService {
 			if (isUndefined(ruleSet.modulesConfig)) {
 				ruleSet.modulesConfig = {
 					lightAndVision: true,
+					hiddenAndSneaking: false,
 					conditions: false,
 					rounds: false,
 					damageTypes: false,

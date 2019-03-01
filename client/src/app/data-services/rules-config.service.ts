@@ -60,4 +60,12 @@ export class RulesConfigService {
 
 		return false;
 	}
+
+	get hasHiddenAndSneaking(): boolean {
+		if (this.ruleMode === RulesMode.RULE_SET) {
+			return this.ruleSetService.modulesConfig.hiddenAndSneaking;
+		}
+
+		return false;
+	}
 }

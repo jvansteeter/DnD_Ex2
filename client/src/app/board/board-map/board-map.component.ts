@@ -31,6 +31,7 @@ import { RendererConsolidationService } from '../renderer/renderer-consolidation
 import { RendererComponent } from '../renderer/render-component.interface';
 import { RuleSetService } from '../../data-services/ruleSet.service';
 import { RulesConfigService } from '../../data-services/rules-config.service';
+import { BoardStealthService } from '../services/board-stealth.service';
 
 
 @Component({
@@ -56,6 +57,7 @@ export class BoardMapComponent implements OnInit, AfterViewInit, OnDestroy, Rend
                 private renderConService: RendererConsolidationService,
                 private ruleSetService: RuleSetService,
                 public rulesConfigService: RulesConfigService,
+                private stealthService: BoardStealthService,
                 ) {
     }
 
@@ -83,10 +85,16 @@ export class BoardMapComponent implements OnInit, AfterViewInit, OnDestroy, Rend
      * Initiative Functions
      ****************************************************************************************************************/
     public showInitCoin(player: Player): boolean {
-        if (this.rightsService.isEncounterGM() || this.rightsService.isMyPlayer(player) || (player.isVisible && this.boardPlayerService.tokenHasLOSToSomeUserToken(player)) || this.boardTeamsService.userSharesTeamWithPlayer(player)) {
-            return true;
-        }
-        return false;
+    	  if (this.rightsService.isEncounterGM() || this.rightsService.isMyPlayer(player) || this.boardTeamsService.userSharesTeamWithPlayer(player)) {
+    	  	return true;
+	      }
+    	  else {
+		      let hasLineOfSight = player.isVisible && this.boardPlayerService.tokenHasLOSToSomeUserToken(player);
+		      if (this.rulesConfigService.hasHiddenAndSneaking) {
+			      hasLineOfSight = hasLineOfSight && this.stealthService.userCanSeeHiddenPlayer(player);
+		      }
+		      return hasLineOfSight;
+	      }
     }
 
     private boardMap_handleInitBadgeMouseUp(event: MouseEvent, player: Player) {

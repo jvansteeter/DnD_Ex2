@@ -9,6 +9,8 @@ import {GeometryStatics} from "../../statics/geometry-statics";
 import {RightsService} from '../../../data-services/rights.service';
 import { RendererConsolidationService } from '../renderer-consolidation.service';
 import { RendererComponent } from '../render-component.interface';
+import { RulesConfigService } from '../../../data-services/rules-config.service';
+import { BoardStealthService } from '../../services/board-stealth.service';
 
 @Component({
     selector: 'token-renderer',
@@ -27,6 +29,8 @@ export class TokenRendererComponent implements OnInit, OnDestroy, RendererCompon
         private boardTraverseService: BoardTraverseService,
         private rightsService: RightsService,
         private renderConService: RendererConsolidationService,
+        private rulesConfigService: RulesConfigService,
+        private stealthService: BoardStealthService,
     ) {
     }
 
@@ -72,9 +76,15 @@ export class TokenRendererComponent implements OnInit, OnDestroy, RendererCompon
             }
 
             if (player.isVisible) {
-                this.boardCanvasService.draw_img(this.ctx, new XyPair(player.location.x * BoardStateService.cell_res, player.location.y * BoardStateService.cell_res), player.token_img, 1.0);
-		            if (this.encounterService.config.showHealth) {
-			              this.boardCanvasService.draw_health_basic(this.ctx, player.location, player.hp / player.maxHp);
+            	  let userCanSeePlayer = true;
+		            if (this.rulesConfigService.hasHiddenAndSneaking && !this.rightsService.isEncounterGM() && !this.rightsService.isMyPlayer(player)) {
+			              userCanSeePlayer = this.stealthService.userCanSeeHiddenPlayer(player);
+		            }
+		            if (userCanSeePlayer) {
+				            this.boardCanvasService.draw_img(this.ctx, new XyPair(player.location.x * BoardStateService.cell_res, player.location.y * BoardStateService.cell_res), player.token_img, 1.0);
+				            if (this.encounterService.config.showHealth) {
+					              this.boardCanvasService.draw_health_basic(this.ctx, player.location, player.hp / player.maxHp);
+				            }
 		            }
             } else {
                 if (this.rightsService.isEncounterGM() || this.rightsService.isMyPlayer(player)) {
