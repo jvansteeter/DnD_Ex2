@@ -11,6 +11,7 @@ import { RulesConfigService } from '../../../data-services/rules-config.service'
 import { RuleModuleAspects } from '../../../../../../shared/predefined-aspects.enum';
 import { BoardTeamsService } from '../../services/board-teams.service';
 import { Player } from '../../../encounter/player';
+import { RightsService } from "../../../data-services/rights.service";
 
 @Component({
     selector: 'light-renderer',
@@ -29,6 +30,7 @@ export class LightRendererComponent implements OnInit, OnDestroy, RendererCompon
         private renderConService: RendererConsolidationService,
         private rulesConfigService: RulesConfigService,
         private teamsService: BoardTeamsService,
+        private rightsService: RightsService,
     ) {
     }
 
@@ -95,8 +97,8 @@ export class LightRendererComponent implements OnInit, OnDestroy, RendererCompon
 	    if (this.rulesConfigService.hasHiddenAndSneaking) {
 		    const playerIsHidden = Boolean(player.characterData.values[RuleModuleAspects.HIDDEN]);
 		    const playerOnUsersTeam = this.teamsService.userSharesTeamWithPlayer(player);
-		    return player.isVisible && (!playerIsHidden || (playerIsHidden && playerOnUsersTeam));
+		    return (player.isVisible || this.rightsService.isMyPlayer(player)) && (!playerIsHidden || (playerIsHidden && playerOnUsersTeam));
 	    }
-	    return player.isVisible;
+	    return player.isVisible || this.rightsService.isMyPlayer(player);
     }
 }

@@ -12,6 +12,7 @@ import {MatDialog} from "@angular/material";
 import {LightEditDialogComponent} from "../dialogs/light-edit-dialog/light-edit-dialog.component";
 import {isNullOrUndefined} from "util";
 import {BoardCanvasService} from "./board-canvas.service";
+import { PlayerVisibilityMode } from "../../../../../shared/types/encounter/board/player-visibility-mode";
 
 @Injectable()
 export class BoardLightService extends IsReadyService {
@@ -152,5 +153,9 @@ export class BoardLightService extends IsReadyService {
 
     public getLightSourceAtCell(cell: XyPair): LightSource {
         return this.lightSourceState.getLightSourceData_byCell(cell) as LightSource;
+    }
+
+    get playerVisibilityMode(): PlayerVisibilityMode {
+        return this.encounterService.config.playerVisibilityMode;
     }
 }

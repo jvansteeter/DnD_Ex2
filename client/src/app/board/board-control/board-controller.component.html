@@ -1,6 +1,6 @@
 <div *ngIf="!boardStateService.toolbarIsHidden" class="board-controller">
 	<view-edit-module></view-edit-module>
-	<diagnostic-module></diagnostic-module>
+	<diagnostic-module *ngIf="rightsService.isEncounterGM()"></diagnostic-module>
 	<encounter-config-module></encounter-config-module>
 	<notation-module></notation-module>
 	<light-visibility-module></light-visibility-module>
