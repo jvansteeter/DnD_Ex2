@@ -2,19 +2,25 @@
 	display: flex;
 	flex: 1;
 	flex-direction: column;
+	max-height: 80vh;
 }
 
 mat-header-cell {
 	min-width: 100px;
 }
 
+.scrollable-tables {
+	overflow-y: auto;
+}
+
 .new-team-section {
 	padding-top: 3px;
-	margin-left: auto;
 	display: flex;
 	align-items: center;
 
 	input {
 		margin-right: 5px;
+		width: 40%;
+		margin-left: auto;
 	}
 }

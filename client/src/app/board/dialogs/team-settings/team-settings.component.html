@@ -1,47 +1,49 @@
-<mat-table [dataSource]="teamsService.users">
-	<ng-container matColumnDef="user">
-		<mat-header-cell *matHeaderCellDef>User</mat-header-cell>
-		<mat-cell *matCellDef="let user">{{user.username}}</mat-cell>
-	</ng-container>
-	<ng-container *ngFor="let team of encounterService.teams">
-		<ng-container [matColumnDef]="team">
-			<mat-header-cell *matHeaderCellDef>{{team}}
-				<button mat-icon-button matTooltip="Remove Team"
-				        *ngIf="team !== 'GM' && team !== 'Player'"
-				        color="primary"
-				        (click)="removeTeam(team)"
-				><mat-icon>remove</mat-icon></button>
-			</mat-header-cell>
-			<mat-cell *matCellDef="let user">
-				<mat-checkbox [checked]="user.isMemberOfTeam(team)" (change)="toggleUserTeam(user, team)"></mat-checkbox>
-			</mat-cell>
+<div class="scrollable-tables">
+	<mat-table [dataSource]="teamsService.users">
+		<ng-container matColumnDef="user">
+			<mat-header-cell *matHeaderCellDef>User</mat-header-cell>
+			<mat-cell *matCellDef="let user">{{user.username}}</mat-cell>
 		</ng-container>
-	</ng-container>
-	<mat-header-row *matHeaderRowDef="userTableCols"></mat-header-row>
-	<mat-row *matRowDef="let user; columns: userTableCols"></mat-row>
-</mat-table>
-<mat-table [dataSource]="encounterService.players">
-	<ng-container matColumnDef="token">
-		<mat-header-cell *matHeaderCellDef>Token</mat-header-cell>
-		<mat-cell *matCellDef="let player">{{player.name}}</mat-cell>
-	</ng-container>
-	<ng-container *ngFor="let team of encounterService.teams">
-		<ng-container [matColumnDef]="team">
-			<mat-header-cell *matHeaderCellDef>{{team}}
-				<button mat-icon-button matTooltip="Remove Team"
-				        *ngIf="team !== 'GM' && team !== 'Player'"
-				        color="primary"
-								(click)="removeTeam(team)"
-				><mat-icon>remove</mat-icon></button>
-			</mat-header-cell>
-			<mat-cell *matCellDef="let player">
-				<mat-checkbox [checked]="player.isMemberOfTeam(team)" (change)="toggleTokenTeam(player, team)"></mat-checkbox>
-			</mat-cell>
+		<ng-container *ngFor="let team of encounterService.teams">
+			<ng-container [matColumnDef]="team">
+				<mat-header-cell *matHeaderCellDef>{{team}}
+					<button mat-icon-button matTooltip="Remove Team"
+					        *ngIf="team !== 'GM' && team !== 'Player'"
+					        color="primary"
+					        (click)="removeTeam(team)"
+					><mat-icon>remove</mat-icon></button>
+				</mat-header-cell>
+				<mat-cell *matCellDef="let user">
+					<mat-checkbox [checked]="user.isMemberOfTeam(team)" (change)="toggleUserTeam(user, team)"></mat-checkbox>
+				</mat-cell>
+			</ng-container>
 		</ng-container>
-	</ng-container>
-	<mat-header-row *matHeaderRowDef="tokenTableCols"></mat-header-row>
-	<mat-row *matRowDef="let player; columns: tokenTableCols"></mat-row>
-</mat-table>
+		<mat-header-row *matHeaderRowDef="userTableCols"></mat-header-row>
+		<mat-row *matRowDef="let user; columns: userTableCols"></mat-row>
+	</mat-table>
+	<mat-table [dataSource]="encounterService.players">
+		<ng-container matColumnDef="token">
+			<mat-header-cell *matHeaderCellDef>Token</mat-header-cell>
+			<mat-cell *matCellDef="let player">{{player.name}}</mat-cell>
+		</ng-container>
+		<ng-container *ngFor="let team of encounterService.teams">
+			<ng-container [matColumnDef]="team">
+				<mat-header-cell *matHeaderCellDef>{{team}}
+					<button mat-icon-button matTooltip="Remove Team"
+					        *ngIf="team !== 'GM' && team !== 'Player'"
+					        color="primary"
+					        (click)="removeTeam(team)"
+					><mat-icon>remove</mat-icon></button>
+				</mat-header-cell>
+				<mat-cell *matCellDef="let player">
+					<mat-checkbox [checked]="player.isMemberOfTeam(team)" (change)="toggleTokenTeam(player, team)"></mat-checkbox>
+				</mat-cell>
+			</ng-container>
+		</ng-container>
+		<mat-header-row *matHeaderRowDef="tokenTableCols"></mat-header-row>
+		<mat-row *matRowDef="let player; columns: tokenTableCols"></mat-row>
+	</mat-table>
+</div>
 <div class="new-team-section">
 	<input class="app-input" [(ngModel)]="newTeam" />
 	<button mat-raised-button color="primary" (click)="addTeam()">Add Team</button>

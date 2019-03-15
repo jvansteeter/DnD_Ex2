@@ -1,7 +1,7 @@
 <ng-container *ngIf="(!hasCampaignCharacters && !hasCampaignNPCs && !hasRuleSetNPCs) || (!rightsService.isEncounterGM() && !hasCampaignCharacters)">
 	<h3>No Characters</h3>
 </ng-container>
-<mat-tab-group *ngIf="(rightsService.isEncounterGM() && (hasCampaignCharacters || hasCampaignNPCs || hasRuleSetNPCs)) || (!rightsService.isEncounterGM() && hasCampaignCharacters)">
+<mat-tab-group *ngIf="(rightsService.isEncounterGM() && (hasCampaignCharacters || hasCampaignNPCs || hasRuleSetNPCs)) || (!rightsService.isEncounterGM() && hasCampaignCharacters)" class="player-tabs">
 	<mat-tab label="Campaign Characters" [disabled]="!hasCampaignCharacters">
 		<mat-table [dataSource]="campaignCharacterDataSource">
 			<ng-container matColumnDef="check">
