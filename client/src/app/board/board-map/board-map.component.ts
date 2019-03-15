@@ -123,6 +123,12 @@ export class BoardMapComponent implements OnInit, AfterViewInit, OnDestroy, Rend
             case 2:
                 break;
             case 3:
+            	  if (this.popService.popIsActive(player.id)) {
+            	  	this.popService.clearPlayerPop(player.id);
+	              }
+            	  else {
+		              this.popService.addPlayerPop(event.x + 50, event.y, player);
+	              }
                 break;
         }
     }
