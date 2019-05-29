@@ -13,8 +13,8 @@ import { isUndefined } from 'util';
 })
 export class CurrentMaxComponent implements SubComponentChild {
 	@Input() aspect: Aspect;
-	@ViewChild('options') options: MatMenu;
-	@ViewChild('fontSizeInput') fontSizeInput: ElementRef;
+	@ViewChild('options', {static: false}) options: MatMenu;
+	@ViewChild('fontSizeInput', {static: false}) fontSizeInput: ElementRef;
 	label: string;
 	required: boolean;
 	readonly hasOptions = false;

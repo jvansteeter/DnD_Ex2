@@ -20,7 +20,7 @@ import { PredefinedAspects } from '../../../../../shared/predefined-aspects.enum
 export class CharacterMakerComponent implements OnInit, AfterViewInit, OnDestroy {
 	private characterSheetId: string;
 
-	@ViewChild('characterTooltip')
+	@ViewChild('characterTooltip', {static: false})
 	private characterToolTipComponent: CharacterTooltipComponent;
 
 	public characterToolTipCard: DashboardCard;

@@ -13,7 +13,7 @@ import { RendererComponent } from '../render-component.interface';
     templateUrl: 'notation-renderer.component.html'
 })
 export class NotationRendererComponent implements OnInit, OnDestroy, RendererComponent {
-    @ViewChild('notationRenderCanvas') gridRenderCanvas: ElementRef;
+    @ViewChild('notationRenderCanvas', {static: false}) gridRenderCanvas: ElementRef;
     private ctx: CanvasRenderingContext2D;
 
     constructor(

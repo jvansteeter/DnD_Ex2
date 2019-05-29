@@ -15,7 +15,7 @@ export interface CategoryOption {
 })
 export class CategoryComponent implements SubComponentChild, AfterViewInit {
 	@Input() aspect: Aspect;
-	@ViewChild('options') options: MatMenu;
+	@ViewChild('options', {static: false}) options: MatMenu;
 	label: string;
 	required: boolean;
 	hasOptions = true;

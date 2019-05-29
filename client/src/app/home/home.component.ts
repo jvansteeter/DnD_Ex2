@@ -21,7 +21,7 @@ import { CampaignData } from '../../../../shared/types/campaign.data';
 	styleUrls: ['home.component.scss']
 })
 export class HomeComponent implements OnInit {
-	@ViewChild('fileInput') fileInput: ElementRef;
+	@ViewChild('fileInput', {static: false}) fileInput: ElementRef;
 	private imageReader: FileReader = new FileReader();
 	private jsonReader: FileReader = new FileReader();
 	private profilePhotoUrl: string = '';
@@ -105,7 +105,7 @@ export class HomeComponent implements OnInit {
 
 	public loadImage(): void {
 		this.imageReader.addEventListener('load', () => {
-			this.profilePhotoUrl = this.imageReader.result;
+			this.profilePhotoUrl = String(this.imageReader.result);
 			this.userProfileService.setProfilePhotoUrl(this.profilePhotoUrl);
 		});
 		if (this.fileInput.nativeElement.files[0]) {

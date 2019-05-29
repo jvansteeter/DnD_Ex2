@@ -10,7 +10,7 @@ import { RendererComponent } from '../render-component.interface';
 })
 
 export class GridRendererComponent implements OnInit, OnDestroy, RendererComponent {
-    @ViewChild('gridRenderCanvas') gridRenderCanvas: ElementRef;
+    @ViewChild('gridRenderCanvas', {static: false}) gridRenderCanvas: ElementRef;
     private ctx_root: CanvasRenderingContext2D;
 
     constructor(

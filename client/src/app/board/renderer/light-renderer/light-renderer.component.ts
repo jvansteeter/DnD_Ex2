@@ -18,7 +18,7 @@ import { RightsService } from "../../../data-services/rights.service";
     templateUrl: 'light-renderer.component.html'
 })
 export class LightRendererComponent implements OnInit, OnDestroy, RendererComponent {
-    @ViewChild('lightRenderCanvasRoot') lightRenderCanvasRoot: ElementRef;
+    @ViewChild('lightRenderCanvasRoot', {static: false}) lightRenderCanvasRoot: ElementRef;
     private ctx_root: CanvasRenderingContext2D;
 
     constructor(

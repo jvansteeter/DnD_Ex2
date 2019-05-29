@@ -12,7 +12,7 @@ import { RendererComponent } from '../render-component.interface';
     templateUrl: 'wall-renderer.component.html'
 })
 export class WallRendererComponent implements OnInit, OnDestroy, RendererComponent {
-    @ViewChild('wallRenderCanvas') wallRenderCanvas: ElementRef;
+    @ViewChild('wallRenderCanvas', {static: false}) wallRenderCanvas: ElementRef;
     private ctx: CanvasRenderingContext2D;
 
     constructor(

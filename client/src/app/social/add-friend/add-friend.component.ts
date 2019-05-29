@@ -1,4 +1,3 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
 import { UserProfile } from '../../types/userProfile';
 import { MatDialogRef } from '@angular/material';
@@ -10,6 +9,7 @@ import { NotificationService } from '../../data-services/notification.service';
 import { NotificationType } from "../../../../../shared/types/notifications/notification-type.enum";
 import { FriendRequestNotification } from "../../../../../shared/types/notifications/friend-request-notification";
 import { NotificationData } from '../../../../../shared/types/notifications/notification-data';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 
 
 @Component({
@@ -18,7 +18,7 @@ import { NotificationData } from '../../../../../shared/types/notifications/noti
 	styleUrls: ['add-friend.component.css']
 })
 export class AddFriendComponent {
-	@ViewChild('searchCriteria') private searchInput: ElementRef;
+	@ViewChild('searchCriteria', {static: false}) private searchInput: ElementRef;
 	private userDataSource: SubjectDataSource<UserProfile>;
 	private readonly userSubject: Subject<UserProfile[]>;
 	public tableColumns = ['user', 'actions'];

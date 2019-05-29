@@ -18,7 +18,7 @@ import { BoardStealthService } from '../../services/board-stealth.service';
 })
 
 export class TokenRendererComponent implements OnInit, OnDestroy, RendererComponent {
-    @ViewChild('tokenRenderCanvas') tokenRenderCanvas: ElementRef;
+    @ViewChild('tokenRenderCanvas', {static: false}) tokenRenderCanvas: ElementRef;
     private ctx: CanvasRenderingContext2D;
 
     constructor(

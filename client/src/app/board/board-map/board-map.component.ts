@@ -41,7 +41,7 @@ import { RuleModuleAspects } from '../../../../../shared/predefined-aspects.enum
     styleUrls: ['board-map.component.scss']
 })
 export class BoardMapComponent implements OnInit, AfterViewInit, OnDestroy, RendererComponent {
-    @ViewChild('mapContainer') mapContainer: ElementRef;
+    @ViewChild('mapContainer', {static: false}) mapContainer: ElementRef;
     public RuleModuleAspects = RuleModuleAspects;
 
     constructor(private boardCanvasService: BoardCanvasService,

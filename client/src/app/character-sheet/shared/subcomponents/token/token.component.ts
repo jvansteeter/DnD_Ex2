@@ -8,7 +8,7 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 export class TokenComponent {
 	private tokenUrl: string = '';
 
-	@ViewChild('fileInput') fileInput: ElementRef;
+	@ViewChild('fileInput', {static: false}) fileInput: ElementRef;
 	reader: FileReader = new FileReader();
 
 	constructor() {

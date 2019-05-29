@@ -8,7 +8,7 @@ import {PopService} from "./pop.service";
 })
 
 export class PopRootComponent implements OnInit{
-    @ViewChild('popRoot', {read: ViewContainerRef}) popRoot;
+    @ViewChild('popRoot', {read: ViewContainerRef, static: false}) popRoot;
 
     constructor(
         private componentFactoryResolver: ComponentFactoryResolver,

@@ -16,7 +16,7 @@ interface TextItem {
 })
 export class TextListComponent implements SubComponentChild, AfterViewInit {
 	@Input() aspect: Aspect;
-	@ViewChild('options') options: MatMenu;
+	@ViewChild('options', {static: false}) options: MatMenu;
 	label: string;
 	required: boolean;
 	readonly hasOptions = true;

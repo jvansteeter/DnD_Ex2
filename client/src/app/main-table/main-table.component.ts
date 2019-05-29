@@ -8,8 +8,8 @@ import { MainTableDataSource } from './main-table-datasource';
   styleUrls: ['./main-table.component.css']
 })
 export class MainTableComponent implements OnInit {
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
+  @ViewChild(MatSort, {static: false}) sort: MatSort;
   dataSource: MainTableDataSource;
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
