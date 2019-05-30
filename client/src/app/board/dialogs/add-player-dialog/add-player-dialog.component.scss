@@ -27,3 +27,8 @@ input::-webkit-inner-spin-button {
 .player-tabs {
 	max-height: 80vh;
 }
+
+mat-table {
+	overflow-y: auto;
+	height: 100%;
+}

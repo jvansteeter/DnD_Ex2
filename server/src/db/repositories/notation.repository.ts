@@ -69,7 +69,9 @@ export class NotationRepository {
 	public async updateNotation(notationData: NotationData): Promise<void> {
 		try {
 			const notation: NotationModel = await this.findById(notationData._id);
-			await notation.setNotationData(notationData);
+			if (notation !== null) {
+				await notation.setNotationData(notationData);
+			}
 
 			return;
 		}
