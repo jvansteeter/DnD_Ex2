@@ -11,6 +11,7 @@ import {UserProfileService} from "../../../data-services/userProfile.service";
 import {BoardTeamsService} from "../../services/board-teams.service";
 import { RendererConsolidationService } from '../renderer-consolidation.service';
 import { RendererComponent } from '../render-component.interface';
+import { Player } from '../../../encounter/player';
 
 @Component({
     selector: 'visibility-renderer',
@@ -106,11 +107,10 @@ export class VisibilityRendererComponent implements OnInit, OnDestroy, RendererC
                 this.boardCanvasService.fill_canvas(this.ctx, 'rgba(0, 0, 0, 1.0)');
                 switch (this.encounterService.config.playerVisibilityMode) {
                     case PlayerVisibilityMode.PLAYER:
-                        for (let player of this.boardPlayerService.players) {
-                            if (player.userId === this.userProfileService.userId) {
-                                const visPoly = this.boardPlayerService.player_visibility_map.get(player._id);
-                                this.boardCanvasService.clear_xy_array(this.ctx, visPoly);
-                            }
+                    	  const userPlayers: Player[] = this.boardPlayerService.players.filter((player: Player) => player.userId === this.userProfileService.userId);
+                        for (let player of userPlayers) {
+                            const visPoly = this.boardPlayerService.player_visibility_map.get(player._id);
+                            this.boardCanvasService.clear_xy_array(this.ctx, visPoly);
                         }
                         break;
                     case PlayerVisibilityMode.TEAM:

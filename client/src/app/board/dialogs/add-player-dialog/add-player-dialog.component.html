@@ -3,6 +3,9 @@
 </ng-container>
 <mat-tab-group *ngIf="(rightsService.isEncounterGM() && (hasCampaignCharacters || hasCampaignNPCs || hasRuleSetNPCs)) || (!rightsService.isEncounterGM() && hasCampaignCharacters)" class="player-tabs">
 	<mat-tab label="Campaign Characters" [disabled]="!hasCampaignCharacters">
+		<mat-form-field class="filter">
+			<input matInput (keyup)="applyCharacterFilter($event.target.value)" placeholder="Filter" />
+		</mat-form-field>
 		<mat-table [dataSource]="campaignCharacterDataSource">
 			<ng-container matColumnDef="check">
 				<mat-header-cell *matHeaderCellDef></mat-header-cell>
@@ -13,6 +16,12 @@
 					></mat-checkbox>
 				</mat-cell>
 			</ng-container>
+			<ng-container matColumnDef="token">
+				<mat-header-cell *matHeaderCellDef></mat-header-cell>
+				<mat-cell *matCellDef="let character">
+					<img [src]="character.tokenUrl" style="width: 50px; height: 50px;"/>
+				</mat-cell>
+			</ng-container>
 			<ng-container matColumnDef="label">
 				<mat-header-cell *matHeaderCellDef>Character</mat-header-cell>
 				<mat-cell *matCellDef="let character">{{character.label}}</mat-cell>
@@ -27,7 +36,6 @@
 					</div>
 				</mat-cell>
 			</ng-container>
-			<mat-header-row *matHeaderRowDef="characterTableColumns"></mat-header-row>
 			<mat-row *matRowDef="let character; columns: characterTableColumns"></mat-row>
 		</mat-table>
 	</mat-tab>
@@ -37,6 +45,9 @@
 		</ng-container>
 	</mat-tab>
 	<mat-tab label="RuleSet NPCs" *ngIf="rightsService.isEncounterGM()" [disabled]="!hasRuleSetNPCs">
+		<mat-form-field class="filter">
+			<input matInput (keyup)="applyRuleSetFilter($event.target.value)" placeholder="Filter" />
+		</mat-form-field>
 		<mat-table [dataSource]="ruleSetNPCDataSource">
 			<ng-container matColumnDef="check">
 				<mat-header-cell *matHeaderCellDef></mat-header-cell>
@@ -47,6 +58,12 @@
 					></mat-checkbox>
 				</mat-cell>
 			</ng-container>
+			<ng-container matColumnDef="token">
+				<mat-header-cell *matHeaderCellDef></mat-header-cell>
+				<mat-cell *matCellDef="let character">
+					<img [src]="character.tokenUrl" style="width: 50px; height: 50px;"/>
+				</mat-cell>
+			</ng-container>
 			<ng-container matColumnDef="label">
 				<mat-header-cell *matHeaderCellDef>Character</mat-header-cell>
 				<mat-cell *matCellDef="let character">{{character.label}}</mat-cell>
@@ -61,7 +78,6 @@
 					</div>
 				</mat-cell>
 			</ng-container>
-			<mat-header-row *matHeaderRowDef="characterTableColumns"></mat-header-row>
 			<mat-row *matRowDef="let character; columns: characterTableColumns"></mat-row>
 		</mat-table>
 	</mat-tab>

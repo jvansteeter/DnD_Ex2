@@ -22,7 +22,7 @@ export class AddPlayerDialogComponent implements OnInit {
 
 	public campaignCharacterDataSource: MatTableDataSource<CharacterData>;
 	public ruleSetNPCDataSource: MatTableDataSource<CharacterData>;
-	public characterTableColumns = ['check', 'label', 'count'];
+	public characterTableColumns = ['check', 'token', 'label', 'count'];
 
 	private counts: Map<CharacterData, number>;
 
@@ -97,5 +97,13 @@ export class AddPlayerDialogComponent implements OnInit {
 		else {
 			this.dialogRef.close();
 		}
+	}
+
+	public applyRuleSetFilter(value: string): void {
+		this.ruleSetNPCDataSource.filter = value.trim().toLowerCase();
+	}
+
+	public applyCharacterFilter(value: string): void {
+		this.campaignCharacterDataSource.filter = value.trim().toLowerCase();
 	}
 }

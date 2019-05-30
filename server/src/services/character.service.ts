@@ -28,8 +28,10 @@ export class CharacterService {
 		if (!!campaignId) {
 			characterModel = await characterModel.setCampaignId(campaignId);
 		}
-		let characterSheetModel: CharacterSheetModel = await this.characterSheetRepo.findById(sheetId);
-		characterModel = await characterModel.setRuleSetId(characterSheetModel.ruleSetId);
+		else {
+			let characterSheetModel: CharacterSheetModel = await this.characterSheetRepo.findById(sheetId);
+			characterModel = await characterModel.setRuleSetId(characterSheetModel.ruleSetId);
+		}
 		return characterModel;
 	}
 
