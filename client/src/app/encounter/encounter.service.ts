@@ -24,6 +24,7 @@ export class EncounterService extends IsReadyService {
 	public encounterId: string;
 	private encounterState: EncounterState;
 	private incrementRoundSubject: Subject<void>;
+	private addPlayerSubject: Subject<void>;
 
 	constructor(
 			protected encounterRepo: EncounterRepository,
@@ -34,6 +35,7 @@ export class EncounterService extends IsReadyService {
 
 	public init(): void {
 		this.incrementRoundSubject = new Subject();
+		this.addPlayerSubject = new Subject();
 		this.encounterRepo.getEncounter(this.encounterId).subscribe((encounter: EncounterData) => {
 			this.encounterState = new EncounterState(encounter);
 			this.setReady(true);
@@ -48,6 +50,7 @@ export class EncounterService extends IsReadyService {
 
 	public addPlayer(player: Player): void {
 		this.encounterState.addPlayer(player);
+		this.addPlayerSubject.next();
 	}
 
 	public removePlayer(player: Player): void {
@@ -287,6 +290,10 @@ export class EncounterService extends IsReadyService {
 
 	get incrementRoundObservable(): Observable<void> {
 		return this.incrementRoundSubject.asObservable();
+	}
+
+	get addPlayerObservable(): Observable<void> {
+		return this.addPlayerSubject.asObservable();
 	}
 
 	get isLightEnabled(): boolean {

@@ -17,9 +17,9 @@ import { isNull, isUndefined } from "util";
 	styleUrls: ['chat.component.scss', 'resizable.css'],
 })
 export class ChatComponent implements OnInit, OnDestroy {
-	@ViewChild('auto', {static: false}) matAutocomplete: MatAutocomplete;
-	@ViewChild('chipInput', {static: false}) chipInput: ElementRef<HTMLInputElement>;
-	@ViewChild('chatHistory', {static: false}) chatHistory: ElementRef;
+	@ViewChild('auto', {static: true}) matAutocomplete: MatAutocomplete;
+	@ViewChild('chipInput', {static: true}) chipInput: ElementRef<HTMLInputElement>;
+	@ViewChild('chatHistory', {static: true}) chatHistory: ElementRef;
 
 	public chatContent: string = '';
 	public toBarControl = new FormControl();

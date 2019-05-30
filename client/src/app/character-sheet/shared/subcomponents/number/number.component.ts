@@ -12,8 +12,8 @@ import { CharacterInterfaceFactory } from '../../character-interface.factory';
 })
 export class NumberComponent implements SubComponentChild {
 	@Input() aspect: Aspect;
-	@ViewChild('options', {static: false}) options: MatMenu;
-	@ViewChild('fontSizeInput', {static: false}) fontSizeInput: ElementRef;
+	@ViewChild('options', {static: true}) options: MatMenu;
+	@ViewChild('fontSizeInput', {static: true}) fontSizeInput: ElementRef;
 	label: string;
 	required: boolean;
 	readonly hasOptions = false;

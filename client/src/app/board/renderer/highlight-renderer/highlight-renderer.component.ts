@@ -14,7 +14,7 @@ import { RendererComponent } from '../render-component.interface';
 })
 
 export class HighlightRendererComponent implements OnInit, OnDestroy, RendererComponent {
-    @ViewChild('highlightRenderCanvas', {static: false}) highlightRenderCanvas: ElementRef;
+    @ViewChild('highlightRenderCanvas', {static: true}) highlightRenderCanvas: ElementRef;
     private ctx: CanvasRenderingContext2D;
 
     constructor(

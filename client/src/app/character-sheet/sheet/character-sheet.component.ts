@@ -15,7 +15,7 @@ import { TokenComponent } from '../shared/subcomponents/token/token.component';
 export class CharacterSheetComponent implements OnInit {
 	private npcId: string;
 
-	@ViewChild(TokenComponent, {static: false})
+	@ViewChild(TokenComponent, {static: true})
 	tokenComponent: TokenComponent;
 
 	constructor(private activatedRoute: ActivatedRoute,

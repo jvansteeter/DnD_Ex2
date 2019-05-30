@@ -23,6 +23,9 @@ export class BoardTeamsService extends IsReadyService {
 	public init(): void {
 		this.dependenciesSub = this.dependenciesReady().subscribe((isReady: boolean) => {
 			if (isReady && !this.isReady()) {
+				this.encounterService.addPlayerObservable.subscribe(() => {
+					this.teamsChangedSubject.next();
+				});
 				console.log('boardTeamsService.init() -> isReady');
 				this.setReady(true);
 			}

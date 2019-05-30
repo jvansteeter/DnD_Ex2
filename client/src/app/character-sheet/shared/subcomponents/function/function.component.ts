@@ -14,7 +14,7 @@ import { RuleFunction } from './rule-function';
 })
 export class FunctionComponent implements SubComponentChild, AfterViewInit {
 	@Input() aspect: Aspect;
-	@ViewChild('options', {static: false}) options: MatMenu;
+	@ViewChild('options', {static: true}) options: MatMenu;
 
 	readonly hasOptions: boolean = true;
 	value: any = 'NaN';

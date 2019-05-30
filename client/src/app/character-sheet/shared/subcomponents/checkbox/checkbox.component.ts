@@ -15,7 +15,7 @@ export class CheckboxComponent implements SubComponentChild {
     hasOptions = false;
     value: boolean;
 
-    @ViewChild('options', {static: false}) options: MatMenu;
+    @ViewChild('options', {static: true}) options: MatMenu;
 
     constructor(private characterMakerService: CharacterMakerService) {
 

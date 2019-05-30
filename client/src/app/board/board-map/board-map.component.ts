@@ -41,7 +41,7 @@ import { RuleModuleAspects } from '../../../../../shared/predefined-aspects.enum
     styleUrls: ['board-map.component.scss']
 })
 export class BoardMapComponent implements OnInit, AfterViewInit, OnDestroy, RendererComponent {
-    @ViewChild('mapContainer', {static: false}) mapContainer: ElementRef;
+    @ViewChild('mapContainer', {static: true}) mapContainer: ElementRef;
     public RuleModuleAspects = RuleModuleAspects;
 
     constructor(private boardCanvasService: BoardCanvasService,
@@ -112,6 +112,7 @@ export class BoardMapComponent implements OnInit, AfterViewInit, OnDestroy, Rend
     }
 
     private boardMap_handleInitIconMouseUp(event: MouseEvent, player: Player) {
+        console.log('init icon mouse up', event)
         switch(event.which) {
             case 1:
                 if (this.boardStateService.ctrlDown) {

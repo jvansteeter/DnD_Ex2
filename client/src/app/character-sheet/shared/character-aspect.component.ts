@@ -17,7 +17,7 @@ import { MatMenu } from '@angular/material';
 })
 export class CharacterAspectComponent implements AfterViewInit {
 	@Input('aspect') aspect: Aspect;
-	@ViewChild('child', {static: false}) child: SubComponentChild;
+	@ViewChild('child', {static: true}) child: SubComponentChild;
 	options: MatMenu;
 	aspectType = AspectType;
 	optionsOpen: boolean = false;

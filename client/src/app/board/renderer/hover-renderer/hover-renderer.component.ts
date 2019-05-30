@@ -18,7 +18,7 @@ import { RendererConsolidationService } from '../renderer-consolidation.service'
 })
 
 export class HoverRendererComponent implements OnInit, OnDestroy, RendererComponent {
-    @ViewChild('hoverRenderCanvas', {static: false}) hoverRenderCanvas: ElementRef;
+    @ViewChild('hoverRenderCanvas', {static: true}) hoverRenderCanvas: ElementRef;
     private ctx: CanvasRenderingContext2D;
 
     constructor(

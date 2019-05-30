@@ -18,7 +18,7 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 	styleUrls: ['add-friend.component.css']
 })
 export class AddFriendComponent {
-	@ViewChild('searchCriteria', {static: false}) private searchInput: ElementRef;
+	@ViewChild('searchCriteria', {static: true}) private searchInput: ElementRef;
 	private userDataSource: SubjectDataSource<UserProfile>;
 	private readonly userSubject: Subject<UserProfile[]>;
 	public tableColumns = ['user', 'actions'];

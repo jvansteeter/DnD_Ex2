@@ -15,7 +15,7 @@ import { RendererComponent } from '../render-component.interface';
 })
 
 export class DiagnosticRendererComponent implements OnInit, OnDestroy, RendererComponent {
-    @ViewChild('diagnosticRenderCanvas', {static: false}) diagnosticRenderCanvas: ElementRef;
+    @ViewChild('diagnosticRenderCanvas', {static: true}) diagnosticRenderCanvas: ElementRef;
     private ctx: CanvasRenderingContext2D;
 
     constructor(

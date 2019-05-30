@@ -18,7 +18,7 @@ export class MapRendererComponent extends IsReadyService implements OnInit, OnDe
     // public static DEV_MAP_URL_STRING = 'resources/images/maps/shack.jpg';
 	// TODO: this shouldn't be isReady
 
-    @ViewChild('mapRenderCanvas', {static: false}) mapRenderCanvas: ElementRef;
+    @ViewChild('mapRenderCanvas', {static: true}) mapRenderCanvas: ElementRef;
     private ctx: CanvasRenderingContext2D;
 
     private bgImage = new Image();

@@ -18,7 +18,7 @@ interface CheckboxItem {
 })
 export class CheckboxListComponent implements SubComponentChild, AfterViewInit {
 	@Input() aspect: Aspect;
-	@ViewChild('options', {static: false}) options: MatMenu;
+	@ViewChild('options', {static: true}) options: MatMenu;
 	label: string;
 	required: boolean;
 	readonly hasOptions = true;

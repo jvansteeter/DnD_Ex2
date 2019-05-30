@@ -16,7 +16,7 @@ import { isUndefined } from 'util';
 })
 export class ConditionsAspectComponent implements SubComponentChild {
 	@Input() aspect: Aspect;
-	@ViewChild('options', {static: false}) options: MatMenu;
+	@ViewChild('options', {static: true}) options: MatMenu;
 	readonly hasOptions: boolean = true;
 
 	conditions: ConditionData[] = [];

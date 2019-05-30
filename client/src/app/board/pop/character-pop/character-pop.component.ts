@@ -20,7 +20,7 @@ export class CharacterPopComponent {
 
 	window = false;
 
-	@ViewChild(CharacterTooltipComponent, {static: false})
+	@ViewChild(CharacterTooltipComponent, {static: true})
 	tooltipComponent: CharacterTooltipComponent;
 	hovered = false;
 

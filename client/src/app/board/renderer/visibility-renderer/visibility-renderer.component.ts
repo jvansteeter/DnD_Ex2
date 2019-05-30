@@ -18,7 +18,7 @@ import { RendererComponent } from '../render-component.interface';
 })
 
 export class VisibilityRendererComponent implements OnInit, OnDestroy, RendererComponent {
-    @ViewChild('visibilityRenderCanvas', {static: false}) visibilityRenderCanvas: ElementRef;
+    @ViewChild('visibilityRenderCanvas', {static: true}) visibilityRenderCanvas: ElementRef;
     private ctx: CanvasRenderingContext2D;
 
     constructor(

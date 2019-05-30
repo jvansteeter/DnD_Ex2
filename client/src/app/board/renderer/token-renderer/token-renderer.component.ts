@@ -18,7 +18,7 @@ import { BoardStealthService } from '../../services/board-stealth.service';
 })
 
 export class TokenRendererComponent implements OnInit, OnDestroy, RendererComponent {
-    @ViewChild('tokenRenderCanvas', {static: false}) tokenRenderCanvas: ElementRef;
+    @ViewChild('tokenRenderCanvas', {static: true}) tokenRenderCanvas: ElementRef;
     private ctx: CanvasRenderingContext2D;
 
     constructor(
@@ -66,11 +66,11 @@ export class TokenRendererComponent implements OnInit, OnDestroy, RendererCompon
 
                 for (cellIndex = 0; cellIndex < traverseMap.length; cellIndex++) {
                     if (traverseMap[cellIndex] <= player.speed * 2) {
-                        this.boardCanvasService.draw_fill_all(this.ctx, GeometryStatics.indexToXY(cellIndex, this.boardStateService.mapDimX), 'rgba(0, 0, 180, 0.1)');
+                        this.boardCanvasService.draw_fill_all(this.ctx, GeometryStatics.indexToXY(cellIndex, this.boardStateService.mapDimX), 'rgba(255, 0, 0, 0.2)');
                     }
 
                     if (traverseMap[cellIndex] <= player.speed) {
-                        this.boardCanvasService.draw_fill_all(this.ctx, GeometryStatics.indexToXY(cellIndex, this.boardStateService.mapDimX), 'rgba(0, 0, 180, 0.1)');
+                        this.boardCanvasService.draw_fill_all(this.ctx, GeometryStatics.indexToXY(cellIndex, this.boardStateService.mapDimX), 'rgba(0, 0, 255, 0.2)');
                     }
                 }
             }

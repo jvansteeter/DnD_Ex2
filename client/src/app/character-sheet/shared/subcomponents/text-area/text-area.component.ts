@@ -10,7 +10,7 @@ import { MatMenu } from '@angular/material';
 })
 export class TextAreaComponent implements SubComponentChild {
 	@Input() aspect: Aspect;
-	@ViewChild('options', {static: false}) options: MatMenu;
+	@ViewChild('options', {static: true}) options: MatMenu;
 	label: string;
 	required: boolean;
 	hasOptions = true;

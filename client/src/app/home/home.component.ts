@@ -21,7 +21,7 @@ import { CampaignData } from '../../../../shared/types/campaign.data';
 	styleUrls: ['home.component.scss']
 })
 export class HomeComponent implements OnInit {
-	@ViewChild('fileInput', {static: false}) fileInput: ElementRef;
+	@ViewChild('fileInput', {static: true}) fileInput: ElementRef;
 	private imageReader: FileReader = new FileReader();
 	private jsonReader: FileReader = new FileReader();
 	private profilePhotoUrl: string = '';
