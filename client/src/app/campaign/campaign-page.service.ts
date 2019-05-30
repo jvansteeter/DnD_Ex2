@@ -74,7 +74,9 @@ export class CampaignPageService extends IsReadyService {
 
 	public sendInvitations(friends: UserProfile[]): void {
 		friends.forEach((friend: UserProfile) => {
-			this.mqService.sendCampaignInvite(friend._id, this.campaignId);
+			this.campaignRepo.sendInvite(friend._id, this.campaignId).subscribe(() => {
+				this.mqService.sendCampaignInvite(friend._id, this.campaignId);
+			});
 		});
 	}
 

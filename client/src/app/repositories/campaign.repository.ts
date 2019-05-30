@@ -55,4 +55,12 @@ export class CampaignRepository {
 	public deleteCampaign(campaignId: string): Observable<void> {
 		return this.http.post<void>('/api/campaign/delete', {campaignId: campaignId});
 	}
+
+	public sendInvite(userId: string, campaignId: string): Observable<void> {
+		const body = {
+			userId,
+			campaignId,
+		};
+		return this.http.post<void>('/api/campaign/invite', body);
+	}
 }

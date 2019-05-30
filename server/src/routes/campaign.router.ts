@@ -4,6 +4,7 @@ import { CampaignModel } from '../db/models/campaign.model';
 import { EncounterService } from "../services/encounter.service";
 import { EncounterModel } from '../db/models/encounter.model';
 import { CampaignData } from '../../../shared/types/campaign.data';
+import { NotificationService } from '../services/notification.service';
 
 
 /**********************************************************************************************************
@@ -16,12 +17,14 @@ export class CampaignRouter {
 
 	private campaignService: CampaignService;
 	private encounterService: EncounterService;
+	private notificationService: NotificationService;
 
 	constructor() {
 		this.router = Router();
 
 		this.campaignService = new CampaignService();
 		this.encounterService = new EncounterService();
+		this.notificationService = new NotificationService();
 		this.init();
 	}
 
@@ -109,6 +112,20 @@ export class CampaignRouter {
 				const userId = req.body.userId;
 				const isGameMaster: boolean = req.body.isGameMaster === 'true';
 				await this.campaignService.setIsGameMaster(campaignId, userId, isGameMaster);
+				res.status(200).send();
+			}
+			catch (error) {
+				console.error(error);
+				res.status(500).send(error);
+			}
+		});
+
+		this.router.post('/invite', async (req: Request, res: Response) => {
+			try {
+				const fromUserId: string = req.user._id;
+				const toUserId: string = req.body.userId;
+				const campaignId: string = req.body.campaignId;
+				await this.notificationService.sendCampaignInvite(fromUserId, toUserId, campaignId);
 				res.status(200).send();
 			}
 			catch (error) {

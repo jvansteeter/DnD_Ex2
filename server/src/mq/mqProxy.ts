@@ -1,15 +1,12 @@
 import * as amqp from 'amqplib/callback_api';
-import { Observable, Subject, throwError } from 'rxjs';
+import { merge, Observable, Subject, throwError } from 'rxjs';
 import { UserModel } from '../db/models/user.model';
 import { Promise } from 'bluebird';
 import * as http from 'http';
 import { MqConfig } from '../config/mqConfig';
-import { merge } from 'rxjs/internal/observable/merge';
 import { FriendRequest } from '../../../shared/types/mq/FriendRequest';
 import { FriendRequestMessage } from './messages/friend-request.message';
 import { MqFactory } from './mq.factory';
-import { CampaignInvite } from '../../../shared/types/mq/campaign-invite';
-import { CampaignInviteMessage } from './messages/campaign-invite.message';
 import { MqError } from '../../../shared/errors/MqError';
 import { EncounterCommandMessage } from './messages/encounter-command.message';
 import { EncounterCommand } from '../../../shared/types/mq/encounter-command';
@@ -93,25 +90,6 @@ export class MqProxy {
 		});
 
 		return friendRequestSubject.asObservable();
-	}
-
-	public observeAllCampaignInvites(): Observable<CampaignInvite> {
-		if (!this.connection) {
-			return throwError('Not connected to MQ Server');
-		}
-		let campaignInviteSubject = new Subject<CampaignInvite>();
-		this.connection.createChannel((error, channel) => {
-			if (error) {
-				merge(campaignInviteSubject, throwError(new Error(error)));
-			}
-
-			channel.bindQueue(MqConfig.campaignInviteQueueName, MqConfig.userExchange, MqConfig.campaignInviteTopic);
-			channel.consume(MqConfig.campaignInviteQueueName, (message) => {
-				campaignInviteSubject.next(new CampaignInviteMessage(message));
-			});
-		});
-
-		return campaignInviteSubject.asObservable();
 	}
 
 	public async sendEncounterCommand(encounterId: string, encounterUpdate: EncounterCommand): Promise<void> {

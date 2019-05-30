@@ -4,8 +4,6 @@ import { FriendRequest } from '../../../shared/types/mq/FriendRequest';
 import { NotificationRepository } from '../db/repositories/notification.repository';
 import { NotificationType } from '../../../shared/types/notifications/notification-type.enum';
 import { NotificationModel } from '../db/models/notification.model';
-import { CampaignInvite } from '../../../shared/types/mq/campaign-invite';
-import { CampaignInviteNotification } from '../../../shared/types/notifications/campaign-invite-notification';
 import { FriendRequestNotification } from "../../../shared/types/notifications/friend-request-notification";
 import { FriendRepository } from "../db/repositories/friend.repository";
 import { EncounterCommandType } from '../../../shared/types/encounter/encounter-command.enum';
@@ -43,9 +41,6 @@ export class MqService {
 		});
 		this.mqProxy.observeAllFriendRequests().subscribe((friendRequest: FriendRequest) => {
 			this.handleFriendRequest(friendRequest);
-		});
-		this.mqProxy.observeAllCampaignInvites().subscribe((campaignInvite: CampaignInvite) => {
-			this.handleCampaignInvite(campaignInvite);
 		});
 	}
 
@@ -192,27 +187,6 @@ export class MqService {
 				toUserId: toUserId,
 				fromUserId: fromUserId,
 			} as FriendRequestNotification);
-		} catch (error) {
-			console.error(error);
-		}
-	}
-
-	private async handleCampaignInvite(campaignInvite: CampaignInvite): Promise<void> {
-		let campaignId = campaignInvite.headers.campaignId;
-		let toUserId = campaignInvite.headers.toUserId;
-		try {
-			let pendingNotifications: NotificationModel[] = await this.notificationRepo.findAllToByType(toUserId, NotificationType.CAMPAIGN_INVITE);
-			for (let invite of pendingNotifications) {
-				let campaignInvite: CampaignInviteNotification = invite.body as CampaignInviteNotification;
-				if (campaignInvite.campaignId && campaignInvite.campaignId === campaignId) {
-					return;
-				}
-			}
-			await this.notificationRepo.create(toUserId, NotificationType.CAMPAIGN_INVITE, {
-				type: NotificationType.CAMPAIGN_INVITE,
-				campaignId: campaignId
-			} as CampaignInviteNotification);
-			return;
 		} catch (error) {
 			console.error(error);
 		}
