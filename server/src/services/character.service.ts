@@ -6,6 +6,7 @@ import { CharacterSheetData } from '../../../shared/types/rule-set/character-she
 import { CharacterSheetService } from './character-sheet.service';
 import { CharacterModel } from '../db/models/character.model';
 import { CharacterSheetRepository } from '../db/repositories/characterSheet.repository';
+import { CharacterSheetModel } from '../db/models/characterSheet.model';
 
 export class CharacterService {
 	private characterRepo: CharacterRepository;
@@ -27,10 +28,8 @@ export class CharacterService {
 		if (!!campaignId) {
 			characterModel = await characterModel.setCampaignId(campaignId);
 		}
-		else {
-			let characterSheetModel = await this.characterSheetRepo.findById(sheetId);
-			characterModel = await characterModel.setRuleSetId(characterSheetModel.ruleSetId);
-		}
+		let characterSheetModel: CharacterSheetModel = await this.characterSheetRepo.findById(sheetId);
+		characterModel = await characterModel.setRuleSetId(characterSheetModel.ruleSetId);
 		return characterModel;
 	}
 
