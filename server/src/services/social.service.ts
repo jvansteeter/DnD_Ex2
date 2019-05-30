@@ -18,11 +18,33 @@ export class SocialService {
 		this.notificationRepo = new NotificationRepository();
 	}
 
+	public async sendFriendRequest(toUserId: string, fromUserId: string): Promise<void> {
+		try {
+			let pendingRequests: NotificationModel[] = await this.notificationRepo.findAllToByType(toUserId, NotificationType.FRIEND_REQUEST);
+			for (let request of pendingRequests) {
+				if ((request.body as FriendRequestNotification).fromUserId && (request.body as FriendRequestNotification).fromUserId === fromUserId) {
+					return;
+				}
+			}
+			let usersAreFriends: boolean = await this.friendRepo.usersAreFriends(toUserId, fromUserId);
+			if (usersAreFriends) {
+				return;
+			}
+			await this.notificationRepo.create(toUserId, NotificationType.FRIEND_REQUEST, {
+				type: NotificationType.FRIEND_REQUEST,
+				toUserId: toUserId,
+				fromUserId: fromUserId,
+			} as FriendRequestNotification);
+		} catch (error) {
+			console.error(error);
+		}
+	}
+
 	public async acceptFriendRequest(toUserId, fromUserId): Promise<void> {
 		let friendRequests: NotificationModel[] = await this.notificationRepo.findAllToByType(toUserId, NotificationType.FRIEND_REQUEST);
 		friendRequests.forEach(async (friendRequest: NotificationModel) => {
 			let data: FriendRequestNotification = friendRequest.body as FriendRequestNotification;
-			if (data.fromUserId === fromUserId) {
+			if (data.fromUserId == fromUserId) {
 				await this.friendRepo.create(toUserId, fromUserId);
 				await this.friendRepo.create(fromUserId, toUserId);
 				await this.notificationRepo.removeById(friendRequest._id);

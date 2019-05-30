@@ -1,10 +1,6 @@
 import { MqProxy, MqProxySingleton } from './mqProxy';
 import { UserModel } from '../db/models/user.model';
-import { FriendRequest } from '../../../shared/types/mq/FriendRequest';
 import { NotificationRepository } from '../db/repositories/notification.repository';
-import { NotificationType } from '../../../shared/types/notifications/notification-type.enum';
-import { NotificationModel } from '../db/models/notification.model';
-import { FriendRequestNotification } from "../../../shared/types/notifications/friend-request-notification";
 import { FriendRepository } from "../db/repositories/friend.repository";
 import { EncounterCommandType } from '../../../shared/types/encounter/encounter-command.enum';
 import { PlayerRepository } from '../db/repositories/player.repository';
@@ -38,9 +34,6 @@ export class MqService {
 	public handleMessages(): void {
 		this.mqProxy.observeAllEncounters().subscribe((message: EncounterCommandMessage) => {
 			this.handleEncounterCommand(message);
-		});
-		this.mqProxy.observeAllFriendRequests().subscribe((friendRequest: FriendRequest) => {
-			this.handleFriendRequest(friendRequest);
 		});
 	}
 
@@ -163,30 +156,6 @@ export class MqService {
 				}
 				this.encounterService.incrementVersion(command.headers.encounterId);
 			}
-		} catch (error) {
-			console.error(error);
-		}
-	}
-
-	private async handleFriendRequest(friendRequest: FriendRequest): Promise<void> {
-		let toUserId = friendRequest.headers.toUserId;
-		let fromUserId = friendRequest.headers.fromUserId;
-		try {
-			let pendingRequests: NotificationModel[] = await this.notificationRepo.findAllToByType(toUserId, NotificationType.FRIEND_REQUEST);
-			for (let request of pendingRequests) {
-				if ((request.body as FriendRequestNotification).fromUserId && (request.body as FriendRequestNotification).fromUserId === fromUserId) {
-					return;
-				}
-			}
-			let usersAreFriends: boolean = await this.friendRepo.usersAreFriends(toUserId, fromUserId);
-			if (usersAreFriends) {
-				return;
-			}
-			await this.notificationRepo.create(toUserId, NotificationType.FRIEND_REQUEST, {
-				type: NotificationType.FRIEND_REQUEST,
-				toUserId: toUserId,
-				fromUserId: fromUserId,
-			} as FriendRequestNotification);
 		} catch (error) {
 			console.error(error);
 		}

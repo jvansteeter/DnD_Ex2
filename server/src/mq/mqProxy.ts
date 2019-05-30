@@ -4,8 +4,6 @@ import { UserModel } from '../db/models/user.model';
 import { Promise } from 'bluebird';
 import * as http from 'http';
 import { MqConfig } from '../config/mqConfig';
-import { FriendRequest } from '../../../shared/types/mq/FriendRequest';
-import { FriendRequestMessage } from './messages/friend-request.message';
 import { MqFactory } from './mq.factory';
 import { MqError } from '../../../shared/errors/MqError';
 import { EncounterCommandMessage } from './messages/encounter-command.message';
@@ -71,25 +69,6 @@ export class MqProxy {
 			}, {noAck: true});
 		});
 		return exchangeSubject.asObservable();
-	}
-
-	public observeAllFriendRequests(): Observable<FriendRequest> {
-		if (!this.connection) {
-			return throwError('Not connected to MQ Server');
-		}
-		let friendRequestSubject = new Subject<FriendRequest>();
-		this.connection.createChannel((error, channel) => {
-			if (error) {
-				merge(friendRequestSubject, throwError(new Error(error)));
-			}
-
-			channel.bindQueue(MqConfig.friendRequestQueueName, MqConfig.userExchange, MqConfig.friendRequestTopic);
-			channel.consume(MqConfig.friendRequestQueueName, (message) => {
-				friendRequestSubject.next(new FriendRequestMessage(message));
-			});
-		});
-
-		return friendRequestSubject.asObservable();
 	}
 
 	public async sendEncounterCommand(encounterId: string, encounterUpdate: EncounterCommand): Promise<void> {

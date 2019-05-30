@@ -36,7 +36,9 @@ export class FriendService extends IsReadyService {
 	}
 
 	public sendFriendRequest(toUserId: string): void {
-		this.mqService.sendFriendRequest(toUserId);
+		this.socialRepo.sendRequest(toUserId).subscribe(() => {
+			this.mqService.sendFriendRequest(toUserId);
+		});
 	}
 
 	public acceptRequest(fromUserId: string): void {
