@@ -56,7 +56,9 @@ export class CampaignComponent implements OnInit, OnDestroy {
 				.pipe(
 						tap((params) => {
 							this.campaignId = params['campaignId'];
-							this.campaignPageService.setCampaignId(this.campaignId);
+							if (this.campaignId !== this.campaignPageService.campaignId) {
+								this.campaignPageService.setCampaignId(this.campaignId);
+							}
 						}),
 						mergeMap(() => {
 							return this.campaignPageService.isReadyObservable;
@@ -99,7 +101,7 @@ export class CampaignComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnDestroy(): void {
-		this.campaignPageService.unInit();
+		// this.campaignPageService.unInit();
 	}
 
 	public changeGameMaster(member: any): void {

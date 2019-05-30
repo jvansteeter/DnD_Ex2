@@ -185,6 +185,9 @@ export class CampaignPageService extends IsReadyService {
 	}
 
 	private observeCampaignUpdates(): void {
+		if (this.campaignMessageSubscription) {
+			this.campaignMessageSubscription.unsubscribe();
+		}
 		this.campaignMessageSubscription = this.mqService.getIncomingCampaignMessages(this.campaignId).subscribe(() => {
 			this.getCampaignState().pipe(mergeMap(() => {
 				return this.updateEncountersList();
