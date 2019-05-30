@@ -2,6 +2,7 @@ import { Router, Request, Response } from 'express';
 import { EncounterService } from "../services/encounter.service";
 import { EncounterData } from '../../../shared/types/encounter/encounter.data';
 import { NotationData } from '../../../shared/types/encounter/board/notation.data';
+import { EncounterCommandType } from '../../../shared/types/encounter/encounter-command.enum';
 
 /**********************************************************************************************************
  * Campaign ROUTER
@@ -155,6 +156,22 @@ export class EncounterRouter {
 				const userId: string = req.user._id;
 				const encounterId = req.body.encounterId;
 				await this.encounterService.incrementRound(userId, encounterId);
+				res.status(200).send();
+			}
+			catch (error) {
+				console.error(error);
+				res.status(500).send(error);
+			}
+		});
+
+		this.router.post('/command', async (req: Request, res: Response) => {
+			try {
+				const encounterId: string = req.body.encounterId;
+				const version: number = req.body.version;
+				const type: EncounterCommandType = req.body.type;
+				const data = req.body.data;
+
+				await this.encounterService.saveCommand(encounterId, version, type, data);
 				res.status(200).send();
 			}
 			catch (error) {

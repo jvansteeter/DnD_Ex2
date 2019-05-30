@@ -327,6 +327,80 @@ export class EncounterService {
 		}
 	}
 
+	public async saveCommand(encounterId: string, version: number, type: EncounterCommandType, data: any): Promise<void> {
+		try {
+			// if (command.body.version === version + 1) {  // currently versioning is causing more problems than it fixes
+			if (true) {
+				switch (type) {
+					case EncounterCommandType.PLAYER_UPDATE: {
+						await this.playerRepo.updatePlayer(data as PlayerData);
+						break;
+					}
+					case EncounterCommandType.ADD_PLAYER: {
+						// do nothing, the server issues these ones
+						break;
+					}
+					case EncounterCommandType.REMOVE_PLAYER: {
+						// do nothing, the server issues these commands
+						break;
+					}
+					case EncounterCommandType.LIGHT_SOURCE: {
+						await this.setLightSources(encounterId, data);
+						break;
+					}
+					case EncounterCommandType.ADD_NOTATION: {
+						// do nothing, the server issues these commands
+						break;
+					}
+					case EncounterCommandType.NOTATION_UPDATE: {
+						if (data) {
+							await this.notationRepo.updateNotation(data as NotationData);
+						}
+						break;
+					}
+					case EncounterCommandType.REMOVE_NOTATION: {
+						// do nothing, ther server issues these commands
+						break;
+					}
+					case EncounterCommandType.EPHEMERAL_NOTATION: {
+						// do nothing, these are only peer to peer
+						break;
+					}
+					case EncounterCommandType.WALL_CHANGE: {
+						await this.setWallData(encounterId, data);
+						break;
+					}
+					case EncounterCommandType.DOOR_CHANGE: {
+						await this.setDoorData(encounterId, data);
+						break;
+					}
+					case EncounterCommandType.WINDOW_CHANGE: {
+						await this.setWindowData(encounterId, data);
+						break;
+					}
+					case EncounterCommandType.SETTINGS_CHANGE: {
+						await this.setEncounterConfig(encounterId, data);
+						break;
+					}
+					case EncounterCommandType.TEAMS_CHANGE: {
+						await this.setEncounterTeamsData(encounterId, data);
+						break;
+					}
+					case EncounterCommandType.INCREMENT_ROUND: {
+						// do nothing
+						break;
+					}
+					default: {
+						console.error('Unrecognized Command Type')
+					}
+				}
+				await this.incrementVersion(encounterId);
+			}
+		} catch (error) {
+			throw error;
+		}
+	}
+
 	private async getPlayerPlacementMap(encounterModel: EncounterModel): Promise<boolean[][]> {
 		const encounterState = await this.buildEncounterState(encounterModel);
 		const placementMap: boolean[][] = [];

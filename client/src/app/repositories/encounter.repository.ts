@@ -8,6 +8,7 @@ import { CharacterData } from '../../../../shared/types/character.data';
 import { isUndefined } from "util";
 import { NotationData } from '../../../../shared/types/encounter/board/notation.data';
 import { BoardNotationGroup } from '../board/shared/notation/board-notation-group';
+import { EncounterCommandType } from '../../../../shared/types/encounter/encounter-command.enum';
 
 @Injectable()
 export class EncounterRepository {
@@ -122,5 +123,15 @@ export class EncounterRepository {
 			encounterId: encounterId
 		};
 		return this.http.post<void>('/api/encounter/incrementRound', data);
+	}
+
+	public saveCommand(encounterId: string, version: number, type: EncounterCommandType, data: any): Observable<void> {
+		const body = {
+			encounterId,
+			version,
+			type,
+			data
+		};
+		return this.http.post<void>('/api/encounter/command', body);
 	}
 }

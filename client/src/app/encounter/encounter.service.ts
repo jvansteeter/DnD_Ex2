@@ -15,6 +15,7 @@ import { LightSourceData } from '../../../../shared/types/encounter/board/light-
 import { TeamUser } from "../board/services/team-user";
 import { isDefined } from '@angular/compiler/src/util';
 import { RulesConfigService } from '../data-services/rules-config.service';
+import { EncounterCommandType } from '../../../../shared/types/encounter/encounter-command.enum';
 
 @Injectable()
 export class EncounterService extends IsReadyService {
@@ -107,6 +108,10 @@ export class EncounterService extends IsReadyService {
 			}
 		}
 		this.incrementRoundSubject.next();
+	}
+
+	public saveCommand(type: EncounterCommandType, data: any): Observable<void> {
+		return this.encounterRepo.saveCommand(this.encounterId, this.version + 1, type, data);
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

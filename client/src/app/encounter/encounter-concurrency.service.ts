@@ -93,8 +93,7 @@ export class EncounterConcurrencyService extends IsReadyService {
 
 	private observePlayerChanges(player: Player): void {
 		this.playerSubscriptions.push(player.changeObservable.subscribe(() => {
-			this.mqService.publishEncounterCommand(this.encounterService.encounterId, this.encounterService.version + 1,
-					EncounterCommandType.PLAYER_UPDATE, player.serialize());
+			this.sendEncounterCommand(EncounterCommandType.PLAYER_UPDATE, player.serialize());
 		}));
 	}
 
@@ -103,8 +102,7 @@ export class EncounterConcurrencyService extends IsReadyService {
 			this.lightSourceSubscription.unsubscribe();
 		}
 		this.lightSourceSubscription = this.lightService.lightSourcesChangeObservable.subscribe(() => {
-			this.mqService.publishEncounterCommand(this.encounterService.encounterId, this.encounterService.version + 1,
-					EncounterCommandType.LIGHT_SOURCE, this.lightService.getSerializedState());
+			this.sendEncounterCommand(EncounterCommandType.LIGHT_SOURCE, this.lightService.getSerializedState());
 		});
 	}
 
@@ -113,8 +111,7 @@ export class EncounterConcurrencyService extends IsReadyService {
 			this.notationSubscription.unsubscribe();
 		}
 		this.notationSubscription = this.notationService.notationsChangeObservable.subscribe((notation) => {
-			this.mqService.publishEncounterCommand(this.encounterService.encounterId, this.encounterService.version + 1,
-					EncounterCommandType.NOTATION_UPDATE, notation);
+			this.sendEncounterCommand(EncounterCommandType.NOTATION_UPDATE, notation);
 		});
 
 		if (this.ephemeralNotationSubscription) {
@@ -122,8 +119,7 @@ export class EncounterConcurrencyService extends IsReadyService {
 		}
 		this.ephemeralNotationSubscription = this.notationService.ephemerailNotationChangeObservable.subscribe(() => {
 			const ephemeralNotation = this.notationService.ephemeralNotationMap.get(this.userProfileService.userId);
-			this.mqService.publishEncounterCommand(this.encounterService.encounterId, this.encounterService.version + 1,
-					EncounterCommandType.EPHEMERAL_NOTATION, ephemeralNotation);
+			this.sendEncounterCommand(EncounterCommandType.EPHEMERAL_NOTATION, ephemeralNotation);
 		});
 	}
 
@@ -132,8 +128,7 @@ export class EncounterConcurrencyService extends IsReadyService {
 			this.wallSubscription.unsubscribe();
 		}
 		this.wallSubscription = this.wallService.wallChangeEvent.subscribe(() => {
-			this.mqService.publishEncounterCommand(this.encounterService.encounterId, this.encounterService.version + 1,
-					EncounterCommandType.WALL_CHANGE, this.wallService.wallData);
+			this.sendEncounterCommand(EncounterCommandType.WALL_CHANGE, this.wallService.wallData);
 		});
 	}
 
@@ -142,8 +137,7 @@ export class EncounterConcurrencyService extends IsReadyService {
 			this.doorSubscription.unsubscribe();
 		}
 		this.doorSubscription = this.wallService.doorChangeEvent.subscribe(() => {
-			this.mqService.publishEncounterCommand(this.encounterService.encounterId, this.encounterService.version + 1,
-					EncounterCommandType.DOOR_CHANGE, this.wallService.doorData);
+			this.sendEncounterCommand(EncounterCommandType.DOOR_CHANGE, this.wallService.doorData);
 		});
 	}
 
@@ -152,8 +146,7 @@ export class EncounterConcurrencyService extends IsReadyService {
 			this.windowChangeSubscription.unsubscribe();
 		}
 		this.windowChangeSubscription = this.wallService.windowChangeEvent.subscribe(() => {
-			this.mqService.publishEncounterCommand(this.encounterService.encounterId, this.encounterService.version + 1,
-					EncounterCommandType.WINDOW_CHANGE, this.wallService.windowData);
+			this.sendEncounterCommand(EncounterCommandType.WINDOW_CHANGE, this.wallService.windowData);
 		});
 	}
 
@@ -162,8 +155,7 @@ export class EncounterConcurrencyService extends IsReadyService {
 			this.configSubscription.unsubscribe();
 		}
 		this.configSubscription = this.encounterService.configChangeObservable.subscribe(() => {
-			this.mqService.publishEncounterCommand(this.encounterService.encounterId, this.encounterService.version + 1,
-					EncounterCommandType.SETTINGS_CHANGE, this.encounterService.getSerializedConfig());
+			this.sendEncounterCommand(EncounterCommandType.SETTINGS_CHANGE, this.encounterService.getSerializedConfig());
 		});
 	}
 
@@ -172,8 +164,7 @@ export class EncounterConcurrencyService extends IsReadyService {
 			this.teamsChangeSubscription.unsubscribe();
 		}
 		this.teamsChangeSubscription = this.encounterService.teamsChangeObservable.subscribe(() => {
-			this.mqService.publishEncounterCommand(this.encounterService.encounterId, this.encounterService.version + 1,
-					EncounterCommandType.TEAMS_CHANGE, this.encounterService.teamsData);
+			this.sendEncounterCommand(EncounterCommandType.TEAMS_CHANGE, this.encounterService.teamsData);
 		});
 	}
 
@@ -182,8 +173,7 @@ export class EncounterConcurrencyService extends IsReadyService {
 			this.incrementingRoundsSubscription.unsubscribe();
 		}
 		this.incrementingRoundsSubscription = this.encounterService.incrementRoundObservable.subscribe(() => {
-			this.mqService.publishEncounterCommand(this.encounterService.encounterId, this.encounterService.version + 1,
-					EncounterCommandType.INCREMENT_ROUND, this.encounterService.round);
+			this.sendEncounterCommand(EncounterCommandType.INCREMENT_ROUND, this.encounterService.round);
 		});
 	}
 
@@ -293,5 +283,10 @@ export class EncounterConcurrencyService extends IsReadyService {
 				return;
 			}
 		}
+	}
+
+	private sendEncounterCommand(type: EncounterCommandType, data: any): void {
+		this.encounterService.saveCommand(type, data).subscribe();
+		this.mqService.publishEncounterCommand(this.encounterService.encounterId, this.encounterService.version + 1, type, data);
 	}
 }

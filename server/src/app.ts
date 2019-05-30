@@ -55,7 +55,6 @@ class App {
     this.config().then(() => {
 	    this.middleware();
 	    this.routes();
-	    this.handleMqMessages();
     });
   }
 
@@ -126,10 +125,6 @@ class App {
     this.app.get('*', (req, res) => {
       res.status(404).send().redirect('/');
     });
-  }
-
-  private handleMqMessages(): void {
-  	MqServiceSingleton.handleMessages();
   }
 
   private isAuthenticated(req: Request, res: Response, next: NextFunction): void {

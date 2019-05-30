@@ -1,12 +1,10 @@
 import * as amqp from 'amqplib/callback_api';
-import { merge, Observable, Subject, throwError } from 'rxjs';
 import { UserModel } from '../db/models/user.model';
 import { Promise } from 'bluebird';
 import * as http from 'http';
 import { MqConfig } from '../config/mqConfig';
 import { MqFactory } from './mq.factory';
 import { MqError } from '../../../shared/errors/MqError';
-import { EncounterCommandMessage } from './messages/encounter-command.message';
 import { EncounterCommand } from '../../../shared/types/mq/encounter-command';
 import { ChatMessage } from '../../../shared/types/mq/chat';
 import { ChatRoomModel } from '../db/models/chat-room.model';
@@ -51,24 +49,6 @@ export class MqProxy {
 		if (this.connection) {
 			this.connection.close();
 		}
-	}
-
-	public observeAllEncounters(): Observable<EncounterCommandMessage> {
-		if (!this.connection) {
-			return throwError('Not connected toUserId MQ Server');
-		}
-		let exchangeSubject = new Subject<EncounterCommandMessage>();
-		this.connection.createChannel((error, channel) => {
-			if (error) {
-				merge(exchangeSubject, throwError(new Error(error)));
-			}
-
-			channel.bindQueue(MqConfig.encounterQueueName, MqConfig.encounterExchange, MqConfig.encounterTopic);
-			channel.consume(MqConfig.encounterQueueName, (message) => {
-				exchangeSubject.next(new EncounterCommandMessage(message));
-			}, {noAck: true});
-		});
-		return exchangeSubject.asObservable();
 	}
 
 	public async sendEncounterCommand(encounterId: string, encounterUpdate: EncounterCommand): Promise<void> {
