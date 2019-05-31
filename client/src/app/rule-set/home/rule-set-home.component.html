@@ -75,8 +75,11 @@
 		</mat-grid-tile>
 		<!--NPCs-->
 		<mat-grid-tile [colspan]="2" [rowspan]="1">
-			<dashboard-card [dashboardCard]="npcCard">
-				<mat-table [dataSource]="npcDataSource">
+			<dashboard-card [dashboardCard]="npcCard" class="npc-card">
+				<mat-form-field class="filter">
+					<input matInput (keyup)="filterNPCs($event.target.value)" placeholder="Filter" />
+				</mat-form-field>
+				<mat-table [dataSource]="npcDataSource" class="npc-table">
 					<ng-container matColumnDef="label">
 						<mat-header-cell *matHeaderCellDef>NPCs</mat-header-cell>
 						<mat-cell *matCellDef="let npc" (click)="editNpc(npc._id)">{{npc.label}}</mat-cell>

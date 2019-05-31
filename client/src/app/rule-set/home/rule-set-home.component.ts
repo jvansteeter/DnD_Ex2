@@ -1,7 +1,7 @@
 import * as FileSaver from 'file-saver';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatTableDataSource } from '@angular/material';
 import { NewCharacterSheetDialogComponent } from './dialog/new-character-sheet-dialog.component';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { RuleSetRepository } from '../../repositories/rule-set.repository';
@@ -33,7 +33,6 @@ export class RuleSetHomeComponent implements OnInit {
 
 	public characterSheets: CharacterSheetData[];
 	public admins: any[];
-	public npcs: any[];
 
 	public configCard: DashboardCard;
 
@@ -48,8 +47,7 @@ export class RuleSetHomeComponent implements OnInit {
 	public characterSheetColumns = ['label', 'options'];
 
 	public npcCard: DashboardCard;
-	private readonly npcSubject: Subject<NpcData[]>;
-	private npcDataSource: SubjectDataSource<NpcData>;
+	public npcDataSource: MatTableDataSource<NpcData>;
 	public npcColumns = ['label', 'sheet', 'options'];
 
 	public conditionsCard: DashboardCard;
@@ -116,8 +114,7 @@ export class RuleSetHomeComponent implements OnInit {
 		this.characterSheetSubject = new BehaviorSubject<CharacterSheetData[]>([]);
 		this.characterSheetDataSource = new SubjectDataSource<CharacterSheetData>(this.characterSheetSubject);
 
-		this.npcSubject = new Subject<NpcData[]>();
-		this.npcDataSource = new SubjectDataSource(this.npcSubject);
+		this.npcDataSource = new MatTableDataSource();
 	}
 
 	ngOnInit(): void {
@@ -229,6 +226,10 @@ export class RuleSetHomeComponent implements OnInit {
 		});
 	}
 
+	public filterNPCs(value: string): void {
+		this.npcDataSource.filter = value.trim().toLowerCase();
+	}
+
 	private getNPCs(): void {
 		this.ruleSetRepository.getNpcs(this.ruleSetId).pipe(map((npcs: NpcData[]) => {
 			for (let npc of npcs) {
@@ -242,8 +243,7 @@ export class RuleSetHomeComponent implements OnInit {
 
 			return npcs;
 		})).subscribe((npcs: NpcData[]) => {
-			this.npcs = npcs;
-			this.npcSubject.next(npcs);
+			this.npcDataSource = new MatTableDataSource(npcs);
 		});
 	}
 

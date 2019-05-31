@@ -47,3 +47,22 @@ button.options-button {
 .tabbed {
 	margin-left: 15px;
 }
+
+.filter {
+	width: 100%;
+}
+
+.npc-table {
+	height: 100%;
+	overflow-y: auto;
+}
+
+.npc-card {
+	display: flex;
+	flex-direction: column;
+}
+
+::ng-deep mat-card-content {
+	display: flex !important;
+	flex-direction: column;
+}
