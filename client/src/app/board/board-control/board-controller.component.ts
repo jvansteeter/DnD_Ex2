@@ -68,4 +68,8 @@ export class BoardControllerComponent implements OnInit, OnDestroy {
 	public toggleToolBar(): void {
 		this.boardStateService.toolbarIsHidden = !this.boardStateService.toolbarIsHidden;
 	}
+
+	public refreshEncounter(): void {
+		this.encounterService.refresh();
+	}
 }
