@@ -55,6 +55,9 @@ export class BoardWallService extends IsReadyService {
     }
 
     public toggleWindow(target: CellTarget) {
+    	  if (isUndefined(target)) {
+    	  	return;
+	      }
         if (this.hasObstruction(target) && this._windowData.has(target.hash())) {
             this.removeWindow(target);
         } else {

@@ -110,8 +110,6 @@ export class BoardStateService extends IsReadyService {
 	public mouseMiddleDown = false;
 	public ctrlDown = false;
 	public altDown = false;
-	public mouseDrag = false;
-
 
 	static distanceCellToCell(cell1: XyPair, cell2: XyPair): number {
 		const delta_y = Math.abs(cell2.y - cell1.y);
