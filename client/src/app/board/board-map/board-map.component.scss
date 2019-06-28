@@ -62,6 +62,23 @@
 	margin-left: 8px;
 }
 
+.initiative-icon-content {
+	height: 40px;
+	width: 40px;
+	border: 3px solid #383838;
+	border-radius: 50%;
+	position: absolute;
+	cursor: pointer;
+}
+
+.selected {
+	background: red;
+}
+
+.not-selected {
+	background: gray;
+}
+
 .initiative-bar {
 	position: absolute;
 	z-index: 5;

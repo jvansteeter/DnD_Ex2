@@ -59,7 +59,7 @@ export class TokenRendererComponent implements OnInit, OnDestroy, RendererCompon
             }
 
             if (this.boardPlayerService.selectedPlayerId === player._id) {
-                this.boardCanvasService.draw_fill_all(this.ctx, player.location, 'rgba(0, 0, 180, 0.2)');
+                this.boardCanvasService.draw_fill_all(this.ctx, player.location, 'rgba(255, 0, 0, 0.2)');
 
                 let cellIndex;
                 const traverseMap = this.boardPlayerService.player_traverse_map.get(player._id);
