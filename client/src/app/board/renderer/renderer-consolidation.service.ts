@@ -31,6 +31,8 @@ export class RendererConsolidationService {
 			renderer.render();
 		});
 
-		this.frameId = requestAnimationFrame(this.render);
+		setTimeout(() => {
+			this.frameId = requestAnimationFrame(this.render);
+		}, 100);
 	}
 }
