@@ -202,8 +202,8 @@ export class EncounterService {
 			const encounter: EncounterModel = await this.encounterRepo.findById(encounterId);
 			const lights: LightSourceData[] = lightSources;
 			for (let light of lights) {
-				delete light.dim_polygon;
-				delete light.bright_polygon;
+				light.dim_polygon = undefined;
+				light.bright_polygon = undefined;
 			}
 			return await encounter.setLightSources(lights);
 		}
@@ -345,7 +345,7 @@ export class EncounterService {
 						break;
 					}
 					case EncounterCommandType.LIGHT_SOURCE: {
-						await this.setLightSources(encounterId, data);
+						await this.setLightSources(encounterId, JSON.parse(data) as LightSourceData[]);
 						break;
 					}
 					case EncounterCommandType.ADD_NOTATION: {

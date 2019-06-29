@@ -77,6 +77,7 @@ export class BoardLightService extends IsReadyService {
         } else {
             this.lightSourceState.remove(source);
         }
+        this.canvas_rebuild_lightSources = true;
     }
 
     public updateLightValue(lightSource: LightSource): void {
@@ -145,6 +146,8 @@ export class BoardLightService extends IsReadyService {
 
     set lightSources(value: Array<LightSource>) {
         this.lightSourceState.lightSources = value;
+        this.canvas_rebuild_lightSources = true;
+        this.updateAllLightValues();
     }
 
     get lightSourcesChangeObservable(): Observable<void> {
