@@ -7,6 +7,7 @@ import { EncounterRepository } from "../repositories/encounter.repository";
 import { BoardModule } from '../board/board.module';
 import { EncounterConcurrencyService } from './encounter-concurrency.service';
 import { MatButtonModule, MatIconModule } from '@angular/material';
+import { EncounterKeyEventService } from "./encounter-key-event.service";
 
 @NgModule({
 	imports: [
@@ -23,6 +24,7 @@ import { MatButtonModule, MatIconModule } from '@angular/material';
 		EncounterService,
 		EncounterRepository,
 		EncounterConcurrencyService,
+		EncounterKeyEventService,
 	],
 	entryComponents: [],
 	exports: [

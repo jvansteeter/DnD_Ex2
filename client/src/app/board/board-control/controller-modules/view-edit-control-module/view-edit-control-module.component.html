@@ -3,8 +3,8 @@
     <div class="sectionContents" style="min-width: 145px;">
 
         <mat-form-field>
-            <mat-select [(value)]="currentView" (selectionChange)="handleViewChange()" placeholder="View Mode">
-                <mat-option *ngFor="let mode of viewModes" value="{{mode}}">{{mode}}</mat-option>
+            <mat-select [value]="boardStateService.board_view_mode" (selectionChange)="handleViewChange($event.value)" placeholder="View Mode">
+                <mat-option *ngFor="let mode of viewModes" [value]="mode">{{mode}}</mat-option>
             </mat-select>
         </mat-form-field>
 

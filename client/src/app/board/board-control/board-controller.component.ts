@@ -1,13 +1,7 @@
 import { BoardStateService } from '../services/board-state.service';
 import { ViewMode } from '../shared/enum/view-mode';
-import { BoardMode } from '../shared/enum/board-mode';
-import { BoardControllerMode } from '../shared/enum/board-controller-mode'
-import { BoardLightService } from '../services/board-light.service';
-import { PlayerVisibilityMode } from "../../../../../shared/types/encounter/board/player-visibility-mode";
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
-import { NotationMode } from '../shared/enum/notation-mode';
-import { NotationVisibility } from "../../../../../shared/types/encounter/board/notation-visibility";
 import { AddPlayerDialogComponent } from '../dialogs/add-player-dialog/add-player-dialog.component';
 import { EncounterService } from '../../encounter/encounter.service';
 import { BoardVisibilityService } from "../services/board-visibility.service";
@@ -22,15 +16,9 @@ import { RulesConfigService } from '../../data-services/rules-config.service';
 })
 
 export class BoardControllerComponent implements OnInit, OnDestroy {
-	public NotationVisibility = NotationVisibility;
-	public NotationMode = NotationMode;
 	public ViewMode = ViewMode;
-	public BoardMode = BoardMode;
-	public BoardControllerMode = BoardControllerMode;
-	public PlayerVisibilityMode = PlayerVisibilityMode;
 
 	constructor(public boardStateService: BoardStateService,
-	            public boardLightService: BoardLightService,
 	            public boardVisibilityService: BoardVisibilityService,
 	            public encounterService: EncounterService,
 	            public rightsService: RightsService,

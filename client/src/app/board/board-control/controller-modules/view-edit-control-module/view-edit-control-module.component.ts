@@ -17,7 +17,7 @@ export class ViewEditControlModuleComponent {
     currentView: string;
     viewModes: string[] = [
         'Board Maker',
-        'Player View',
+        'Player',
         'Game Master'
     ];
 
@@ -43,12 +43,12 @@ export class ViewEditControlModuleComponent {
         }
     }
 
-    public handleViewChange() {
-        switch (this.currentView) {
+    public handleViewChange(value: string): void {
+        switch (value) {
             case 'Board Maker':
                 this.boardStateService.set_viewMode_boardMaker();
                 break;
-            case 'Player View':
+            case 'Player':
                 this.boardStateService.set_viewMode_player();
                 break;
             case 'Game Master':

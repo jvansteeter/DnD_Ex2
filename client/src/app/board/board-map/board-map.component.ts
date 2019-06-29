@@ -227,6 +227,7 @@ export class BoardMapComponent implements OnInit, AfterViewInit, OnDestroy, Rend
 		const x_delta = -(this.boardStateService.mouse_loc_map.x * new_scale_delta);
 		const y_delta = -(this.boardStateService.mouse_loc_map.y * new_scale_delta);
 
+		this.boardCanvasService.rebuild_grid_canvas = true;
 		this.boardStateService.canvasTransform_scale += new_scale_delta;
 		this.boardStateService.canvasTransform_xOffset += x_delta;
 		this.boardStateService.canvasTransform_yOffset += y_delta;
