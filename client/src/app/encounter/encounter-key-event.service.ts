@@ -6,17 +6,35 @@ import { MatDialog, MatDialogRef } from "@angular/material";
 import { AddPlayerDialogComponent } from "../board/dialogs/add-player-dialog/add-player-dialog.component";
 import { EncounterService } from "./encounter.service";
 import { TeamSettingsComponent } from "../board/dialogs/team-settings/team-settings.component";
+import { RightsService } from "../data-services/rights.service";
 
 @Injectable()
 export class EncounterKeyEventService {
+	private listenToKeyEvents: boolean = false;
 
 	constructor(private stateService: BoardStateService,
 	            private encounterService: EncounterService,
+	            private rightsService: RightsService,
 	            private dialog: MatDialog) {
 
 	}
 
+	public startListeningToKeyEvents(): void {
+		this.listenToKeyEvents = true;
+	}
+
+	public stopListeningToKeyEvents(): void {
+		this.stopListeningToKeyEvents();
+	}
+
+	public isListeningToKeyEvents(): boolean {
+		return this.listenToKeyEvents;
+	}
+
 	public keyup(event): void {
+		if (!this.listenToKeyEvents) {
+			return;
+		}
 		switch (event.code) {
 			case 'KeyE':
 				this.cycleEditMode();
@@ -43,7 +61,11 @@ export class EncounterKeyEventService {
 	}
 
 	private toggleViewMode(): void {
+		if (!this.rightsService.isEncounterGM()) {
+			return;
+		}
 		if (this.stateService.board_view_mode === ViewMode.BOARD_MAKER) {
+			this.stateService.set_inputMode_player();
 			this.stateService.set_viewMode_gameMaster();
 		}
 		else if (this.stateService.board_view_mode === ViewMode.MASTER) {
@@ -59,6 +81,9 @@ export class EncounterKeyEventService {
 	}
 
 	private cycleEditMode(): void {
+		if (!this.rightsService.isEncounterGM()) {
+			return;
+		}
 		switch (this.stateService.board_edit_mode) {
 			case BoardMode.PLAYER:
 				this.stateService.set_inputMode_door();
@@ -93,6 +118,9 @@ export class EncounterKeyEventService {
 	}
 
 	private openTeamSettingsDialog(): void {
+		if (!this.rightsService.isEncounterGM()) {
+			return;
+		}
 		const openDialogs: MatDialogRef<any>[] = this.dialog.openDialogs;
 		if (openDialogs.length > 0) {
 			this.dialog.closeAll();
@@ -107,6 +135,9 @@ export class EncounterKeyEventService {
 	}
 
 	private incrementRound(): void {
+		if (!this.rightsService.isEncounterGM()) {
+			return;
+		}
 		this.encounterService.incrementRound();
 	}
 }

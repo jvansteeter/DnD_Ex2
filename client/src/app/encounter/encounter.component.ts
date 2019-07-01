@@ -45,6 +45,7 @@ export class EncounterComponent implements OnInit, OnDestroy {
 
 	ngOnInit(): void {
 		this.encounterConcurrencyService.init();
+		this.keyInputService.startListeningToKeyEvents();
 		this.activatedRoute.params.subscribe((params) => {
 			let encounterId = params['encounterId'];
 			this.encounterService.setEncounterId(encounterId);

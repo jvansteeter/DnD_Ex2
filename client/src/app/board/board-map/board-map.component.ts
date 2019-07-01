@@ -152,7 +152,7 @@ export class BoardMapComponent implements OnInit, AfterViewInit, OnDestroy, Rend
 			this.boardNotationService.handleMouseMove();
 		}
 
-		if (this.boardStateService.mouseLeftDown && !(this.boardStateService.shiftDown || this.boardStateService.isEditingNotation)) {
+		if (this.boardStateService.mouseMiddleDown || (this.boardStateService.spaceDown && this.boardStateService.mouseLeftDown)) {
 			this.boardCanvasService.rebuild_grid_canvas = true;
 			const trans_coor = this.boardTransformService.screen_to_map(event);
 

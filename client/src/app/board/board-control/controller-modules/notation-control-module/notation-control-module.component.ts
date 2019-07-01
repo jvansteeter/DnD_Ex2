@@ -8,6 +8,7 @@ import {BoardStateService} from "../../../services/board-state.service";
 import {BoardNotationService} from "../../../services/board-notation-service";
 import {MatDialog} from "@angular/material";
 import {NotationVisibility} from "../../../../../../../shared/types/encounter/board/notation-visibility";
+import { EncounterKeyEventService } from "../../../../encounter/encounter-key-event.service";
 
 @Component({
     selector: 'notation-module',
@@ -22,6 +23,7 @@ export class NotationControlModuleComponent {
     constructor(
         private boardStateService: BoardStateService,
         private notationService: BoardNotationService,
+        private keyEventService: EncounterKeyEventService,
         private dialog: MatDialog,
     ) {
     }
@@ -80,6 +82,14 @@ export class NotationControlModuleComponent {
         this.notationService.returnToMeNotationMode = this.notationService.activeNotationMode;
         this.notationService.activeNotationMode = NotationMode.TEXT;
         this.dialog.open(NotationTextCreateDialogComponent);
+    }
+
+    stopListeningToKeyEvents(): void {
+        this.keyEventService.stopListeningToKeyEvents();
+    }
+
+    startListeningToKeyEvents(): void {
+        this.keyEventService.startListeningToKeyEvents();
     }
 
 }

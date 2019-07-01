@@ -4,7 +4,7 @@
 <mat-tab-group *ngIf="(rightsService.isEncounterGM() && (hasCampaignCharacters || hasCampaignNPCs || hasRuleSetNPCs)) || (!rightsService.isEncounterGM() && hasCampaignCharacters)" class="player-tabs">
 	<mat-tab label="Campaign Characters" [disabled]="!hasCampaignCharacters">
 		<mat-form-field class="filter">
-			<input matInput (keyup)="applyCharacterFilter($event.target.value)" placeholder="Filter" />
+			<input matInput (keyup)="applyCharacterFilter($event.target.value)" placeholder="Filter" (focus)="stopListeningToKeyEvents()" (blur)="startListeningToKeyEvents()" />
 		</mat-form-field>
 		<mat-table [dataSource]="campaignCharacterDataSource">
 			<ng-container matColumnDef="check">
@@ -46,7 +46,7 @@
 	</mat-tab>
 	<mat-tab label="RuleSet NPCs" *ngIf="rightsService.isEncounterGM()" [disabled]="!hasRuleSetNPCs">
 		<mat-form-field class="filter">
-			<input matInput (keyup)="applyRuleSetFilter($event.target.value)" placeholder="Filter" />
+			<input matInput (keyup)="applyRuleSetFilter($event.target.value)" placeholder="Filter" (focus)="stopListeningToKeyEvents()" (blur)="startListeningToKeyEvents()"/>
 		</mat-form-field>
 		<mat-table [dataSource]="ruleSetNPCDataSource">
 			<ng-container matColumnDef="check">

@@ -354,7 +354,7 @@ export class EncounterService {
 					}
 					case EncounterCommandType.NOTATION_UPDATE: {
 						if (data) {
-							await this.notationRepo.updateNotation(data as NotationData);
+							await this.notationRepo.updateNotation(JSON.parse(data) as NotationData);
 						}
 						break;
 					}
