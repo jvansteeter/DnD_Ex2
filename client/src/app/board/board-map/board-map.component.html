@@ -51,15 +51,7 @@
             class="inputCanvas"
             [ngClass]="getCursorClass()"
             height={{boardStateService.canvasElement_height}} width={{boardStateService.canvasElement_width}}
-            (mouseleave)="boardMap_handleMouseLeave($event)"
-            (mouseenter)="boardMap_handleMouseEnter($event)"
-            (mouseWheelUp)="boardMap_handleMouseWheel($event)"
-            (mouseWheelDown)="boardMap_handleMouseWheel($event)"
-            (mousemove)="boardMap_mouseMove($event)"
-            (mousedown)="boardMap_handleMouseDown($event)"
-            (mouseup)="boardMap_handleMouseUp($event)"
             (contextmenu)="boardMap_handleContextMenu($event)"
-            (click)="boardMap_clickResponse()"
             mouseWheel>
     </canvas>
 </div>

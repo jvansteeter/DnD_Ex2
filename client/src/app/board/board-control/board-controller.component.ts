@@ -8,6 +8,8 @@ import { BoardVisibilityService } from "../services/board-visibility.service";
 import { TeamSettingsComponent } from '../dialogs/team-settings/team-settings.component';
 import { RightsService } from '../../data-services/rights.service';
 import { RulesConfigService } from '../../data-services/rules-config.service';
+import { EncounterKeyEventService } from "../../encounter/encounter-key-event.service";
+import { first } from "rxjs/operators";
 
 @Component({
 	selector: 'board-controller',
@@ -23,6 +25,7 @@ export class BoardControllerComponent implements OnInit, OnDestroy {
 	            public encounterService: EncounterService,
 	            public rightsService: RightsService,
 	            public rulesConfigService: RulesConfigService,
+	            private keyEventService: EncounterKeyEventService,
 	            private dialog: MatDialog,
 	) {
 	}
@@ -34,15 +37,17 @@ export class BoardControllerComponent implements OnInit, OnDestroy {
 	}
 
 	addPlayer(): void {
+		this.keyEventService.stopListeningToKeyEvents();
 		this.dialog.open(AddPlayerDialogComponent, {
 			data: {
 				campaignId: this.encounterService.campaignId
 			}
-		});
+		}).afterClosed().pipe(first()).subscribe(() => this.keyEventService.startListeningToKeyEvents());
 	}
 
 	openTeamSettings(): void {
-		this.dialog.open(TeamSettingsComponent);
+		this.keyEventService.stopListeningToKeyEvents();
+		this.dialog.open(TeamSettingsComponent).afterClosed().pipe(first()).subscribe(() => this.keyEventService.startListeningToKeyEvents());
 	}
 
 	exportEncounterJson(): void {

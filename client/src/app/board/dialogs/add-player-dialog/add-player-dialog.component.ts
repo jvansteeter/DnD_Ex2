@@ -33,7 +33,6 @@ export class AddPlayerDialogComponent implements OnInit {
 	            private dialogRef: MatDialogRef<AddPlayerDialogComponent>,
 	            private alertService: AlertService,
 	            public rightsService: RightsService,
-	            private keyEventsService: EncounterKeyEventService,
 	            ) {
 		this.campaignId = data.campaignId;
 		this.counts = new Map<CharacterData, number>();
@@ -107,13 +106,5 @@ export class AddPlayerDialogComponent implements OnInit {
 
 	public applyCharacterFilter(value: string): void {
 		this.campaignCharacterDataSource.filter = value.trim().toLowerCase();
-	}
-
-	public stopListeningToKeyEvents(): void {
-		this.keyEventsService.stopListeningToKeyEvents();
-	}
-
-	public startListeningToKeyEvents(): void {
-		this.keyEventsService.startListeningToKeyEvents();
 	}
 }

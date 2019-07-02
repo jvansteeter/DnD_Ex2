@@ -145,7 +145,8 @@ export class BoardMapComponent implements OnInit, AfterViewInit, OnDestroy, Rend
 	/****************************************************************************************************************
 	 * Event Handler/Listener Functions
 	 ****************************************************************************************************************/
-	private boardMap_mouseMove(event): void {
+	@HostListener('mousemove', ['$event'])
+	public boardMap_mouseMove(event): void {
 		const mouse_screen = new XyPair(event.clientX, event.clientY);
 
 		if (this.boardStateService.isEditingNotation || this.boardStateService.board_controller_mode === BoardControllerMode.EPHEM_NOTATION) {
@@ -168,7 +169,8 @@ export class BoardMapComponent implements OnInit, AfterViewInit, OnDestroy, Rend
 		this.boardPlayerService.syncPlayerHover(this.boardStateService.mouse_loc_cell);
 	}
 
-	private boardMap_handleMouseUp(event) {
+	@HostListener('mouseup', ['$event'])
+	public boardMap_handleMouseUp(event) {
 		switch (event.which) {
 			case 1:
 				// left click
@@ -185,7 +187,8 @@ export class BoardMapComponent implements OnInit, AfterViewInit, OnDestroy, Rend
 		}
 	}
 
-	private boardMap_handleMouseDown(event) {
+	@HostListener('mousedown', ['$event'])
+	public boardMap_handleMouseDown(event) {
 		switch (event.which) {
 			case 1:
 				// left click
@@ -204,7 +207,8 @@ export class BoardMapComponent implements OnInit, AfterViewInit, OnDestroy, Rend
 		}
 	}
 
-	private boardMap_handleMouseWheel(event) {
+	@HostListener('mousewheel', ['$event'])
+	public boardMap_handleMouseWheel(event) {
 		const scroll_scale_delta = 0.10;
 		const max_scale = this.boardStateService.maxZoom;
 		const min_scale = this.boardStateService.minZoom;
@@ -233,11 +237,13 @@ export class BoardMapComponent implements OnInit, AfterViewInit, OnDestroy, Rend
 		this.boardStateService.canvasTransform_yOffset += y_delta;
 	}
 
+	@HostListener('mouseleave', ['$event'])
 	private boardMap_handleMouseLeave(event) {
 		this.boardMap_clearMouseLocation();
 		this.boardStateService.mouseLeftDown = false;
 	}
 
+	@HostListener('mouseenter', ['$event'])
 	private boardMap_handleMouseEnter(event) {
 	}
 
@@ -398,7 +404,8 @@ export class BoardMapComponent implements OnInit, AfterViewInit, OnDestroy, Rend
 		}
 	}
 
-	private boardMap_clickResponse(): void {
+	@HostListener('click', ['$event'])
+	public boardMap_clickResponse(): void {
 	}
 
 	@HostListener('document:keydown', ['$event'])

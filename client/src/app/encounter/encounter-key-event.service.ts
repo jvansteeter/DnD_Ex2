@@ -7,6 +7,7 @@ import { AddPlayerDialogComponent } from "../board/dialogs/add-player-dialog/add
 import { EncounterService } from "./encounter.service";
 import { TeamSettingsComponent } from "../board/dialogs/team-settings/team-settings.component";
 import { RightsService } from "../data-services/rights.service";
+import { first } from "rxjs/operators";
 
 @Injectable()
 export class EncounterKeyEventService {
@@ -24,7 +25,7 @@ export class EncounterKeyEventService {
 	}
 
 	public stopListeningToKeyEvents(): void {
-		this.stopListeningToKeyEvents();
+		this.listenToKeyEvents = false;
 	}
 
 	public isListeningToKeyEvents(): boolean {
@@ -109,11 +110,12 @@ export class EncounterKeyEventService {
 			this.dialog.closeAll();
 		}
 		else {
+			this.stopListeningToKeyEvents();
 			this.dialog.open(AddPlayerDialogComponent, {
 				data: {
 					campaignId: this.encounterService.campaignId
 				}
-			});
+			}).afterClosed().pipe(first()).subscribe(() => this.startListeningToKeyEvents());
 		}
 	}
 
@@ -126,7 +128,8 @@ export class EncounterKeyEventService {
 			this.dialog.closeAll();
 		}
 		else {
-			this.dialog.open(TeamSettingsComponent);
+			this.stopListeningToKeyEvents();
+			this.dialog.open(TeamSettingsComponent).afterClosed().pipe(first()).subscribe(() => this.startListeningToKeyEvents());
 		}
 	}
 
