@@ -63,7 +63,7 @@ export class CharacterRouter {
 				let characterData: CharacterData = req.body;
 				let character = await this.characterRepo.findById(characterData._id);
 				await character.setValues(characterData.values);
-				await character.setTokenUrl(characterData.tokenUrl);
+				await character.setTokens(characterData.tokens);
 				res.status(200).send();
 			}
 			catch (error) {

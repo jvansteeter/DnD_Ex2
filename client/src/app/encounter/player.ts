@@ -6,6 +6,7 @@ import { ConcurrentBoardObject } from './concurrent-board-object';
 import { PredefinedAspects, RuleModuleAspects } from '../../../../shared/predefined-aspects.enum';
 import { ConditionData } from '../../../../shared/types/rule-set/condition.data';
 import { isDefined } from '@angular/compiler/src/util';
+import { TokenData } from '../../../../shared/types/token.data';
 
 export class Player extends ConcurrentBoardObject implements PlayerData {
 	_id: string;
@@ -17,8 +18,8 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 	private _speed: number;
 	private _location: XyPair;
 	private _isVisible: boolean;
-	private _tokenUrl: string;
-	private _token_img: HTMLImageElement;
+	private _tokens: TokenData[];
+	private _token_imgs: HTMLImageElement[];
 	private _actions: { action: string, detail: string }[];
 	private _initiative: number;
 	private _teams: string[] = [];
@@ -79,10 +80,14 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 		else {
 			this._location = new XyPair(0, 0);
 		}
-		if (!!playerData.characterData.tokenUrl) {
-			this._tokenUrl = playerData.characterData.tokenUrl;
-			this._token_img = new Image();
-			this._token_img.src = this._tokenUrl;
+		if (isDefined(playerData.characterData.tokens) && playerData.characterData.tokens.length > 0) {
+			this._tokens = playerData.characterData.tokens;
+			this._token_imgs = [];
+			for (let token of playerData.characterData.tokens) {
+				const tokenImage = new Image();
+				tokenImage.src = token.url;
+				this._token_imgs.push(tokenImage)
+			}
 		}
 		this._isVisible = playerData.isVisible;
 		this._userId = playerData.userId;
@@ -199,17 +204,17 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 		this.emitChange();
 	}
 
-	get tokenUrl(): string {
-		return this._tokenUrl;
+	get tokens(): TokenData[] {
+		return this._tokens;
 	}
 
-	set tokenUrl(value: string) {
-		this._tokenUrl = value;
+	set tokens(tokens: TokenData[]) {
+		this._tokens = tokens;
 		this.emitChange();
 	}
 
 	get token_img(): HTMLImageElement {
-		return this._token_img;
+		return this._token_imgs;
 	}
 
 	set token_img(value: HTMLImageElement) {

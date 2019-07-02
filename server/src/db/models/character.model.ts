@@ -3,12 +3,13 @@ import { Promise } from 'bluebird';
 import { MongooseModel } from './mongoose.model';
 import { CharacterData } from '../../../../shared/types/character.data';
 import { CharacterSheetData } from '../../../../shared/types/rule-set/character-sheet.data';
+import { TokenData } from '../../../../shared/types/token.data';
 
 export class CharacterModel extends MongooseModel implements CharacterData {
 	public _id: string;
 	public label: string;
 	public creatorUserId: string;
-	public tokenUrl: string;
+	public tokens: TokenData[];
 	public characterSheetId: string;
 	public characterSheet?: CharacterSheetData;
 	public ruleSetId?: string;
@@ -20,7 +21,11 @@ export class CharacterModel extends MongooseModel implements CharacterData {
 		super({
 			label: {type: String, required: true},
 			creatorUserId: {type: String, required: true},
-			tokenUrl: {type: String, default: ''},
+			tokens: [{
+				url: String,
+				widthInCells: Number,
+				heightInCells: Number
+			}],
 			characterSheetId: String,
 			ruleSetId: String,
 			campaignId: String,
@@ -31,7 +36,7 @@ export class CharacterModel extends MongooseModel implements CharacterData {
 		this._id = this.methods._id;
 		this.label = this.methods.label;
 		this.creatorUserId = this.methods.creatorUserId;
-		this.tokenUrl = this.methods.tokenUrl;
+		this.tokens = this.methods.tokens;
 		this.characterSheetId = this.methods.characterSheetId;
 		this.ruleSetId = this.methods.ruleSetId;
 		this.campaignId = this.methods.campaignId;
@@ -41,7 +46,7 @@ export class CharacterModel extends MongooseModel implements CharacterData {
 		this.methods.setRuleSetId = this.setRuleSetId;
 		this.methods.setValues = this.setValues;
 		this.methods.setCampaignId = this.setCampaignId;
-		this.methods.setTokenUrl = this.setTokenUrl;
+		this.methods.setTokens = this.setTokens;
 	}
 
 	public setRuleSetId(id: string): Promise<void> {
@@ -59,8 +64,8 @@ export class CharacterModel extends MongooseModel implements CharacterData {
 		return this.save();
 	}
 
-	public setTokenUrl(url): Promise<void> {
-		this.tokenUrl = url;
+	public setTokens(tokens: TokenData[]): Promise<void> {
+		this.tokens = tokens;
 		return this.save();
 	}
 }

@@ -1,11 +1,11 @@
-import {Injectable} from '@angular/core';
-import {isNullOrUndefined} from 'util';
-import {XyPair} from '../../../../../shared/types/encounter/board/xy-pair';
-import {CellTarget} from '../shared/cell-target';
-import {CellRegion} from '../shared/enum/cell-region';
-import {BoardStateService} from './board-state.service';
-import {CellTargetStatics} from '../statics/cell-target-statics';
-import {IsReadyService} from "../../utilities/services/isReady.service";
+import { Injectable } from '@angular/core';
+import { isNullOrUndefined } from 'util';
+import { XyPair } from '../../../../../shared/types/encounter/board/xy-pair';
+import { CellTarget } from '../shared/cell-target';
+import { CellRegion } from '../shared/enum/cell-region';
+import { BoardStateService } from './board-state.service';
+import { CellTargetStatics } from '../statics/cell-target-statics';
+import { IsReadyService } from "../../utilities/services/isReady.service";
 
 @Injectable()
 export class BoardCanvasService extends IsReadyService {
@@ -74,6 +74,12 @@ export class BoardCanvasService extends IsReadyService {
         ctx.globalAlpha = opacity;
         ctx.drawImage(img, origin.x, origin.y);
         ctx.globalAlpha = 1.0;
+    }
+
+    draw_img_to_size(ctx: CanvasRenderingContext2D, origin: XyPair, img: HTMLImageElement, widthInCells: number, heightInCells: number, opacity: number = 1.0): void {
+    	ctx.globalAlpha = opacity;
+    	ctx.drawImage(img, origin.x, origin.y, widthInCells * BoardStateService.cell_res, heightInCells * BoardStateService.cell_res);
+    	ctx.globalAlpha = 1.0;
     }
 
     draw_dot(ctx: CanvasRenderingContext2D, origin: XyPair, rgba_code?: string): void {

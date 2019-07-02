@@ -12,6 +12,7 @@ import { IsReadyService } from '../../utilities/services/isReady.service';
 import { RuleSetService } from '../../data-services/ruleSet.service';
 import { AlertService } from '../../alert/alert.service';
 import { isDefined } from '@angular/compiler/src/util';
+import { TokenData } from '../../../../../shared/types/token.data';
 
 @Injectable()
 export class CharacterSheetService extends IsReadyService implements CharacterInterfaceService {
@@ -145,8 +146,8 @@ export class CharacterSheetService extends IsReadyService implements CharacterIn
 
 	}
 
-	public setTokenUrl(url: string): void {
-		this.characterData.tokenUrl = url;
+	public setTokens(tokens: TokenData[]): void {
+		this.characterData.tokens = tokens;
 	}
 
 	public save(): void {

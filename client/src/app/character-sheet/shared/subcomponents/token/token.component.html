@@ -1,4 +1,9 @@
-<a class="image-thumbnail" (click)="upload()">
-	<img class="token-component-image" [src]="tokenUrl"/>
-</a>
-<input type="file" accept="image/*" #fileInput (change)="loadImage()"/>
+<mat-tab-group>
+	<mat-tab *ngFor="let token of tokens; let i = index" label="{{i}}">
+		<a class="image-thumbnail" (click)="upload()">
+			<img class="token-component-image" [src]="tokens[0].url"/>
+		</a>
+		<input type="file" accept="image/*" #fileInput (change)="loadImage()"/>
+	</mat-tab>
+</mat-tab-group>
+

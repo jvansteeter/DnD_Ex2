@@ -103,7 +103,7 @@ export class RuleSetService {
 			const characterSheet = await this.characterSheetRepo.findByLabel(npc.characterSheet.label, ruleSetModel._id);
 			let characterModel: CharacterModel = await this.characterService.createNewCharacter(userId, npc.label, characterSheet._id, npc.isNpc);
 			await characterModel.setValues(npc.values);
-			await characterModel.setTokenUrl(npc.tokenUrl)
+			await characterModel.setTokens(npc.tokens)
 		}
 		await this.userRuleSetRepo.create(userId, ruleSetModel._id);
 		return;

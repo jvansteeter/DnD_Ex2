@@ -32,14 +32,14 @@ export class CharacterSheetComponent implements OnInit {
 		this.activatedRoute.params.subscribe((params) => {
 			this.npcId = params['characterId'];
 			this.characterRepo.getCharacter(this.npcId).subscribe((characterData: CharacterData) => {
-				this.tokenComponent.setTokenUrl(characterData.tokenUrl);
+				this.tokenComponent.setTokens(characterData.tokens);
 				this.characterService.setCharacterData(characterData);
 			});
 		});
 	}
 
 	save(): void {
-		this.characterService.setTokenUrl(this.tokenComponent.getTokenUrl());
+		this.characterService.setTokens(this.tokenComponent.getTokens());
 		this.characterService.save();
 	}
 }

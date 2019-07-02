@@ -1,12 +1,13 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { TokenData } from '../../../../../../../shared/types/token.data';
 
 @Component({
 	selector: 'characterMaker-tokenComponent',
 	templateUrl: 'token.component.html',
 	styleUrls: ['token.component.scss']
 })
-export class TokenComponent {
-	private tokenUrl: string = '';
+export class TokenComponent implements OnInit {
+	public tokens: TokenData[] = [];
 
 	@ViewChild('fileInput', {static: true}) fileInput: ElementRef;
 	reader: FileReader = new FileReader();
@@ -15,12 +16,22 @@ export class TokenComponent {
 
 	}
 
-	getTokenUrl() {
-		return this.tokenUrl;
+	public ngOnInit(): void {
+		if (this.tokens.length === 0) {
+			this.tokens.push({
+				url: '',
+				widthInCells: 1,
+				heightInCells: 1
+			});
+		}
 	}
 
-	setTokenUrl(tokenUrl: string): void {
-		this.tokenUrl = tokenUrl;
+	getTokens() {
+		return this.tokens;
+	}
+
+	setTokens(tokens: TokenData[]): void {
+		this.tokens = tokens;
 	}
 
 	upload(): void {
@@ -29,7 +40,7 @@ export class TokenComponent {
 
 	loadImage(): void {
 		this.reader.addEventListener('load', () => {
-			this.tokenUrl = String(this.reader.result);
+			this.tokens[0].url = String(this.reader.result);
 		});
 		if (this.fileInput.nativeElement.files[0]) {
 			this.reader.readAsDataURL(this.fileInput.nativeElement.files[0]);
