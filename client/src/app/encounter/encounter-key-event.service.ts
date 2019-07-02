@@ -82,7 +82,7 @@ export class EncounterKeyEventService {
 	}
 
 	private cycleEditMode(): void {
-		if (!this.rightsService.isEncounterGM()) {
+		if (!this.rightsService.isEncounterGM() || this.stateService.board_view_mode !== ViewMode.BOARD_MAKER) {
 			return;
 		}
 		switch (this.stateService.board_edit_mode) {
