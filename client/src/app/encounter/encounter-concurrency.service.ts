@@ -12,27 +12,17 @@ import { BoardLightService } from '../board/services/board-light.service';
 import { LightSource } from '../board/map-objects/light-source';
 import { BoardNotationService } from '../board/services/board-notation-service';
 import { NotationData } from '../../../../shared/types/encounter/board/notation.data';
-import { Subscription } from 'rxjs';
 import { BoardWallService } from '../board/services/board-wall.service';
 import { CellTarget } from '../board/shared/cell-target';
 import { EncounterConfigData } from '../../../../shared/types/encounter/encounter-config.data';
 import { EncounterTeamsData } from '../../../../shared/types/encounter/encounter-teams.data';
 import { BoardTeamsService } from '../board/services/board-teams.service';
 import { isUndefined } from 'util';
+import { SubSink } from 'subsink';
 
 @Injectable()
 export class EncounterConcurrencyService extends IsReadyService {
-	private encounterSubscription: Subscription;
-	private lightSourceSubscription: Subscription;
-	private notationSubscription: Subscription;
-	private ephemeralNotationSubscription: Subscription;
-	private playerSubscriptions: Subscription[] = [];
-	private wallSubscription: Subscription;
-	private doorSubscription: Subscription;
-	private configSubscription: Subscription;
-	private teamsChangeSubscription: Subscription;
-	private windowChangeSubscription: Subscription;
-	private incrementingRoundsSubscription: Subscription;
+	private concurrentSubs: SubSink = new SubSink();
 
 	constructor(private encounterService: EncounterService,
 	            private playerService: BoardPlayerService,
@@ -65,116 +55,86 @@ export class EncounterConcurrencyService extends IsReadyService {
 		});
 	}
 
+	public unInit(): void {
+		this.concurrentSubs.unsubscribe();
+		super.unInit();
+		console.log('encounterConcurrencyService.unInit()');
+	}
+
 	private observeEncounterMqMessages(): void {
-		if (this.encounterSubscription) {
-			this.encounterSubscription.unsubscribe();
-		}
-		this.encounterSubscription = this.mqService.getEncounterMessages(this.encounterService.encounterId).subscribe((message: EncounterCommandMessage) => {
+		this.concurrentSubs.add(this.mqService.getEncounterMessages(this.encounterService.encounterId).subscribe((message: EncounterCommandMessage) => {
 			console.log(message);
 			// if (message.body.version > this.encounterService.version) {
 			if (true) { // versioning currently causing more problems than it fixes
 				this.doEncounterCommand(message);
 				this.encounterService.version = message.body.version;
 			}
-		});
+		}));
 	}
 
 	private observeAllPlayerChanges(): void {
-		if (this.playerSubscriptions.length > 0) {
-			for (let sub of this.playerSubscriptions) {
-				sub.unsubscribe();
-			}
-			this.playerSubscriptions = [];
-		}
 		for (let player of this.encounterService.players) {
 			this.observePlayerChanges(player);
 		}
 	}
 
 	private observePlayerChanges(player: Player): void {
-		this.playerSubscriptions.push(player.changeObservable.subscribe(() => {
+		this.concurrentSubs.add(player.changeObservable.subscribe(() => {
 			this.sendEncounterCommand(EncounterCommandType.PLAYER_UPDATE, player.serialize());
 		}));
 	}
 
 	private observeLightSourceChanges(): void {
-		if (this.lightSourceSubscription) {
-			this.lightSourceSubscription.unsubscribe();
-		}
-		this.lightSourceSubscription = this.lightService.lightSourcesChangeObservable.subscribe(() => {
+		this.concurrentSubs.add(this.lightService.lightSourcesChangeObservable.subscribe(() => {
 			this.sendEncounterCommand(EncounterCommandType.LIGHT_SOURCE, this.lightService.getSerializedState());
-		});
+		}));
 	}
 
 	private observeNotationChanges(): void {
-		if (this.notationSubscription) {
-			this.notationSubscription.unsubscribe();
-		}
-		this.notationSubscription = this.notationService.notationsChangeObservable.subscribe((notation) => {
+		this.concurrentSubs.add(this.notationService.notationsChangeObservable.subscribe((notation) => {
 			this.sendEncounterCommand(EncounterCommandType.NOTATION_UPDATE, notation);
-		});
+		}));
 
-		if (this.ephemeralNotationSubscription) {
-			this.ephemeralNotationSubscription.unsubscribe();
-		}
-		this.ephemeralNotationSubscription = this.notationService.ephemerailNotationChangeObservable.subscribe(() => {
+		this.concurrentSubs.add(this.notationService.ephemerailNotationChangeObservable.subscribe(() => {
 			const ephemeralNotation = this.notationService.ephemeralNotationMap.get(this.userProfileService.userId);
 			this.sendEncounterCommand(EncounterCommandType.EPHEMERAL_NOTATION, ephemeralNotation);
-		});
+		}));
 	}
 
 	private observerWallChanges(): void {
-		if (this.wallSubscription) {
-			this.wallSubscription.unsubscribe();
-		}
-		this.wallSubscription = this.wallService.wallChangeEvent.subscribe(() => {
+		this.concurrentSubs.add(this.wallService.wallChangeEvent.subscribe(() => {
 			this.sendEncounterCommand(EncounterCommandType.WALL_CHANGE, this.wallService.wallData);
-		});
+		}));
 	}
 
 	private observerDoorChanges(): void {
-		if (this.doorSubscription) {
-			this.doorSubscription.unsubscribe();
-		}
-		this.doorSubscription = this.wallService.doorChangeEvent.subscribe(() => {
+		this.concurrentSubs.add(this.wallService.doorChangeEvent.subscribe(() => {
 			this.sendEncounterCommand(EncounterCommandType.DOOR_CHANGE, this.wallService.doorData);
-		});
+		}));
 	}
 
 	private observeWindowChanges(): void {
-		if (this.windowChangeSubscription) {
-			this.windowChangeSubscription.unsubscribe();
-		}
-		this.windowChangeSubscription = this.wallService.windowChangeEvent.subscribe(() => {
+		this.concurrentSubs.add(this.wallService.windowChangeEvent.subscribe(() => {
 			this.sendEncounterCommand(EncounterCommandType.WINDOW_CHANGE, this.wallService.windowData);
-		});
+		}));
 	}
 
 	private observeConfigChanges(): void {
-		if (this.configSubscription) {
-			this.configSubscription.unsubscribe();
-		}
-		this.configSubscription = this.encounterService.configChangeObservable.subscribe(() => {
+		this.concurrentSubs.add(this.encounterService.configChangeObservable.subscribe(() => {
 			this.sendEncounterCommand(EncounterCommandType.SETTINGS_CHANGE, this.encounterService.getSerializedConfig());
-		});
+		}));
 	}
 
 	private observeTeamChanges(): void {
-		if (this.teamsChangeSubscription) {
-			this.teamsChangeSubscription.unsubscribe();
-		}
-		this.teamsChangeSubscription = this.encounterService.teamsChangeObservable.subscribe(() => {
+		this.concurrentSubs.add(this.encounterService.teamsChangeObservable.subscribe(() => {
 			this.sendEncounterCommand(EncounterCommandType.TEAMS_CHANGE, this.encounterService.teamsData);
-		});
+		}));
 	}
 
 	private observeIncrementingRounds(): void {
-		if (this.incrementingRoundsSubscription) {
-			this.incrementingRoundsSubscription.unsubscribe();
-		}
-		this.incrementingRoundsSubscription = this.encounterService.incrementRoundObservable.subscribe(() => {
+		this.concurrentSubs.add(this.encounterService.incrementRoundObservable.subscribe(() => {
 			this.sendEncounterCommand(EncounterCommandType.INCREMENT_ROUND, this.encounterService.round);
-		});
+		}));
 	}
 
 	private doEncounterCommand(message: EncounterCommandMessage): void {
