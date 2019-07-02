@@ -27,6 +27,8 @@ export class EncounterService extends IsReadyService {
 	private incrementRoundSubject: Subject<void>;
 	private addPlayerSubject: Subject<void>;
 
+	private refreshEncounterSubject: Subject<void> = new Subject<void>();
+
 	constructor(
 			protected encounterRepo: EncounterRepository,
 			private rulesConfigService: RulesConfigService,
@@ -115,8 +117,7 @@ export class EncounterService extends IsReadyService {
 	}
 
 	public refresh(): void {
-		this.setReady(false);
-		this.init();
+		this.refreshEncounterSubject.next();
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -320,5 +321,9 @@ export class EncounterService extends IsReadyService {
 		}
 
 		return LightValue.FULL;
+	}
+
+	get refreshEncounterObservable(): Observable<void> {
+		return this.refreshEncounterSubject.asObservable();
 	}
 }

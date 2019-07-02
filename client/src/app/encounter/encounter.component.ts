@@ -15,6 +15,7 @@ import { BoardTeamsService } from "../board/services/board-teams.service";
 import { BoardNotationService } from "../board/services/board-notation-service";
 import { BoardStealthService } from '../board/services/board-stealth.service';
 import { EncounterKeyEventService } from "./encounter-key-event.service";
+import { Subscription } from 'rxjs';
 
 @Component({
 	selector: 'encounter',
@@ -22,6 +23,8 @@ import { EncounterKeyEventService } from "./encounter-key-event.service";
 	styleUrls: ['encounter.component.scss']
 })
 export class EncounterComponent implements OnInit, OnDestroy {
+	private refreshSubscription: Subscription;
+
 	public finishedLoading: boolean = false;
 
 	constructor(private encounterService: EncounterService,
@@ -43,7 +46,25 @@ export class EncounterComponent implements OnInit, OnDestroy {
 	) {
 	}
 
-	ngOnInit(): void {
+	public ngOnInit(): void {
+		this.initEncounterServices();
+		this.refreshSubscription = this.encounterService.refreshEncounterObservable.subscribe(() => {
+			this.unInitEncounterServices();
+			this.initEncounterServices();
+		});
+	}
+
+	public ngOnDestroy(): void {
+		this.unInitEncounterServices();
+		this.refreshSubscription.unsubscribe();
+	}
+
+	@HostListener('document:keyup', ['$event'])
+	public keyup(event): void {
+		this.keyInputService.keyup(event);
+	}
+
+	private initEncounterServices(): void {
 		this.encounterConcurrencyService.init();
 		this.keyInputService.startListeningToKeyEvents();
 		this.activatedRoute.params.subscribe((params) => {
@@ -75,7 +96,7 @@ export class EncounterComponent implements OnInit, OnDestroy {
 		this.stealthService.init();
 	}
 
-	ngOnDestroy(): void {
+	private unInitEncounterServices(): void {
 		this.encounterConcurrencyService.unInit();
 		this.boardStateService.unInit();
 		this.boardLightService.unInit();
@@ -88,10 +109,5 @@ export class EncounterComponent implements OnInit, OnDestroy {
 		this.boardTeamsService.unInit();
 		this.boardNotationService.unInit();
 		this.stealthService.unInit();
-	}
-
-	@HostListener('document:keyup', ['$event'])
-	public keyup(event): void {
-		this.keyInputService.keyup(event);
 	}
 }

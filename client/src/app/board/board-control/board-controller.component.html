@@ -25,7 +25,7 @@
 	<button mat-mini-fab color="primary" class="toggle-button" matTooltip="Toggle Toolbar" (click)="toggleToolBar()">
 		<mat-icon>keyboard_arrow_down</mat-icon>
 	</button>
-	<button mat-mini-fab color="primary" class="toggle-button" matTooltip="Toggle Toolbar" (click)="refreshEncounter()">
+	<button mat-mini-fab color="primary" class="toggle-button" matTooltip="Refresh Encounter Data" (click)="refreshEncounter()">
 		<mat-icon>refresh</mat-icon>
 	</button>
 	<span class="round-indicator" *ngIf="rulesConfigService.hasRounds">Round: {{encounterService.round}}</span>

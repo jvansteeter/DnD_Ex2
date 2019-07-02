@@ -111,7 +111,6 @@ export class BoardMapComponent implements OnInit, AfterViewInit, OnDestroy, Rend
 	}
 
 	private boardMap_handleInitIconMouseUp(event: MouseEvent, player: Player) {
-		console.log('init icon mouse up', event)
 		switch (event.which) {
 			case 1:
 				if (this.boardStateService.ctrlDown) {
@@ -153,7 +152,7 @@ export class BoardMapComponent implements OnInit, AfterViewInit, OnDestroy, Rend
 			this.boardNotationService.handleMouseMove();
 		}
 
-		if (this.boardStateService.mouseMiddleDown || (this.boardStateService.spaceDown && this.boardStateService.mouseLeftDown)) {
+		if (this.boardStateService.mouseLeftDown && !(this.boardStateService.shiftDown || this.boardStateService.isEditingNotation)) {
 			this.boardCanvasService.rebuild_grid_canvas = true;
 			const trans_coor = this.boardTransformService.screen_to_map(event);
 
@@ -167,24 +166,6 @@ export class BoardMapComponent implements OnInit, AfterViewInit, OnDestroy, Rend
 		this.boardMap_updateMouseLocation(mouse_screen);
 
 		this.boardPlayerService.syncPlayerHover(this.boardStateService.mouse_loc_cell);
-	}
-
-	@HostListener('mouseup', ['$event'])
-	public boardMap_handleMouseUp(event) {
-		switch (event.which) {
-			case 1:
-				// left click
-				this.boardMap_doMouseLeftUp(event);
-				break;
-			case 2:
-				// middle click
-				this.boardStateService.mouseMiddleDown = false;
-				break;
-			case 3:
-				// right click
-				this.boardMap_doMouseRightUp(event);
-				break;
-		}
 	}
 
 	@HostListener('mousedown', ['$event'])
@@ -203,6 +184,24 @@ export class BoardMapComponent implements OnInit, AfterViewInit, OnDestroy, Rend
 				break;
 			case 3:
 				// right click
+				break;
+		}
+	}
+
+	@HostListener('mouseup', ['$event'])
+	public boardMap_handleMouseUp(event) {
+		switch (event.which) {
+			case 1:
+				// left click
+				this.boardMap_doMouseLeftUp(event);
+				break;
+			case 2:
+				// middle click
+				this.boardStateService.mouseMiddleDown = false;
+				break;
+			case 3:
+				// right click
+				this.boardMap_doMouseRightUp(event);
 				break;
 		}
 	}

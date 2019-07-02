@@ -11,7 +11,7 @@ import {EncounterService} from '../../encounter/encounter.service';
 import {BoardPlayerService} from "./board-player.service";
 import {Observable, Subject} from 'rxjs';
 import {IsReadyService} from '../../utilities/services/isReady.service';
-import {isUndefined} from 'util';
+import { isNullOrUndefined, isUndefined } from 'util';
 import {BoardWindow} from "../map-objects/board-window";
 
 @Injectable()
@@ -255,6 +255,9 @@ export class BoardWallService extends IsReadyService {
     }
 
     public hasObstruction(target: CellTarget): boolean {
+    	  if (isNullOrUndefined(target)) {
+    	  	return false;
+	      }
         return this._wallData.has(target.hash()) || this._doorData.has(target.hash()) || this._windowData.has(target.hash());
     }
 
