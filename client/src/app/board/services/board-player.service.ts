@@ -254,6 +254,10 @@ export class BoardPlayerService extends IsReadyService {
                     }
                 }
 
+                if (loc_cell.x < 0 || loc_cell.y < 0) {
+                	return;
+                }
+
                 const selectedPlayer = this.encounterService.getPlayerById(this.selectedPlayerId);
                 selectedPlayer.location = loc_cell;
                 this.updatePlayerVisibility(selectedPlayer._id);
