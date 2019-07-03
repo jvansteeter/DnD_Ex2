@@ -145,6 +145,16 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 		}
 	}
 
+	public setTokenWidth(tokenIndex: number, width: number): void {
+		this._tokens[tokenIndex].widthInCells = width;
+		this.emitChange();
+	}
+
+	public setTokenHeight(tokenIndex: number, height: number): void {
+		this._tokens[tokenIndex].heightInCells = height;
+		this.emitChange();
+	}
+
 	/*////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		GETTERS & SETTERS
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
@@ -236,6 +246,14 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 
 	get tokenUrl(): string {
 		return this.tokens[this._activeTokenIndex].url;
+	}
+
+	get tokenWidth(): number {
+		return this.tokens[this._activeTokenIndex].widthInCells;
+	}
+
+	get tokenHeight(): number {
+		return this.tokens[this._activeTokenIndex].heightInCells;
 	}
 
 	get actions(): { action: string; detail: string }[] {

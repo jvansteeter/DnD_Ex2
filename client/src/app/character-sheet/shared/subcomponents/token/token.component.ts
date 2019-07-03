@@ -12,7 +12,7 @@ export class TokenComponent {
 	@ViewChild('fileInput', {static: true}) fileInput: ElementRef;
 	reader: FileReader = new FileReader();
 
-	private selectedIndex: number = 0;
+	public selectedIndex: number = 0;
 
 	constructor() {
 

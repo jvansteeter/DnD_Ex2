@@ -81,14 +81,14 @@ export class TokenRendererComponent implements OnInit, OnDestroy, RendererCompon
 			              userCanSeePlayer = this.stealthService.userCanSeeHiddenPlayer(player);
 		            }
 		            if (userCanSeePlayer) {
-				            this.boardCanvasService.draw_img(this.ctx, new XyPair(player.location.x * BoardStateService.cell_res, player.location.y * BoardStateService.cell_res), player.token_img, 1.0);
+				            this.boardCanvasService.draw_img_to_size(this.ctx, new XyPair(player.location.x * BoardStateService.cell_res, player.location.y * BoardStateService.cell_res), player.token_img, player.tokenWidth, player.tokenHeight, 1.0);
 				            if (this.encounterService.config.showHealth) {
 					              this.boardCanvasService.draw_health_basic(this.ctx, player.location, player.hp / player.maxHp);
 				            }
 		            }
             } else {
                 if (this.rightsService.isEncounterGM() || this.rightsService.isMyPlayer(player)) {
-                    this.boardCanvasService.draw_img(this.ctx, new XyPair(player.location.x * BoardStateService.cell_res, player.location.y * BoardStateService.cell_res), player.token_img, 0.35);
+                    this.boardCanvasService.draw_img_to_size(this.ctx, new XyPair(player.location.x * BoardStateService.cell_res, player.location.y * BoardStateService.cell_res), player.token_img, player.tokenWidth, player.tokenHeight, 0.35);
 		                if (this.encounterService.config.showHealth) {
 			                  this.boardCanvasService.draw_health_basic(this.ctx, player.location, player.hp / player.maxHp);
 		                }

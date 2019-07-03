@@ -16,6 +16,8 @@ import { isDefined } from "@angular/compiler/src/util";
 import { MatDialog } from '@angular/material';
 import { NewConditionDialogComponent } from '../../conditions/new-condition-dialog.component';
 import { RulesConfigService } from '../../data-services/rules-config.service';
+import { TokenData } from "../../../../../shared/types/token.data";
+import { Player } from "../../encounter/player";
 
 @Component({
 	selector: 'character-tooltip',
@@ -32,6 +34,10 @@ export class CharacterTooltipComponent {
 	public aspectType = AspectType;
 	public hoveredIndex: number;
 	public editingIndex: number = -1;
+	public tokens: TokenData[];
+	public activeTokenIndex: number;
+	public activeTokenWidth: number;
+	public activeTokenHeight: number;
 	private currentMaxAdd: boolean;
 
 	private _playerId: string;
@@ -265,8 +271,29 @@ export class CharacterTooltipComponent {
 		return this.rightsService.hasRightsToPlayer(this._playerId);
 	}
 
+	public activeTokenIndexChange(index: number): void {
+		this.activeTokenIndex = index;
+		const player: Player = this.encounterService.getPlayerById(this._playerId);
+		player.activeTokenIndex = this.activeTokenIndex;
+		this.activeTokenWidth = player.tokenWidth;
+		this.activeTokenHeight = player.tokenHeight;
+	}
+
+	public widthChange(): void {
+		this.encounterService.getPlayerById(this._playerId).setTokenWidth(this.activeTokenIndex, this.activeTokenWidth);
+	}
+
+	public heightChange(): void {
+		this.encounterService.getPlayerById(this._playerId).setTokenHeight(this.activeTokenIndex, this.activeTokenHeight);
+	}
+
 	set playerId(value) {
 		this._playerId = value;
+		const player = this.encounterService.getPlayerById(this._playerId);
+		this.tokens = player.tokens;
+		this.activeTokenIndex = player.activeTokenIndex;
+		this.activeTokenWidth = this.tokens[this.activeTokenIndex].widthInCells;
+		this.activeTokenHeight = this.tokens[this.activeTokenIndex].heightInCells;
 	}
 
 	get playerId(): string {

@@ -5,19 +5,19 @@
 		</a>
 	</mat-tab>
 </mat-tab-group>
-<form class="width-height" *ngIf="tokens[this.selectedIndex]">
+<form class="width-height" *ngIf="tokens[selectedIndex]">
 	<mat-form-field>
-		<input matInput placeholder="Width" type="number" min="0" name="width" [(ngModel)]="tokens[this.selectedIndex].widthInCells" />
+		<input matInput placeholder="Width" type="number" min="0" name="width" [(ngModel)]="tokens[selectedIndex].widthInCells" />
 	</mat-form-field>
 	<mat-form-field>
-		<input matInput placeholder="Height" type="number" min="0" name="height" [(ngModel)]="tokens[this.selectedIndex].heightInCells" />
+		<input matInput placeholder="Height" type="number" min="0" name="height" [(ngModel)]="tokens[selectedIndex].heightInCells" />
 	</mat-form-field>
 </form>
 <div class="button-area">
 	<button mat-icon-button color="primary" (click)="addToken()" matTooltip="Add Token">
 		<mat-icon>add</mat-icon>
 	</button>
-	<button mat-icon-button color="primary" (click)="removeToken()" matTooltip="Remove this Token" *ngIf="this.selectedIndex !== 0">
+	<button mat-icon-button color="primary" (click)="removeToken()" matTooltip="Remove this Token" *ngIf="selectedIndex !== 0">
 		<mat-icon>remove</mat-icon>
 	</button>
 </div>
