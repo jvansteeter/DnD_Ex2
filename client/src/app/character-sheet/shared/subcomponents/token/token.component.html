@@ -1,9 +1,24 @@
-<mat-tab-group>
-	<mat-tab *ngFor="let token of tokens; let i = index" label="{{i}}">
+<mat-tab-group mat-stretch-tabs [(selectedIndex)]="selectedIndex">
+	<mat-tab *ngFor="let token of tokens; let i = index" [label]="i === 0 ? 'Default' : 'Alt ' + i">
 		<a class="image-thumbnail" (click)="upload()">
-			<img class="token-component-image" [src]="tokens[0].url"/>
+			<img class="token-component-image" [src]="tokens[i].url"/>
 		</a>
-		<input type="file" accept="image/*" #fileInput (change)="loadImage()"/>
 	</mat-tab>
 </mat-tab-group>
-
+<form class="width-height" *ngIf="tokens[this.selectedIndex]">
+	<mat-form-field>
+		<input matInput placeholder="Width" type="number" min="0" name="width" [(ngModel)]="tokens[this.selectedIndex].widthInCells" />
+	</mat-form-field>
+	<mat-form-field>
+		<input matInput placeholder="Height" type="number" min="0" name="height" [(ngModel)]="tokens[this.selectedIndex].heightInCells" />
+	</mat-form-field>
+</form>
+<div class="button-area">
+	<button mat-icon-button color="primary" (click)="addToken()" matTooltip="Add Token">
+		<mat-icon>add</mat-icon>
+	</button>
+	<button mat-icon-button color="primary" (click)="removeToken()" matTooltip="Remove this Token" *ngIf="this.selectedIndex !== 0">
+		<mat-icon>remove</mat-icon>
+	</button>
+</div>
+<input class="fileInput" type="file" accept="image/*" #fileInput (change)="loadImage()"/>

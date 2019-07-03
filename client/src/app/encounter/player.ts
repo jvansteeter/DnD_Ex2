@@ -19,6 +19,7 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 	private _location: XyPair;
 	private _isVisible: boolean;
 	private _tokens: TokenData[];
+	private _activeTokenIndex: number = 0;
 	private _token_imgs: HTMLImageElement[];
 	private _actions: { action: string, detail: string }[];
 	private _initiative: number;
@@ -40,6 +41,7 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 			_id: this._id,
 			encounterId: this.encounterId,
 			userId: this._userId,
+			activeTokenIndex: this._activeTokenIndex,
 			characterData: this.characterData,
 			initiative: this._initiative,
 			location: this._location,
@@ -92,6 +94,7 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 		this._isVisible = playerData.isVisible;
 		this._userId = playerData.userId;
 		this._teams = playerData.teams;
+		this._activeTokenIndex = playerData.activeTokenIndex;
 	}
 
 	public isMemberOfTeam(team: string): boolean {
@@ -159,6 +162,15 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 		this.emitChange();
 	}
 
+	get activeTokenIndex(): number {
+		return this._activeTokenIndex;
+	}
+
+	set activeTokenIndex(index: number) {
+		this._activeTokenIndex = index;
+		this.emitChange();
+	}
+
 	get hp(): number {
 		return this._hp;
 	}
@@ -214,12 +226,16 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 	}
 
 	get token_img(): HTMLImageElement {
-		return this._token_imgs;
+		return this._token_imgs[this._activeTokenIndex];
 	}
 
 	set token_img(value: HTMLImageElement) {
-		this._token_img = value;
+		this._token_imgs[0] = value;
 		this.emitChange();
+	}
+
+	get tokenUrl(): string {
+		return this.tokens[this._activeTokenIndex].url;
 	}
 
 	get actions(): { action: string; detail: string }[] {

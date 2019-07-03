@@ -83,7 +83,7 @@ export class AddPlayerDialogComponent implements OnInit {
 			for (let selectedCharacter of this.selection.selected) {
 				let count = this.counts.get(selectedCharacter);
 				for (let i = 0; i < count; i++) {
-					if (isNullOrUndefined(selectedCharacter.tokenUrl) || selectedCharacter.tokenUrl === '') {
+					if (selectedCharacter.tokens.length < 1 || isNullOrUndefined(selectedCharacter.tokens[0].url) || selectedCharacter.tokens[0].url === '') {
 						this.alertService.showAlert('Cannot add a character that does not have a map token');
 						return;
 					}

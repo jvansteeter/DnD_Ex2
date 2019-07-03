@@ -1,18 +1,37 @@
 :host {
-	min-height: 100px;
+	min-height: 200px;
 	height: 100%;
 	position: relative;
 	display: flex;
 	flex-direction: column;
 }
 
-input {
+input.fileInput {
 	position: absolute;
 	display: none;
 	top: 0;
 	left: 0;
 }
 
+a.image-thumbnail {
+	min-height: 150px;
+}
+
 .token-component-image {
-	max-height: 200px;
+	max-height: 150px;
+}
+
+.width-height {
+	display: flex;
+	flex-direction: row;
+}
+
+.button-area {
+	display: flex;
+}
+
+::ng-deep .mat-tab-label {
+	width: 50px;
+	min-width: 50px !important;
+	max-width: 50px;
 }
