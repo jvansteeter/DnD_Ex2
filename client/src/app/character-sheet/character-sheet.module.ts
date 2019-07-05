@@ -53,6 +53,7 @@ import { RuleSetService } from '../data-services/ruleSet.service';
 import { ConditionsAspectComponent } from './shared/subcomponents/conditions/conditions-aspect.component';
 import { ConditionsModule } from '../conditions/conditions.module';
 import { RulesConfigService } from '../data-services/rules-config.service';
+import { AbilityModule } from '../abilities/ability.module';
 
 @NgModule({
 	imports: [
@@ -84,48 +85,49 @@ import { RulesConfigService } from '../data-services/rules-config.service';
 		GridsterModule,
 		ConditionsModule,
 		MatButtonToggleModule,
+		AbilityModule
 	],
-    declarations: [
-        CharacterSheetComponent,
-        CharacterMakerComponent,
-        AddComponentComponent,
-        TextComponent,
-        CheckboxComponent,
-        NumberComponent,
-        CheckboxListComponent,
-        TextListComponent,
-        CategoryComponent,
-        TokenComponent,
-        FunctionComponent,
-		    CharacterGridComponent,
-		    CharacterAspectComponent,
-		    FunctionTextComponent,
-		    TextAreaComponent,
-		    CharacterTooltipComponent,
-		    AddTooltipAspectComponent,
-		    CurrentMaxComponent,
-		    ConditionsAspectComponent,
-    ],
-    providers: [
-        CharacterSheetRepository,
-        CharacterMakerService,
-        CharacterSheetService,
-        CharacterInterfaceFactory,
-		    CharacterRepository,
-		    RuleSetService,
-		    RulesConfigService,
-    ],
-    entryComponents: [
-        AddComponentComponent,
-		    FunctionTextComponent,
-		    AddTooltipAspectComponent,
-		    CharacterTooltipComponent,
-    ],
-    exports: [
-        CharacterSheetComponent,
-        CharacterMakerComponent,
-		    CharacterTooltipComponent,
-    ]
+	declarations: [
+		CharacterSheetComponent,
+		CharacterMakerComponent,
+		AddComponentComponent,
+		TextComponent,
+		CheckboxComponent,
+		NumberComponent,
+		CheckboxListComponent,
+		TextListComponent,
+		CategoryComponent,
+		TokenComponent,
+		FunctionComponent,
+		CharacterGridComponent,
+		CharacterAspectComponent,
+		FunctionTextComponent,
+		TextAreaComponent,
+		CharacterTooltipComponent,
+		AddTooltipAspectComponent,
+		CurrentMaxComponent,
+		ConditionsAspectComponent,
+	],
+	providers: [
+		CharacterSheetRepository,
+		CharacterMakerService,
+		CharacterSheetService,
+		CharacterInterfaceFactory,
+		CharacterRepository,
+		RuleSetService,
+		RulesConfigService,
+	],
+	entryComponents: [
+		AddComponentComponent,
+		FunctionTextComponent,
+		AddTooltipAspectComponent,
+		CharacterTooltipComponent,
+	],
+	exports: [
+		CharacterSheetComponent,
+		CharacterMakerComponent,
+		CharacterTooltipComponent,
+	]
 })
 export class CharacterSheetModule {
 

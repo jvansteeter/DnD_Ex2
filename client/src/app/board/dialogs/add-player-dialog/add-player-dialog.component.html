@@ -44,7 +44,7 @@
 			{{character.label}}
 		</ng-container>
 	</mat-tab>
-	<mat-tab label="RuleSet NPCs" *ngIf="rightsService.isEncounterGM()" [disabled]="!hasRuleSetNPCs">
+	<mat-tab label="RuleSet NPCs" *ngIf="rightsService.isEncounterGM()" [disabled]="!hasRuleSetNPCs" class="table-container">
 		<mat-form-field class="filter">
 			<input matInput (keyup)="applyRuleSetFilter($event.target.value)" placeholder="Filter" />
 		</mat-form-field>

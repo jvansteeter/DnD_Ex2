@@ -101,7 +101,7 @@
 	</div>
 	<mat-accordion *ngIf="editable || hasRights()">
 <!--		 TOKENS     -->
-		<mat-expansion-panel *ngIf="tokens.length > 0">
+		<mat-expansion-panel *ngIf="!!tokens && tokens.length > 0">
 			<mat-expansion-panel-header>
 				<mat-panel-title>Tokens</mat-panel-title>
 			</mat-expansion-panel-header>

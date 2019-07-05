@@ -6,6 +6,8 @@ import { CharacterInterfaceFactory } from '../shared/character-interface.factory
 import { CharacterData } from '../../../../../shared/types/character.data';
 import { CharacterRepository } from '../../repositories/character.repository';
 import { TokenComponent } from '../shared/subcomponents/token/token.component';
+import { MatDialog } from '@angular/material';
+import { AddAbilityDialogComponent } from '../../abilities/add-ability-dialog.component';
 
 @Component({
 	selector: 'character-sheet',
@@ -22,7 +24,8 @@ export class CharacterSheetComponent implements OnInit {
 	            private characterSheetRepository: CharacterSheetRepository,
 	            public characterService: CharacterSheetService,
 	            private characterInterfaceFactory: CharacterInterfaceFactory,
-	            private characterRepo: CharacterRepository) {
+	            private characterRepo: CharacterRepository,
+	            private dialog: MatDialog) {
 		this.characterService.init();
 		this.characterInterfaceFactory.setCharacterInterface(this.characterService);
 	}
@@ -41,5 +44,9 @@ export class CharacterSheetComponent implements OnInit {
 	save(): void {
 		this.characterService.setTokens(this.tokenComponent.getTokens());
 		this.characterService.save();
+	}
+
+	public openAddAbilityDialog(): void {
+		this.dialog.open(AddAbilityDialogComponent);
 	}
 }

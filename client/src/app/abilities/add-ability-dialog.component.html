@@ -1,0 +1,18 @@
+<mat-form-field>
+	<input matInput placeholder="Ability Name" [(ngModel)]="name" required/>
+</mat-form-field>
+<h3>Rolls</h3>
+<div *ngFor="let roll of rolls">
+	<mat-form-field>
+		<input matInput placeholder="Name" required [(ngModel)]="roll.name"/>
+	</mat-form-field>
+	<mat-form-field>
+		<input matInput placeholder="Equation" required [(ngModel)]="roll.equation"/>
+	</mat-form-field>
+</div>
+<button mat-icon-button color="primary" matTooltip="Add Roll" (click)="addRoll()">
+	<mat-icon>add</mat-icon>
+</button>
+<button mat-icon-button color="primary" matTooltip="Save" (click)="save()">
+	<mat-icon>save</mat-icon>
+</button>

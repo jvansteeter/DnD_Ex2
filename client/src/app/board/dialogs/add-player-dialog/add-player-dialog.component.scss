@@ -36,3 +36,8 @@ mat-table {
 .filter {
 	width: 100%;
 }
+
+::ng-deep .player-tabs .mat-tab-body-content {
+	display: flex;
+	flex-direction: column;
+}
