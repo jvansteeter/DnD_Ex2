@@ -1,5 +1,6 @@
 import { CharacterSheetData } from './rule-set/character-sheet.data';
 import { TokenData } from './token.data';
+import { AbilityData } from "./ability.data";
 
 export interface CharacterData {
 	_id: string;
@@ -10,5 +11,6 @@ export interface CharacterData {
 	characterSheet?: CharacterSheetData;
 	ruleSetId?: string;
 	campaignId?: string;
+	abilities: AbilityData[],
 	values: {};
 }

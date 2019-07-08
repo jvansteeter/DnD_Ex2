@@ -13,6 +13,7 @@ import { RuleSetService } from '../../data-services/ruleSet.service';
 import { AlertService } from '../../alert/alert.service';
 import { isDefined } from '@angular/compiler/src/util';
 import { TokenData } from '../../../../../shared/types/token.data';
+import { AbilityData } from "../../../../../shared/types/ability.data";
 
 @Injectable()
 export class CharacterSheetService extends IsReadyService implements CharacterInterfaceService {
@@ -148,6 +149,10 @@ export class CharacterSheetService extends IsReadyService implements CharacterIn
 
 	public setTokens(tokens: TokenData[]): void {
 		this.characterData.tokens = tokens;
+	}
+
+	public setAbilities(abilities: AbilityData[]): void {
+		this.characterData.abilities = abilities;
 	}
 
 	public save(): void {

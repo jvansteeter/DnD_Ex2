@@ -2,6 +2,7 @@ import * as mongoose from 'mongoose';
 import { CharacterSheetData } from '../../../../shared/types/rule-set/character-sheet.data';
 import { MongooseModel } from './mongoose.model';
 import { CharacterSheetTooltipData } from '../../../../shared/types/rule-set/character-sheet-tooltip.data';
+import { AbilityData } from "../../../../shared/types/ability.data";
 
 export class CharacterSheetModel extends MongooseModel implements CharacterSheetData {
 	public _id: string;

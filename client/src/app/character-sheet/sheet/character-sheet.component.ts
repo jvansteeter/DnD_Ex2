@@ -8,6 +8,7 @@ import { CharacterRepository } from '../../repositories/character.repository';
 import { TokenComponent } from '../shared/subcomponents/token/token.component';
 import { MatDialog } from '@angular/material';
 import { AddAbilityDialogComponent } from '../../abilities/add-ability-dialog.component';
+import { AbilityData } from "../../../../../shared/types/ability.data";
 
 @Component({
 	selector: 'character-sheet',
@@ -30,7 +31,7 @@ export class CharacterSheetComponent implements OnInit {
 		this.characterInterfaceFactory.setCharacterInterface(this.characterService);
 	}
 
-	ngOnInit(): void {
+	public ngOnInit(): void {
 		this.characterService.init();
 		this.activatedRoute.params.subscribe((params) => {
 			this.npcId = params['characterId'];
@@ -41,12 +42,14 @@ export class CharacterSheetComponent implements OnInit {
 		});
 	}
 
-	save(): void {
+	public save(): void {
 		this.characterService.setTokens(this.tokenComponent.getTokens());
 		this.characterService.save();
 	}
 
 	public openAddAbilityDialog(): void {
-		this.dialog.open(AddAbilityDialogComponent);
+		this.dialog.open(AddAbilityDialogComponent).afterClosed().subscribe((result: AbilityData) => {
+			console.log(result);
+		});
 	}
 }

@@ -60,10 +60,9 @@ export class CharacterRouter {
 
 		this.router.post('/save', async (req: Request, res: Response) => {
 			try {
-				let characterData: CharacterData = req.body;
-				let character = await this.characterRepo.findById(characterData._id);
-				await character.setValues(characterData.values);
-				await character.setTokens(characterData.tokens);
+				const userId: string = req.user._id;
+				const characterData: CharacterData = req.body;
+				await this.characterService.saveCharacter(userId, characterData);
 				res.status(200).send();
 			}
 			catch (error) {

@@ -26,6 +26,18 @@ export class AddAbilityDialogComponent implements OnInit {
 	}
 
 	public save(): void {
+		if (this.name === '') {
+			return;
+		}
+		for (let roll of this.rolls) {
+			if (roll.name === '' || roll.equation === '') {
+				return;
+			}
+		}
 
+		this.dialogRef.close({
+			name: this.name,
+			rolls: this.rolls
+		});
 	}
 }
