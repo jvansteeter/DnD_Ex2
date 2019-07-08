@@ -99,25 +99,30 @@
 			</ng-container>
 		</ng-container>
 	</div>
-	<mat-accordion *ngIf="editable || hasRights()">
+	<mat-accordion *ngIf="editable || hasRights()" displayMode="flat">
 <!--		 TOKENS     -->
-		<mat-expansion-panel *ngIf="!!tokens && tokens.length > 0">
+		<mat-expansion-panel *ngIf="!!player.tokens && player.tokens.length > 0">
 			<mat-expansion-panel-header>
 				<mat-panel-title>Tokens</mat-panel-title>
 			</mat-expansion-panel-header>
 			<mat-button-toggle-group [value]="activeTokenIndex" (change)="activeTokenIndexChange($event.value)">
-				<mat-button-toggle *ngFor="let token of tokens; let i = index" [value]="i">
+				<mat-button-toggle *ngFor="let token of player.tokens; let i = index" [value]="i">
 					<img [src]="token.url" class="button-toggle-image"/>
 				</mat-button-toggle>
 			</mat-button-toggle-group>
 			<form class="width-height">
 				<mat-form-field>
-					<input matInput placeholder="Width" type="number" min="0" name="width" [(ngModel)]="activeTokenWidth" (change)="widthChange($event.target.value)"/>
+					<input matInput placeholder="Width" type="number" min="0" name="width" [(ngModel)]="activeTokenWidth" (change)="widthChange()"/>
 				</mat-form-field>
 				<mat-form-field>
-					<input matInput placeholder="Height" type="number" min="0" name="height" [(ngModel)]="activeTokenHeight" (change)="heightChange($event.target.value)" />
+					<input matInput placeholder="Height" type="number" min="0" name="height" [(ngModel)]="activeTokenHeight" (change)="heightChange()" />
 				</mat-form-field>
 			</form>
+		</mat-expansion-panel>
+<!--		ABILITIES-->
+		<mat-expansion-panel>
+			<mat-expansion-panel-header>Abilities</mat-expansion-panel-header>
+			<character-abilities [abilities]="player.abilities" (change)="abilityChange(player)"></character-abilities>
 		</mat-expansion-panel>
 	</mat-accordion>
 </ng-container>

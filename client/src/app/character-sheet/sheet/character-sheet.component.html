@@ -23,23 +23,7 @@
 					</mat-expansion-panel>
 					<mat-expansion-panel>
 						<mat-expansion-panel-header>Abilities</mat-expansion-panel-header>
-						<button mat-icon-button color="primary" (click)="openAddAbilityDialog()" matTooltip="Add Ability"><mat-icon>add</mat-icon></button>
-						<mat-accordion>
-							<mat-expansion-panel *ngFor="let ability of abilities; let i = index;">
-								<mat-expansion-panel-header>{{ability.name}}</mat-expansion-panel-header>
-								<div class="ability-rolls">
-									<div class="ability-roll" *ngFor="let roll of ability.rolls" [matTooltip]="roll.equation">
-										<span>{{roll.name}}</span>
-										<span>{{roll.result}}</span>
-									</div>
-								</div>
-								<button mat-icon-button color="primary" matTooltip="Edit" (click)="editAbility(i)"><mat-icon>edit</mat-icon></button>
-								<button mat-icon-button color="primary" matTooltip="Remove" (click)="removeAbility(i)"><mat-icon>remove</mat-icon></button>
-								<button mat-icon-button color="primary" class="roll-button" (click)="rollAbility(ability)" matTooltip="Roll">
-									<img src="../../../resources/images/favicon.ico" />
-								</button>
-							</mat-expansion-panel>
-						</mat-accordion>
+						<character-abilities [abilities]="abilities"></character-abilities>
 					</mat-expansion-panel>
 				</mat-accordion>
 			</mat-grid-tile>

@@ -7,6 +7,7 @@ import { PredefinedAspects, RuleModuleAspects } from '../../../../shared/predefi
 import { ConditionData } from '../../../../shared/types/rule-set/condition.data';
 import { isDefined } from '@angular/compiler/src/util';
 import { TokenData } from '../../../../shared/types/token.data';
+import { AbilityData } from '../../../../shared/types/ability.data';
 
 export class Player extends ConcurrentBoardObject implements PlayerData {
 	_id: string;
@@ -307,5 +308,13 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 	set teams(value: string[]) {
 		this._teams = value;
 		this.emitChange();
+	}
+
+	get abilities(): AbilityData[] {
+		return this.characterData.abilities;
+	}
+
+	set abilities(abilities: AbilityData[]) {
+		this.characterData.abilities = abilities;
 	}
 }

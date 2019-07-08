@@ -16,7 +16,6 @@ import { isDefined } from "@angular/compiler/src/util";
 import { MatDialog } from '@angular/material';
 import { NewConditionDialogComponent } from '../../conditions/new-condition-dialog.component';
 import { RulesConfigService } from '../../data-services/rules-config.service';
-import { TokenData } from "../../../../../shared/types/token.data";
 import { Player } from "../../encounter/player";
 
 @Component({
@@ -34,10 +33,10 @@ export class CharacterTooltipComponent {
 	public aspectType = AspectType;
 	public hoveredIndex: number;
 	public editingIndex: number = -1;
-	public tokens: TokenData[];
 	public activeTokenIndex: number;
 	public activeTokenWidth: number;
 	public activeTokenHeight: number;
+	public player: Player;
 	private currentMaxAdd: boolean;
 
 	private _playerId: string;
@@ -77,8 +76,7 @@ export class CharacterTooltipComponent {
 
 	private playerHasCondition(condition: ConditionData): boolean {
 		if (!this.editable) {
-			const player = this.encounterService.getPlayerById(this._playerId);
-			const conditions: ConditionData[] = player.characterData.values[RuleModuleAspects.CONDITIONS];
+			const conditions: ConditionData[] = this.player.characterData.values[RuleModuleAspects.CONDITIONS];
 			if (isDefined(conditions)) {
 				for (let existingCondition of conditions) {
 					if (condition.name.toLowerCase() === existingCondition.name.toLowerCase()) {
@@ -128,9 +126,8 @@ export class CharacterTooltipComponent {
 		if (this.editable) {
 			this.characterService.setAspectValue(aspectLabel, value);
 		} else {
-			const player = this.encounterService.getPlayerById(this._playerId);
-			player.characterData.values[aspectLabel] = value;
-			player.emitChange();
+			this.player.characterData.values[aspectLabel] = value;
+			this.player.emitChange();
 		}
 	}
 
@@ -139,9 +136,8 @@ export class CharacterTooltipComponent {
 			const currentMaxValue = this.characterService.getAspectValue(aspectLabel);
 			currentMaxValue.current = value;
 		} else {
-			const player = this.encounterService.getPlayerById(this._playerId);
-			player.characterData.values[aspectLabel].current = value;
-			player.emitChange();
+			this.player.characterData.values[aspectLabel].current = value;
+			this.player.emitChange();
 		}
 	}
 
@@ -150,9 +146,8 @@ export class CharacterTooltipComponent {
 			const currentMaxValue = this.characterService.getAspectValue(aspectLabel);
 			currentMaxValue.max = value;
 		} else {
-			const player = this.encounterService.getPlayerById(this._playerId);
-			player.characterData.values[aspectLabel].max = value;
-			player.emitChange();
+			this.player.characterData.values[aspectLabel].max = value;
+			this.player.emitChange();
 		}
 	}
 
@@ -167,15 +162,14 @@ export class CharacterTooltipComponent {
 			}
 		}
 		else {
-			const player = this.encounterService.getPlayerById(this._playerId);
 			for (let condition of this.ruleSetService.conditions) {
 				if (condition.name.toLowerCase() === conditionName.toLowerCase()) {
-					if (isUndefined(player.characterData.values[aspectLabel])) {
-						player.characterData.values[aspectLabel] = [];
+					if (isUndefined(this.player.characterData.values[aspectLabel])) {
+						this.player.characterData.values[aspectLabel] = [];
 					}
-					player.characterData.values[aspectLabel].push(condition);
+					this.player.characterData.values[aspectLabel].push(condition);
 					this.addConditionControl.setValue('');
-					player.emitChange();
+					this.player.emitChange();
 					return;
 				}
 			}
@@ -189,12 +183,11 @@ export class CharacterTooltipComponent {
 	public openCreateConditionDialog(aspectLabel: string): void {
 		this.dialog.open(NewConditionDialogComponent).afterClosed().pipe(first()).subscribe((condition: ConditionData) => {
 			if (isDefined(condition)) {
-				const player = this.encounterService.getPlayerById(this._playerId);
-				if (isUndefined(player.characterData.values[aspectLabel])) {
-					player.characterData.values[aspectLabel] = [];
+				if (isUndefined(this.player.characterData.values[aspectLabel])) {
+					this.player.characterData.values[aspectLabel] = [];
 				}
-				player.characterData.values[aspectLabel].push(condition);
-				player.emitChange();
+				this.player.characterData.values[aspectLabel].push(condition);
+				this.player.emitChange();
 			}
 		});
 	}
@@ -210,12 +203,11 @@ export class CharacterTooltipComponent {
 				}
 			}
 		} else {
-			const player = this.encounterService.getPlayerById(this._playerId);
-			const conditions: ConditionData[] = player.characterData.values[aspectLabel];
+			const conditions: ConditionData[] = this.player.characterData.values[aspectLabel];
 			for (let i = 0; i < conditions.length; i++) {
 				if (conditionName.toLowerCase() === conditions[i].name.toLowerCase()) {
 					conditions.splice(i, 1);
-					player.emitChange();
+					this.player.emitChange();
 				}
 			}
 		}
@@ -255,8 +247,7 @@ export class CharacterTooltipComponent {
 	}
 
 	public editCurrentMax(aspectLabel: string, value: number): void {
-		const player = this.encounterService.getPlayerById(this._playerId);
-		let aspectValue: number = +player.characterData.values[aspectLabel].current;
+		let aspectValue: number = +this.player.characterData.values[aspectLabel].current;
 
 		if (this.currentMaxAdd) {
 			aspectValue += value;
@@ -273,10 +264,9 @@ export class CharacterTooltipComponent {
 
 	public activeTokenIndexChange(index: number): void {
 		this.activeTokenIndex = index;
-		const player: Player = this.encounterService.getPlayerById(this._playerId);
-		player.activeTokenIndex = this.activeTokenIndex;
-		this.activeTokenWidth = player.tokenWidth;
-		this.activeTokenHeight = player.tokenHeight;
+		this.player.activeTokenIndex = this.activeTokenIndex;
+		this.activeTokenWidth = this.player.tokenWidth;
+		this.activeTokenHeight = this.player.tokenHeight;
 	}
 
 	public widthChange(): void {
@@ -287,13 +277,16 @@ export class CharacterTooltipComponent {
 		this.encounterService.getPlayerById(this._playerId).setTokenHeight(this.activeTokenIndex, this.activeTokenHeight);
 	}
 
+	public abilityChange(player: Player): void {
+		player.emitChange();
+	}
+
 	set playerId(value) {
 		this._playerId = value;
-		const player = this.encounterService.getPlayerById(this._playerId);
-		this.tokens = player.tokens;
-		this.activeTokenIndex = player.activeTokenIndex;
-		this.activeTokenWidth = this.tokens[this.activeTokenIndex].widthInCells;
-		this.activeTokenHeight = this.tokens[this.activeTokenIndex].heightInCells;
+		this.player = this.encounterService.getPlayerById(this._playerId);
+		this.activeTokenIndex = this.player.activeTokenIndex;
+		this.activeTokenWidth = this.player.tokens[this.activeTokenIndex].widthInCells;
+		this.activeTokenHeight = this.player.tokens[this.activeTokenIndex].heightInCells;
 	}
 
 	get playerId(): string {
