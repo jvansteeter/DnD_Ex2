@@ -3,5 +3,6 @@ export interface AbilityData {
 	rolls: {
 		name: string,
 		equation: string,
+		result?: string
 	}[];
 }

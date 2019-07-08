@@ -3,7 +3,6 @@
 	width: 100%;
 	top: 10vh;
 	left: 0;
-	//z-index: 999;
 
 	padding: 15px;
 	margin-bottom: 20px;
@@ -16,7 +15,7 @@
 
 .alertShow {
 	opacity: 1;
-	z-index: 999;
+	z-index: 1001;
 	transition: .5s ease-in;
 }
 

@@ -37,3 +37,17 @@ mat-accordion {
 	margin-top: 5px;
 	width: 90%;
 }
+
+.ability-rolls {
+	display: flex;
+	flex-direction: column;
+}
+
+.ability-roll {
+	display: flex;
+	justify-content: space-between;
+}
+
+.roll-button {
+	float: right;
+}

@@ -36,12 +36,17 @@ export class CharacterService {
 	}
 
 	public async saveCharacter(userId: string, characterData: CharacterData): Promise<CharacterModel> {
-		console.log(characterData);
-		let character = await this.characterRepo.findById(characterData._id);
-		await character.setValues(characterData.values);
-		await character.setTokens(characterData.tokens);
+		try {
+			let character: CharacterModel = await this.characterRepo.findById(characterData._id);
+			character = await character.setValues(characterData.values);
+			character = await character.setTokens(characterData.tokens);
+			character = await character.setAbilities(characterData.abilities);
 
-		return character;
+			return character;
+		}
+		catch (error) {
+			throw error;
+		}
 	}
 
 	public async getAllByCampaignId(campaignId: string): Promise<{}> {

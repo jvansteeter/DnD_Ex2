@@ -57,29 +57,30 @@ export class CharacterModel extends MongooseModel implements CharacterData {
 		this.methods.setValues = this.setValues;
 		this.methods.setCampaignId = this.setCampaignId;
 		this.methods.setTokens = this.setTokens;
+		this.methods.setAbilities = this.setAbilities;
 	}
 
-	public setRuleSetId(id: string): Promise<void> {
+	public setRuleSetId(id: string): Promise<CharacterModel> {
 		this.ruleSetId = id;
 		return this.save();
 	}
 
-	public setCampaignId(id: string): Promise<void> {
+	public setCampaignId(id: string): Promise<CharacterModel> {
 		this.campaignId = id;
 		return this.save();
 	}
 
-	public setValues(values): Promise<void> {
+	public setValues(values): Promise<CharacterModel> {
 		this.values = values;
 		return this.save();
 	}
 
-	public setAbilities(abilities: AbilityData[]): Promise<void> {
+	public setAbilities(abilities: AbilityData[]): Promise<CharacterModel> {
 		this.abilities = abilities;
 		return this.save();
 	}
 
-	public setTokens(tokens: TokenData[]): Promise<void> {
+	public setTokens(tokens: TokenData[]): Promise<CharacterModel> {
 		this.tokens = tokens;
 		return this.save();
 	}

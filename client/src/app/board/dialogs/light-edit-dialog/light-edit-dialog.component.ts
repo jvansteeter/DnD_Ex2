@@ -1,6 +1,5 @@
-import {Component, Inject} from "@angular/core";
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material";
-import {BoardLightService} from "../../services/board-light.service";
+import { Component, Inject } from "@angular/core";
+import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material";
 
 @Component({
     selector: 'light-edit-dialog',
