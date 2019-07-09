@@ -34,6 +34,7 @@ export class CharacterModel extends MongooseModel implements CharacterData {
 			npc: {type: Boolean, default: true},
 			abilities: [{
 				name: String,
+				range: Number,
 				rolls: [{
 					name: String,
 					equation: String,

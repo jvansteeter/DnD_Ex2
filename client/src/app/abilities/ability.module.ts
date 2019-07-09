@@ -12,7 +12,7 @@ import {
 } from '@angular/material';
 import { AbilityService } from "./ability.service";
 import { CharacterSheetService } from "../character-sheet/sheet/character-sheet.service";
-import { AbilitiesComponent } from './abilities.compnent';
+import { AbilitiesComponent } from './abilities.component';
 
 @NgModule({
 	imports: [

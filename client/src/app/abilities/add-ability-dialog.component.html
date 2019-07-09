@@ -1,6 +1,9 @@
 <mat-form-field>
 	<input matInput placeholder="Ability Name" [(ngModel)]="name" required/>
 </mat-form-field>
+<mat-form-field>
+	<input matInput placeholder="Range" [(ngModel)]="range" type="number" min="0"/>
+</mat-form-field>
 <h3>Rolls</h3>
 <div *ngFor="let roll of rolls">
 	<mat-form-field>

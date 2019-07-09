@@ -153,6 +153,9 @@ export class BoardWallService extends IsReadyService {
     }
 
     private _addWall(target: CellTarget) {
+    	  if (isNullOrUndefined(target)) {
+    	  	return;
+	      }
         if (!this.hasObstruction(target)) {
             this._wallData.set(target.hash(), target);
             this.boardVisibilityService.blockCellTarget(target);

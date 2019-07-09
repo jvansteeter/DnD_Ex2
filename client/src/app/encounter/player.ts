@@ -8,6 +8,7 @@ import { ConditionData } from '../../../../shared/types/rule-set/condition.data'
 import { isDefined } from '@angular/compiler/src/util';
 import { TokenData } from '../../../../shared/types/token.data';
 import { AbilityData } from '../../../../shared/types/ability.data';
+import { AuraData } from '../../../../shared/types/aura.data';
 
 export class Player extends ConcurrentBoardObject implements PlayerData {
 	_id: string;
@@ -25,9 +26,10 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 	private _actions: { action: string, detail: string }[];
 	private _initiative: number;
 	private _teams: string[] = [];
+	private _auras: Map<string, AuraData> = new Map<string, AuraData>();
 
-	encounterId: string;
-	characterData: CharacterData;
+	public encounterId: string;
+	public characterData: CharacterData;
 
 	constructor(playerData: PlayerData) {
 		super();
@@ -154,6 +156,14 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 	public setTokenHeight(tokenIndex: number, height: number): void {
 		this._tokens[tokenIndex].heightInCells = height;
 		this.emitChange();
+	}
+
+	public addAura(aura: AuraData): void {
+		this._auras.set(aura.name, aura);
+	}
+
+	public removeAura(name: string): void {
+		this._auras.delete(name);
 	}
 
 	/*////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -316,5 +326,14 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 
 	set abilities(abilities: AbilityData[]) {
 		this.characterData.abilities = abilities;
+	}
+
+	get auras(): AuraData[] {
+		const result: AuraData[] = [];
+		for (let value of this._auras.values()) {
+			result.push(value);
+		}
+
+		return result;
 	}
 }

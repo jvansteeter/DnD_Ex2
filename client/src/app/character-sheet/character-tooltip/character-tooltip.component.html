@@ -99,7 +99,7 @@
 			</ng-container>
 		</ng-container>
 	</div>
-	<mat-accordion *ngIf="editable || hasRights()" displayMode="flat">
+	<mat-accordion *ngIf="!editable && hasRights()" displayMode="flat">
 <!--		 TOKENS     -->
 		<mat-expansion-panel *ngIf="!!player.tokens && player.tokens.length > 0">
 			<mat-expansion-panel-header>
@@ -119,10 +119,10 @@
 				</mat-form-field>
 			</form>
 		</mat-expansion-panel>
-<!--		ABILITIES-->
+<!--		ABILITIES    -->
 		<mat-expansion-panel>
 			<mat-expansion-panel-header>Abilities</mat-expansion-panel-header>
-			<character-abilities [abilities]="player.abilities" (change)="abilityChange(player)"></character-abilities>
+			<character-abilities [abilities]="player.abilities" (change)="abilityChange()" (expanded)="abilityExpanded($event)" (closed)="abilityClosed($event)"></character-abilities>
 		</mat-expansion-panel>
 	</mat-accordion>
 </ng-container>

@@ -10,6 +10,7 @@ import { isDefined } from '@angular/compiler/src/util';
 })
 export class AddAbilityDialogComponent implements OnInit {
 	public name: string = '';
+	public range: number = 0;
 	public rolls: {name: string, equation: string}[] = [];
 
 	constructor(@Inject(MAT_DIALOG_DATA) private data: any,
@@ -23,6 +24,7 @@ export class AddAbilityDialogComponent implements OnInit {
 		if (isDefined(this.data)) {
 			this.name = this.data.name;
 			this.rolls = this.data.rolls;
+			this.range = this.data.range;
 		}
 		else {
 			this.rolls.push({name: '', equation: ''});
@@ -69,6 +71,7 @@ export class AddAbilityDialogComponent implements OnInit {
 
 		this.dialogRef.close({
 			name: this.name,
+			range: this.range,
 			rolls: this.rolls
 		});
 	}

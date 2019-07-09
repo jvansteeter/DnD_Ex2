@@ -11,6 +11,7 @@ import { RendererConsolidationService } from '../renderer-consolidation.service'
 import { RendererComponent } from '../render-component.interface';
 import { RulesConfigService } from '../../../data-services/rules-config.service';
 import { BoardStealthService } from '../../services/board-stealth.service';
+import { Player } from '../../../encounter/player';
 
 @Component({
     selector: 'token-renderer',
@@ -81,6 +82,7 @@ export class TokenRendererComponent implements OnInit, OnDestroy, RendererCompon
 			              userCanSeePlayer = this.stealthService.userCanSeeHiddenPlayer(player);
 		            }
 		            if (userCanSeePlayer) {
+		            	  this.drawPlayerAuras(player);
 				            this.boardCanvasService.draw_img_to_size(this.ctx, new XyPair(player.location.x * BoardStateService.cell_res, player.location.y * BoardStateService.cell_res), player.token_img, player.tokenWidth, player.tokenHeight, 1.0);
 				            if (this.encounterService.config.showHealth) {
 					              this.boardCanvasService.draw_health_basic(this.ctx, player.location, player.hp / player.maxHp);
@@ -88,6 +90,7 @@ export class TokenRendererComponent implements OnInit, OnDestroy, RendererCompon
 		            }
             } else {
                 if (this.rightsService.isEncounterGM() || this.rightsService.isMyPlayer(player)) {
+                	  this.drawPlayerAuras(player);
                     this.boardCanvasService.draw_img_to_size(this.ctx, new XyPair(player.location.x * BoardStateService.cell_res, player.location.y * BoardStateService.cell_res), player.token_img, player.tokenWidth, player.tokenHeight, 0.35);
 		                if (this.encounterService.config.showHealth) {
 			                  this.boardCanvasService.draw_health_basic(this.ctx, player.location, player.hp / player.maxHp);
@@ -95,5 +98,14 @@ export class TokenRendererComponent implements OnInit, OnDestroy, RendererCompon
                 }
             }
         }
+    };
+
+    private drawPlayerAuras(player: Player): void {
+    	for (const aura of player.auras) {
+    		let cells: XyPair[] = this.boardStateService.calcCellsWithinRangeOfCell(player.location, aura.range);
+    		for (const cell of cells) {
+			    this.boardCanvasService.draw_center(this.ctx, cell, aura.rgbaCode, 0);
+		    }
+	    }
     }
 }

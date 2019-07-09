@@ -15,9 +15,12 @@ import { isNullOrUndefined } from 'util';
 export class AbilitiesComponent implements OnInit {
 	@Input()
 	public abilities: AbilityData[];
-
 	@Output()
 	public change = new EventEmitter();
+	@Output()
+	public expanded = new EventEmitter<AbilityData>();
+	@Output()
+	public closed = new EventEmitter<AbilityData>();
 
 	public displayMode: MatAccordionDisplayMode = 'flat';
 	public expandedIndex: number = -1;
@@ -59,9 +62,10 @@ export class AbilitiesComponent implements OnInit {
 				.subscribe((result: AbilityData) => {
 					if (isDefined(result)) {
 						this.abilities.splice(index, 1, result);
-						this.keyEventService.startListeningToKeyEvents();
 						this.change.emit();
+						this.expanded.emit(result);
 					}
+					this.keyEventService.startListeningToKeyEvents();
 				});
 	}
 
@@ -78,7 +82,12 @@ export class AbilitiesComponent implements OnInit {
 		this.change.emit();
 	}
 
-	public expanded(index: number): void {
+	public afterExpanded(index: number): void {
 		this.expandedIndex = index;
+		this.expanded.emit(this.abilities[index]);
+	}
+
+	public onClose(index: number): void {
+		this.closed.emit(this.abilities[index]);
 	}
 }

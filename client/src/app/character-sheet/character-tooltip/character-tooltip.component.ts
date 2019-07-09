@@ -17,6 +17,7 @@ import { MatDialog } from '@angular/material';
 import { NewConditionDialogComponent } from '../../conditions/new-condition-dialog.component';
 import { RulesConfigService } from '../../data-services/rules-config.service';
 import { Player } from "../../encounter/player";
+import { AbilityData } from '../../../../../shared/types/ability.data';
 
 @Component({
 	selector: 'character-tooltip',
@@ -277,8 +278,16 @@ export class CharacterTooltipComponent {
 		this.encounterService.getPlayerById(this._playerId).setTokenHeight(this.activeTokenIndex, this.activeTokenHeight);
 	}
 
-	public abilityChange(player: Player): void {
-		player.emitChange();
+	public abilityChange(): void {
+		this.player.emitChange();
+	}
+
+	public abilityExpanded(ability: AbilityData): void {
+		this.player.addAura({name: ability.name, range: ability.range, rgbaCode: 'rgba(255,0,0,.5)'});
+	}
+
+	public abilityClosed(ability: AbilityData): void {
+		this.player.removeAura(ability.name);
 	}
 
 	set playerId(value) {
