@@ -27,12 +27,17 @@ export class RendererConsolidationService {
 	}
 
 	private render = () => {
-		[...this.renderers.values()].forEach((renderer: RendererComponent) => {
-			renderer.render();
-		});
+		try {
+			[...this.renderers.values()].forEach((renderer: RendererComponent) => {
+				renderer.render();
+			});
 
-		setTimeout(() => {
-			this.frameId = requestAnimationFrame(this.render);
-		}, 100);
+			setTimeout(() => {
+				this.frameId = requestAnimationFrame(this.render);
+			}, 100);
+		}
+		catch (error) {
+			requestAnimationFrame(this.render);
+		}
 	}
 }

@@ -65,7 +65,7 @@
 						</button>
 						<div class="filter-conditions" (click)="stopClickPropagate($event)">
 							<mat-form-field>
-								<input matInput placeholder="Filter Conditions" [matAutocomplete]="conditionsAutocomplete" [formControl]="addConditionControl"/>
+								<input matInput placeholder="Filter Conditions" [matAutocomplete]="conditionsAutocomplete" [formControl]="addConditionControl" (focus)="stopListeningToKeyEvents()" (blur)="startListeningToKeyEvents()"/>
 								<mat-autocomplete #conditionsAutocomplete (optionSelected)="addCondition(aspect.aspect.label, $event.option.value)">
 									<mat-option *ngFor="let condition of filteredConditions | async" [value]="condition.name" [matTooltip]="condition.description">
 										<mat-icon [style.color]="condition.color">{{condition.icon}}</mat-icon>

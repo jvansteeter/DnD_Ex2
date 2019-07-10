@@ -18,6 +18,7 @@ import { NewConditionDialogComponent } from '../../conditions/new-condition-dial
 import { RulesConfigService } from '../../data-services/rules-config.service';
 import { Player } from "../../encounter/player";
 import { AbilityData } from '../../../../../shared/types/ability.data';
+import { EncounterKeyEventService } from '../../encounter/encounter-key-event.service';
 
 @Component({
 	selector: 'character-tooltip',
@@ -52,6 +53,7 @@ export class CharacterTooltipComponent {
 	            public ruleSetService: RuleSetService,
 	            private dialog: MatDialog,
 	            private rulesConfigService: RulesConfigService,
+	            private keyEventService: EncounterKeyEventService,
 	) {
 		this.filteredConditions = this.addConditionControl.valueChanges.pipe(
 				startWith(''),
@@ -182,6 +184,7 @@ export class CharacterTooltipComponent {
 	}
 
 	public openCreateConditionDialog(aspectLabel: string): void {
+		this.stopListeningToKeyEvents();
 		this.dialog.open(NewConditionDialogComponent).afterClosed().pipe(first()).subscribe((condition: ConditionData) => {
 			if (isDefined(condition)) {
 				if (isUndefined(this.player.characterData.values[aspectLabel])) {
@@ -190,6 +193,7 @@ export class CharacterTooltipComponent {
 				this.player.characterData.values[aspectLabel].push(condition);
 				this.player.emitChange();
 			}
+			this.startListeningToKeyEvents();
 		});
 	}
 
@@ -288,6 +292,14 @@ export class CharacterTooltipComponent {
 
 	public abilityClosed(ability: AbilityData): void {
 		this.player.removeAura(ability.name);
+	}
+
+	public stopListeningToKeyEvents(): void {
+		this.keyEventService.stopListeningToKeyEvents()
+	}
+
+	public startListeningToKeyEvents(): void {
+		this.keyEventService.startListeningToKeyEvents();
 	}
 
 	set playerId(value) {
