@@ -92,6 +92,7 @@ export class BoardWallService extends IsReadyService {
             this.boardTraverseService.unblockCellTarget(target);
         }
         this.updateLightAndTraverse();
+        this.windowChangeSubject.next();
     }
 
     public addDoor(target: CellTarget) {
