@@ -22,6 +22,10 @@
 						<characterMaker-tokenComponent #token></characterMaker-tokenComponent>
 					</mat-expansion-panel>
 					<mat-expansion-panel>
+						<mat-expansion-panel-header>Default Abilities</mat-expansion-panel-header>
+						<character-abilities [abilities]="defaultAbilities" [editable]="false"></character-abilities>
+					</mat-expansion-panel>
+					<mat-expansion-panel>
 						<mat-expansion-panel-header>Abilities</mat-expansion-panel-header>
 						<character-abilities [abilities]="abilities"></character-abilities>
 					</mat-expansion-panel>

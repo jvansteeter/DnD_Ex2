@@ -15,6 +15,8 @@ import { isNullOrUndefined } from 'util';
 export class AbilitiesComponent implements OnInit {
 	@Input()
 	public abilities: AbilityData[] = [];
+	@Input()
+	public editable: boolean = true;
 	@Output()
 	public change = new EventEmitter();
 	@Output()

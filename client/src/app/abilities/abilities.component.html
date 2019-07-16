@@ -1,4 +1,4 @@
-<button mat-icon-button color="primary" (click)="openAddAbilityDialog()" matTooltip="Add Ability"><mat-icon>add</mat-icon></button>
+<button mat-icon-button color="primary" (click)="openAddAbilityDialog()" matTooltip="Add Ability" *ngIf="editable"><mat-icon>add</mat-icon></button>
 <mat-accordion [displayMode]="displayMode">
 	<mat-expansion-panel *ngFor="let ability of abilities; let i = index;" (afterExpand)="afterExpanded(i)" (closed)="onClose(i)" [expanded]="i === expandedIndex">
 		<mat-expansion-panel-header *ngIf="ability">{{ability.name}}</mat-expansion-panel-header>
@@ -8,8 +8,8 @@
 				<span>{{roll.result}}</span>
 			</div>
 		</div>
-		<button mat-icon-button color="primary" matTooltip="Edit" (click)="editAbility(i)"><mat-icon>edit</mat-icon></button>
-		<button mat-icon-button color="primary" matTooltip="Remove" (click)="removeAbility(i)"><mat-icon>remove</mat-icon></button>
+		<button mat-icon-button color="primary" matTooltip="Edit" (click)="editAbility(i)" *ngIf="editable"><mat-icon>edit</mat-icon></button>
+		<button mat-icon-button color="primary" matTooltip="Remove" (click)="removeAbility(i)" *ngIf="editable"><mat-icon>remove</mat-icon></button>
 		<button mat-icon-button color="primary" class="roll-button" (click)="rollAbility(ability)" matTooltip="Roll">
 			<img src="../../resources/images/favicon.ico" />
 		</button>

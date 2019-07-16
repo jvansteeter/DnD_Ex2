@@ -20,6 +20,7 @@ export class CharacterSheetComponent implements OnInit {
 	tokenComponent: TokenComponent;
 
 	public abilities: AbilityData[] = [];
+	public defaultAbilities: AbilityData[] = [];
 
 	constructor(private activatedRoute: ActivatedRoute,
 	            private characterSheetRepository: CharacterSheetRepository,
@@ -38,6 +39,7 @@ export class CharacterSheetComponent implements OnInit {
 				this.tokenComponent.setTokens(characterData.tokens);
 				this.characterService.setCharacterData(characterData);
 				this.abilities = characterData.abilities;
+				this.defaultAbilities = characterData.characterSheet.abilities;
 			});
 		});
 	}
