@@ -6,7 +6,7 @@ import { FunctionComponent } from '../shared/subcomponents/function/function.com
 import { SubComponentChild } from '../shared/subcomponents/sub-component-child';
 import { CharacterInterfaceService } from '../shared/character-interface.service';
 import { CharacterSheetRepository } from '../../repositories/character-sheet.repository';
-import { isUndefined } from 'util';
+import { isNullOrUndefined, isUndefined } from 'util';
 import { AspectData } from '../../../../../shared/types/rule-set/aspect.data';
 import { Observable, Subject, Subscription } from 'rxjs';
 import { AlertService } from '../../alert/alert.service';
@@ -27,6 +27,7 @@ import { mergeMap } from 'rxjs/operators';
 import { RuleSetService } from '../../data-services/ruleSet.service';
 import { RuleModuleAspects } from '../../../../../shared/predefined-aspects.enum';
 import { RulesConfigService } from '../../data-services/rules-config.service';
+import { AbilityData } from '../../../../../shared/types/ability.data';
 
 @Injectable()
 export class CharacterMakerService extends IsReadyService implements CharacterInterfaceService {
@@ -187,6 +188,10 @@ export class CharacterMakerService extends IsReadyService implements CharacterIn
 		});
 	}
 
+	public setAbilities(abilities: AbilityData[]): void {
+		this.characterSheet.abilities = abilities;
+	}
+
 	public save() {
 		let characterSheet = JSON.parse(JSON.stringify(this.characterSheet));
 		let aspects: AspectData[] = [];
@@ -268,6 +273,14 @@ export class CharacterMakerService extends IsReadyService implements CharacterIn
 			} as CharacterSheetTooltipData;
 		}
 		return this.characterSheet.tooltipConfig;
+	}
+
+	get abilities(): AbilityData[] {
+		if (isNullOrUndefined(this.characterSheet.abilities)) {
+			return [];
+		}
+
+		return this.characterSheet.abilities;
 	}
 
 	private getChildOf(aspect: Aspect): SubComponentChild | undefined {

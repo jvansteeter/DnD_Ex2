@@ -37,6 +37,10 @@
 						</div>
 					</mat-expansion-panel>
 					<mat-expansion-panel>
+						<mat-expansion-panel-header>Default Abilities</mat-expansion-panel-header>
+							<character-abilities [abilities]="defaultAbilities"></character-abilities>
+					</mat-expansion-panel>
+					<mat-expansion-panel>
 						<mat-expansion-panel-header>Rules</mat-expansion-panel-header>
 						<button mat-icon-button (click)="startNewRule()"><mat-icon>add</mat-icon></button>
 					</mat-expansion-panel>

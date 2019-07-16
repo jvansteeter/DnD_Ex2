@@ -1,4 +1,5 @@
 import { CharacterSheetTooltipData } from './character-sheet-tooltip.data';
+import { AbilityData } from '../ability.data';
 
 export interface CharacterSheetData {
 	_id: string;
@@ -7,4 +8,5 @@ export interface CharacterSheetData {
 	tooltipConfig: CharacterSheetTooltipData;
 	rules: string[];
 	aspects?: any[];
+	abilities?: AbilityData[];
 }

@@ -11,6 +11,7 @@ import { DashboardCard } from '../../cdk/dashboard-card/dashboard-card';
 import { AddTooltipAspectComponent } from "./dialog/add-tooltip-aspect.component";
 import { CharacterAspectComponent } from '../shared/character-aspect.component';
 import { PredefinedAspects } from '../../../../../shared/predefined-aspects.enum';
+import { AbilityData } from '../../../../../shared/types/ability.data';
 
 @Component({
 	selector: 'character-maker',
@@ -19,6 +20,7 @@ import { PredefinedAspects } from '../../../../../shared/predefined-aspects.enum
 })
 export class CharacterMakerComponent implements OnInit, AfterViewInit, OnDestroy {
 	private characterSheetId: string;
+	private defaultAbilities: AbilityData[] = [];
 
 	@ViewChild('characterTooltip', {static: true})
 	private characterToolTipComponent: CharacterTooltipComponent;
@@ -76,6 +78,7 @@ export class CharacterMakerComponent implements OnInit, AfterViewInit, OnDestroy
 		this.characterService.isReadyObservable.subscribe((isReady: boolean) => {
 			if (isReady) {
 				this.characterToolTipComponent.tooltipConfig = this.characterService.characterTooltipConfig;
+				this.defaultAbilities = this.characterService.abilities;
 			}
 		});
 	}
@@ -96,6 +99,7 @@ export class CharacterMakerComponent implements OnInit, AfterViewInit, OnDestroy
 	}
 
 	public save(): void {
+		this.characterService.setAbilities(this.defaultAbilities);
 		this.characterService.save();
 	}
 

@@ -10,6 +10,7 @@ export class CharacterSheetModel extends MongooseModel implements CharacterSheet
 	public label: string;
 	public tooltipConfig: CharacterSheetTooltipData;
 	public rules: string[];
+	public abilities: AbilityData[];
 
 	constructor() {
 		super({
@@ -19,6 +20,14 @@ export class CharacterSheetModel extends MongooseModel implements CharacterSheet
 				aspects: []
 			}},
 			rules: {type: Array, default: []},
+			abilities: [{
+				name: String,
+				range: Number,
+				rolls: [{
+					name: String,
+					equation: String,
+				}]
+			}],
 		});
 
 		this._id = this.methods._id;
@@ -26,12 +35,19 @@ export class CharacterSheetModel extends MongooseModel implements CharacterSheet
 		this.label = this.methods.label;
 		this.tooltipConfig = this.methods.tooltipConfig;
 		this.rules = this.methods.rules;
+		this.abilities = this.methods.abilities;
 
 		this.methods.setTooltipConfig = this.setTooltipConfig;
+		this.methods.setAbilities = this.setAbilities;
 	}
 
 	public setTooltipConfig(config: any): Promise<CharacterSheetModel> {
 		this.tooltipConfig = config;
+		return this.save();
+	}
+
+	public setAbilities(abilities: AbilityData[]): Promise<CharacterSheetModel> {
+		this.abilities = abilities;
 		return this.save();
 	}
 }

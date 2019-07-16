@@ -5,6 +5,7 @@ import { CharacterSheetModel } from '../db/models/characterSheet.model';
 import { CharacterRepository } from '../db/repositories/character.repository';
 import { CharacterModel } from '../db/models/character.model';
 import { CharacterSheetData } from '../../../shared/types/rule-set/character-sheet.data';
+import { isNullOrUndefined } from 'util';
 
 export class CharacterSheetService {
 	private sheetRepo: CharacterSheetRepository;
@@ -25,8 +26,12 @@ export class CharacterSheetService {
 			await this.aspectRepo.create(sheetModel._id, aspect);
 		}
 
-		sheetModel.tooltipConfig = characterSheetObj.tooltipConfig;
-		return sheetModel.setTooltipConfig(characterSheetObj.tooltipConfig);
+		sheetModel = await sheetModel.setTooltipConfig(characterSheetObj.tooltipConfig);
+		if (!isNullOrUndefined(characterSheetObj.abilities)) {
+			sheetModel = await sheetModel.setAbilities(characterSheetObj.abilities);
+		}
+
+		return sheetModel;
 	}
 
 	public async getCompiledCharacterSheet(id: string): Promise<CharacterSheetData> {
