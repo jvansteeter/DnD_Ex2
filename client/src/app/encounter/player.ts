@@ -320,8 +320,12 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 		this.emitChange();
 	}
 
+	get defaultAbilities(): AbilityData[] {
+		return this.characterData.characterSheet.abilities;
+	}
+
 	get abilities(): AbilityData[] {
-		return [...this.characterData.characterSheet.abilities, ...this.characterData.abilities];
+		return this.characterData.abilities;
 	}
 
 	set abilities(abilities: AbilityData[]) {
