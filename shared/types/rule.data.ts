@@ -4,6 +4,7 @@ export interface RuleData {
 	effects: {
 		aspectLabel: string,
 		aspectItem?: string,
-		modFunction: string
+		modFunction: string,
+		result?: any
 	}[];
 }

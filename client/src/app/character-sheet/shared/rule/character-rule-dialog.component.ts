@@ -1,10 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { CharacterInterfaceService } from '../character-interface.service';
 import { CharacterInterfaceFactory } from '../character-interface.factory';
 import { Aspect, AspectType } from '../aspect';
 import { RuleData } from '../../../../../../shared/types/rule.data';
 import { isNullOrUndefined, isUndefined } from 'util';
-import { MatDialogRef } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { AlertService } from '../../../alert/alert.service';
 import { RuleFunction } from '../subcomponents/function/rule-function';
 
@@ -15,12 +15,12 @@ import { RuleFunction } from '../subcomponents/function/rule-function';
 export class CharacterRuleDialogComponent implements OnInit {
 	private characterService: CharacterInterfaceService;
 
-	@Input()
 	public rule: RuleData;
 	public aspects: Aspect[];
 	public AspectType = AspectType;
 
-	constructor(characterServiceFactory: CharacterInterfaceFactory,
+	constructor(@Inject(MAT_DIALOG_DATA) private data: any,
+	            characterServiceFactory: CharacterInterfaceFactory,
 	            private alertService: AlertService,
 	            private dialogRef: MatDialogRef<CharacterRuleDialogComponent>) {
 		this.characterService = characterServiceFactory.getCharacterInterface();
@@ -36,15 +36,22 @@ export class CharacterRuleDialogComponent implements OnInit {
 				aspect.aspectType === AspectType.CURRENT_MAX ||
 				aspect.aspectType === AspectType.FUNCTION
 		);
-		if (isNullOrUndefined(this.rule)) {
+		if (isNullOrUndefined(this.data)) {
 			this.rule = {
 				name: '',
 				description: '',
 				effects: [{
 					aspectLabel: '',
-					modFunction: ''
+					modFunction: 'this = '
 				}]
-			}
+			};
+		}
+		else {
+			this.rule = {
+				name: this.data.name,
+				description: this.data.description,
+				effects: this.data.effects,
+			};
 		}
 	}
 
@@ -55,7 +62,7 @@ export class CharacterRuleDialogComponent implements OnInit {
 		}
 		this.rule.effects.push({
 			aspectLabel: '',
-			modFunction: ''
+			modFunction: 'this = '
 		});
 	}
 
@@ -103,6 +110,9 @@ export class CharacterRuleDialogComponent implements OnInit {
 			if (result === 'NaN') {
 				this.alertService.showAlert('Invalid Function');
 				return;
+			}
+			else {
+				effect.result = result;
 			}
 		}
 

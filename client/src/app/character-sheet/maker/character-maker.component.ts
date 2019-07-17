@@ -13,7 +13,6 @@ import { CharacterAspectComponent } from '../shared/character-aspect.component';
 import { PredefinedAspects } from '../../../../../shared/predefined-aspects.enum';
 import { AbilityData } from '../../../../../shared/types/ability.data';
 import { RulesConfigService } from '../../data-services/rules-config.service';
-import { CharacterRuleDialogComponent } from '../shared/rule/character-rule-dialog.component';
 import { RuleData } from '../../../../../shared/types/rule.data';
 
 @Component({
@@ -24,6 +23,7 @@ import { RuleData } from '../../../../../shared/types/rule.data';
 export class CharacterMakerComponent implements OnInit, AfterViewInit, OnDestroy {
 	private characterSheetId: string;
 	private defaultAbilities: AbilityData[] = [];
+	private rules: RuleData[] = [];
 
 	@ViewChild('characterTooltip', {static: true})
 	private characterToolTipComponent: CharacterTooltipComponent;
@@ -102,8 +102,13 @@ export class CharacterMakerComponent implements OnInit, AfterViewInit, OnDestroy
 		this.dialog.open(AddComponentComponent);
 	}
 
+	public ruleChange(): void {
+		this.characterService.setRules(this.rules);
+	}
+
 	public save(): void {
 		this.characterService.setAbilities(this.defaultAbilities);
+		this.characterService.setRules(this.rules);
 		this.characterService.save();
 	}
 
@@ -141,12 +146,6 @@ export class CharacterMakerComponent implements OnInit, AfterViewInit, OnDestroy
 			this.characterService.removeComponent(aspect);
 			this.characterToolTipComponent.removeAspect(aspect.label);
 		}
-	}
-
-	public startNewRule(): void {
-		this.dialog.open(CharacterRuleDialogComponent).afterClosed().subscribe((rule: RuleData) => {
-			console.log(rule)
-		});
 	}
 
 	private addTooltipAspect = () => {

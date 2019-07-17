@@ -28,22 +28,24 @@ import { RuleSetService } from '../../data-services/ruleSet.service';
 import { RuleModuleAspects } from '../../../../../shared/predefined-aspects.enum';
 import { RulesConfigService } from '../../data-services/rules-config.service';
 import { AbilityData } from '../../../../../shared/types/ability.data';
+import { RuleData } from '../../../../../shared/types/rule.data';
+import { RuleFunction } from '../shared/subcomponents/function/rule-function';
+import { isDefined } from '@angular/compiler/src/util';
 
 @Injectable()
 export class CharacterMakerService extends IsReadyService implements CharacterInterfaceService {
 	private characterSheetId: string;
-	public characterSheet: CharacterSheetData;
-
 	private aspectMap: Map<GridsterItem, Aspect>;
 	private aspectComponents: Map<string, CharacterAspectComponent>;
 	private removeComponentSubject = new Subject<void>();
 	private registerAspectComponentSubject = new Subject<CharacterAspectComponent>();
 	private readonly materialConstant = 2.71875;
+	private ruleModifiers: Map<string, any> = new Map<string, any>();
 
 	public readonly immutable = false;
 	public ruleModuleAspects: Aspect[] = [];
-
 	public gridOptions: GridsterConfig;
+	public characterSheet: CharacterSheetData;
 
 	constructor(private characterSheetRepo: CharacterSheetRepository,
 	            private alertService: AlertService,
@@ -190,6 +192,38 @@ export class CharacterMakerService extends IsReadyService implements CharacterIn
 
 	public setAbilities(abilities: AbilityData[]): void {
 		this.characterSheet.abilities = abilities;
+	}
+
+	public setRules(rules: RuleData[]): void {
+		this.characterSheet.rules = rules;
+		this.ruleModifiers.clear();
+		for (const rule of this.characterSheet.rules) {
+			for (const effect of rule.effects) {
+				effect.result = new RuleFunction(effect.modFunction, this).execute();
+				let hashKey: string = isDefined(effect.aspectItem) ? effect.aspectLabel + '.' + effect.aspectItem : effect.aspectLabel;
+				if (this.ruleModifiers.has(hashKey)) {
+					this.ruleModifiers.set(hashKey, this.ruleModifiers.get(hashKey) + effect.result);
+				}
+				else {
+					this.ruleModifiers.set(hashKey, effect.result);
+				}
+			}
+		}
+		this.updateFunctionAspects();
+	}
+
+	public getRuleModifiers(aspect: Aspect): any {
+		if (aspect.aspectType === AspectType.CURRENT_MAX) {
+
+		}
+		else if (aspect.aspectType === AspectType.BOOLEAN_LIST) {
+
+		}
+		else {
+			if (this.ruleModifiers.has(aspect.label)) {
+				return this.ruleModifiers.get(aspect.label);
+			}
+		}
 	}
 
 	public save() {

@@ -18,6 +18,7 @@ export class NumberComponent implements SubComponentChild {
 	required: boolean;
 	readonly hasOptions = false;
 	value: any;
+	effectiveValue: number;
 
 	private characterService: CharacterInterfaceService;
 
@@ -37,7 +38,7 @@ export class NumberComponent implements SubComponentChild {
 		this.value = value;
 	}
 
-	valueChanged(): void {
+	valueChanged(value: number): void {
 		this.characterService.updateFunctionAspects();
 	}
 }

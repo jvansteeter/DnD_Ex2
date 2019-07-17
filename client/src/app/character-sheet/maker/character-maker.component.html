@@ -23,12 +23,14 @@
 			</mat-grid-tile>
 			<mat-grid-tile [colspan]="1" [rowspan]="1">
 				<mat-accordion>
+<!--					MODULE DEFINED ASPECTS-->
 					<mat-expansion-panel expanded>
 						<mat-expansion-panel-header>Rule Module Defined Aspects</mat-expansion-panel-header>
 						<div class="required-aspects">
 							<mat-checkbox *ngFor="let aspect of characterService.ruleModuleAspects" color="primary" [checked]="true" [disabled]="true">{{aspect.label}}</mat-checkbox>
 						</div>
 					</mat-expansion-panel>
+<!--					PRE-DEFINED ASPECTS-->
 					<mat-expansion-panel>
 						<mat-expansion-panel-header>Pre-defined Aspects</mat-expansion-panel-header>
 						<div class="predefined-aspects">
@@ -36,13 +38,15 @@
 							              (change)="changePredefinedAspect(aspect.label, $event.checked)" [checked]="aspect.checked">{{aspect.label}}</mat-checkbox>
 						</div>
 					</mat-expansion-panel>
+<!--					DEFAULT ABILITIES-->
 					<mat-expansion-panel *ngIf="rulesConfigService.hasCharacterAbilities">
 						<mat-expansion-panel-header>Default Abilities</mat-expansion-panel-header>
 							<character-abilities [abilities]="defaultAbilities"></character-abilities>
 					</mat-expansion-panel>
+<!--					RULES-->
 					<mat-expansion-panel>
 						<mat-expansion-panel-header>Rules</mat-expansion-panel-header>
-						<button mat-icon-button color="primary" (click)="startNewRule()"><mat-icon>add</mat-icon></button>
+						<character-rules [rules]="rules" (change)="ruleChange()"></character-rules>
 					</mat-expansion-panel>
 				</mat-accordion>
 			</mat-grid-tile>

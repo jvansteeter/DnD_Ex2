@@ -55,6 +55,7 @@ import { ConditionsModule } from '../conditions/conditions.module';
 import { RulesConfigService } from '../data-services/rules-config.service';
 import { AbilityModule } from '../abilities/ability.module';
 import { CharacterRuleDialogComponent } from './shared/rule/character-rule-dialog.component';
+import { RulesComponent } from './shared/rule/rules.component';
 
 @NgModule({
 	imports: [
@@ -109,6 +110,7 @@ import { CharacterRuleDialogComponent } from './shared/rule/character-rule-dialo
 		CurrentMaxComponent,
 		ConditionsAspectComponent,
 		CharacterRuleDialogComponent,
+		RulesComponent,
 	],
 	providers: [
 		CharacterSheetRepository,
