@@ -1,0 +1,27 @@
+<form class="main-info">
+	<mat-form-field>
+		<input matInput placeholder="Rule Name" name="Rule Name" [(ngModel)]="rule.name"/>
+	</mat-form-field>
+	<mat-form-field>
+		<textarea matInput placeholder="Description" name="Description" [(ngModel)]="rule.description"></textarea>
+	</mat-form-field>
+</form>
+<h3>Effects</h3>
+<div class="effect-row" *ngFor="let effect of rule.effects; let i = index">
+	<mat-form-field style="flex: 2; margin-right: 5px;">
+		<mat-select placeholder="Aspect to Modify" (selectionChange)="selectAspect(i, $event.value)" [value]="effect.aspectLabel">
+			<mat-option *ngFor="let aspect of aspects" [value]="aspect.label">{{aspect.label}}</mat-option>
+		</mat-select>
+	</mat-form-field>
+	<mat-form-field *ngIf="effectAspectType(effect) === AspectType.CURRENT_MAX || effectAspectType(effect) === AspectType.BOOLEAN_LIST" style="flex: 2;">
+		<mat-select placeholder="Sub-value" (selectionChange)="selectAspectItem(i, $event.value)">
+			<mat-option *ngFor="let option of typeOptions(effect)" [value]="option">{{option}}</mat-option>
+		</mat-select>
+	</mat-form-field>
+	<mat-form-field style="flex: 3">
+		<textarea matInput placeholder="Mod Function" name="Function" (change)="functionChange(i, $event.target.value)" [value]="effect.modFunction"></textarea>
+	</mat-form-field>
+</div>
+<button mat-icon-button color="primary" matTooltip="Add Effect" (click)="addEffectRow()"><mat-icon>add</mat-icon></button>
+<button mat-icon-button color="primary" matTooltip="Remove Effect" (click)="removeEffectRow()"><mat-icon>remove</mat-icon></button>
+<button mat-icon-button color="primary" matTooltip="Save" class="save-button" (click)="save()"><mat-icon>save</mat-icon></button>

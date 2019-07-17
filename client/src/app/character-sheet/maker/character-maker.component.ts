@@ -13,6 +13,8 @@ import { CharacterAspectComponent } from '../shared/character-aspect.component';
 import { PredefinedAspects } from '../../../../../shared/predefined-aspects.enum';
 import { AbilityData } from '../../../../../shared/types/ability.data';
 import { RulesConfigService } from '../../data-services/rules-config.service';
+import { CharacterRuleDialogComponent } from '../shared/rule/character-rule-dialog.component';
+import { RuleData } from '../../../../../shared/types/rule.data';
 
 @Component({
 	selector: 'character-maker',
@@ -142,11 +144,13 @@ export class CharacterMakerComponent implements OnInit, AfterViewInit, OnDestroy
 	}
 
 	public startNewRule(): void {
-
+		this.dialog.open(CharacterRuleDialogComponent).afterClosed().subscribe((rule: RuleData) => {
+			console.log(rule)
+		});
 	}
 
 	private addTooltipAspect = () => {
-		let tooltipAspects = this.characterService.getTooltipAspects();
+		let tooltipAspects: Aspect[] = this.characterService.getTooltipAspects();
 		for (let tooltipAspect of this.characterToolTipComponent.tooltipConfig.aspects) {
 			for (let i = 0; i < tooltipAspects.length; i++) {
 				if (tooltipAspects[i].label.toLowerCase() === tooltipAspect.aspect.label.toLowerCase()) {

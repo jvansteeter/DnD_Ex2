@@ -54,6 +54,7 @@ import { ConditionsAspectComponent } from './shared/subcomponents/conditions/con
 import { ConditionsModule } from '../conditions/conditions.module';
 import { RulesConfigService } from '../data-services/rules-config.service';
 import { AbilityModule } from '../abilities/ability.module';
+import { CharacterRuleDialogComponent } from './shared/rule/character-rule-dialog.component';
 
 @NgModule({
 	imports: [
@@ -107,6 +108,7 @@ import { AbilityModule } from '../abilities/ability.module';
 		AddTooltipAspectComponent,
 		CurrentMaxComponent,
 		ConditionsAspectComponent,
+		CharacterRuleDialogComponent,
 	],
 	providers: [
 		CharacterSheetRepository,
@@ -122,6 +124,7 @@ import { AbilityModule } from '../abilities/ability.module';
 		FunctionTextComponent,
 		AddTooltipAspectComponent,
 		CharacterTooltipComponent,
+		CharacterRuleDialogComponent,
 	],
 	exports: [
 		CharacterSheetComponent,

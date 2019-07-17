@@ -21,7 +21,7 @@ export class AbilityService {
 			}
 
 			// replace 'd' notation with functions
-			executable = executable.replace(/(\d+)d(\d+)/, (match, ...offset): string => {
+			executable = executable.replace(/(\d+)d(\d+)/g, (match, ...offset): string => {
 				const numberOfDice = offset[0];
 				const numberOfSides = offset[1];
 				let result: number = 0;
