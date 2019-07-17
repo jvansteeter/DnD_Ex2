@@ -68,4 +68,10 @@ export class RulesConfigService {
 
 		return false;
 	}
+
+	get hasCharacterAbilities(): boolean {
+		if (this.ruleMode === RulesMode.RULE_SET) {
+			return this.ruleSetService.modulesConfig.characterAbilities;
+		}
+	}
 }

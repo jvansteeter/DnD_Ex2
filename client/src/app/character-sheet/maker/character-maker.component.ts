@@ -12,6 +12,7 @@ import { AddTooltipAspectComponent } from "./dialog/add-tooltip-aspect.component
 import { CharacterAspectComponent } from '../shared/character-aspect.component';
 import { PredefinedAspects } from '../../../../../shared/predefined-aspects.enum';
 import { AbilityData } from '../../../../../shared/types/ability.data';
+import { RulesConfigService } from '../../data-services/rules-config.service';
 
 @Component({
 	selector: 'character-maker',
@@ -42,7 +43,8 @@ export class CharacterMakerComponent implements OnInit, AfterViewInit, OnDestroy
 	            private activatedRoute: ActivatedRoute,
 	            private characterSheetRepository: CharacterSheetRepository,
 	            private characterInterfaceFactory: CharacterInterfaceFactory,
-	            public characterService: CharacterMakerService) {
+	            public characterService: CharacterMakerService,
+	            public rulesConfigService: RulesConfigService) {
 		this.characterInterfaceFactory.setCharacterInterface(this.characterService);
 		this.characterToolTipCard = {
 			label: 'Character Tooltip Preview',

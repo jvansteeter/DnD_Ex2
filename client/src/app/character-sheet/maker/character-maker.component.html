@@ -36,7 +36,7 @@
 							              (change)="changePredefinedAspect(aspect.label, $event.checked)" [checked]="aspect.checked">{{aspect.label}}</mat-checkbox>
 						</div>
 					</mat-expansion-panel>
-					<mat-expansion-panel>
+					<mat-expansion-panel *ngIf="rulesConfigService.hasCharacterAbilities">
 						<mat-expansion-panel-header>Default Abilities</mat-expansion-panel-header>
 							<character-abilities [abilities]="defaultAbilities"></character-abilities>
 					</mat-expansion-panel>

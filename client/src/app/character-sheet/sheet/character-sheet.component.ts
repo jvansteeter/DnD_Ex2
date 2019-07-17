@@ -7,6 +7,7 @@ import { CharacterData } from '../../../../../shared/types/character.data';
 import { CharacterRepository } from '../../repositories/character.repository';
 import { TokenComponent } from '../shared/subcomponents/token/token.component';
 import { AbilityData } from "../../../../../shared/types/ability.data";
+import { RulesConfigService } from '../../data-services/rules-config.service';
 
 @Component({
 	selector: 'character-sheet',
@@ -26,7 +27,8 @@ export class CharacterSheetComponent implements OnInit {
 	            private characterSheetRepository: CharacterSheetRepository,
 	            public characterService: CharacterSheetService,
 	            private characterInterfaceFactory: CharacterInterfaceFactory,
-	            private characterRepo: CharacterRepository) {
+	            private characterRepo: CharacterRepository,
+	            public rulesConfigService: RulesConfigService) {
 		this.characterService.init();
 		this.characterInterfaceFactory.setCharacterInterface(this.characterService);
 	}
