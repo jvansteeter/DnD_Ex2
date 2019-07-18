@@ -14,6 +14,7 @@ import { AlertService } from '../../alert/alert.service';
 import { isDefined } from '@angular/compiler/src/util';
 import { TokenData } from '../../../../../shared/types/token.data';
 import { AbilityData } from "../../../../../shared/types/ability.data";
+import { Observable, Subject } from 'rxjs';
 
 @Injectable()
 export class CharacterSheetService extends IsReadyService implements CharacterInterfaceService {
@@ -24,6 +25,7 @@ export class CharacterSheetService extends IsReadyService implements CharacterIn
 
 	private characterData: CharacterData;
 	private aspectComponents: Map<string, CharacterAspectComponent>;
+	private modifiersChangeSubject: Subject<void> = new Subject();
 
 	constructor(private characterRepo: CharacterRepository,
 	            private ruleSetService: RuleSetService,
@@ -99,6 +101,10 @@ export class CharacterSheetService extends IsReadyService implements CharacterIn
 		return this.aspectComponents.get(aspectLabel.toLowerCase()) ? this.aspectComponents.get(aspectLabel.toLowerCase()).getValue() : undefined;
 	}
 
+	public getRuleModifiers(aspect: Aspect): any {
+
+	}
+
 	updateFunctionAspects(): void {
 		this.aspectComponents.forEach(subComponent => {
 			if (subComponent.aspect.aspectType === AspectType.FUNCTION) {
@@ -155,6 +161,10 @@ export class CharacterSheetService extends IsReadyService implements CharacterIn
 		this.characterData.abilities = abilities;
 	}
 
+	get modifiersChangeObservable(): Observable<void> {
+		return this.modifiersChangeSubject.asObservable();
+	}
+
 	public save(): void {
 		this.characterData.values = {};
 		for (let aspect of this.aspects) {
@@ -165,5 +175,4 @@ export class CharacterSheetService extends IsReadyService implements CharacterIn
 			this.alertService.showAlert('Character Saved')
 		});
 	}
-
 }

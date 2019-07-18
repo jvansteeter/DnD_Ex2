@@ -3,6 +3,7 @@ import { CharacterSheetData } from '../../../../../shared/types/rule-set/charact
 import { CharacterAspectComponent } from './character-aspect.component';
 import { GridsterConfig } from "angular-gridster2";
 import { IsReadyService } from '../../utilities/services/isReady.service';
+import { Observable } from 'rxjs';
 
 export interface CharacterInterfaceService extends IsReadyService {
 	aspects: Aspect[];
@@ -13,6 +14,8 @@ export interface CharacterInterfaceService extends IsReadyService {
 
 	gridOptions: GridsterConfig;
 
+	modifiersChangeObservable: Observable<void>;
+
 	init(): void;
 
 	registerAspectComponent(aspectComponent: CharacterAspectComponent): void;
@@ -22,4 +25,6 @@ export interface CharacterInterfaceService extends IsReadyService {
 	getAspectValue(aspectLabel: string): any;
 
 	updateFunctionAspects(): void;
+
+	getRuleModifiers(aspect: Aspect): any;
 }

@@ -41,6 +41,7 @@ export class CharacterMakerService extends IsReadyService implements CharacterIn
 	private registerAspectComponentSubject = new Subject<CharacterAspectComponent>();
 	private readonly materialConstant = 2.71875;
 	private ruleModifiers: Map<string, any> = new Map<string, any>();
+	private modifiersChangeSubject: Subject<void> = new Subject();
 
 	public readonly immutable = false;
 	public ruleModuleAspects: Aspect[] = [];
@@ -298,6 +299,10 @@ export class CharacterMakerService extends IsReadyService implements CharacterIn
 		}
 
 		return result;
+	}
+
+	get modifiersChangeObservable(): Observable<void> {
+		return this.modifiersChangeSubject.asObservable();
 	}
 
 	get characterTooltipConfig(): CharacterSheetTooltipData {
