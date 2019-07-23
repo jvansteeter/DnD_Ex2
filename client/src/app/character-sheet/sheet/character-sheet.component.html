@@ -21,7 +21,7 @@
 						<mat-expansion-panel-header>Map Token</mat-expansion-panel-header>
 						<characterMaker-tokenComponent #token></characterMaker-tokenComponent>
 					</mat-expansion-panel>
-					<mat-expansion-panel *ngIf="rulesConfigService.hasCharacterAbilities">
+					<mat-expansion-panel *ngIf="rulesConfigService.hasCharacterAbilities && defaultAbilities.length > 0">
 						<mat-expansion-panel-header>Default Abilities</mat-expansion-panel-header>
 						<character-abilities [abilities]="defaultAbilities" [editable]="false"></character-abilities>
 					</mat-expansion-panel>

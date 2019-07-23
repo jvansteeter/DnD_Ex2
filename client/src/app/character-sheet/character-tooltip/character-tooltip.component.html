@@ -127,7 +127,7 @@
 			<character-abilities [abilities]="player.abilities" (change)="abilityChange()" (expanded)="abilityExpanded($event)" (closed)="abilityClosed($event)"></character-abilities>
 		</mat-expansion-panel>
 <!--		DEFAULT ABILITIES-->
-		<mat-expansion-panel *ngIf="rulesConfigService.hasCharacterAbilities">
+		<mat-expansion-panel *ngIf="rulesConfigService.hasCharacterAbilities && player.defaultAbilities.length > 0">
 			<mat-expansion-panel-header>Default Abilities</mat-expansion-panel-header>
 			<character-abilities [abilities]="player.defaultAbilities" [editable]="false"></character-abilities>
 		</mat-expansion-panel>

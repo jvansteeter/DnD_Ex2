@@ -8,6 +8,7 @@ import { CharacterRepository } from '../../repositories/character.repository';
 import { TokenComponent } from '../shared/subcomponents/token/token.component';
 import { AbilityData } from "../../../../../shared/types/ability.data";
 import { RulesConfigService } from '../../data-services/rules-config.service';
+import { RuleSetService } from '../../data-services/ruleSet.service';
 
 @Component({
 	selector: 'character-sheet',
@@ -28,13 +29,17 @@ export class CharacterSheetComponent implements OnInit {
 	            public characterService: CharacterSheetService,
 	            private characterInterfaceFactory: CharacterInterfaceFactory,
 	            private characterRepo: CharacterRepository,
+	            private ruleSetService: RuleSetService,
 	            public rulesConfigService: RulesConfigService) {
 		this.characterService.init();
 		this.characterInterfaceFactory.setCharacterInterface(this.characterService);
 	}
 
 	public ngOnInit(): void {
+		console.log(this.rulesConfigService)
 		this.characterService.init();
+		this.rulesConfigService.setRuleSetService(this.ruleSetService);
+		this.rulesConfigService.setRuleSetRuleMode();
 		this.activatedRoute.params.subscribe((params) => {
 			this.npcId = params['characterId'];
 			this.characterRepo.getCharacter(this.npcId).subscribe((characterData: CharacterData) => {
