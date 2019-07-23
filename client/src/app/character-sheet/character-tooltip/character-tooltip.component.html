@@ -93,7 +93,9 @@
 			<ng-container *ngSwitchDefault>
 				<input class="aspect-input" *ngIf="editable || hasRights()"
 				       [value]="aspectValue(aspect.aspect.label) ? aspectValue(aspect.aspect.label) : ''"
-				       (change)="changeAspectValue(aspect.aspect.label, $event.target.value)"/>
+				       (change)="changeAspectValue(aspect.aspect.label, $event.target.value)"
+							 (focus)="stopListeningToKeyEvents()"
+							 (blur)="startListeningToKeyEvents()"/>
 				<span *ngIf="!editable && !hasRights() && aspect.aspect.label === 'Name'" class="aspect-unknown">{{aspectValue(aspect.aspect.label)}}</span>
 				<span *ngIf="!editable && !hasRights() && aspect.aspect.label !== 'Name'" class="aspect-unknown">???</span>
 			</ng-container>
