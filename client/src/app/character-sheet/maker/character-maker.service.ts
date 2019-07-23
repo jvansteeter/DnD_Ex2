@@ -116,6 +116,9 @@ export class CharacterMakerService extends IsReadyService implements CharacterIn
 		const isReadySub: Subscription = this.characterSheetRepo.getCharacterSheet(this.characterSheetId).pipe(
 				mergeMap((sheet: CharacterSheetData) => {
 					this.characterSheet = sheet;
+					if (isDefined(this.characterSheet.rules)) {
+						this.setRules(this.characterSheet.rules);
+					}
 					this.initAspects(sheet.aspects);
 					this.ruleSetService.setRuleSetId(this.characterSheet.ruleSetId);
 					return this.ruleSetService.isReadyObservable;
@@ -321,6 +324,14 @@ export class CharacterMakerService extends IsReadyService implements CharacterIn
 		}
 
 		return this.characterSheet.abilities;
+	}
+
+	get rules(): RuleData[] {
+		if (isNullOrUndefined(this.characterSheet.rules)) {
+			return [];
+		}
+
+		return this.characterSheet.rules;
 	}
 
 	private getChildOf(aspect: Aspect): SubComponentChild | undefined {

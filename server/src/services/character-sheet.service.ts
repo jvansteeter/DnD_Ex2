@@ -30,6 +30,9 @@ export class CharacterSheetService {
 		if (!isNullOrUndefined(characterSheetObj.abilities)) {
 			sheetModel = await sheetModel.setAbilities(characterSheetObj.abilities);
 		}
+		if (!isNullOrUndefined(characterSheetObj.rules)) {
+			sheetModel = await sheetModel.setRules(characterSheetObj.rules);
+		}
 
 		return sheetModel;
 	}

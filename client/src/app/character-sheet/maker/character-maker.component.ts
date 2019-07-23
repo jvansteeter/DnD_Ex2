@@ -83,6 +83,7 @@ export class CharacterMakerComponent implements OnInit, AfterViewInit, OnDestroy
 			if (isReady) {
 				this.characterToolTipComponent.tooltipConfig = this.characterService.characterTooltipConfig;
 				this.defaultAbilities = this.characterService.abilities;
+				this.rules = this.characterService.rules;
 			}
 		});
 	}
