@@ -55,6 +55,7 @@ export class EncounterRouter {
 				const player = req.body.player;
 				const userId = req.user._id;
 				await this.encounterService.deletePlayer(player, userId);
+				res.status(200).send();
 			}
 			catch (error) {
 				console.error(error);

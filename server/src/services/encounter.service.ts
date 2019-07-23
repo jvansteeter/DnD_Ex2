@@ -166,9 +166,9 @@ export class EncounterService {
 	public async deletePlayer(player: PlayerData, userId: string): Promise<void> {
 		try {
 			const encounter: EncounterModel = await this.encounterRepo.findById(player.encounterId);
-			await encounter.removePlayer(player);
-			await this.playerRepo.deleteById(player._id);
-			await MqServiceSingleton.sendEncounterCommand(player.encounterId, userId, EncounterCommandType.REMOVE_PLAYER, encounter.version + 1, player);
+			encounter.removePlayer(player);
+			this.playerRepo.deleteById(player._id);
+			MqServiceSingleton.sendEncounterCommand(player.encounterId, userId, EncounterCommandType.REMOVE_PLAYER, encounter.version + 1, player);
 			return;
 		}
 		catch (error) {
