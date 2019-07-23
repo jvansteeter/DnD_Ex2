@@ -1,5 +1,17 @@
 <mat-form-field [style.fontSize.px]="aspect.fontSize" class="number-sub-component">
-	<input matInput type="number" [placeholder]="aspect.label" [required]="aspect.required" class="align-center" [value]="value" (change)="valueChanged($event.target.value)" (mousedown)="$event.stopPropagation()" (touchstart)="$event.stopPropagation()">
+	<input matInput
+	       type="number"
+	       [placeholder]="aspect.label"
+	       [required]="aspect.required"
+	       class="align-center"
+	       [value]="displayValue"
+	       (change)="valueChanged($event.target.value)"
+	       (focus)="setToValue()"
+	       (blur)="setToEffectiveValue()"
+	       (mousedown)="$event.stopPropagation()"
+	       (touchstart)="$event.stopPropagation()"
+	       [style.color]="fontColor"
+	>
 </mat-form-field>
 <mat-menu #options="matMenu">
 </mat-menu>

@@ -21,6 +21,8 @@ export class NumberComponent implements SubComponentChild, OnInit, OnDestroy {
 	readonly hasOptions = false;
 	value: any;
 	effectiveValue: number;
+	displayValue: number;
+	fontColor: string = 'black';
 
 	private characterService: CharacterInterfaceService;
 	private modifiersChangeSub: Subscription;
@@ -31,6 +33,7 @@ export class NumberComponent implements SubComponentChild, OnInit, OnDestroy {
 
 	ngOnInit(): void {
 		this.setEffectiveValue();
+		this.displayValue = this.effectiveValue;
 		this.modifiersChangeSub = this.characterService.modifiersChangeObservable.subscribe(() => {
 			this.setEffectiveValue();
 		});
@@ -57,12 +60,26 @@ export class NumberComponent implements SubComponentChild, OnInit, OnDestroy {
 	valueChanged(value: number): void {
 		this.value = value;
 		this.characterService.updateFunctionAspects();
+		this.setEffectiveValue();
+	}
+
+	setToValue(): void {
+		this.displayValue = this.value;
+		this.fontColor = 'black';
+	}
+
+	setToEffectiveValue(): void {
+		this.displayValue = this.effectiveValue;
+		if (this.effectiveValue > this.value) {
+			this.fontColor = 'blue';
+		}
 	}
 
 	private setEffectiveValue(): void {
 		const mod = this.characterService.getRuleModifiers(this.aspect);
 		if (isDefined(mod)) {
-			this.effectiveValue = this.value + Number(mod);
+			this.effectiveValue = Number(this.value) + Number(mod);
+			this.setToEffectiveValue();
 		}
 		else {
 			this.effectiveValue = this.value;

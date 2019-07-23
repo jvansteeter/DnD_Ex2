@@ -211,6 +211,7 @@ export class CharacterMakerService extends IsReadyService implements CharacterIn
 			}
 		}
 		this.updateFunctionAspects();
+		this.modifiersChangeSubject.next();
 	}
 
 	public getRuleModifiers(aspect: Aspect): any {
