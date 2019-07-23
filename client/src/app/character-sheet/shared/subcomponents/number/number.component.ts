@@ -55,6 +55,7 @@ export class NumberComponent implements SubComponentChild, OnInit, OnDestroy {
 	}
 
 	valueChanged(value: number): void {
+		this.value = value;
 		this.characterService.updateFunctionAspects();
 	}
 
