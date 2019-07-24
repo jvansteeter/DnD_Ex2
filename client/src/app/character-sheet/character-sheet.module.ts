@@ -56,6 +56,7 @@ import { RulesConfigService } from '../data-services/rules-config.service';
 import { AbilityModule } from '../abilities/ability.module';
 import { CharacterRuleDialogComponent } from './shared/rule/character-rule-dialog.component';
 import { RulesComponent } from './shared/rule/rules.component';
+import { RuleService } from './shared/rule/rule.service';
 
 @NgModule({
 	imports: [
@@ -120,6 +121,7 @@ import { RulesComponent } from './shared/rule/rules.component';
 		CharacterRepository,
 		RuleSetService,
 		RulesConfigService,
+		RuleService,
 	],
 	entryComponents: [
 		AddComponentComponent,

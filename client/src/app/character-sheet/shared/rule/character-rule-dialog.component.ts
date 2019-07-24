@@ -50,6 +50,7 @@ export class CharacterRuleDialogComponent implements OnInit {
 			this.rule = {
 				name: this.data.name,
 				description: this.data.description,
+				condition: this.data.condition,
 				effects: this.data.effects,
 			};
 		}

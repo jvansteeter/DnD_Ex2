@@ -32,8 +32,6 @@ export class NumberComponent implements SubComponentChild, OnInit, OnDestroy {
 	}
 
 	ngOnInit(): void {
-		this.setEffectiveValue();
-		this.displayValue = this.effectiveValue;
 		this.modifiersChangeSub = this.characterService.modifiersChangeObservable.subscribe(() => {
 			this.setEffectiveValue();
 		});
@@ -55,6 +53,8 @@ export class NumberComponent implements SubComponentChild, OnInit, OnDestroy {
 
 	setValue(value: any): any {
 		this.value = value;
+		this.setEffectiveValue();
+		this.displayValue = this.effectiveValue;
 	}
 
 	valueChanged(value: number): void {

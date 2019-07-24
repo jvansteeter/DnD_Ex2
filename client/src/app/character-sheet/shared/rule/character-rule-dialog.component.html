@@ -3,6 +3,9 @@
 		<input matInput placeholder="Rule Name" name="Rule Name" [(ngModel)]="rule.name"/>
 	</mat-form-field>
 	<mat-form-field>
+		<textarea matInput placeholder="Condition" name="Condition" [(ngModel)]="rule.condition"></textarea>
+	</mat-form-field>
+	<mat-form-field>
 		<textarea matInput placeholder="Description" name="Description" [(ngModel)]="rule.description"></textarea>
 	</mat-form-field>
 </form>
