@@ -52,6 +52,7 @@ export class CharacterPopComponent {
 	}
 
 	close() {
+		this.player.removeAuras();
 		this.parentRef.clearPlayerPop(this.player._id);
 	}
 

@@ -122,7 +122,7 @@
 			</form>
 		</mat-expansion-panel>
 <!--		ABILITIES    -->
-		<mat-expansion-panel *ngIf="rulesConfigService.hasCharacterAbilities">
+		<mat-expansion-panel *ngIf="rulesConfigService.hasCharacterAbilities" (closed)="removeAbilityAuras()">
 			<mat-expansion-panel-header>Abilities</mat-expansion-panel-header>
 			<character-abilities [abilities]="player.abilities" (change)="abilityChange()" (expanded)="abilityExpanded($event)" (closed)="abilityClosed($event)"></character-abilities>
 		</mat-expansion-panel>

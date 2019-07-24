@@ -294,6 +294,10 @@ export class CharacterTooltipComponent {
 		this.player.removeAura(ability.name);
 	}
 
+	public removeAbilityAuras(): void {
+		this.player.removeAuras();
+	}
+
 	public stopListeningToKeyEvents(): void {
 		this.keyEventService.stopListeningToKeyEvents()
 	}
