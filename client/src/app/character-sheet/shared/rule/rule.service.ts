@@ -18,12 +18,13 @@ export class RuleService {
 			console.error('character service has not been defined');
 			return false;
 		}
-
-		const result = new RuleFunction(condition, this.characterService).execute();
+		if (isUndefined(condition) || condition === '') {
+			return true;
+		}
+		const result = new RuleFunction('this=' + condition, this.characterService).execute();
 		if (result === 'NaN') {
 			return false;
 		}
-
 		return result;
 	}
 
@@ -42,6 +43,20 @@ export class RuleService {
 	}
 
 	private getNumericModifiers(aspectLabel: string, rules: RuleData[]): Map<string, any> {
-		return new Map<string, any>();
+		const resultMap = new Map<string, any>();
+		for (const rule of rules) {
+			if (this.evaluationRuleCondition(rule.condition)) {
+				let ruleTotal: number = 0;
+				for (const effect of rule.effects) {
+					if (effect.aspectLabel === aspectLabel) {
+						effect.result = new RuleFunction(effect.modFunction, this.characterService).execute();
+						ruleTotal += Number(effect.result);
+					}
+				}
+				resultMap.set(rule.name, ruleTotal);
+			}
+		}
+
+		return resultMap;
 	}
 }

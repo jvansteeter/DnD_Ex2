@@ -1,4 +1,4 @@
-<button mat-icon-button color="primary" (click)="startNewRule()"><mat-icon>add</mat-icon></button>
+<button mat-icon-button color="primary" (click)="startNewRule()" *ngIf="editable"><mat-icon>add</mat-icon></button>
 <mat-accordion [displayMode]="'flat'">
 	<mat-expansion-panel *ngFor="let rule of rules; let i = index;">
 		<mat-expansion-panel-header>{{rule.name}}</mat-expansion-panel-header>
@@ -8,7 +8,7 @@
 				<span>{{effect.result}}</span>
 			</div>
 		</div>
-		<button mat-icon-button color="primary" matTooltip="Edit" (click)="editRule(i)"><mat-icon>edit</mat-icon></button>
-		<button mat-icon-button color="primary" matTooltip="Remove" (click)="removeRule(i)"><mat-icon>remove</mat-icon></button>
+		<button mat-icon-button color="primary" matTooltip="Edit" (click)="editRule(i)" *ngIf="editable"><mat-icon>edit</mat-icon></button>
+		<button mat-icon-button color="primary" matTooltip="Remove" (click)="removeRule(i)" *ngIf="editable"><mat-icon>remove</mat-icon></button>
 	</mat-expansion-panel>
 </mat-accordion>

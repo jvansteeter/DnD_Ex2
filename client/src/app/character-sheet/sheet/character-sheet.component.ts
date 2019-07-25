@@ -36,7 +36,6 @@ export class CharacterSheetComponent implements OnInit {
 	}
 
 	public ngOnInit(): void {
-		console.log(this.rulesConfigService)
 		this.characterService.init();
 		this.rulesConfigService.setRuleSetService(this.ruleSetService);
 		this.rulesConfigService.setRuleSetRuleMode();

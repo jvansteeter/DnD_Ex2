@@ -1,8 +1,9 @@
 import { Component, Input, ViewChild } from '@angular/core';
 import { SubComponentChild } from '../sub-component-child';
 import { Aspect } from '../../aspect';
-import { CharacterMakerService } from '../../../maker/character-maker.service';
 import { MatMenu } from '@angular/material';
+import { CharacterInterfaceService } from '../../character-interface.service';
+import { CharacterInterfaceFactory } from '../../character-interface.factory';
 
 
 @Component({
@@ -17,8 +18,10 @@ export class CheckboxComponent implements SubComponentChild {
 
     @ViewChild('options', {static: true}) options: MatMenu;
 
-    constructor(private characterMakerService: CharacterMakerService) {
+    private characterService: CharacterInterfaceService;
 
+    constructor(characterInterfaceFactory: CharacterInterfaceFactory) {
+			this.characterService = characterInterfaceFactory.getCharacterInterface();
     }
 
     getMenuOptions(): MatMenu {
@@ -34,7 +37,7 @@ export class CheckboxComponent implements SubComponentChild {
     }
 
     valueChanged(): void {
-        this.characterMakerService.updateFunctionAspects();
+        this.characterService.updateFunctionAspects();
     }
 }
 

@@ -12,6 +12,8 @@ import { MatDialog } from '@angular/material';
 export class RulesComponent {
 	@Input()
 	public rules: RuleData[] = [];
+	@Input()
+	public editable: boolean = true;
 	@Output()
 	public change = new EventEmitter();
 

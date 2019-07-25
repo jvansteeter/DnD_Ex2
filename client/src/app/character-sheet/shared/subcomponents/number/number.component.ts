@@ -76,9 +76,14 @@ export class NumberComponent implements SubComponentChild, OnInit, OnDestroy {
 	}
 
 	private setEffectiveValue(): void {
-		const mod = this.characterService.getRuleModifiers(this.aspect);
+		const mod: Map<string, number> = this.characterService.getRuleModifiers(this.aspect);
+		let total: number = 0;
+		for (let value of mod.values()) {
+			total += Number(value);
+		}
+
 		if (isDefined(mod)) {
-			this.effectiveValue = Number(this.value) + Number(mod);
+			this.effectiveValue = Number(this.value) + total;
 			this.setToEffectiveValue();
 		}
 		else {

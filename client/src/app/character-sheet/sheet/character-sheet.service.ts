@@ -15,6 +15,8 @@ import { isDefined } from '@angular/compiler/src/util';
 import { TokenData } from '../../../../../shared/types/token.data';
 import { AbilityData } from "../../../../../shared/types/ability.data";
 import { Observable, Subject } from 'rxjs';
+import { RuleService } from '../shared/rule/rule.service';
+import { RuleData } from '../../../../../shared/types/rule.data';
 
 @Injectable()
 export class CharacterSheetService extends IsReadyService implements CharacterInterfaceService {
@@ -22,6 +24,7 @@ export class CharacterSheetService extends IsReadyService implements CharacterIn
 	public characterSheet: CharacterSheetData;
 	public readonly immutable = true;
 	public gridOptions: GridsterConfig;
+	public appliedRules: RuleData[];
 
 	private characterData: CharacterData;
 	private aspectComponents: Map<string, CharacterAspectComponent>;
@@ -29,6 +32,7 @@ export class CharacterSheetService extends IsReadyService implements CharacterIn
 
 	constructor(private characterRepo: CharacterRepository,
 	            private ruleSetService: RuleSetService,
+	            private ruleService: RuleService,
 	            private alertService: AlertService) {
 		super();
 	}
@@ -89,6 +93,7 @@ export class CharacterSheetService extends IsReadyService implements CharacterIn
 			disableWarnings: true,
 			scrollToNewItems: false,
 		};
+		this.ruleService.setCharacterService(this);
 		this.setReady(true);
 	}
 
@@ -101,16 +106,19 @@ export class CharacterSheetService extends IsReadyService implements CharacterIn
 		return this.aspectComponents.get(aspectLabel.toLowerCase()) ? this.aspectComponents.get(aspectLabel.toLowerCase()).getValue() : undefined;
 	}
 
-	public getRuleModifiers(aspect: Aspect): any {
-
+	public getRuleModifiers(aspect: Aspect): Map<string, any> {
+		this.updateAppliedRules();
+		return this.ruleService.getRuleModifiers(aspect, this.characterSheet.rules);
 	}
 
 	updateFunctionAspects(): void {
+		this.updateAppliedRules();
 		this.aspectComponents.forEach(subComponent => {
 			if (subComponent.aspect.aspectType === AspectType.FUNCTION) {
 				subComponent.getValue();
 			}
-		})
+		});
+		this.modifiersChangeSubject.next();
 	}
 
 	public setCharacterData(data: CharacterData): void {
@@ -174,5 +182,14 @@ export class CharacterSheetService extends IsReadyService implements CharacterIn
 		this.characterRepo.saveCharacter(this.characterData).subscribe(() => {
 			this.alertService.showAlert('Character Saved')
 		});
+	}
+
+	private updateAppliedRules(): void {
+		this.appliedRules = [];
+		for (const rule of this.characterSheet.rules) {
+			if (this.ruleService.evaluationRuleCondition(rule.condition)) {
+				this.appliedRules.push(rule);
+			}
+		}
 	}
 }

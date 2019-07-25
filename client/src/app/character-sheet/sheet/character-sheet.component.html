@@ -29,6 +29,10 @@
 						<mat-expansion-panel-header>Abilities</mat-expansion-panel-header>
 						<character-abilities [abilities]="abilities"></character-abilities>
 					</mat-expansion-panel>
+					<mat-expansion-panel>
+						<mat-expansion-panel-header>Applied Rules</mat-expansion-panel-header>
+						<character-rules [rules]="characterService.appliedRules" [editable]="false"></character-rules>
+					</mat-expansion-panel>
 				</mat-accordion>
 			</mat-grid-tile>
 		</mat-grid-list>
