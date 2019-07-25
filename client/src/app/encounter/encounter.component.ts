@@ -16,6 +16,7 @@ import { BoardNotationService } from "../board/services/board-notation-service";
 import { BoardStealthService } from '../board/services/board-stealth.service';
 import { EncounterKeyEventService } from "./encounter-key-event.service";
 import { Subscription } from 'rxjs';
+import { RuleService } from '../character-sheet/shared/rule/rule.service';
 
 @Component({
 	selector: 'encounter',
@@ -43,6 +44,7 @@ export class EncounterComponent implements OnInit, OnDestroy {
 	            private boardTraverseService: BoardTraverseService,
 	            private stealthService: BoardStealthService,
 	            private keyInputService: EncounterKeyEventService,
+	            private ruleService: RuleService,
 	) {
 	}
 
@@ -73,6 +75,7 @@ export class EncounterComponent implements OnInit, OnDestroy {
 			this.encounterService.isReadyObservable.subscribe((isReady: boolean) => {
 				if (isReady) {
 					this.rightsService.setEncounterService(this.encounterService);
+					this.ruleService.setAspectService(this.encounterService);
 				}
 			});
 		});

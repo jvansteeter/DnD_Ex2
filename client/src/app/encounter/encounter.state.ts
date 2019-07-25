@@ -2,7 +2,7 @@ import { LightValue } from '../../../../shared/types/encounter/board/light-value
 import { Player } from './player';
 import { EncounterData } from '../../../../shared/types/encounter/encounter.data';
 import { PlayerData } from '../../../../shared/types/encounter/player.data';
-import { isUndefined } from 'util';
+import { isNullOrUndefined, isUndefined } from 'util';
 import { LightSourceData } from '../../../../shared/types/encounter/board/light-source.data';
 import { NotationData } from '../../../../shared/types/encounter/board/notation.data';
 import { EncounterConfigData } from '../../../../shared/types/encounter/encounter-config.data';
@@ -50,8 +50,11 @@ export class EncounterState implements EncounterData {
 		this.teamsState = new EncounterTeamsState(encounterStateData.teamsData);
 	}
 
-	public getAspectValue(playerId: string, aspectLabel: string): any {
+	public getAspectValue(aspectLabel: string, playerId: string): any {
 		const player: PlayerData = this.playerMap.get(playerId);
+		if (isNullOrUndefined(player)) {
+			return null;
+		}
 		return player.characterData.values[aspectLabel];
 	}
 

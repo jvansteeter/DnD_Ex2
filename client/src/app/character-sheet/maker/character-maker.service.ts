@@ -29,12 +29,12 @@ import { RuleModuleAspects } from '../../../../../shared/predefined-aspects.enum
 import { RulesConfigService } from '../../data-services/rules-config.service';
 import { AbilityData } from '../../../../../shared/types/ability.data';
 import { RuleData } from '../../../../../shared/types/rule.data';
-import { RuleFunction } from '../shared/subcomponents/function/rule-function';
 import { isDefined } from '@angular/compiler/src/util';
 import { RuleService } from '../shared/rule/rule.service';
+import { AspectServiceInterface } from '../../data-services/aspect.service.interface';
 
 @Injectable()
-export class CharacterMakerService extends IsReadyService implements CharacterInterfaceService {
+export class CharacterMakerService extends IsReadyService implements CharacterInterfaceService, AspectServiceInterface {
 	private characterSheetId: string;
 	private aspectMap: Map<GridsterItem, Aspect>;
 	private aspectComponents: Map<string, CharacterAspectComponent>;
@@ -128,7 +128,7 @@ export class CharacterMakerService extends IsReadyService implements CharacterIn
 			if (isReady) {
 				this.rulesConfigService.setRuleSetService(this.ruleSetService);
 				this.rulesConfigService.setRuleSetRuleMode();
-				this.ruleService.setCharacterService(this);
+				this.ruleService.setAspectService(this);
 				isReadySub.unsubscribe();
 				this.initRuleModuleAspects();
 				this.setReady(true);
@@ -176,7 +176,7 @@ export class CharacterMakerService extends IsReadyService implements CharacterIn
 		return this.registerAspectComponentSubject.asObservable();
 	}
 
-	public getAspectValue(aspectLabel: string): any {
+	public getAspectValue(aspectLabel: string, playerId?: string): any {
 		return this.aspectComponents.get(aspectLabel.toLowerCase()) ? this.aspectComponents.get(aspectLabel.toLowerCase()).getValue() : undefined;
 	}
 

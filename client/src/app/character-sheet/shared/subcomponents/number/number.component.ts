@@ -48,7 +48,7 @@ export class NumberComponent implements SubComponentChild, OnInit, OnDestroy {
 	}
 
 	getValue() {
-		return this.value;
+		return Number(this.value);
 	}
 
 	setValue(value: any): any {

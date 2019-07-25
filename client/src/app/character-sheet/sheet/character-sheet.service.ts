@@ -17,9 +17,10 @@ import { AbilityData } from "../../../../../shared/types/ability.data";
 import { Observable, Subject } from 'rxjs';
 import { RuleService } from '../shared/rule/rule.service';
 import { RuleData } from '../../../../../shared/types/rule.data';
+import { AspectServiceInterface } from '../../data-services/aspect.service.interface';
 
 @Injectable()
-export class CharacterSheetService extends IsReadyService implements CharacterInterfaceService {
+export class CharacterSheetService extends IsReadyService implements CharacterInterfaceService, AspectServiceInterface {
 	public aspects: Aspect[];
 	public characterSheet: CharacterSheetData;
 	public readonly immutable = true;
@@ -93,7 +94,7 @@ export class CharacterSheetService extends IsReadyService implements CharacterIn
 			disableWarnings: true,
 			scrollToNewItems: false,
 		};
-		this.ruleService.setCharacterService(this);
+		this.ruleService.setAspectService(this);
 		this.setReady(true);
 	}
 
@@ -102,7 +103,7 @@ export class CharacterSheetService extends IsReadyService implements CharacterIn
 		aspectComponent.child.setValue(this.characterData.values[aspectComponent.aspect.label]);
 	}
 
-	getAspectValue(aspectLabel: string): any {
+	getAspectValue(aspectLabel: string, playerId?: string): any {
 		return this.aspectComponents.get(aspectLabel.toLowerCase()) ? this.aspectComponents.get(aspectLabel.toLowerCase()).getValue() : undefined;
 	}
 

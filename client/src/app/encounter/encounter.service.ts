@@ -16,9 +16,10 @@ import { TeamUser } from "../board/services/team-user";
 import { isDefined } from '@angular/compiler/src/util';
 import { RulesConfigService } from '../data-services/rules-config.service';
 import { EncounterCommandType } from '../../../../shared/types/encounter/encounter-command.enum';
+import { AspectServiceInterface } from '../data-services/aspect.service.interface';
 
 @Injectable()
-export class EncounterService extends IsReadyService {
+export class EncounterService extends IsReadyService implements AspectServiceInterface {
 	protected claimedPlayerId: string;
 	protected hasClaimedPlayer = false;
 
@@ -84,8 +85,8 @@ export class EncounterService extends IsReadyService {
 		this.encounterState.toggleUserTeam(userId, team);
 	}
 
-	public getAspectValue(playerId: string, aspectLabel: string): any {
-		return this.encounterState.getAspectValue(playerId, aspectLabel);
+	public getAspectValue(aspectLabel: string, playerId?: string): any {
+		return this.encounterState.getAspectValue(aspectLabel, playerId);
 	}
 
 	public getTeamUser(userId: string): TeamUser {

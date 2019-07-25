@@ -26,21 +26,21 @@
 					<ng-container *ngIf="editingIndex === i">
 						<input (keyup.enter)="editCurrentMax(aspect.aspect.label, +$event.target.value)" (blur)="stopEditCurrentMax()" class="current-max-edit" autofocus/>
 					</ng-container>
-					<ng-container *ngIf="aspectValue(aspect.aspect.label)">
+					<ng-container *ngIf="aspectValue(aspect.aspect)">
 						<input class="current-max-input" style="margin-left: auto" type="number"
-						       [value]="aspectValue(aspect.aspect.label).current"
+						       [value]="aspectValue(aspect.aspect).current"
 						       (change)="changeCurrentAspectValue(aspect.aspect.label, $event.target.value)"/>
 						<span>/</span>
-						<input class="current-max-input" type="number" [value]="aspectValue(aspect.aspect.label).max"
+						<input class="current-max-input" type="number" [value]="aspectValue(aspect.aspect).max"
 						       (change)="changeMaxAspectValue(aspect.aspect.label, $event.target.value)"/>
 					</ng-container>
 				</span>
 				<span class="aspect-unknown" *ngIf="!editable && !hasRights()">
-					<span class="negative-difference" *ngIf="(aspectValue(aspect.aspect.label).current - aspectValue(aspect.aspect.label).max) < 0">
-						{{aspectValue(aspect.aspect.label).current - aspectValue(aspect.aspect.label).max}}
+					<span class="negative-difference" *ngIf="(aspectValue(aspect.aspect).current - aspectValue(aspect.aspect).max) < 0">
+						{{aspectValue(aspect.aspect).current - aspectValue(aspect.aspect).max}}
 					</span>
-					<span class="positive-difference" *ngIf="(aspectValue(aspect.aspect.label).current - aspectValue(aspect.aspect.label).max) > 0">
-						+{{aspectValue(aspect.aspect.label).current - aspectValue(aspect.aspect.label).max}}
+					<span class="positive-difference" *ngIf="(aspectValue(aspect.aspect).current - aspectValue(aspect.aspect).max) > 0">
+						+{{aspectValue(aspect.aspect).current - aspectValue(aspect.aspect).max}}
 					</span>
 					<span> ???</span>
 				</span>
@@ -48,7 +48,7 @@
 			<!--Conditions-->
 			<ng-container *ngSwitchCase="aspectType.CONDITIONS">
 				<div class="conditions-tooltip">
-					<div *ngFor="let condition of aspectValue(aspect.aspect.label)" class="condition-row" [matTooltip]="condition['description']">
+					<div *ngFor="let condition of aspectValue(aspect.aspect)" class="condition-row" [matTooltip]="condition['description']">
 						<button mat-icon-button class="remove-condition-button tooltip-button" (click)="removeCondition(aspect.aspect.label, condition['name'])" *ngIf="editable || hasRights()">
 							<mat-icon>close</mat-icon>
 						</button>
@@ -80,23 +80,26 @@
 			<!--Number-->
 			<ng-container *ngSwitchCase="aspectType.NUMBER">
 				<input class="aspect-input" type="number" *ngIf="editable || hasRights()"
-				       [value]="aspectValue(aspect.aspect.label) ? aspectValue(aspect.aspect.label) : ''"
+				       [value]="aspectValue(aspect.aspect) ? aspectValue(aspect.aspect) : ''"
+				       (focus)="focusAspect(aspect.aspect)"
+				       (blur)="blurAspect()"
+				       [style.color]="aspectColor(aspect.aspect)"
 				       (change)="changeAspectValue(aspect.aspect.label, $event.target.value)"/>
 				<span *ngIf="!editable && !hasRights()" class="aspect-unknown">???</span>
 			</ng-container>
 			<!--Check Box-->
 			<ng-container *ngSwitchCase="aspectType.BOOLEAN">
-				<mat-checkbox *ngIf="editable || hasRights()" [checked]="aspectValue(aspect.aspect.label) === 'true'" (change)="changeAspectValue(aspect.aspect.label, $event.checked ? 'true' : '')" class="aspect-checkbox"></mat-checkbox>
+				<mat-checkbox *ngIf="editable || hasRights()" [checked]="aspectValue(aspect.aspect) === 'true'" (change)="changeAspectValue(aspect.aspect.label, $event.checked ? 'true' : '')" class="aspect-checkbox"></mat-checkbox>
 				<span *ngIf="!editable && !hasRights()" class="aspect-unknown">???</span>
 			</ng-container>
 			<!--Other-->
 			<ng-container *ngSwitchDefault>
 				<input class="aspect-input" *ngIf="editable || hasRights()"
-				       [value]="aspectValue(aspect.aspect.label) ? aspectValue(aspect.aspect.label) : ''"
+				       [value]="aspectValue(aspect.aspect) ? aspectValue(aspect.aspect) : ''"
 				       (change)="changeAspectValue(aspect.aspect.label, $event.target.value)"
 							 (focus)="stopListeningToKeyEvents()"
 							 (blur)="startListeningToKeyEvents()"/>
-				<span *ngIf="!editable && !hasRights() && aspect.aspect.label === 'Name'" class="aspect-unknown">{{aspectValue(aspect.aspect.label)}}</span>
+				<span *ngIf="!editable && !hasRights() && aspect.aspect.label === 'Name'" class="aspect-unknown">{{aspectValue(aspect.aspect)}}</span>
 				<span *ngIf="!editable && !hasRights() && aspect.aspect.label !== 'Name'" class="aspect-unknown">???</span>
 			</ng-container>
 		</ng-container>

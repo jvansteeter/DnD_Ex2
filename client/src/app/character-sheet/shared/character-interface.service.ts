@@ -4,8 +4,9 @@ import { CharacterAspectComponent } from './character-aspect.component';
 import { GridsterConfig } from "angular-gridster2";
 import { IsReadyService } from '../../utilities/services/isReady.service';
 import { Observable } from 'rxjs';
+import { AspectServiceInterface } from '../../data-services/aspect.service.interface';
 
-export interface CharacterInterfaceService extends IsReadyService {
+export interface CharacterInterfaceService extends AspectServiceInterface, IsReadyService {
 	aspects: Aspect[];
 
 	readonly immutable: boolean;
@@ -21,8 +22,6 @@ export interface CharacterInterfaceService extends IsReadyService {
 	registerAspectComponent(aspectComponent: CharacterAspectComponent): void;
 
 	removeComponent(aspect: Aspect): void;
-
-	getAspectValue(aspectLabel: string): any;
 
 	updateFunctionAspects(): void;
 

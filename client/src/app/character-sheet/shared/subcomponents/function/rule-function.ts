@@ -1,10 +1,7 @@
-import { CharacterInterfaceService } from '../../character-interface.service';
+import { AspectServiceInterface } from '../../../../data-services/aspect.service.interface';
 
 export class RuleFunction {
-	public functionText: string;
-
-	constructor(functionText: string, private characterService: CharacterInterfaceService) {
-		this.functionText = functionText;
+	constructor(public functionText: string, private aspectService: AspectServiceInterface, private playerId?: string) {
 	}
 
 	public execute(): any {
@@ -18,8 +15,9 @@ export class RuleFunction {
 
 			// replace aspects with their values
 			if (executable.indexOf('${') > -1) {
-				executable = executable.replace(/\${([\w\s]+)}/g, (match, offset: string): string => {
-					return JSON.stringify(this.characterService.getAspectValue(offset));
+				executable = executable.replace(/\${([\w\s]+)}/g, (match, offset: string) => {
+					let value: any = JSON.stringify(this.aspectService.getAspectValue(offset, this.playerId));
+					return value;
 				});
 			}
 
