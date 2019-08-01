@@ -114,9 +114,9 @@ export class CharacterSheetService extends IsReadyService implements CharacterIn
 	}
 
 	updateFunctionAspects(): void {
+		this.modifiersChangeSubject.next();
 		this.updateAppliedRules();
 		this.updateFunctionSubject.next();
-		this.modifiersChangeSubject.next();
 	}
 
 	public updateFunctionAspectsObservable(): Observable<void> {

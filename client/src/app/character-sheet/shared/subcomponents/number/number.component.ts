@@ -48,7 +48,7 @@ export class NumberComponent implements SubComponentChild, OnInit, OnDestroy {
 	}
 
 	getValue() {
-		return Number(this.value);
+		return Number(this.effectiveValue);
 	}
 
 	setValue(value: any): any {
@@ -59,8 +59,8 @@ export class NumberComponent implements SubComponentChild, OnInit, OnDestroy {
 
 	valueChanged(value: number): void {
 		this.value = value;
-		this.characterService.updateFunctionAspects();
 		this.setEffectiveValue();
+		this.characterService.updateFunctionAspects();
 	}
 
 	setToValue(): void {

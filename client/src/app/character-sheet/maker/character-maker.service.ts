@@ -190,6 +190,7 @@ export class CharacterMakerService extends IsReadyService implements CharacterIn
 	}
 
 	public updateFunctionAspects(): void {
+		this.modifiersChangeSubject.next();
 		this.updateFunctionsSubject.next();
 	}
 
