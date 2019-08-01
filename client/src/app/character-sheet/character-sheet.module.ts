@@ -57,6 +57,7 @@ import { AbilityModule } from '../abilities/ability.module';
 import { CharacterRuleDialogComponent } from './shared/rule/character-rule-dialog.component';
 import { RulesComponent } from './shared/rule/rules.component';
 import { RuleService } from './shared/rule/rule.service';
+import { CharacterTooltipPreviewComponent } from './character-tooltip/character-tooltip-preview.component';
 
 @NgModule({
 	imports: [
@@ -107,6 +108,7 @@ import { RuleService } from './shared/rule/rule.service';
 		FunctionTextComponent,
 		TextAreaComponent,
 		CharacterTooltipComponent,
+		CharacterTooltipPreviewComponent,
 		AddTooltipAspectComponent,
 		CurrentMaxComponent,
 		ConditionsAspectComponent,

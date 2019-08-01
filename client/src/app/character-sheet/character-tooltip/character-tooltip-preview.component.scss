@@ -1,0 +1,113 @@
+:host {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	width: 100%;
+}
+
+.character-tooltip-aspect {
+	display: flex;
+	align-items: center;
+}
+
+.current-max-aspect-value {
+	width: 100%;
+	display: flex;
+}
+
+.current-max-input {
+	text-align: center;
+	background-color: inherit;
+	border: none;
+	width: 50px;
+}
+
+.current-max-edit {
+	width: 50px;
+}
+
+.tooltip-button {
+	width: 24px;
+	height: 24px;
+	mat-icon {
+		margin-bottom: 16px;
+	}
+}
+
+.aspect-label {
+	padding-right: 5px;
+}
+
+.aspect-unknown {
+	width: 100%;
+	text-align: right;
+}
+
+.negative-difference {
+	color: red;
+}
+
+.positive-difference {
+	color: green;
+}
+
+.aspect-input {
+	background-color: inherit;
+	border: none;
+	text-align: right;
+	width: 100%;
+}
+
+input.current-max-input::-webkit-outer-spin-button,
+input.current-max-input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+.conditions-tooltip {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+}
+
+.add-condition-button {
+	margin-right: auto;
+}
+
+.condition-row {
+	width: 100%;
+	display: flex;
+	align-items: center;
+	flex-direction: row-reverse;
+}
+
+.condition-name {
+	margin-right: auto;
+}
+
+.remove-condition-button {
+
+}
+
+.create-condition-button {
+	float: right;
+}
+
+.round-count {
+	width: 30px;
+	margin-left: 10px;
+	border: none;
+}
+
+.condition-icon {
+
+}
+
+.aspect-checkbox {
+	margin-left: auto;
+}
+
+.button-toggle-image {
+	height: 50px;
+	width: 50px;
+}

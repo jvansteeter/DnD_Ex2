@@ -16,6 +16,7 @@ import { BoardTeamsService } from './board-teams.service';
 import { RuleModuleAspects } from '../../../../../shared/predefined-aspects.enum';
 import { RulesConfigService } from '../../data-services/rules-config.service';
 import { LightValue } from '../../../../../shared/types/encounter/board/light-value';
+import { isDefined } from '@angular/compiler/src/util';
 
 @Injectable()
 export class BoardPlayerService extends IsReadyService {
@@ -259,10 +260,13 @@ export class BoardPlayerService extends IsReadyService {
                 }
 
                 const selectedPlayer = this.encounterService.getPlayerById(this.selectedPlayerId);
-                selectedPlayer.location = loc_cell;
-                this.updatePlayerVisibility(selectedPlayer._id);
-                this.updatePlayerTraverse(selectedPlayer._id);
-                this.updatePlayerLightSource(selectedPlayer._id);
+                if (isDefined(selectedPlayer)) {
+	                selectedPlayer.location = loc_cell;
+	                this.updatePlayerVisibility(selectedPlayer._id);
+	                this.updatePlayerTraverse(selectedPlayer._id);
+	                this.updatePlayerLightSource(selectedPlayer._id);
+                }
+
                 this.selectedPlayerId = null;
 
             } else {

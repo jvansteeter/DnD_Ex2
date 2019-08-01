@@ -14,6 +14,7 @@ import { PredefinedAspects } from '../../../../../shared/predefined-aspects.enum
 import { AbilityData } from '../../../../../shared/types/ability.data';
 import { RulesConfigService } from '../../data-services/rules-config.service';
 import { RuleData } from '../../../../../shared/types/rule.data';
+import { CharacterTooltipPreviewComponent } from '../character-tooltip/character-tooltip-preview.component';
 
 @Component({
 	selector: 'character-maker',
@@ -26,7 +27,7 @@ export class CharacterMakerComponent implements OnInit, AfterViewInit, OnDestroy
 	private rules: RuleData[] = [];
 
 	@ViewChild('characterTooltip', {static: true})
-	private characterToolTipComponent: CharacterTooltipComponent;
+	private characterToolTipComponent: CharacterTooltipPreviewComponent;
 
 	public characterToolTipCard: DashboardCard;
 

@@ -30,6 +30,7 @@ export class CharacterSheetService extends IsReadyService implements CharacterIn
 	private characterData: CharacterData;
 	private aspectComponents: Map<string, CharacterAspectComponent>;
 	private modifiersChangeSubject: Subject<void> = new Subject();
+	private updateFunctionSubject: Subject<void> = new Subject();
 
 	constructor(private characterRepo: CharacterRepository,
 	            private ruleSetService: RuleSetService,
@@ -114,12 +115,12 @@ export class CharacterSheetService extends IsReadyService implements CharacterIn
 
 	updateFunctionAspects(): void {
 		this.updateAppliedRules();
-		this.aspectComponents.forEach(subComponent => {
-			if (subComponent.aspect.aspectType === AspectType.FUNCTION) {
-				subComponent.getValue();
-			}
-		});
+		this.updateFunctionSubject.next();
 		this.modifiersChangeSubject.next();
+	}
+
+	public updateFunctionAspectsObservable(): Observable<void> {
+		return this.updateFunctionSubject.asObservable();
 	}
 
 	public setCharacterData(data: CharacterData): void {

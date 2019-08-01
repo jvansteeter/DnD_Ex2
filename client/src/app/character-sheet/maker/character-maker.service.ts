@@ -42,6 +42,7 @@ export class CharacterMakerService extends IsReadyService implements CharacterIn
 	private registerAspectComponentSubject = new Subject<CharacterAspectComponent>();
 	private readonly materialConstant = 2.71875;
 	private modifiersChangeSubject: Subject<void> = new Subject();
+	private updateFunctionsSubject: Subject<void> = new Subject();
 
 	public readonly immutable = false;
 	public ruleModuleAspects: Aspect[] = [];
@@ -189,11 +190,11 @@ export class CharacterMakerService extends IsReadyService implements CharacterIn
 	}
 
 	public updateFunctionAspects(): void {
-		this.aspectComponents.forEach(subComponent => {
-			if (subComponent.aspect.aspectType === AspectType.FUNCTION) {
-				subComponent.getValue();
-			}
-		});
+		this.updateFunctionsSubject.next();
+	}
+
+	public updateFunctionAspectsObservable(): Observable<void> {
+		return this.updateFunctionsSubject.asObservable();
 	}
 
 	public setAbilities(abilities: AbilityData[]): void {

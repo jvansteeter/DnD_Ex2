@@ -29,8 +29,6 @@ import { RuleService } from '../shared/rule/rule.service';
 export class CharacterTooltipComponent {
 	@Input()
 	characterSheetId: string;
-	@Input()
-	public editable: boolean = false;
 
 	public aspectType = AspectType;
 	public hoveredIndex: number;
@@ -74,41 +72,22 @@ export class CharacterTooltipComponent {
 			return this.ruleSetService.conditions.filter((condition: ConditionData) => {
 				return (condition.name.toLowerCase().indexOf(filterValue) === 0 && !this.playerHasCondition(condition));
 			});
-		}
-		else {
+		} else {
 			return [];
 		}
 	}
 
 	private playerHasCondition(condition: ConditionData): boolean {
-		if (!this.editable) {
-			const conditions: ConditionData[] = this.player.characterData.values[RuleModuleAspects.CONDITIONS];
-			if (isDefined(conditions)) {
-				for (let existingCondition of conditions) {
-					if (condition.name.toLowerCase() === existingCondition.name.toLowerCase()) {
-						return true;
-					}
+		const conditions: ConditionData[] = this.player.characterData.values[RuleModuleAspects.CONDITIONS];
+		if (isDefined(conditions)) {
+			for (let existingCondition of conditions) {
+				if (condition.name.toLowerCase() === existingCondition.name.toLowerCase()) {
+					return true;
 				}
 			}
 		}
 
 		return false;
-	}
-
-	public addAspect(aspect: Aspect, icon: string): void {
-		let unique = true;
-		for (let tooltipAspect of this.tooltipConfig.aspects) {
-			if (tooltipAspect.aspect.label.toLowerCase() === aspect.label.toLowerCase()) {
-				unique = false;
-				break;
-			}
-		}
-		if (unique) {
-			this.tooltipConfig.aspects.push({
-				icon: icon,
-				aspect: aspect
-			});
-		}
 	}
 
 	public removeAspect(aspectLabel: string): void {
@@ -121,70 +100,41 @@ export class CharacterTooltipComponent {
 	}
 
 	public aspectValue(aspect: Aspect): string {
-		if (this.editable) {
-			return this.characterService.getAspectValue(aspect.label, this._playerId);
-		} else {
-			let value = this.player.characterData.values[aspect.label];
-			if (this.focusedAspect !== aspect) {
-				if (aspect.aspectType === AspectType.NUMBER && this.modifiers.has(aspect.label)) {
-					return String(Number(value) + Number(this.modifiers.get(aspect.label)));
-				}
+		let value = this.player.characterData.values[aspect.label];
+		if (this.focusedAspect !== aspect) {
+			if (aspect.aspectType === AspectType.NUMBER && this.modifiers.has(aspect.label)) {
+				return String(Number(value) + Number(this.modifiers.get(aspect.label)));
 			}
-
-			return value;
 		}
+
+		return value;
 	}
 
 	public changeAspectValue(aspectLabel: string, value: any): void {
-		if (this.editable) {
-			this.characterService.setAspectValue(aspectLabel, value);
-		} else {
-			this.player.characterData.values[aspectLabel] = value;
-			this.player.emitChange();
-		}
+		this.player.characterData.values[aspectLabel] = value;
+		this.player.emitChange();
 	}
 
 	public changeCurrentAspectValue(aspectLabel: string, value: number): void {
-		if (this.editable) {
-			const currentMaxValue = this.characterService.getAspectValue(aspectLabel, this.player.id);
-			currentMaxValue.current = value;
-		} else {
-			this.player.characterData.values[aspectLabel].current = value;
-			this.player.emitChange();
-		}
+		this.player.characterData.values[aspectLabel].current = value;
+		this.player.emitChange();
 	}
 
 	public changeMaxAspectValue(aspectLabel: string, value: number): void {
-		if (this.editable) {
-			const currentMaxValue = this.characterService.getAspectValue(aspectLabel, this.player.id);
-			currentMaxValue.max = value;
-		} else {
-			this.player.characterData.values[aspectLabel].max = value;
-			this.player.emitChange();
-		}
+		this.player.characterData.values[aspectLabel].max = value;
+		this.player.emitChange();
 	}
 
 	public addCondition(aspectLabel: string, conditionName: string): void {
-		if (this.editable) {
-			const conditions: ConditionData[] = this.characterService.getAspectValue(aspectLabel, this.player.id);
-			for (let condition of this.ruleSetService.conditions) {
-				if (condition.name.toLowerCase() === conditionName.toLowerCase()) {
-					conditions.push(condition);
-					return;
+		for (let condition of this.ruleSetService.conditions) {
+			if (condition.name.toLowerCase() === conditionName.toLowerCase()) {
+				if (isUndefined(this.player.characterData.values[aspectLabel])) {
+					this.player.characterData.values[aspectLabel] = [];
 				}
-			}
-		}
-		else {
-			for (let condition of this.ruleSetService.conditions) {
-				if (condition.name.toLowerCase() === conditionName.toLowerCase()) {
-					if (isUndefined(this.player.characterData.values[aspectLabel])) {
-						this.player.characterData.values[aspectLabel] = [];
-					}
-					this.player.characterData.values[aspectLabel].push(condition);
-					this.addConditionControl.setValue('');
-					this.player.emitChange();
-					return;
-				}
+				this.player.characterData.values[aspectLabel].push(condition);
+				this.addConditionControl.setValue('');
+				this.player.emitChange();
+				return;
 			}
 		}
 	}
@@ -208,23 +158,11 @@ export class CharacterTooltipComponent {
 	}
 
 	public removeCondition(aspectLabel: string, conditionName: string): void {
-		if (this.editable) {
-			const conditions: ConditionData[] = this.characterService.getAspectValue(aspectLabel, this.player.id);
-			for (let i = 0; i < conditions.length; i++) {
-				let condition = conditions[i];
-				if (conditionName.toLowerCase() === condition.name.toLowerCase()) {
-					conditions.splice(i, 1);
-					return;
-				}
-			}
-		}
-		else {
-			const conditions: ConditionData[] = this.player.characterData.values[aspectLabel];
-			for (let i = 0; i < conditions.length; i++) {
-				if (conditionName.toLowerCase() === conditions[i].name.toLowerCase()) {
-					conditions.splice(i, 1);
-					this.player.emitChange();
-				}
+		const conditions: ConditionData[] = this.player.characterData.values[aspectLabel];
+		for (let i = 0; i < conditions.length; i++) {
+			if (conditionName.toLowerCase() === conditions[i].name.toLowerCase()) {
+				conditions.splice(i, 1);
+				this.player.emitChange();
 			}
 		}
 	}

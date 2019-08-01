@@ -25,5 +25,7 @@ export interface CharacterInterfaceService extends AspectServiceInterface, IsRea
 
 	updateFunctionAspects(): void;
 
+	updateFunctionAspectsObservable(): Observable<void>;
+
 	getRuleModifiers(aspect: Aspect): any;
 }
