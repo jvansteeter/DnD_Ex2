@@ -18,10 +18,17 @@
 					<ng-container *ngIf="aspectValue(aspect.aspect)">
 						<input class="current-max-input" style="margin-left: auto" type="number"
 						       [value]="aspectValue(aspect.aspect).current"
-						       (change)="changeCurrentAspectValue(aspect.aspect.label, $event.target.value)"/>
+						       (change)="changeCurrentAspectValue(aspect.aspect.label, $event.target.value)"
+						       (focus)="focusAspect(aspect.aspect)"
+						       (blur)="blurAspect()"
+									 [style.color]="aspectColor(aspect.aspect, 'current')"/>
 						<span>/</span>
-						<input class="current-max-input" type="number" [value]="aspectValue(aspect.aspect).max"
-						       (change)="changeMaxAspectValue(aspect.aspect.label, $event.target.value)"/>
+						<input class="current-max-input" type="number"
+						       [value]="aspectValue(aspect.aspect).max"
+						       (change)="changeMaxAspectValue(aspect.aspect.label, $event.target.value)"
+						       (focus)="focusAspect(aspect.aspect)"
+						       (blur)="blurAspect()"
+									 [style.color]="aspectColor(aspect.aspect, 'max')"/>
 					</ng-container>
 				</span>
 				<span class="aspect-unknown" *ngIf="!hasRights()">

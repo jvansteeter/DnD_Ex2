@@ -90,20 +90,17 @@ export class CharacterTooltipComponent {
 		return false;
 	}
 
-	public removeAspect(aspectLabel: string): void {
-		for (let i = 0; i < this.tooltipConfig.aspects.length; i++) {
-			if (this.tooltipConfig.aspects[i].aspect.label === aspectLabel) {
-				this.tooltipConfig.aspects.splice(i, 1);
-				return;
-			}
-		}
-	}
-
-	public aspectValue(aspect: Aspect): string {
+	public aspectValue(aspect: Aspect): any {
 		let value = this.player.characterData.values[aspect.label];
-		if (this.focusedAspect !== aspect) {
-			if (aspect.aspectType === AspectType.NUMBER && this.modifiers.has(aspect.label)) {
-				return String(Number(value) + Number(this.modifiers.get(aspect.label)));
+		if (this.focusedAspect !== aspect && this.modifiers.has(aspect.label)) {
+			switch (aspect.aspectType) {
+				case AspectType.NUMBER:
+					return String(Number(value) + Number(this.modifiers.get(aspect.label)));
+				case AspectType.CURRENT_MAX:
+					const mods = this.modifiers.get(aspect.label);
+					const currentTotal: number = Number(value.current) + Number(mods.current);
+					const maxTotal: number = Number(value.max) + Number(mods.max);
+					return {current: currentTotal, max: maxTotal};
 			}
 		}
 
@@ -179,18 +176,6 @@ export class CharacterTooltipComponent {
 		this.hoveredIndex = undefined;
 	}
 
-	public moveUp(index: number): void {
-		let aspect = this.tooltipConfig.aspects[index];
-		this.tooltipConfig.aspects.splice(index, 1);
-		this.tooltipConfig.aspects.splice(index - 1, 0, aspect);
-	}
-
-	public moveDown(index: number): void {
-		let aspect = this.tooltipConfig.aspects[index];
-		this.tooltipConfig.aspects.splice(index, 1);
-		this.tooltipConfig.aspects.splice(index + 1, 0, aspect);
-	}
-
 	public beginEditCurrentMax(index: number, add: boolean): void {
 		this.editingIndex = index;
 		this.currentMaxAdd = add;
@@ -263,9 +248,20 @@ export class CharacterTooltipComponent {
 		this.focusedAspect = undefined;
 	}
 
-	public aspectColor(aspect: Aspect): string {
+	public aspectColor(aspect: Aspect, aspectItem?: string): string {
 		if (this.focusedAspect !== aspect && this.modifiers.has(aspect.label)) {
-			return 'blue';
+			if (aspect.aspectType === AspectType.CURRENT_MAX) {
+				const mod = this.modifiers.get(aspect.label);
+				if (aspectItem.toLowerCase() === 'current' && mod.current !== 0) {
+					return 'blue';
+				}
+				if (aspectItem.toLowerCase() === 'max' && mod.max !== 0) {
+					return 'blue';
+				}
+			}
+			else if (aspect.aspectType === AspectType.NUMBER) {
+				return 'blue';
+			}
 		}
 
 		return 'black';
@@ -299,6 +295,18 @@ export class CharacterTooltipComponent {
 				}
 				if (total !== 0) {
 					this.modifiers.set(aspect.aspect.label, total);
+				}
+			}
+			if (aspect.aspect.aspectType === AspectType.CURRENT_MAX) {
+				let ruleModifiers = this.ruleService.getRuleModifiers(aspect.aspect, this.player.characterData.characterSheet.rules, this.player.id);
+				let currentTotal: number = 0;
+				let maxTotal: number = 0;
+				for (const mod of ruleModifiers.values()) {
+					currentTotal += Number(mod.current);
+					maxTotal += Number(mod.max);
+				}
+				if (currentTotal !== 0 || maxTotal !== 0) {
+					this.modifiers.set(aspect.aspect.label, {current: currentTotal, max: maxTotal});
 				}
 			}
 		}

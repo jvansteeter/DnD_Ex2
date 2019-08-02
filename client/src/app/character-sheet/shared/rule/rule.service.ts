@@ -32,7 +32,10 @@ export class RuleService {
 		switch (aspect.aspectType) {
 			case AspectType.NUMBER:
 				return this.getNumericModifiers(aspect.label, rules, playerId);
+			case AspectType.CURRENT_MAX:
+				return this.getCurrentMaxModifiers(aspect.label, rules, playerId);
 			default:
+				console.error('rule modifiers for aspect type', aspect.aspectType, 'have not yet been programmed');
 				return new Map<string, any>();
 		}
 	}
@@ -54,6 +57,36 @@ export class RuleService {
 				}
 				if (ruleTotal !== 0) {
 					resultMap.set(rule.name, ruleTotal);
+				}
+			}
+		}
+
+		return resultMap;
+	}
+
+	private getCurrentMaxModifiers(aspectLabel: string, rules: RuleData[], playerId?: string): Map<string, any> {
+		const resultMap = new Map<string, {current: number, max: number}>();
+		for (const rule of rules) {
+			if (this.evaluationRuleCondition(rule.condition, playerId)) {
+				let currentTotal: number = 0;
+				let maxTotal: number = 0;
+				for (const effect of rule.effects) {
+					if (effect.aspectLabel === aspectLabel) {
+						let currentEffect: number;
+						let maxEffect: number;
+						if (effect.aspectItem.toLowerCase() === 'current') {
+							currentEffect = new RuleFunction(effect.modFunction, this.aspectService, playerId).execute();
+							currentTotal += currentEffect;
+						}
+						if (effect.aspectItem.toLowerCase() === 'max') {
+							maxEffect = new RuleFunction(effect.modFunction, this.aspectService, playerId).execute();
+							maxTotal += maxEffect;
+						}
+						effect.result = {current: currentEffect, max: maxEffect};
+					}
+				}
+				if (currentTotal !== 0 || maxTotal !== 0) {
+					resultMap.set(rule.name, {current: currentTotal, max: maxTotal});
 				}
 			}
 		}

@@ -12,7 +12,7 @@ export class NewConditionDialogComponent {
 		name: '',
 		description: '',
 		icon: '',
-		color: '',
+		color: 'black',
 	};
 	public iconOptions: string[];
 
@@ -98,7 +98,7 @@ export class NewConditionDialogComponent {
 	}
 
 	public submit(): void {
-		if (this.condition.name !== '' && this.condition.description !== '' && this.condition.icon !== '' && this.condition.color !== '') {
+		if (this.condition.name !== '' && this.condition.icon !== '' && this.condition.color !== '') {
 			this.matDialogRef.close(this.condition);
 		}
 	}
