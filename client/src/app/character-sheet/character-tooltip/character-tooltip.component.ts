@@ -297,7 +297,9 @@ export class CharacterTooltipComponent {
 				for (let mod of ruleModifiers.values()) {
 					total += Number(mod);
 				}
-				this.modifiers.set(aspect.aspect.label, total);
+				if (total !== 0) {
+					this.modifiers.set(aspect.aspect.label, total);
+				}
 			}
 		}
 	}

@@ -52,7 +52,9 @@ export class RuleService {
 						ruleTotal += Number(effect.result);
 					}
 				}
-				resultMap.set(rule.name, ruleTotal);
+				if (ruleTotal !== 0) {
+					resultMap.set(rule.name, ruleTotal);
+				}
 			}
 		}
 
