@@ -61,6 +61,11 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 		if (isUndefined(playerData.characterData.values)) {
 			playerData.characterData.values = {};
 		}
+		else {
+			for (let item in playerData.characterData.values) {
+				playerData.characterData.values[item.trim().toLowerCase()] = playerData.characterData.values[item];
+			}
+		}
 		if (!isUndefined(playerData.characterData.values[PredefinedAspects.NAME])) {
 			this._name = playerData.characterData.values[PredefinedAspects.NAME];
 		}

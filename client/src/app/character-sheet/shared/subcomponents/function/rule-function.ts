@@ -16,12 +16,12 @@ export class RuleFunction {
 			// replace aspects with their values
 			if (executable.indexOf('${') > -1) {
 				executable = executable.replace(/\${([\w\s]+)}/g, (match, offset: string) => {
-					let value: any = JSON.stringify(this.aspectService.getAspectValue(offset, this.playerId));
+					let value: any = this.aspectService.getAspectValue(offset, this.playerId);
 					return value;
 				});
 			}
 
-			console.log(executable)
+			console.log(executable);
 			let result = new Function(executable)();
 			return result;
 		}

@@ -108,17 +108,20 @@ export class CharacterTooltipComponent {
 	}
 
 	public changeAspectValue(aspectLabel: string, value: any): void {
-		this.player.characterData.values[aspectLabel] = value;
+		this.player.characterData.values[aspectLabel.trim().toLowerCase()] = value;
+		this.setRuleModifiers();
 		this.player.emitChange();
 	}
 
 	public changeCurrentAspectValue(aspectLabel: string, value: number): void {
 		this.player.characterData.values[aspectLabel].current = value;
+		this.setRuleModifiers();
 		this.player.emitChange();
 	}
 
 	public changeMaxAspectValue(aspectLabel: string, value: number): void {
 		this.player.characterData.values[aspectLabel].max = value;
+		this.setRuleModifiers();
 		this.player.emitChange();
 	}
 
@@ -285,8 +288,12 @@ export class CharacterTooltipComponent {
 
 	set tooltipConfig(config: CharacterSheetTooltipData) {
 		this._tooltipConfig = config;
+		this.setRuleModifiers();
+	}
+
+	private setRuleModifiers(): void {
 		this.modifiers = new Map<string, any>();
-		for (let aspect of this.tooltipConfig.aspects) {
+		for (let aspect of this._tooltipConfig.aspects) {
 			if (aspect.aspect.aspectType === AspectType.NUMBER) {
 				let ruleModifiers = this.ruleService.getRuleModifiers(aspect.aspect, this.player.characterData.characterSheet.rules, this.player.id);
 				let total = 0;

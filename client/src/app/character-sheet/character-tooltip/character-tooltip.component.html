@@ -85,7 +85,7 @@
 			</ng-container>
 			<!--Check Box-->
 			<ng-container *ngSwitchCase="aspectType.BOOLEAN">
-				<mat-checkbox *ngIf="hasRights()" [checked]="aspectValue(aspect.aspect) === 'true'" (change)="changeAspectValue(aspect.aspect.label, $event.checked ? 'true' : '')" class="aspect-checkbox"></mat-checkbox>
+				<mat-checkbox *ngIf="hasRights()" [checked]="aspectValue(aspect.aspect)" (change)="changeAspectValue(aspect.aspect.label, $event.checked ? 'true' : '')" class="aspect-checkbox"></mat-checkbox>
 				<span *ngIf="!hasRights()" class="aspect-unknown">???</span>
 			</ng-container>
 			<!--Function-->
