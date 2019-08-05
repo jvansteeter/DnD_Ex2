@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CharacterInterfaceService } from '../shared/character-interface.service';
-import { Aspect, AspectType } from '../shared/aspect';
+import { Aspect } from '../shared/aspect';
 import { CharacterSheetData } from '../../../../../shared/types/rule-set/character-sheet.data';
 import { CharacterData } from '../../../../../shared/types/character.data';
 import { AspectData } from '../../../../../shared/types/rule-set/aspect.data';
@@ -14,7 +14,7 @@ import { AlertService } from '../../alert/alert.service';
 import { isDefined } from '@angular/compiler/src/util';
 import { TokenData } from '../../../../../shared/types/token.data';
 import { AbilityData } from "../../../../../shared/types/ability.data";
-import { Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { RuleService } from '../shared/rule/rule.service';
 import { RuleData } from '../../../../../shared/types/rule.data';
 import { AspectServiceInterface } from '../../data-services/aspect.service.interface';
@@ -29,7 +29,7 @@ export class CharacterSheetService extends IsReadyService implements CharacterIn
 
 	private characterData: CharacterData;
 	private aspectComponents: Map<string, CharacterAspectComponent>;
-	private modifiersChangeSubject: Subject<void> = new Subject();
+	private modifiersChangeSubject: Subject<void> = new BehaviorSubject(null);
 	private updateFunctionSubject: Subject<void> = new Subject();
 
 	constructor(private characterRepo: CharacterRepository,
@@ -102,6 +102,8 @@ export class CharacterSheetService extends IsReadyService implements CharacterIn
 	registerAspectComponent(aspectComponent: CharacterAspectComponent): void {
 		this.aspectComponents.set(aspectComponent.aspect.label.toLowerCase(), aspectComponent);
 		aspectComponent.child.setValue(this.characterData.values[aspectComponent.aspect.label]);
+		this.updateAppliedRules();
+		this.modifiersChangeSubject.next();
 	}
 
 	getAspectValue(aspectLabel: string, playerId?: string): any {
@@ -172,6 +174,7 @@ export class CharacterSheetService extends IsReadyService implements CharacterIn
 	}
 
 	get modifiersChangeObservable(): Observable<void> {
+		this.updateAppliedRules();
 		return this.modifiersChangeSubject.asObservable();
 	}
 

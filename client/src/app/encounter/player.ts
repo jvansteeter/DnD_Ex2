@@ -9,6 +9,7 @@ import { isDefined } from '@angular/compiler/src/util';
 import { TokenData } from '../../../../shared/types/token.data';
 import { AbilityData } from '../../../../shared/types/ability.data';
 import { AuraData } from '../../../../shared/types/aura.data';
+import { Observable, Subject } from 'rxjs';
 
 export class Player extends ConcurrentBoardObject implements PlayerData {
 	_id: string;
@@ -27,6 +28,7 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 	private _initiative: number;
 	private _teams: string[] = [];
 	private _auras: Map<string, AuraData> = new Map<string, AuraData>();
+	private playerDataChangeSubject: Subject<void> = new Subject();
 
 	public encounterId: string;
 	public characterData: CharacterData;
@@ -63,7 +65,7 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 		}
 		else {
 			for (let item in playerData.characterData.values) {
-				playerData.characterData.values[item.trim().toLowerCase()] = playerData.characterData.values[item];
+				playerData.characterData.values[item] = playerData.characterData.values[item];
 			}
 		}
 		if (!isUndefined(playerData.characterData.values[PredefinedAspects.NAME])) {
@@ -103,6 +105,7 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 		this._userId = playerData.userId;
 		this._teams = playerData.teams;
 		this._activeTokenIndex = playerData.activeTokenIndex;
+		this.playerDataChangeSubject.next();
 	}
 
 	public isMemberOfTeam(team: string): boolean {
@@ -348,5 +351,9 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 		}
 
 		return result;
+	}
+
+	get playerDataChangeObservable(): Observable<void> {
+		return this.playerDataChangeSubject.asObservable();
 	}
 }

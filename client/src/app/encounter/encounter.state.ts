@@ -51,12 +51,18 @@ export class EncounterState implements EncounterData {
 	}
 
 	public getAspectValue(aspectLabel: string, playerId: string): any {
-		aspectLabel = aspectLabel.trim().toLowerCase();
 		const player: Player = this.playerMap.get(playerId);
 		if (isNullOrUndefined(player)) {
 			return null;
 		}
 		let value = player.characterData.values[aspectLabel];
+		if (isUndefined(value)) {
+			for (const item in player.characterData.values) {
+				if (aspectLabel.trim().toLowerCase() === item.trim().toLowerCase()) {
+					value = player.characterData.values[item];
+				}
+			}
+		}
 		if (isNullOrUndefined(value) || value === '') {
 			return false;
 		}

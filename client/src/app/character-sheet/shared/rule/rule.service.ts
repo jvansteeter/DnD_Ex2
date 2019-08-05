@@ -82,7 +82,6 @@ export class RuleService {
 							maxEffect = new RuleFunction(effect.modFunction, this.aspectService, playerId).execute();
 							maxTotal += maxEffect;
 						}
-						effect.result = {current: currentEffect, max: maxEffect};
 					}
 				}
 				if (currentTotal !== 0 || maxTotal !== 0) {

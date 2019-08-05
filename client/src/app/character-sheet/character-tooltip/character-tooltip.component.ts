@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnDestroy } from '@angular/core';
 import { CharacterSheetRepository } from '../../repositories/character-sheet.repository';
 import { CharacterSheetTooltipData } from '../../../../../shared/types/rule-set/character-sheet-tooltip.data';
 import { CharacterMakerService } from '../maker/character-maker.service';
@@ -8,7 +8,7 @@ import { RightsService } from '../../data-services/rights.service';
 import { ConditionData } from '../../../../../shared/types/rule-set/condition.data';
 import { RuleSetService } from '../../data-services/ruleSet.service';
 import { FormControl } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { first, map, startWith } from 'rxjs/operators';
 import { isUndefined } from "util";
 import { RuleModuleAspects } from '../../../../../shared/predefined-aspects.enum';
@@ -26,7 +26,7 @@ import { RuleService } from '../shared/rule/rule.service';
 	templateUrl: 'character-tooltip.component.html',
 	styleUrls: ['character-tooltip.component.scss']
 })
-export class CharacterTooltipComponent {
+export class CharacterTooltipComponent implements OnDestroy {
 	@Input()
 	characterSheetId: string;
 
@@ -45,6 +45,7 @@ export class CharacterTooltipComponent {
 	private _playerId: string;
 	private focusedAspect: Aspect;
 	private modifiers: Map<string, any>;
+	private playerDataChangeSubscription: Subscription;
 
 	constructor(private characterSheetRepo: CharacterSheetRepository,
 	            private characterService: CharacterMakerService,
@@ -61,6 +62,12 @@ export class CharacterTooltipComponent {
 				map((value: string) => {
 					return this.filterConditions(value);
 				}));
+	}
+
+	public ngOnDestroy(): void {
+		if (this.playerDataChangeSubscription) {
+			this.playerDataChangeSubscription.unsubscribe();
+		}
 	}
 
 	private filterConditions(value: string): ConditionData[] {
@@ -108,7 +115,7 @@ export class CharacterTooltipComponent {
 	}
 
 	public changeAspectValue(aspectLabel: string, value: any): void {
-		this.player.characterData.values[aspectLabel.trim().toLowerCase()] = value;
+		this.player.characterData.values[aspectLabel] = value;
 		this.setRuleModifiers();
 		this.player.emitChange();
 	}
@@ -276,6 +283,9 @@ export class CharacterTooltipComponent {
 		this.activeTokenIndex = this.player.activeTokenIndex;
 		this.activeTokenWidth = this.player.tokens[this.activeTokenIndex].widthInCells;
 		this.activeTokenHeight = this.player.tokens[this.activeTokenIndex].heightInCells;
+		this.playerDataChangeSubscription = this.player.playerDataChangeObservable.subscribe(() => {
+			this.setRuleModifiers();
+		});
 	}
 
 	get playerId(): string {
