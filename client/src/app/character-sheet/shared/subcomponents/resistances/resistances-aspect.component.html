@@ -1,0 +1,35 @@
+<span [style.font-size.px]="aspect.fontSize">
+	<span>Resistances</span>
+	<button mat-icon-button color="primary" matTooltip="Add Condition" [matMenuTriggerFor]="addResistanceMenu">
+		<mat-icon>add</mat-icon>
+	</button>
+	<mat-menu #addResistanceMenu>
+		<div (click)="stopClickPropagate($event)">
+			<mat-form-field class="add-resistance">
+				<input matInput placeholder="Add Resistance" [matAutocomplete]="auto" [formControl]="autoCompleteControl"/>
+				<mat-autocomplete #auto="matAutocomplete" (optionSelected)="addResistance($event.option.value)">
+					<mat-option *ngFor="let damageType of filteredDamageTypes | async" [value]="damageType">
+						<mat-icon [style.color]="damageType.color">{{damageType.icon}}</mat-icon>
+						<span>{{damageType.name}}</span>
+					</mat-option>
+				</mat-autocomplete>
+			</mat-form-field>
+		</div>
+	</mat-menu>
+</span>
+<div class="resistances-container">
+	<div *ngFor="let resistance of resistances; let i = index;" class="resistance">
+		<mat-icon [style.color]="resistance.damageType.color">{{resistance.damageType.icon}}</mat-icon>
+		<span>{{resistance.damageType.name}}</span>
+		<button mat-icon-button (click)="removeResistance(i)" class="remove-resistance">
+			<mat-icon>close</mat-icon>
+		</button>
+	</div>
+</div>
+<mat-menu #options>
+	<div class="changeFontSize" (click)="stopClickPropagate($event)">
+		<mat-form-field>
+			<input matInput type="number" placeholder="Label Font Size" [(ngModel)]="aspect.fontSize">
+		</mat-form-field>
+	</div>
+</mat-menu>

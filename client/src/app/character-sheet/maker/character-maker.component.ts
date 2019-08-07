@@ -6,7 +6,6 @@ import { ActivatedRoute } from '@angular/router';
 import { CharacterInterfaceFactory } from '../shared/character-interface.factory';
 import { CharacterSheetRepository } from '../../repositories/character-sheet.repository';
 import { Aspect, AspectType } from '../shared/aspect';
-import { CharacterTooltipComponent } from '../character-tooltip/character-tooltip.component';
 import { DashboardCard } from '../../cdk/dashboard-card/dashboard-card';
 import { AddTooltipAspectComponent } from "./dialog/add-tooltip-aspect.component";
 import { CharacterAspectComponent } from '../shared/character-aspect.component';
@@ -15,6 +14,7 @@ import { AbilityData } from '../../../../../shared/types/ability.data';
 import { RulesConfigService } from '../../data-services/rules-config.service';
 import { RuleData } from '../../../../../shared/types/rule.data';
 import { CharacterTooltipPreviewComponent } from '../character-tooltip/character-tooltip-preview.component';
+import { SubSink } from 'subsink';
 
 @Component({
 	selector: 'character-maker',
@@ -25,7 +25,7 @@ export class CharacterMakerComponent implements OnInit, AfterViewInit, OnDestroy
 	private characterSheetId: string;
 	private defaultAbilities: AbilityData[] = [];
 	private rules: RuleData[] = [];
-
+	private subscriptions: SubSink = new SubSink();
 	@ViewChild('characterTooltip', {static: true})
 	private characterToolTipComponent: CharacterTooltipPreviewComponent;
 
@@ -48,6 +48,10 @@ export class CharacterMakerComponent implements OnInit, AfterViewInit, OnDestroy
 	            private characterInterfaceFactory: CharacterInterfaceFactory,
 	            public characterService: CharacterMakerService,
 	            public rulesConfigService: RulesConfigService) {
+
+	}
+
+	ngOnInit(): void {
 		this.characterInterfaceFactory.setCharacterInterface(this.characterService);
 		this.characterToolTipCard = {
 			label: 'Character Tooltip Preview',
@@ -58,10 +62,8 @@ export class CharacterMakerComponent implements OnInit, AfterViewInit, OnDestroy
 				}
 			]
 		};
-	}
 
-	ngOnInit(): void {
-		this.characterService.registerAspectComponentObservable.subscribe((aspectComponent: CharacterAspectComponent) => {
+		this.subscriptions.add(this.characterService.registerAspectComponentObservable.subscribe((aspectComponent: CharacterAspectComponent) => {
 			if (aspectComponent.aspect.isPredefined) {
 				for (let preDefinedAspect of this.preDefinedAspects) {
 					if (preDefinedAspect.label.toLowerCase() === aspectComponent.aspect.label.toLowerCase()) {
@@ -69,8 +71,8 @@ export class CharacterMakerComponent implements OnInit, AfterViewInit, OnDestroy
 					}
 				}
 			}
-		});
-		this.characterService.removeComponentObservable.subscribe(() => {
+		}));
+		this.subscriptions.add(this.characterService.removeComponentObservable.subscribe(() => {
 			let tooltipAspects = this.characterService.getTooltipAspects();
 			let notPredefined = false;
 			for (let aspect of tooltipAspects) {
@@ -79,24 +81,25 @@ export class CharacterMakerComponent implements OnInit, AfterViewInit, OnDestroy
 					break;
 				}
 			}
-		});
-		this.characterService.isReadyObservable.subscribe((isReady: boolean) => {
+		}));
+		this.subscriptions.add(this.characterService.isReadyObservable.subscribe((isReady: boolean) => {
 			if (isReady) {
 				this.characterToolTipComponent.tooltipConfig = this.characterService.characterTooltipConfig;
 				this.defaultAbilities = this.characterService.abilities;
 				this.rules = this.characterService.rules;
 			}
-		});
+		}));
 	}
 
 	ngAfterViewInit(): void {
-		this.activatedRoute.params.subscribe(params => {
+		this.subscriptions.add(this.activatedRoute.params.subscribe(params => {
 			this.characterSheetId = params['characterSheetId'];
 			this.characterService.setCharacterSheetId(this.characterSheetId);
-		});
+		}));
 	}
 
 	public ngOnDestroy(): void {
+		this.subscriptions.unsubscribe();
 		this.characterService.unInit();
 	}
 

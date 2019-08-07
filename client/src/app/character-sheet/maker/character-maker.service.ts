@@ -8,7 +8,7 @@ import { CharacterInterfaceService } from '../shared/character-interface.service
 import { CharacterSheetRepository } from '../../repositories/character-sheet.repository';
 import { isNullOrUndefined, isUndefined } from 'util';
 import { AspectData } from '../../../../../shared/types/rule-set/aspect.data';
-import { Observable, Subject, Subscription } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { AlertService } from '../../alert/alert.service';
 import { CharacterSheetData } from '../../../../../shared/types/rule-set/character-sheet.data';
 import { CharacterSheetTooltipData } from '../../../../../shared/types/rule-set/character-sheet-tooltip.data';
@@ -115,7 +115,7 @@ export class CharacterMakerService extends IsReadyService implements CharacterIn
 			itemResizeCallback: this.resizeItem,
 		};
 
-		const isReadySub: Subscription = this.characterSheetRepo.getCharacterSheet(this.characterSheetId).pipe(
+		this.characterSheetRepo.getCharacterSheet(this.characterSheetId).pipe(
 				mergeMap((sheet: CharacterSheetData) => {
 					this.characterSheet = sheet;
 					if (isDefined(this.characterSheet.rules)) {
@@ -130,7 +130,6 @@ export class CharacterMakerService extends IsReadyService implements CharacterIn
 				this.rulesConfigService.setRuleSetService(this.ruleSetService);
 				this.rulesConfigService.setRuleSetRuleMode();
 				this.ruleService.setAspectService(this);
-				isReadySub.unsubscribe();
 				this.initRuleModuleAspects();
 				this.setReady(true);
 			}
@@ -460,6 +459,19 @@ export class CharacterMakerService extends IsReadyService implements CharacterIn
 				this.aspectMap.delete(conditionsAspect.config);
 				this.removeTooltipAspect(conditionsAspect.label);
 			}
+		}
+
+		// Resistances
+		let resistancesAspect: Aspect = this.getAspectFromMapByLabel(RuleModuleAspects.RESISTANCES);
+		if (this.rulesConfigService.hasDamageTypes) {
+			if (isUndefined(resistancesAspect)) {
+				resistancesAspect = new Aspect(RuleModuleAspects.RESISTANCES, AspectType.RESISTANCES, false, true);
+				aspectsToInit.push(resistancesAspect);
+				this.addTooltipAspect('format_line_spacing', resistancesAspect);
+			}
+		}
+		else {
+
 		}
 
 		this.initAspects(aspectsToInit);

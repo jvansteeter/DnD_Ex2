@@ -13,6 +13,7 @@ export enum AspectType {
 	CATEGORICAL = 'CATEGORICAL',
 	FUNCTION = 'FUNCTION',
 	CONDITIONS = 'CONDITIONS',
+	RESISTANCES = 'RESISTANCES',
 }
 
 export class Aspect implements AspectData {

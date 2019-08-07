@@ -58,6 +58,7 @@ import { CharacterRuleDialogComponent } from './shared/rule/character-rule-dialo
 import { RulesComponent } from './shared/rule/rules.component';
 import { RuleService } from './shared/rule/rule.service';
 import { CharacterTooltipPreviewComponent } from './character-tooltip/character-tooltip-preview.component';
+import { ResistancesAspectComponent } from './shared/subcomponents/resistances/resistances-aspect.component';
 
 @NgModule({
 	imports: [
@@ -114,6 +115,7 @@ import { CharacterTooltipPreviewComponent } from './character-tooltip/character-
 		ConditionsAspectComponent,
 		CharacterRuleDialogComponent,
 		RulesComponent,
+		ResistancesAspectComponent,
 	],
 	providers: [
 		CharacterSheetRepository,

@@ -74,4 +74,10 @@ export class RulesConfigService {
 			return this.ruleSetService.modulesConfig.characterAbilities;
 		}
 	}
+
+	get hasDamageTypes(): boolean {
+		if (this.ruleMode === RulesMode.RULE_SET) {
+			return this.ruleSetService.modulesConfig.damageTypes;
+		}
+	}
 }

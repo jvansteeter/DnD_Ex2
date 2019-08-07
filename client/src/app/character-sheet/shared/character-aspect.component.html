@@ -20,6 +20,8 @@
 		<characterMaker-categoryComponent *ngSwitchCase="aspectType.CATEGORICAL" [aspect]="aspect" #child></characterMaker-categoryComponent>
 		<characterMaker-functionComponent *ngSwitchCase="aspectType.FUNCTION" [aspect]="aspect" #child></characterMaker-functionComponent>
 		<characterMaker-currentMax *ngSwitchCase="aspectType.CURRENT_MAX" [aspect]="aspect" #child></characterMaker-currentMax>
-		<aspect-conditions *ngSwitchCase="aspectType.CONDITIONS" [aspect]="aspectType" #child></aspect-conditions>
+		<aspect-conditions *ngSwitchCase="aspectType.CONDITIONS" [aspect]="aspect" #child></aspect-conditions>
+		<resistances-aspect *ngSwitchCase="aspectType.RESISTANCES" [aspect]="aspect" #child></resistances-aspect>
+		<span *ngSwitchDefault [style.color]="'red'">Aspect type not implemented</span>
 	</ng-container>
 </mat-card>
