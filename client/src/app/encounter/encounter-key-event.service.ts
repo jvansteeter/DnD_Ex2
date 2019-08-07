@@ -8,6 +8,8 @@ import { EncounterService } from "./encounter.service";
 import { TeamSettingsComponent } from "../board/dialogs/team-settings/team-settings.component";
 import { RightsService } from "../data-services/rights.service";
 import { first } from "rxjs/operators";
+import { SendGlobalAnnouncementDialogComponent } from './announcement/send-global-announcement-dialog.component';
+import { isDefined } from '@angular/compiler/src/util';
 
 @Injectable()
 export class EncounterKeyEventService {
@@ -57,6 +59,9 @@ export class EncounterKeyEventService {
 				return;
 			case 'KeyI':
 				this.incrementRound();
+				return;
+			case 'Enter':
+				this.openSendGlobalAnnouncementDialog();
 				return;
 		}
 	}
@@ -142,5 +147,18 @@ export class EncounterKeyEventService {
 			return;
 		}
 		this.encounterService.incrementRound();
+	}
+
+	private openSendGlobalAnnouncementDialog(): void {
+		if (!this.rightsService.isEncounterGM()) {
+			return;
+		}
+		this.stopListeningToKeyEvents();
+		this.dialog.open(SendGlobalAnnouncementDialogComponent).afterClosed().subscribe((announcement: string) => {
+			this.startListeningToKeyEvents();
+			if (isDefined(announcement) && announcement.trim() !== '') {
+				this.encounterService.broadcastGlobalAnnouncement(announcement);
+			}
+		});
 	}
 }

@@ -229,6 +229,10 @@ export class EncounterConcurrencyService extends IsReadyService {
 				this.encounterService.round = Number(message.body.data);
 				break;
 			}
+			case EncounterCommandType.GLOBAL_ANNOUNCEMENT: {
+				this.encounterService.showGlobalAnnouncement(String(message.body.data));
+				break;
+			}
 			default: {
 				console.error('Encounter Command Type not recognized');
 				console.log(message)

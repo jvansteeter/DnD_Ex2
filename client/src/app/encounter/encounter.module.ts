@@ -6,8 +6,10 @@ import { FormsModule } from "@angular/forms";
 import { EncounterRepository } from "../repositories/encounter.repository";
 import { BoardModule } from '../board/board.module';
 import { EncounterConcurrencyService } from './encounter-concurrency.service';
-import { MatButtonModule, MatIconModule } from '@angular/material';
+import { MatButtonModule, MatFormFieldModule, MatIconModule, MatInputModule } from '@angular/material';
 import { EncounterKeyEventService } from "./encounter-key-event.service";
+import { SendGlobalAnnouncementDialogComponent } from './announcement/send-global-announcement-dialog.component';
+import { ShowGlobalAnnouncementDialogComponent } from './announcement/show-global-announcement-dialog.component';
 
 @NgModule({
 	imports: [
@@ -16,9 +18,13 @@ import { EncounterKeyEventService } from "./encounter-key-event.service";
 		BoardModule,
 		MatButtonModule,
 		MatIconModule,
+		MatFormFieldModule,
+		MatInputModule,
 	],
 	declarations: [
-		EncounterComponent
+		EncounterComponent,
+		SendGlobalAnnouncementDialogComponent,
+		ShowGlobalAnnouncementDialogComponent,
 	],
 	providers: [
 		EncounterService,
@@ -26,7 +32,10 @@ import { EncounterKeyEventService } from "./encounter-key-event.service";
 		EncounterConcurrencyService,
 		EncounterKeyEventService,
 	],
-	entryComponents: [],
+	entryComponents: [
+		SendGlobalAnnouncementDialogComponent,
+		ShowGlobalAnnouncementDialogComponent,
+	],
 	exports: [
 		EncounterComponent
 	]

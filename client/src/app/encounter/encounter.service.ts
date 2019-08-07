@@ -17,6 +17,9 @@ import { isDefined } from '@angular/compiler/src/util';
 import { RulesConfigService } from '../data-services/rules-config.service';
 import { EncounterCommandType } from '../../../../shared/types/encounter/encounter-command.enum';
 import { AspectServiceInterface } from '../data-services/aspect.service.interface';
+import { MqService } from '../mq/mq.service';
+import { MatDialog } from '@angular/material';
+import { ShowGlobalAnnouncementDialogComponent } from './announcement/show-global-announcement-dialog.component';
 
 @Injectable()
 export class EncounterService extends IsReadyService implements AspectServiceInterface {
@@ -33,6 +36,8 @@ export class EncounterService extends IsReadyService implements AspectServiceInt
 	constructor(
 			protected encounterRepo: EncounterRepository,
 			private rulesConfigService: RulesConfigService,
+			private mqService: MqService,
+			private dialog: MatDialog,
 	) {
 		super();
 	}
@@ -119,6 +124,14 @@ export class EncounterService extends IsReadyService implements AspectServiceInt
 
 	public refresh(): void {
 		this.refreshEncounterSubject.next();
+	}
+
+	public broadcastGlobalAnnouncement(announcement: string): void {
+		this.mqService.publishEncounterCommand(this.encounterId, this.version + 1, EncounterCommandType.GLOBAL_ANNOUNCEMENT, announcement.trim());
+	}
+
+	public showGlobalAnnouncement(announcement: string): void {
+		this.dialog.open(ShowGlobalAnnouncementDialogComponent, {data: announcement});
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
