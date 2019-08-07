@@ -31,10 +31,10 @@ export class AbilityService {
 				return String(result);
 			});
 
-			console.log(executable)
 			const result = new Function(executable)();
 			return result;
 		} catch (error) {
+			console.log(executable);
 			console.error(error);
 			return 'NaN';
 		}

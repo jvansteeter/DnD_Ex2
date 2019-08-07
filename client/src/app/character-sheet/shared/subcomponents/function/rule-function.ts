@@ -21,7 +21,6 @@ export class RuleFunction {
 				});
 			}
 
-			// console.log(executable);
 			let result = new Function(executable)();
 			return result;
 		}

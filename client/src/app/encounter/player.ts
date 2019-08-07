@@ -387,7 +387,6 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 	}
 
 	get aspects(): {icon: string, aspect: Aspect}[] {
-		console.log(this._characterData)
 		return this._characterData.characterSheet.tooltipConfig.aspects;
 	}
 
