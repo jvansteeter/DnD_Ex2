@@ -340,6 +340,7 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 
 	set userId(value) {
 		this._userId = value;
+		this.emitChange();
 	}
 
 	get initiative(): number {

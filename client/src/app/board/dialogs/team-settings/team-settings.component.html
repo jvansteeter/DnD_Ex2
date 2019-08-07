@@ -40,6 +40,14 @@
 				</mat-cell>
 			</ng-container>
 		</ng-container>
+		<ng-container [matColumnDef]="'Owner'">
+			<mat-header-cell *matHeaderCellDef>Owner</mat-header-cell>
+			<mat-cell *matCellDef="let player">
+				<mat-select placeholder="Owner" [value]="player.userId" (selectionChange)="changePlayerOwner(player, $event.value)">
+					<mat-option *ngFor="let user of teamsService.users" [value]="user.userId">{{user.username}}</mat-option>
+				</mat-select>
+			</mat-cell>
+		</ng-container>
 		<mat-header-row *matHeaderRowDef="tokenTableCols"></mat-header-row>
 		<mat-row *matRowDef="let player; columns: tokenTableCols"></mat-row>
 	</mat-table>

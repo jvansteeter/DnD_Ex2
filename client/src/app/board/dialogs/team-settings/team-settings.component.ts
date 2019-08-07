@@ -18,7 +18,7 @@ export class TeamSettingsComponent implements OnInit {
 	            public encounterService: EncounterService) {}
 
 	public ngOnInit(): void {
-		this.tokenTableCols.push(...this.teamsService.teams);
+		this.tokenTableCols.push(...this.teamsService.teams, 'Owner');
 		this.userTableCols.push(...this.teamsService.teams);
 	}
 
@@ -55,5 +55,9 @@ export class TeamSettingsComponent implements OnInit {
 				return;
 			}
 		}
+	}
+
+	public changePlayerOwner(player: Player, userId: string): void {
+		player.userId = userId;
 	}
 }
