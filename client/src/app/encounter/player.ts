@@ -9,7 +9,11 @@ import { isDefined } from '@angular/compiler/src/util';
 import { TokenData } from '../../../../shared/types/token.data';
 import { AbilityData } from '../../../../shared/types/ability.data';
 import { AuraData } from '../../../../shared/types/aura.data';
-import { Observable, Subject } from 'rxjs';
+import { AspectServiceInterface } from '../data-services/aspect.service.interface';
+import { RuleService } from '../character-sheet/shared/rule/rule.service';
+import { Aspect, AspectType } from '../character-sheet/shared/aspect';
+import { RuleData } from '../../../../shared/types/rule.data';
+import { CharacterSheetTooltipData } from '../../../../shared/types/rule-set/character-sheet-tooltip.data';
 
 export class Player extends ConcurrentBoardObject implements PlayerData {
 	_id: string;
@@ -17,8 +21,6 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 	private _name: string;
 	private _hp: number;
 	private _maxHp: number;
-	private _ac: number;
-	private _speed: number;
 	private _location: XyPair;
 	private _isVisible: boolean;
 	private _tokens: TokenData[];
@@ -28,10 +30,10 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 	private _initiative: number;
 	private _teams: string[] = [];
 	private _auras: Map<string, AuraData> = new Map<string, AuraData>();
-	private playerDataChangeSubject: Subject<void> = new Subject();
+	private privatePlayerService: PrivatePlayerService;
+	private _characterData: CharacterData;
 
 	public encounterId: string;
-	public characterData: CharacterData;
 
 	constructor(playerData: PlayerData) {
 		super();
@@ -47,7 +49,7 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 			encounterId: this.encounterId,
 			userId: this._userId,
 			activeTokenIndex: this._activeTokenIndex,
-			characterData: this.characterData,
+			characterData: this._characterData,
 			initiative: this._initiative,
 			location: this._location,
 			isVisible: this._isVisible,
@@ -63,11 +65,6 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 		if (isUndefined(playerData.characterData.values)) {
 			playerData.characterData.values = {};
 		}
-		else {
-			for (let item in playerData.characterData.values) {
-				playerData.characterData.values[item] = playerData.characterData.values[item];
-			}
-		}
 		if (!isUndefined(playerData.characterData.values[PredefinedAspects.NAME])) {
 			this._name = playerData.characterData.values[PredefinedAspects.NAME];
 		}
@@ -82,9 +79,8 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 			this._maxHp = 1;
 			this._hp = 1;
 		}
-		this._speed = playerData.characterData.values[RuleModuleAspects.SPEED];
 		this.encounterId = playerData.encounterId;
-		this.characterData = playerData.characterData;
+		this._characterData = playerData.characterData;
 		this._initiative = playerData.initiative;
 		if (!isUndefined(playerData.location) && !isUndefined(playerData.location.x) && !isUndefined(playerData.location.y)) {
 			this._location = new XyPair(playerData.location.x, playerData.location.y);
@@ -105,7 +101,9 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 		this._userId = playerData.userId;
 		this._teams = playerData.teams;
 		this._activeTokenIndex = playerData.activeTokenIndex;
-		this.playerDataChangeSubject.next();
+
+		this.privatePlayerService = new PrivatePlayerService(this);
+		this.privatePlayerService.updateRuleModifiers();
 	}
 
 	public isMemberOfTeam(team: string): boolean {
@@ -132,7 +130,7 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 	}
 
 	public decrementConditionRounds(): void {
-		const conditions: ConditionData[] = this.characterData.values[RuleModuleAspects.CONDITIONS];
+		const conditions: ConditionData[] = this._characterData.values[RuleModuleAspects.CONDITIONS];
 		if (isDefined(conditions) && conditions.length > 0) {
 			let conditionChanged = false;
 			let conditionsToRemove = [];
@@ -176,6 +174,41 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 
 	public removeAuras(): void {
 		this._auras.clear();
+	}
+
+	public getAspectValue(aspectLabel: string, withModifiers: boolean = true): any {
+		let value: any;
+		if (withModifiers && this.privatePlayerService.effectiveValues.has(aspectLabel)) {
+			value = this.privatePlayerService.effectiveValues.get(aspectLabel);
+		}
+		else {
+			value = this._characterData.values[aspectLabel];
+		}
+
+		if (isNullOrUndefined(value)) {
+			for (const item in this._characterData.values) {
+				if (aspectLabel.trim().toLowerCase() === item.trim().toLowerCase()) {
+					value = this._characterData.values[item];
+				}
+			}
+		}
+
+
+		return value;
+	}
+
+	public setAspectValue(aspect: Aspect, value: any, aspectItem?: string): void {
+		if (aspect.aspectType === AspectType.BOOLEAN) {
+			value = value == 'true';
+		}
+		if (isDefined(aspectItem)) {
+			this._characterData.values[aspect.label][aspectItem] = value;
+		}
+		else {
+			this._characterData.values[aspect.label] = value;
+		}
+		this.privatePlayerService.updateRuleModifiers();
+		this.emitChange();
 	}
 
 	/*////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -222,22 +255,16 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 		this.emitChange();
 	}
 
-	get ac(): number {
-		return this._ac;
-	}
-
-	set ac(value: number) {
-		this._ac = value;
-		this.emitChange();
-	}
-
 	get speed(): number {
-		return this._speed;
+		return Number(this.getAspectValue(RuleModuleAspects.SPEED));
 	}
 
-	set speed(value: number) {
-		this._speed = value;
-		this.emitChange();
+	get vision(): number {
+		return Number(this.getAspectValue(RuleModuleAspects.VISION));
+	}
+
+	get perception(): number {
+		return Number(this.getAspectValue(RuleModuleAspects.PERCEPTION));
 	}
 
 	get location(): XyPair {
@@ -293,8 +320,9 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 	}
 
 	get isDead(): boolean {
-		if (!isNullOrUndefined(this.characterData.values['Health'])) {
-			if (this.characterData.values['Health'].current <= 0) {
+		const effectiveHealthObject: {current: number, max: number} = this.getAspectValue(PredefinedAspects.HEALTH);
+		if (!isNullOrUndefined(effectiveHealthObject)) {
+			if (effectiveHealthObject.current <= 0) {
 				return true;
 			}
 		}
@@ -333,15 +361,15 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 	}
 
 	get defaultAbilities(): AbilityData[] {
-		return this.characterData.characterSheet.abilities;
+		return this._characterData.characterSheet.abilities;
 	}
 
 	get abilities(): AbilityData[] {
-		return this.characterData.abilities;
+		return this._characterData.abilities;
 	}
 
 	set abilities(abilities: AbilityData[]) {
-		this.characterData.abilities = abilities;
+		this._characterData.abilities = abilities;
 	}
 
 	get auras(): AuraData[] {
@@ -353,7 +381,87 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 		return result;
 	}
 
-	get playerDataChangeObservable(): Observable<void> {
-		return this.playerDataChangeSubject.asObservable();
+	get rules(): RuleData[] {
+		return this._characterData.characterSheet.rules;
+	}
+
+	get aspects(): {icon: string, aspect: Aspect}[] {
+		console.log(this._characterData)
+		return this._characterData.characterSheet.tooltipConfig.aspects;
+	}
+
+	set characterData(value) {
+		// never call this, only here for interface reasons
+	}
+
+	get tooltipConfig(): CharacterSheetTooltipData {
+		return this._characterData.characterSheet.tooltipConfig
+	}
+
+	get modifiers(): Map<string, any> {
+		return this.privatePlayerService.modifiers;
+	}
+
+	get conditions(): ConditionData[] {
+		return this.getAspectValue(RuleModuleAspects.CONDITIONS);
+	}
+
+	get isHidden(): boolean {
+		return this.getAspectValue(RuleModuleAspects.HIDDEN);
+	}
+
+	get stealth(): number {
+		return Number(this.getAspectValue(RuleModuleAspects.STEALTH));
+	}
+}
+
+class PrivatePlayerService implements AspectServiceInterface {
+	private ruleService: RuleService;
+	public modifiers: Map<string, any>;
+	public effectiveValues: Map<string, any>;
+
+	constructor(private player: Player) {
+		this.ruleService = new RuleService();
+		this.ruleService.setAspectService(this);
+	}
+
+	public getAspectValue(aspectLabel: string, playerId?: string): void {
+		return this.player.getAspectValue(aspectLabel);
+	}
+
+	public updateRuleModifiers(): void {
+		this.modifiers = new Map<string, any>();
+		this.effectiveValues = new Map<string, any>();
+		for (let aspect of this.player.aspects) {
+			if (aspect.aspect.aspectType === AspectType.NUMBER) {
+				let ruleModifiers = this.ruleService.getRuleModifiers(aspect.aspect, this.player.rules, this.player.id);
+				let total = 0;
+				for (let mod of ruleModifiers.values()) {
+					total += Number(mod);
+				}
+				if (total !== 0) {
+					this.modifiers.set(aspect.aspect.label, total);
+					const aspectValue: number = this.player.getAspectValue(aspect.aspect.label, false);
+					const effectiveValue: number = Number(aspectValue) + Number(total);
+					this.effectiveValues.set(aspect.aspect.label, effectiveValue);
+				}
+			}
+			if (aspect.aspect.aspectType === AspectType.CURRENT_MAX) {
+				let ruleModifiers = this.ruleService.getRuleModifiers(aspect.aspect, this.player.rules, this.player.id);
+				let currentTotal: number = 0;
+				let maxTotal: number = 0;
+				for (const mod of ruleModifiers.values()) {
+					currentTotal += Number(mod.current);
+					maxTotal += Number(mod.max);
+				}
+				if (currentTotal !== 0 || maxTotal !== 0) {
+					this.modifiers.set(aspect.aspect.label, {current: currentTotal, max: maxTotal});
+					const aspectValue: {current: number, max: number} = this.player.getAspectValue(aspect.aspect.label, false);
+					const effectiveCurrent: number = Number(aspectValue.current) + Number(currentTotal);
+					const effectiveMax: number = Number(aspectValue.max) + Number(currentTotal);
+					this.effectiveValues.set(aspect.aspect.label, {current: effectiveCurrent, max: effectiveMax});
+				}
+			}
+		}
 	}
 }

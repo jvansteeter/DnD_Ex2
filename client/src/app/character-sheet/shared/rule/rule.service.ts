@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import { isUndefined } from 'util';
 import { RuleFunction } from '../subcomponents/function/rule-function';
 import { RuleData } from '../../../../../../shared/types/rule.data';
-import { Aspect, AspectType } from '../aspect';
+import { AspectType } from '../aspect';
 import { AspectServiceInterface } from '../../../data-services/aspect.service.interface';
+import { AspectData } from '../../../../../../shared/types/rule-set/aspect.data';
 
 @Injectable()
 export class RuleService {
@@ -28,7 +29,7 @@ export class RuleService {
 		return result;
 	}
 
-	public getRuleModifiers(aspect: Aspect, rules: RuleData[], playerId?: string): Map<string, any> {
+	public getRuleModifiers(aspect: AspectData, rules: RuleData[], playerId?: string): Map<string, any> {
 		switch (aspect.aspectType) {
 			case AspectType.NUMBER:
 				return this.getNumericModifiers(aspect.label, rules, playerId);
@@ -44,8 +45,8 @@ export class RuleService {
 		this.aspectService = service;
 	}
 
-	private getNumericModifiers(aspectLabel: string, rules: RuleData[], playerId?: string): Map<string, any> {
-		const resultMap = new Map<string, any>();
+	private getNumericModifiers(aspectLabel: string, rules: RuleData[], playerId?: string): Map<string, number> {
+		const resultMap = new Map<string, number>();
 		for (const rule of rules) {
 			if (this.evaluationRuleCondition(rule.condition, playerId)) {
 				let ruleTotal: number = 0;

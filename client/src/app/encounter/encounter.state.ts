@@ -55,14 +55,7 @@ export class EncounterState implements EncounterData {
 		if (isNullOrUndefined(player)) {
 			return null;
 		}
-		let value = player.characterData.values[aspectLabel];
-		if (isUndefined(value)) {
-			for (const item in player.characterData.values) {
-				if (aspectLabel.trim().toLowerCase() === item.trim().toLowerCase()) {
-					value = player.characterData.values[item];
-				}
-			}
-		}
+		let value = player.getAspectValue(aspectLabel);
 		if (isNullOrUndefined(value) || value === '') {
 			return false;
 		}

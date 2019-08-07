@@ -95,7 +95,7 @@ export class LightRendererComponent implements OnInit, OnDestroy, RendererCompon
 
     private shouldRenderPlayerLightSource(player: Player): boolean {
 	    if (this.rulesConfigService.hasHiddenAndSneaking) {
-		    const playerIsHidden = Boolean(player.characterData.values[RuleModuleAspects.HIDDEN]);
+		    const playerIsHidden = Boolean(player.getAspectValue(RuleModuleAspects.HIDDEN));
 		    const playerOnUsersTeam = this.teamsService.userSharesTeamWithPlayer(player);
 		    return (player.isVisible || this.rightsService.isMyPlayer(player)) && (!playerIsHidden || (playerIsHidden && playerOnUsersTeam));
 	    }

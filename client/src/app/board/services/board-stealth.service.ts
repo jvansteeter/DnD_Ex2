@@ -37,22 +37,22 @@ export class BoardStealthService extends IsReadyService {
 		}
 	}
 
-	public  userCanSeeHiddenPlayer(hiddenPlayer: Player): boolean {
-		const hidden: boolean = hiddenPlayer.characterData.values[RuleModuleAspects.HIDDEN] === 'true';
+	public userCanSeeHiddenPlayer(hiddenPlayer: Player): boolean {
+		const hidden: boolean = hiddenPlayer.isHidden;
 		if (!hidden) {
 			return true;
 		}
-		const stealthScore: number = Number(hiddenPlayer.characterData.values[RuleModuleAspects.STEALTH]);
+		const stealthScore: number = hiddenPlayer.stealth;
 		for (let teamPlayer of this.teamPlayers) {
 			if (this.lightService.playerVisibilityMode === PlayerVisibilityMode.TEAM || this.lightService.playerVisibilityMode === PlayerVisibilityMode.GLOBAL) {
-				const playerPerception: number = Number(teamPlayer.characterData.values[RuleModuleAspects.PERCEPTION]);
+				const playerPerception: number = teamPlayer.perception;
 				if (playerPerception >= stealthScore) {
 					return true;
 				}
 			}
 			else if (this.lightService.playerVisibilityMode === PlayerVisibilityMode.PLAYER) {
 				if (this.rightsService.isMyPlayer(teamPlayer)) {
-					const playerPerception: number = Number(teamPlayer.characterData.values[RuleModuleAspects.PERCEPTION]);
+					const playerPerception: number = teamPlayer.perception;
 					if (playerPerception >= stealthScore) {
 						return true;
 					}

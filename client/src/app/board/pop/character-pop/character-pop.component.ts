@@ -36,7 +36,7 @@ export class CharacterPopComponent {
 		this.pos_y = pos_y;
 		this.player = player;
 		this.tooltipComponent.playerId = player.id;
-		this.tooltipComponent.tooltipConfig = player.characterData.characterSheet.tooltipConfig;
+		this.tooltipComponent.tooltipConfig = player.tooltipConfig;
 
 		this.window = window;
 	}

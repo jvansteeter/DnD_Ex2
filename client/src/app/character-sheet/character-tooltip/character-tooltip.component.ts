@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CharacterSheetRepository } from '../../repositories/character-sheet.repository';
 import { CharacterSheetTooltipData } from '../../../../../shared/types/rule-set/character-sheet-tooltip.data';
 import { CharacterMakerService } from '../maker/character-maker.service';
@@ -8,7 +8,7 @@ import { RightsService } from '../../data-services/rights.service';
 import { ConditionData } from '../../../../../shared/types/rule-set/condition.data';
 import { RuleSetService } from '../../data-services/ruleSet.service';
 import { FormControl } from '@angular/forms';
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { first, map, startWith } from 'rxjs/operators';
 import { isUndefined } from "util";
 import { RuleModuleAspects } from '../../../../../shared/predefined-aspects.enum';
@@ -19,14 +19,13 @@ import { RulesConfigService } from '../../data-services/rules-config.service';
 import { Player } from "../../encounter/player";
 import { AbilityData } from '../../../../../shared/types/ability.data';
 import { EncounterKeyEventService } from '../../encounter/encounter-key-event.service';
-import { RuleService } from '../shared/rule/rule.service';
 
 @Component({
 	selector: 'character-tooltip',
 	templateUrl: 'character-tooltip.component.html',
 	styleUrls: ['character-tooltip.component.scss']
 })
-export class CharacterTooltipComponent implements OnDestroy {
+export class CharacterTooltipComponent {
 	@Input()
 	characterSheetId: string;
 
@@ -44,8 +43,6 @@ export class CharacterTooltipComponent implements OnDestroy {
 	private currentMaxAdd: boolean;
 	private _playerId: string;
 	private focusedAspect: Aspect;
-	private modifiers: Map<string, any>;
-	private playerDataChangeSubscription: Subscription;
 
 	constructor(private characterSheetRepo: CharacterSheetRepository,
 	            private characterService: CharacterMakerService,
@@ -55,19 +52,12 @@ export class CharacterTooltipComponent implements OnDestroy {
 	            private dialog: MatDialog,
 	            private rulesConfigService: RulesConfigService,
 	            private keyEventService: EncounterKeyEventService,
-	            private ruleService: RuleService,
 	) {
 		this.filteredConditions = this.addConditionControl.valueChanges.pipe(
 				startWith(''),
 				map((value: string) => {
 					return this.filterConditions(value);
 				}));
-	}
-
-	public ngOnDestroy(): void {
-		if (this.playerDataChangeSubscription) {
-			this.playerDataChangeSubscription.unsubscribe();
-		}
 	}
 
 	private filterConditions(value: string): ConditionData[] {
@@ -85,7 +75,7 @@ export class CharacterTooltipComponent implements OnDestroy {
 	}
 
 	private playerHasCondition(condition: ConditionData): boolean {
-		const conditions: ConditionData[] = this.player.characterData.values[RuleModuleAspects.CONDITIONS];
+		const conditions: ConditionData[] = this.player.getAspectValue(RuleModuleAspects.CONDITIONS);
 		if (isDefined(conditions)) {
 			for (let existingCondition of conditions) {
 				if (condition.name.toLowerCase() === existingCondition.name.toLowerCase()) {
@@ -98,47 +88,31 @@ export class CharacterTooltipComponent implements OnDestroy {
 	}
 
 	public aspectValue(aspect: Aspect): any {
-		let value = this.player.characterData.values[aspect.label];
-		if (this.focusedAspect !== aspect && this.modifiers.has(aspect.label)) {
-			switch (aspect.aspectType) {
-				case AspectType.NUMBER:
-					return String(Number(value) + Number(this.modifiers.get(aspect.label)));
-				case AspectType.CURRENT_MAX:
-					const mods = this.modifiers.get(aspect.label);
-					const currentTotal: number = Number(value.current) + Number(mods.current);
-					const maxTotal: number = Number(value.max) + Number(mods.max);
-					return {current: currentTotal, max: maxTotal};
-			}
+		if (this.focusedAspect === aspect) {
+			return this.player.getAspectValue(aspect.label, false);
 		}
-
-		return value;
+		return this.player.getAspectValue(aspect.label, true);
 	}
 
-	public changeAspectValue(aspectLabel: string, value: any): void {
-		this.player.characterData.values[aspectLabel] = value;
-		this.setRuleModifiers();
-		this.player.emitChange();
+	public changeAspectValue(aspect: Aspect, value: any): void {
+		this.player.setAspectValue(aspect, value);
 	}
 
-	public changeCurrentAspectValue(aspectLabel: string, value: number): void {
-		this.player.characterData.values[aspectLabel].current = value;
-		this.setRuleModifiers();
-		this.player.emitChange();
+	public changeCurrentAspectValue(aspect: Aspect, value: number): void {
+		this.player.setAspectValue(aspect, value, 'current');
 	}
 
-	public changeMaxAspectValue(aspectLabel: string, value: number): void {
-		this.player.characterData.values[aspectLabel].max = value;
-		this.setRuleModifiers();
-		this.player.emitChange();
+	public changeMaxAspectValue(aspect: Aspect, value: number): void {
+		this.player.setAspectValue(aspect, value, 'max');
 	}
 
-	public addCondition(aspectLabel: string, conditionName: string): void {
+	public addCondition(aspect: Aspect, conditionName: string): void {
 		for (let condition of this.ruleSetService.conditions) {
 			if (condition.name.toLowerCase() === conditionName.toLowerCase()) {
-				if (isUndefined(this.player.characterData.values[aspectLabel])) {
-					this.player.characterData.values[aspectLabel] = [];
+				if (isUndefined(this.player.getAspectValue(aspect.label))) {
+					this.player.setAspectValue(aspect, []);
 				}
-				this.player.characterData.values[aspectLabel].push(condition);
+				this.player.getAspectValue(aspect.label).push(condition);
 				this.addConditionControl.setValue('');
 				this.player.emitChange();
 				return;
@@ -150,14 +124,14 @@ export class CharacterTooltipComponent implements OnDestroy {
 		this.encounterService.getPlayerById(this._playerId).emitChange();
 	}
 
-	public openCreateConditionDialog(aspectLabel: string): void {
+	public openCreateConditionDialog(aspect: Aspect): void {
 		this.stopListeningToKeyEvents();
 		this.dialog.open(NewConditionDialogComponent).afterClosed().pipe(first()).subscribe((condition: ConditionData) => {
 			if (isDefined(condition)) {
-				if (isUndefined(this.player.characterData.values[aspectLabel])) {
-					this.player.characterData.values[aspectLabel] = [];
+				if (isUndefined(this.player.getAspectValue(aspect.label))) {
+					this.player.setAspectValue(aspect,[]);
 				}
-				this.player.characterData.values[aspectLabel].push(condition);
+				this.player.getAspectValue(aspect.label).push(condition);
 				this.player.emitChange();
 			}
 			this.startListeningToKeyEvents();
@@ -165,7 +139,7 @@ export class CharacterTooltipComponent implements OnDestroy {
 	}
 
 	public removeCondition(aspectLabel: string, conditionName: string): void {
-		const conditions: ConditionData[] = this.player.characterData.values[aspectLabel];
+		const conditions: ConditionData[] = this.player.getAspectValue(aspectLabel);
 		for (let i = 0; i < conditions.length; i++) {
 			if (conditionName.toLowerCase() === conditions[i].name.toLowerCase()) {
 				conditions.splice(i, 1);
@@ -195,15 +169,15 @@ export class CharacterTooltipComponent implements OnDestroy {
 		this.editingIndex = -1;
 	}
 
-	public editCurrentMax(aspectLabel: string, value: number): void {
-		let aspectValue: number = +this.player.characterData.values[aspectLabel].current;
+	public editCurrentMax(aspect: Aspect, value: number): void {
+		let aspectValue: number = +this.player.getAspectValue(aspect.label).current;
 
 		if (this.currentMaxAdd) {
 			aspectValue += value;
 		} else {
 			aspectValue -= value;
 		}
-		this.changeCurrentAspectValue(aspectLabel, aspectValue);
+		this.changeCurrentAspectValue(aspect, aspectValue);
 		this.editingIndex = -1;
 	}
 
@@ -259,9 +233,9 @@ export class CharacterTooltipComponent implements OnDestroy {
 	}
 
 	public aspectColor(aspect: Aspect, aspectItem?: string): string {
-		if (this.focusedAspect !== aspect && this.modifiers.has(aspect.label)) {
+		if (this.focusedAspect !== aspect && this.player.modifiers.has(aspect.label)) {
 			if (aspect.aspectType === AspectType.CURRENT_MAX) {
-				const mod = this.modifiers.get(aspect.label);
+				const mod = this.player.modifiers.get(aspect.label);
 				if (aspectItem.toLowerCase() === 'current' && mod.current !== 0) {
 					return 'blue';
 				}
@@ -283,9 +257,6 @@ export class CharacterTooltipComponent implements OnDestroy {
 		this.activeTokenIndex = this.player.activeTokenIndex;
 		this.activeTokenWidth = this.player.tokens[this.activeTokenIndex].widthInCells;
 		this.activeTokenHeight = this.player.tokens[this.activeTokenIndex].heightInCells;
-		this.playerDataChangeSubscription = this.player.playerDataChangeObservable.subscribe(() => {
-			this.setRuleModifiers();
-		});
 	}
 
 	get playerId(): string {
@@ -298,34 +269,5 @@ export class CharacterTooltipComponent implements OnDestroy {
 
 	set tooltipConfig(config: CharacterSheetTooltipData) {
 		this._tooltipConfig = config;
-		this.setRuleModifiers();
-	}
-
-	private setRuleModifiers(): void {
-		this.modifiers = new Map<string, any>();
-		for (let aspect of this._tooltipConfig.aspects) {
-			if (aspect.aspect.aspectType === AspectType.NUMBER) {
-				let ruleModifiers = this.ruleService.getRuleModifiers(aspect.aspect, this.player.characterData.characterSheet.rules, this.player.id);
-				let total = 0;
-				for (let mod of ruleModifiers.values()) {
-					total += Number(mod);
-				}
-				if (total !== 0) {
-					this.modifiers.set(aspect.aspect.label, total);
-				}
-			}
-			if (aspect.aspect.aspectType === AspectType.CURRENT_MAX) {
-				let ruleModifiers = this.ruleService.getRuleModifiers(aspect.aspect, this.player.characterData.characterSheet.rules, this.player.id);
-				let currentTotal: number = 0;
-				let maxTotal: number = 0;
-				for (const mod of ruleModifiers.values()) {
-					currentTotal += Number(mod.current);
-					maxTotal += Number(mod.max);
-				}
-				if (currentTotal !== 0 || maxTotal !== 0) {
-					this.modifiers.set(aspect.aspect.label, {current: currentTotal, max: maxTotal});
-				}
-			}
-		}
 	}
 }

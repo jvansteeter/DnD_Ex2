@@ -21,11 +21,12 @@ export class RuleFunction {
 				});
 			}
 
-			console.log(executable);
+			// console.log(executable);
 			let result = new Function(executable)();
 			return result;
 		}
 		catch (error) {
+			console.log(executable);
 			console.error(error);
 			return 'NaN';
 		}

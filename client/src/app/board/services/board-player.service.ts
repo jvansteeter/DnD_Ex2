@@ -99,7 +99,7 @@ export class BoardPlayerService extends IsReadyService {
     public updatePlayerLightSource(playerId: string) {
         console.log('\t\tboardPlayerService: updatePlayerLightSource()');
         const player = this.encounterService.getPlayerById(playerId);
-        let playerVision = player.characterData.values[RuleModuleAspects.VISION];
+        let playerVision = player.vision;
         if (isUndefined(playerVision)) {
             playerVision = 0;
         }
@@ -155,7 +155,7 @@ export class BoardPlayerService extends IsReadyService {
         const player = this.encounterService.getPlayerById(id);
         const playerPixelLocation = new XyPair(player.location.x * BoardStateService.cell_res + (BoardStateService.cell_res / 2), player.location.y * BoardStateService.cell_res + (BoardStateService.cell_res / 2));
 
-        let playerVision = player.characterData.values[RuleModuleAspects.VISION];
+        let playerVision = player.vision;
         if (isUndefined(playerVision)) {
             playerVision = 0;
         }
@@ -187,7 +187,7 @@ export class BoardPlayerService extends IsReadyService {
 			              this.encounterService.isLightEnabled &&
 			              this.encounterService.ambientLight !== LightValue.FULL) {
 		              const distance: number = BoardStateService.distanceCellToCell(target.location, player.location);
-		              const playerVision: number = Number(player.characterData.values[RuleModuleAspects.VISION]);
+		              const playerVision: number = player.vision;
 		              return distance <= playerVision;
 	              }
             	  else {

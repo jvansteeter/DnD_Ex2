@@ -13,19 +13,19 @@
 						<button mat-icon-button class="negative-difference tooltip-button" (click)="beginEditCurrentMax(i, false)"><mat-icon>remove</mat-icon></button>
 					</ng-container>
 					<ng-container *ngIf="editingIndex === i">
-						<input (keyup.enter)="editCurrentMax(aspect.aspect.label, +$event.target.value)" (blur)="stopEditCurrentMax()" class="current-max-edit" autofocus/>
+						<input (keyup.enter)="editCurrentMax(aspect.aspect, +$event.target.value)" (blur)="stopEditCurrentMax()" class="current-max-edit" autofocus/>
 					</ng-container>
 					<ng-container *ngIf="aspectValue(aspect.aspect)">
 						<input class="current-max-input" style="margin-left: auto" type="number"
 						       [value]="aspectValue(aspect.aspect).current"
-						       (change)="changeCurrentAspectValue(aspect.aspect.label, $event.target.value)"
+						       (change)="changeCurrentAspectValue(aspect.aspect, $event.target.value)"
 						       (focus)="focusAspect(aspect.aspect)"
 						       (blur)="blurAspect()"
 									 [style.color]="aspectColor(aspect.aspect, 'current')"/>
 						<span>/</span>
 						<input class="current-max-input" type="number"
 						       [value]="aspectValue(aspect.aspect).max"
-						       (change)="changeMaxAspectValue(aspect.aspect.label, $event.target.value)"
+						       (change)="changeMaxAspectValue(aspect.aspect, $event.target.value)"
 						       (focus)="focusAspect(aspect.aspect)"
 						       (blur)="blurAspect()"
 									 [style.color]="aspectColor(aspect.aspect, 'max')"/>
@@ -56,13 +56,13 @@
 						<mat-icon>add</mat-icon>
 					</button>
 					<mat-menu #addConditionMenu>
-						<button mat-icon-button color="primary" matTooltip="Create New Condition" class="create-condition-button" (click)="openCreateConditionDialog(aspect.aspect.label)">
+						<button mat-icon-button color="primary" matTooltip="Create New Condition" class="create-condition-button" (click)="openCreateConditionDialog(aspect.aspect)">
 							<mat-icon>add</mat-icon>
 						</button>
 						<div class="filter-conditions" (click)="stopClickPropagate($event)">
 							<mat-form-field>
 								<input matInput placeholder="Filter Conditions" [matAutocomplete]="conditionsAutocomplete" [formControl]="addConditionControl" (focus)="stopListeningToKeyEvents()" (blur)="startListeningToKeyEvents()"/>
-								<mat-autocomplete #conditionsAutocomplete (optionSelected)="addCondition(aspect.aspect.label, $event.option.value)">
+								<mat-autocomplete #conditionsAutocomplete (optionSelected)="addCondition(aspect.aspect, $event.option.value)">
 									<mat-option *ngFor="let condition of filteredConditions | async" [value]="condition.name" [matTooltip]="condition.description">
 										<mat-icon [style.color]="condition.color">{{condition.icon}}</mat-icon>
 										<span>{{condition.name}}</span>
@@ -76,16 +76,16 @@
 			<!--Number-->
 			<ng-container *ngSwitchCase="aspectType.NUMBER">
 				<input class="aspect-input" type="number" *ngIf="hasRights()"
-				       [value]="aspectValue(aspect.aspect) ? aspectValue(aspect.aspect) : ''"
+				       [value]="aspectValue(aspect.aspect)"
 				       (focus)="focusAspect(aspect.aspect)"
 				       (blur)="blurAspect()"
 				       [style.color]="aspectColor(aspect.aspect)"
-				       (change)="changeAspectValue(aspect.aspect.label, $event.target.value)"/>
+				       (change)="changeAspectValue(aspect.aspect, $event.target.value)"/>
 				<span *ngIf="!hasRights()" class="aspect-unknown">???</span>
 			</ng-container>
 			<!--Check Box-->
 			<ng-container *ngSwitchCase="aspectType.BOOLEAN">
-				<mat-checkbox *ngIf="hasRights()" [checked]="aspectValue(aspect.aspect)" (change)="changeAspectValue(aspect.aspect.label, $event.checked ? 'true' : '')" class="aspect-checkbox"></mat-checkbox>
+				<mat-checkbox *ngIf="hasRights()" [checked]="aspectValue(aspect.aspect)" (change)="changeAspectValue(aspect.aspect, $event.checked ? 'true' : '')" class="aspect-checkbox"></mat-checkbox>
 				<span *ngIf="!hasRights()" class="aspect-unknown">???</span>
 			</ng-container>
 			<!--Function-->
@@ -95,8 +95,8 @@
 			<!--Other-->
 			<ng-container *ngSwitchDefault>
 				<input class="aspect-input" *ngIf="hasRights()"
-				       [value]="aspectValue(aspect.aspect) ? aspectValue(aspect.aspect) : ''"
-				       (change)="changeAspectValue(aspect.aspect.label, $event.target.value)"
+				       [value]="aspectValue(aspect.aspect)"
+				       (change)="changeAspectValue(aspect.aspect, $event.target.value)"
 							 (focus)="stopListeningToKeyEvents()"
 							 (blur)="startListeningToKeyEvents()"/>
 				<span *ngIf="!hasRights() && aspect.aspect.label === 'Name'" class="aspect-unknown">{{aspectValue(aspect.aspect)}}</span>
