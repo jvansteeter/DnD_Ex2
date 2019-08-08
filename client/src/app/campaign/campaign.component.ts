@@ -19,6 +19,7 @@ import { MqService } from '../mq/mq.service';
 import { RightsService } from '../data-services/rights.service';
 import { timer } from 'rxjs';
 import { isUndefined } from 'util';
+import { BreadCrumbService } from '../bread-crumb/bread-crumb.service';
 
 @Component({
 	selector: 'campaign-page',
@@ -48,6 +49,7 @@ export class CampaignComponent implements OnInit, OnDestroy {
 	            private ruleSetRepo: RuleSetRepository,
 	            private mqService: MqService,
 	            public rightsService: RightsService,
+	            private breadCrumbService: BreadCrumbService,
 	            private router: Router) {
 	}
 
@@ -69,6 +71,7 @@ export class CampaignComponent implements OnInit, OnDestroy {
 				this.encounterDataSource = new SubjectDataSource(this.campaignPageService.encounterSubject);
 				this.characterDataSource = new SubjectDataSource(this.campaignPageService.characterSubject);
 				this.rightsService.setCampaignService(this.campaignPageService);
+				this.breadCrumbService.addCrumb(this.campaignPageService.campaignState.label, `campaign/${this.campaignId}`)
 			}
 		});
 

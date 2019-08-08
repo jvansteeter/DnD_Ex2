@@ -9,6 +9,7 @@ import { TokenComponent } from '../shared/subcomponents/token/token.component';
 import { AbilityData } from "../../../../../shared/types/ability.data";
 import { RulesConfigService } from '../../data-services/rules-config.service';
 import { RuleSetService } from '../../data-services/ruleSet.service';
+import { BreadCrumbService } from '../../bread-crumb/bread-crumb.service';
 
 @Component({
 	selector: 'character-sheet',
@@ -30,6 +31,7 @@ export class CharacterSheetComponent implements OnInit {
 	            private characterInterfaceFactory: CharacterInterfaceFactory,
 	            private characterRepo: CharacterRepository,
 	            private ruleSetService: RuleSetService,
+	            private breadCrumbService: BreadCrumbService,
 	            public rulesConfigService: RulesConfigService) {
 		this.characterService.init();
 		this.characterInterfaceFactory.setCharacterInterface(this.characterService);
@@ -46,6 +48,7 @@ export class CharacterSheetComponent implements OnInit {
 				this.characterService.setCharacterData(characterData);
 				this.abilities = characterData.abilities;
 				this.defaultAbilities = characterData.characterSheet.abilities;
+				this.breadCrumbService.addCrumb(this.characterService.label, `character/${this.npcId}`);
 			});
 		});
 	}

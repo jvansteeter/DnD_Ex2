@@ -178,6 +178,10 @@ export class CharacterSheetService extends IsReadyService implements CharacterIn
 		return this.modifiersChangeSubject.asObservable();
 	}
 
+	get label(): string {
+		return this.characterData.label;
+	}
+
 	public save(): void {
 		this.characterData.values = {};
 		for (let aspect of this.aspects) {

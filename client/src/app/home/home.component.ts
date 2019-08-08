@@ -14,6 +14,7 @@ import { FriendService } from '../data-services/friend.service';
 import { CampaignService } from '../data-services/campaign.service';
 import { RuleSetData } from '../../../../shared/types/rule-set/rule-set.data';
 import { CampaignData } from '../../../../shared/types/campaign.data';
+import { BreadCrumbService } from '../bread-crumb/bread-crumb.service';
 
 @Component({
 	selector: 'home-page',
@@ -46,13 +47,15 @@ export class HomeComponent implements OnInit {
 	            private ruleSetRepository: RuleSetRepository,
 	            private friendService: FriendService,
 	            private renderer: Renderer2,
-	            public campaignService: CampaignService) {
+	            public campaignService: CampaignService,
+	            private breadCrumbService: BreadCrumbService) {
 		this.ruleSetSubject = new Subject<RuleSetData[]>();
 		this.ruleSetDataSource = new SubjectDataSource(this.ruleSetSubject);
 		this.friendDataSource = new SubjectDataSource(this.friendService.getFriendsSubject());
 	}
 
 	public ngOnInit(): void {
+		this.breadCrumbService.clearCrumbs();
 		this.userProfileService.isReadyObservable.subscribe((isReady: boolean) => {
 			if (isReady) {
 				this.profilePhotoUrl = this.userProfileService.profilePhotoUrl;

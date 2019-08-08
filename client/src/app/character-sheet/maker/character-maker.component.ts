@@ -15,6 +15,7 @@ import { RulesConfigService } from '../../data-services/rules-config.service';
 import { RuleData } from '../../../../../shared/types/rule.data';
 import { CharacterTooltipPreviewComponent } from '../character-tooltip/character-tooltip-preview.component';
 import { SubSink } from 'subsink';
+import { BreadCrumbService } from '../../bread-crumb/bread-crumb.service';
 
 @Component({
 	selector: 'character-maker',
@@ -47,6 +48,7 @@ export class CharacterMakerComponent implements OnInit, AfterViewInit, OnDestroy
 	            private characterSheetRepository: CharacterSheetRepository,
 	            private characterInterfaceFactory: CharacterInterfaceFactory,
 	            public characterService: CharacterMakerService,
+	            private breadCrumbService: BreadCrumbService,
 	            public rulesConfigService: RulesConfigService) {
 
 	}
@@ -87,6 +89,7 @@ export class CharacterMakerComponent implements OnInit, AfterViewInit, OnDestroy
 				this.characterToolTipComponent.tooltipConfig = this.characterService.characterTooltipConfig;
 				this.defaultAbilities = this.characterService.abilities;
 				this.rules = this.characterService.rules;
+				this.breadCrumbService.addCrumb(this.characterService.label, `character-sheet/${this.characterSheetId}`);
 			}
 		}));
 	}

@@ -1,5 +1,5 @@
 import * as FileSaver from 'file-saver';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog, MatTableDataSource } from '@angular/material';
 import { NewCharacterSheetDialogComponent } from './dialog/new-character-sheet-dialog.component';
@@ -13,7 +13,7 @@ import { CharacterRepository } from '../../repositories/character.repository';
 import { CharacterData } from '../../../../../shared/types/character.data';
 import { isUndefined } from 'util';
 import { CharacterSheetRepository } from '../../repositories/character-sheet.repository';
-import { first, map, mergeMap, tap } from 'rxjs/operators';
+import { filter, first, map, mergeMap, tap } from 'rxjs/operators';
 import { NewDamageTypeDialogComponent } from './dialog/new-damage-type-dialog.component';
 import { DamageTypeData } from '../../../../../shared/types/rule-set/damage-type.data';
 import { SelectFriendsComponent } from '../../social/select-friends/select-friends.component';
@@ -22,37 +22,34 @@ import { NewConditionDialogComponent } from '../../conditions/new-condition-dial
 import { ConditionData } from '../../../../../shared/types/rule-set/condition.data';
 import { RuleSetService } from '../../data-services/ruleSet.service';
 import { AlertService } from '../../alert/alert.service';
+import { BreadCrumbService } from '../../bread-crumb/bread-crumb.service';
+import { SubSink } from 'subsink';
 
 @Component({
 	selector: 'rule-set-home',
 	templateUrl: 'rule-set-home.component.html',
 	styleUrls: ['rule-set-home.component.scss']
 })
-export class RuleSetHomeComponent implements OnInit {
-	private ruleSetId: string;
-
+export class RuleSetHomeComponent implements OnInit, OnDestroy {
 	public characterSheets: CharacterSheetData[];
 	public admins: any[];
-
 	public configCard: DashboardCard;
-
 	public adminsCard: DashboardCard;
-	private readonly adminSubject: Subject<AdminData[]>;
-	private adminDataSource: SubjectDataSource<AdminData>;
 	public adminColumns = ['username', 'role'];
-
 	public characterSheetCard: DashboardCard;
-	private readonly characterSheetSubject: BehaviorSubject<CharacterSheetData[]>;
-	private characterSheetDataSource: SubjectDataSource<CharacterSheetData>;
 	public characterSheetColumns = ['label', 'options'];
-
 	public npcCard: DashboardCard;
 	public npcDataSource: MatTableDataSource<NpcData>;
 	public npcColumns = ['label', 'sheet', 'options'];
-
 	public conditionsCard: DashboardCard;
-
 	public damageTypesCard: DashboardCard;
+
+	private subs: SubSink = new SubSink();
+	private ruleSetId: string;
+	private adminDataSource: SubjectDataSource<AdminData>;
+	private characterSheetDataSource: SubjectDataSource<CharacterSheetData>;
+	private readonly adminSubject: Subject<AdminData[]>;
+	private readonly characterSheetSubject: BehaviorSubject<CharacterSheetData[]>;
 
 	constructor(private activatedRoute: ActivatedRoute,
 	            private dialog: MatDialog,
@@ -61,6 +58,7 @@ export class RuleSetHomeComponent implements OnInit {
 	            private characterRepo: CharacterRepository,
 	            private characterSheetRepo: CharacterSheetRepository,
 	            private ruleSetService: RuleSetService,
+	            private breadCrumbService: BreadCrumbService,
 	            private alertService: AlertService) {
 		this.adminSubject = new Subject<AdminData[]>();
 		this.adminDataSource = new SubjectDataSource(this.adminSubject);
@@ -121,7 +119,8 @@ export class RuleSetHomeComponent implements OnInit {
 		this.activatedRoute.params.subscribe((params) => {
 			this.ruleSetId = params['ruleSetId'];
 			this.ruleSetService.setRuleSetId(this.ruleSetId);
-			this.ruleSetService.isReadyObservable.pipe(
+			this.subs.add(this.ruleSetService.isReadyObservable.pipe(
+					filter((isReady: boolean ) => isReady),
 					mergeMap(() => {
 						return this.ruleSetRepository.getCharacterSheets(this.ruleSetId);
 					}),
@@ -138,8 +137,13 @@ export class RuleSetHomeComponent implements OnInit {
 			).subscribe((admins: any[]) => {
 				this.admins = admins;
 				this.adminSubject.next(admins);
-			});
+				this.breadCrumbService.addCrumb(this.ruleSetService.label, `rule-set/${this.ruleSetId}`)
+			}));
 		});
+	}
+
+	public ngOnDestroy(): void {
+		this.subs.unsubscribe();
 	}
 
 	private newCharacterSheet = () => {

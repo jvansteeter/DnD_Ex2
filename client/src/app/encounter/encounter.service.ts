@@ -105,8 +105,7 @@ export class EncounterService extends IsReadyService implements AspectServiceInt
 	public incrementRound(): void {
 		if (isDefined(this.encounterState.round)) {
 			this.encounterState.round++;
-		}
-		else {
+		} else {
 			this.encounterState.round = 1;
 		}
 		this.encounterRepo.incrementRound(this.encounterId).subscribe();
@@ -137,6 +136,10 @@ export class EncounterService extends IsReadyService implements AspectServiceInt
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// GETTERS AND SETTERS
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	get label(): string {
+		return this.encounterState.label;
+	}
 
 	get players(): Player[] {
 		if (this.encounterState) {
@@ -207,13 +210,13 @@ export class EncounterService extends IsReadyService implements AspectServiceInt
 		return undefined;
 	}
 
-    get windowData(): Object {
-        if (this.encounterState) {
-            return this.encounterState.windowData;
-        }
+	get windowData(): Object {
+		if (this.encounterState) {
+			return this.encounterState.windowData;
+		}
 
-        return undefined;
-    }
+		return undefined;
+	}
 
 	get config(): EncounterConfigData {
 		if (this.encounterState) {

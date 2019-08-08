@@ -20,6 +20,7 @@ import { NotificationRepository } from '../repositories/notification.repository'
 import { UserProfileService } from '../data-services/userProfile.service';
 import { UserRepository } from '../repositories/user.repository';
 import { CampaignInviteNotificationComponent } from './notification/notification-components/campaign-invite-notification.component';
+import { BreadCrumbModule } from '../bread-crumb/bread-crumb.module';
 
 @NgModule({
     imports: [
@@ -36,6 +37,7 @@ import { CampaignInviteNotificationComponent } from './notification/notification
         MatButtonModule,
         AppRoutingModule,
 		    MatBadgeModule,
+		    BreadCrumbModule,
     ],
     declarations: [
         MainNavComponent,

@@ -323,6 +323,10 @@ export class CharacterMakerService extends IsReadyService implements CharacterIn
 		return [...this.aspectMap.values()];
 	}
 
+	get label(): string {
+		return this.characterSheet.label;
+	}
+
 	set aspects(value) {
 		// do nothing
 	}

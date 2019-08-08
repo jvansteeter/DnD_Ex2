@@ -1,5 +1,6 @@
 <mat-toolbar color="primary" class="main-toolbar">
 	<span [routerLink]="'home'" class="app-title">Co GM</span>
+	<bread-crumbs></bread-crumbs>
 	<span class="right-toolbarButtons" [style.right.px]="0">
 		<button mat-button class="navbar-menuButton" (click)="chatService.toggleChatWindow()">
 			<mat-icon *ngIf="chatService.totalUnreadCount === 0">mail</mat-icon>

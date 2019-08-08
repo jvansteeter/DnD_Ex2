@@ -15,8 +15,10 @@ import { BoardTeamsService } from "../board/services/board-teams.service";
 import { BoardNotationService } from "../board/services/board-notation-service";
 import { BoardStealthService } from '../board/services/board-stealth.service';
 import { EncounterKeyEventService } from "./encounter-key-event.service";
-import { Subscription } from 'rxjs';
 import { RuleService } from '../character-sheet/shared/rule/rule.service';
+import { BreadCrumbService } from '../bread-crumb/bread-crumb.service';
+import { SubSink } from 'subsink';
+import { filter, mergeMap } from 'rxjs/operators';
 
 @Component({
 	selector: 'encounter',
@@ -24,7 +26,7 @@ import { RuleService } from '../character-sheet/shared/rule/rule.service';
 	styleUrls: ['encounter.component.scss']
 })
 export class EncounterComponent implements OnInit, OnDestroy {
-	private refreshSubscription: Subscription;
+	private subs: SubSink = new SubSink();
 
 	public finishedLoading: boolean = false;
 
@@ -45,20 +47,21 @@ export class EncounterComponent implements OnInit, OnDestroy {
 	            private stealthService: BoardStealthService,
 	            private keyInputService: EncounterKeyEventService,
 	            private ruleService: RuleService,
+	            private breadCrumbService: BreadCrumbService,
 	) {
 	}
 
 	public ngOnInit(): void {
 		this.initEncounterServices();
-		this.refreshSubscription = this.encounterService.refreshEncounterObservable.subscribe(() => {
+		this.subs.add(this.encounterService.refreshEncounterObservable.subscribe(() => {
 			this.unInitEncounterServices();
 			this.initEncounterServices();
-		});
+		}));
 	}
 
 	public ngOnDestroy(): void {
 		this.unInitEncounterServices();
-		this.refreshSubscription.unsubscribe();
+		this.subs.unsubscribe();
 	}
 
 	@HostListener('document:keyup', ['$event'])
@@ -69,22 +72,27 @@ export class EncounterComponent implements OnInit, OnDestroy {
 	private initEncounterServices(): void {
 		this.encounterConcurrencyService.init();
 		this.keyInputService.startListeningToKeyEvents();
-		this.activatedRoute.params.subscribe((params) => {
-			let encounterId = params['encounterId'];
-			this.encounterService.setEncounterId(encounterId);
-			this.encounterService.isReadyObservable.subscribe((isReady: boolean) => {
-				if (isReady) {
-					this.rightsService.setEncounterService(this.encounterService);
-					this.ruleService.setAspectService(this.encounterService);
-				}
-			});
-		});
+		let encounterId: string;
+		this.subs.add(this.activatedRoute.params.pipe(
+				mergeMap((params) => {
+					encounterId = params['encounterId'];
+					this.encounterService.setEncounterId(encounterId);
+					return this.encounterService.isReadyObservable;
+				}),
+				filter((isReady: boolean) => isReady)
+				)
+						.subscribe(() => {
+							this.rightsService.setEncounterService(this.encounterService);
+							this.ruleService.setAspectService(this.encounterService);
+							this.breadCrumbService.addCrumb(this.encounterService.label, `encounter/${encounterId}`);
+						})
+		);
 
-		this.boardCanvasService.isReadyObservable.subscribe((isReady: boolean) => {
+		this.subs.add(this.boardCanvasService.isReadyObservable.subscribe((isReady: boolean) => {
 			if (isReady) {
 				this.finishedLoading = true;
 			}
-		});
+		}));
 
 		this.boardStateService.init();
 		this.boardLightService.init();
