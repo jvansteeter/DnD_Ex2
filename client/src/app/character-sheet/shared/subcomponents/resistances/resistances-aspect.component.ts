@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 import { DamageTypeData } from '../../../../../../../shared/types/rule-set/damage-type.data';
 import { map, startWith } from 'rxjs/operators';
 import { RuleSetService } from '../../../../data-services/ruleSet.service';
-import { isUndefined } from 'util';
+import { isNullOrUndefined, isUndefined } from 'util';
 
 @Component({
 	selector: 'resistances-aspect',
@@ -51,6 +51,10 @@ export class ResistancesAspectComponent implements SubComponentChild, OnInit {
 	}
 
 	setValue(value: ResistanceData[]): void {
+		if (isNullOrUndefined(value)) {
+			this.resistances = [];
+			return;
+		}
 		this.resistances = value;
 	}
 
@@ -65,6 +69,10 @@ export class ResistancesAspectComponent implements SubComponentChild, OnInit {
 
 	public removeResistance(index: number): void {
 		this.resistances.splice(index, 1);
+	}
+
+	public resetAutoComplete(): void {
+		this.autoCompleteControl.setValue('');
 	}
 
 	private filterDamageTypes(value: string): DamageTypeData[] {

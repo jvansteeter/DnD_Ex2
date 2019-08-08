@@ -8,7 +8,7 @@ import { CharacterInterfaceService } from '../shared/character-interface.service
 import { CharacterSheetRepository } from '../../repositories/character-sheet.repository';
 import { isNullOrUndefined, isUndefined } from 'util';
 import { AspectData } from '../../../../../shared/types/rule-set/aspect.data';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, Subscription } from 'rxjs';
 import { AlertService } from '../../alert/alert.service';
 import { CharacterSheetData } from '../../../../../shared/types/rule-set/character-sheet.data';
 import { CharacterSheetTooltipData } from '../../../../../shared/types/rule-set/character-sheet-tooltip.data';
@@ -115,7 +115,7 @@ export class CharacterMakerService extends IsReadyService implements CharacterIn
 			itemResizeCallback: this.resizeItem,
 		};
 
-		this.characterSheetRepo.getCharacterSheet(this.characterSheetId).pipe(
+		const sub: Subscription = this.characterSheetRepo.getCharacterSheet(this.characterSheetId).pipe(
 				mergeMap((sheet: CharacterSheetData) => {
 					this.characterSheet = sheet;
 					if (isDefined(this.characterSheet.rules)) {
@@ -124,9 +124,10 @@ export class CharacterMakerService extends IsReadyService implements CharacterIn
 					this.initAspects(sheet.aspects);
 					this.ruleSetService.setRuleSetId(this.characterSheet.ruleSetId);
 					return this.ruleSetService.isReadyObservable;
-				})
+				}),
 		).subscribe((isReady: boolean) => {
 			if (isReady) {
+				sub.unsubscribe();
 				this.rulesConfigService.setRuleSetService(this.ruleSetService);
 				this.rulesConfigService.setRuleSetRuleMode();
 				this.ruleService.setAspectService(this);
@@ -469,9 +470,13 @@ export class CharacterMakerService extends IsReadyService implements CharacterIn
 				aspectsToInit.push(resistancesAspect);
 				this.addTooltipAspect('format_line_spacing', resistancesAspect);
 			}
+			this.ruleModuleAspects.push(resistancesAspect);
 		}
 		else {
-
+			if (!isUndefined(resistancesAspect) && resistancesAspect.isPredefined) {
+				this.aspectMap.delete(resistancesAspect.config);
+				this.removeTooltipAspect(resistancesAspect.label);
+			}
 		}
 
 		this.initAspects(aspectsToInit);

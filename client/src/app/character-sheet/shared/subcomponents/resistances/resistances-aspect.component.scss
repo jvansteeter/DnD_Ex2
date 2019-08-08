@@ -12,11 +12,12 @@
 	align-items: center;
 }
 
-.remove-resistance {
-	margin-left: auto;
-}
-
 .resistances-container {
 	overflow-y: auto;
 	margin-bottom: 5px;
+}
+
+.app-input {
+	margin-left: auto;
+	max-width: 3.5em;
 }

@@ -6,7 +6,7 @@
 	<mat-menu #addResistanceMenu>
 		<div (click)="stopClickPropagate($event)">
 			<mat-form-field class="add-resistance">
-				<input matInput placeholder="Add Resistance" [matAutocomplete]="auto" [formControl]="autoCompleteControl"/>
+				<input matInput placeholder="Add Resistance" [matAutocomplete]="auto" [formControl]="autoCompleteControl" (blur)="resetAutoComplete()"/>
 				<mat-autocomplete #auto="matAutocomplete" (optionSelected)="addResistance($event.option.value)">
 					<mat-option *ngFor="let damageType of filteredDamageTypes | async" [value]="damageType">
 						<mat-icon [style.color]="damageType.color">{{damageType.icon}}</mat-icon>
@@ -21,6 +21,7 @@
 	<div *ngFor="let resistance of resistances; let i = index;" class="resistance">
 		<mat-icon [style.color]="resistance.damageType.color">{{resistance.damageType.icon}}</mat-icon>
 		<span>{{resistance.damageType.name}}</span>
+		<input type="number" class="app-input" [(ngModel)]="resistance.percent"/><span>%</span>
 		<button mat-icon-button (click)="removeResistance(i)" class="remove-resistance">
 			<mat-icon>close</mat-icon>
 		</button>

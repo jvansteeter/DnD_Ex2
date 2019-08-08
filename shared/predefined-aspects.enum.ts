@@ -6,7 +6,7 @@ export enum RuleModuleAspects {
 	PERCEPTION = 'Perception',
 	HIDDEN = 'Hidden',
 	STEALTH = 'Stealth',
-	RESISTANCES = 'RESISTANCES',
+	RESISTANCES = 'Resistances',
 }
 
 export enum PredefinedAspects {

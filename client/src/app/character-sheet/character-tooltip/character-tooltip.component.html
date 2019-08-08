@@ -48,7 +48,7 @@
 						<button mat-icon-button class="remove-condition-button tooltip-button" (click)="removeCondition(aspect.aspect.label, condition['name'])" *ngIf="hasRights()">
 							<mat-icon>close</mat-icon>
 						</button>
-						<input *ngIf="rulesConfigService.hasRounds" type="number" class="round-count" matTooltip="Rounds" matTooltipPosition="above" [(ngModel)]="condition['rounds']" (change)="changeConditionRounds()" />
+						<input *ngIf="rulesConfigService.hasRounds" type="number" class="round-count app-input" matTooltip="Rounds" matTooltipPosition="above" [(ngModel)]="condition['rounds']" (change)="changeConditionRounds()" />
 						<span class="condition-name">{{condition['name']}}</span>
 						<mat-icon [style.color]="condition['color']" class="condition-icon">{{condition['icon']}}</mat-icon>
 					</div>
@@ -92,7 +92,16 @@
 			<ng-container *ngSwitchCase="aspectType.FUNCTION">
 				<span class="aspect-input">{{aspectValue(aspect.aspect)}}</span>
 			</ng-container>
-			<!--Other-->
+			<!--Resistances-->
+			<ng-container *ngSwitchCase="aspectType.RESISTANCES">
+				<div class="resistances-tooltip" *ngIf="hasRights(); else unknownResistances">
+					<button mat-icon-button color="primary" class="tooltip-button add-resistance-button"><mat-icon>add</mat-icon></button>
+				</div>
+				<ng-template #unknownResistances>
+					<div>???</div>
+				</ng-template>
+			</ng-container>
+<!--			Other-->
 			<ng-container *ngSwitchDefault>
 				<input class="aspect-input" *ngIf="hasRights()"
 				       [value]="aspectValue(aspect.aspect)"
