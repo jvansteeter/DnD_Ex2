@@ -48,7 +48,8 @@
 						<button mat-icon-button class="remove-condition-button tooltip-button" (click)="removeCondition(aspect.aspect.label, condition['name'])" *ngIf="hasRights()">
 							<mat-icon>close</mat-icon>
 						</button>
-						<input *ngIf="rulesConfigService.hasRounds" type="number" class="round-count app-input" matTooltip="Rounds" matTooltipPosition="above" [(ngModel)]="condition['rounds']" (change)="changeConditionRounds()" />
+						<input *ngIf="rulesConfigService.hasRounds && hasRights()" type="number" class="round-count app-input" matTooltip="Rounds" matTooltipPosition="above" [(ngModel)]="condition['rounds']" (change)="changeConditionRounds()" />
+						<span *ngIf="rulesConfigService.hasRounds && !hasRights()" class="round-count" matTooltip="Rounds" matTooltipPosition="above">{{condition.rounds}}</span>
 						<span class="condition-name">{{condition['name']}}</span>
 						<mat-icon [style.color]="condition['color']" class="condition-icon">{{condition['icon']}}</mat-icon>
 					</div>
@@ -95,10 +96,34 @@
 			<!--Resistances-->
 			<ng-container *ngSwitchCase="aspectType.RESISTANCES">
 				<div class="resistances-tooltip" *ngIf="hasRights(); else unknownResistances">
-					<button mat-icon-button color="primary" class="tooltip-button add-resistance-button"><mat-icon>add</mat-icon></button>
+					<button mat-icon-button color="primary" matTooltip="Add Resistance" class="tooltip-button add-resistance-button" [matMenuTriggerFor]="addResistanceMenu">
+						<mat-icon>add</mat-icon>
+					</button>
+					<mat-menu #addResistanceMenu>
+						<div (click)="stopClickPropagate($event)">
+							<mat-form-field>
+								<input matInput placeholder="Damage Types" [matAutocomplete]="resistancesAutoComplete" [formControl]="addResistanceControl" (focus)="stopListeningToKeyEvents()" (blur)="startListeningToKeyEvents()" />
+								<mat-autocomplete #resistancesAutoComplete (optionSelected)="addResistance($event.option.value)">
+									<mat-option *ngFor="let type of filteredDamageTypes | async" [value]="type.name">
+										<mat-icon [style.color]="type.color">{{type.icon}}</mat-icon>
+										<span>{{type.name}}</span>
+									</mat-option>
+								</mat-autocomplete>
+							</mat-form-field>
+						</div>
+					</mat-menu>
+					<div *ngFor="let resistance of player.resistances" class="resistance-row">
+						<mat-icon [style.color]="resistance.damageType.color">{{resistance.damageType.icon}}</mat-icon>
+						<span>{{resistance.damageType.name}}</span>
+						<input type="number" class="app-input resistance-percent" [value]="resistance.percent" (change)="resistancePercentChanged(resistance, $event.target.value)"/>
+						<span>%</span>
+						<button mat-icon-button matTooltip="Remove Resistance" class="tooltip-button" (click)="removeResistance(resistance)">
+							<mat-icon>close</mat-icon>
+						</button>
+					</div>
 				</div>
 				<ng-template #unknownResistances>
-					<div>???</div>
+					<span class="aspect-unknown">???</span>
 				</ng-template>
 			</ng-container>
 <!--			Other-->

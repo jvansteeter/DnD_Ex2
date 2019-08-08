@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CharacterSheetRepository } from '../../repositories/character-sheet.repository';
 import { CharacterSheetTooltipData } from '../../../../../shared/types/rule-set/character-sheet-tooltip.data';
 import { CharacterMakerService } from '../maker/character-maker.service';
@@ -19,13 +19,15 @@ import { RulesConfigService } from '../../data-services/rules-config.service';
 import { Player } from "../../encounter/player";
 import { AbilityData } from '../../../../../shared/types/ability.data';
 import { EncounterKeyEventService } from '../../encounter/encounter-key-event.service';
+import { DamageTypeData } from '../../../../../shared/types/rule-set/damage-type.data';
+import { ResistanceData } from '../../../../../shared/types/resistance.data';
 
 @Component({
 	selector: 'character-tooltip',
 	templateUrl: 'character-tooltip.component.html',
 	styleUrls: ['character-tooltip.component.scss']
 })
-export class CharacterTooltipComponent {
+export class CharacterTooltipComponent implements OnInit {
 	@Input()
 	characterSheetId: string;
 
@@ -38,6 +40,8 @@ export class CharacterTooltipComponent {
 	public player: Player;
 	public filteredConditions: Observable<ConditionData[]>;
 	public addConditionControl = new FormControl();
+	public filteredDamageTypes: Observable<DamageTypeData[]>;
+	public addResistanceControl = new FormControl();
 
 	private _tooltipConfig: CharacterSheetTooltipData;
 	private currentMaxAdd: boolean;
@@ -53,38 +57,23 @@ export class CharacterTooltipComponent {
 	            private rulesConfigService: RulesConfigService,
 	            private keyEventService: EncounterKeyEventService,
 	) {
+
+	}
+
+	public ngOnInit(): void {
 		this.filteredConditions = this.addConditionControl.valueChanges.pipe(
 				startWith(''),
 				map((value: string) => {
 					return this.filterConditions(value);
-				}));
-	}
+				})
+		);
 
-	private filterConditions(value: string): ConditionData[] {
-		if (isUndefined(value)) {
-			value = '';
-		}
-		const filterValue = value.toLowerCase();
-		if (Array.isArray(this.ruleSetService.conditions)) {
-			return this.ruleSetService.conditions.filter((condition: ConditionData) => {
-				return (condition.name.toLowerCase().indexOf(filterValue) === 0 && !this.playerHasCondition(condition));
-			});
-		} else {
-			return [];
-		}
-	}
-
-	private playerHasCondition(condition: ConditionData): boolean {
-		const conditions: ConditionData[] = this.player.getAspectValue(RuleModuleAspects.CONDITIONS);
-		if (isDefined(conditions)) {
-			for (let existingCondition of conditions) {
-				if (condition.name.toLowerCase() === existingCondition.name.toLowerCase()) {
-					return true;
-				}
-			}
-		}
-
-		return false;
+		this.filteredDamageTypes = this.addResistanceControl.valueChanges.pipe(
+				startWith(''),
+				map((value: string) => {
+					return this.filterDamageTypes(value);
+				})
+		);
 	}
 
 	public aspectValue(aspect: Aspect): any {
@@ -120,6 +109,24 @@ export class CharacterTooltipComponent {
 		}
 	}
 
+	public addResistance(damageTypeName: string): void {
+		for (const type of this.ruleSetService.damageTypes) {
+			if (damageTypeName.trim().toLowerCase() === type.name.trim().toLowerCase()) {
+				if (isUndefined(this.player.resistances)) {
+					this.player.resistances = [];
+				}
+				this.player.resistances.push({damageType: type, percent: 0});
+				this.addResistanceControl.setValue('');
+				return;
+			}
+		}
+	}
+
+	public resistancePercentChanged(resistance: ResistanceData, value: number): void {
+		resistance.percent = value;
+		this.player.emitChange();
+	}
+
 	public changeConditionRounds(): void {
 		this.encounterService.getPlayerById(this._playerId).emitChange();
 	}
@@ -144,6 +151,16 @@ export class CharacterTooltipComponent {
 			if (conditionName.toLowerCase() === conditions[i].name.toLowerCase()) {
 				conditions.splice(i, 1);
 				this.player.emitChange();
+			}
+		}
+	}
+
+	public removeResistance(resistance: ResistanceData): void {
+		for (let i = 0; i < this.player.resistances.length; i++) {
+			if (this.player.resistances[i].damageType.name === resistance.damageType.name) {
+				this.player.resistances.splice(i, 1);
+				this.player.emitChange();
+				return;
 			}
 		}
 	}
@@ -269,5 +286,59 @@ export class CharacterTooltipComponent {
 
 	set tooltipConfig(config: CharacterSheetTooltipData) {
 		this._tooltipConfig = config;
+	}
+
+	private filterConditions(value: string): ConditionData[] {
+		if (isUndefined(value)) {
+			value = '';
+		}
+		const filterValue = value.toLowerCase();
+		if (Array.isArray(this.ruleSetService.conditions)) {
+			return this.ruleSetService.conditions.filter((condition: ConditionData) => {
+				return (condition.name.toLowerCase().indexOf(filterValue) === 0 && !this.playerHasCondition(condition));
+			});
+		} else {
+			return [];
+		}
+	}
+
+	private playerHasCondition(condition: ConditionData): boolean {
+		const conditions: ConditionData[] = this.player.conditions;
+		if (isDefined(conditions)) {
+			for (let existingCondition of conditions) {
+				if (condition.name.toLowerCase() === existingCondition.name.toLowerCase()) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	private filterDamageTypes(value: string): DamageTypeData[] {
+		if (isUndefined(value)) {
+			value = '';
+		}
+		const filterValue = value.trim().toLowerCase();
+		if (Array.isArray(this.ruleSetService.damageTypes)) {
+			return this.ruleSetService.damageTypes.filter((type: DamageTypeData) => {
+				return (type.name.trim().toLowerCase().indexOf(filterValue) > -1 && !this.playerHasResistance(type));
+			});
+		}
+		else {
+			return [];
+		}
+	}
+
+	private playerHasResistance(type: DamageTypeData): boolean {
+		if (isDefined(this.player.resistances)) {
+			for (const resistance of this.player.resistances) {
+				if (resistance.damageType.name.trim().toLowerCase() === type.name.trim().toLowerCase()) {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 }

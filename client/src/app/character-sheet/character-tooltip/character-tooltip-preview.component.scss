@@ -111,3 +111,18 @@ input.current-max-input::-webkit-inner-spin-button {
 	height: 50px;
 	width: 50px;
 }
+
+.resistances-tooltip {
+	flex: 1;
+}
+
+.resistance-row {
+	width: 100%;
+	display: flex;
+	align-items: center;
+}
+
+.resistance-percent {
+	max-width: 3em;
+	margin-left: auto;
+}

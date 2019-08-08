@@ -82,6 +82,17 @@
 			<ng-container *ngSwitchCase="aspectType.FUNCTION">
 				<span class="aspect-input">{{aspectValue(aspect.aspect)}}</span>
 			</ng-container>
+<!--			Resistances-->
+			<ng-container *ngSwitchCase="aspectType.RESISTANCES">
+				<div class="resistances-tooltip">
+					<div *ngFor="let resistance of aspectValue(aspect.aspect)" class="resistance-row">
+						<mat-icon [style.color]="resistance.damageType.color">{{resistance.damageType.icon}}</mat-icon>
+						<span>{{resistance.damageType.name}}</span>
+						<input type="number" class="app-input resistance-percent" [value]="resistance.percent" disabled/>
+						<span>%</span>
+					</div>
+				</div>
+			</ng-container>
 			<!--Other-->
 			<ng-container *ngSwitchDefault>
 				<input class="aspect-input"

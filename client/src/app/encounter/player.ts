@@ -14,6 +14,7 @@ import { RuleService } from '../character-sheet/shared/rule/rule.service';
 import { Aspect, AspectType } from '../character-sheet/shared/aspect';
 import { RuleData } from '../../../../shared/types/rule.data';
 import { CharacterSheetTooltipData } from '../../../../shared/types/rule-set/character-sheet-tooltip.data';
+import { ResistanceData } from '../../../../shared/types/resistance.data';
 
 export class Player extends ConcurrentBoardObject implements PlayerData {
 	_id: string;
@@ -404,6 +405,16 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 
 	get conditions(): ConditionData[] {
 		return this.getAspectValue(RuleModuleAspects.CONDITIONS);
+	}
+
+	get resistances(): ResistanceData[] {
+		return this.getAspectValue((RuleModuleAspects.RESISTANCES));
+	}
+
+	set resistances(resistances: ResistanceData[]) {
+		this._characterData.values[RuleModuleAspects.RESISTANCES] = resistances;
+		this.privatePlayerService.updateRuleModifiers();
+		this.emitChange();
 	}
 
 	get isHidden(): boolean {
