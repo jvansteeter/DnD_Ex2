@@ -1,4 +1,4 @@
-import { Component, HostListener, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { PopService } from '../pop.service';
 import { Player } from '../../../encounter/player';
 import { CharacterTooltipComponent } from '../../../character-sheet/character-tooltip/character-tooltip.component';
@@ -6,27 +6,41 @@ import { BoardStateService } from '../../services/board-state.service';
 import { EncounterRepository } from '../../../repositories/encounter.repository';
 import { RightsService } from '../../../data-services/rights.service';
 import { isUndefined } from 'util';
+import { MatDialog } from '@angular/material';
+import { SubmitDamageDialogComponent } from '../damage-dialog/submit-damage-dialog.component';
+import { DamageData } from '../../../../../../shared/types/rule-set/damage.data';
+import { isDefined } from '@angular/compiler/src/util';
 
 @Component({
 	templateUrl: 'character-pop.component.html',
 	styleUrls: ['character-pop.component.scss']
 })
-export class CharacterPopComponent {
+export class CharacterPopComponent implements OnInit {
 	parentRef: PopService;
-
 	pos_x: number;
 	pos_y: number;
 	player: Player;
-
 	window = false;
 
 	@ViewChild(CharacterTooltipComponent, {static: true})
 	tooltipComponent: CharacterTooltipComponent;
 	hovered = false;
+	public menuItems: {label: string, clickFunction: Function}[];
 
 	constructor(private boardStateService: BoardStateService,
 	            private encounterRepo: EncounterRepository,
-	            private rightsService: RightsService) {
+	            private rightsService: RightsService,
+	            private dialog: MatDialog,
+	) {
+	}
+
+	public ngOnInit(): void {
+		this.menuItems = [];
+
+		this.menuItems.push({label: 'Submit Damage', clickFunction: this.openSubmitDamageDialog});
+		if (this.hasRights()) {
+			this.menuItems.push({label: 'Delete Player', clickFunction: this.deletePlayer});
+		}
 	}
 
 	public initVars(parentRef: PopService, window: boolean, pos_x: number, pos_y: number, player: Player) {
@@ -56,10 +70,19 @@ export class CharacterPopComponent {
 		this.parentRef.clearPlayerPop(this.player._id);
 	}
 
-	deletePlayer(): void {
+	public deletePlayer = (): void => {
 		this.close();
 		this.encounterRepo.removePlayer(this.player.serialize()).subscribe();
-	}
+	};
+
+	public openSubmitDamageDialog = (): void => {
+		this.dialog.open(SubmitDamageDialogComponent, {data: this.player}).afterClosed().subscribe((damages: DamageData[]) => {
+			if (isDefined(damages) && damages.length > 0) {
+				this.player.damageRequests.push(...damages);
+				this.player.emitChange();
+			}
+		});
+	};
 
 	toggleVisibility(): void {
 		this.player.isVisible = !this.player.isVisible;

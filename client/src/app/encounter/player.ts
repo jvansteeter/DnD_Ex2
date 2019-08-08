@@ -15,6 +15,7 @@ import { Aspect, AspectType } from '../character-sheet/shared/aspect';
 import { RuleData } from '../../../../shared/types/rule.data';
 import { CharacterSheetTooltipData } from '../../../../shared/types/rule-set/character-sheet-tooltip.data';
 import { ResistanceData } from '../../../../shared/types/resistance.data';
+import { DamageData } from '../../../../shared/types/rule-set/damage.data';
 
 export class Player extends ConcurrentBoardObject implements PlayerData {
 	_id: string;
@@ -33,6 +34,7 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 	private _auras: Map<string, AuraData> = new Map<string, AuraData>();
 	private privatePlayerService: PrivatePlayerService;
 	private _characterData: CharacterData;
+	private _damageRequests: DamageData[];
 
 	public encounterId: string;
 
@@ -42,6 +44,7 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 		this.setPlayerData(playerData);
 
 		this._actions = [];
+		this._damageRequests = [];
 	}
 
 	public serialize(): PlayerData {
@@ -55,6 +58,7 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 			location: this._location,
 			isVisible: this._isVisible,
 			teams: this._teams,
+			damageRequests: this._damageRequests,
 		}
 	}
 
@@ -423,6 +427,15 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 
 	get stealth(): number {
 		return Number(this.getAspectValue(RuleModuleAspects.STEALTH));
+	}
+
+	get damageRequests(): DamageData[] {
+		return this._damageRequests;
+	}
+
+	set damageRequests(value: DamageData[]) {
+		this._damageRequests = value;
+		this.emitChange();
 	}
 }
 

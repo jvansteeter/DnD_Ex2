@@ -1,0 +1,19 @@
+<div class="damage-row" *ngFor="let damage of damages">
+	<mat-form-field>
+		<input matInput placeholder="Damage" type="number" [(ngModel)]="damage.amount"/>
+	</mat-form-field>
+	<mat-form-field *ngIf="rulesConfigService.hasDamageTypes">
+		<mat-label>Damage Type</mat-label>
+		<mat-select [(ngModel)]="damage.type">
+			<mat-option *ngFor="let type of ruleSetService.damageTypes" [value]="type">
+				<mat-icon [style.color]="type.color">{{type.icon}}</mat-icon>
+				<span>{{type.name}}</span>
+			</mat-option>
+		</mat-select>
+	</mat-form-field>
+</div>
+<div class="button-row">
+	<button mat-icon-button color="primary" (click)="addDamageRow()"><mat-icon>add</mat-icon></button>
+	<button mat-icon-button color="primary" (click)="removeDamageRow()"><mat-icon>remove</mat-icon></button>
+	<button mat-raised-button color="primary" class="submit-button" (click)="submit()">Submit</button>
+</div>

@@ -2,6 +2,7 @@ import * as mongoose from 'mongoose';
 import { PlayerData } from '../../../../shared/types/encounter/player.data';
 import { MongooseModel } from './mongoose.model';
 import { CharacterData } from '../../../../shared/types/character.data';
+import { DamageData } from '../../../../shared/types/rule-set/damage.data';
 
 export class PlayerModel extends MongooseModel implements PlayerData {
 	public _id;
@@ -13,6 +14,7 @@ export class PlayerModel extends MongooseModel implements PlayerData {
 	location: {x: number, y: number};
 	isVisible: boolean;
 	teams: string[];
+	damageRequests: DamageData[];
 
 	constructor() {
 		super({
@@ -24,6 +26,7 @@ export class PlayerModel extends MongooseModel implements PlayerData {
 			location: {type: Object, default: {x: 0, y: 0}},
 			isVisible: {type: Boolean, default: false},
 			teams: [String],
+			damageRequests: {type: Array, of: Object, default: []}
 		});
 
 		this._id = this.methods._id;
