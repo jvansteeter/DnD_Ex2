@@ -15,7 +15,7 @@ import {
 	MatTableModule,
 	MatSortModule,
 	MatBadgeModule,
-	MatMenuModule
+	MatMenuModule, MatAutocompleteModule
 } from '@angular/material';
 import { NgModule } from '@angular/core';
 import { MapRendererComponent } from "./renderer/map-renderer/map-renderer.component";
@@ -26,7 +26,7 @@ import { WallRendererComponent } from "./renderer/wall-renderer/wall-renderer.co
 import { HighlightRendererComponent } from "./renderer/highlight-renderer/highlight-renderer.component";
 import { MouseWheelDirective } from "./mousewheel.directive";
 import { BoardControllerComponent } from "./board-control/board-controller.component";
-import { FormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BoardStateService } from "./services/board-state.service";
 import { BoardCanvasService } from "./services/board-canvas.service";
 import { BoardWallService } from "./services/board-wall.service";
@@ -106,6 +106,7 @@ import { SubmitDamageDialogComponent } from './pop/damage-dialog/submit-damage-d
 		MatRadioModule,
 		MatCheckboxModule,
 		FormsModule,
+		ReactiveFormsModule,
 		MatSliderModule,
 		MatButtonModule,
 		MatSelectModule,
@@ -122,6 +123,7 @@ import { SubmitDamageDialogComponent } from './pop/damage-dialog/submit-damage-d
 		CharacterSheetModule,
 		MatMenuModule,
 		DragDropModule,
+		MatAutocompleteModule,
 	],
 	providers: [
 		PopService,

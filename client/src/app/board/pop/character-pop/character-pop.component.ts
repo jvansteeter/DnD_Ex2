@@ -76,7 +76,7 @@ export class CharacterPopComponent implements OnInit {
 	};
 
 	public openSubmitDamageDialog = (): void => {
-		this.dialog.open(SubmitDamageDialogComponent, {data: this.player}).afterClosed().subscribe((damages: DamageData[]) => {
+		this.dialog.open(SubmitDamageDialogComponent).afterClosed().subscribe((damages: DamageData[]) => {
 			if (isDefined(damages) && damages.length > 0) {
 				this.player.damageRequests.push(...damages);
 				this.player.emitChange();

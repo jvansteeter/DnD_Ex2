@@ -1,15 +1,15 @@
-<div class="damage-row" *ngFor="let damage of damages">
+<div class="damage-row" *ngFor="let damage of damages; let i = index">
 	<mat-form-field>
 		<input matInput placeholder="Damage" type="number" [(ngModel)]="damage.amount"/>
 	</mat-form-field>
 	<mat-form-field *ngIf="rulesConfigService.hasDamageTypes">
-		<mat-label>Damage Type</mat-label>
-		<mat-select [(ngModel)]="damage.type">
-			<mat-option *ngFor="let type of ruleSetService.damageTypes" [value]="type">
-				<mat-icon [style.color]="type.color">{{type.icon}}</mat-icon>
-				<span>{{type.name}}</span>
+		<input matInput placeholder="Damage Type" [matAutocomplete]="auto" [formControl]="autoCompleteControl" />
+		<mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectDamageType($event.option.value, i)">
+			<mat-option *ngFor="let damageType of filteredDamageTypes | async" [value]="damageType">
+				<mat-icon [style.color]="damageType.color">{{damageType.icon}}</mat-icon>
+				<span>{{damageType.name}}</span>
 			</mat-option>
-		</mat-select>
+		</mat-autocomplete>
 	</mat-form-field>
 </div>
 <div class="button-row">
