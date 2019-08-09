@@ -12,7 +12,7 @@ import {
 	ValidatorFn,
 	Validators
 } from "@angular/forms";
-import { isUndefined } from "util";
+import { isNullOrUndefined, isUndefined } from "util";
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { DamageData } from '../../../../../../shared/types/rule-set/damage.data';
@@ -114,6 +114,9 @@ export class SubmitDamageDialogComponent implements OnInit {
 			valFunctions.push(Validators.required);
 		}
 		const validType: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+			if (!this.rulesConfigService.damageMustBeTyped && (isNullOrUndefined(control.value) || control.value === '')) {
+				return null;
+			}
 			const type: DamageTypeData = this.ruleSetService.damageTypes.find((type: DamageTypeData) => type.name === control.value);
 			if (isUndefined(type)) {
 				return {

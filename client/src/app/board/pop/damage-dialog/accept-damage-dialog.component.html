@@ -1,7 +1,9 @@
 <div class="damage-row" *ngFor="let damageRequest of player.damageRequests">
 	<input type="number" class="app-input damage-amount" [(ngModel)]="damageRequest.amount" />
-	<mat-icon [style.color]="damageRequest.type.color" class="damage-icon">{{damageRequest.type.icon}}</mat-icon>
-	<span>{{damageRequest.type.name}}</span>
+	<ng-container *ngIf="damageRequest.type">
+		<mat-icon [style.color]="damageRequest.type.color" class="damage-icon">{{damageRequest.type.icon}}</mat-icon>
+		<span>{{damageRequest.type.name}}</span>
+	</ng-container>
 	<button mat-icon-button [style.color]="'green'" matTooltip="Accept" (click)="acceptRequest(damageRequest)"><mat-icon>check_circle</mat-icon></button>
 	<button mat-icon-button [style.color]="'red'" matTooltip="Reject" (click)="rejectRequest(damageRequest)"><mat-icon>cancel</mat-icon></button>
 </div>
