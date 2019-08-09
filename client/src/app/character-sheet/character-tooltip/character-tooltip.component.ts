@@ -295,7 +295,7 @@ export class CharacterTooltipComponent implements OnInit {
 		const filterValue = value.toLowerCase();
 		if (Array.isArray(this.ruleSetService.conditions)) {
 			return this.ruleSetService.conditions.filter((condition: ConditionData) => {
-				return (condition.name.toLowerCase().indexOf(filterValue) === 0 && !this.playerHasCondition(condition));
+				return (condition.name.toLowerCase().includes(filterValue) && !this.playerHasCondition(condition));
 			});
 		} else {
 			return [];
@@ -322,7 +322,7 @@ export class CharacterTooltipComponent implements OnInit {
 		const filterValue = value.trim().toLowerCase();
 		if (Array.isArray(this.ruleSetService.damageTypes)) {
 			return this.ruleSetService.damageTypes.filter((type: DamageTypeData) => {
-				return (type.name.trim().toLowerCase().indexOf(filterValue) > -1 && !this.playerHasResistance(type));
+				return (type.name.trim().toLowerCase().includes(filterValue) && !this.playerHasResistance(type));
 			});
 		}
 		else {

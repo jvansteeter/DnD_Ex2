@@ -223,6 +223,9 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 			if (isDefined(health)) {
 				health.current -= damageAmount;
 			}
+		}
+		for (let i = request.length - 1; i >= 0; i--) {
+			const damage = request[i];
 			this.damageRequests.splice(this.damageRequests.indexOf(damage, 1));
 		}
 

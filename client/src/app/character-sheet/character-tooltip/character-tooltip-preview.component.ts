@@ -59,7 +59,7 @@ export class CharacterTooltipPreviewComponent {
 		const filterValue = value.toLowerCase();
 		if (Array.isArray(this.ruleSetService.conditions)) {
 			return this.ruleSetService.conditions.filter((condition: ConditionData) => {
-				return (condition.name.toLowerCase().indexOf(filterValue) === 0);
+				return (condition.name.toLowerCase().includes(filterValue));
 			});
 		}
 		else {

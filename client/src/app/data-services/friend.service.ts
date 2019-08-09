@@ -75,7 +75,7 @@ export class FriendService extends IsReadyService {
 	public filterFriendsByUsername(input: string): UserProfile[] {
 		const filterValue = input.toLowerCase();
 
-		return this._friends.filter((friend: UserProfile) => friend.username.toLowerCase().indexOf(filterValue) === 0);
+		return this._friends.filter((friend: UserProfile) => friend.username.toLowerCase().includes(filterValue));
 	}
 
 	get friends(): UserProfile[] {

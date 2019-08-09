@@ -72,7 +72,7 @@ export class ConditionsAspectComponent implements SubComponentChild {
 		}
 		const filterValue = value.toLowerCase();
 		return this.ruleSetService.conditions.filter((condition: ConditionData) => {
-			return (condition.name.toLowerCase().indexOf(filterValue) === 0 &&
+			return (condition.name.toLowerCase().includes(filterValue) &&
 					!this.containsCondition(condition));
 		});
 	}

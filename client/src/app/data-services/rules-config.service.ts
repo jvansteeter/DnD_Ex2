@@ -80,4 +80,10 @@ export class RulesConfigService {
 			return this.ruleSetService.modulesConfig.damageTypes;
 		}
 	}
+
+	get damageMustBeTyped(): boolean {
+		if (this.ruleMode === RulesMode.RULE_SET) {
+			return this.ruleSetService.modulesConfig.damageMustBeTyped;
+		}
+	}
 }

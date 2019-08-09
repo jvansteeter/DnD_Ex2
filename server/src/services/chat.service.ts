@@ -49,7 +49,7 @@ export class ChatService {
 
 	public async addUserToRoom(authorizingId: string, inviteeId: string, roomId: string): Promise<ChatRoomModel> {
 		let room: ChatRoomModel = await this.chatRepo.getChatRoomById(roomId);
-		if (room.userIds.indexOf(authorizingId) > -1) {
+		if (room.userIds.includes(authorizingId)) {
 			throw new Error('Not Authorized');
 		}
 		const invitee: UserModel = await this.userRepo.findById(inviteeId);
@@ -59,7 +59,7 @@ export class ChatService {
 	}
 
 	public async getOrCreateRoomOfUsers(userId: string, userIds: string[]): Promise<ChatRoomModel> {
-		if (userIds.indexOf(userId) > -1) {
+		if (userIds.includes(userId)) {
 			throw new Error('Not in this conversation');
 		}
 		let room: ChatRoomModel = await this.chatRepo.getRoomOfUsers(userIds);

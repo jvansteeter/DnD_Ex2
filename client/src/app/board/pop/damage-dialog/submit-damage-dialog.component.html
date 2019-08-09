@@ -1,19 +1,25 @@
-<div class="damage-row" *ngFor="let damage of damages; let i = index">
-	<mat-form-field>
-		<input matInput placeholder="Damage" type="number" [(ngModel)]="damage.amount"/>
-	</mat-form-field>
-	<mat-form-field *ngIf="rulesConfigService.hasDamageTypes">
-		<input matInput placeholder="Damage Type" [matAutocomplete]="auto" [formControl]="formControls[i]" />
-		<mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectDamageType($event.option.value, i)">
-			<mat-option *ngFor="let damageType of filteredDamageTypes[i] | async" [value]="damageType">
-				<mat-icon [style.color]="damageType.color">{{damageType.icon}}</mat-icon>
-				<span>{{damageType.name}}</span>
-			</mat-option>
-		</mat-autocomplete>
-	</mat-form-field>
-</div>
-<div class="button-row">
-	<button mat-icon-button color="primary" (click)="addDamageRow()"><mat-icon>add</mat-icon></button>
-	<button mat-icon-button color="primary" (click)="removeDamageRow()"><mat-icon>remove</mat-icon></button>
-	<button mat-raised-button color="primary" class="submit-button" (click)="submit()">Submit</button>
-</div>
+<form [formGroup]="submitForm" (submit)="submit()">
+	<div class="damage-row" *ngFor="let amount of amounts.controls; let i = index">
+		<mat-form-field formArrayName="amounts">
+			<input matInput name="Damage Amount" placeholder="Damage" type="number" [formControlName]="i"/>
+		</mat-form-field>
+		<mat-form-field *ngIf="rulesConfigService.hasDamageTypes" formArrayName="types">
+			<input matInput name="Damage Type" placeholder="Damage Type" [matAutocomplete]="auto" [formControlName]="i" />
+			<mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectDamageType($event.option.value, i)">
+				<mat-option *ngFor="let damageType of filteredDamageTypes[i] | async" [value]="damageType">
+					<mat-icon [style.color]="damageType.color">{{damageType.icon}}</mat-icon>
+					<span>{{damageType.name}}</span>
+				</mat-option>
+			</mat-autocomplete>
+		</mat-form-field>
+	</div>
+	<div class="button-row">
+		<button mat-icon-button *ngIf="rulesConfigService.hasDamageTypes" color="primary" (click)="addDamageRow()" matTooltip="Add Damage Type">
+			<mat-icon>add</mat-icon>
+		</button>
+		<button mat-icon-button *ngIf="rulesConfigService.hasDamageTypes" color="primary" (click)="removeDamageRow()" matTooltip="Remove Last Damage Type" [disabled]="amounts.length < 2">
+			<mat-icon>remove</mat-icon>
+		</button>
+		<button mat-raised-button color="primary" class="submit-button" type="submit">Submit</button>
+	</div>
+</form>

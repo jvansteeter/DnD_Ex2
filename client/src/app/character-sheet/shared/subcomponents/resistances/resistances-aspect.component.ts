@@ -81,7 +81,7 @@ export class ResistancesAspectComponent implements SubComponentChild, OnInit {
 		}
 		const filterValue: string = value.trim().toLowerCase();
 		return this.ruleSetService.damageTypes.filter((type: DamageTypeData) => {
-			return (type.name.trim().toLowerCase().indexOf(filterValue) === 0 && !this.containsDamageType(type));
+			return (type.name.trim().toLowerCase().includes(filterValue) && !this.containsDamageType(type));
 		});
 	}
 

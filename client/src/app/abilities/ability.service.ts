@@ -14,7 +14,7 @@ export class AbilityService {
 			executable = executable.concat(';return _this;');
 
 			// replace aspects with their values
-			if (executable.indexOf('${') > -1) {
+			if (executable.includes('${')) {
 				executable = executable.replace(/\${([\w\s]+)}/g, (match, offset: string): string => {
 					return JSON.stringify(this.characterService.getAspectValue(offset));
 				});
