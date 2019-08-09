@@ -1,7 +1,7 @@
 <div class="initiative-bar">
     <ng-container *ngFor="let player of boardPlayerService.players | initiative">
         <div class="player-icon" *ngIf="showInitCoin(player)">
-            <div class="initiative-icon" (contextmenu)="boardMap_handleContextMenu($event)">
+            <div class="initiative-icon" (contextmenu)="boardMap_handleContextMenu($event)" [matBadge]="player.damageRequests.length" matBadgeColor="warn" matBadgePosition="above before" [matBadgeHidden]="player.damageRequests.length < 1">
                 <div [ngClass]="boardPlayerService.selectedPlayerId === player.id ? 'initiative-icon-content selected' : 'initiative-icon-content not-selected'">
                     <img src="{{player.tokenUrl}}" style="height: 100%; border-radius: 25px;">
                     <mat-icon class="not-visible-icon" *ngIf="!player.isVisible">visibility_off</mat-icon>

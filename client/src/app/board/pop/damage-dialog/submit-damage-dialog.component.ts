@@ -15,8 +15,8 @@ import { isUndefined } from "util";
 })
 export class SubmitDamageDialogComponent implements OnInit {
 	public damages: DamageData[];
-	public autoCompleteControl = new FormControl();
-	public filteredDamageTypes: Observable<DamageTypeData[]>;
+	public formControls: FormControl[];
+	public filteredDamageTypes: Observable<DamageTypeData[]>[];
 
 	constructor(private dialogRef: MatDialogRef<SubmitDamageDialogComponent>,
 	            public ruleSetService: RuleSetService,
@@ -24,9 +24,20 @@ export class SubmitDamageDialogComponent implements OnInit {
 	}
 
 	public ngOnInit(): void {
+		this.formControls = [];
 		this.damages = [];
-		this.damages.push({amount: null});
-		this.filteredDamageTypes = this.autoCompleteControl.valueChanges.pipe(
+		this.filteredDamageTypes = [];
+		this.addDamageRow();
+	}
+
+	public selectDamageType(type: DamageTypeData, index: number): void {
+		this.damages[index].type = type;
+		this.formControls[index].setValue(type.name);
+	}
+
+	public addDamageRow(): void {
+		const formControl = new FormControl();
+		const filtered = formControl.valueChanges.pipe(
 				startWith(''),
 				map((damageTypeName: string) => {
 					if (typeof damageTypeName !== 'string') {
@@ -34,18 +45,15 @@ export class SubmitDamageDialogComponent implements OnInit {
 					}
 					return this.filterDamageTypes(damageTypeName);
 				})
-		)
-	}
+		);
 
-	public selectDamageType(type: DamageTypeData, index: number): void {
-		this.damages[index].type = type;
-	}
-
-	public addDamageRow(): void {
+		this.formControls.push(new FormControl());
+		this.filteredDamageTypes.push(filtered);
 		this.damages.push({amount: null});
 	}
 
 	public removeDamageRow(): void {
+		this.formControls.splice(this.formControls.length - 1);
 		this.damages.splice(this.damages.length - 1);
 	}
 

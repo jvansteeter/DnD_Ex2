@@ -6,7 +6,7 @@ import { isNullOrUndefined } from "util";
 	name: 'initiative'
 })
 export class InitiativePipe implements PipeTransform{
-	transform(value: any, ...args: any[]): any {
+	transform(value: any, ...args: any[]): Player[] {
 		const players: Player[] = value as Player[];
 		return players.sort((player1: Player, player2: Player) => {
 			let localPlayer1;

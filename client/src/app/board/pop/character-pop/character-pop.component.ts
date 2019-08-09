@@ -10,12 +10,14 @@ import { MatDialog } from '@angular/material';
 import { SubmitDamageDialogComponent } from '../damage-dialog/submit-damage-dialog.component';
 import { DamageData } from '../../../../../../shared/types/rule-set/damage.data';
 import { isDefined } from '@angular/compiler/src/util';
+import { AcceptDamageDialogComponent } from '../damage-dialog/accept-damage-dialog.component';
+import { EncounterKeyEventService } from '../../../encounter/encounter-key-event.service';
 
 @Component({
 	templateUrl: 'character-pop.component.html',
 	styleUrls: ['character-pop.component.scss']
 })
-export class CharacterPopComponent implements OnInit {
+export class CharacterPopComponent {
 	parentRef: PopService;
 	pos_x: number;
 	pos_y: number;
@@ -25,22 +27,13 @@ export class CharacterPopComponent implements OnInit {
 	@ViewChild(CharacterTooltipComponent, {static: true})
 	tooltipComponent: CharacterTooltipComponent;
 	hovered = false;
-	public menuItems: {label: string, clickFunction: Function}[];
 
 	constructor(private boardStateService: BoardStateService,
 	            private encounterRepo: EncounterRepository,
 	            private rightsService: RightsService,
+	            private keyEventService: EncounterKeyEventService,
 	            private dialog: MatDialog,
 	) {
-	}
-
-	public ngOnInit(): void {
-		this.menuItems = [];
-
-		this.menuItems.push({label: 'Submit Damage', clickFunction: this.openSubmitDamageDialog});
-		if (this.hasRights()) {
-			this.menuItems.push({label: 'Delete Player', clickFunction: this.deletePlayer});
-		}
 	}
 
 	public initVars(parentRef: PopService, window: boolean, pos_x: number, pos_y: number, player: Player) {
@@ -70,21 +63,28 @@ export class CharacterPopComponent implements OnInit {
 		this.parentRef.clearPlayerPop(this.player._id);
 	}
 
-	public deletePlayer = (): void => {
+	public deletePlayer(): void {
 		this.close();
 		this.encounterRepo.removePlayer(this.player.serialize()).subscribe();
-	};
+	}
 
-	public openSubmitDamageDialog = (): void => {
+	public openSubmitDamageDialog(): void {
+		this.keyEventService.stopListeningToKeyEvents();
 		this.dialog.open(SubmitDamageDialogComponent).afterClosed().subscribe((damages: DamageData[]) => {
 			if (isDefined(damages) && damages.length > 0) {
 				this.player.damageRequests.push(...damages);
 				this.player.emitChange();
 			}
+			this.keyEventService.startListeningToKeyEvents();
 		});
-	};
+	}
 
-	toggleVisibility(): void {
+	public openAcceptDamageDialog(): void {
+		this.keyEventService.stopListeningToKeyEvents();
+		this.dialog.open(AcceptDamageDialogComponent, {data: this.player}).afterClosed().subscribe(() => this.keyEventService.startListeningToKeyEvents());
+	}
+
+	public toggleVisibility(): void {
 		this.player.isVisible = !this.player.isVisible;
 	}
 

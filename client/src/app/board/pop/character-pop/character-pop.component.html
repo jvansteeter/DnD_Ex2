@@ -6,11 +6,13 @@
 		<button mat-icon-button class="visibility-button" *ngIf="hovered && hasRights() && !player.isVisible" (click)="toggleVisibility()">
 			<mat-icon class="white-shadow">visibility_off</mat-icon>
 		</button>
-		<button mat-icon-button class="menu-button" *ngIf="menuItems.length > 0" [matMenuTriggerFor]="characterMenu" [ngStyle]="{'display': hovered ? 'inherit' : 'none'}">
+		<button mat-icon-button class="menu-button" [matMenuTriggerFor]="characterMenu" [ngStyle]="{'display': hovered ? 'inherit' : 'none'}">
 			<mat-icon class="white-shadow">settings</mat-icon>
 		</button>
 		<mat-menu #characterMenu="matMenu">
-			<button mat-menu-item *ngFor="let item of menuItems" (click)="item.clickFunction()">{{item.label}}</button>
+			<button mat-menu-item (click)="openSubmitDamageDialog()">Submit Damage</button>
+			<button mat-menu-item *ngIf="player.damageRequests.length > 0" (click)="openAcceptDamageDialog()">Accept Damage</button>
+			<button mat-menu-item *ngIf="hasRights()" (click)="deletePlayer()">Delete Player</button>
 		</mat-menu>
 		<button mat-icon-button class="close-button" (click)="close()" *ngIf="hovered">
 			<mat-icon class="white-shadow">close</mat-icon>

@@ -3,9 +3,9 @@
 		<input matInput placeholder="Damage" type="number" [(ngModel)]="damage.amount"/>
 	</mat-form-field>
 	<mat-form-field *ngIf="rulesConfigService.hasDamageTypes">
-		<input matInput placeholder="Damage Type" [matAutocomplete]="auto" [formControl]="autoCompleteControl" />
+		<input matInput placeholder="Damage Type" [matAutocomplete]="auto" [formControl]="formControls[i]" />
 		<mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectDamageType($event.option.value, i)">
-			<mat-option *ngFor="let damageType of filteredDamageTypes | async" [value]="damageType">
+			<mat-option *ngFor="let damageType of filteredDamageTypes[i] | async" [value]="damageType">
 				<mat-icon [style.color]="damageType.color">{{damageType.icon}}</mat-icon>
 				<span>{{damageType.name}}</span>
 			</mat-option>

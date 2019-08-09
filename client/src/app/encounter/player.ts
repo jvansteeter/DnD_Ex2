@@ -21,8 +21,6 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 	_id: string;
 	private _userId: string;
 	private _name: string;
-	private _hp: number;
-	private _maxHp: number;
 	private _location: XyPair;
 	private _isVisible: boolean;
 	private _tokens: TokenData[];
@@ -41,10 +39,9 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 	constructor(playerData: PlayerData) {
 		super();
 		this._id = playerData._id;
-		this.setPlayerData(playerData);
-
 		this._actions = [];
-		this._damageRequests = [];
+
+		this.setPlayerData(playerData);
 	}
 
 	public serialize(): PlayerData {
@@ -76,14 +73,6 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 		else {
 			this._name = playerData.characterData.label;
 		}
-		if (!isUndefined(playerData.characterData.values[PredefinedAspects.HEALTH])) {
-			this._maxHp = playerData.characterData.values[PredefinedAspects.HEALTH].max;
-			this._hp = playerData.characterData.values[PredefinedAspects.HEALTH].current;
-		}
-		else {
-			this._maxHp = 1;
-			this._hp = 1;
-		}
 		this.encounterId = playerData.encounterId;
 		this._characterData = playerData.characterData;
 		this._initiative = playerData.initiative;
@@ -106,6 +95,12 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 		this._userId = playerData.userId;
 		this._teams = playerData.teams;
 		this._activeTokenIndex = playerData.activeTokenIndex;
+		if (isDefined(playerData.damageRequests)) {
+			this._damageRequests = playerData.damageRequests;
+		}
+		else {
+			this._damageRequests = [];
+		}
 
 		this.privatePlayerService = new PrivatePlayerService(this);
 		this.privatePlayerService.updateRuleModifiers();
@@ -216,6 +211,24 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 		this.emitChange();
 	}
 
+	public acceptDamageRequest(request: DamageData[]): void {
+		for (const damage of request) {
+			const resistance = this.resistances.find((resistance: ResistanceData) => resistance.damageType.name === damage.type.name);
+			let resistPercent: number = 0;
+			if (isDefined(resistance)) {
+				resistPercent = resistance.percent;
+			}
+			const damageAmount: number = Math.floor(damage.amount - (damage.amount * resistPercent/100));
+			const health: {current: number, max: number} = this.getAspectValue(PredefinedAspects.HEALTH, false);
+			if (isDefined(health)) {
+				health.current -= damageAmount;
+			}
+			this.damageRequests.splice(this.damageRequests.indexOf(damage, 1));
+		}
+
+		this.emitChange();
+	}
+
 	/*////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		GETTERS & SETTERS
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
@@ -243,21 +256,31 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 	}
 
 	get hp(): number {
-		return this._hp;
+		if (this.getAspectValue(PredefinedAspects.HEALTH)) {
+			return this.getAspectValue(PredefinedAspects.HEALTH).current;
+		}
+		return 0;
 	}
 
 	set hp(value: number) {
-		this._hp = value;
-		this.emitChange();
+		if (this.getAspectValue(PredefinedAspects.HEALTH)) {
+			this.getAspectValue(PredefinedAspects.HEALTH).current = value;
+			this.emitChange();
+		}
 	}
 
 	get maxHp(): number {
-		return this._maxHp;
+		if (this.getAspectValue(PredefinedAspects.HEALTH)) {
+			return this.getAspectValue(PredefinedAspects.HEALTH).max;
+		}
+		return 0;
 	}
 
 	set maxHp(value: number) {
-		this._maxHp = value;
-		this.emitChange();
+		if (this.getAspectValue(PredefinedAspects.HEALTH)) {
+			this.getAspectValue(PredefinedAspects.HEALTH).max = value;
+			this.emitChange();
+		}
 	}
 
 	get speed(): number {
@@ -430,6 +453,9 @@ export class Player extends ConcurrentBoardObject implements PlayerData {
 	}
 
 	get damageRequests(): DamageData[] {
+		if (isUndefined(this._damageRequests)) {
+			return [];
+		}
 		return this._damageRequests;
 	}
 

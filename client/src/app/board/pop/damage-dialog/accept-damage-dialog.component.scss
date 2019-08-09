@@ -1,0 +1,33 @@
+:host {
+	display: flex;
+	flex-direction: column;
+}
+
+.damage-row {
+	display: flex;
+	align-items: center;
+}
+
+.damage-amount {
+	width: 3em;
+}
+
+.damage-icon {
+	margin-left: auto;
+	padding-left: 10px;
+}
+
+.button-row {
+	margin-top: 10px;
+	display: flex;
+}
+
+.accept-all-button {
+	//background-color: green;
+	margin-left: auto;
+}
+
+.reject-all-button {
+	//background-color: red;
+	margin-left: 10px;
+}

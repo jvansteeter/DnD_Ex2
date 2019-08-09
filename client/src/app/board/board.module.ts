@@ -65,6 +65,7 @@ import { RendererConsolidationService } from './renderer/renderer-consolidation.
 import { BoardStealthService } from './services/board-stealth.service';
 import { InitiativePipe } from './board-map/initiative.pipe';
 import { SubmitDamageDialogComponent } from './pop/damage-dialog/submit-damage-dialog.component';
+import { AcceptDamageDialogComponent } from './pop/damage-dialog/accept-damage-dialog.component';
 
 
 @NgModule({
@@ -100,6 +101,7 @@ import { SubmitDamageDialogComponent } from './pop/damage-dialog/submit-damage-d
 		TeamSettingsComponent,
 		InitiativePipe,
 		SubmitDamageDialogComponent,
+		AcceptDamageDialogComponent,
 	],
 	imports: [
 		BrowserModule,
@@ -152,6 +154,7 @@ import { SubmitDamageDialogComponent } from './pop/damage-dialog/submit-damage-d
 		TempPlayerInitDialogComponent,
 		TeamSettingsComponent,
 		SubmitDamageDialogComponent,
+		AcceptDamageDialogComponent,
 	],
 	bootstrap: [],
 	exports: [
