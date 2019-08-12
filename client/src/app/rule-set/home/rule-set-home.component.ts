@@ -43,6 +43,8 @@ export class RuleSetHomeComponent implements OnInit, OnDestroy {
 	public npcColumns = ['label', 'sheet', 'options'];
 	public conditionsCard: DashboardCard;
 	public damageTypesCard: DashboardCard;
+	public conditions: ConditionData[];
+	public damageTypes: DamageTypeData[];
 
 	private subs: SubSink = new SubSink();
 	private ruleSetId: string;
@@ -136,6 +138,8 @@ export class RuleSetHomeComponent implements OnInit, OnDestroy {
 					})
 			).subscribe((admins: any[]) => {
 				this.admins = admins;
+				this.conditions = this.ruleSetService.conditions;
+				this.damageTypes = this.ruleSetService.damageTypes;
 				this.adminSubject.next(admins);
 				this.breadCrumbService.addCrumb(this.ruleSetService.label, `rule-set/${this.ruleSetId}`)
 			}));
@@ -232,6 +236,24 @@ export class RuleSetHomeComponent implements OnInit, OnDestroy {
 
 	public filterNPCs(value: string): void {
 		this.npcDataSource.filter = value.trim().toLowerCase();
+	}
+
+	public filterConditions(value: string): void {
+		this.conditions = [];
+		this.ruleSetService.conditions.forEach((condition: ConditionData) => {
+			if (condition.name.trim().toLowerCase().includes(value.trim().toLowerCase())) {
+				this.conditions.push(condition);
+			}
+		});
+	}
+
+	public filterDamageTypes(value: string): void {
+		this.damageTypes = [];
+		this.ruleSetService.damageTypes.forEach((damageType: DamageTypeData) => {
+			if (damageType.name.trim().toLowerCase().includes(value.trim().toLowerCase())) {
+				this.damageTypes.push(damageType);
+			}
+		});
 	}
 
 	private getNPCs(): void {
