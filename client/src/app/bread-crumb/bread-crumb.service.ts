@@ -22,6 +22,11 @@ export class BreadCrumbService {
 	}
 
 	public addCrumb(name: string, location: string): void {
+		for (let crumb of this.crumbs) {
+			if (crumb.location === location) {
+				return;
+			}
+		}
 		this.crumbs.push({name, location});
 	}
 
