@@ -1,12 +1,12 @@
 <span [style.font-size.px]="aspect.fontSize">
 	<span>Resistances</span>
-	<button mat-icon-button color="primary" matTooltip="Add Condition" [matMenuTriggerFor]="addResistanceMenu">
+	<button mat-icon-button color="primary" matTooltip="Add Condition" [matMenuTriggerFor]="addResistanceMenu" (click)="resetAutoComplete()">
 		<mat-icon>add</mat-icon>
 	</button>
 	<mat-menu #addResistanceMenu>
 		<div (click)="stopClickPropagate($event)">
 			<mat-form-field class="add-resistance">
-				<input matInput placeholder="Add Resistance" [matAutocomplete]="auto" [formControl]="autoCompleteControl" (blur)="resetAutoComplete()"/>
+				<input matInput placeholder="Add Resistance" [matAutocomplete]="auto" [formControl]="autoCompleteControl"/>
 				<mat-autocomplete #auto="matAutocomplete" (optionSelected)="addResistance($event.option.value)">
 					<mat-option *ngFor="let damageType of filteredDamageTypes | async" [value]="damageType">
 						<mat-icon [style.color]="damageType.color">{{damageType.icon}}</mat-icon>
