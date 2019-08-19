@@ -13,6 +13,7 @@ import { ChatRoom } from '../chat/chat-room';
 import { ChatRepository } from '../repositories/chat.repository';
 import { ChatRoomData } from '../../../../shared/types/mq/chat-room.data';
 import { SocialService } from '../social/social.service';
+import { EncounterKeyEventService } from '../encounter/encounter-key-event.service';
 
 @Injectable()
 export class ChatService extends IsReadyService {
@@ -25,6 +26,7 @@ export class ChatService extends IsReadyService {
 	constructor(private mqService: MqService,
 	            private userProfileService: UserProfileService,
 	            private socialService: SocialService,
+	            private keyEventService: EncounterKeyEventService,
 	            private chatRepo: ChatRepository) {
 		super(mqService, userProfileService);
 		this._chatRooms = new Map();
@@ -92,6 +94,12 @@ export class ChatService extends IsReadyService {
 
 	public toggleChatWindow(): void {
 		this.showChatWindow = !this.showChatWindow;
+		if (this.showChatWindow) {
+			this.keyEventService.stopListeningToKeyEvents();
+		}
+		else {
+			this.keyEventService.startListeningToKeyEvents();
+		}
 	}
 
 	public getRoomById(id: string): ChatRoom {
